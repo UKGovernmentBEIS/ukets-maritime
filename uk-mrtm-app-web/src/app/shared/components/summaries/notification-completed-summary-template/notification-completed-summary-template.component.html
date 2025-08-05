@@ -1,0 +1,84 @@
+@if (notificationCompleted(); as nc) {
+  <h2 class="govuk-heading-m">Follow-up response details</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Request from the regulator</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="nc.request"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Due date</dt>
+      <dd govukSummaryListRowValue [notProvided]="nc.dueDate | govukDate"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Submission date</dt>
+      <dd govukSummaryListRowValue [notProvided]="nc.submissionDate | govukDate"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Operator's response</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="nc.response"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Supporting documents</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="nc.attachments" />
+      </dd>
+    </div>
+  </dl>
+  <h2 class="govuk-heading-m">Decision details</h2>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision status</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="nc.decisionType | empReviewDecisionType"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+  <h2 class="govuk-heading-m">Official notice recipients</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue>
+        @for (recipientId of recipientIds(); track recipientId) {
+          <p class="govuk-body">{{ recipientId | userInfoResolver: nc.usersInfo }}</p>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue [notProvided]="nc.signatory | userInfoResolver: nc.usersInfo"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

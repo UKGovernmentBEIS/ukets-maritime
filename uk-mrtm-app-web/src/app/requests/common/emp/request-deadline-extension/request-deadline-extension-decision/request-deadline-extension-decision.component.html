@@ -1,0 +1,54 @@
+@if (!isRegulatorTask()) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-full">
+      <p class="govuk-body" tabindex="-1">
+        The regulator has requested more time to complete their review of your permit or emissions monitoring plan
+        application.
+        <br />
+        The consequence of not approving an extension is that the regulator may not have enough time to complete their
+        review and make their decision.
+      </p>
+    </div>
+  </div>
+}
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  submitText="Confirm and complete"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="!isEditable">
+  <mrtm-request-deadline-extension-decision-details-summary-template [data]="rdeDetails()" />
+
+  @if (isEditable) {
+    <div formControlName="decision" govuk-radio legend="What is your decision?" legendSize="medium">
+      <govuk-radio-option value="ACCEPTED" label="Accept new due date" />
+      @if (isRegulatorTask()) {
+        <govuk-radio-option value="REJECTED" label="Reject new due date" />
+      } @else {
+        <govuk-radio-option value="REJECTED" label="Reject new due date">
+          <ng-container govukConditionalContent>
+            <div formControlName="reason" govuk-textarea label="Provide a reason" [maxLength]="10000"></div>
+          </ng-container>
+        </govuk-radio-option>
+      }
+    </div>
+
+    @if (isRegulatorTask()) {
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-full">
+          <h2 class="govuk-heading-m">Provide evidence of operator consent</h2>
+          <div class="govuk-hint">
+            Provide evidence that a representative of the operator has agreed to the deadline extension. An email
+            screenshot or similar will suffice.
+          </div>
+        </div>
+      </div>
+      <div formControlName="evidence" govuk-textarea label="Details" [maxLength]="10000"></div>
+
+      <mrtm-multiple-file-input
+        [baseDownloadUrl]="downloadUrl"
+        label="Upload a file (Optional)"
+        listTitle="Uploaded files"
+        formControlName="files" />
+    }
+  }
+</mrtm-wizard-step>

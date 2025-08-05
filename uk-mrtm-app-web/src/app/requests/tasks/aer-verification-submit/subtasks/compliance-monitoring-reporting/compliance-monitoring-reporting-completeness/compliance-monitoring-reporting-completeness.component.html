@@ -1,0 +1,39 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.completenessCompliant.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Some principles are aspirational and you may not be able to confirm absolute compliance. Some are reliant on others
+    being met before compliance can be confirmed.
+  </p>
+  <div
+    formControlName="completenessCompliant"
+    govuk-radio
+    [legend]="map.completenessCompliant.caption"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <p class="govuk-hint">
+        Monitoring and reporting must be complete and cover all voyages performed by the Maritime Operator that are
+        defined as a maritime activity listed in Schedule TBD of the UKETS Order. The emissions data for the voyages
+        must be complete.
+      </p>
+      <p class="govuk-hint">
+        Maritime Operators need to take appropriate measures to prevent any data gaps in the reporting period.
+      </p>
+    </ng-container>
+    <govuk-radio-option [value]="true" [label]="true | complianceToText" />
+    <govuk-radio-option [value]="false" [label]="false | complianceToText">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="completenessNonCompliantReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

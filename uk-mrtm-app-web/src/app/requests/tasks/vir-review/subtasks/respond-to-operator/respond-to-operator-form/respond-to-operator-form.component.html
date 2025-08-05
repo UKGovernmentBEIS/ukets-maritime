@@ -1,0 +1,39 @@
+<mrtm-wizard-step
+  [caption]="verificationData()?.reference"
+  heading="Respond to {{ key() | uppercase }}"
+  [formGroup]="formGroup"
+  (formSubmit)="onSubmit()"
+  [showReturnLink]="true">
+  <mrtm-vir-verifier-recommendation-summary-template [data]="verificationData()" />
+  <mrtm-vir-operator-response-summary-template header="Operator's response" [data]="operatorResponse()" />
+  <fieldset govukFieldset>
+    <legend govukLegend legendSize="medium">Is the improvement required?</legend>
+    <div formControlName="improvementRequired" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            govuk-date-input
+            legendSize="small"
+            label="Deadline for improvement to be completed"
+            formControlName="improvementDeadline"></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No" />
+    </div>
+  </fieldset>
+  <div
+    govuk-textarea
+    formControlName="improvementComments"
+    [maxLength]="10000"
+    labelSize="small"
+    class="govuk-!-width-two-thirds"
+    label="Comments on the improvement (optional)"></div>
+  <div
+    govuk-textarea
+    formControlName="operatorActions"
+    [maxLength]="10000"
+    labelSize="small"
+    label="Actions for the operator"
+    class="govuk-!-width-two-thirds"
+    hint="This will be visible to the operator"></div>
+</mrtm-wizard-step>

@@ -1,0 +1,9 @@
+@if (successComponent) {
+  <ng-container *ngComponentOutlet="successComponent" />
+} @else {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Task completed" />
+    </div>
+  </div>
+}

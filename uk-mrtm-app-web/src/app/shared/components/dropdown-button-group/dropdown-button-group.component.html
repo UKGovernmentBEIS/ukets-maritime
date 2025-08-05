@@ -1,0 +1,11 @@
+<button
+  type="button"
+  class="govuk-button dropdown-button-group__trigger"
+  [class.dropdown-button-group__trigger--open]="isPopoverOpen()"
+  #trigger
+  [attr.popovertarget]="uniqueId">
+  <span class="dropdown-button-group__trigger-inner">{{ label() }}</span>
+</button>
+<div class="dropdown-button-group__popover" (toggle)="onToggle($event)" id="{{ uniqueId }}" #popover popover>
+  <ng-content select="mrtm-dropdown-button-item"></ng-content>
+</div>

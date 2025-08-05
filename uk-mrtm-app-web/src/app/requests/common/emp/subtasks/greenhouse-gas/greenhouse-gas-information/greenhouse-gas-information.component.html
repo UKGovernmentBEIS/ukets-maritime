@@ -1,0 +1,14 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="greenhouseGasMap.title"
+  [formGroup]="formGroup"
+  [heading]="greenhouseGasMap?.information?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Enter details of how data information related to fuel is recorded, retrieved, transmitted and stored before being
+    used to compile your annual emissions report.
+  </p>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

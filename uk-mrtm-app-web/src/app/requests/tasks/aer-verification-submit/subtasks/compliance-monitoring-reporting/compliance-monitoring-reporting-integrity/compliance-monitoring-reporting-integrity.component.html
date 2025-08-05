@@ -1,0 +1,42 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.integrityCompliant.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Some principles are aspirational and you may not be able to confirm absolute compliance. Some are reliant on others
+    being met before compliance can be confirmed.
+  </p>
+  <h2 class="govuk-heading-m">{{ map.integrityCompliant.title }}</h2>
+  <p class="govuk-body">
+    Maritime Operators must enable reasonable assurance of the integrity of emission data to be reported. They must
+    determine emissions using the appropriate monitoring methodologies set out in the Regulations.
+  </p>
+  <p class="govuk-body">Reported emission data and related disclosures must:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>be free from material misstatement</li>
+    <li>avoid bias in the selection and presentation of information</li>
+    <li>provide a credible and balanced account of a port's emissions</li>
+  </ul>
+  <p class="govuk-body">
+    In selecting a monitoring methodology, the improvements from greater accuracy must be balanced against additional
+    costs. Monitoring and reporting of emissions must aim for the highest achievable accuracy, unless this is
+    technically not feasible or incurs unreasonable costs.
+  </p>
+
+  <div formControlName="integrityCompliant" govuk-radio [legend]="map.integrityCompliant.caption" legendSize="medium">
+    <govuk-radio-option [value]="true" [label]="true | complianceToText" />
+    <govuk-radio-option [value]="false" [label]="false | complianceToText">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="integrityNonCompliantReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

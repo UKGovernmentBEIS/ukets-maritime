@@ -1,0 +1,34 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ reportingRequiredLabel() }}</dt>
+    <dd govukSummaryListRowValue>{{ reportingRequired() | booleanToText }}</dd>
+    @if (isEditable() && changeLink()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+      </dd>
+    }
+  </div>
+
+  @if (reportingRequired() === false) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map().noReportingReason.title }}</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ reportingObligationDetails().noReportingReason }}</dd>
+      @if (isEditable() && changeLink()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ supportingDocumentsLabel() }}</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="files()" />
+      </dd>
+      @if (isEditable() && changeLink()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  }
+</dl>

@@ -1,0 +1,15 @@
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'govuk-phase-banner',
+  standalone: true,
+  imports: [],
+  templateUrl: './phase-banner.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './phase-banner.component.scss',
+})
+export class PhaseBannerComponent {
+  @Input() phase: string;
+  @Input() tagColor: string;
+  @Input() tagAlign: 'right' | 'left' = 'left';
+}

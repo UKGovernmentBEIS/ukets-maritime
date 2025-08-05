@@ -1,0 +1,38 @@
+<div class="moj-multi-file-upload moj-multi-file-upload--enhanced">
+  @if (showFileUploadList) {
+    <mrtm-file-upload-list
+      (fileDelete)="onFileDeleteClick()"
+      [files]="uploadedFiles$ | async"
+      [isDisabled]="isDisabled"
+      [listTitle]="listTitle"
+      [showNoFilesHint]="showNoFilesHint" />
+  }
+
+  <label [for]="id" class="{{ currentLabelClass }}" id="{{ 'l.' + id }}">{{ label }}</label>
+  @if (text) {
+    <span class="govuk-body">{{ text }}</span>
+  }
+  @if (showFilesizeHint) {
+    <div [id]="id + '-hint-file-size'" class="govuk-hint">
+      Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or CSV
+      file, no more than 20MB.
+    </div>
+  }
+  @if (hint) {
+    <span [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
+  }
+  @if (shouldDisplayErrors$ | async) {
+    <govuk-error-message [errors]="control.errors" [identifier]="id"></govuk-error-message>
+  }
+  <input
+    #input
+    (blur)="onFileBlur()"
+    (change)="onFileChange($event)"
+    [accept]="accepted"
+    [class.govuk-file-upload--error]="shouldDisplayErrors$ | async"
+    [disabled]="isDisabled"
+    [id]="id"
+    [name]="id"
+    class="govuk-file-upload"
+    type="file" />
+</div>

@@ -1,0 +1,31 @@
+<govuk-table [columns]="editable ? editableColumns : readonlyColumns" [data]="data" formArrayName="verificationBodies">
+  <ng-template let-column="column" let-index="index" let-row="row">
+    @switch (column.field) {
+      @case ('name') {
+        @if (editable) {
+          <a [routerLink]="[row.id]" govukLink>{{ row.name }}</a>
+        } @else {
+          {{ row.name }}
+        }
+      }
+      @case ('status') {
+        <ng-container [formGroupName]="index">
+          @if (row.status === 'PENDING' || !editable) {
+            {{ row.status | verificationBodyStatus }}
+          } @else {
+            <div
+              [options]="verificationBodyStatuses"
+              formControlName="status"
+              govuk-select
+              widthClass="govuk-!-width-one-half"></div>
+          }
+        </ng-container>
+      }
+      @case ('deleteBtn') {
+        <div class="govuk-!-text-align-right">
+          <a [routerLink]="[row.id, 'delete']" govukLink>Delete</a>
+        </div>
+      }
+    }
+  </ng-template>
+</govuk-table>

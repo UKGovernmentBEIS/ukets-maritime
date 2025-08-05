@@ -1,0 +1,12 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.methodApproved.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="methodApproved" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

@@ -1,0 +1,32 @@
+<govuk-table [columns]="columns()" [data]="$any(data())" emptyTableText="No items to display">
+  <ng-template let-row="row" let-column="column">
+    @switch (column.field) {
+      @case ('fuelOriginTypeName') {
+        @if (row.isSummary) {
+          <strong>Total sustainable emissions</strong>
+        } @else {
+          {{ row[column.field] | fuelOriginTitle }}
+        }
+      }
+      @case ('evidenceFiles') {
+        @if (!row.isSummary) {
+          <mrtm-summary-download-files [files]="row[column.field]" />
+        }
+      }
+      @case ('batchNumber') {
+        {{ row[column.field] }}
+      }
+      @case ('actions') {
+        @if (editable() && !row.isSummary) {
+          <div class="control-row justify-content-end">
+            <a (click)="onChange($event, row)" routerLink="." govukLink>Change</a>
+            <a (click)="onDelete($event, row)" routerLink="." govukLink>Remove</a>
+          </div>
+        }
+      }
+      @default {
+        {{ row[column.field] | bigNumber: 7 }}
+      }
+    }
+  </ng-template>
+</govuk-table>

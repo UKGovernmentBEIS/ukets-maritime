@@ -1,0 +1,34 @@
+<div class="govuk-grid-row">
+  <netz-page-heading
+    caption="List of ships and calculation of maritime emissions"
+    class="govuk-grid-column-three-quarters">
+    Check your answers
+  </netz-page-heading>
+  @if (isEditable) {
+    <div class="govuk-grid-column-one-quarter govuk-!-text-align-right govuk-body govuk-!-margin-bottom-0">
+      <a [routerLink]="['list-of-ships']" [queryParams]="{ change: true }" govukLink>Change</a>
+    </div>
+  }
+</div>
+<mrtm-list-of-ships-summary-template [data]="ships" [originalShips]="originalShips" editUrl="./ships" />
+@if (isVariationRegulatorDecision) {
+  <mrtm-variation-regulator-decision-partial-summary-template
+    [variationDecisionDetails]="variationDecisionDetails"
+    [wizardStep]="wizardStep"
+    [queryParams]="{ change: true }"
+    [isEditable]="isEditable" />
+}
+@if (hasReview) {
+  <mrtm-emp-review-decision-summary-template
+    [reviewDecision]="empReviewDecisionDTO"
+    [isEditable]="isEditable"
+    [changeLink]="wizardStep.DECISION"
+    [queryParams]="{ change: true }" />
+}
+@if (isEditable && !isSubTaskCompleted) {
+  <button (click)="onSubmit()" govukButton type="button">Confirm and continue</button>
+}
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

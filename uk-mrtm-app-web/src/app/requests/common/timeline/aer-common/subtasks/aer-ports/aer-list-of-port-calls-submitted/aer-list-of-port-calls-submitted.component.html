@@ -1,0 +1,9 @@
+<netz-page-heading [caption]="map.caption">{{ map.title }}</netz-page-heading>
+
+<mrtm-port-calls-list-summary-template [data]="ports()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

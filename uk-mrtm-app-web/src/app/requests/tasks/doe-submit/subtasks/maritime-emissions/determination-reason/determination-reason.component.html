@@ -1,0 +1,25 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="maritimeEmissionsMap.title"
+  [formGroup]="form"
+  [heading]="maritimeEmissionsMap.determinationReason.title"
+  [hideSubmit]="false"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div
+    formControlName="type"
+    govuk-radio
+    legend="Why are you determining the maritime emissions or emissions figure for surrender?"
+    legendSize="medium">
+    @for (option of determineReasonTypeOptions; track option) {
+      <govuk-radio-option [value]="option" [label]="option | i18nSelect: determineReasonTypeMap" />
+    }
+  </div>
+  <div
+    formControlName="furtherDetails"
+    govuk-textarea
+    label="Further details (optional)"
+    labelSize="small"
+    hint="Provide more information about why you are making a determination. The operator cannot view this."
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

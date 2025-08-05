@@ -1,0 +1,9 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="isEditMode ? map.commentsFormEdit.title : map.commentsFormAdd.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="reason" govuk-textarea [maxLength]="10000"></div>
+</mrtm-wizard-step>

@@ -1,0 +1,108 @@
+<h3 class="{{ isSummary() ? 'govuk-heading-s' : 'govuk-heading-m' }}" [class.govuk-!-margin-top-9]="!isSummary()">
+  Emissions summary
+</h3>
+<govuk-tabs>
+  <ng-template govukTab id="fuelConsumption" label="Fuel consumption">
+    <h3 class="govuk-heading-m">Fuel consumption</h3>
+    @if (fuelConsumptions()?.length) {
+      <div class="overflow-auto overflow-auto-table">
+        <govuk-table [columns]="columns" [data]="fuelConsumptions()">
+          <ng-template let-column="column" let-row="row">
+            @switch (column?.field) {
+              @case ('fuelOriginTypeName') {
+                {{ row?.[column?.field] | fuelOriginTitle: false }}
+              }
+              @case ('methaneSlip') {
+                {{ row?.['fuelOriginTypeName']?.['methaneSlip'] | methaneSlipValue: row.methaneSlipValueType }}
+              }
+              @case ('measuringUnit') {
+                {{ row?.[column?.field] | selectOptionToTitle: measurementUnits }}
+              }
+              @case ('name') {
+                {{ row?.[column.field] }}
+              }
+              @case (null) {
+                @if (editable() && !row?.isSummary) {
+                  <div class="control-row justify-content-end">
+                    <a govukLink [routerLink]="[fuelConsumptionsEditPath(), row['uniqueIdentifier']]">Change</a>
+                    @if (deletable()) {
+                      <a govukLink routerLink="." preserveFragment (click)="removeFuelConsumption.emit(row)">Remove</a>
+                    }
+                  </div>
+                }
+              }
+              @default {
+                {{ row?.[column.field] | bigNumber: 7 }}
+              }
+            }
+          </ng-template>
+        </govuk-table>
+      </div>
+      @if (editable() && emissionFactors()) {
+        <mrtm-fuels-and-emissions-factors-info-summary-template [data]="emissionFactors()" />
+      }
+    } @else {
+      <p class="govuk-body">No fuel consumption to display</p>
+    }
+  </ng-template>
+  <ng-template govukTab id="directEmissions" label="Direct emissions">
+    @if (directEmissions(); as directEmissions) {
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+          <h3 class="govuk-heading-m">Direct emissions</h3>
+        </div>
+        @if (editable() && deletable()) {
+          <div class="govuk-grid-column-one-third">
+            <div class="float-right govuk-body">
+              <a govukLink routerLink="." preserveFragment (click)="removeDirectEmission.emit()">
+                Remove direct emissions
+              </a>
+            </div>
+          </div>
+        }
+      </div>
+      <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="false">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>CO2 emissions (t)</dt>
+          <dd govukSummaryListRowValue>{{ directEmissions?.co2 | bigNumber: 7 }}</dd>
+          @if (editable()) {
+            <dd govukSummaryListColumnActions>
+              <a govukLink [routerLink]="[directEmissionsEditPath()]" [queryParams]="editQueryParams()">Change</a>
+            </dd>
+          }
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>CH4 emissions (tCO2e)</dt>
+          <dd govukSummaryListRowValue>{{ directEmissions?.ch4 | bigNumber: 7 }}</dd>
+          @if (editable()) {
+            <dd govukSummaryListColumnActions>
+              <a govukLink [routerLink]="[directEmissionsEditPath()]" [queryParams]="editQueryParams()">Change</a>
+            </dd>
+          }
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>N2O emissions (tCO2e)</dt>
+          <dd govukSummaryListRowValue>{{ directEmissions?.n2o | bigNumber: 7 }}</dd>
+          @if (editable()) {
+            <dd govukSummaryListColumnActions>
+              <a govukLink [routerLink]="[directEmissionsEditPath()]" [queryParams]="editQueryParams()">Change</a>
+            </dd>
+          }
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Total emissions (tCO2e)</dt>
+          <dd govukSummaryListRowValue>{{ directEmissions?.total | bigNumber: 7 }}</dd>
+          @if (editable()) {
+            <dd govukSummaryListColumnActions>
+              <a govukLink [routerLink]="[directEmissionsEditPath()]" [queryParams]="editQueryParams()">Change</a>
+            </dd>
+          }
+        </div>
+      </dl>
+    } @else {
+      <h3 class="govuk-heading-m">Direct emissions</h3>
+      <p class="govuk-body">No emissions to display</p>
+      <button govukSecondaryButton type="button" (click)="onAddDirectEmission()">Add direct emissions</button>
+    }
+  </ng-template>
+</govuk-tabs>

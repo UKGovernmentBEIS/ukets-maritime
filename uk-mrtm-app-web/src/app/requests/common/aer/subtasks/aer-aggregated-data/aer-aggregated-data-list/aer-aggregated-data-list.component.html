@@ -1,0 +1,43 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading [caption]="wizardMap.caption">{{ wizardMap.title }}</netz-page-heading>
+    <p class="govuk-body govuk-!-width-three-quarters">{{ wizardMap.description }}</p>
+  </div>
+  @if (editable()) {
+    <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+      <mrtm-dropdown-button-group label="Add aggregated data">
+        <mrtm-dropdown-button-item [routerLink]="wizardStep.SELECT_SHIP">Add aggregated data</mrtm-dropdown-button-item>
+        <mrtm-dropdown-button-item [routerLink]="['../', wizardStep.UPLOAD_AGGREGATED_DATA]">
+          Upload file
+        </mrtm-dropdown-button-item>
+        @if (canFetchFromPortsAndVoyages()) {
+          <mrtm-dropdown-button-item [routerLink]="['../', wizardStep.FETCH_FROM_VOYAGES_AND_PORTS]">
+            Import from voyages and ports
+          </mrtm-dropdown-button-item>
+        }
+      </mrtm-dropdown-button-group>
+    </div>
+  }
+</div>
+
+@if (editable() && data()?.length) {
+  <mrtm-aer-filter-by-ship
+    [items]="filterAggregatedDataSelectItems()"
+    header="View aggregated per ship"
+    (filterChanged)="onFilterChanged($event)" />
+}
+
+<h3 class="govuk-heading-m">{{ aggregatedDataListHeader() }}</h3>
+@if (warningMessage(); as warningMessage) {
+  <govuk-warning-text [assistiveText]="warningMessage" />
+}
+<mrtm-aggregated-data-list-summary-template [data]="data()" (deleteItems)="onDelete($event)" [editable]="editable()" />
+
+@if (canContinue()) {
+  <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

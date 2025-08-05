@@ -1,0 +1,20 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [showBackLink]="true"
+  [heading]="title"
+  submitText="Confirm and complete">
+  <span class="govuk-body govuk-!-margin-bottom-1">
+    The following notes are from the regulator explaining the things you need to change.
+  </span>
+  <mrtm-follow-up-amends-details-summary-template [followUpReviewDecision]="followUpReviewDecision" />
+  <div formControlName="changesComplete" govuk-checkboxes>
+    <govuk-checkbox
+      [value]="true"
+      label="I have made the changes and want to mark this task as complete"></govuk-checkbox>
+  </div>
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+</div>
+<netz-return-to-task-or-action-page />

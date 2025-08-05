@@ -1,0 +1,27 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="additionalDocumentsMap.additionalDocumentsUpload.title"
+  [caption]="additionalDocumentsMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="exist"
+    govuk-radio
+    [hint]="
+      'Add any information that you think is relevant for your ship and management procedures, for example task lists or organisation charts.'
+    "
+    [isInline]="true">
+    <govuk-radio-option [value]="true" [label]="'Yes'" />
+    <govuk-radio-option [value]="false" [label]="'No'" />
+  </div>
+
+  @if (existCtrl.value) {
+    <mrtm-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      label="Upload a file"
+      listTitle="Uploaded files"
+      formControlName="documents"></mrtm-multiple-file-input>
+  }
+</mrtm-wizard-step>

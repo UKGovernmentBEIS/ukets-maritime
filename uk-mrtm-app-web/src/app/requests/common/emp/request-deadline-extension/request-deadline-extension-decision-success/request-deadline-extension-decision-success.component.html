@@ -1,0 +1,11 @@
+@if (decision === 'ACCEPTED') {
+  <div class="govuk-!-width-two-thirds">
+    <govuk-panel title="Extension request approved"></govuk-panel>
+    <p class="govuk-body">The determination deadline has been updated to {{ extDueDate() | govukDate }}</p>
+  </div>
+} @else {
+  <div class="govuk-!-width-two-thirds">
+    <govuk-panel title="Extension request {{ decision | lowercase }}"></govuk-panel>
+  </div>
+}
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

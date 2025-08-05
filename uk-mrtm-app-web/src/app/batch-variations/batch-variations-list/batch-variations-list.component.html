@@ -1,0 +1,38 @@
+@if (vm(); as vm) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <netz-page-heading>Batch variations</netz-page-heading>
+    </div>
+    @if (vm.canInitiateBatchReissue) {
+      <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+        <a [routerLink]="['create']" govukButton>Start a batch variation</a>
+      </div>
+    }
+  </div>
+  @if (vm?.data?.length > 0) {
+    <govuk-table [columns]="vm.columns" [data]="vm.data">
+      <ng-template let-column="column" let-row="row">
+        @switch (column.field) {
+          @case ('id') {
+            <a govukLink [routerLink]="['workflows', row[column.field]]">{{ row[column.field] }}</a>
+          }
+          @case ('createdDate') {
+            {{ row[column.field] | govukDate }}
+          }
+          @default {
+            {{ row[column.field] }}
+          }
+        }
+      </ng-template>
+    </govuk-table>
+    @if (vm.totalItems > pageSize) {
+      <govuk-pagination [count]="vm.totalItems" [pageSize]="pageSize" (currentPageChange)="onPageChanged($event)" />
+    }
+  } @else {
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <p class="govuk-body" tabindex="-1">There are no results to show</p>
+      </div>
+    </div>
+  }
+}

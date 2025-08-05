@@ -1,0 +1,25 @@
+@if (data?.length > 0) {
+  <div class="govuk-grid-row">
+    <h2 class="govuk-heading-m govuk-grid-column-two-thirds">Fuels and emissions factors</h2>
+    @if (isEditable) {
+      <div class="govuk-grid-column-one-third govuk-!-text-align-right govuk-body">
+        <a govukLink [routerLink]="changeLinkList" [queryParams]="queryParams">Change</a>
+      </div>
+    }
+  </div>
+
+  @for (factor of data; track factor.uniqueIdentifier; let i = $index) {
+    <mrtm-fuels-and-emission-factors-summary-template
+      (delete)="onDeleteFuelEmission($event)"
+      [data]="factor"
+      [changeLink]="changeLinkForm"
+      [index]="i"
+      [isEditable]="isEditable" />
+  }
+
+  @if (isEditable) {
+    <p class="govuk-body">
+      <button (click)="handleAddAnother()" govukButton govukSecondaryButton type="button">Add another item</button>
+    </p>
+  }
+}

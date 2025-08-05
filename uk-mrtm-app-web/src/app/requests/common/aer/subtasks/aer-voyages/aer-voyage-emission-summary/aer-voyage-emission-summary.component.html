@@ -1,0 +1,15 @@
+<mrtm-notification-banner />
+<netz-page-heading caption="{{ wizardMap?.voyageDetails?.caption }} {{ ship()?.details?.name }}">
+  Check your answers
+</netz-page-heading>
+
+<mrtm-voyage-summary-template [data]="voyage()" [relatedShip]="ship()" [editable]="editable()" />
+
+@if (editable() && !isVoyageCompleted()) {
+  <button (click)="onSubmit()" govukButton netzPendingButton type="button">Continue</button>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../']">Return to: {{ wizardMap.title }}</a>
+</div>

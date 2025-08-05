@@ -1,0 +1,50 @@
+<mrtm-wizard-step
+  [caption]="wizardMap.purchases.caption"
+  [heading]="wizardMap.purchases.title"
+  [formGroup]="form"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">{{ wizardMap.purchases.description }}</p>
+
+  <div
+    govuk-select
+    label="Fuel name"
+    formControlName="fuelOriginTypeName"
+    widthClass="govuk-!-width-one-third"
+    [options]="fuelTypeSelectItems()"></div>
+  <div govuk-text-input label="Batch number" formControlName="batchNumber" widthClass="govuk-!-width-one-third"></div>
+  <div
+    govuk-text-input
+    label="Total mass of sustainable fuel claimed from the batch"
+    formControlName="smfMass"
+    suffix="tonnes"
+    widthClass="govuk-!-width-one-quarter"></div>
+  <div
+    govuk-text-input
+    label="CO2 EF t/t"
+    formControlName="co2EmissionFactor"
+    widthClass="govuk-!-width-one-third"></div>
+  <p class="govuk-body govuk-!-margin-bottom-3">CO2 emissions (t)</p>
+  <p class="govuk-body">
+    {{ isNil(form.get('co2Emissions').value) ? 'Not calculated yet' : form.get('co2Emissions').value }}
+  </p>
+
+  <h3 class="govuk-heading-m">Evidence of proof of sustainability, and proof of purchase and delivery</h3>
+  <p class="govuk-body govuk-!-margin-bottom-1">The batch must be:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>purchased in the scheme year, or up to three months beforehand</li>
+    <li>delivered no later than 31 March of the year after the scheme year</li>
+  </ul>
+
+  <mrtm-multiple-file-input
+    [baseDownloadUrl]="downloadUrl()"
+    label="Upload evidence"
+    headerSize="s"
+    listTitle="Uploaded files"
+    formControlName="evidenceFiles" />
+</mrtm-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../']">Return to: {{ wizardMap.smfDetails.title }}</a>
+</div>

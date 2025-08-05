@@ -1,0 +1,19 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="determinationType | determinationHeaderType"
+  [caption]="overallDecisionMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="reason"
+    govuk-textarea
+    [label]="
+      determinationType === 'APPROVED'
+        ? 'Provide a reason for your decision (optional)'
+        : 'Provide a reason for your decision'
+    "
+    [hint]="'This cannot be viewed by the operator'"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

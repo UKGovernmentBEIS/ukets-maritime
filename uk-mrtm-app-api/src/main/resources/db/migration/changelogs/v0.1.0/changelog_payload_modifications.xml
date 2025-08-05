@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_payload_modifications.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_MODIFY_EMP_REQUEST_TASK_RELATED_PAYLOAD_ADD_emissionsMonitoringPlan_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE request_task
+            SET payload =
+                    jsonb_set(
+                            payload,
+                            '{emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(payload->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE payload ?? 'emissionsMonitoringPlan' AND
+		 payload->'emissionsMonitoringPlan' ?? 'emissions' AND
+		 payload->'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(payload->'emissionsMonitoringPlan'->'emissions'->'ships') > 0 AND
+		 payload->>'payloadType' IN (
+		 'EMP_ISSUANCE_APPLICATION_SUBMIT_PAYLOAD',
+		 'EMP_ISSUANCE_WAIT_FOR_REVIEW_PAYLOAD',
+		 'EMP_ISSUANCE_APPLICATION_REVIEW_PAYLOAD',
+		 'EMP_ISSUANCE_APPLICATION_PEER_REVIEW_PAYLOAD',
+		 'EMP_ISSUANCE_WAIT_FOR_PEER_REVIEW_PAYLOAD',
+		 'EMP_ISSUANCE_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
+		 'EMP_ISSUANCE_WAIT_FOR_AMENDS_PAYLOAD',
+
+		 'EMP_VARIATION_APPLICATION_SUBMIT_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_WAIT_FOR_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_SUBMIT_REGULATOR_LED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_PEER_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_WAIT_FOR_PEER_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_PEER_REVIEW_REGULATOR_LED_PAYLOAD',
+		 'EMP_VARIATION_WAIT_FOR_PEER_REVIEW_REGULATOR_LED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
+		 'EMP_VARIATION_WAIT_FOR_AMENDS_PAYLOAD'
+		 );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_EMP_RELATED_REQUEST_TASK_PAYLOAD_ADD_originalEmpContainer_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE request_task
+            SET payload =
+                    jsonb_set(
+                            payload,
+                            '{originalEmpContainer, emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(payload->'originalEmpContainer'->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE payload ?? 'originalEmpContainer' AND
+            payload->'originalEmpContainer' ?? 'emissionsMonitoringPlan' AND
+		 payload->'originalEmpContainer' -> 'emissionsMonitoringPlan' ?? 'emissions' AND
+		 payload->'originalEmpContainer' -> 'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(payload->'originalEmpContainer'->'emissionsMonitoringPlan'->'emissions'->'ships') > 0 AND
+		 payload->>'payloadType' IN (
+		 'EMP_VARIATION_APPLICATION_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_SUBMIT_REGULATOR_LED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_PEER_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_WAIT_FOR_PEER_REVIEW_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_PEER_REVIEW_REGULATOR_LED_PAYLOAD',
+		 'EMP_VARIATION_WAIT_FOR_PEER_REVIEW_REGULATOR_LED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_AMENDS_SUBMIT_PAYLOAD',
+		 'EMP_VARIATION_WAIT_FOR_AMENDS_PAYLOAD'
+		 );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_EMP_REQUEST_ACTION_RELATED_PAYLOAD_ADD_emissionsMonitoringPlan_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE request_action
+            SET payload =
+                    jsonb_set(
+                            payload,
+                            '{emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(payload->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE payload ?? 'emissionsMonitoringPlan' AND
+		 payload->'emissionsMonitoringPlan' ?? 'emissions' AND
+		 payload->'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(payload->'emissionsMonitoringPlan'->'emissions'->'ships') > 0 AND
+		 payload->>'payloadType' IN (
+		 'EMP_ISSUANCE_APPLICATION_SUBMITTED_PAYLOAD',
+		 'EMP_ISSUANCE_APPLICATION_APPROVED_PAYLOAD',
+		 'EMP_ISSUANCE_APPLICATION_AMENDS_SUBMITTED_PAYLOAD',
+
+		 'EMP_VARIATION_APPLICATION_SUBMITTED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_REJECTED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_AMENDS_SUBMITTED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_APPROVED_PAYLOAD'
+		 );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_EMP_RELATED_REQUEST_ACTION_PAYLOAD_ADD_originalEmpContainer_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE request_action
+            SET payload =
+                    jsonb_set(
+                            payload,
+                            '{originalEmpContainer, emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(payload->'originalEmpContainer'->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE payload ?? 'originalEmpContainer' AND
+            payload->'originalEmpContainer' ?? 'emissionsMonitoringPlan' AND
+		 payload->'originalEmpContainer' -> 'emissionsMonitoringPlan' ?? 'emissions' AND
+		 payload->'originalEmpContainer' -> 'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(payload->'originalEmpContainer'->'emissionsMonitoringPlan'->'emissions'->'ships') > 0 AND
+		 payload->>'payloadType' IN (
+		 'EMP_VARIATION_APPLICATION_REGULATOR_LED_APPROVED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_APPROVED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_REJECTED_PAYLOAD',
+		 'EMP_VARIATION_APPLICATION_DEEMED_WITHDRAWN_PAYLOAD'
+		 );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_EMP_REQUEST_RELATED_PAYLOAD_ADD_emissionsMonitoringPlan_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE request
+            SET payload =
+                    jsonb_set(
+                            payload,
+                            '{emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(payload->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE payload ?? 'emissionsMonitoringPlan' AND
+		 payload->'emissionsMonitoringPlan' ?? 'emissions' AND
+		 payload->'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(payload->'emissionsMonitoringPlan'->'emissions'->'ships') > 0 AND
+		 payload->>'payloadType' IN (
+		 'EMP_ISSUANCE_REQUEST_PAYLOAD',
+		 'EMP_VARIATION_REQUEST_PAYLOAD'
+		 );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_EMP_RELATED_REQUEST_PAYLOAD_ADD_originalEmpContainer_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE request
+            SET payload =
+                    jsonb_set(
+                            payload,
+                            '{originalEmpContainer, emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(payload->'originalEmpContainer'->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE payload ?? 'originalEmpContainer' AND
+            payload->'originalEmpContainer' ?? 'emissionsMonitoringPlan' AND
+		 payload->'originalEmpContainer' -> 'emissionsMonitoringPlan' ?? 'emissions' AND
+		 payload->'originalEmpContainer' -> 'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(payload->'originalEmpContainer'->'emissionsMonitoringPlan'->'emissions'->'ships') > 0 AND
+		 payload->>'payloadType' IN (
+		 'EMP_VARIATION_REQUEST_PAYLOAD'
+		 );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_EMP_RELATED_EMP_DATA_ADD_originalEmpContainer_methaneSlipValueType" author="P44065">
+        <sql>
+            UPDATE emp
+            SET data =
+                    jsonb_set(
+                            data,
+                            '{emissionsMonitoringPlan, emissions, ships}',
+                            (
+                                SELECT jsonb_agg(
+                                               jsonb_set(
+                                                       ship,
+                                                       '{emissionsSources}',
+                                                       (
+                                                           SELECT jsonb_agg(
+                                                                          CASE
+                                                                              WHEN (esm->>'methaneSlip') IN ('0', '0.2', '1.7', '2.6', '3.1') THEN
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"PRESELECTED"')
+                                                                              ELSE
+                                                                                  jsonb_set(esm, '{methaneSlipValueType}', '"OTHER"')
+                                                                              END
+                                                                  )
+                                                           FROM jsonb_array_elements(ship->'emissionsSources') AS esm
+                                                       )
+                                               )
+                                       )
+                                FROM jsonb_array_elements(data->'emissionsMonitoringPlan'->'emissions'->'ships') AS ship
+                            )
+                    )
+
+            WHERE data ?? 'emissionsMonitoringPlan' AND
+		 data->'emissionsMonitoringPlan' ?? 'emissions' AND
+		 data->'emissionsMonitoringPlan'->'emissions' ?? 'ships' AND
+		 jsonb_array_length(data->'emissionsMonitoringPlan'->'emissions'->'ships') > 0;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

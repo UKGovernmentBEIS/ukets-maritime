@@ -1,0 +1,6 @@
+<netz-page-heading [caption]="verificationData()?.reference">Check your answers</netz-page-heading>
+<mrtm-vir-verifier-recommendation-summary-template [data]="verificationData()" />
+<mrtm-vir-operator-response-summary-template
+  header="Operator's response"
+  [data]="operatorResponseData()"
+  [isEditable]="false" />

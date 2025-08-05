@@ -1,0 +1,29 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading caption="Aggregated data">Check your answers</netz-page-heading>
+  </div>
+  @if (editable()) {
+    <div class="govuk-grid-column-one-third">
+      <div class="govuk-button-group float-right">
+        <a
+          govukLink
+          [routerLink]="['./', wizardStep.LIST_OF_AGGREGATED_DATA]"
+          [queryParams]="{ change: true }"
+          type="button">
+          Change
+        </a>
+      </div>
+    </div>
+  }
+</div>
+
+<mrtm-aggregated-data-list-summary-template [data]="aggregatedData()" [editPath]="wizardStep.LIST_OF_AGGREGATED_DATA" />
+
+@if (canSubmit()) {
+  <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and continue</button>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

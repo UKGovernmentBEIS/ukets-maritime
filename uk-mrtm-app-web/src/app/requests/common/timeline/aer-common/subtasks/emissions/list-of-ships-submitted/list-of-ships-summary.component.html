@@ -1,0 +1,8 @@
+<netz-page-heading caption="Ships and emission details">Ships and emission details list</netz-page-heading>
+<mrtm-list-of-ships-summary-template [data]="ships()" editUrl="./ships" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

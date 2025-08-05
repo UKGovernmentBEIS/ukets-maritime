@@ -1,0 +1,26 @@
+<netz-page-heading [caption]="shipName() | shipStepTitleCustom: 2">
+  {{ taskMap.fuelsAndEmissionsFactors.title }}
+</netz-page-heading>
+
+@for (fuel of fuelsAndFactors(); track fuel; let i = $index) {
+  <mrtm-fuels-and-emission-factors-summary-template
+    [isDeletable]="true"
+    [index]="i"
+    [data]="fuel"
+    (delete)="handleDelete($event)"
+    [isEditable]="isEditable" />
+} @empty {
+  <p class="govuk-body govuk-!-margin-top-7 govuk-!-margin-bottom-9">No fuels and emissions factors to display</p>
+  <div>
+    <button (click)="handleAdd()" govukButton type="button">Add item</button>
+  </div>
+}
+
+@if (fuelsAndFactors().length) {
+  <div>
+    <button (click)="handleAdd()" govukButton govukSecondaryButton type="button">Add another item</button>
+  </div>
+  <button (click)="handleContinue()" govukButton type="button" [disabled]="!canContinue()">Continue</button>
+}
+
+<mrtm-return-to-ships-list-table />

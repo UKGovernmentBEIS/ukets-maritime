@@ -1,0 +1,22 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="followUpResponseMap.title"
+  [caption]="followUpResponseMap.title"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true"
+  [hideSubmit]="false"
+  [showReturnLink]="true">
+  <h2 class="govuk-heading-m">Request from the regulator</h2>
+  <p class="govuk-body">{{ followUpRequest }}</p>
+  <div
+    govuk-textarea
+    labelSize="medium"
+    formControlName="response"
+    label="Provide a response"
+    [maxLength]="10000"></div>
+  <mrtm-multiple-file-input
+    [baseDownloadUrl]="downloadUrl"
+    label="Upload any supporting documents (optional)"
+    listTitle="Uploaded files"
+    formControlName="files" />
+</mrtm-wizard-step>

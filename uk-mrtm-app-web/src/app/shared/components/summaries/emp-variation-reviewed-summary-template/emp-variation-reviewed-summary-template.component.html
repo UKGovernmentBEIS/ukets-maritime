@@ -1,0 +1,47 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Decision details</h2>
+  <dl govuk-summary-list>
+    @if (data?.empFile.length > 0) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emissions plan</dt>
+        <dd govukSummaryListRowValue>
+          <mrtm-summary-download-files [files]="data?.empFile" />
+        </dd>
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Emissions plan application</dt>
+      <dd govukSummaryListRowValue>
+        <a govukLink [routerLink]="[data?.empApplication?.url]">{{ data?.empApplication?.title }}</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision</dt>
+      <dd govukSummaryListRowValue>{{ data?.determination?.type | determinationType }}</dd>
+    </div>
+    @if (userRole() === 'REGULATOR' && !isEmpVariationRegulator()) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason for decision</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.determination?.reason"></dd>
+      </div>
+    }
+  </dl>
+
+  <h2 class="govuk-heading-m">Recipients</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue>{{ data?.users?.join(' ') }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue>{{ data?.signatory?.name }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="data?.officialNotice" />
+      </dd>
+    </div>
+  </dl>
+}

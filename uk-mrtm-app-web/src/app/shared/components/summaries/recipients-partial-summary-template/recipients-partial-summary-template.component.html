@@ -1,0 +1,23 @@
+<h2 class="govuk-heading-m">Recipients</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Users</dt>
+    <dd govukSummaryListRowValue>
+      @for (user of officialNoticeInfo()?.users; track $index) {
+        <div>{{ user }}</div>
+      } @empty {
+        <span class="govuk-hint">Not provided</span>
+      }
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+    <dd govukSummaryListRowValue [notProvided]="officialNoticeInfo()?.signatory?.name"></dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Official notice</dt>
+    <dd govukSummaryListRowValue>
+      <mrtm-summary-download-files [files]="officialNoticeInfo()?.officialNotice" />
+    </dd>
+  </div>
+</dl>

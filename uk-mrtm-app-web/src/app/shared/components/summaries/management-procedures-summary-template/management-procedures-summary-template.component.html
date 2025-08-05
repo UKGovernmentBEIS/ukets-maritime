@@ -1,0 +1,85 @@
+<h2 class="govuk-heading-m">{{ managementProceduresMap.monitoringReportingRoles.title }}</h2>
+@for (role of combinedMonitoringReportingRoles(); track role; let index = $index) {
+  <h3 class="govuk-heading-s">Role {{ index + 1 }}</h3>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Job title</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="role?.current?.jobTitle"
+        [previous]="role?.previous?.jobTitle"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.MONITORING_REPORTING_ROLES]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Main duties</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="role?.current?.mainDuties"
+        [previous]="role?.previous?.mainDuties"
+        class="pre-wrap"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.MONITORING_REPORTING_ROLES]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}
+
+<h2 class="govuk-heading-m">{{ managementProceduresMap.regularCheckOfAdequacy.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="managementProcedures?.regularCheckOfAdequacy"
+  [originalProcedureForm]="originalManagementProcedures?.regularCheckOfAdequacy"
+  [currentWizardStep]="wizardStep?.REGULAR_CHECK_OF_ADEQUACY"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable" />
+
+<h2 class="govuk-heading-m">{{ managementProceduresMap.dataFlowActivities.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="managementProcedures?.dataFlowActivities"
+  [originalProcedureForm]="originalManagementProcedures?.dataFlowActivities"
+  [currentWizardStep]="wizardStep?.DATA_FLOW_ACTIVITIES"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable"
+  cssClass="govuk-!-margin-bottom-0" />
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded files</dt>
+    <dd govukSummaryListRowValue>
+      <mrtm-summary-download-files [files]="dataFlowFiles" [originalFiles]="originalDataFlowFiles" />
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.DATA_FLOW_ACTIVITIES]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>
+
+<h2 class="govuk-heading-m">{{ managementProceduresMap.riskAssessmentProcedures.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="managementProcedures?.riskAssessmentProcedures"
+  [originalProcedureForm]="originalManagementProcedures?.riskAssessmentProcedures"
+  [currentWizardStep]="wizardStep?.RISK_ASSESSMENT_PROCEDURES"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable"
+  cssClass="govuk-!-margin-bottom-0" />
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded files</dt>
+    <dd govukSummaryListRowValue>
+      <mrtm-summary-download-files [files]="riskAssessmentFiles" [originalFiles]="originalRiskAssessmentFiles" />
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.RISK_ASSESSMENT_PROCEDURES]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>

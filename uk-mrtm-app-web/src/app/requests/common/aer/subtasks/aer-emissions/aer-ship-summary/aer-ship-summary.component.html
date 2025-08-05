@@ -1,0 +1,18 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm.caption">Check your answers</netz-page-heading>
+  <mrtm-aer-ship-summary-template
+    [data]="vm.ship"
+    [isEditable]="vm.isEditable"
+    [changeLinks]="vm.changeLinks"
+    (addItem)="onAddItem($event)"
+    (removeItem)="onRemoveItem($event)" />
+
+  @if (vm.isEditable && vm.isShipWizardCompleted && !vm.isShipStatusCompleted) {
+    <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>
+  }
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink [routerLink]="['../../']">Return to: {{ vm.subtasksMap.ships.title }}</a>
+  </div>
+}

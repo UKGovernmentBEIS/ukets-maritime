@@ -1,0 +1,11 @@
+<netz-page-heading [caption]="map.title">{{ map.title }}</netz-page-heading>
+
+<mrtm-reduction-claim-summary-template header="Emissions reduction claim" [data]="data()" />
+@if (data()?.exist) {
+  <div>
+    <h3 class="govuk-heading-m">{{ map.smfDetails.title }}</h3>
+    <mrtm-reduction-claim-details-summary-template [data]="fuelPurchases()" />
+  </div>
+}
+
+<netz-return-to-task-or-action-page />

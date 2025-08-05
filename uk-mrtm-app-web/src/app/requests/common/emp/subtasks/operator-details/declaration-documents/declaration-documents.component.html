@@ -1,0 +1,22 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="identifyMaritimeOperatorMap.declarationDocuments.title"
+  [caption]="identifyMaritimeOperatorMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="exist" govuk-radio [isInline]="true">
+    <govuk-radio-option [value]="true" [label]="'Yes'" />
+    <govuk-radio-option [value]="false" [label]="'No'" />
+  </div>
+
+  @if (existCtrl.value) {
+    <mrtm-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      label="Upload any mandates or declarations relevant to the ships for which you have taken on reporting
+      responsibility under the UK ETS, or are mandating to another Maritime Operator."
+      listTitle="Uploaded files"
+      formControlName="documents"></mrtm-multiple-file-input>
+  }
+</mrtm-wizard-step>

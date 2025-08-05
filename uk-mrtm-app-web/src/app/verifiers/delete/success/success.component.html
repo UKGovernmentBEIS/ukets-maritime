@@ -1,0 +1,11 @@
+<div class="govuk-!-width-two-thirds">
+  <govuk-panel title="The user account of {{ userInfo$ | async | userFullName }} has been deleted"></govuk-panel>
+</div>
+
+@if (verificationBodyId$ | async; as verificationBodyId) {
+  <a fragment="contacts" govukLink [routerLink]="['/verification-bodies', verificationBodyId]">
+    Return to: Verification body details
+  </a>
+} @else {
+  <a govukLink [routerLink]="['/user/verifiers']">Return to: Manage verifier users</a>
+}

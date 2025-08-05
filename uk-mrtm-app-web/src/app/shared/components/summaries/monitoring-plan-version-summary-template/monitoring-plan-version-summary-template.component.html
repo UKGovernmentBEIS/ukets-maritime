@@ -1,0 +1,15 @@
+<h2 class="govuk-heading-m">
+  Monitoring plan version that was in effect when the annual emissions report was generated:
+</h2>
+@if (monitoringPlanVersion()?.empApprovalDate) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        {{ monitoringPlanVersion()?.empId }} v{{ monitoringPlanVersion()?.empConsolidationNumber }}
+      </dt>
+      <dd govukSummaryListRowValue>{{ monitoringPlanVersion()?.empApprovalDate | govukDate: 'date' }}</dd>
+    </div>
+  </dl>
+} @else {
+  <p class="govuk-body govuk-!-margin-bottom-9">No monitoring plan.</p>
+}

@@ -1,0 +1,18 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm.wizardMap.title">Check your answers</netz-page-heading>
+  <mrtm-notification-details-of-change-summary-template
+    [detailsOfChange]="vm.detailsOfChange"
+    [notificationFiles]="vm.notificationFiles"
+    [changeLink]="vm.wizardStep.NON_SIGNIFICANT_CHANGE"
+    [isEditable]="vm.isEditable"
+    [queryParams]="{ change: true }" />
+  @if (vm.isEditable && !vm.isSubtaskCompleted) {
+    <div class="govuk-button-group">
+      <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
+    </div>
+  }
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

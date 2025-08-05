@@ -1,0 +1,8 @@
+<div>
+  <h2 class="govuk-heading-m">Check your answers</h2>
+  <mrtm-operator-account-summary-info
+    [formRouterLink]="'../'"
+    [summaryInfo]="info$ | async"></mrtm-operator-account-summary-info>
+  <button (click)="handleSubmit()" govukButton netzPendingButton type="button">Confirm and complete</button>
+</div>
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

@@ -1,0 +1,48 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="taskMap.title | shipStepTitle: 5 : shipName"
+  [formGroup]="formGroup"
+  [heading]="taskMap.measurements.title"
+  [showReturnLink]="false"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Add all measurement devices used to measure fuel consumption or emissions, as well as the associated source streams.
+  </p>
+  <govuk-details summary="What is a measurement device?">
+    <p class="govuk-body">
+      A measurement device is a tool for measuring the amount of fuel consumed or greenhouse gases emitted, for example
+      a flow meter, manual sounding tape or CO2 meter.
+    </p>
+  </govuk-details>
+  <p class="govuk-body">
+    You should use a consistent reference format for all measurement devices, for example Flow Meter 1, Flow Meter 2,
+    Manual Sounding Tape, HFO Tank Radar Gauge.
+  </p>
+
+  <ng-container formArrayName="measurements">
+    @for (control of measurementsFormArray.controls; track control; let i = $index) {
+      <ng-container [formGroupName]="i">
+        <fieldset govukFieldset>
+          <legend govukLegend legendSize="medium">Measurement Device {{ i + 1 }}</legend>
+          @if (measurementsFormArray.controls.length > 1) {
+            <button (click)="removeMeasurementDescription(i)" mrtmAddAnother govukSecondaryButton type="button">
+              Remove
+            </button>
+          }
+          <div formControlName="name" govuk-text-input label="Name of measurement device"></div>
+          <div
+            formControlName="emissionSources"
+            govuk-checkboxes
+            legend="Select the emission source this device is used for"
+            legendSize="normal">
+            @for (name of emissionSourcesNames; track name) {
+              <govuk-checkbox [value]="name" [label]="name"></govuk-checkbox>
+            }
+          </div>
+        </fieldset>
+      </ng-container>
+    }
+    <button (click)="addFuelDetails()" govukSecondaryButton type="button">Add another measurement</button>
+  </ng-container>
+</mrtm-wizard-step>
+<mrtm-return-to-ships-list-table />

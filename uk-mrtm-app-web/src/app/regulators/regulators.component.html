@@ -1,0 +1,63 @@
+<mrtm-notification-banner />
+<netz-page-heading size="xl">Regulator users and contacts</netz-page-heading>
+<govuk-tabs>
+  <ng-template govukTab id="regulator-users" label="Regulator users">
+    @if (isEditable$ | async) {
+      <button govukButton id="add-regulator" routerLink="add" type="button">Add a new user</button>
+    }
+    <form (ngSubmit)="saveRegulators()" [formGroup]="regulatorsForm" id="regulators-form">
+      <govuk-table
+        [columns]="(isEditable$ | async) ? editableCols : nonEditableCols"
+        [form]="regulatorsForm"
+        [users]="regulators$"
+        mrtmUsersTable>
+        <ng-template let-column="column" let-index="index" let-row="row">
+          <ng-container formArrayName="regulatorsArray">
+            <div [formGroupName]="index">
+              @switch (column.field) {
+                @case ('name') {
+                  @if ((isEditable$ | async) || row.userId === (userId$ | async)) {
+                    <a [routerLink]="row.userId" govukLink>{{ row | userFullName }}</a>
+                  } @else {
+                    {{ row | userFullName }}
+                  }
+                }
+                @case ('authorityStatus') {
+                  @if (row.authorityStatus !== 'PENDING') {
+                    <div
+                      [options]="row.authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
+                      formControlName="authorityStatus"
+                      govuk-select
+                      widthClass="govuk-!-width-full"></div>
+                  } @else {
+                    Awaiting confirmation
+                  }
+                }
+                @case ('deleteBtn') {
+                  <div class="govuk-!-text-align-right">
+                    <a [routerLink]="[row.userId, 'delete']" govukLink>Delete</a>
+                  </div>
+                }
+                @default {
+                  {{ row[column.field] }}
+                }
+              }
+            </div>
+          </ng-container>
+        </ng-template>
+      </govuk-table>
+      @if ((isEditable$ | async) && (regulators$ | async)?.length > 0) {
+        <div class="govuk-button-group">
+          <button govukButton netzPendingButton type="submit">Save</button>
+          <button (click)="discardChanges()" govukSecondaryButton type="button">Discard changes</button>
+        </div>
+      }
+    </form>
+  </ng-template>
+  <ng-template govukTab id="site-contacts" label="Site contacts">
+    <mrtm-site-contacts />
+  </ng-template>
+  <ng-template govukTab id="external-contacts" label="External contacts">
+    <mrtm-external-contacts />
+  </ng-template>
+</govuk-tabs>

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_temp_account_search_additional_keyword.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_remove_account_search_additional_keywords" author="P44065">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="account_search_additional_keyword"/>
+        </preConditions>
+
+        <sql>
+            truncate table account_search_additional_keyword;
+        </sql>
+    </changeSet>
+</databaseChangeLog>

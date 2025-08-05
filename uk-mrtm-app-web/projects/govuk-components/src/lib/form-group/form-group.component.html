@@ -1,0 +1,10 @@
+<fieldset [id]="identifier" govukFieldset>
+  @if (legend()) {
+    <legend govukLegend [legendSize]="legendSize()">{{ legend() }}</legend>
+  }
+  @if (shouldDisplayErrors) {
+    <govuk-error-message [errors]="group.errors" [identifier]="identifier" />
+  }
+
+  <ng-content />
+</fieldset>

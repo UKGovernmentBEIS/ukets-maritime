@@ -1,0 +1,14 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Report summary</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ data?.reportSummary }}</dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep()?.REPORT]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

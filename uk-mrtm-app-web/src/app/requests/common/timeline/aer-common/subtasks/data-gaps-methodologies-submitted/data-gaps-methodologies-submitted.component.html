@@ -1,0 +1,9 @@
+<netz-page-heading [caption]="map.title">{{ map.title }}</netz-page-heading>
+
+<mrtm-data-gaps-methodologies-summary-template [data]="dataGapsMethodologies()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

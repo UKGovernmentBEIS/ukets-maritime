@@ -1,0 +1,3 @@
+import { EmpVariationApplicationReturnedForAmendsRequestActionPayload } from '@mrtm/api';
+
+export type EmpVariationReturnedForAmendsActionPayload = EmpVariationApplicationReturnedForAmendsRequestActionPayload;

@@ -1,0 +1,24 @@
+<mrtm-notification-banner />
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading [caption]="taskMap.title">{{ taskMap.ships.title }}</netz-page-heading>
+  </div>
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    <div class="control-row justify-content-end">
+      <button govukButton type="button" (click)="onAddNew()">Add ship</button>
+      <button govukSecondaryButton type="button" (click)="onUploadFile()">Upload file</button>
+    </div>
+  </div>
+</div>
+<p class="govuk-body govuk-!-margin-bottom-7">You can manually add or upload the details for ships and emissions.</p>
+
+<div class="govuk-!-margin-bottom-9">
+  <mrtm-list-of-ships-table editUrl="../ships" [dataSource]="listOfShips()" (removeShips)="onDeleteShips($event)" />
+</div>
+
+@if (canContinue()) {
+  <button netzPendingButton govukButton type="submit" (click)="onContinue()">Continue</button>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+}
+
+<netz-return-to-task-or-action-page />

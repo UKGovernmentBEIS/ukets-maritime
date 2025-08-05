@@ -1,0 +1,6 @@
+@if (canProcessActions()) {
+  <div class="govuk-button-group">
+    <a govukButton [routerLink]="['doe-submit', 'notify-operator']">Notify Operator of decision</a>
+    <a govukSecondaryButton [routerLink]="['doe-submit', 'peer-review']">Send for peer review</a>
+  </div>
+}

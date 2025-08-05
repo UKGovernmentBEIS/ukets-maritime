@@ -1,0 +1,28 @@
+<mrtm-notification-banner />
+<netz-page-heading
+  [caption]="
+    !aggregatedData()?.fromFetch ? wizardMap.annualAggregatedEmissions.caption + ' ' + ship()?.details?.name : undefined
+  ">
+  @if (aggregatedData()?.fromFetch) {
+    Aggregated data for {{ ship()?.details?.name }}
+  } @else {
+    Check your answers
+  }
+</netz-page-heading>
+@if (showWarningMessage()) {
+  <govuk-warning-text
+    assistiveText="No relevant data can be retrieved from the voyages or ports subtasks. Review the aggregated data and ensure that is correct." />
+}
+<mrtm-aer-aggregated-data-ship-summary-template
+  [editable]="editable()"
+  [aggregatedData]="aggregatedData()"
+  [ship]="ship()" />
+
+@if (canSubmit()) {
+  <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and continue</button>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../']">Return to: {{ wizardMap.title }}</a>
+</div>

@@ -1,0 +1,31 @@
+<mrtm-wizard-step
+  [isTwoThirds]="true"
+  caption="{{ wizardMap.annualAggregatedEmissions.caption }} {{ ship()?.details?.name }}"
+  [heading]="wizardMap.annualAggregatedEmissions.title"
+  (formSubmit)="onSubmit()"
+  [formGroup]="form">
+  <mrtm-aer-aggregated-emissions-form
+    class="govuk-!-margin-bottom-5 govuk-!-display-block"
+    [header]="wizardMap.emissionsWithinUKPorts.title"
+    formGroupName="emissionsWithinUKPorts" />
+
+  <mrtm-aer-aggregated-emissions-form
+    class="govuk-!-margin-bottom-5 govuk-!-display-block"
+    [header]="wizardMap.emissionsBetweenUKPorts.title"
+    formGroupName="emissionsBetweenUKPorts" />
+
+  <mrtm-aer-aggregated-emissions-form
+    class="govuk-!-margin-bottom-5 govuk-!-display-block"
+    [header]="wizardMap.emissionsBetweenUKAndEEAVoyages.title"
+    formGroupName="emissionsBetweenUKAndEEAVoyages" />
+
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+
+  <mrtm-aer-aggregated-data-annual-emissions-totals
+    [header]="wizardMap.totalAggregatedEmissions.title"
+    [data]="form.get('totalAggregatedEmissions').value" />
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
+</div>

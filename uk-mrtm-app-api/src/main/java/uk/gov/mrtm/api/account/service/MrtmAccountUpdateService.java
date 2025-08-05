@@ -1,0 +1,102 @@
+package uk.gov.mrtm.api.account.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mrtm.api.account.domain.MrtmAccount;
+import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
+import uk.gov.mrtm.api.account.domain.MrtmAccountUpdatedEvent;
+import uk.gov.mrtm.api.account.domain.dto.MrtmAccountUpdateDTO;
+import uk.gov.mrtm.api.account.enumeration.AccountSearchKey;
+import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
+import uk.gov.mrtm.api.account.transform.AddressStateMapper;
+import uk.gov.mrtm.api.account.transform.MrtmAccountMapper;
+import uk.gov.mrtm.api.account.transform.RegisteredAddressStateMapper;
+import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
+import uk.gov.netz.api.account.service.AccountSearchAdditionalKeywordService;
+import uk.gov.netz.api.account.service.validator.AccountStatus;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.util.List;
+import java.util.Map;
+
+@Service
+@RequiredArgsConstructor
+public class MrtmAccountUpdateService {
+    private final MrtmAccountQueryService mrtmAccountQueryService;
+    private final MrtmAccountRepository mrtmAccountRepository;
+    private final MrtmAccountMapper mrtmAccountMapper;
+    private final AccountSearchAdditionalKeywordService accountSearchAdditionalKeywordService;
+    private final RegisteredAddressStateMapper registeredAddressStateMapper;
+    private final AddressStateMapper addressStateMapper;
+    private final ApplicationEventPublisher publisher;
+
+    @Value("${feature-flag.aer.workflow.enabled}")
+    private boolean aerEnabled;
+
+    @Transactional
+    @AccountStatus(expression = "{#status != 'CLOSED'}")
+    public void updateMaritimeAccount(Long accountId, MrtmAccountUpdateDTO mrtmAccountUpdateDTO, AppUser user) {
+        MrtmAccount mrtmAccount = mrtmAccountQueryService.getAccountById(accountId);
+
+        mrtmAccountMapper.updateMrtmAccount(mrtmAccount, mrtmAccountUpdateDTO);
+        mrtmAccount.setUpdatedBy(user.getUserId());
+        mrtmAccount.setLastUpdatedDate(LocalDateTime.now());
+
+        accountSearchAdditionalKeywordService.storeKeywordsForAccount(accountId,
+                Map.of(AccountSearchKey.ACCOUNT_NAME.name(), mrtmAccountUpdateDTO.getName()));
+
+        final List<Year> reportingYears = ReportingYearService
+                .calculateReportingYears(Year.of(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate().getYear()));
+
+        if (aerEnabled) {
+            publisher.publishEvent(MrtmAccountUpdatedEvent.builder()
+                    .accountId(accountId)
+                    .reportingYears(reportingYears)
+                    .build());
+        }
+    }
+
+    @Transactional
+    @AccountStatus(expression = "{#status != 'CLOSED'}")
+    public void closeAccount(Long accountId, AppUser appUser, String reason) {
+        MrtmAccount mrtmAccount = mrtmAccountQueryService.getAccountById(accountId);
+        mrtmAccount.setClosureReason(reason);
+        mrtmAccount.setClosingDate(LocalDateTime.now());
+        mrtmAccount.setClosedBy(appUser.getUserId());
+        mrtmAccount.setClosedByName(appUser.getFullName());
+        mrtmAccount.setStatus(MrtmAccountStatus.CLOSED);
+
+        mrtmAccountRepository.save(mrtmAccount);
+    }
+
+    @Transactional
+    @AccountStatus(expression = "{#status == 'NEW'}")
+    public void updateAccountUponEmpApproved(Long accountId, String name, AddressStateDTO contactAddress, AddressStateDTO registeredAddress) {
+        MrtmAccount account = mrtmAccountQueryService.getAccountById(accountId);
+        account.setName(name);
+        account.setAddress(addressStateMapper.toAddressStateDTO(contactAddress));
+        account.setRegisteredAddress(registeredAddressStateMapper.toRegisteredAddressState(registeredAddress));
+        account.setStatus(MrtmAccountStatus.LIVE);
+    }
+
+    @Transactional
+    @AccountStatus(expression = "{#status == 'NEW'}")
+    public void updateAccountUponEmpWithdrawn(Long accountId) {
+        MrtmAccount account = mrtmAccountQueryService.getAccountById(accountId);
+        account.setStatus(MrtmAccountStatus.WITHDRAWN);
+    }
+
+    @Transactional
+    @AccountStatus(expression = "{#status == 'LIVE'}")
+    public void updateAccountUponEmpVariationApproved(Long accountId, String name, AddressStateDTO contactAddress, AddressStateDTO registeredAddress) {
+        MrtmAccount account = mrtmAccountQueryService.getAccountById(accountId);
+        account.setName(name);
+        account.setAddress(addressStateMapper.toAddressStateDTO(contactAddress));
+        account.setRegisteredAddress(registeredAddressStateMapper.toRegisteredAddressState(registeredAddress));
+    }
+}

@@ -1,0 +1,8 @@
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+@if (vm(); as vm) {
+  <mrtm-notification-decision-summary-template
+    [reviewDecision]="vm.reviewDecision"
+    [usersInfo]="vm.usersInfo"
+    [reviewDecisionNotification]="vm.reviewDecisionNotification"
+    [officialNotice]="vm.officialNotice" />
+}

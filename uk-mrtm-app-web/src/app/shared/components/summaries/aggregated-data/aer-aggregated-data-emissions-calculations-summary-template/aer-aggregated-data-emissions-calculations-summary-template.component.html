@@ -1,0 +1,25 @@
+<h4 class="govuk-heading-s">{{ header() }}</h4>
+<govuk-table [columns]="columns()" [data]="data()" emptyTableText="No emissions to display" [description]="header()">
+  <ng-template let-row="row" let-column="column">
+    @switch (column.field) {
+      @case ('emission') {
+        <strong>
+          {{ row?.[column.field] }}
+        </strong>
+      }
+      @default {
+        @if (row?.isSummary) {
+          @if (column.field === 'total' || showSummaryComponents()) {
+            <strong>{{ row?.[column?.field] ?? 0 | bigNumber: 7 }}</strong>
+          }
+        } @else {
+          @if (boldedColumns().includes(column.field)) {
+            <strong>{{ row?.[column?.field] ?? 0 | bigNumber: 7 }}</strong>
+          } @else {
+            {{ row?.[column?.field] ?? 0 | bigNumber: 7 }}
+          }
+        }
+      }
+    }
+  </ng-template>
+</govuk-table>

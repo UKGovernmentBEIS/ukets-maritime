@@ -1,0 +1,16 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  caption="Update reporting status "
+  [heading]="headerMap[currentStatus.status]"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  @if (currentStatus?.reported && currentStatus.status === 'REQUIRED_TO_REPORT') {
+    <govuk-warning-text assistiveText="Emissions have already been reported for the selected year." />
+  }
+
+  <div govuk-textarea [maxLength]="maxReasonLength" formControlName="reason"></div>
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../../']">Return to: Account details</a>
+</div>

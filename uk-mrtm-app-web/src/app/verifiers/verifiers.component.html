@@ -1,0 +1,16 @@
+<mrtm-notification-banner />
+<netz-page-heading size="xl">Manage verifier users</netz-page-heading>
+<govuk-tabs (selectedTab)="handleSelectedTab($event)">
+  <ng-template govukTab id="verifier-users" label="Verifier users">
+    <h2 class="govuk-heading-m">Verifier users</h2>
+    <mrtm-verifier-users-list
+      (discardChanges)="onDiscardChanges()"
+      (saveChanges)="onSave($event)"
+      [authorities]="authorities$"
+      [editable]="verifiersEditable$ | async" />
+  </ng-template>
+  <ng-template govukTab id="site-contacts" label="Site contacts">
+    <h2 class="govuk-heading-m">Site contacts</h2>
+    <mrtm-site-contacts />
+  </ng-template>
+</govuk-tabs>

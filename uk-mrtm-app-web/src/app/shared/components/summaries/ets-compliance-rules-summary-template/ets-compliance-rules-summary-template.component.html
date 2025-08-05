@@ -1,0 +1,217 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.monitoringPlanRequirementsMet.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.monitoringPlanRequirementsMet | booleanToText }}
+        @if (data?.monitoringPlanRequirementsMet === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.monitoringPlanRequirementsNotMetReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.monitoringPlanRequirementsMet"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.etsOrderRequirementsMet.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.etsOrderRequirementsMet | booleanToText }}
+        @if (data?.etsOrderRequirementsMet === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.etsOrderRequirementsNotMetReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.etsOrderRequirementsMet"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.detailSourceDataVerified.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.detailSourceDataVerified | booleanToText }}
+        @if (data?.detailSourceDataVerified) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.partOfSiteVerification"></div>
+        } @else if (data?.detailSourceDataVerified === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.detailSourceDataNotVerifiedReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.detailSourceDataVerified"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.controlActivitiesDocumented.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.controlActivitiesDocumented | booleanToText }}
+        @if (data?.controlActivitiesDocumented === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.controlActivitiesNotDocumentedReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.controlActivitiesDocumented"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.proceduresMonitoringPlanDocumented.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.proceduresMonitoringPlanDocumented | booleanToText }}
+        @if (data?.proceduresMonitoringPlanDocumented === false) {
+          <div
+            class="govuk-!-margin-top-1 pre-wrap"
+            [notProvided]="data?.proceduresMonitoringPlanNotDocumentedReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.proceduresMonitoringPlanDocumented"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.dataVerificationCompleted.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.dataVerificationCompleted | booleanToText }}
+        @if (data?.dataVerificationCompleted === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.dataVerificationNotCompletedReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.dataVerificationCompleted"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.monitoringApproachAppliedCorrectly.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.monitoringApproachAppliedCorrectly | booleanToText }}
+        @if (data?.monitoringApproachAppliedCorrectly === false) {
+          <div
+            class="govuk-!-margin-top-1 pre-wrap"
+            [notProvided]="data?.monitoringApproachNotAppliedCorrectlyReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.monitoringApproachAppliedCorrectly"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.methodsApplyingMissingDataUsed.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.methodsApplyingMissingDataUsed | booleanToText }}
+        @if (data?.methodsApplyingMissingDataUsed === false) {
+          <div
+            class="govuk-!-margin-top-1 pre-wrap"
+            [notProvided]="data?.methodsApplyingMissingDataNotUsedReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.methodsApplyingMissingDataUsed"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.competentAuthorityGuidanceMet.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.competentAuthorityGuidanceMet | booleanToText }}
+        @if (data?.competentAuthorityGuidanceMet === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.competentAuthorityGuidanceNotMetReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a
+            govukLink
+            [routerLink]="wizardStep.FORM"
+            fragment="l.competentAuthorityGuidanceMet"
+            [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.nonConformities.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.nonConformities | nonConformitiesToText }}
+        @if (data?.nonConformities === 'NO') {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.nonConformitiesDetails"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" fragment="l.nonConformities" [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

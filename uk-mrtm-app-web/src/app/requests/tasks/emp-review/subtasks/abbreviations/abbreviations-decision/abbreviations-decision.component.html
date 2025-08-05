@@ -1,0 +1,17 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [formGroup]="form"
+    [heading]="vm.abbreviationsMap.decision.title"
+    [caption]="vm.abbreviationsMap.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-abbreviations-summary-template
+      [abbreviations]="vm.abbreviations"
+      [abbreviationsMap]="vm.abbreviationsMap"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-review-decision />
+  </mrtm-wizard-step>
+}

@@ -1,0 +1,12 @@
+// for ITEM_LINK_REQUEST_TYPES_WHITELIST
+export const requestTypesWhitelistForItemLinkPipe = [
+  'ACCOUNT_CLOSURE',
+  'EMP_ISSUANCE',
+  'EMP_NOTIFICATION',
+  'EMP_ISSUANCE_APPLICATION_REVIEW',
+  'EMP_VARIATION',
+  'AER',
+  'DOE',
+  'VIR',
+  'NON_COMPLIANCE',
+];

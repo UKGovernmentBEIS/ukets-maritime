@@ -1,0 +1,132 @@
+@if (data(); as voyage) {
+  <h3 class="govuk-heading-m">Voyage details</h3>
+
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Country code and name of departure</dt>
+      <dd govukSummaryListRowValue>
+        {{ voyage?.voyageDetails?.departurePort?.country | selectOptionToTitle: countries }}
+      </dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Port code and name of departure</dt>
+      <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.departurePort?.port | selectOptionToTitle: ports }}</dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Date of departure</dt>
+      <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.departureTime | govukDate: 'date' }}</dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Actual time of departure (ATD)</dt>
+      <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.departureTime | date: 'HH:mm:ss' : 'UTC' }}</dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Country code and name of arrival</dt>
+      <dd govukSummaryListRowValue>
+        {{ voyage?.voyageDetails?.arrivalPort?.country | selectOptionToTitle: countries }}
+      </dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Port code and name of arrival</dt>
+      <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.arrivalPort?.port | selectOptionToTitle: ports }}</dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Date of arrival</dt>
+      <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.arrivalTime | govukDate: 'date' }}</dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Actual time of arrival (ATA)</dt>
+      <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.arrivalTime | date: 'HH:mm:ss' : 'UTC' }}</dd>
+      @if (editable()) {
+        <dd govukSummaryListColumnActions>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    @if (relatedShip()?.derogations?.carbonCaptureAndStorageReduction) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Carbon capture and storage (CCS) (t)</dt>
+        <dd govukSummaryListRowValue [notProvided]="voyage?.voyageDetails?.ccs"></dd>
+        @if (editable()) {
+          <dd govukSummaryListColumnActions>
+            <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Carbon capture and utilisation (CCU) (t)</dt>
+        <dd govukSummaryListRowValue [notProvided]="voyage?.voyageDetails?.ccu">{{ voyage?.voyageDetails?.ccu }}</dd>
+        @if (editable()) {
+          <dd govukSummaryListColumnActions>
+            <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+
+    @if (relatedShip()?.derogations?.smallIslandFerryOperatorReduction) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Are you claiming a small island ferry operator surrender reduction?</dt>
+        <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.smallIslandFerryReduction | booleanToText }}</dd>
+        @if (editable()) {
+          <dd govukSummaryListColumnActions>
+            <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+
+  <mrtm-voyage-or-port-call-emissions-summary-template
+    [isSummary]="true"
+    header="Emissions from voyage"
+    [editable]="editable()"
+    [journeyType]="voyage?.journeyType"
+    [totalEmissions]="voyage?.totalEmissions"
+    [surrenderEmissions]="voyage?.surrenderEmissions" />
+
+  <mrtm-fuel-consumption-and-direct-emissions-summary-template
+    [directEmissionsEditPath]="[wizardStep.FUEL_EMISSIONS, wizardStep.DIRECT_EMISSIONS].join('/')"
+    [fuelConsumptionsEditPath]="[wizardStep.FUEL_EMISSIONS, wizardStep.FUEL_CONSUMPTION].join('/')"
+    [editable]="editable()"
+    [editQueryParams]="editQueryParams()"
+    [directEmissions]="voyage?.directEmissions"
+    [fuelConsumptions]="voyage?.fuelConsumptions" />
+}

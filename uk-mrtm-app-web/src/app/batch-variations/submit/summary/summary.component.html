@@ -1,0 +1,9 @@
+@if (vm(); as vm) {
+  <netz-page-heading caption="Start a batch variation">Check your answers</netz-page-heading>
+  <mrtm-batch-variation-summary-template
+    [data]="vm?.data"
+    [isEditable]="vm?.isEditable"
+    [queryParams]="vm?.queryParams"
+    [wizardStep]="vm?.wizardStep" />
+  <button type="submit" netzPendingButton govukButton (click)="onSubmit()">Confirm and complete</button>
+}

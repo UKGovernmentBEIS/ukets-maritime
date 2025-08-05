@@ -1,0 +1,27 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Response details</h2>
+  <dl govuk-summary-list>
+    @for (question of data.questions; track question; let index = $index) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Question {{ index + 1 }}</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="question"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Response</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.answers?.[index]"></dd>
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Regulator files</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="data.regulatorFiles" />
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Operator files</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="data.operatorFiles" />
+      </dd>
+    </div>
+  </dl>
+}

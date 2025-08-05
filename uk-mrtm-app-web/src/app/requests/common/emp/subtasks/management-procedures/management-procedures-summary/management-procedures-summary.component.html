@@ -1,0 +1,35 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm.managementProceduresMap.title">Check your answers</netz-page-heading>
+  <mrtm-management-procedures-summary-template
+    [managementProcedures]="vm.managementProcedures"
+    [originalManagementProcedures]="vm.originalManagementProcedures"
+    [managementProceduresMap]="vm.managementProceduresMap"
+    [dataFlowFiles]="vm.dataFlowFiles"
+    [originalDataFlowFiles]="vm.originalDataFlowFiles"
+    [riskAssessmentFiles]="vm.riskAssessmentFiles"
+    [originalRiskAssessmentFiles]="vm.originalRiskAssessmentFiles"
+    [isEditable]="vm.isEditable"
+    [wizardStep]="vm.wizardStep"
+    [queryParams]="{ change: true }" />
+  @if (vm.isVariationRegulatorDecision) {
+    <mrtm-variation-regulator-decision-partial-summary-template
+      [variationDecisionDetails]="vm.variationDecisionDetails"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }"
+      [isEditable]="vm.isEditable" />
+  }
+  @if (vm.hasReview) {
+    <mrtm-emp-review-decision-summary-template
+      [reviewDecision]="vm.empReviewDecisionDTO"
+      [isEditable]="vm.isEditable"
+      [changeLink]="vm.wizardStep.DECISION"
+      [queryParams]="{ change: true }" />
+  }
+  @if (vm.isEditable && !vm.isSubTaskCompleted) {
+    <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+  }
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

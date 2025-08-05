@@ -1,0 +1,35 @@
+@if (data?.length) {
+  <h2 class="govuk-heading-m">Level of uncertainty associated with the fuel monitoring methods</h2>
+  @for (item of data; track item.monitoringMethod) {
+    <h3 class="govuk-heading-s">{{ monitoringMethodMap[item.monitoringMethod].text }}</h3>
+    <dl [hasBorders]="true" govuk-summary-list>
+      @if (item.methodApproach) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Approach used</dt>
+          <dd govukSummaryListRowValue>{{ item.methodApproach | selectOptionToTitle: methodApproachSelectOptions }}</dd>
+          @if (isEditable && item.monitoringMethod !== 'DIRECT') {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+            </dd>
+          }
+        </div>
+      }
+      @if (!isNil(item.value)) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Uncertainty value (%)</dt>
+          <dd govukSummaryListRowValue>
+            @if (item.methodApproach === 'DEFAULT') {
+              ±
+            }
+            {{ item.value }}
+          </dd>
+          @if (isEditable && item.methodApproach !== 'DEFAULT') {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+            </dd>
+          }
+        </div>
+      }
+    </dl>
+  }
+}

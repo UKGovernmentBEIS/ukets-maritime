@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.1.0/changelog_emissions_monitoring_plan.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+
+	<changeSet id="0_1_0_CREATE_EMISSIONS_MONITORING_PLAN_TABLE" author="dimopoulosc@unisystems.gr">
+		<createTable tableName="emp" remarks="Represents an emissions monitoring plan object">
+			<column name="id" type="varchar(20)" remarks="The emissions monitoring plan id (primary key)">
+				<constraints primaryKey="true" primaryKeyName="emp_pk" nullable="false"/>
+			</column>
+			<column name="account_id" type="bigint" remarks="The account id for which the emissions monitoring plan has been issued">
+				<constraints nullable="false" unique="true" uniqueConstraintName="emp_account_id_uc" />
+			</column>
+			<column name="data" type="jsonb" remarks="emissions monitoring plan representation as json">
+				<constraints nullable="false" />
+			</column>
+			<column name="consolidation_number" type="int" defaultValueNumeric="1" remarks="The emissions monitoring plan version">
+				<constraints nullable="false" />
+			</column>
+			<column name="file_document_uuid" type="varchar(255)" remarks="The emissions monitoring plan's file document uuid"/>
+		</createTable>
+		<rollback>
+			<sql>
+				DROP TABLE IF EXISTS emp;
+			</sql>
+		</rollback>
+	</changeSet>
+
+
+
+</databaseChangeLog>

@@ -1,0 +1,16 @@
+<p class="govuk-body">{{ requestTaskType() | i18nSelect: hintMap }}</p>
+<mrtm-payment-details-summary-template [data]="paymentDetails()" />
+
+<div class="govuk-button-group">
+  @if (isEditable() && allowedActions(); as allowedActions) {
+    @if (allowedActions.includes('PAYMENT_MARK_AS_PAID')) {
+      <a [routerLink]="[routePrefix, makePaymentRoute]" govukButton>Make payment</a>
+    }
+    @if (allowedActions.includes('PAYMENT_MARK_AS_RECEIVED')) {
+      <a [routerLink]="[routePrefix, markAsReceivedPaymentRoute]" govukButton>Mark payment as received</a>
+    }
+    @if (allowedActions.includes('PAYMENT_CANCEL')) {
+      <a [routerLink]="[routePrefix, cancelPaymentRoute]" govukSecondaryButton>Cancel payment task</a>
+    }
+  }
+</div>

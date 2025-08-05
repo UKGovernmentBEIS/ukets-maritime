@@ -1,0 +1,45 @@
+<govuk-table
+  [columns]="columns"
+  [data]="data()"
+  [description]="map.priorYearList.title"
+  emptyTableText="No items to display">
+  <ng-template let-row="row" let-column="column">
+    @switch (column?.field) {
+      @case ('actionLinks') {
+        @if (isEditable()) {
+          <div class="control-row justify-content-end">
+            <a
+              govukLink
+              class="govuk-link--no-visited-state"
+              [routerLink]="[editLinkPrefix() + row['reference'] + '/' + wizardStep.PRIOR_YEAR_ISSUE_FORM_EDIT]"
+              [queryParams]="queryParams()">
+              Change
+            </a>
+            <a
+              govukLink
+              class="govuk-link--no-visited-state"
+              [routerLink]="[editLinkPrefix() + row['reference'] + '/' + wizardStep.PRIOR_YEAR_ISSUE_DELETE]"
+              [queryParams]="queryParams()">
+              Remove
+            </a>
+          </div>
+        }
+      }
+      @default {
+        <div class="pre-wrap">{{ row[column?.field] }}</div>
+      }
+    }
+  </ng-template>
+</govuk-table>
+
+@if (data()?.length && isEditable()) {
+  <div class="govuk-!-margin-bottom-6">
+    <a
+      data-test-id="add-another-item-btn"
+      govukSecondaryButton
+      [routerLink]="[editLinkPrefix() + wizardStep.PRIOR_YEAR_ISSUE_FORM_ADD]"
+      [queryParams]="queryParams()">
+      Add another item
+    </a>
+  </div>
+}

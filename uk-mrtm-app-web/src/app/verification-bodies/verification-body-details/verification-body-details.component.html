@@ -1,0 +1,18 @@
+<mrtm-notification-banner />
+<netz-page-heading size="xl">Verification body details</netz-page-heading>
+
+<govuk-tabs (selectedTab)="handleSelectedTab($event)">
+  <ng-template govukTab id="details" label="Details">
+    <h2 class="govuk-heading-m">Details</h2>
+    <mrtm-verification-body-summary [summaryInfo]="summaryInfo$ | async" />
+  </ng-template>
+  <ng-template govukTab id="contacts" label="Contacts">
+    <h2 class="govuk-heading-m">Contacts</h2>
+    <mrtm-verifier-users-list
+      (discardChanges)="handleDiscardChanges()"
+      (saveChanges)="handleSaveChanges($event)"
+      [authorities]="authorities$"
+      [editable]="isEditable$ | async"
+      [verificationBodyId]="verificationBodyId$ | async" />
+  </ng-template>
+</govuk-tabs>

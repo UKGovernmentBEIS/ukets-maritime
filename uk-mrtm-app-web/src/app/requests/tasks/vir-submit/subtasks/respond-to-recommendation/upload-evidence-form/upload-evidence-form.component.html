@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  (formSubmit)="onSubmit()"
+  [caption]="caption()"
+  heading="Upload evidence and documents"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <mrtm-multiple-file-input
+    [baseDownloadUrl]="downloadUrl"
+    label="Upload a file"
+    listTitle="Uploaded files"
+    formControlName="files"></mrtm-multiple-file-input>
+</mrtm-wizard-step>

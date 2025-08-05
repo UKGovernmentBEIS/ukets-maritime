@@ -1,0 +1,9 @@
+<mrtm-wizard-step
+  (formSubmit)="handleConfirm()"
+  [formGroup]="form"
+  [showBackLink]="true"
+  heading="Add an operator account">
+  <mrtm-operator-account-form />
+</mrtm-wizard-step>
+
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

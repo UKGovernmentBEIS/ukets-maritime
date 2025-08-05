@@ -1,0 +1,15 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.siteVisitDetailsVirtual.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="reason"
+    [label]="map.siteVisitDetailsVirtual.caption"
+    labelSize="medium"
+    [hint]="hintHtml"
+    govuk-textarea
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

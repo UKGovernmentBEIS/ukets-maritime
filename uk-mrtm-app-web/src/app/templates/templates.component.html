@@ -1,0 +1,66 @@
+<netz-page-heading size="xl">Templates</netz-page-heading>
+
+<govuk-tabs>
+  <ng-template govukTab id="operator-emails" label="Operator emails">
+    <ng-container *ngTemplateOutlet="tabTemplate"></ng-container>
+  </ng-template>
+
+  <ng-template govukTab id="operator-documents" label="Operator documents">
+    <ng-container *ngTemplateOutlet="tabTemplate"></ng-container>
+  </ng-template>
+
+  <ng-template govukTab id="regulator-emails" label="Regulator emails">
+    <ng-container *ngTemplateOutlet="tabTemplate"></ng-container>
+  </ng-template>
+</govuk-tabs>
+
+<ng-template #tabTemplate>
+  <div class="govuk-heading-m">{{ currentTabName }}</div>
+  <div class="govuk-body">Search for a template</div>
+  <div class="govuk-grid-row">
+    <form (ngSubmit)="onSearch()" [formGroup]="searchForm" id="search-form">
+      <div class="govuk-grid-column-full">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-three-quarters"></div>
+          <div class="govuk-grid-column-three-quarters">
+            <div formControlName="term" govuk-text-input></div>
+          </div>
+          <div class="govuk-grid-column-one-quarter">
+            <button netzPendingButton govukButton type="submit">Search</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+  @if ((templates$ | async)?.length) {
+    <govuk-table
+      [columns]="(currentFragment$ | async) === 'regulator-emails' ? regulatorTabCols : operatorTabCols"
+      [data]="templates$ | async">
+      <ng-template let-column="column" let-row="row">
+        @switch (column.field) {
+          @case ('name') {
+            <a routerLink="." (click)="navigateToTemplate(row['id'])" govukLink>{{ row[column.field] }}</a>
+          }
+          @case ('workflow') {
+            {{ row[column.field] }}
+          }
+          @case ('lastUpdatedDate') {
+            {{ row[column.field] | govukDate }}
+          }
+        }
+      </ng-template>
+    </govuk-table>
+    @if ((totalPages$ | async) > pageSize) {
+      <govuk-pagination
+        (currentPageChange)="currentPage$.next($event)"
+        [count]="totalPages$ | async"
+        [pageSize]="pageSize" />
+    }
+  } @else {
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <p class="govuk-body" tabindex="-1">There are no results to show.</p>
+      </div>
+    </div>
+  }
+</ng-template>

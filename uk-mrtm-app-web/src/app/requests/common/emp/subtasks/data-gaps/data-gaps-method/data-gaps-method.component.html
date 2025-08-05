@@ -1,0 +1,32 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="dataGapsMap.dataGapsMethod.title"
+  [caption]="dataGapsMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Explain how one of the four monitoring methods (A, B, C or D), that is not used as the main monitoring method, has
+    been applied to estimate fuel consumption where there is a data gap. If the estimation method you plan to apply for
+    the treatment of data gaps does not match any of the four methods, describe it in detail.
+  </p>
+  <div
+    formControlName="fuelConsumptionEstimationMethod"
+    govuk-textarea
+    label="Description of method to estimate fuel consumption"
+    [maxLength]="10000"></div>
+  <div
+    formControlName="responsiblePersonOrPosition"
+    govuk-text-input
+    label="Name of person or position responsible for this method"></div>
+  <div
+    formControlName="formulaeUsed"
+    govuk-textarea
+    hint="If a data gap method is applied that is not one of the four monitoring methods, explain the formulae used to estimate fuel consumption, qualifying the input parameters used"
+    label="Formulae used (optional)"
+    [maxLength]="10000"></div>
+  <div formControlName="dataSources" govuk-textarea label="Data sources" [maxLength]="10000"></div>
+  <div formControlName="recordsLocation" govuk-text-input label="Location where records are kept"></div>
+  <div formControlName="itSystemUsed" govuk-text-input label="Name of IT system used (optional)"></div>
+</mrtm-wizard-step>

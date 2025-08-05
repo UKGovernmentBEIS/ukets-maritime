@@ -1,0 +1,9 @@
+<netz-page-heading [caption]="map.title">{{ map.title }}</netz-page-heading>
+
+<mrtm-materiality-level-summary-template [data]="materialityLevel()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

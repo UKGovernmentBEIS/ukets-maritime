@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/reporting.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+
+    <changeSet id="0_1_0_RPT_REPORTABLE_EMISSIONS_SEQUENCE" author="tsaktsirasl@unisystems.gr">
+        <createSequence sequenceName="rpt_reportable_emissions_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS rpt_reportable_emissions_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_RPT_REPORTABLE_EMISSIONS_TABLE" author="tsaktsirasl@unisystems.gr">
+        <comment>Create reportable emissions TABLE</comment>
+        <createTable tableName="rpt_reportable_emissions" remarks="Represents yearly reportable emissions">
+            <column name="id" type="bigint" remarks="Primary key">
+                <constraints primaryKey="true" primaryKeyName="rpt_reportable_emissions_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="int" remarks="The year">
+                <constraints nullable="false" />
+            </column>
+            <column name="emissions" type="numeric" remarks="The reportable emissions">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_from_doe" type="boolean" defaultValueBoolean="false" remarks="The indication that emissions are derived from doe"/>
+        </createTable>
+        <addUniqueConstraint tableName="rpt_reportable_emissions" columnNames="account_id, year"
+                             constraintName="rpt_reportable_emissions_uc"/>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS rpt_reportable_emissions CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_COLUMNS_ON_RPT_REPORTABLE_EMISSIONS_TABLE" author="tsaktsirasl@unisystems.gr">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update rpt_reportable_emissions TABLE with columns</comment>
+
+        <addColumn tableName="rpt_reportable_emissions">
+            <column name="offset_emissions" type="numeric" remarks="The reportable offset emissions"/>
+            <column name="reduction_claim_emissions" type="numeric" remarks="The reportable reduction claim emissions"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="offset_emissions"/>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="reduction_claim_emissions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_IS_EXEMPTED_COLUMN_ON_RPT_REPORTABLE_EMISSIONS_TABLE" author="tsaktsirasl@unisystems.gr">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update rpt_reportable_emissions TABLE</comment>
+
+        <addColumn tableName="rpt_reportable_emissions">
+            <column name="is_exempted" type="boolean" defaultValueBoolean="false" remarks="The indication whether the account is exempted from reporting emissions"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="is_exempted"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_MODIFY_COLUMNS_ON_RPT_REPORTABLE_EMISSIONS_TABLE" author="tsaktsirasl@unisystems.gr">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update rpt_reportable_emissions TABLE with columns</comment>
+
+        <dropColumn tableName="rpt_reportable_emissions" columnName="offset_emissions"/>
+        <dropColumn tableName="rpt_reportable_emissions" columnName="reduction_claim_emissions"/>
+
+        <addColumn tableName="rpt_reportable_emissions">
+            <column name="total_emissions" type="numeric" defaultValueNumeric="0.0" remarks="The total emissions"/>
+        </addColumn>
+
+        <rollback>
+            <addColumn tableName="rpt_reportable_emissions">
+                <column name="offset_emissions" type="numeric" remarks="The reportable offset emissions"/>
+                <column name="reduction_claim_emissions" type="numeric" remarks="The reportable reduction claim emissions"/>
+            </addColumn>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="total_emissions"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_RPT_REPORTABLE_EMISSIONS_TABLE_RENAME_EMISSIONS_COLUMN" author="tsaktsirasl@unisystems.gr">
+
+        <renameColumn tableName="rpt_reportable_emissions" oldColumnName="emissions" newColumnName="surrender_emissions"/>
+        <rollback>
+            <sql>
+                ALTER TABLE rpt_reportable_emissions RENAME COLUMN surrender_emissions TO emissions;
+            </sql>
+        </rollback>
+    </changeSet>
+	
+	<changeSet id="0_1_0_CREATE_RPT_AER_TABLE" author="tsaktsirasl@unisystems.gr">
+        <createTable tableName="rpt_aer">
+            <column name="id" type="varchar(20)">
+                <constraints primaryKey="true" primaryKeyName="rpt_aer_pk" nullable="false"/>
+            </column>
+            <column name="data" type="jsonb">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="int">
+                <constraints nullable="false" />
+            </column>
+			<column name="total_emissions" type="numeric">
+                <constraints nullable="true" />
+            </column>
+            <column name="surrender_emissions" type="numeric">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS rpt_aer CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_ISLAND_FERRY_AND_ICE_CLASS_DEDUCTION_COLUMNS_ON_RPT_REPORTABLE_EMISSIONS_TABLE" author="dimopoulosc@unisystems.gr">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update rpt_reportable_emissions TABLE with island ferry deduction and ice class deduction columns</comment>
+
+        <addColumn tableName="rpt_reportable_emissions">
+            <column name="island_ferry_deduction" type="numeric" defaultValueNumeric="0.0" remarks="The less small island ferry deduction"/>
+        </addColumn>
+
+        <addColumn tableName="rpt_reportable_emissions">
+            <column name="ice_class_deduction" type="numeric" defaultValueNumeric="0.0" remarks="The less 5 percent ice class deduction"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="island_ferry_deduction"/>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="ice_class_deduction"/>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

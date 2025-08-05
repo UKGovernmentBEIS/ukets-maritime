@@ -1,0 +1,118 @@
+@if (editable) {
+  @switch (userRole$ | async) {
+    @case ('REGULATOR') {
+      <a
+        [routerLink]="['/user/verifiers/add', 'verifier_admin']"
+        [queryParams]="{ verificationBodyId }"
+        govukButton
+        id="reg-add-user"
+        type="button">
+        Add new verifier admin
+      </a>
+    }
+    @case ('VERIFIER') {
+      <form
+        [formGroup]="addNewUserForm"
+        (ngSubmit)="addNewUser()"
+        class="govuk-grid-row row-container govuk-!-width-one-half"
+        id="add-verifier"
+        name="Add verifier">
+        <div class="govuk-grid-column-two-thirds">
+          <div
+            [options]="verifierUserTypes"
+            formControlName="roleCode"
+            govuk-select
+            label="Add a new user"
+            widthClass="govuk-!-width-full"></div>
+        </div>
+        <div class="govuk-grid-column-one-third">
+          <button govukButton type="submit">Continue</button>
+        </div>
+      </form>
+      <govuk-details summary="Learn more about user types">
+        <article>
+          <h3 class="govuk-heading-s govuk-!-padding-bottom-3">User types</h3>
+          <section>
+            <h4 class="govuk-heading-s govuk-!-font-weight-regular">Verifier admin</h4>
+            <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+              This role can manage verifier users and site contacts and can verify operator AEM reports.
+            </p>
+          </section>
+          <section>
+            <h4 class="govuk-heading-s govuk-!-font-weight-regular">Verifier</h4>
+            <p class="govuk-!-padding-left-3 govuk-!-padding-bottom-3">
+              This role can verify operator AEM reports only.
+            </p>
+          </section>
+        </article>
+      </govuk-details>
+    }
+  }
+}
+
+<form (submit)="handleSubmit()" [formGroup]="form" id="verifier-users-form" name="verifier users">
+  <govuk-table
+    [columns]="editable ? tableColumns : readonlyTableColumns"
+    [data]="authorities | async"
+    formArrayName="verifierUsers">
+    <ng-template let-column="column" let-index="index" let-row="row">
+      <ng-container [formGroupName]="index">
+        @switch (column.field) {
+          @case ('name') {
+            @if (editable || (userId$ | async) === row.userId) {
+              <a [routerLink]="['/user/verifiers', row.userId]" [queryParams]="{ verificationBodyId }" govukLink>
+                {{ row | userFullName }}
+              </a>
+            } @else {
+              {{ row | userFullName }}
+            }
+          }
+          @case ('roleCode') {
+            @if (row.authorityStatus !== 'DISABLED' && row.authorityStatus !== 'PENDING' && editable) {
+              <div
+                [options]="verifierUserTypes"
+                formControlName="roleCode"
+                govuk-select
+                widthClass="govuk-!-width-full"></div>
+            } @else {
+              {{ row.roleName }}
+            }
+          }
+          @case ('authorityStatus') {
+            @if (row.authorityStatus === 'PENDING' || editable === false) {
+              Awaiting confirmation
+            } @else {
+              <div
+                [options]="
+                  row.authorityStatus === 'ACCEPTED'
+                    ? verifierUsersAcceptedStatuses
+                    : row.authorityStatus === 'TEMP_DISABLED'
+                      ? getTempDisabledStatuses(index)
+                      : verifierUserStatuses
+                "
+                formControlName="authorityStatus"
+                govuk-select
+                widthClass="govuk-!-width-one-half"></div>
+            }
+          }
+          @case ('deleteBtn') {
+            <div class="govuk-!-text-align-right">
+              <a
+                [routerLink]="['/user/verifiers', row.userId, 'delete']"
+                [queryParams]="{ verificationBodyId }"
+                govukLink>
+                Delete
+              </a>
+            </div>
+          }
+        }
+      </ng-container>
+    </ng-template>
+  </govuk-table>
+  @if (editable && (authorities | async)?.length > 0) {
+    <div class="govuk-button-group">
+      <button govukButton netzPendingButton type="submit">Save</button>
+      <button (click)="handleDiscardChanges()" govukSecondaryButton type="button">Discard changes</button>
+    </div>
+  }
+</form>

@@ -1,0 +1,92 @@
+@if (vm(); as vm) {
+  <netz-page-heading>{{ vm.title }}</netz-page-heading>
+
+  <p class="govuk-body govuk-!-margin-top-2">{{ vm.creationDate | govukDate: 'datetime' }}</p>
+
+  <netz-page-heading>1. Verifier’s assessments and findings</netz-page-heading>
+
+  @if (vm.verifierDetails) {
+    <netz-page-heading>{{ vm.verifierDetailsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-verifier-details-summary-template [data]="vm.verifierDetails" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.opinionStatement) {
+    <netz-page-heading>{{ vm.opinionStatementSubtaskMap.title }}</netz-page-heading>
+    <mrtm-opinion-statement-summary-template
+      [opinionStatement]="vm.opinionStatement"
+      [totalEmissions]="vm.totalEmissions"
+      [monitoringPlanVersion]="vm.monitoringPlanVersion"
+      [monitoringPlanChanges]="vm.monitoringPlanChanges" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.etsComplianceRules) {
+    <netz-page-heading>{{ vm.etsComplianceRulesSubtaskMap.title }}</netz-page-heading>
+    <mrtm-ets-compliance-rules-summary-template [data]="vm.etsComplianceRules" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.complianceMonitoringReporting) {
+    <netz-page-heading>{{ vm.complianceMonitoringReportingSubtaskMap.title }}</netz-page-heading>
+    <mrtm-compliance-monitoring-reporting-summary-template [data]="vm.complianceMonitoringReporting" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.overallVerificationDecision) {
+    <netz-page-heading>{{ vm.overallVerificationDecisionSubtaskMap.title }}</netz-page-heading>
+    <mrtm-aer-overall-verification-decision-summary-template [data]="vm.overallVerificationDecision" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.uncorrectedMisstatements) {
+    <netz-page-heading>{{ vm.uncorrectedMisstatementsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-uncorrected-misstatements-summary-template [data]="vm.uncorrectedMisstatements" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.uncorrectedNonConformities) {
+    <netz-page-heading>{{ vm.uncorrectedNonConformitiesSubtaskMap.title }}</netz-page-heading>
+    <mrtm-uncorrected-non-conformities-summary-template [data]="vm.uncorrectedNonConformities" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.uncorrectedNonCompliances) {
+    <netz-page-heading>{{ vm.uncorrectedNonCompliancesSubtaskMap.title }}</netz-page-heading>
+    <mrtm-uncorrected-non-compliances-summary-template [data]="vm.uncorrectedNonCompliances" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.recommendedImprovements) {
+    <netz-page-heading>{{ vm.recommendedImprovementsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-recommended-improvements-summary-template [data]="vm.recommendedImprovements" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.dataGapsMethodologies) {
+    <netz-page-heading>{{ vm.dataGapsMethodologiesSubtaskMap.title }}</netz-page-heading>
+    <mrtm-data-gaps-methodologies-summary-template [data]="vm.dataGapsMethodologies" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.materialityLevel) {
+    <netz-page-heading>{{ vm.materialityLevelSubtaskMap.title }}</netz-page-heading>
+    <mrtm-materiality-level-summary-template [data]="vm.materialityLevel" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  <netz-page-heading>2. Operator’s application</netz-page-heading>
+
+  <mrtm-aer-submitted-report [hasVerification]="true" />
+}

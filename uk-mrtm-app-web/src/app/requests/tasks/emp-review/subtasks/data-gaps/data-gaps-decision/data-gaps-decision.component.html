@@ -1,0 +1,16 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [formGroup]="form"
+    [heading]="vm.dataGapsMap.decision.title"
+    [caption]="vm.dataGapsMap.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-data-gaps-summary-template
+      [dataGaps]="vm.dataGaps"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-review-decision />
+  </mrtm-wizard-step>
+}

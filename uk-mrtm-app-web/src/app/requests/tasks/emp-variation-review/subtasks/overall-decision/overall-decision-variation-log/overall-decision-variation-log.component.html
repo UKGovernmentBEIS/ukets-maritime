@@ -1,0 +1,24 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="determinationType | determinationType"
+  [formGroup]="form"
+  [heading]=""
+  [hideSubmit]="false"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div
+    [label]="
+      determinationType === 'REJECTED'
+        ? 'Provide text to be included in the refusal notice'
+        : 'Enter a summary of the changes for emissions monitoring plan variation log'
+    "
+    [maxLength]="10000"
+    formControlName="summary"
+    govuk-textarea
+    [hint]="
+      determinationType === 'APPROVED'
+        ? 'The operator will see this in the approved emissions monitoring plan document. Enter a summary for all items that were added to the status log'
+        : 'The operator will see this in the refusal notice'
+    "
+    labelSize="large"></div>
+</mrtm-wizard-step>

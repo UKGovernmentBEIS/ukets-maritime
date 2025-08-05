@@ -1,0 +1,6 @@
+<netz-page-heading>Confirm that this verification body will be deleted</netz-page-heading>
+<govuk-warning-text assistiveText="You will not be able to undo this action." />
+<div class="govuk-button-group">
+  <button (click)="handleDelete()" govukWarnButton netzPendingButton type="button">Confirm delete</button>
+  <a [routerLink]="['/verification-bodies']" govukLink>Cancel</a>
+</div>

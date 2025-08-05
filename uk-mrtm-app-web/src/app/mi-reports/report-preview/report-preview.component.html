@@ -1,0 +1,27 @@
+<mrtm-wizard-step [heading]="title" [formGroup]="formGroup" [hideSubmit]="true">
+  @if (reportFormComponent) {
+    <ng-template [formGroup]="formGroup" [ngComponentOutlet]="reportFormComponent" />
+  }
+
+  <div class="govuk-button-group">
+    <button netzPendingButton govukButton type="submit" (click)="generateReport()">Execute</button>
+    <button netzPendingButton govukButton type="submit" (click)="exportToExcel()">Export to excel</button>
+  </div>
+
+  @if (reportData(); as reportData) {
+    <div>
+      @if (reportData?.results?.length) {
+        <div class="overflow-auto overflow-auto-table">
+          <govuk-table [columns]="tableColumns()" [data]="tableData()"></govuk-table>
+        </div>
+
+        @if (reportData?.results?.length > pageSize) {
+          <govuk-pagination
+            [count]="reportData?.results?.length"
+            (currentPageChange)="currentPage.set($event)"
+            [pageSize]="pageSize"></govuk-pagination>
+        }
+      }
+    </div>
+  }
+</mrtm-wizard-step>

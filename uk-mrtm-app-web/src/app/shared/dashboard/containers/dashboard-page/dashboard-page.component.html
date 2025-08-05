@@ -1,0 +1,44 @@
+<netz-page-heading size="xl">Tasks</netz-page-heading>
+<govuk-tabs>
+  <ng-template govukTabLazy id="assigned-to-me" label="Assigned to me">
+    <ng-container
+      *ngTemplateOutlet="
+        tabTemplate;
+        context: { unassigned: 'Regulator', tab: 'assigned-to-me', header: 'Assigned to me' }
+      "></ng-container>
+  </ng-template>
+  <ng-template govukTabLazy id="assigned-to-others" label="Assigned to others">
+    <ng-container
+      *ngTemplateOutlet="
+        tabTemplate;
+        context: { tab: 'assigned-to-others', header: 'Assigned to others' }
+      "></ng-container>
+  </ng-template>
+  @if (role() !== 'OPERATOR') {
+    <ng-template govukTabLazy id="unassigned" label="Unassigned">
+      <ng-container
+        *ngTemplateOutlet="
+          tabTemplate;
+          context: { unassigned: 'Unassigned', tab: 'unassigned', header: 'Unassigned' }
+        "></ng-container>
+    </ng-template>
+  }
+</govuk-tabs>
+<ng-template #tabTemplate let-header="header" let-tab="tab" let-unassigned="unassigned">
+  <h2 class="govuk-heading-m">{{ header }}</h2>
+  @if (activeTab() === tab) {
+    <mrtm-dashboard-items-list [items]="items()" [tableColumns]="tableColumns()" [unassignedLabel]="unassigned" />
+  }
+  @if (total() > pageSize()) {
+    @if (activeTab() === tab) {
+      <govuk-pagination (currentPageChange)="changePage($event)" [count]="total()" [pageSize]="pageSize()" />
+    }
+  }
+</ng-template>
+
+@if (role() === 'REGULATOR') {
+  <div>
+    <h2 class="govuk-heading-m">Actions</h2>
+    <a govukLink routerLink="/accounts/create">Add an operator account</a>
+  </div>
+}

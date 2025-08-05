@@ -1,0 +1,33 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    @if (shouldSendToRegulator()) {
+      <netz-page-heading>Send report to regulator</netz-page-heading>
+      <p class="govuk-body">Your report will be sent directly to {{ competentAuthority() | competentAuthority }}.</p>
+      <ng-container *ngTemplateOutlet="commonConfirmationContent" />
+    } @else {
+      @if (hasVerificationBody()) {
+        <netz-page-heading>Send report to verifier</netz-page-heading>
+        <h4 class="govuk-heading-s govuk-!-margin-bottom-1">Current verifier</h4>
+        <p class="govuk-body">{{ verificationBody()?.name }}</p>
+        <ng-container *ngTemplateOutlet="commonConfirmationContent" />
+      } @else if (hasVerificationBody() === false) {
+        <netz-page-heading>
+          Your named verifier is invalid. Please make sure a verification body has been successfully added to your
+          account.
+        </netz-page-heading>
+      }
+    }
+  </div>
+</div>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>
+
+<ng-template #commonConfirmationContent>
+  <p class="govuk-body govuk-!-margin-bottom-9">
+    By selecting ‘Confirm and send’ you confirm that the information is correct to the best of your knowledge.
+  </p>
+  <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and send</button>
+</ng-template>

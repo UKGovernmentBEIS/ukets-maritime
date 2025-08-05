@@ -1,0 +1,19 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="managementProceduresMap.riskAssessmentProcedures.title"
+  [caption]="managementProceduresMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Enter details of how inherent risks and control risks are assessed when establishing an effective control system.
+  </p>
+  <govuk-details summary="About the description of procedures">
+    Simple procedures may be completely reflected by the description. However, when the procedure is more complex, it
+    may be described in an external source (such as a written procedure or harmonised quality, environmental or energy
+    management standards). If so, a brief description will suffice, with a reference to the full procedure and indicate
+    where its full version is stored.
+  </govuk-details>
+  <mrtm-emp-procedure-form-with-files />
+</mrtm-wizard-step>

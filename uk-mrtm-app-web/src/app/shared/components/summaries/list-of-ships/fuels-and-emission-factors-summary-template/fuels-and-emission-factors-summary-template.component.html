@@ -1,0 +1,47 @@
+@if (data(); as data) {
+  <div govuk-summary-card title="Fuel {{ index() + 1 }}">
+    @if (isEditable()) {
+      <ng-template #actions>
+        <a
+          [routerLink]="[changeLink(), data?.uniqueIdentifier]"
+          [queryParams]="queryParams()"
+          govukLink="summaryAction">
+          Change
+        </a>
+        @if (isDeletable()) {
+          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">Remove</a>
+        }
+      </ng-template>
+    }
+    <dl [hasBottomMargin]="false" govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Fuel origin</dt>
+        <dd govukSummaryListRowValue [notProvided]="data | fuelOriginTitle"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Tank to Wake emission factor for carbon dioxide</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.carbonDioxide"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Tank to Wake emission factor for methane</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.methane"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Tank to Wake emission factor for nitrous oxide</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.nitrousOxide"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Method to determine density - fuel bunkered</dt>
+        <dd
+          govukSummaryListRowValue
+          [notProvided]="data?.densityMethodBunker | selectOptionToTitle: densityMethodBunkerOptions"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Method to determine density - fuel in tanks</dt>
+        <dd
+          govukSummaryListRowValue
+          [notProvided]="data?.densityMethodTank | selectOptionToTitle: densityMethodTankOptions"></dd>
+      </div>
+    </dl>
+  </div>
+}

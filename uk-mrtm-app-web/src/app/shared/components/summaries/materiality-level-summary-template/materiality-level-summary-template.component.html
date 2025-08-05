@@ -1,0 +1,41 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.materialityDetails.caption }}</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.materialityDetails"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.DETAILS" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.accreditationReferenceDocumentTypes.title }}</dt>
+      <dd govukSummaryListRowValue>
+        <ul class="govuk-list govuk-list--bullet">
+          @for (type of accreditationReferenceDocumentTypes(); track i; let i = $index) {
+            <li [class.govuk-!-margin-top-5]="i > 0">{{ type | accreditationReferenceDocumentTypes }}</li>
+          }
+        </ul>
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.REFERENCE_DOCUMENTS" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    @if (data.accreditationReferenceDocumentTypes?.includes('OTHER')) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.otherReference.title }}</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.otherReference"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="wizardStep.REFERENCE_DOCUMENTS" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

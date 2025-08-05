@@ -1,0 +1,45 @@
+@import 'base';
+
+:host {
+  display: block;
+}
+
+.govuk-button.dropdown-button-group__trigger {
+  &:active {
+    // Prevent the button bumping down
+    top: 0;
+  }
+}
+
+.dropdown-button-group__trigger-inner {
+  display: block;
+  position: relative;
+  padding-right: 24px;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: calc(50% - 3px);
+    right: 2px;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: currentColor transparent transparent transparent;
+  }
+
+  .dropdown-button-group__trigger--open &::after {
+    border-width: 0 6px 6px 6px;
+    border-color: transparent transparent currentColor transparent;
+  }
+}
+
+.dropdown-button-group__popover {
+  position: absolute;
+  inset: unset;
+  width: max-content;
+  padding: 0;
+  border: none;
+  margin: 6px 0 0 0;
+  overflow: hidden;
+  background-color: govuk-colour('light-grey');
+  transition: none;
+}

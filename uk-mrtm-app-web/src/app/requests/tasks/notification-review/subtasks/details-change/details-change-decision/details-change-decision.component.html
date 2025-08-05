@@ -1,0 +1,65 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="detailsChangeMap.reviewDecision.title"
+  [caption]="detailsChangeMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true">
+  <mrtm-notification-details-of-change-summary-template
+    [detailsOfChange]="empNotification?.detailsOfChange"
+    [notificationFiles]="notificationFiles" />
+
+  <mrtm-boolean-radio-group
+    controlName="type"
+    legend="What is your decision for the information submitted?"
+    hint="Take into account any additional information shared"
+    [positiveValue]="'ACCEPTED'"
+    [negativeValue]="'REJECTED'"
+    positiveLabel="Accepted"
+    negativeLabel="Rejected">
+    <ng-container govukConditionalContent formGroupName="details">
+      <ng-container formGroupName="followUp">
+        <div
+          formControlName="followUpResponseRequired"
+          govuk-radio
+          legend="Do you require a response from the operator?"
+          legendSize="small">
+          <govuk-radio-option [value]="true" label="Yes">
+            <ng-container govukConditionalContent>
+              <div
+                govuk-textarea
+                [maxLength]="10000"
+                formControlName="followUpRequest"
+                label="Explain what the operator should cover in their response"
+                hint="This will help the operator write a useful reply"
+                labelSize="small"></div>
+              <div
+                formControlName="followUpResponseExpirationDate"
+                label="Date response is needed"
+                hint="You can change this later"
+                govuk-date-input
+                legendSize="small"></div>
+            </ng-container>
+          </govuk-radio-option>
+          <govuk-radio-option [value]="false" label="No" />
+        </div>
+      </ng-container>
+    </ng-container>
+  </mrtm-boolean-radio-group>
+
+  <ng-container formGroupName="details">
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="officialNotice"
+      label="Provide a summary of your decision to be included in the notification letter"
+      labelSize="small"></div>
+    <div
+      govuk-textarea
+      [maxLength]="10000"
+      formControlName="notes"
+      label="Notes (optional)"
+      labelSize="small"
+      hint="The operator cannot view this"></div>
+  </ng-container>
+</mrtm-wizard-step>

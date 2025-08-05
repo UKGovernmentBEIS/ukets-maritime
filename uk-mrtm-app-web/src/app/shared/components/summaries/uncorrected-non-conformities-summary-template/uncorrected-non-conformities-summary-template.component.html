@@ -1,0 +1,44 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">{{ map.list.title }}</h2>
+  <dl govuk-summary-list [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.exist.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.exist | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  @if (data.uncorrectedNonConformities?.length) {
+    <mrtm-uncorrected-items-list-template
+      [data]="data.uncorrectedNonConformities"
+      [description]="map.list.title"
+      [queryParams]="queryParams()"
+      [isEditable]="isEditable()"
+      editLinkPrefix="" />
+  }
+
+  <h2 class="govuk-heading-m">{{ map.priorYearList.title }}</h2>
+  <dl govuk-summary-list [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.priorYearIssuesExist.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.existPriorYearIssues | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.PRIOR_YEAR_ISSUES_EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  @if (data.priorYearIssues?.length) {
+    <mrtm-uncorrected-non-conformities-prior-year-list-template
+      [data]="data.priorYearIssues"
+      [queryParams]="queryParams()"
+      [isEditable]="isEditable()"
+      editLinkPrefix="" />
+  }
+}

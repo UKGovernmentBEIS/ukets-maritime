@@ -1,0 +1,5 @@
+@use 'base' as govuk;
+
+.return-to-operator-for-changes-form-hint {
+  margin-top: -(govuk.govuk-spacing(4));
+}

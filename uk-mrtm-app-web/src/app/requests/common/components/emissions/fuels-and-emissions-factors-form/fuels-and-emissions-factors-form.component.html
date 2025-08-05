@@ -1,0 +1,119 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="isAer() ? shipName() : (shipName() | shipStepTitleCustom: 2)"
+  [formGroup]="formGroup"
+  [heading]="heading()"
+  [isTwoThirds]="true"
+  [showReturnLink]="false">
+  @if (!isAer()) {
+    <p class="govuk-body">For fossil fuels you must use the default CO2 emissions factors.</p>
+    <p class="govuk-body">
+      If you specify your own values for biofuels and Renewable Fuels of a Non Biological Origin (RFNBO), you must give
+      details of the procedures, systems and responsibilities used to define these values in the determination of
+      emission factors section.
+    </p>
+  }
+
+  <ng-template #fuelTypeInput>
+    <div [options]="fuelTypeOptions[originValue]" formControlName="type" govuk-select label="Fuel type"></div>
+    <div
+      [class.govuk-visually-hidden]="formGroup.get('type').value !== 'OTHER'"
+      govuk-text-input
+      formControlName="name"
+      label="Fuel name"></div>
+  </ng-template>
+
+  <span class="govuk-body">Fuel origin</span>
+  <div formControlName="origin" govuk-radio>
+    <govuk-radio-option [label]="'FOSSIL' | shipFuelOrigin" value="FOSSIL">
+      <ng-container govukConditionalContent>
+        <ng-container *ngTemplateOutlet="fuelTypeInput"></ng-container>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [label]="'BIOFUEL' | shipFuelOrigin" value="BIOFUEL">
+      <ng-container govukConditionalContent>
+        <ng-container *ngTemplateOutlet="fuelTypeInput"></ng-container>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [label]="'RFNBO' | shipFuelOrigin" value="RFNBO">
+      <ng-container govukConditionalContent>
+        <ng-container *ngTemplateOutlet="fuelTypeInput"></ng-container>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  @if (formGroup.get('carbonDioxide').disabled) {
+    <p class="govuk-label">Tank to Wake emission factor for carbon dioxide</p>
+    <p class="govuk-hint govuk-!-margin-top-0">Measured in grams of CO2/grams of fuel</p>
+    <p class="govuk-body">{{ formGroup.get('carbonDioxide').value }}</p>
+  } @else {
+    <div
+      formControlName="carbonDioxide"
+      govuk-text-input
+      hint="Measured in grams of CO2/grams of fuel"
+      label="Tank to Wake emission factor for carbon dioxide"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  <div
+    formControlName="methane"
+    govuk-text-input
+    hint="Measured in grams of CH4/grams of fuel."
+    label="Tank to Wake emission factor for methane"
+    widthClass="govuk-!-width-one-third"></div>
+  @if (nitrousOxideOptions) {
+    <div
+      govuk-select
+      formControlName="nitrousOxide"
+      label="Tank to Wake emission factor for nitrous oxide"
+      hint="Measured in grams of N2O/grams of fuel"
+      widthClass="govuk-!-width-one-third">
+      @for (option of nitrousOxideOptions; track option) {
+        <option [value]="option">{{ option }}</option>
+      }
+      <option [value]="'OTHER'">Other</option>
+    </div>
+  } @else {
+    <div
+      formControlName="nitrousOxide"
+      govuk-text-input
+      hint="Measured in grams of N2O/grams of fuel"
+      label="Tank to Wake emission factor for nitrous oxide"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  @if (
+    nitrousOxideOptions &&
+    formGroup.get('nitrousOxide')?.value !== null &&
+    !nitrousOxideOptions?.includes(+formGroup.get('nitrousOxide')?.value)
+  ) {
+    <div
+      formControlName="otherNitrousOxide"
+      govuk-text-input
+      label="Other value for nitrous oxide"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  @if (!isAer()) {
+    <div
+      [options]="densityMethodBunkerOptions"
+      formControlName="densityMethodBunker"
+      govuk-select
+      hint="Select 'not applicable' if fuel consumption is measured directly in mass instead of volume."
+      label="Method to determine actual density values of fuel bunkered"
+      widthClass="govuk-!-width-one-third"></div>
+    <div
+      [options]="densityMethodTankOptions"
+      formControlName="densityMethodTank"
+      govuk-select
+      hint="Select 'not applicable' if fuel consumption is measured directly in mass instead of volume."
+      label="Method to determine actual density values of fuel in tanks"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+</mrtm-wizard-step>
+
+@if (isAer()) {
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink routerLink="../list">Return to: {{ returnToLabel() }}</a>
+  </div>
+} @else {
+  <mrtm-return-to-ships-list-table [label]="returnToLabel()" />
+}

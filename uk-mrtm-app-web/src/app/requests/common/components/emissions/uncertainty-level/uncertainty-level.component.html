@@ -1,0 +1,41 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="isAer() ? shipName : (taskMap.title | shipStepTitle: 4 : shipName)"
+  [formGroup]="formGroup"
+  [heading]="taskMap.uncertaintyLevel.title"
+  [isTwoThirds]="true"
+  [showReturnLink]="false">
+  <p class="govuk-body">For each method state whether a default, or ship specific uncertainty is being applied.</p>
+  <div formArrayName="uncertaintyLevels">
+    @for (control of uncertaintyLevelFormArray.controls; track control; let i = $index) {
+      <div [formGroupName]="i">
+        <h3 class="govuk-heading-m">{{ monitoringMethodMap[control.get('monitoringMethod')?.value]?.text }}</h3>
+        @if (control.get('methodApproach').disabled) {
+          <p class="govuk-label">Approach used</p>
+          <p class="govuk-body">
+            {{ control.get('methodApproach').value | selectOptionToTitle: methodApproachOptions }}
+          </p>
+        } @else {
+          <div
+            formControlName="methodApproach"
+            [options]="methodApproachOptions"
+            govuk-select
+            widthClass="govuk-!-width-one-third"
+            label="Approach used"></div>
+        }
+
+        @if (control.get('value').disabled) {
+          <p class="govuk-label">Uncertainty value (± %)</p>
+          <p class="govuk-body">{{ control.get('value').value }}</p>
+        } @else {
+          <div
+            widthClass="govuk-!-width-one-third"
+            formControlName="value"
+            govuk-text-input
+            label="Uncertainty value (%)"></div>
+        }
+      </div>
+    }
+  </div>
+</mrtm-wizard-step>
+<mrtm-return-to-ships-list-table [label]="returnToLabel()" />

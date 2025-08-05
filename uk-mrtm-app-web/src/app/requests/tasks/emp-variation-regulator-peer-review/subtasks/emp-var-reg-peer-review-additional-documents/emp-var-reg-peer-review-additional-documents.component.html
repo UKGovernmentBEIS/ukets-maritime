@@ -1,0 +1,15 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm.additionalDocumentsMap.title">Check your answers</netz-page-heading>
+  <mrtm-additional-documents-summary-template
+    [additionalDocuments]="vm.additionalDocuments"
+    [originalAdditionalDocuments]="vm.originalAdditionalDocuments"
+    [additionalDocumentsMap]="vm.additionalDocumentsMap"
+    [files]="vm.files"
+    [originalFiles]="vm.originalFiles" />
+  <mrtm-variation-regulator-decision-partial-summary-template
+    [variationDecisionDetails]="vm.variationDecisionDetails" />
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

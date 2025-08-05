@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.siteVisitType.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="siteVisitType" govuk-radio>
+    @for (option of siteVisitTypeOptions; track option) {
+      <govuk-radio-option [value]="option" [label]="option | aerSiteVisitTypeToLabel" />
+    }
+  </div>
+</mrtm-wizard-step>

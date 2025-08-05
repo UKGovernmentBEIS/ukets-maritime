@@ -1,0 +1,18 @@
+@if (data(); as data) {
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Sort code</dt>
+      <dd govukSummaryListRowValue>{{ data?.swiftCode }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Account number</dt>
+      <dd govukSummaryListRowValue>{{ data?.iban }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Account name</dt>
+      <dd govukSummaryListRowValue>{{ data?.accountName }}</dd>
+    </div>
+  </dl>
+}

@@ -1,0 +1,59 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Request details</h2>
+  <dl govuk-summary-list>
+    @for (question of data?.questions; track question; let index = $index) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Question {{ index + 1 }}</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="question"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[questionEditUrl()]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded files</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="data.files" />
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[questionEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Response deadline</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.deadline | govukDate: 'date'"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[questionEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Recipients</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.operators.join(',')"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[notificationEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.signatory"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[notificationEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

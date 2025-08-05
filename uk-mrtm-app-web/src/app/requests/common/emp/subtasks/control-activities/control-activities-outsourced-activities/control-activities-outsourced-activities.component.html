@@ -1,0 +1,22 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="controlActivitiesMap.title"
+  [formGroup]="formGroup"
+  [heading]="controlActivitiesMap?.outsourcedActivities?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    If monitoring, reporting and verification tasks are outsourced to a third party, you must describe the procedure on
+    how the decision to outsource is made and how quality is ensured.
+  </p>
+  <mrtm-about-procedure-details />
+  <h2 class="govuk-heading-m">Are any of your activities outsourced?</h2>
+  <div [isInline]="true" formControlName="exist" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+
+  @if (existCtrl.value) {
+    <mrtm-emp-procedure-form formGroupName="details" />
+  }
+</mrtm-wizard-step>

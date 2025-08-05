@@ -1,0 +1,93 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="wizardMap.voyageDetails.title"
+  [isTwoThirds]="true"
+  caption="New voyage for {{ ship()?.details?.name }}"
+  (formSubmit)="onSubmit()">
+  <h3 class="govuk-heading-m">Departure details</h3>
+  <div
+    govuk-select
+    [options]="countrySelectItems"
+    widthClass="govuk-!-width-one-third"
+    formControlName="departureCountry"
+    label="Country code and name of departure"
+    labelSize="normal"></div>
+  <div
+    govuk-select
+    [options]="portDepartureSelectItems()"
+    formControlName="departurePort"
+    widthClass="govuk-!-width-one-third"
+    label="Port code and name of departure"
+    labelSize="normal"></div>
+
+  <div
+    govuk-date-input
+    incompleteMessage="The format should be “DD-MM-YYYY”"
+    formControlName="departureDate"
+    label="Date of departure"
+    hint="For example, 21 07 2024"></div>
+  <div
+    mrtm-time-input
+    formControlName="departureTime"
+    label="Actual time of departure (ATD)"
+    hint="Enter the exact time in GMT, for example 17:06:22"></div>
+
+  <h3 class="govuk-heading-m">Arrival details</h3>
+  <div
+    govuk-select
+    [options]="countrySelectItems"
+    widthClass="govuk-!-width-one-third"
+    formControlName="arrivalCountry"
+    label="Country code and name of arrival"
+    labelSize="normal"></div>
+  <div
+    govuk-select
+    [options]="portArrivalSelectItems()"
+    formControlName="arrivalPort"
+    widthClass="govuk-!-width-one-third"
+    label="Port code and name of arrival"
+    labelSize="normal"></div>
+
+  <div
+    govuk-date-input
+    incompleteMessage="The format should be “DD-MM-YYYY”"
+    formControlName="arrivalDate"
+    label="Date of arrival"
+    hint="For example, 21 07 2024"></div>
+  <div
+    mrtm-time-input
+    formControlName="arrivalTime"
+    label="Actual time of arrival (ATA)"
+    hint="Enter the exact time in GMT, for example 17:06:22"></div>
+
+  @if (ship()?.derogations?.carbonCaptureAndStorageReduction) {
+    <h3 class="govuk-heading-m">Carbon Capture Utilisation and Storage</h3>
+
+    <div
+      govuk-text-input
+      formControlName="ccs"
+      label="Carbon capture and storage (CCS)(t)"
+      widthClass="govuk-!-width-one-third"></div>
+
+    <div
+      govuk-text-input
+      formControlName="ccu"
+      label="Carbon capture and utilisation (CCU)(t)"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+
+  @if (ship()?.derogations?.smallIslandFerryOperatorReduction) {
+    <div
+      formControlName="smallIslandFerryReduction"
+      govuk-radio
+      legend="Are you claiming a small island ferry operator surrender reduction?"
+      legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes" />
+      <govuk-radio-option [value]="false" label="No" />
+    </div>
+  }
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
+</div>

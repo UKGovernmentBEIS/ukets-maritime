@@ -1,0 +1,60 @@
+@if ((showCookiesBanner$ | async) === true) {
+  <mrtm-cookies-container />
+}
+<govuk-skip-link />
+<govuk-header title="Manage your UK Emissions Trading Scheme Reporting">
+  <govuk-header-actions-list>
+    <span aria-label="Maritime view">Maritime view</span>
+    @if ((isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)) {
+      <a class="govuk-header__link" [href]="serviceGatewayUrl">Change service</a>
+    }
+    @if (isLoggedIn$ | async) {
+      <a routerLink class="govuk-header__link" (click)="logout($event)">Sign out</a>
+    }
+  </govuk-header-actions-list>
+  @if (permissions$ | async; as permissions) {
+    <govuk-header-nav-list identifier="navigation" ariaLabel="Primary navigation">
+      @if (permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers) {
+        <a govukLink="header" [routerLink]="['/dashboard']">Tasks</a>
+      }
+      @if (permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers) {
+        <a govukLink="header" [routerLink]="['/accounts']">Accounts</a>
+      }
+      @if (permissions.showRegulators) {
+        <a govukLink="header" [routerLink]="['/user/regulators']">Regulator users and contacts</a>
+      }
+      @if (permissions.showRegulators) {
+        <a [routerLink]="['/verification-bodies']" govukLink="header">Verification body accounts</a>
+      }
+      @if (permissions.showVerifiers) {
+        <a [routerLink]="['/user/verifiers']" govukLink="header">Manage verifier users</a>
+      }
+      @if (permissions.showRegulators) {
+        <a govukLink="header" [routerLink]="['/templates']">Templates</a>
+      }
+      @if (permissions.showRegulators) {
+        <a govukLink="header" [routerLink]="['/mi-reports']">MI Reports</a>
+        <a govukLink="header" [routerLink]="['/batch-variations']">Batch variations</a>
+      }
+    </govuk-header-nav-list>
+  }
+</govuk-header>
+
+<div class="govuk-width-container">
+  <mrtm-phase-bar />
+  <mrtm-incorporate-header />
+  <netz-breadcrumbs />
+  <netz-back-link />
+  <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="0">
+    <router-outlet />
+  </main>
+</div>
+<govuk-footer>
+  <govuk-footer-meta-info>
+    <a govukLink="meta" href="/privacy-notice">Privacy Notice</a>
+    <a govukLink="meta" routerLink="/contact-us">Contact us</a>
+    <a govukLink="meta" routerLink="/accessibility">Accessibility Statement</a>
+    <a govukLink="meta" routerLink="/legislation">Legislation</a>
+  </govuk-footer-meta-info>
+</govuk-footer>
+<mrtm-timeout-banner />

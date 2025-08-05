@@ -1,0 +1,36 @@
+@if (data(); as data) {
+  <mrtm-notification-banner />
+  <netz-page-heading [caption]="wizardMap.title">Check your answers</netz-page-heading>
+
+  @if (warningMessage(); as warningMessage) {
+    <govuk-warning-text [assistiveText]="warningMessage" />
+  }
+
+  <mrtm-reduction-claim-summary-template
+    header="Emissions reduction claim"
+    [wizardStep]="wizardStep"
+    [data]="data"
+    [editable]="editable()" />
+  @if (data.exist) {
+    <div>
+      <h3 class="govuk-heading-m">{{ wizardMap.smfDetails.title }}</h3>
+      <mrtm-reduction-claim-details-summary-template
+        [editable]="editable()"
+        [data]="fuelPurchases()"
+        (handleDelete)="onDelete($event)"
+        (handleChange)="onChange($event)" />
+      @if (editable()) {
+        <a govukSecondaryButton [routerLink]="[wizardStep.DETAILS, wizardStep.FUEL_PURCHASE]">Add another item</a>
+      }
+    </div>
+  }
+
+  @if (canSubmit()) {
+    <button type="button" govukButton netzPendingButton (click)="onSubmit()">Confirm and continue</button>
+  }
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

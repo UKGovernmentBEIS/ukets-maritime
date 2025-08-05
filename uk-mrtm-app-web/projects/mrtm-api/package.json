@@ -1,0 +1,14 @@
+{
+  "name": "mrtm-api",
+  "version": "0.0.1",
+  "private": true,
+  "peerDependencies": {
+    "@angular/common": "^18.2.13",
+    "@angular/core": "^18.2.13",
+    "@openapitools/openapi-generator-cli": "^2.16.2",
+    "rimraf": "^6.0.1"
+  },
+  "dependencies": {
+    "tslib": "^2.0.0"
+  }
+}

@@ -1,0 +1,18 @@
+<div
+  mrtm-multi-select
+  formControlName="requestTaskTypes"
+  label="Task"
+  hint="If no tasks are selected, no filtering will be applied">
+  @for (taskType of taskTypes(); track taskType.value) {
+    <div mrtm-multi-select-item [itemValue]="taskType.value" [label]="taskType.label"></div>
+  }
+</div>
+<div
+  mrtm-multi-select
+  formControlName="userIds"
+  label="Assigned to"
+  hint="If no users are selected, no filtering will be applied">
+  @for (taskType of regulatorsOptions(); track taskType.value) {
+    <div mrtm-multi-select-item [itemValue]="taskType.value" [label]="taskType.label"></div>
+  }
+</div>

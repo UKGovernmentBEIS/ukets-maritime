@@ -1,0 +1,16 @@
+@if (vm(); as vm) {
+  @if (isStatusSetByDefault()) {
+    <netz-page-heading>Follow-up response</netz-page-heading>
+  } @else {
+    <netz-page-heading caption="Follow-up response">Check your answers</netz-page-heading>
+  }
+  <mrtm-follow-up-response-summary-template
+    [followUpResponse]="vm"
+    [changeLink]="changeLink"
+    [queryParams]="{ change: true }" />
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

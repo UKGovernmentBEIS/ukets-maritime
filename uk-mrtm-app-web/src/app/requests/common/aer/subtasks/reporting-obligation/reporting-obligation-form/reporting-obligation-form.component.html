@@ -1,0 +1,27 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.heading.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">{{ map.introHint.title }}</p>
+  <div formControlName="reportingRequired" govuk-radio [legend]="reportingRequiredLegend()" legendSize="small">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+  @if (shouldShowDetails()) {
+    <div
+      formControlName="noReportingReason"
+      [maxLength]="10000"
+      govuk-textarea
+      [label]="map.noReportingReason.title"
+      labelSize="small"></div>
+    <mrtm-multiple-file-input
+      formControlName="supportingDocuments"
+      [baseDownloadUrl]="downloadUrl()"
+      [label]="map.supportingDocuments.title"
+      headerSize="s"
+      [listTitle]="map.uploadedFiles.title" />
+  }
+</mrtm-wizard-step>

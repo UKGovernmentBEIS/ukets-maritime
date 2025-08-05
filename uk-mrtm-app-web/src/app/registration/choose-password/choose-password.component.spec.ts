@@ -1,0 +1,149 @@
+import { provideHttpClient } from '@angular/common/http';
+import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/core/testing';
+import { ActivatedRoute, provideRouter, Router } from '@angular/router';
+
+import { of } from 'rxjs';
+import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
+
+import { OperatorUsersRegistrationService } from '@mrtm/api';
+
+import { PageHeadingComponent } from '@netz/common/components';
+import { BasePage, mockClass, MockType } from '@netz/common/testing';
+
+import { ChoosePasswordComponent } from '@registration/choose-password/choose-password.component';
+import { UserRegistrationStore } from '@registration/store/user-registration.store';
+import { PasswordService } from '@shared/services';
+
+describe('ChoosePasswordComponent', () => {
+  let component: ChoosePasswordComponent;
+  let fixture: ComponentFixture<ChoosePasswordComponent>;
+  let page: Page;
+  let passwordService: jest.Mocked<PasswordService>;
+
+  class Page extends BasePage<ChoosePasswordComponent> {
+    get emailValue() {
+      return this.getInputValue('#email');
+    }
+
+    get passwordValue() {
+      return this.getInputValue('#password');
+    }
+
+    set passwordValue(password: string) {
+      this.setInputValue('#password', password);
+    }
+
+    get repeatedPasswordValue() {
+      return this.query<HTMLInputElement>('#validatePassword').value;
+    }
+
+    set repeatedPasswordValue(password: string) {
+      this.setInputValue('#validatePassword', password);
+    }
+
+    get submitButton() {
+      return this.query<HTMLButtonElement>('button[type="submit"]');
+    }
+  }
+
+  const operatorUsersRegistrationService: MockType<OperatorUsersRegistrationService> = {
+    acceptAuthorityAndSetCredentialsToUser: jest.fn().mockReturnValue(of(null)),
+  };
+
+  beforeEach(async () => {
+    passwordService = mockClass(PasswordService);
+
+    await TestBed.configureTestingModule({
+      imports: [ChoosePasswordComponent, PageHeadingComponent],
+      providers: [
+        provideHttpClient(),
+        provideRouter([]),
+        provideZxvbnServiceForPSM(),
+        UserRegistrationStore,
+        { provide: OperatorUsersRegistrationService, useValue: operatorUsersRegistrationService },
+        { provide: PasswordService, useValue: passwordService },
+      ],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(ChoosePasswordComponent);
+    component = fixture.debugElement.componentInstance;
+    component.form.controls['password'].clearAsyncValidators();
+    page = new Page(fixture);
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should fill form from store', inject(
+    [UserRegistrationStore],
+    fakeAsync((store: UserRegistrationStore) => {
+      passwordService.blacklisted.mockReturnValue(of(null));
+      store.setState({ password: 'password', email: 'test@netz.uk' });
+
+      tick();
+      fixture.detectChanges();
+
+      expect(page.emailValue).toBe('test@netz.uk');
+      expect(page.passwordValue).toBe('password');
+      expect(page.repeatedPasswordValue).toBe('password');
+    }),
+  ));
+
+  it('should submit only if form valid', inject([Router], (router: Router) => {
+    const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
+    passwordService.blacklisted.mockReturnValue(of(null));
+
+    page.passwordValue = '';
+    page.repeatedPasswordValue = '';
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    page.passwordValue = 'test';
+    page.submitButton.click();
+    fixture.detectChanges();
+    expect(navigateSpy).not.toHaveBeenCalled();
+
+    page.passwordValue = 'ThisIsAStrongP@ssw0rd';
+    page.repeatedPasswordValue = 'ThisIsAStrongP@ssw0rd';
+
+    page.submitButton.click();
+    fixture.detectChanges();
+    expect(navigateSpy).toHaveBeenCalled();
+  }));
+
+  it('should navigate to summary when creating an operator from an emitter', inject(
+    [Router, UserRegistrationStore],
+    (router: Router, store: UserRegistrationStore) => {
+      const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
+      const token = 'thisisatoken';
+      const password = 'ThisIsAStrongP@ssw0rd';
+
+      passwordService.blacklisted.mockReturnValue(of(null));
+
+      store.setState({
+        invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',
+        token: token,
+        password: password,
+      });
+
+      page.passwordValue = password;
+      page.repeatedPasswordValue = password;
+
+      page.submitButton.click();
+      fixture.detectChanges();
+
+      expect(operatorUsersRegistrationService.acceptAuthorityAndSetCredentialsToUser).toHaveBeenCalledWith({
+        invitationToken: token,
+        password: password,
+      });
+
+      expect(navigateSpy).toHaveBeenCalledWith(['../success'], {
+        relativeTo: TestBed.inject(ActivatedRoute),
+      });
+    },
+  ));
+});

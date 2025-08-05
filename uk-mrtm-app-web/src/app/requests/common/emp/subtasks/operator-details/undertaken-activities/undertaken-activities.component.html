@@ -1,0 +1,15 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="identifyMaritimeOperatorMap.title"
+  [formGroup]="formGroup"
+  [heading]="identifyMaritimeOperatorMap.undertakenActivities.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="activityDescription"
+    govuk-textarea
+    hint="
+    Include geographical scope, typical leasing arrangements if applicable and purpose of maritime activity,
+    for example transport of passengers or cargo."
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

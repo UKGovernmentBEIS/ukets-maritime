@@ -1,0 +1,13 @@
+<netz-page-heading size="l">Are you sure you want to delete this note?</netz-page-heading>
+
+<div class="govuk-button-group govuk-!-margin-bottom-8">
+  <button type="button" (click)="onDelete()" netzPendingButton govukWarnButton>Yes, delete this note</button>
+</div>
+
+<a govukLink [routerLink]="backUrl" fragment="notes">
+  @if (workflowId) {
+    Return to: Workflow notes
+  } @else {
+    Return to: Account notes
+  }
+</a>

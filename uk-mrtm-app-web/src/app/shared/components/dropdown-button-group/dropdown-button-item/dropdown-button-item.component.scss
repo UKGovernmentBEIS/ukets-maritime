@@ -1,0 +1,48 @@
+@import 'base';
+
+$dropdown-button-colour: govuk-colour('light-grey');
+$dropdown-button-hover-colour: govuk-shade($dropdown-button-colour, 52%);
+$dropdown-button-shadow-colour: govuk-shade($dropdown-button-colour, 40%);
+
+:host {
+  display: block;
+}
+
+.govuk-button.dropdown-button-item__button {
+  width: 100%;
+  margin: 0;
+  border: 0;
+  text-align: right;
+  background-color: $dropdown-button-colour;
+  line-height: 20px;
+  padding: 10px 12px;
+
+  &,
+  &:focus {
+    box-shadow: inset 0 -1px 0 $dropdown-button-shadow-colour;
+  }
+
+  &,
+  &:link,
+  &:visited,
+  &:active,
+  &:hover {
+    color: govuk-colour('black');
+  }
+
+  &:active {
+    // Prevent the button bumping down
+    top: 0;
+  }
+
+  &::before {
+    // Hide ::before pseudo element to prevent the expanded click target area
+    // from overlapping with other buttons in the group
+    display: none;
+  }
+
+  &:hover {
+    color: govuk-colour('white');
+    background-color: $dropdown-button-hover-colour;
+  }
+}

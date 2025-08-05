@@ -1,0 +1,17 @@
+@if (formMode === 'NEW') {
+  <div
+    formControlName="imoNumber"
+    govuk-text-input
+    label="Company IMO number"
+    widthClass="govuk-!-width-one-quarter"></div>
+}
+<div formControlName="name" govuk-text-input label="Operator name" widthClass="govuk-!-width-two-thirds"></div>
+@if (formMode === 'EDIT') {
+  <div formControlName="sopId" govuk-text-input label="SOP ID (optional)" widthClass="govuk-!-width-one-quarter"></div>
+}
+<mrtm-location-state-form legendLabel="Contact address" />
+<div
+  formControlName="firstMaritimeActivityDate"
+  govuk-date-input
+  label="First year of reporting obligation"
+  legendSize="small"></div>

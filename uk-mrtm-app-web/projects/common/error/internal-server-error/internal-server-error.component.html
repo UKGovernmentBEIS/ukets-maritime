@@ -1,0 +1,20 @@
+@switch (errorCode) {
+  @case (genericServiceErrorCode.INTREGACCOUNTCREATIONMRTM1007) {
+    <netz-page-heading size="xl">Sorry, the service could not send information to the registry</netz-page-heading>
+    <p class="govuk-body">We're experiencing temporary difficulties in syncing data.</p>
+    <p class="govuk-body">Try again later.</p>
+    <p class="govuk-body">
+      Contact
+      <a govukLink href="mailto:METS@energysecurity.gov.uk">UK ETS reporting helpdesk</a>
+      for assistance.
+    </p>
+  }
+  @default {
+    <netz-page-heading size="xl">Sorry, there is a problem with the service</netz-page-heading>
+    <p class="govuk-body">Try again later.</p>
+    <p class="govuk-body">
+      <a govukLink [routerLink]="['/contact-us']">Contact the DESNZ helpdesk</a>
+      if you have any questions.
+    </p>
+  }
+}

@@ -1,0 +1,64 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="maritimeEmissionsMap.title"
+  [formGroup]="form"
+  [heading]="maritimeEmissionsMap.totalMaritimeEmissions.title"
+  [hideSubmit]="false"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div
+    formControlName="determinationType"
+    govuk-radio
+    [legend]="doeTotalMaritimeEmissionsMap.determinationType.title"
+    legendSize="medium">
+    @for (option of determinationTypeOptions; track option) {
+      <govuk-radio-option [value]="option" [label]="option | i18nSelect: determinationTypeMap" />
+    }
+  </div>
+
+  <h2 class="govuk-heading-m">{{ doeTotalMaritimeEmissionsMap.title }}</h2>
+  <div
+    formControlName="totalReportableEmissions"
+    govuk-text-input
+    inputType="number"
+    [label]="doeTotalMaritimeEmissionsMap.totalReportableEmissions.title"
+    labelSize="small"
+    suffix="tCO2e"
+    [widthClass]="'govuk-input--width-10'"></div>
+  <div
+    formControlName="smallIslandFerryDeduction"
+    govuk-text-input
+    inputType="number"
+    [label]="doeTotalMaritimeEmissionsMap.smallIslandFerryDeduction.title"
+    labelSize="small"
+    suffix="tCO2e"
+    [widthClass]="'govuk-input--width-10'"></div>
+  <div
+    formControlName="iceClassDeduction"
+    govuk-text-input
+    inputType="number"
+    [label]="doeTotalMaritimeEmissionsMap.iceClassDeduction.title"
+    labelSize="small"
+    suffix="tCO2e"
+    [widthClass]="'govuk-input--width-10'"></div>
+  <div
+    formControlName="surrenderEmissions"
+    govuk-text-input
+    inputType="number"
+    [label]="doeTotalMaritimeEmissionsMap.surrenderEmissions.title"
+    labelSize="small"
+    suffix="tCO2e"
+    [widthClass]="'govuk-input--width-10'"></div>
+  <div
+    formControlName="calculationApproach"
+    govuk-textarea
+    label="How have you calculated the emissions?"
+    labelSize="medium"
+    hint="The operator will see this in the official notice."
+    [maxLength]="10000"></div>
+  <mrtm-multiple-file-input
+    [baseDownloadUrl]="downloadUrl()"
+    label="Upload supporting documents (optional) "
+    listTitle="Uploaded files"
+    formControlName="supportingDocuments" />
+</mrtm-wizard-step>

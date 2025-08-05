@@ -1,0 +1,17 @@
+<netz-page-heading caption="Create report summary">Check your answers</netz-page-heading>
+<mrtm-vir-regulator-report-summary-template
+  header="Your response"
+  [data]="reportSummaryData()"
+  [isEditable]="isEditable()"
+  [wizardStep]="wizardStepMap"
+  [queryParams]="{ change: true }" />
+
+@if (isEditable() && !isSubTaskCompleted()) {
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
+}
+<div>
+  @if (isEditable() && !isSubTaskCompleted()) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

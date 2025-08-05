@@ -1,0 +1,126 @@
+import { inject } from '@angular/core';
+
+import { RequestTaskPageContentFactory } from '@netz/common/request-task';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+
+import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
+import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
+import { empReviewQuery } from '@requests/common/emp/+state';
+import { ABBREVIATIONS_SUB_TASK } from '@requests/common/emp/subtasks/abbreviations';
+import { CONTROL_ACTIVITIES_SUB_TASK } from '@requests/common/emp/subtasks/control-activities';
+import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps';
+import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources';
+import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas';
+import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures';
+import { OVERALL_DECISION_SUB_TASK, overallDecisionMap } from '@requests/common/emp/subtasks/overall-decision';
+import {
+  abbreviationsMap,
+  additionalDocumentsMap,
+  controlActivitiesMap,
+  dataGapsMap,
+  emissionSourcesMap,
+  emissionsSubTasksMap,
+  greenhouseGasMap,
+  identifyMaritimeOperatorMap,
+  managementProceduresMap,
+} from '@requests/common/emp/subtasks/subtask-list.map';
+import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
+import { taskActionTypeToTitleMap } from '@shared/constants';
+
+const routePrefix = 'emp-wait-for-amend';
+
+export const empWaitForAmendTaskContent: RequestTaskPageContentFactory = () => {
+  const store: RequestTaskStore = inject(RequestTaskStore);
+  const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
+
+  return {
+    header: taskActionTypeToTitleMap?.[requestTaskType],
+    sections: [
+      {
+        title: 'Account details',
+        tasks: [
+          {
+            name: OPERATOR_DETAILS_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(OPERATOR_DETAILS_SUB_TASK))(),
+            linkText: identifyMaritimeOperatorMap.title,
+            link: `${routePrefix}/operator-details`,
+          },
+        ],
+      },
+      {
+        title: 'Emissions monitoring',
+        tasks: [
+          {
+            name: EMISSIONS_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(EMISSIONS_SUB_TASK))(),
+            linkText: emissionsSubTasksMap.title,
+            link: `${routePrefix}/emissions`,
+          },
+          {
+            name: EMISSION_SOURCES_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(EMISSION_SOURCES_SUB_TASK))(),
+            linkText: emissionSourcesMap.title,
+            link: `${routePrefix}/emission-sources`,
+          },
+          {
+            name: GREENHOUSE_GAS_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(GREENHOUSE_GAS_SUB_TASK))(),
+            linkText: greenhouseGasMap.title,
+            link: `${routePrefix}/greenhouse-gas`,
+          },
+          {
+            name: DATA_GAPS_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(DATA_GAPS_SUB_TASK))(),
+            linkText: dataGapsMap.title,
+            link: `${routePrefix}/data-gaps`,
+          },
+        ],
+      },
+      {
+        title: 'Management procedures',
+        tasks: [
+          {
+            name: MANAGEMENT_PROCEDURES_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(MANAGEMENT_PROCEDURES_SUB_TASK))(),
+            linkText: managementProceduresMap.title,
+            link: `${routePrefix}/management-procedures`,
+          },
+          {
+            name: CONTROL_ACTIVITIES_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(CONTROL_ACTIVITIES_SUB_TASK))(),
+            linkText: controlActivitiesMap.title,
+            link: `${routePrefix}/control-activities`,
+          },
+        ],
+      },
+      {
+        title: 'Additional information',
+        tasks: [
+          {
+            name: ABBREVIATIONS_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(ABBREVIATIONS_SUB_TASK))(),
+            linkText: abbreviationsMap.title,
+            link: `${routePrefix}/abbreviations`,
+          },
+          {
+            name: ADDITIONAL_DOCUMENTS_SUB_TASK,
+            status: store.select(empReviewQuery.selectReviewDecisionStatus(ADDITIONAL_DOCUMENTS_SUB_TASK))(),
+            linkText: additionalDocumentsMap.title,
+            link: `${routePrefix}/additional-documents`,
+          },
+        ],
+      },
+      {
+        title: 'Decision',
+        tasks: [
+          {
+            name: OVERALL_DECISION_SUB_TASK,
+            status: store.select(empReviewQuery.selectStatusForOverallDecision)(),
+            linkText: overallDecisionMap.title,
+            link: `${routePrefix}/overall-decision`,
+          },
+        ],
+      },
+    ],
+  };
+};

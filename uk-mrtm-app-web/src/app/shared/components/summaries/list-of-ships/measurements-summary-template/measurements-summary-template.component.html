@@ -1,0 +1,41 @@
+@if (data?.length) {
+  <h2 class="govuk-heading-m">Description of the measurement instruments involved</h2>
+  @for (measurement of data; track measurement; let index = $index) {
+    <h3 class="govuk-heading-s">Measurement Device {{ index + 1 }}</h3>
+    <dl [hasBorders]="true" govuk-summary-list>
+      @if (measurement.name) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Name of measurement device</dt>
+          <dd govukSummaryListRowValue>{{ measurement.name }}</dd>
+          @if (isEditable) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+            </dd>
+          }
+        </div>
+      }
+      @if (measurement.emissionSources?.length) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Emission source this device is used for</dt>
+          <dd govukSummaryListRowValue>
+            <ul class="govuk-list govuk-list--bullet">
+              @for (source of measurement.emissionSources; track source) {
+                <li>{{ source }}</li>
+              }
+            </ul>
+          </dd>
+          @if (isEditable) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+            </dd>
+          }
+        </div>
+      }
+    </dl>
+  }
+  @if (isEditable) {
+    <p class="govuk-body">
+      <button (click)="handleAddAnother()" govukButton govukSecondaryButton type="button">Add another item</button>
+    </p>
+  }
+}

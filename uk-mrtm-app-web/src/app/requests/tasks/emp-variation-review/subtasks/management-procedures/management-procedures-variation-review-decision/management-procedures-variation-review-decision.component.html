@@ -1,0 +1,22 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [formGroup]="form"
+    [heading]="vm.managementProceduresMap.decision.title"
+    [caption]="vm.managementProceduresMap.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-management-procedures-summary-template
+      [managementProcedures]="vm.managementProcedures"
+      [originalManagementProcedures]="vm.originalManagementProcedures"
+      [dataFlowFiles]="vm.dataFlowFiles"
+      [originalDataFlowFiles]="vm.originalDataFlowFiles"
+      [riskAssessmentFiles]="vm.riskAssessmentFiles"
+      [originalRiskAssessmentFiles]="vm.originalRiskAssessmentFiles"
+      [managementProceduresMap]="vm.managementProceduresMap"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-review-decision />
+  </mrtm-wizard-step>
+}

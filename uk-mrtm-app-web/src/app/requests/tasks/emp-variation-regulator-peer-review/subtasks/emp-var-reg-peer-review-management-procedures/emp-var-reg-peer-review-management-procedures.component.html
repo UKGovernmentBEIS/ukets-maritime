@@ -1,0 +1,17 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm.managementProceduresMap.title">Check your answers</netz-page-heading>
+  <mrtm-management-procedures-summary-template
+    [managementProcedures]="vm.managementProcedures"
+    [originalManagementProcedures]="vm.originalManagementProcedures"
+    [managementProceduresMap]="vm.managementProceduresMap"
+    [dataFlowFiles]="vm.dataFlowFiles"
+    [originalDataFlowFiles]="vm.originalDataFlowFiles"
+    [riskAssessmentFiles]="vm.riskAssessmentFiles"
+    [originalRiskAssessmentFiles]="vm.originalRiskAssessmentFiles" />
+  <mrtm-variation-regulator-decision-partial-summary-template
+    [variationDecisionDetails]="vm.variationDecisionDetails" />
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

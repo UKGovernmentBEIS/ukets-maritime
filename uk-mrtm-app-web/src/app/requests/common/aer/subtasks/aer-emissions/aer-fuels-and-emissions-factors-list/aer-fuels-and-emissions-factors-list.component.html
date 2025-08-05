@@ -1,0 +1,23 @@
+<netz-page-heading [caption]="shipName()">
+  {{ taskMap.fuelsAndEmissionsFactors.title }}
+</netz-page-heading>
+
+<mrtm-aer-fuels-and-emission-factors-summary-template
+  [isDeletable]="true"
+  [data]="fuelsAndEmissionsFactors()"
+  (delete)="handleDelete($event)"
+  [isEditable]="isEditable" />
+
+<div class="govuk-button-group">
+  @if (fuelsAndEmissionsFactors().length) {
+    <button (click)="handleAddItem()" govukButton govukSecondaryButton type="button">Add another item</button>
+  } @else {
+    <button (click)="handleAddItem()" govukButton type="button">Add new item</button>
+  }
+</div>
+
+@if (canContinue()) {
+  <button (click)="handleContinue()" govukButton type="button">Continue</button>
+}
+
+<mrtm-return-to-ships-list-table [label]="returnToLabel" />

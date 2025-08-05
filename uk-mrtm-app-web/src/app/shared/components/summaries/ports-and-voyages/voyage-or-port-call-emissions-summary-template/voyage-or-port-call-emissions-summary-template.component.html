@@ -1,0 +1,52 @@
+<div class="govuk-!-margin-bottom-7">
+  @if (header()) {
+    <div class="flex-space-between">
+      <h3 class="govuk-heading-m">{{ header() }}</h3>
+      @if (isSummary() && editable()) {
+        <div class="govuk-body">
+          <a govukLink [routerLink]="[editStep]" [queryParams]="{ change: true }">Change</a>
+        </div>
+      }
+    </div>
+  }
+
+  @if (journeyType(); as journeyType) {
+    <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey><strong>Journey type</strong></dt>
+        <dd govukSummaryListRowValue>{{ journeyType | uppercase }}</dd>
+      </div>
+    </dl>
+  }
+
+  <div class="overflow-auto overflow-auto-table">
+    <govuk-table
+      [data]="data()"
+      [columns]="columns"
+      emptyTableText="No emissions to display"
+      [description]="!journeyType() ? 'Voyages calculations' : 'Port calculations'">
+      <ng-template let-row="row" let-column="column">
+        @switch (column.field) {
+          @case ('emission') {
+            <strong>
+              {{
+                row?.[column.field] === 'TOTAL'
+                  ? journeyType()
+                    ? 'Total emissions from voyage'
+                    : 'Total in port emissions'
+                  : 'Emissions figure for surrender'
+              }}
+            </strong>
+          }
+          @default {
+            @if (row['emission'] === 'SURRENDER' && journeyType() === 'International') {
+              Not applicable
+            } @else {
+              {{ row?.[column?.field] | bigNumber: 7 }}
+            }
+          }
+        }
+      </ng-template>
+    </govuk-table>
+  </div>
+</div>

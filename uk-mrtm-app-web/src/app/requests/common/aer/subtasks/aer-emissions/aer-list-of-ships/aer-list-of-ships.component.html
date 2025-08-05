@@ -1,0 +1,27 @@
+<mrtm-notification-banner />
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading [caption]="map.title">{{ map.ships.title }}</netz-page-heading>
+  </div>
+  <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+    <mrtm-dropdown-button-group label="Add ship">
+      <mrtm-dropdown-button-item (click)="onAddNew()">Add new ship</mrtm-dropdown-button-item>
+      <mrtm-dropdown-button-item (click)="onUploadFile()">Upload file</mrtm-dropdown-button-item>
+      @if (canFetchFromEMP()) {
+        <mrtm-dropdown-button-item (click)="onFetchFromEMP()">Import from EMP</mrtm-dropdown-button-item>
+      }
+    </mrtm-dropdown-button-group>
+  </div>
+</div>
+<p class="govuk-body govuk-!-margin-bottom-7">You can manually add or upload the details for ships and emissions.</p>
+
+<div class="govuk-!-margin-bottom-9">
+  <mrtm-list-of-ships-table editUrl="../ships" [dataSource]="listOfShips()" (removeShips)="onDeleteShips($event)" />
+</div>
+
+@if (canContinue()) {
+  <button netzPendingButton govukButton type="submit" (click)="onContinue()">Continue</button>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+}
+
+<netz-return-to-task-or-action-page />

@@ -1,0 +1,107 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Non-compliance details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type of non-compliance</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.reason | nonComplianceReason"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.nonComplianceDate.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.nonComplianceDate | govukDate"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.complianceDate.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.complianceDate | govukDate"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.comments"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Selected task or workflow of non-compliance</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Selected task or workflow</dt>
+      <dd govukSummaryListRowValue>
+        @if (data.selectedRequestsMapped?.length) {
+          <ol class="govuk-list govuk-list--number">
+            @for (requestInfo of data.selectedRequestsMapped; track $index) {
+              <li>{{ requestInfo | requestName }}</li>
+            }
+          </ol>
+        } @else {
+          <span class="govuk-hint">Not provided</span>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.SELECTED_REQUESTS]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Enforcement details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.civilPenalty.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.civilPenalty | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.CIVIL_PENALTY]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    @if (data.civilPenalty) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.noticeOfIntent.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.noticeOfIntent | booleanToText"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.NOTICE_OF_INTENT]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.initialPenalty.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.initialPenalty | booleanToText"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.INITIAL_PENALTY]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    } @else {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Explanation</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.noCivilPenaltyJustification"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.CIVIL_PENALTY]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

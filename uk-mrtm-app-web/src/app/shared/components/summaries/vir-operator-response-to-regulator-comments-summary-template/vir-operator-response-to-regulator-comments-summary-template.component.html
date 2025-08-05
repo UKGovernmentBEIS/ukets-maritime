@@ -1,0 +1,37 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Is the required improvement complete?</dt>
+      <dd govukSummaryListRowValue>{{ data?.improvementCompleted | booleanToText }}</dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep()?.FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    @if (data?.improvementCompleted) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">When was the improvement completed?</dt>
+        <dd govukSummaryListRowValue>{{ data?.dateCompleted | govukDate }}</dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep()?.FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    } @else {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">
+          Tell us why you have chosen not to address this recommendation
+        </dt>
+        <dd govukSummaryListRowValue class="pre-wrap">{{ data?.reason }}</dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep()?.FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

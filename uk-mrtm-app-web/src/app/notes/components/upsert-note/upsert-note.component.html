@@ -1,0 +1,34 @@
+@if (vm$ | async; as vm) {
+  @if (vm.accountInfo; as account) {
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <netz-page-heading size="xl">
+          {{ account.name }}
+          <govuk-tag [color]="account.status | operatorAccountsStatusColor">{{ account.status | titlecase }}</govuk-tag>
+        </netz-page-heading>
+      </div>
+    </div>
+  }
+}
+
+@if ((route.data | async)?.heading; as heading) {
+  <netz-page-heading size="l">{{ heading }}</netz-page-heading>
+  <form (ngSubmit)="onSubmit()" [formGroup]="form">
+    @if (isErrorSummaryDisplayed$ | async) {
+      <govuk-error-summary [form]="form"></govuk-error-summary>
+    }
+    <div
+      govuk-textarea
+      formControlName="note"
+      label="Note"
+      labelSize="medium"
+      [maxLength]="10000"
+      hint="This will only be visible to other regulators"></div>
+    <mrtm-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      [listTitle]="'Uploaded files'"
+      label="Upload a file (Optional)"
+      formControlName="files"></mrtm-multiple-file-input>
+    <button netzPendingButton govukButton type="submit">Confirm and complete</button>
+  </form>
+}

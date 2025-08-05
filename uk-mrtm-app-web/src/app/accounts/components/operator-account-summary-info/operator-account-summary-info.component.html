@@ -1,0 +1,51 @@
+@if (summaryInfo) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Company IMO Number</dt>
+      <dd govukSummaryListRowValue>{{ summaryInfo.imoNumber }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Operator name</dt>
+      <dd govukSummaryListRowValue>{{ summaryInfo.name }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Contact address</dt>
+      <dd govukSummaryListRowValue>
+        <div>
+          {{ summaryInfo.line1 }}
+          @if (summaryInfo.line2) {
+            , {{ summaryInfo.line2 }}
+          }
+        </div>
+        <div>{{ summaryInfo.city }}</div>
+        <div>{{ summaryInfo.state }}</div>
+        <div>{{ summaryInfo.postcode }}</div>
+        <div>{{ summaryInfo.country | country }}</div>
+      </dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+      <dd govukSummaryListRowValue>{{ summaryInfo.firstMaritimeActivityDate | govukDate }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

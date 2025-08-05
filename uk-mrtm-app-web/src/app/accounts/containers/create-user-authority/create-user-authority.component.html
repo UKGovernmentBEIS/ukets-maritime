@@ -1,0 +1,23 @@
+<mrtm-wizard-step
+  (formSubmit)="handleSubmit()"
+  [formGroup]="form"
+  caption="Add new user"
+  heading="Add an {{ userType$ | async | userType }}">
+  @switch (userType$ | async) {
+    @case ('operator_admin') {
+      <mrtm-operator-admin-info />
+    }
+    @case ('operator') {
+      <mrtm-operator-user-info />
+    }
+    @case ('consultant_agent') {
+      <mrtm-agent-user-info />
+    }
+    @case ('emitter_contact') {
+      <mrtm-emitter-contact-info />
+    }
+  }
+
+  <mrtm-user-account-form
+    emailHint="This should be their work email. All system alerts, notices and official communications will always be sent by email." />
+</mrtm-wizard-step>

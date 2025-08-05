@@ -1,0 +1,20 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  heading="Send for peer review"
+  submitText="Confirm and complete"
+  [isTwoThirds]="true"
+  [hideSubmit]="false"
+  [showReturnLink]="true">
+  <div
+    [options]="assignees()"
+    formControlName="assignees"
+    govuk-select
+    label="Select a peer reviewer"
+    widthClass="govuk-!-width-two-thirds"></div>
+  @if (pendingRfi) {
+    <div class="govuk-inset-text">
+      Clicking "confirm and complete" will automatically cancel the active request for information
+    </div>
+  }
+</mrtm-wizard-step>

@@ -1,0 +1,43 @@
+<govuk-details summary="Fuels and emissions factors of the emissions calculations ">
+  <p class="govuk-body">The emissions have been calculated by using the following essential information:</p>
+
+  <h4 class="govuk-heading-s">Emission factors</h4>
+  <div class="overflow-auto overflow-auto-table">
+    <govuk-table
+      [columns]="columns"
+      [data]="data()"
+      emptyTableText="No items to display"
+      description="Emission factors">
+      <ng-template let-row="row" let-column="column">
+        @switch (column?.field) {
+          @case ('origin') {
+            {{ row | fuelOriginTitle }}
+          }
+          @default {
+            {{ row[column?.field] }}
+          }
+        }
+      </ng-template>
+    </govuk-table>
+  </div>
+
+  <h4 class="govuk-heading-s">Global warming potentials values</h4>
+  <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>GHG</dt>
+      <dd govukSummaryListRowValue><h4 class="govuk-heading-s">GWPs value</h4></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>CO2</dt>
+      <dd govukSummaryListRowValue>{{ GWP_VALUES.co2 }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>CH4</dt>
+      <dd govukSummaryListRowValue>{{ GWP_VALUES.ch4 }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>N2O</dt>
+      <dd govukSummaryListRowValue>{{ GWP_VALUES.n2o }}</dd>
+    </div>
+  </dl>
+</govuk-details>

@@ -1,0 +1,20 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="controlActivitiesMap.title"
+  [formGroup]="formGroup"
+  [heading]="controlActivitiesMap?.internalReviews?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Explain how quality of information is ensured before your reports are submitted to verifiers. Minimum review checks
+    can include:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>data completeness checks</li>
+    <li>trend analysis</li>
+    <li>comparison of fuel consumption reported with purchase records</li>
+    <li>criteria for rejecting data</li>
+  </ul>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

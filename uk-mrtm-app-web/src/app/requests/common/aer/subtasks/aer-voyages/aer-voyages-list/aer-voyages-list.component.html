@@ -1,0 +1,37 @@
+<mrtm-notification-banner />
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading caption="Voyages">{{ wizardMap.title }}</netz-page-heading>
+    <p class="govuk-body">{{ wizardMap.description }}</p>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-button-group float-right">
+      <a govukLink govukSecondaryButton [routerLink]="['./', wizardStep.SELECT_SHIP]">Add new voyage</a>
+      <a govukLink govukSecondaryButton [routerLink]="['../', wizardStep.UPLOAD_VOYAGES]">Upload file</a>
+    </div>
+  </div>
+</div>
+
+@if (editable() && voyages()?.length) {
+  <mrtm-aer-filter-by-ship
+    [items]="filterVoyagesSelectItems()"
+    header="View voyages per ship"
+    (filterChanged)="onFilter($event)" />
+}
+
+<h3 class="govuk-heading-m">{{ voyagesListHeader() }}</h3>
+@if (warningMessage(); as warningMessage) {
+  <govuk-warning-text [assistiveText]="warningMessage" />
+}
+<mrtm-voyages-list-summary-template [editable]="editable()" [data]="voyages()" (deleteItems)="onDelete($event)" />
+
+@if (canContinue()) {
+  <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>
+}
+
+<div>
+  @if (canContinue() || !voyages()?.length) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

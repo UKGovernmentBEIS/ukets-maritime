@@ -1,0 +1,45 @@
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+
+import { take } from 'rxjs';
+
+import { TaskService } from '@netz/common/forms';
+import { RadioComponent, RadioOptionComponent } from '@netz/govuk-components';
+
+import { TASK_FORM } from '@requests/common';
+import {
+  UNCORRECTED_NON_CONFORMITIES_SUB_TASK,
+  uncorrectedNonConformitiesMap,
+  UncorrectedNonConformitiesStep,
+} from '@requests/common/aer';
+import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types';
+import { uncorrectedNonConformitiesExistProvider } from '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-exist/uncorrected-non-conformities-exist.form-provider';
+import { WizardStepComponent } from '@shared/components';
+
+@Component({
+  selector: 'mrtm-uncorrected-non-conformities-exist',
+  standalone: true,
+  imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent],
+  templateUrl: './uncorrected-non-conformities-exist.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uncorrectedNonConformitiesExistProvider],
+})
+export class UncorrectedNonConformitiesExistComponent {
+  readonly map = uncorrectedNonConformitiesMap;
+  readonly formGroup = inject<FormGroup>(TASK_FORM);
+  private readonly route = inject(ActivatedRoute);
+  private readonly service = inject(TaskService<AerVerificationSubmitTaskPayload>);
+
+  onSubmit() {
+    this.service
+      .saveSubtask(
+        UNCORRECTED_NON_CONFORMITIES_SUB_TASK,
+        UncorrectedNonConformitiesStep.EXIST_FORM,
+        this.route,
+        this.formGroup.value,
+      )
+      .pipe(take(1))
+      .subscribe();
+  }
+}

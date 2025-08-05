@@ -1,0 +1,66 @@
+<h2 class="govuk-heading-m">Decision details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>What is your decision for the information submitted?</dt>
+    <dd govukSummaryListRowValue [notProvided]="reviewDecision?.type | notificationReviewDecisionType"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Do you require a response from the operator?</dt>
+    <dd
+      govukSummaryListRowValue
+      [notProvided]="reviewDecision?.details?.followUp?.followUpResponseRequired | booleanToText"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  @if (reviewDecision?.details?.followUp?.followUpResponseRequired) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Explain what the operator should cover in their response</dt>
+      <dd
+        govukSummaryListRowValue
+        class="pre-wrap"
+        [notProvided]="reviewDecision?.details?.followUp?.followUpRequest"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Date response is needed</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="reviewDecision?.details?.followUp?.followUpResponseExpirationDate | govukDate"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  }
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Provide a summary of your decision to be included in the notification letter</dt>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="reviewDecision?.details?.officialNotice"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="reviewDecision?.details?.notes"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>

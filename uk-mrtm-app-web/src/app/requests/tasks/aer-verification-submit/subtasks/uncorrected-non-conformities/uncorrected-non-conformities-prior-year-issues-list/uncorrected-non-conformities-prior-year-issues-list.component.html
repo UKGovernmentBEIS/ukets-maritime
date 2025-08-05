@@ -1,0 +1,14 @@
+<netz-page-heading [caption]="map.title">{{ map.priorYearIssueAdd.title }}</netz-page-heading>
+
+<mrtm-uncorrected-non-conformities-prior-year-list-template [data]="issues()" [isEditable]="isEditable()" />
+
+@if (issues()?.length) {
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
+} @else {
+  <a govukButton [routerLink]="['../' + wizardStep.PRIOR_YEAR_ISSUE_FORM_ADD]">Add new item</a>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

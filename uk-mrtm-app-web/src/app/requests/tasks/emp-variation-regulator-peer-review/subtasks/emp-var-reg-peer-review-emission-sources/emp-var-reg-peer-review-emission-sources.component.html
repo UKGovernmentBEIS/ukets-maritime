@@ -1,0 +1,13 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm.emissionSourcesMap.title">Check your answers</netz-page-heading>
+  <mrtm-emission-sources-summary-template
+    [emissionSources]="vm.emissionSources"
+    [originalEmissionSources]="vm.originalEmissionSources"
+    [emissionSourcesMap]="vm.emissionSourcesMap" />
+  <mrtm-variation-regulator-decision-partial-summary-template
+    [variationDecisionDetails]="vm.variationDecisionDetails" />
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

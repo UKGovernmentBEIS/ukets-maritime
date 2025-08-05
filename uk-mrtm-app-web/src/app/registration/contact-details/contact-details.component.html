@@ -1,0 +1,15 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-full">
+    <form (ngSubmit)="submitContactDetails()" [formGroup]="form">
+      @if (isSummaryDisplayed) {
+        <govuk-error-summary [form]="form"></govuk-error-summary>
+      }
+
+      <netz-page-heading caption="Create user account" size="xl">Enter your details</netz-page-heading>
+
+      <mrtm-user-input [hasJobTitle]="false" phoneType="full"></mrtm-user-input>
+
+      <button govukButton type="submit">Continue</button>
+    </form>
+  </div>
+</div>

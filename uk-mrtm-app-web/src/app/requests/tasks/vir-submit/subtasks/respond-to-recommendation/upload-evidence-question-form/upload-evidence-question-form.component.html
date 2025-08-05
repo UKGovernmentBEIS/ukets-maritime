@@ -1,0 +1,12 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  (formSubmit)="onSubmit()"
+  [caption]="caption()"
+  heading="Would you like to upload evidence to support your response?"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div formControlName="uploadEvidence" govuk-radio legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

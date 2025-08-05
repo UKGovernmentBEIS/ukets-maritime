@@ -1,0 +1,47 @@
+<div class="govuk-!-margin-top-7 govuk-!-margin-bottom-9">
+  <h3 class="govuk-heading-m">Emissions summary</h3>
+  <p class="govuk-hint govuk-!-margin-bottom-2">{{ surrenderHeading }}</p>
+  <p class="govuk-body govuk-!-font-size-27">
+    <strong>{{ totalEmissions()?.surrenderEmissionsSummary | bigNumber: 7 }}</strong>
+  </p>
+  <hr class="govuk-section-break govuk-section-break--visible" />
+  <p class="govuk-hint govuk-!-margin-top-2">
+    <span class="govuk-!-margin-right-9">{{ totalEmissionsHeading }}</span>
+    <span class="govuk-!-margin-left-6">{{ totalEmissions()?.totalShipEmissionsSummary | bigNumber: 7 }}</span>
+  </p>
+</div>
+
+<h3 class="govuk-heading-m">Emission calculations</h3>
+
+<h4 class="govuk-heading-s">{{ totalEmissionsHeading }}</h4>
+<ng-container
+  *ngTemplateOutlet="tableTpl; context: { description: totalEmissionsHeading, data: totalEmissionsTableData() }" />
+
+<h4 class="govuk-heading-s">{{ surrenderHeading }}</h4>
+<ng-container *ngTemplateOutlet="tableTpl; context: { description: surrenderHeading, data: surrenderTableData() }" />
+
+<ng-template #tableTpl let-description="description" let-data="data">
+  <govuk-table
+    class="govuk-!-margin-bottom-9 govuk-!-display-block"
+    [columns]="columns"
+    [data]="data"
+    emptyTableText="No emissions to display"
+    [description]="description">
+    <ng-template let-row="row" let-column="column">
+      @switch (column.field) {
+        @case ('emissionLabel') {
+          <strong>{{ row?.[column.field] }}</strong>
+        }
+        @default {
+          @if (row?.isSummary) {
+            @if (column.field === 'total') {
+              <strong>{{ row?.[column?.field] | bigNumber: 7 }}</strong>
+            }
+          } @else {
+            {{ row?.[column?.field] | bigNumber: 7 }}
+          }
+        }
+      }
+    </ng-template>
+  </govuk-table>
+</ng-template>

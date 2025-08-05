@@ -1,0 +1,45 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    @if (data?.status) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Payment status</dt>
+        <dd govukSummaryListRowValue>{{ data?.status | paymentStatus }}</dd>
+      </div>
+    }
+    @if (data?.paymentDate) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date marked as paid</dt>
+        <dd govukSummaryListRowValue>{{ data?.paymentDate | govukDate }}</dd>
+      </div>
+    }
+    @if (data?.paidByFullName) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Paid by</dt>
+        <dd govukSummaryListRowValue>{{ data?.paidByFullName }}</dd>
+      </div>
+    }
+    @if (data?.paymentMethod) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Payment method</dt>
+        <dd govukSummaryListRowValue>{{ data?.paymentMethod | selectOptionToTitle: PAYMENT_METHOD_SELECT_OPTIONS }}</dd>
+      </div>
+    }
+    @if (data?.creationDate) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date created</dt>
+        <dd govukSummaryListRowValue>{{ data?.creationDate | govukDate }}</dd>
+      </div>
+    }
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reference number</dt>
+      <dd govukSummaryListRowValue>{{ data?.paymentRefNum }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Amount</dt>
+      <dd govukSummaryListRowValue>{{ data?.amount | currency: 'GBP' }}</dd>
+    </div>
+  </dl>
+}

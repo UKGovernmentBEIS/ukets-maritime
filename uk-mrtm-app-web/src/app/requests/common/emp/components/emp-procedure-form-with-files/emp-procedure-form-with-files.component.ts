@@ -1,0 +1,22 @@
+import { Component, inject } from '@angular/core';
+import { ReactiveFormsModule } from '@angular/forms';
+
+import { RequestTaskStore } from '@netz/common/store';
+
+import { empCommonQuery } from '@requests/common/emp/+state';
+import { EmpProcedureFormComponent } from '@requests/common/emp/components/emp-procedure-form';
+import { MultipleFileInputComponent } from '@shared/components';
+import { existingControlContainer } from '@shared/providers';
+
+// eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
+@Component({
+  selector: 'mrtm-emp-procedure-form-with-files',
+  standalone: true,
+  imports: [EmpProcedureFormComponent, MultipleFileInputComponent, ReactiveFormsModule],
+  viewProviders: [existingControlContainer],
+  templateUrl: './emp-procedure-form-with-files.component.html',
+})
+export class EmpProcedureFormWithFilesComponent {
+  private readonly store: RequestTaskStore = inject(RequestTaskStore);
+  downloadUrl = this.store.select(empCommonQuery.selectTasksDownloadUrl)();
+}

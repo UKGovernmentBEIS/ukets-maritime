@@ -1,0 +1,29 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="managementProceduresMap.regularCheckOfAdequacy.title"
+  [caption]="managementProceduresMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Enter details of the procedures used to regularly check that the monitoring plan reflects the ships and processes
+    used, and whether the monitoring methodology can be improved or needs revision.
+  </p>
+  <p class="govuk-body">You should include:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>
+      checks made to the list of emissions sources to ensure that monitoring remains complete and any changes to the
+      nature or function of the ship are accounted for
+    </li>
+    <li>assessing compliance with uncertainty values identified in the monitoring plan</li>
+    <li>evaluating potential improvements to the applied monitoring methodology</li>
+  </ul>
+  <govuk-details summary="About the description of procedures">
+    Simple procedures may be completely reflected by the description. However, when the procedure is more complex, it
+    may be described in an external source (such as a written procedure or harmonised quality, environmental or energy
+    management standards). If so, a brief description will suffice, with a reference to the full procedure and indicate
+    where its full version is stored.
+  </govuk-details>
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

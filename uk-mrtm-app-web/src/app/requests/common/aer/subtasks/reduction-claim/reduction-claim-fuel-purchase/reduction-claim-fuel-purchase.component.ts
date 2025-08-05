@@ -1,0 +1,123 @@
+import { ChangeDetectionStrategy, Component, computed, effect, inject, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+
+import { take } from 'rxjs';
+import { isNil, isNumber } from 'lodash-es';
+
+import { TaskService } from '@netz/common/forms';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { GovukSelectOption, LinkDirective, SelectComponent, TextInputComponent } from '@netz/govuk-components';
+
+import { aerCommonQuery } from '@requests/common/aer/+state';
+import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
+import {
+  AER_REDUCTION_CLAIM_SUB_TASK,
+  ReductionClaimWizardStep,
+} from '@requests/common/aer/subtasks/reduction-claim/reduction-claim.helpers';
+import { reductionClaimMap } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim.map';
+import { reductionClaimFuelPurchaseFormProvider } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim-fuel-purchase/reduction-claim-fuel-purchase.form-provider';
+import { ReductionClaimFuelPurchaseFormModel } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim-fuel-purchase/reduction-claim-fuel-purchase.types';
+import { TASK_FORM } from '@requests/common/task-form.token';
+import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
+import { FuelOriginTitlePipe } from '@shared/pipes';
+import { bigNumberUtils } from '@shared/utils';
+import BigNumber from 'bignumber.js';
+
+@Component({
+  selector: 'mrtm-reduction-claim-fuel-purchase',
+  standalone: true,
+  imports: [
+    WizardStepComponent,
+    LinkDirective,
+    RouterLink,
+    TextInputComponent,
+    SelectComponent,
+    ReactiveFormsModule,
+    MultipleFileInputComponent,
+  ],
+  providers: [reductionClaimFuelPurchaseFormProvider],
+  templateUrl: './reduction-claim-fuel-purchase.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class ReductionClaimFuelPurchaseComponent {
+  private readonly store: RequestTaskStore = inject(RequestTaskStore);
+  private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private readonly fuelOriginTitlePipe: FuelOriginTitlePipe = new FuelOriginTitlePipe();
+
+  public readonly form: FormGroup = inject(TASK_FORM);
+
+  private readonly currentFormValue = toSignal<ReductionClaimFuelPurchaseFormModel>(this.form.valueChanges, {
+    initialValue: this.form.value,
+  });
+  public readonly wizardMap = reductionClaimMap;
+  public readonly isNil: typeof isNil = isNil;
+  public readonly downloadUrl: Signal<string> = this.store.select(requestTaskQuery.selectTasksDownloadUrl);
+
+  public readonly currentFuelValue = toSignal(this.form.get('fuelOriginTypeName').valueChanges, {
+    initialValue: this.form.get('fuelOriginTypeName').value,
+  });
+
+  public fuelTypeSelectItems = computed(() => {
+    const currentFuelType = this.currentFuelValue();
+    const allFuels = this.store.select(aerCommonQuery.selectSupersetOfFuelTypes)();
+
+    const alreadyUsedReductionClaimFuels =
+      this.store
+        .select(aerCommonQuery.selectReductionClaimFuelPurchases)()
+        ?.filter((fuel) => fuel?.fuelOriginTypeName?.uniqueIdentifier !== currentFuelType)
+        ?.map((fuel) => fuel?.fuelOriginTypeName?.uniqueIdentifier) ?? [];
+
+    return allFuels
+      .filter((shipFuel) => !alreadyUsedReductionClaimFuels.includes(shipFuel?.uniqueIdentifier))
+      .map<GovukSelectOption>((shipFuel) => ({
+        value: shipFuel.uniqueIdentifier,
+        text: this.fuelOriginTitlePipe.transform(shipFuel),
+      }))
+      .reduce((acc, current) => {
+        if (!acc.find((entry) => entry.text === current.text)) {
+          acc.push(current);
+        }
+
+        return acc;
+      }, []);
+  });
+
+  constructor() {
+    effect(() => {
+      const { smfMass, co2EmissionFactor } = this.currentFormValue();
+      if (
+        isNil(smfMass) ||
+        isNil(co2EmissionFactor) ||
+        !isNumber(+smfMass) ||
+        !isNumber(+co2EmissionFactor) ||
+        new BigNumber(smfMass).isNaN() ||
+        new BigNumber(co2EmissionFactor).isNaN()
+      ) {
+        this.form.get('co2Emissions').setValue(null, { emitEvent: false });
+        return;
+      }
+
+      this.form
+        .get('co2Emissions')
+        .setValue(
+          bigNumberUtils.getFixed(new BigNumber(smfMass).multipliedBy(new BigNumber(co2EmissionFactor)).toString(), 7),
+          { emitEvent: false },
+        );
+    });
+  }
+
+  public onSubmit(): void {
+    this.service
+      .saveSubtask(
+        AER_REDUCTION_CLAIM_SUB_TASK,
+        ReductionClaimWizardStep.FUEL_PURCHASE,
+        this.activatedRoute,
+        this.form.value,
+      )
+      .pipe(take(1))
+      .subscribe();
+  }
+}

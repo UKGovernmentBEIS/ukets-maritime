@@ -1,0 +1,17 @@
+<netz-page-heading [caption]="map.title">Check your answers</netz-page-heading>
+<mrtm-reporting-obligation-summary-template
+  [reportingYear]="reportingYear()"
+  [reportingRequired]="reportingRequired()"
+  [reportingObligationDetails]="reportingObligationDetails()"
+  [files]="supportingDocuments()"
+  [map]="map"
+  [isEditable]="isEditable()"
+  [changeLink]="wizardStep.FORM" />
+
+@if (isEditable() && !isSubtaskCompleted()) {
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+}
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

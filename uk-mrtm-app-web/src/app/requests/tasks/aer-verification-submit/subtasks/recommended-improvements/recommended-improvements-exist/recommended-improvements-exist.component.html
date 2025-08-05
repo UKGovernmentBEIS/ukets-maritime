@@ -1,0 +1,29 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Suggest how the operator could improve their performance in monitoring and reporting emissions, and why you think an
+    improvement is relevant. Improvements can cover a wide range of issues including:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>risk assessment</li>
+    <li>data flow and control activities and procedures</li>
+    <li>accuracy of monitoring and reporting</li>
+  </ul>
+  <govuk-warning-text
+    [bottomSpacing]="2"
+    [assistiveText]="
+      'You should not tell the operator how to resolve the issues as this may compromise your independence as a verifier.'
+    " />
+  <p class="govuk-body govuk-!-margin-bottom-7">
+    Recommendations could still be useful for the regulator as they could give information on quality of verified data.
+  </p>
+  <div formControlName="exist" govuk-radio [legend]="map.exist.title" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

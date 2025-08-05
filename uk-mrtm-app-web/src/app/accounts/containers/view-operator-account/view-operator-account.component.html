@@ -1,0 +1,49 @@
+@if (vm$ | async; as vm) {
+  <mrtm-notification-banner />
+  @if (vm.accountInfo; as account) {
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-three-quarters">
+        <netz-page-heading size="xl">
+          {{ account.name }}
+          <govuk-tag [color]="account.status | operatorAccountsStatusColor">{{ account.status | titlecase }}</govuk-tag>
+        </netz-page-heading>
+      </div>
+      @if (vm.userRoleType !== 'VERIFIER') {
+        <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+          <button govukButton routerLink="process-actions" type="button">Start a new task</button>
+        </div>
+      }
+    </div>
+  }
+
+  <govuk-tabs (selectedTab)="handleSelectedTab($event)">
+    <ng-template govukTabLazy id="details" label="Details">
+      @if (vm.accountInfo.status === 'LIVE' || vm.accountInfo.status === 'CLOSED') {
+        <mrtm-active-emissions-plan />
+      }
+      <mrtm-operator-account-details [editable]="vm.isAccountEditable" />
+      <mrtm-operator-account-reporting-details [editable]="vm.isAccountEditable" />
+    </ng-template>
+    @if (vm.userRoleType === 'REGULATOR') {
+      <ng-template govukTabLazy id="notes" label="Notes">
+        <mrtm-notes-list />
+      </ng-template>
+    }
+    <ng-template govukTabLazy id="history" label="Emissions plan history">
+      <mrtm-emissions-plan-history-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="reports" label="Reports">
+      <mrtm-reports-tab />
+    </ng-template>
+    @if (vm.userRoleType === 'REGULATOR') {
+      <ng-template govukTabLazy id="non-compliance" label="Non-compliance">
+        <mrtm-non-compliance-tab />
+      </ng-template>
+    }
+    @if (vm.userRoleType !== 'VERIFIER') {
+      <ng-template govukTabLazy id="users" label="Users and contacts">
+        <mrtm-user-contacts-verifiers-tab />
+      </ng-template>
+    }
+  </govuk-tabs>
+}

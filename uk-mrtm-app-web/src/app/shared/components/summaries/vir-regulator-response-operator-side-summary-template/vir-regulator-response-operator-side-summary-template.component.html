@@ -1,0 +1,19 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Regulator's decision</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.improvementRequired ? 'Improvement is required' : 'Improvement is not required' }}
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Actions for the operator</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ data?.operatorActions }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Deadline for improvement</dt>
+      <dd govukSummaryListRowValue>{{ data?.improvementDeadline | govukDate }}</dd>
+    </div>
+  </dl>
+}

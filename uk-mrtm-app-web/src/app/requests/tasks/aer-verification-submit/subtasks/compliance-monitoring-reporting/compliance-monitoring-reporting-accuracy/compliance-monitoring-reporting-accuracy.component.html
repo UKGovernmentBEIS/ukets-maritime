@@ -1,0 +1,41 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.accuracyCompliant.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Some principles are aspirational and you may not be able to confirm absolute compliance. Some are reliant on others
+    being met before compliance can be confirmed.
+  </p>
+  <div
+    formControlName="accuracyCompliant"
+    govuk-radio
+    [legend]="map.accuracyCompliant.caption"
+    legendSize="medium"
+    [legendBottomSpacing]="1">
+    <ng-container govukRadioAdditionalContent>
+      <p class="govuk-hint">Maritime Operators must:</p>
+      <ul class="govuk-list govuk-list--bullet govuk-hint govuk-!-margin-bottom-5">
+        <li>ensure that emission determination is neither systematically nor knowingly inaccurate</li>
+        <li>identify and reduce any source of inaccuracies as far as possible</li>
+        <li>
+          exercise due diligence to ensure that the calculation and measurement of emissions exhibit the highest
+          achievable accuracy
+        </li>
+      </ul>
+    </ng-container>
+    <govuk-radio-option [value]="true" [label]="true | complianceToText" />
+    <govuk-radio-option [value]="false" [label]="false | complianceToText">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="accuracyNonCompliantReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

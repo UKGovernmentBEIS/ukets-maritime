@@ -1,0 +1,28 @@
+@if (!isDeleted()) {
+  <netz-page-heading>
+    Confirm that {{ userAuthority | userFullName }} will be removed from this account
+  </netz-page-heading>
+  <govuk-warning-text assistiveText="You will not be able to undo this function" />
+  <p class="govuk-body">
+    All tasks currently assigned to this user will be automatically unassigned.
+    <br />
+    You may cancel and manually re-assign tasks before attempting to remove this user.
+  </p>
+  <div class="govuk-button-group">
+    <button (click)="confirm()" netzPendingButton govukWarnButton type="button">Confirm delete</button>
+    <a [routerLink]="['/accounts', accountId]" fragment="users" govukLink>Cancel</a>
+  </div>
+} @else {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel [title]="(userAuthority | userFullName) + ' has been removed from the account'" />
+      @if (!isCurrentUser()) {
+        <a [routerLink]="['/accounts', accountId]" fragment="users" govukLink>
+          Return to: Users, contacts and verifiers page
+        </a>
+      } @else {
+        <a govukLink [routerLink]="isLoginEnabled ? '/dashboard' : '/landing'">Return to: Dashboard</a>
+      }
+    </div>
+  </div>
+}

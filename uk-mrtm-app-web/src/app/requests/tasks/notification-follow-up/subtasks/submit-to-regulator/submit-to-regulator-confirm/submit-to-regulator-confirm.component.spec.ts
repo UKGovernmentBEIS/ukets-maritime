@@ -1,0 +1,78 @@
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, provideRouter, Router, UrlSegment } from '@angular/router';
+
+import { of } from 'rxjs';
+
+import { TaskService } from '@netz/common/forms';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+
+import { taskProviders } from '@requests/common/task.providers';
+import { FollowUpService } from '@requests/tasks/notification-follow-up/services';
+import { SubmitToRegulatorConfirmComponent } from '@requests/tasks/notification-follow-up/subtasks/submit-to-regulator/submit-to-regulator-confirm/submit-to-regulator-confirm.component';
+
+describe('SubmitToRegulatorConfirmComponent', () => {
+  let component: SubmitToRegulatorConfirmComponent;
+  let fixture: ComponentFixture<SubmitToRegulatorConfirmComponent>;
+  let page: Page;
+  let router: Router;
+
+  const route = new ActivatedRouteStub();
+  const taskService: MockType<FollowUpService> = {
+    submit: jest.fn().mockReturnValue(of({})),
+  };
+  const taskServiceSpy = jest.spyOn(taskService, 'submit');
+
+  @Component({ template: '', standalone: true })
+  class NoopComponent {}
+
+  class Page extends BasePage<SubmitToRegulatorConfirmComponent> {
+    get paragraphs(): HTMLParagraphElement[] {
+      return this.queryAll<HTMLParagraphElement>('p');
+    }
+
+    get submitButton(): HTMLButtonElement {
+      return this.query<HTMLButtonElement>('button[type="button"]');
+    }
+  }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [SubmitToRegulatorConfirmComponent],
+      providers: [
+        provideRouter([{ path: 'success', component: NoopComponent }]),
+        { provide: TaskService, useValue: taskService },
+        { provide: ActivatedRoute, useValue: route },
+        ...taskProviders,
+      ],
+    }).compileComponents();
+
+    fixture = TestBed.createComponent(SubmitToRegulatorConfirmComponent);
+    component = fixture.componentInstance;
+    page = new Page(fixture);
+    router = TestBed.inject(Router);
+    route.setUrl([new UrlSegment('/', {})]);
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should display all HTMLElements', () => {
+    expect(page.heading1).toBeTruthy();
+    expect(page.heading1.textContent.trim()).toEqual('Submit to regulator');
+    expect(page.paragraphs).toHaveLength(2);
+  });
+
+  it('should submit subtask', () => {
+    const navigateSpy = jest.spyOn(router, 'navigate');
+
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    expect(taskServiceSpy).toHaveBeenCalledTimes(1);
+    expect(navigateSpy).toHaveBeenCalledTimes(1);
+    expect(navigateSpy).toHaveBeenCalledWith(['success'], { skipLocationChange: true, relativeTo: route });
+  });
+});

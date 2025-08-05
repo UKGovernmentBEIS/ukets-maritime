@@ -1,0 +1,72 @@
+@if (rows(); as rows) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  @if (editable() && rows.length) {
+    <button
+      type="button"
+      govukSecondaryButton
+      netzPendingButton
+      (click)="onDelete(rows)"
+      [disabled]="rows.every(checkIsSelected)">
+      Delete
+    </button>
+
+    <mrtm-multi-select-table
+      [columns]="columns()"
+      [data]="rows"
+      (sort)="sort.set($event)"
+      [description]="header()"
+      emptyTableText="No items to display">
+      <ng-template let-row="row" let-column="column">
+        <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
+      </ng-template>
+    </mrtm-multi-select-table>
+  } @else {
+    <govuk-table
+      [columns]="columns()"
+      [data]="rows"
+      (sort)="sort.set($event)"
+      emptyTableText="No items to display"
+      [description]="header()">
+      <ng-template let-row="row" let-column="column">
+        <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
+      </ng-template>
+    </govuk-table>
+  }
+  @if (totalItems() > pageSize()) {
+    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
+  }
+}
+
+<ng-template let-column="column" let-row="row" #tableContent>
+  @switch (column?.field) {
+    @case ('imoNumber') {
+      @if (row?.['shipName'] && row.canViewDetails) {
+        <a
+          govukLink
+          [routerLink]="editPath() ? ['./', editPath(), row.uniqueIdentifier] : ['./', row.uniqueIdentifier]">
+          {{ row[column.field] }}
+        </a>
+      } @else {
+        {{ row?.[column?.field] }}
+      }
+    }
+    @case ('totalShipEmissions') {
+      <div class="govuk-!-width-full govuk-!-text-align-right">
+        {{ row?.[column?.field] | bigNumber: 4 }}
+      </div>
+    }
+    @case ('surrenderEmissions') {
+      <div class="govuk-!-width-full govuk-!-text-align-right">
+        {{ row?.[column?.field] | bigNumber: 4 }}
+      </div>
+    }
+    @case ('status') {
+      <govuk-tag [color]="row[column.field] | statusTagColor">
+        {{ row?.[column?.field] | statusTagText }}
+      </govuk-tag>
+    }
+    @default {
+      {{ row?.[column?.field] }}
+    }
+  }
+</ng-template>

@@ -1,0 +1,33 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="managementProceduresMap.dataFlowActivities.title"
+  [caption]="managementProceduresMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Enter details of how you collect information, including fuel consumption, for the emission report.
+    <br />
+    Diagrams for complex data flows can be uploaded.
+    <br />
+    Data flow activities include:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>reading from instruments</li>
+    <li>sending samples to the laboratory</li>
+    <li>aggregating data, calculating the emissions from various parameters</li>
+    <li>storing relevant information for later use</li>
+  </ul>
+  <p class="govuk-body">
+    If you use several procedures, give details of the overarching procedure that covers the main steps of data flow
+    activities, and a diagram that shows how the data management procedures link together.
+  </p>
+  <govuk-details summary="About the description of procedures">
+    Simple procedures may be completely reflected by the description. However, when the procedure is more complex, it
+    may be described in an external source (such as a written procedure or harmonised quality, environmental or energy
+    management standards). If so, a brief description will suffice, with a reference to the full procedure and indicate
+    where its full version is stored.
+  </govuk-details>
+  <mrtm-emp-procedure-form-with-files />
+</mrtm-wizard-step>

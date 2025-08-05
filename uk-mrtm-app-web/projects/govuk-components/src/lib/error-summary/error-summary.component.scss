@@ -1,0 +1,5 @@
+@import 'govuk-frontend/dist/govuk/settings/_colours-applied.scss';
+
+.govuk-error-summary__message-without-path {
+  color: $govuk-error-colour;
+}

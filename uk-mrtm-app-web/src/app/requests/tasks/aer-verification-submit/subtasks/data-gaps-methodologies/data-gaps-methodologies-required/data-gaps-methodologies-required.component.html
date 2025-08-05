@@ -1,0 +1,20 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.methodRequired.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    If the Maritime Operator has missing data and cannot calculate their emissions, they must use an estimation method
+    that does not lead to an underestimation of emissions for the respective time period.
+  </p>
+  <p class="govuk-body govuk-!-margin-bottom-7">
+    Where applicable, the regulator will have approved an estimation methodology in the emissions monitoring plan that
+    should have been applied.
+  </p>
+  <div formControlName="methodRequired" govuk-radio [legend]="map.methodRequired.title" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

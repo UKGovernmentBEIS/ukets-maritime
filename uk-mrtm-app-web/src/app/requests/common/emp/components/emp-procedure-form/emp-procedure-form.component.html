@@ -1,0 +1,15 @@
+<div formControlName="reference" govuk-text-input label="Procedure reference"></div>
+<div formControlName="version" govuk-text-input label="Procedure version (optional)"></div>
+
+<div
+  formControlName="description"
+  govuk-textarea
+  hint="A brief description of the procedure can be provided if already existing outside the monitoring plan"
+  label="Description of procedure"
+  [maxLength]="10000"></div>
+<div
+  formControlName="responsiblePersonOrPosition"
+  govuk-text-input
+  label="Name of person or position responsible for this procedure"></div>
+<div formControlName="recordsLocation" govuk-text-input label="Location where records are kept"></div>
+<div formControlName="itSystemUsed" govuk-text-input label="Name of IT system used (optional)"></div>

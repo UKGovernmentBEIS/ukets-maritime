@@ -1,0 +1,57 @@
+<h2 class="govuk-heading-m">Emissions monitoring plan history</h2>
+
+<form [formGroup]="searchForm">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      <div class="govuk-grid-row">
+        <div class="govuk-checkboxes govuk-checkboxes--small">
+          <div class="govuk-grid-column-full">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Type</h3>
+            <div formControlName="requestTypes" govuk-checkboxes>
+              @for (type of empHistoryTypesMap | keyvalue: originalOrder; track type.key) {
+                <govuk-checkbox [value]="type.key" [label]="type.value" />
+              }
+            </div>
+          </div>
+          <div class="govuk-grid-column-full">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Status</h3>
+            <div formControlName="requestStatuses" govuk-checkboxes>
+              @for (status of empHistoryStatusMap | keyvalue: originalOrder; track status.key) {
+                <govuk-checkbox [value]="status.key" [label]="status.value" />
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    @if (workflowResults(); as workflowResults) {
+      <div class="govuk-grid-column-three-quarters">
+        <ul class="govuk-list">
+          @for (workflow of workflowResults.requestDetails; track workflow.id) {
+            <li class="search-results-list_item">
+              <div class="govuk-grid-row">
+                <div class="govuk-grid-column-three-quarters">
+                  <a [routerLink]="['workflows', workflow.id]" govukLink>
+                    {{ workflow.id }} {{ workflow.requestType | i18nSelect: empHistoryTypesMap }}
+                  </a>
+                  <div>Created on: {{ workflow.creationDate | govukDate }}</div>
+                </div>
+                <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+                  <govuk-tag [color]="workflow.requestStatus | requestStatusTagColor">
+                    {{ workflow.requestStatus | i18nSelect: empHistoryStatusMap }}
+                  </govuk-tag>
+                </div>
+              </div>
+            </li>
+          }
+        </ul>
+        @if (workflowResults?.total > pageSize) {
+          <govuk-pagination
+            [count]="workflowResults.total"
+            (currentPageChange)="page$.next($event)"
+            [pageSize]="pageSize" />
+        }
+      </div>
+    }
+  </div>
+</form>

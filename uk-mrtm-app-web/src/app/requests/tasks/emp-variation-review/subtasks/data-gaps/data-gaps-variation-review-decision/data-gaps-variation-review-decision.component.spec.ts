@@ -1,0 +1,111 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+
+import { of } from 'rxjs';
+
+import { TaskService } from '@netz/common/forms';
+import { RequestTaskStore } from '@netz/common/store';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+
+import { DATA_GAPS_SUB_TASK, DataGapsWizardStep } from '@requests/common/emp/subtasks/data-gaps';
+import { mockEmpDataGaps, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
+import { taskProviders } from '@requests/common/task.providers';
+import { TaskItemStatus } from '@requests/common/task-item-status';
+import { EmpVariationReviewService } from '@requests/tasks/emp-variation-review/services';
+import { DataGapsVariationReviewDecisionComponent } from '@requests/tasks/emp-variation-review/subtasks/data-gaps';
+
+describe('DataGapsVariationReviewDecisionComponent', () => {
+  let component: DataGapsVariationReviewDecisionComponent;
+  let fixture: ComponentFixture<DataGapsVariationReviewDecisionComponent>;
+  let page: Page;
+  let store: RequestTaskStore;
+
+  const route = new ActivatedRouteStub();
+  const taskService: MockType<EmpVariationReviewService> = {
+    saveReviewDecision: jest.fn().mockReturnValue(of({})),
+  };
+  const taskServiceSpy = jest.spyOn(taskService, 'saveReviewDecision');
+
+  class Page extends BasePage<DataGapsVariationReviewDecisionComponent> {
+    get typeRadios() {
+      return this.queryAll<HTMLInputElement>('input[name$="type"]');
+    }
+  }
+
+  const createComponent = () => {
+    fixture = TestBed.createComponent(DataGapsVariationReviewDecisionComponent);
+    component = fixture.componentInstance;
+    page = new Page(fixture);
+    fixture.detectChanges();
+    jest.clearAllMocks();
+  };
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [DataGapsVariationReviewDecisionComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: ActivatedRoute, useValue: route },
+        { provide: TaskService, useValue: taskService },
+        ...taskProviders,
+      ],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    store = TestBed.inject(RequestTaskStore);
+    store.setState(mockStateBuild({ dataGaps: mockEmpDataGaps }, { dataGaps: TaskItemStatus.IN_PROGRESS }));
+    createComponent();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('should display all HTMLElements', () => {
+    expect(page.summariesContents).toEqual([
+      'Description of method to estimate fuel consumption',
+      'test fuelConsumptionEstimationMethod',
+      'Change',
+      'Name of person or position responsible for this procedure',
+      'test responsiblePersonOrPosition',
+      'Change',
+      'Formulae used',
+      'test formulaeUsed',
+      'Change',
+      'Data sources',
+      'test dataSources',
+      'Change',
+      'Location where records are kept',
+      'test recordsLocation',
+      'Change',
+      'Name of IT system used',
+      'test itSystemUsed',
+      'Change',
+    ]);
+  });
+
+  it('should submit subtask', () => {
+    page.submitButton.click();
+
+    fixture.detectChanges();
+    expect(page.errorSummary).toBeTruthy();
+    expect(page.errorSummaryListContents).toEqual(['Select a decision for this review group']);
+
+    page.typeRadios[0].click();
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    expect(taskServiceSpy).toHaveBeenCalledWith(
+      DATA_GAPS_SUB_TASK,
+      DataGapsWizardStep.DECISION,
+      route,
+      { notes: null, type: 'ACCEPTED', variationScheduleItems: [] },
+      subtaskReviewGroupMap[DATA_GAPS_SUB_TASK],
+    );
+  });
+});

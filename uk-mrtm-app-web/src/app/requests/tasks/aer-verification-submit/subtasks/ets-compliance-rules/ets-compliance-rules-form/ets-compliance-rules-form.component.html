@@ -1,0 +1,330 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="monitoringPlanRequirementsMet"
+    govuk-radio
+    [legend]="map.monitoringPlanRequirementsMet.title"
+    legendSize="medium"
+    hint="You must assess whether the Maritime Operator has met the requirements of the approved emissions monitoring plan, especially relating to the emissions report.">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="monitoringPlanRequirementsNotMetReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="etsOrderRequirementsMet"
+    govuk-radio
+    [legend]="map.etsOrderRequirementsMet.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <div class="govuk-hint">
+        You must assess if the Maritime Operator has met the requirements of the
+        <a
+          govukLink
+          href="https://www.legislation.gov.uk/uksi/2020/1265/contents"
+          target="_blank"
+          rel="noreferrer noopener">
+          UK ETS Order
+        </a>
+        .
+      </div>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="etsOrderRequirementsNotMetReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="detailSourceDataVerified"
+    govuk-radio
+    [legend]="map.detailSourceDataVerified.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to verify the detail and source of data" [bottomSpacing]="3">
+        <p class="govuk-body">You should carry out detailed testing which at a minimum covers:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>analytical procedures</li>
+          <li>data verification</li>
+          <li>checking the monitoring approach</li>
+          <li>checking the data flow activities and the systems used, including IT systems</li>
+        </ul>
+        <p class="govuk-body">
+          As part of this data verification, whilst checking the Maritime Operator’s emissions monitoring plan and
+          procedures, you’ll need to:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>trace the data back to the primary data source</li>
+          <li>cross cross-check data with external data sources</li>
+          <li>perform reconciliations</li>
+          <li>check thresholds for appropriate data</li>
+          <li>carry out recalculations</li>
+        </ul>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="partOfSiteVerification"
+          govuk-textarea
+          label="Was this part of site verification?"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="detailSourceDataNotVerifiedReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="controlActivitiesDocumented"
+    govuk-radio
+    [legend]="map.controlActivitiesDocumented.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to check control activities" [bottomSpacing]="3">
+        <p class="govuk-body">You should carry out detailed testing which at minimum covers:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>analytical procedures</li>
+          <li>data verification</li>
+          <li>checking the monitoring approach</li>
+        </ul>
+        <p class="govuk-body">
+          You should also check that the control activities are well documented, implemented and maintained, and are
+          effectively reducing any inherent risks.
+        </p>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="controlActivitiesNotDocumentedReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="proceduresMonitoringPlanDocumented"
+    govuk-radio
+    [legend]="map.proceduresMonitoringPlanDocumented.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to check monitoring plan procedures" [bottomSpacing]="3">
+        <p class="govuk-body">
+          To ensure that the emissions monitoring plan is implemented correctly, you need to check that the procedures
+          in it are effectively reducing the inherent risks and control risks.
+        </p>
+        <p class="govuk-body">The procedures must be:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>implemented correctly</li>
+          <li>documented correctly</li>
+          <li>maintained properly</li>
+        </ul>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="proceduresMonitoringPlanNotDocumentedReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="dataVerificationCompleted"
+    govuk-radio
+    [legend]="map.dataVerificationCompleted.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to complete data verification" [bottomSpacing]="3">
+        <p class="govuk-body">You must test the data in detail. This means you have to:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>trace all data back to its primary source</li>
+          <li>cross-check data with external sources</li>
+          <li>make reconciliations and recalculations</li>
+          <li>check thresholds for appropriate data</li>
+        </ul>
+        <p class="govuk-body">
+          As part of this verification, for the monitoring plan or monitoring approach plan, you’ll have to check:
+        </p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>consistency of the aggregated reported data with primary source data</li>
+          <li>any measured values if the operator uses a measurement-based approach</li>
+          <li>reliability and accuracy of the data</li>
+        </ul>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="dataVerificationNotCompletedReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="monitoringApproachAppliedCorrectly"
+    govuk-radio
+    [legend]="map.monitoringApproachAppliedCorrectly.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to check that monitoring approaches have been applied correctly" [bottomSpacing]="3">
+        <p class="govuk-body">
+          You must check that the monitoring approach and procedures set out in the approved emissions monitoring plan
+          have been correctly applied and implemented.
+        </p>
+        <p class="govuk-body">
+          Where the Maritime Operator has deviated, this should be reported as a non-conformity or recommended
+          improvement.
+        </p>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="monitoringApproachNotAppliedCorrectlyReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="methodsApplyingMissingDataUsed"
+    govuk-radio
+    [legend]="map.methodsApplyingMissingDataUsed.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to check that methods for applying missing data were appropriate" [bottomSpacing]="3">
+        <p class="govuk-body">You must check that:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>
+            the methods used for completing any missing data in the monitoring plan were appropriate for the specific
+            situation, and that the operator has applied them correctly
+          </li>
+          <li>the control activities which the operator has used to prevent missing data are effective</li>
+        </ul>
+        <p class="govuk-body">
+          If the Maritime Operator has approval to use other methods, you must check that they have applied and
+          documented them correctly.
+        </p>
+        <p class="govuk-body">
+          If they do not have approval to apply the data gap method used, you must check that their approach to
+          addressing the gaps does not underestimate their emissions, and lead to material misstatements.
+        </p>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="methodsApplyingMissingDataNotUsedReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="competentAuthorityGuidanceMet"
+    govuk-radio
+    [legend]="map.competentAuthorityGuidanceMet.title"
+    legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <govuk-details summary="How to check the regulator guidance has been met" [bottomSpacing]="3">
+        <p class="govuk-body">
+          You must apply the harmonised standards which meet the essential requirements of the EC regulations for GHG
+          accreditation and verification bodies.
+        </p>
+        <p class="govuk-body">You’ll also need to apply processes and arrangements for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>communicating with the maritime operator and other parties</li>
+          <li>protecting the confidentiality of information you obtain</li>
+          <li>dealing with approvals</li>
+          <li>issuing a revised verification report after you have issued it to the operator</li>
+        </ul>
+      </govuk-details>
+    </ng-container>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="competentAuthorityGuidanceNotMetReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div formControlName="nonConformities" govuk-radio [legend]="map.nonConformities.title" legendSize="medium">
+    <ng-container govukRadioAdditionalContent>
+      <p class="govuk-hint">
+        You must assess whether the Maritime Operator has corrected any non-conformities from the verification report
+        for the previous monitoring period.
+      </p>
+      <p class="govuk-hint">Has the operator corrected any non-conformities?</p>
+    </ng-container>
+    <govuk-radio-option [value]="'YES'" label="Yes" />
+    <govuk-radio-option [value]="'NO'" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="nonConformitiesDetails"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [divider]="true" [value]="'NOT_APPLICABLE'" label="Not applicable" />
+  </div>
+</mrtm-wizard-step>

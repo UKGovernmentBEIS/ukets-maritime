@@ -1,0 +1,12 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.noticeOfIntent.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="noticeOfIntent" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

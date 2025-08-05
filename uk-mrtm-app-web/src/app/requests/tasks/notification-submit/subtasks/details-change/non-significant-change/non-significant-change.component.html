@@ -1,0 +1,38 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="detailsChangeMap.title"
+  [formGroup]="formGroup"
+  [heading]="detailsChangeMap.detailsOfChange.title"
+  [hideSubmit]="false"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div
+    [maxLength]="10000"
+    formControlName="description"
+    govuk-textarea
+    labelSize="medium"
+    label="Describe the non-significant change"></div>
+  <div
+    [maxLength]="10000"
+    formControlName="justification"
+    govuk-textarea
+    hint="You must give reasons why your change is non-significant and doesn’t require a variation"
+    labelSize="medium"
+    label="Justification for not submitting a variation"></div>
+  <mrtm-multiple-file-input
+    [baseDownloadUrl]="downloadUrl"
+    formControlName="documents"
+    label="Upload a file (optional)"
+    listTitle="Uploaded files"></mrtm-multiple-file-input>
+
+  <div
+    formControlName="startDate"
+    govuk-date-input
+    legendSize="medium"
+    label="Provide the start date of the non-significant change (optional)"></div>
+  <div
+    formControlName="endDate"
+    govuk-date-input
+    legendSize="medium"
+    label="Provide the end date of the non-significant change (optional)"></div>
+</mrtm-wizard-step>

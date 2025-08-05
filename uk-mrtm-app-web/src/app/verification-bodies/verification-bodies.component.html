@@ -1,0 +1,16 @@
+<mrtm-notification-banner />
+<netz-page-heading size="xl">Manage verification bodies</netz-page-heading>
+@if ((editable$ | async) === true) {
+  <button (click)="handleAddNewVerificationBody()" govukButton id="btn-add-verification-body" type="button">
+    Add a new verification body
+  </button>
+}
+<form (submit)="handleFormSubmit()" [formGroup]="formGroup" name="verification-bodies">
+  <mrtm-verification-bodies-list [data]="verificationBodies$ | async" [editable]="editable$ | async" />
+  @if ((editable$ | async) && (verificationBodies$ | async)?.length > 0) {
+    <div class="govuk-button-group">
+      <button govukButton netzPendingButton type="submit">Save</button>
+      <button (click)="handleDiscardChanges()" govukSecondaryButton type="button">Discard changes</button>
+    </div>
+  }
+</form>

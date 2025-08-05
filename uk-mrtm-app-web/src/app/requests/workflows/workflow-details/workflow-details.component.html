@@ -1,0 +1,49 @@
+@if (vm(); as vm) {
+  <div class="govuk-grid-row">
+    <div [class]="vm?.aerRelatedTasks ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+          <netz-page-heading [caption]="vm.workflowId">
+            {{ taskActionTypeToTitleTransformer(vm?.workflowDetails?.requestType, vm?.year) }}
+          </netz-page-heading>
+        </div>
+        <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+          <govuk-tag [color]="vm?.workflowDetails?.requestStatus | statusTagColor">
+            {{ vm?.workflowDetails?.requestStatus | statusTagText }}
+          </govuk-tag>
+        </div>
+      </div>
+
+      <!--Tasks to complete-->
+      @if (vm?.workflowTasks?.length > 0) {
+        <netz-related-tasks [items]="vm.workflowTasks" heading="Tasks to complete" data-testid="related-tasks" />
+      }
+
+      <govuk-tabs (selectedTab)="handleSelectedTab($event)">
+        <ng-template govukTabLazy id="timeline" label="Timeline">
+          <netz-timeline>
+            @for (action of vm?.workflowActions; track action.id) {
+              <netz-timeline-item [action]="action" [requestId]="vm.workflowId" [link]="['timeline', action.id]" />
+            } @empty {
+              <p class="govuk-body" data-testid="no-timeline-events">No timeline events</p>
+            }
+          </netz-timeline>
+        </ng-template>
+        @if (vm.userRoleType === 'REGULATOR') {
+          <ng-template govukTabLazy id="notes" label="Notes">
+            <mrtm-notes-list />
+          </ng-template>
+        }
+      </govuk-tabs>
+    </div>
+    @if (vm?.aerRelatedTasks) {
+      <div class="govuk-grid-column-one-third">
+        <netz-related-actions
+          [allowedRequestTaskActions]="vm.aerRelatedTasks"
+          [showReassignAction]="false"
+          [previewDocuments]="[]"
+          [taskId]="vm.workflowId" />
+      </div>
+    }
+  </div>
+}

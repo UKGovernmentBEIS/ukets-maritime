@@ -1,0 +1,69 @@
+@if (summaryInfo) {
+  <dl govuk-summary-list>
+    @if (summaryInfo?.roleCode && viewMode === 'CREATE') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>User type</dt>
+        <dd govukSummaryListRowValue>{{ summaryInfo.roleCode | userType | titlecase }}</dd>
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>First name</dt>
+      <dd govukSummaryListRowValue>{{ summaryInfo.firstName }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Last name</dt>
+      <dd govukSummaryListRowValue>{{ summaryInfo.lastName }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    @if (viewMode === 'VIEW') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Telephone number</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container *ngTemplateOutlet="phoneNumberSummary; context: { phoneNumber: summaryInfo.phoneNumber }" />
+        </dd>
+        @if (editable) {
+          <dd govukSummaryListRowActions>
+            <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Mobile number</dt>
+        <dd govukSummaryListRowValue>
+          <ng-container *ngTemplateOutlet="phoneNumberSummary; context: { phoneNumber: summaryInfo.mobileNumber }" />
+        </dd>
+        @if (editable) {
+          <dd govukSummaryListRowActions>
+            <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+          </dd>
+        }
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Email address</dt>
+      <dd govukSummaryListRowValue>{{ summaryInfo.email }}</dd>
+      @if (editable && viewMode === 'CREATE') {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}
+
+<ng-template #phoneNumberSummary let-phoneNumber="phoneNumber">
+  @if (phoneNumber?.countryCode && phoneNumber?.number) {
+    {{ phoneNumber.countryCode | phoneNumber }} {{ phoneNumber.number }}
+  } @else {
+    <span class="govuk-hint">Not provided</span>
+  }
+</ng-template>

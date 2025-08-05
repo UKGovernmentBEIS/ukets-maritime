@@ -1,0 +1,18 @@
+<netz-page-heading [caption]="overallDecisionMap.title">{{ overallDecisionMap.actions.title }}</netz-page-heading>
+<p class="govuk-body">These are based on the current status of the review</p>
+<div class="govuk-button-group">
+  @if (isAcceptedEnabled) {
+    <button govukButton netzPendingButton (click)="onSubmit('APPROVED')" type="button">Approve</button>
+  }
+  <button govukSecondaryButton netzPendingButton (click)="onSubmit('DEEMED_WITHDRAWN')" type="button">Withdraw</button>
+</div>
+
+@if (!isAcceptedEnabled) {
+  <p class="govuk-heading-m">Unavailable actions</p>
+  <p class="govuk-heading-s">Approved</p>
+  <p class="govuk-body govuk-hint">All sections must have a decision of "Accepted"</p>
+}
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

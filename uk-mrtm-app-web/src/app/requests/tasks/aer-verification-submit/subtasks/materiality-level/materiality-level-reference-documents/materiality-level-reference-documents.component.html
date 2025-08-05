@@ -1,0 +1,29 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.accreditationReferenceDocumentTypes.description"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="accreditationReferenceDocumentTypes"
+    govuk-checkboxes
+    legend="For UK Emissions Trading Scheme (ETS)"
+    legendSize="medium"
+    hint="The listed documents include all modifications and amendments made to relevant legislation, unless otherwise stated.">
+    @for (type of referenceDocumentTypes; track type) {
+      <govuk-checkbox [value]="type" [label]="type | accreditationReferenceDocumentTypes">
+        @if (type === 'OTHER') {
+          <ng-container govukConditionalContent>
+            <div
+              formControlName="otherReference"
+              govuk-textarea
+              [label]="map.otherReference.title"
+              labelSize="normal"
+              [maxLength]="10000"></div>
+          </ng-container>
+        }
+      </govuk-checkbox>
+    }
+  </div>
+</mrtm-wizard-step>

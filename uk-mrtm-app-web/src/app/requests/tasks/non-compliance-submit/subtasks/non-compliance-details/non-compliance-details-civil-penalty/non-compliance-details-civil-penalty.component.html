@@ -1,0 +1,21 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.civilPenalty.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="civilPenalty" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="noCivilPenaltyJustification"
+          govuk-textarea
+          label="Explain why a civil penalty will not be pursued and what steps are being taken"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

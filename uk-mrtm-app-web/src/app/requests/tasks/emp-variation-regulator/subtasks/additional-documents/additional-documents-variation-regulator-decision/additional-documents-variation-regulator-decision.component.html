@@ -1,0 +1,20 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [formGroup]="form"
+    [heading]="vm.additionalDocumentsMap.variationRegulatorDecision.title"
+    [caption]="vm.additionalDocumentsMap.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-additional-documents-summary-template
+      [additionalDocuments]="vm.additionalDocuments"
+      [originalAdditionalDocuments]="vm.originalAdditionalDocuments"
+      [files]="vm.files"
+      [originalFiles]="vm.originalFiles"
+      [additionalDocumentsMap]="vm.additionalDocumentsMap"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-variation-regulator-decision />
+  </mrtm-wizard-step>
+}

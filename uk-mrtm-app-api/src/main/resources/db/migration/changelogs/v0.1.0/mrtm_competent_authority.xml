@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_mi_reports.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_add_competent_authorities" author="P44065">
+        <comment>Add Competent Authorities</comment>
+        <sql>
+            insert into competent_authority(id, email, name)
+            values ('ENGLAND', 'ethelp@environment-agency.gov.uk', 'Environment Agency');
+            insert into competent_authority(id, email, name)
+            values ('NORTHERN_IRELAND', 'emissions.trading@daera-ni.gov.uk', 'Northern Ireland Environment Agency');
+            insert into competent_authority(id, email, name)
+            values ('OPRED', 'opred@energysecurity.gov.uk', 'Secretary of State for Energy Security &amp; Net Zero');
+            insert into competent_authority(id, email, name)
+            values ('SCOTLAND', 'emission.trading@sepa.org.uk', 'Scottish Environment Protection Agency');
+            insert into competent_authority(id, email, name)
+            values ('WALES', 'GHGHelp@naturalresourceswales.gov.uk', 'Natural Resources Wales');
+        </sql>
+        <rollback>
+            delete from competent_authority;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_competent_authorities_emails" author="P44065">
+        <comment>Add Competent Authorities</comment>
+        <sql>
+            update competent_authority ca set email = 'etmaritimehelp@environment-agency.gov.uk' where ca.id = 'ENGLAND';
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

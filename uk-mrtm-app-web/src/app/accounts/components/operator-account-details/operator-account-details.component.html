@@ -1,0 +1,77 @@
+<h2 class="govuk-heading-m">Maritime operator details</h2>
+@if (accountInfo$ | async; as accountInfo) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Company IMO Number</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo.imoNumber }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Operator name</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo.name }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>SOP ID</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo.sopId }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo.registryId }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Contact address</dt>
+      <dd govukSummaryListRowValue>
+        <div>
+          {{ accountInfo.line1 }}
+          @if (accountInfo.line2) {
+            , {{ accountInfo.line2 }}
+          }
+        </div>
+        <div>{{ accountInfo.city }}</div>
+        <div>{{ accountInfo.state }}</div>
+        <div>{{ accountInfo.postcode }}</div>
+        <div>{{ accountInfo.country | country }}</div>
+      </dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Registered address</dt>
+      @if (accountInfo.registeredAddress) {
+        <dd govukSummaryListRowValue>
+          <div>
+            {{ accountInfo.registeredAddress.line1 }}
+            @if (accountInfo.registeredAddress.line2) {
+              , {{ accountInfo.registeredAddress.line2 }}
+            }
+          </div>
+          <div>{{ accountInfo.registeredAddress.city }}</div>
+          <div>{{ accountInfo.registeredAddress.state }}</div>
+          <div>{{ accountInfo.registeredAddress.postcode }}</div>
+          <div>{{ accountInfo.registeredAddress.country | country }}</div>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+      <dd govukSummaryListRowValue>{{ accountInfo.firstMaritimeActivityDate | govukDate }}</dd>
+      @if (editable) {
+        <dd govukSummaryListRowActions>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

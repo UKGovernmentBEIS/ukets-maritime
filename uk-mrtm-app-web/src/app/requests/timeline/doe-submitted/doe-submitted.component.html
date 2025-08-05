@@ -1,0 +1,10 @@
+<mrtm-doe-maritime-emissions-summary-template
+  [data]="maritimeEmissions()"
+  [files]="files()"
+  [map]="maritimeEmissionsMap"
+  [doeTotalMaritimeEmissionsMap]="doeTotalMaritimeEmissionsMap" />
+<mrtm-recipients-partial-summary-template [officialNoticeInfo]="officialNoticeInfo" />
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink routerLink="../../">Return to: {{ returnToText() }}</a>
+</div>

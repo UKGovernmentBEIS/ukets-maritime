@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.type.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="type" govuk-radio>
+    @for (option of options; track $index) {
+      <govuk-radio-option [value]="option" [label]="option | overallVerificationDecision" />
+    }
+  </div>
+</mrtm-wizard-step>

@@ -1,0 +1,24 @@
+@if (vm(); as vm) {
+  <div class="govuk-grid-row">
+    <div [class]="vm.printableComponent ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+      <netz-page-heading [size]="vm.headerSize ?? 'l'" [caption]="vm.caption">
+        {{ vm.header }}
+
+        <p class="govuk-caption-m govuk-!-margin-bottom-8">
+          {{ vm.requestAction.creationDate | govukDate: 'datetime' }}
+        </p>
+      </netz-page-heading>
+
+      @if (vm.component; as component) {
+        <ng-container *ngComponentOutlet="component"></ng-container>
+      } @else {
+        <netz-task-list [sections]="vm.sections"></netz-task-list>
+      }
+    </div>
+    @if (vm.printableComponent) {
+      <div class="govuk-grid-column-one-third">
+        <netz-related-printable-items [dataComponent]="vm.printableComponent" />
+      </div>
+    }
+  </div>
+}

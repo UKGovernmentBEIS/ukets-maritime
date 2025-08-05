@@ -1,0 +1,31 @@
+@if (vm(); as vm) {
+  <netz-page-heading [caption]="vm?.greenhouseGasMap.title">Check your answers</netz-page-heading>
+  <mrtm-greenhouses-summary-template
+    [greenhouseGas]="vm.greenhouseGas"
+    [originalGreenhouseGas]="vm.originalGreenhouseGas"
+    [greenhouseGasMap]="vm.greenhouseGasMap"
+    [isEditable]="vm.isEditable"
+    [wizardStep]="vm.wizardStep"
+    [queryParams]="{ change: true }" />
+  @if (vm.isVariationRegulatorDecision) {
+    <mrtm-variation-regulator-decision-partial-summary-template
+      [variationDecisionDetails]="vm.variationDecisionDetails"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }"
+      [isEditable]="vm.isEditable" />
+  }
+  @if (vm.hasReview) {
+    <mrtm-emp-review-decision-summary-template
+      [reviewDecision]="vm.empReviewDecisionDTO"
+      [isEditable]="vm.isEditable"
+      [changeLink]="vm.wizardStep.DECISION"
+      [queryParams]="{ change: true }" />
+  }
+  @if (vm.isEditable && !vm.isSubTaskCompleted) {
+    <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+  }
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}
