@@ -1,0 +1,79 @@
+<dl [hasBorders]="true" govuk-summary-list>
+  @if (hasSignificantChangesItems()) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Significant changes</dt>
+      <dd govukSummaryListRowValue>
+        @for (opt of significantChangesOptions; track opt) {
+          @if (variationDetails?.changes?.includes($any(opt.value))) {
+            <p class="govuk-body">
+              {{ opt.text }}
+              @if (opt.value === 'OTHER_SIGNIFICANT') {
+                : {{ variationDetails?.otherSignificantChangeReason }}
+              }
+            </p>
+          }
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DESCRIBE_CHANGES]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  }
+  @if (hasNonSignificantChangesItems()) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Non significant changes</dt>
+      <dd govukSummaryListRowValue>
+        @for (opt of nonSignificantChangesOptions; track opt) {
+          @if (variationDetails?.changes?.includes($any(opt.value))) {
+            <p class="govuk-body">
+              {{ opt.text }}
+              @if (opt.value === 'OTHER_NON_SIGNIFICANT') {
+                : {{ variationDetails?.otherNonSignificantChangeReason }}
+              }
+            </p>
+          }
+        }
+      </dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DESCRIBE_CHANGES]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  }
+  @if (variationDetails?.reason) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Explain what you are changing and the reasons for the changes</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ variationDetails.reason }}</dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DESCRIBE_CHANGES]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  }
+  @if (isVariationRegulator) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason to include in the notice</dt>
+      <dd govukSummaryListRowValue [notProvided]="regulatorLedReason | regulatorLedReason"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.REASON_NOTICE]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  }
+  @if (isVariationRegulator) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Enter a summary of the changes for emissions monitoring plan variation log</dt>
+      <dd govukSummaryListRowValue [notProvided]="regulatorLedReason?.summary"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.CHANGES_SUMMARY]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  }
+</dl>

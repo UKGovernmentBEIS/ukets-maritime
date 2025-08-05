@@ -1,0 +1,39 @@
+<h2 class="govuk-heading-m">{{ greenhouseGasMap.fuel.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="greenhouseGas?.fuel"
+  [originalProcedureForm]="originalGreenhouseGas?.fuel"
+  [currentWizardStep]="wizardStep?.FUEL"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable" />
+
+<h2 class="govuk-heading-m">{{ greenhouseGasMap.crossChecks.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="greenhouseGas?.crossChecks"
+  [originalProcedureForm]="originalGreenhouseGas?.crossChecks"
+  [currentWizardStep]="wizardStep?.CROSS_CHECK"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable" />
+
+<h2 class="govuk-heading-m">{{ greenhouseGasMap.information.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="greenhouseGas?.information"
+  [originalProcedureForm]="originalGreenhouseGas?.information"
+  [currentWizardStep]="wizardStep?.INFORMATION"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable" />
+
+<h2 class="govuk-heading-m">{{ greenhouseGasMap.qaEquipment.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="greenhouseGas?.qaEquipment"
+  [originalProcedureForm]="originalGreenhouseGas?.qaEquipment"
+  [currentWizardStep]="wizardStep?.QA_EQUIPMENT"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable" />
+
+<h2 class="govuk-heading-m">{{ greenhouseGasMap.voyages.title }}</h2>
+<mrtm-procedure-form-partial-summary-template
+  [procedureForm]="greenhouseGas?.voyages"
+  [originalProcedureForm]="originalGreenhouseGas?.voyages"
+  [currentWizardStep]="wizardStep?.VOYAGES"
+  [queryParams]="queryParams"
+  [isEditable]="isEditable" />

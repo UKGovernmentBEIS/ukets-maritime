@@ -1,0 +1,49 @@
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ActivatedRoute, RouterLink } from '@angular/router';
+
+import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
+import { TaskService } from '@netz/common/forms';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { ButtonDirective } from '@netz/govuk-components';
+
+import {
+  UNCORRECTED_NON_COMPLIANCES_SUB_TASK,
+  uncorrectedNonCompliancesMap,
+  UncorrectedNonCompliancesStep,
+} from '@requests/common/aer';
+import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types';
+import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
+import { UncorrectedItemsListTemplateComponent } from '@shared/components/summaries';
+
+@Component({
+  selector: 'mrtm-uncorrected-non-compliances-list',
+  standalone: true,
+  imports: [
+    RouterLink,
+    ButtonDirective,
+    PendingButtonDirective,
+    PageHeadingComponent,
+    ReturnToTaskOrActionPageComponent,
+    UncorrectedItemsListTemplateComponent,
+  ],
+  templateUrl: './uncorrected-non-compliances-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class UncorrectedNonCompliancesListComponent {
+  readonly map = uncorrectedNonCompliancesMap;
+  readonly wizardStep = UncorrectedNonCompliancesStep;
+  private readonly subtask = UNCORRECTED_NON_COMPLIANCES_SUB_TASK;
+  private readonly route = inject(ActivatedRoute);
+  private readonly service = inject(TaskService<AerVerificationSubmitTaskPayload>);
+  private readonly store = inject(RequestTaskStore);
+
+  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly issues = computed(
+    () => this.store.select(aerVerificationSubmitQuery.selectUncorrectedNonCompliances)()?.uncorrectedNonCompliances,
+  );
+
+  onSubmit() {
+    this.service.saveSubtask(this.subtask, UncorrectedNonCompliancesStep.ITEMS_LIST, this.route, null).subscribe();
+  }
+}

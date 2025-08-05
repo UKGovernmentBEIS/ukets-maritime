@@ -1,0 +1,97 @@
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(01-08-2025)
+-----------------------------------------------------------------------------------
+
+1) Updates on ship-details-and-emissions-v1.3.xsd
+  1.1) added maxOccurs 4 in monitoring methods related elements
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.3.xsd: Updates
+aer-ship-details-and-emissions-v1.3.xsd: No updates
+emissions-aggregated-data-v1.0.xsd: No updates
+
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(29-07-2025)
+-----------------------------------------------------------------------------------
+
+1) Updates on ship-details-and-emissions-v1.2.xsd
+  1.1) updated elements with an indication of whether they are mandatory or optional
+  1.2) added data types in elements
+
+2) Updates on aer-ship-details-and-emissions-v1.3.xsd
+  2.1) updated elements with an indication of whether they are mandatory or optional
+  2.2) added data types in elements
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.2.xsd: Updates
+aer-ship-details-and-emissions-v1.3.xsd: Updates
+emissions-aggregated-data-v1.0.xsd: No updates
+
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(16-05-2025)
+-----------------------------------------------------------------------------------
+
+1) Updates on ship-details-and-emissions-v1.1.xsd
+  1.1) added element otherFuelType under fuelTypeCodes
+2) Updates on aer-ship-details-and-emissions-v1.2.xsd
+  2.1) added element otherFuelType under fuelTypeCodes
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.1.xsd: Updates
+aer-ship-details-and-emissions-v1.2.xsd: Updates
+emissions-aggregated-data-v1.0.xsd: No updates
+
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(5-05-2025)
+-----------------------------------------------------------------------------------
+
+1) Updates on aer-ship-details-and-emissions-v1.1.xsd
+  1.1) slipPercentage field moved into a new element fuelTypeCodes
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.0.xsd: No updates
+aer-ship-details-and-emissions-v1.1.xsd: Updates
+emissions-aggregated-data-v1.0.xsd: No updates
+
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(25-04-2025)
+-----------------------------------------------------------------------------------
+
+1) New xsd for the AER workflow for the aggregated emissions report (emissions-aggregated-data-v1.0.xsd)
+2) Updates on ship-details-and-emissions-v1.0.xsd
+  2.1) max length restriction of 255 characters introduced for name field
+  2.2) slipPercentage field moved into a new element fuelTypeCodes
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.0.xsd: Updates
+aer-ship-details-and-emissions-v1.0.xsd: No updates
+emissions-aggregated-data-v1.0.xsd: First version of the schema
+
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(27-02-2025)
+-----------------------------------------------------------------------------------
+
+1) New xsd for the AER workflow for ships and emission details (aer-ship-details-and-emissions-v1.0.xsd)
+
+XSD Schema Files:
+
+ship-details-and-emissions-v0.3.xsd: No updates
+aer-ship-details-and-emissions-v1.0.xsd: First version of the schema
+
+
+-----------------------------------------------------------------------------------
+MARITIME XSD Files 	(12-11-2024)
+-----------------------------------------------------------------------------------
+
+1) New xsd for the EMP workflow for ships and emission details (ship-details-and-emissions-v0.3.xsd)
+
+XSD Schema Files:
+
+ship-details-and-emissions-v0.3.xsd: First version of the schema
+
+

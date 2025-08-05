@@ -1,0 +1,72 @@
+<fieldset govukFieldset>
+  <legend [class.govuk-visually-hidden]="hiddenLegend()" govukLegend [legendSize]="legendSize()">
+    {{ legendLabel() }}
+  </legend>
+  @if (legendHint(); as legendHint) {
+    <div govukFieldsetHint>{{ legendHint }}</div>
+  }
+  @if (isReadonly()) {
+    <p class="govuk-label govuk-label--s">{{ 'Address line 1' | optionalFieldLabel: optionalFields().line1 }}</p>
+    <p class="govuk-body" [notProvided]="controlContainer.value?.line1"></p>
+  } @else {
+    <div
+      formControlName="line1"
+      govuk-text-input
+      [label]="'Address line 1' | optionalFieldLabel: optionalFields().line1"></div>
+  }
+  @if (isReadonly()) {
+    <p class="govuk-label govuk-label--s">{{ 'Address line 2' | optionalFieldLabel: optionalFields().line2 }}</p>
+    <p class="govuk-body" [notProvided]="controlContainer.value?.line2"></p>
+  } @else {
+    <div
+      formControlName="line2"
+      govuk-text-input
+      [labelSize]=""
+      [label]="'Address line 2' | optionalFieldLabel: optionalFields().line2"></div>
+  }
+  @if (isReadonly()) {
+    <p class="govuk-label govuk-label--s">{{ 'Town or city' | optionalFieldLabel: optionalFields().city }}</p>
+    <p class="govuk-body" [notProvided]="controlContainer.value?.city"></p>
+  } @else {
+    <div
+      formControlName="city"
+      govuk-text-input
+      [label]="'Town or city' | optionalFieldLabel: optionalFields().city"
+      widthClass="govuk-!-width-two-thirds"></div>
+  }
+  @if (withState()) {
+    @if (isReadonly()) {
+      <p class="govuk-label govuk-label--s">
+        {{ 'State, province or region' | optionalFieldLabel: optionalFields().state }}
+      </p>
+      <p class="govuk-body" [notProvided]="controlContainer.value?.state"></p>
+    } @else {
+      <div
+        formControlName="state"
+        govuk-text-input
+        [label]="'State, province or region' | optionalFieldLabel: optionalFields().state"
+        widthClass="govuk-!-width-two-thirds"></div>
+    }
+  }
+  @if (isReadonly()) {
+    <p class="govuk-label govuk-label--s">{{ 'Postal or zip code' | optionalFieldLabel: optionalFields().postcode }}</p>
+    <p class="govuk-body" [notProvided]="controlContainer.value?.postcode"></p>
+  } @else {
+    <div
+      formControlName="postcode"
+      govuk-text-input
+      [label]="'Postal or zip code' | optionalFieldLabel: optionalFields().postcode"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  @if (isReadonly()) {
+    <p class="govuk-label govuk-label--s">{{ 'Country' | optionalFieldLabel: optionalFields().country }}</p>
+    <p class="govuk-body" [notProvided]="controlContainer.value?.country"></p>
+  } @else {
+    <div
+      formControlName="country"
+      govuk-select
+      label="Country"
+      mrtmCountries
+      widthClass="govuk-!-width-one-third"></div>
+  }
+</fieldset>

@@ -1,0 +1,16 @@
+@if (vm(); as vm) {
+  <netz-page-heading>Check your answers</netz-page-heading>
+  <mrtm-request-deadline-extension-summary-template
+    [data]="vm?.data"
+    [isEditable]="vm?.isEditable"
+    [deadlineFormEditUrl]="vm?.wizardSteps?.RDE_DEADLINE_EXTENSION"
+    [deadlineNotificationEditUrl]="vm?.wizardSteps?.RDE_DEADLINE_NOTIFICATION"
+    [queryParams]="vm?.queryParams" />
+
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

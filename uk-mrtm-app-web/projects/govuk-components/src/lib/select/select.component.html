@@ -1,0 +1,31 @@
+<label
+  [class.govuk-visually-hidden]="isLabelHidden"
+  [for]="identifier"
+  [id]="'l.' + identifier"
+  [class]="currentLabelSize">
+  {{ currentLabel }}
+</label>
+@if (hint) {
+  <div [id]="identifier + '-hint'" class="govuk-hint">
+    {{ hint }}
+  </div>
+}
+
+@if (shouldDisplayErrors) {
+  <govuk-error-message [errors]="control.errors" [identifier]="identifier" />
+}
+<select
+  [attr.name]="identifier"
+  [class.govuk-select--error]="shouldDisplayErrors"
+  [formControl]="control"
+  [id]="identifier"
+  [ngClass]="widthClass"
+  class="govuk-select"
+  govukFormError>
+  @for (option of options; track $index) {
+    <option [attr.disabled]="option.disabled || null" [ngValue]="option.value">
+      {{ option.text }}
+    </option>
+  }
+  <ng-content></ng-content>
+</select>

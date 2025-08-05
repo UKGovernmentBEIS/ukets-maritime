@@ -1,0 +1,12 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Start a batch variation"
+  heading="Whose name and signature should appear on the notice?"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <div
+    govuk-select
+    formControlName="signatory"
+    [options]="signatoryOptions()"
+    widthClass="govuk-!-width-two-thirds"></div>
+</mrtm-wizard-step>

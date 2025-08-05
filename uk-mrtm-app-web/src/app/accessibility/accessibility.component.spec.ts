@@ -1,0 +1,26 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
+
+import { AccessibilityComponent } from '@accessibility/accessibility.component';
+
+describe('AccessibilityComponent', () => {
+  let component: AccessibilityComponent;
+  let fixture: ComponentFixture<AccessibilityComponent>;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [AccessibilityComponent],
+      providers: [provideRouter([])],
+    }).compileComponents();
+  });
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AccessibilityComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});

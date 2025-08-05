@@ -1,0 +1,23 @@
+@if (accountDetails$ | async; as accountDetails) {
+  <div class="govuk-phase-banner">
+    <div class="govuk-phase-banner__content">
+      <a
+        class="govuk-!-font-weight-bold govuk-link--no-visited-state"
+        govukLink
+        [routerLink]="['accounts', accountDetails.account.id]">
+        {{ accountDetails.account.name }}
+      </a>
+      @if (accountDetails.emp?.id) {
+        <span class="govuk-!-padding-left-3">
+          Emissions Plan ID:
+          <span>
+            {{ accountDetails.emp.id }} /
+            <govuk-tag [color]="accountDetails.account.status | operatorAccountsStatusColor">
+              {{ accountDetails.account.status | titlecase }}
+            </govuk-tag>
+          </span>
+        </span>
+      }
+    </div>
+  </div>
+}

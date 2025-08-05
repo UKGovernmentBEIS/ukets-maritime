@@ -1,0 +1,59 @@
+@if (vm(); as vm) {
+  <div class="govuk-grid-row">
+    <div [class]="vm.hasSidebar ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+      <netz-page-heading [size]="vm.headerSize ?? 'l'">
+        {{ vm.header }}
+
+        @if (vm.postHeaderComponent; as postHeaderComponent) {
+          <ng-container *ngComponentOutlet="postHeaderComponent" />
+        }
+
+        @if (vm.requestTask; as rt) {
+          <netz-task-header-info
+            [assignee]="rt.assigneeFullName"
+            [daysRemaining]="rt.daysRemaining"
+            [requestId]="vm.requestId"
+            [taskType]="rt.type" />
+        }
+      </netz-page-heading>
+      @if (vm.preContentComponent; as preContentComponent) {
+        <ng-container *ngComponentOutlet="preContentComponent" />
+      }
+
+      @if (vm.contentComponent; as component) {
+        <ng-container *ngComponentOutlet="component" />
+      } @else {
+        <netz-task-list [sections]="vm.sections" />
+      }
+
+      @if (vm.postContentComponent; as postContentComponent) {
+        <ng-container *ngComponentOutlet="postContentComponent" />
+      }
+
+      @if (vm.hasRelatedTasks) {
+        <netz-related-tasks [items]="vm.relatedTasks" />
+      }
+
+      @if (vm.hasTimeline) {
+        <netz-timeline>
+          @for (timelineEntry of vm.timeline; track timelineEntry) {
+            <netz-timeline-item
+              [action]="timelineEntry"
+              [requestId]="vm.requestId"
+              [link]="['timeline', timelineEntry.id]" />
+          }
+        </netz-timeline>
+      }
+    </div>
+
+    @if (vm.hasSidebar) {
+      <div class="govuk-grid-column-one-third">
+        <netz-related-actions
+          [allowedRequestTaskActions]="vm.relatedActions"
+          [showReassignAction]="vm.showAssignAction"
+          [previewDocuments]="vm.previewDocuments"
+          [taskId]="vm.requestTask.id" />
+      </div>
+    }
+  </div>
+}

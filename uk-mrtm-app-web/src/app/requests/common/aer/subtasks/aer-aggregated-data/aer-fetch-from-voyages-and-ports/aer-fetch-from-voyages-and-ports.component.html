@@ -1,0 +1,10 @@
+<div class="govuk-!-width-two-thirds">
+  <netz-page-heading>{{ wizardMap.fromFetch.title }}</netz-page-heading>
+  <govuk-warning-text [assistiveText]="wizardMap.fromFetch.description" />
+  <button govukButton netzPendingButton type="submit" (click)="onSubmit()">Yes, import data</button>
+</div>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../', wizardStep.LIST_OF_AGGREGATED_DATA]">Return to: {{ wizardMap.title }}</a>
+</div>

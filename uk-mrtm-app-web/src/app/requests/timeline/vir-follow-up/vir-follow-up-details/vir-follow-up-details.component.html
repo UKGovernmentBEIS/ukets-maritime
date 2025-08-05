@@ -1,0 +1,10 @@
+@if (data(); as data) {
+  <mrtm-vir-verifier-recommendation-summary-template [data]="data?.verifierComment" />
+  <mrtm-vir-operator-response-summary-template header="Operator's response" [data]="operatorResponse()" />
+  <mrtm-vir-regulator-response-summary-template
+    header="Regulator's response"
+    [data]="data?.regulatorImprovementResponse" />
+  <mrtm-vir-operator-response-to-regulator-comments-summary-template
+    header="Operator's response to regulator's comments"
+    [data]="data?.operatorImprovementFollowUpResponse" />
+}

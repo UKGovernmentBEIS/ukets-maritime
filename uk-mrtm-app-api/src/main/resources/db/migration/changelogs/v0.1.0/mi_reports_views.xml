@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_mi_reports.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+   <changeSet id="0_1_0_drop_ca_reporting_views" author="P70453" runOrder="first" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.request_task_visit cascade;
+            drop view if exists sch_report_sepa.request_task cascade;
+            drop view if exists sch_report_sepa.request_task_type_action_type cascade;
+            drop view if exists sch_report_sepa.request_task_action_type cascade;
+            drop view if exists sch_report_sepa.request_task_type cascade;
+            drop view if exists sch_report_sepa.request_action cascade;
+            drop view if exists sch_report_sepa.request cascade;
+            drop view if exists sch_report_sepa.request_type cascade;
+            drop view if exists sch_report_sepa.request_resource cascade;
+            drop view if exists sch_report_sepa.au_authority_permission cascade;
+            drop view if exists sch_report_sepa.au_authority cascade;
+            drop view if exists sch_report_sepa.au_role cascade;
+            drop view if exists sch_report_sepa.au_role_permission cascade;
+            drop view if exists sch_report_sepa.account_contact cascade;
+            drop view if exists sch_report_sepa.account_ca_external_contacts cascade;
+            drop view if exists sch_report_sepa.account cascade;
+            drop view if exists sch_report_sepa.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_sepa.verification_body cascade;
+
+            drop view if exists sch_report_opred.request_task_visit cascade;
+            drop view if exists sch_report_opred.request_task cascade;
+            drop view if exists sch_report_opred.request_task_type_action_type cascade;
+            drop view if exists sch_report_opred.request_task_action_type cascade;
+            drop view if exists sch_report_opred.request_task_type cascade;
+            drop view if exists sch_report_opred.request_action cascade;
+            drop view if exists sch_report_opred.request cascade;
+            drop view if exists sch_report_opred.request_type cascade;
+            drop view if exists sch_report_opred.request_resource cascade;
+            drop view if exists sch_report_opred.au_authority_permission cascade;
+            drop view if exists sch_report_opred.au_authority cascade;
+            drop view if exists sch_report_opred.au_role cascade;
+            drop view if exists sch_report_opred.au_role_permission cascade;
+            drop view if exists sch_report_opred.account_contact cascade;
+            drop view if exists sch_report_opred.account_ca_external_contacts cascade;
+            drop view if exists sch_report_opred.account cascade;
+            drop view if exists sch_report_opred.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_opred.verification_body cascade;
+
+            drop view if exists sch_report_nrw.request_task_visit cascade;
+            drop view if exists sch_report_nrw.request_task cascade;
+            drop view if exists sch_report_nrw.request_task_type_action_type cascade;
+            drop view if exists sch_report_nrw.request_task_action_type cascade;
+            drop view if exists sch_report_nrw.request_task_type cascade;
+            drop view if exists sch_report_nrw.request_action cascade;
+            drop view if exists sch_report_nrw.request cascade;
+            drop view if exists sch_report_nrw.request_type cascade;
+            drop view if exists sch_report_nrw.request_resource cascade;
+            drop view if exists sch_report_nrw.au_authority_permission cascade;
+            drop view if exists sch_report_nrw.au_authority cascade;
+            drop view if exists sch_report_nrw.au_role cascade;
+            drop view if exists sch_report_nrw.au_role_permission cascade;
+            drop view if exists sch_report_nrw.account_contact cascade;
+            drop view if exists sch_report_nrw.account_ca_external_contacts cascade;
+            drop view if exists sch_report_nrw.account cascade;
+            drop view if exists sch_report_nrw.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_nrw.verification_body cascade;
+
+            drop view if exists sch_report_niea.request_task_visit cascade;
+            drop view if exists sch_report_niea.request_task cascade;
+            drop view if exists sch_report_niea.request_task_type_action_type cascade;
+            drop view if exists sch_report_niea.request_task_action_type cascade;
+            drop view if exists sch_report_niea.request_task_type cascade;
+            drop view if exists sch_report_niea.request_action cascade;
+            drop view if exists sch_report_niea.request cascade;
+            drop view if exists sch_report_niea.request_type cascade;
+            drop view if exists sch_report_niea.request_resource cascade;
+            drop view if exists sch_report_niea.au_authority_permission cascade;
+            drop view if exists sch_report_niea.au_authority cascade;
+            drop view if exists sch_report_niea.au_role cascade;
+            drop view if exists sch_report_niea.au_role_permission cascade;
+            drop view if exists sch_report_niea.account_contact cascade;
+            drop view if exists sch_report_niea.account_ca_external_contacts cascade;
+            drop view if exists sch_report_niea.account cascade;
+            drop view if exists sch_report_niea.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_niea.verification_body cascade;
+
+            drop view if exists sch_report_ea.request_task_visit cascade;
+            drop view if exists sch_report_ea.request_task cascade;
+            drop view if exists sch_report_ea.request_task_type_action_type cascade;
+            drop view if exists sch_report_ea.request_task_action_type cascade;
+            drop view if exists sch_report_ea.request_task_type cascade;
+            drop view if exists sch_report_ea.request_action cascade;
+            drop view if exists sch_report_ea.request cascade;
+            drop view if exists sch_report_ea.request_type cascade;
+            drop view if exists sch_report_ea.request_resource cascade;
+            drop view if exists sch_report_ea.au_authority_permission cascade;
+            drop view if exists sch_report_ea.au_authority cascade;
+            drop view if exists sch_report_ea.au_role cascade;
+            drop view if exists sch_report_ea.au_role_permission cascade;
+            drop view if exists sch_report_ea.account_contact cascade;
+            drop view if exists sch_report_ea.account_ca_external_contacts cascade;
+            drop view if exists sch_report_ea.account cascade;
+            drop view if exists sch_report_ea.verification_body_emission_trading_scheme cascade;
+            drop view if exists sch_report_ea.verification_body cascade;
+
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_ca_reporting_views" author="P70453" runOrder="last" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.account as select s.* from account s where s.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_sepa.au_authority as select s.* from au_authority s where s.competent_authority = 'SCOTLAND' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_sepa.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'SCOTLAND' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'SCOTLAND')));
+            create or replace view sch_report_sepa.au_role as select s.* from au_role s;
+            create or replace view sch_report_sepa.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_sepa.request_type as select rt.* from request_type rt;
+            create or replace view sch_report_sepa.request as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, vb.resource_id AS verification_body_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' LEFT JOIN request_resource vb ON r.id = acc.request_id AND acc.resource_type = 'VERIFICATION_BODY' WHERE ca.resource_id = 'SCOTLAND';
+            create or replace view sch_report_sepa.request_action as select s.* from request_action s where exists (select null from request r join request_resource rr on r.id = rr.request_id where r.id = s.request_id and rr.resource_id = 'SCOTLAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_sepa.request_task_type_action_type as select * from request_task_type_action_type;
+            create or replace view sch_report_sepa.request_task_type as select * from request_task_type;
+            create or replace view sch_report_sepa.request_task_action_type as select * from request_task_action_type;
+            create or replace view sch_report_sepa.request_task as select id, request_id, type_id, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r join request_resource rr on r.id = rr.request_id  where r.id = s.request_id and rr.resource_id = 'SCOTLAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_sepa.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id join request_resource rr on r.id = rr.request_id where rt.id = s.task_id and rr.resource_id = 'SCOTLAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_sepa.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_sepa.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+
+            create or replace view sch_report_opred.account as select s.* from account s where s.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'OPRED';
+            create or replace view sch_report_opred.au_authority as select s.* from au_authority s where s.competent_authority = 'OPRED' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_opred.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'OPRED' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'OPRED')));
+            create or replace view sch_report_opred.au_role as select s.* from au_role s;
+            create or replace view sch_report_opred.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_opred.request_type as select rt.* from request_type rt;
+            create or replace view sch_report_opred.request as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, vb.resource_id AS verification_body_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' LEFT JOIN request_resource vb ON r.id = acc.request_id AND acc.resource_type = 'VERIFICATION_BODY' WHERE ca.resource_id = 'OPRED';
+            create or replace view sch_report_opred.request_action as select s.* from request_action s where exists (select null from request r join request_resource rr on r.id = rr.request_id where r.id = s.request_id and rr.resource_id = 'OPRED' and rr.resource_type = 'CA');
+            create or replace view sch_report_opred.request_task_type_action_type as select * from request_task_type_action_type;
+            create or replace view sch_report_opred.request_task_type as select * from request_task_type;
+            create or replace view sch_report_opred.request_task_action_type as select * from request_task_action_type;
+            create or replace view sch_report_opred.request_task as select id, request_id, type_id, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r join request_resource rr on r.id = rr.request_id  where r.id = s.request_id and rr.resource_id = 'OPRED' and rr.resource_type = 'CA');
+            create or replace view sch_report_opred.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id join request_resource rr on r.id = rr.request_id where rt.id = s.task_id and rr.resource_id = 'OPRED' and rr.resource_type = 'CA');
+            create or replace view sch_report_opred.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_opred.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+
+            create or replace view sch_report_nrw.account as select s.* from account s where s.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'WALES';
+            create or replace view sch_report_nrw.au_authority as select s.* from au_authority s where s.competent_authority = 'WALES' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_nrw.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'WALES' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'WALES')));
+            create or replace view sch_report_nrw.au_role as select s.* from au_role s;
+            create or replace view sch_report_nrw.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_nrw.request_type as select rt.* from request_type rt;
+            create or replace view sch_report_nrw.request as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, vb.resource_id AS verification_body_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' LEFT JOIN request_resource vb ON r.id = acc.request_id AND acc.resource_type = 'VERIFICATION_BODY' WHERE ca.resource_id = 'WALES';
+            create or replace view sch_report_nrw.request_action as select s.* from request_action s where exists (select null from request r join request_resource rr on r.id = rr.request_id where r.id = s.request_id and rr.resource_id = 'WALES' and rr.resource_type = 'CA');
+            create or replace view sch_report_nrw.request_task_type_action_type as select * from request_task_type_action_type;
+            create or replace view sch_report_nrw.request_task_type as select * from request_task_type;
+            create or replace view sch_report_nrw.request_task_action_type as select * from request_task_action_type;
+            create or replace view sch_report_nrw.request_task as select id, request_id, type_id, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r join request_resource rr on r.id = rr.request_id  where r.id = s.request_id and rr.resource_id = 'WALES' and rr.resource_type = 'CA');
+            create or replace view sch_report_nrw.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id join request_resource rr on r.id = rr.request_id where rt.id = s.task_id and rr.resource_id = 'WALES' and rr.resource_type = 'CA');
+            create or replace view sch_report_nrw.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_nrw.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+
+            create or replace view sch_report_niea.account as select s.* from account s where s.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.au_authority as select s.* from au_authority s where s.competent_authority = 'NORTHERN_IRELAND' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_niea.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'NORTHERN_IRELAND' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'NORTHERN_IRELAND')));
+            create or replace view sch_report_niea.au_role as select s.* from au_role s;
+            create or replace view sch_report_niea.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_niea.request_type as select rt.* from request_type rt;
+            create or replace view sch_report_niea.request as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, vb.resource_id AS verification_body_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' LEFT JOIN request_resource vb ON r.id = acc.request_id AND acc.resource_type = 'VERIFICATION_BODY' WHERE ca.resource_id = 'NORTHERN_IRELAND';
+            create or replace view sch_report_niea.request_action as select s.* from request_action s where exists (select null from request r join request_resource rr on r.id = rr.request_id where r.id = s.request_id and rr.resource_id = 'NORTHERN_IRELAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_niea.request_task_type_action_type as select * from request_task_type_action_type;
+            create or replace view sch_report_niea.request_task_type as select * from request_task_type;
+            create or replace view sch_report_niea.request_task_action_type as select * from request_task_action_type;
+            create or replace view sch_report_niea.request_task as select id, request_id, type_id, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r join request_resource rr on r.id = rr.request_id  where r.id = s.request_id and rr.resource_id = 'NORTHERN_IRELAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_niea.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id join request_resource rr on r.id = rr.request_id where rt.id = s.task_id and rr.resource_id = 'NORTHERN_IRELAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_niea.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_niea.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+
+            create or replace view sch_report_ea.account as select s.* from account s where s.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.account_contact as select s.* from account_contact s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.account_ca_external_contacts as select s.* from account_ca_external_contacts s where s.competent_authority = 'ENGLAND';
+            create or replace view sch_report_ea.au_authority as select s.* from au_authority s where s.competent_authority = 'ENGLAND' or s.verification_body_id is not null or exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+            create or replace view sch_report_ea.au_authority_permission as select s.* from au_authority_permission s where exists (select null from au_authority aa where aa.id = s.authority_id and (aa.competent_authority = 'ENGLAND' or aa.verification_body_id is not null or exists (select null from account a where a.id = aa.account_id and a.competent_authority = 'ENGLAND')));
+            create or replace view sch_report_ea.au_role as select s.* from au_role s;
+            create or replace view sch_report_ea.au_role_permission as select s.* from au_role_permission s;
+            create or replace view sch_report_ea.request_type as select rt.* from request_type rt;
+            create or replace view sch_report_ea.request as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, vb.resource_id AS verification_body_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' LEFT JOIN request_resource vb ON r.id = acc.request_id AND acc.resource_type = 'VERIFICATION_BODY' WHERE ca.resource_id = 'ENGLAND';
+            create or replace view sch_report_ea.request_action as select s.* from request_action s where exists (select null from request r join request_resource rr on r.id = rr.request_id where r.id = s.request_id and rr.resource_id = 'ENGLAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_ea.request_task_type_action_type as select * from request_task_type_action_type;
+            create or replace view sch_report_ea.request_task_type as select * from request_task_type;
+            create or replace view sch_report_ea.request_task_action_type as select * from request_task_action_type;
+            create or replace view sch_report_ea.request_task as select id, request_id, type_id, assignee, due_date, start_date, pause_date, payload, version from request_task s where exists (select null from request r join request_resource rr on r.id = rr.request_id  where r.id = s.request_id and rr.resource_id = 'ENGLAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_ea.request_task_visit as select s.* from request_task_visit s where exists (select null from request_task rt join request r on r.id = rt.request_id join request_resource rr on r.id = rr.request_id where rt.id = s.task_id and rr.resource_id = 'ENGLAND' and rr.resource_type = 'CA');
+            create or replace view sch_report_ea.verification_body as select s.* from verification_body s;
+            create or replace view sch_report_ea.verification_body_emission_trading_scheme as select s.* from verification_body_emission_trading_scheme s;
+
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_account_mrtm_emp_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.account_mrtm cascade;
+            drop view if exists sch_report_opred.account_mrtm cascade;
+            drop view if exists sch_report_nrw.account_mrtm cascade;
+            drop view if exists sch_report_niea.account_mrtm cascade;
+            drop view if exists sch_report_ea.account_mrtm cascade;
+
+            drop view if exists sch_report_sepa.emp cascade;
+            drop view if exists sch_report_opred.emp cascade;
+            drop view if exists sch_report_nrw.emp cascade;
+            drop view if exists sch_report_niea.emp cascade;
+            drop view if exists sch_report_ea.emp cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_account_mrtm_emp_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.account_mrtm as select acc_mrtm.* from account_mrtm acc_mrtm join account acc on acc.id=acc_mrtm.id where acc.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_opred.account_mrtm as select acc_mrtm.* from account_mrtm acc_mrtm join account acc on acc.id=acc_mrtm.id where acc.competent_authority = 'OPRED';
+            create or replace view sch_report_nrw.account_mrtm as select acc_mrtm.* from account_mrtm acc_mrtm join account acc on acc.id=acc_mrtm.id where acc.competent_authority = 'WALES';
+            create or replace view sch_report_niea.account_mrtm as select acc_mrtm.* from account_mrtm acc_mrtm join account acc on acc.id=acc_mrtm.id where acc.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_ea.account_mrtm as select acc_mrtm.* from account_mrtm acc_mrtm join account acc on acc.id=acc_mrtm.id where acc.competent_authority = 'ENGLAND';
+
+            create or replace view sch_report_sepa.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_opred.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_nrw.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_niea.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_ea.emp as select s.* from emp s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_request_resource_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.request_resource cascade;
+            drop view if exists sch_report_opred.request_resource cascade;
+            drop view if exists sch_report_nrw.request_resource cascade;
+            drop view if exists sch_report_niea.request_resource cascade;
+            drop view if exists sch_report_ea.request_resource cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_request_resource_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.request_resource as (select rr.* FROM request_resource rr  WHERE rr.resource_type = 'CA' and rr.resource_id = 'SCOTLAND' UNION select acc.* FROM request_resource ca JOIN request_resource acc ON ca.request_id = acc.request_id  WHERE acc.resource_type = 'ACCOUNT' and ca.resource_type = 'CA' and ca.resource_id = 'SCOTLAND');
+            create or replace view sch_report_opred.request_resource as (select rr.* FROM request_resource rr  WHERE rr.resource_type = 'CA' and rr.resource_id = 'OPRED' UNION select acc.* FROM request_resource ca JOIN request_resource acc ON ca.request_id = acc.request_id  WHERE acc.resource_type = 'ACCOUNT' and ca.resource_type = 'CA' and ca.resource_id = 'OPRED');
+            create or replace view sch_report_nrw.request_resource as (select rr.* FROM request_resource rr  WHERE rr.resource_type = 'CA' and rr.resource_id = 'WALES' UNION select acc.* FROM request_resource ca JOIN request_resource acc ON ca.request_id = acc.request_id  WHERE acc.resource_type = 'ACCOUNT' and ca.resource_type = 'CA' and ca.resource_id = 'WALES');
+            create or replace view sch_report_niea.request_resource as (select rr.* FROM request_resource rr  WHERE rr.resource_type = 'CA' and rr.resource_id = 'NORTHERN_IRELAND' UNION select acc.* FROM request_resource ca JOIN request_resource acc ON ca.request_id = acc.request_id  WHERE acc.resource_type = 'ACCOUNT' and ca.resource_type = 'CA' and ca.resource_id = 'NORTHERN_IRELAND');
+            create or replace view sch_report_ea.request_resource as (select rr.* FROM request_resource rr  WHERE rr.resource_type = 'CA' and rr.resource_id = 'ENGLAND' UNION select acc.* FROM request_resource ca JOIN request_resource acc ON ca.request_id = acc.request_id  WHERE acc.resource_type = 'ACCOUNT' and ca.resource_type = 'CA' and ca.resource_id = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_account_reporting_status_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.account_reporting_status cascade;
+            drop view if exists sch_report_opred.account_reporting_status cascade;
+            drop view if exists sch_report_nrw.account_reporting_status cascade;
+            drop view if exists sch_report_niea.account_reporting_status cascade;
+            drop view if exists sch_report_ea.account_reporting_status cascade;
+
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_account_reporting_status_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.account_reporting_status as select ars.* from account_reporting_status ars join account acc on acc.id=ars.account_id where acc.competent_authority = 'SCOTLAND';
+            create or replace view sch_report_opred.account_reporting_status as select ars.* from account_reporting_status ars join account acc on acc.id=ars.account_id where acc.competent_authority = 'OPRED';
+            create or replace view sch_report_nrw.account_reporting_status as select ars.* from account_reporting_status ars join account acc on acc.id=ars.account_id where acc.competent_authority = 'WALES';
+            create or replace view sch_report_niea.account_reporting_status as select ars.* from account_reporting_status ars join account acc on acc.id=ars.account_id where acc.competent_authority = 'NORTHERN_IRELAND';
+            create or replace view sch_report_ea.account_reporting_status as select ars.* from account_reporting_status ars join account acc on acc.id=ars.account_id where acc.competent_authority = 'ENGLAND';
+
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_aer_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.rpt_aer cascade;
+            drop view if exists sch_report_opred.rpt_aer cascade;
+            drop view if exists sch_report_nrw.rpt_aer cascade;
+            drop view if exists sch_report_niea.rpt_aer cascade;
+            drop view if exists sch_report_ea.rpt_aer cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_aer_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_opred.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_nrw.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_niea.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_ea.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_rpt_reportable_emissions_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_opred.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_nrw.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_niea.rpt_reportable_emissions cascade;
+            drop view if exists sch_report_ea.rpt_reportable_emissions cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_rpt_reportable_emissions_views" author="dimopoulosc@unisystems" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_opred.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_nrw.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_niea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_ea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

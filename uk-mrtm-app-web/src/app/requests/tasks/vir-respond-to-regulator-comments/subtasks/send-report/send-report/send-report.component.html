@@ -1,0 +1,12 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading>Send response to regulator</netz-page-heading>
+    <govuk-warning-text assistiveText="You cannot make changes once your response is sent" />
+    <p class="govuk-body">Select 'Confirm and complete' to send your response to your regulator</p>
+    <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and complete</button>
+  </div>
+</div>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

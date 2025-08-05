@@ -1,0 +1,18 @@
+<netz-page-heading [caption]="caption">Check your answers</netz-page-heading>
+@if (summaryDetails) {
+  <ng-container *ngComponentOutlet="summaryDetails.component; inputs: summaryDetails.inputs" />
+}
+<mrtm-emp-review-decision-summary-template
+  [reviewDecision]="$any(decision())"
+  [isEditable]="isEditable()"
+  [changeLink]="wizardMap.FORM"
+  [queryParams]="{ change: true }" />
+@if (canSubmit()) {
+  <button govukButton netzPendingButton type="button" (click)="onSubmit()">Confirm and continue</button>
+}
+<div>
+  @if (canSubmit()) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

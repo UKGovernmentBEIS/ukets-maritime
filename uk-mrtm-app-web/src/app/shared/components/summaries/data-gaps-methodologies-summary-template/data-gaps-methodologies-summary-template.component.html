@@ -1,0 +1,68 @@
+@if (data(); as data) {
+  <dl govuk-summary-list [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.methodRequired.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.methodRequired | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.METHOD_REQUIRED]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    @if (data.methodRequired) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.methodApproved.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.methodApproved | booleanToText"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.METHOD_APPROVED]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+
+    @if (data.methodRequired && data.methodApproved === false) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.methodConservative.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.methodConservative | booleanToText"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.METHOD_CONSERVATIVE]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+      @if (data.methodConservative === false) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>{{ map.noConservativeMethodDetails.title }}</dt>
+          <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.noConservativeMethodDetails"></dd>
+          @if (isEditable()) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="[wizardStep.METHOD_CONSERVATIVE]" [queryParams]="queryParams()">Change</a>
+            </dd>
+          }
+        </div>
+      }
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.materialMisstatementExist.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.materialMisstatementExist | booleanToText"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.MATERIAL_MISSTATEMENT]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+      @if (data.materialMisstatementExist) {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>{{ map.materialMisstatementDetails.title }}</dt>
+          <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.materialMisstatementDetails"></dd>
+          @if (isEditable()) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="[wizardStep.MATERIAL_MISSTATEMENT]" [queryParams]="queryParams()">Change</a>
+            </dd>
+          }
+        </div>
+      }
+    }
+  </dl>
+}

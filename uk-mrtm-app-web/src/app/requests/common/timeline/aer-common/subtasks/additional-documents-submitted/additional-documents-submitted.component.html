@@ -1,0 +1,11 @@
+<netz-page-heading [caption]="additionalDocumentsMap.title">Additional documents and information</netz-page-heading>
+<mrtm-additional-documents-summary-template
+  [additionalDocuments]="additionalDocuments()"
+  [additionalDocumentsMap]="additionalDocumentsMap"
+  [files]="files()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

@@ -1,0 +1,50 @@
+<h2 class="govuk-heading-m">{{ heading }}</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Describe the non-significant change</dt>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="detailsOfChange?.description"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Justification for not submitting a variation</dt>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="detailsOfChange?.justification"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Uploaded files</dt>
+    <dd govukSummaryListRowValue>
+      <mrtm-summary-download-files [files]="notificationFiles" />
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Provide the start date of the non-significant change</dt>
+    <dd govukSummaryListRowValue [notProvided]="detailsOfChange?.startDate | govukDate"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Provide the end date of the non-significant change</dt>
+    <dd govukSummaryListRowValue [notProvided]="detailsOfChange?.endDate | govukDate"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>

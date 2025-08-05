@@ -1,0 +1,34 @@
+<govuk-table [columns]="columns" [data]="combinedShips()">
+  <ng-template let-column="column" let-row="row">
+    @switch (column?.field) {
+      @case ('imoNumber') {
+        @if (editUrl && row?.current?.uniqueIdentifier) {
+          <a govukLink [routerLink]="[editUrl, row?.current?.uniqueIdentifier]" [queryParams]="queryParams">
+            <span htmlDiff [current]="row?.current?.imoNumber" [previous]="row?.previous?.imoNumber"></span>
+          </a>
+        } @else {
+          <span htmlDiff [current]="row?.current?.imoNumber" [previous]="row?.previous?.imoNumber"></span>
+        }
+      }
+      @case ('type') {
+        <span htmlDiff [current]="row?.current?.type | shipType" [previous]="row?.previous?.type | shipType"></span>
+      }
+      @case ('status') {
+        @if (hasHtmlDiff) {
+          <govuk-tag
+            [color]="row?.current?.status | statusTagColor"
+            htmlDiff
+            [current]="row?.current?.status | shipTaskStatus"
+            [previous]="row?.previous?.status | shipTaskStatus" />
+        } @else {
+          <govuk-tag [color]="row?.current?.status | statusTagColor">
+            {{ row?.current?.status | shipTaskStatus }}
+          </govuk-tag>
+        }
+      }
+      @default {
+        <span htmlDiff [current]="row?.current?.[column.field]" [previous]="row?.previous?.[column.field]"></span>
+      }
+    }
+  </ng-template>
+</govuk-table>

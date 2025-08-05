@@ -1,0 +1,107 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-3">{{ map.accuracyCompliant.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.accuracyCompliant.caption }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.accuracyCompliant | complianceToText }}
+        @if (data?.accuracyCompliant === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.accuracyNonCompliantReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.ACCURACY" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-3">{{ map.completenessCompliant.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.completenessCompliant.caption }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.completenessCompliant | complianceToText }}
+        @if (data?.completenessCompliant === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.completenessNonCompliantReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.COMPLETENESS" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-3">{{ map.cct.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.consistencyCompliant.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.consistencyCompliant | complianceToText }}
+        @if (data?.consistencyCompliant === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.consistencyNonCompliantReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY" [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.comparabilityCompliant.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.comparabilityCompliant | complianceToText }}
+        @if (data?.comparabilityCompliant === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.comparabilityNonCompliantReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY" [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.transparencyCompliant.title }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.transparencyCompliant | complianceToText }}
+        @if (data?.transparencyCompliant === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.transparencyNonCompliantReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY" [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-3">{{ map.integrityCompliant.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.integrityCompliant.caption }}</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.integrityCompliant | complianceToText }}
+        @if (data?.integrityCompliant === false) {
+          <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.integrityNonCompliantReason"></div>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.INTEGRITY" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

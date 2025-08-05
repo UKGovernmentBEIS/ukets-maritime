@@ -1,0 +1,13 @@
+<netz-page-heading [caption]="map.title">{{ map.title }}</netz-page-heading>
+<mrtm-reporting-obligation-summary-template
+  [reportingYear]="reportingYear()"
+  [reportingRequired]="reportingRequired()"
+  [reportingObligationDetails]="reportingObligationDetails()"
+  [files]="supportingDocuments()"
+  [map]="map" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

@@ -1,0 +1,14 @@
+<netz-page-heading [caption]="map.title">{{ map.list.title }}</netz-page-heading>
+
+<mrtm-uncorrected-items-list-template [data]="issues()" [description]="map.list.title" [isEditable]="isEditable()" />
+
+@if (issues()?.length) {
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
+} @else {
+  <a govukButton [routerLink]="['../' + wizardStep.ITEM_FORM_ADD]">Add new item</a>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

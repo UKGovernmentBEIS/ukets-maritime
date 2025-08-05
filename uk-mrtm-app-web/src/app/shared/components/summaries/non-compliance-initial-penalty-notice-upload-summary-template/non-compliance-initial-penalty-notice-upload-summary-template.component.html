@@ -1,0 +1,25 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded file</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="files()" />
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.UPLOAD_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Your comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.comments"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.UPLOAD_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

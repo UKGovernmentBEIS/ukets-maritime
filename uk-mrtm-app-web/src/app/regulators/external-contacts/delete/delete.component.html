@@ -1,0 +1,19 @@
+@if ((isConfirmationDisplayed$ | async) === false) {
+  <h2 class="govuk-heading-l">Confirm that this external contact {{ (contact$ | async).name }} will be deleted</h2>
+  <govuk-warning-text assistiveText="You will not be able to undo this action." />
+  <div class="govuk-button-group">
+    <button (click)="deleteExternalContact()" govukWarnButton netzPendingButton type="button">Confirm delete</button>
+    <a [routerLink]="['/user/regulators']" fragment="external-contacts" govukLink>Cancel</a>
+  </div>
+} @else {
+  <div class="govuk-grid-row">
+    @if (contact$ | async; as contact) {
+      <div class="govuk-grid-column-two-thirds">
+        <govuk-panel title="The external contact {{ contact.name }} has been deleted"></govuk-panel>
+        <a [routerLink]="['/user/regulators']" fragment="external-contacts" govukLink>
+          Return to: Regulator users and contacts page
+        </a>
+      </div>
+    }
+  </div>
+}

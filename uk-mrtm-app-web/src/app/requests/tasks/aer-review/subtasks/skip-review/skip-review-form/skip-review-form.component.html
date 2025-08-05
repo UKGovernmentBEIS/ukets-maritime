@@ -1,0 +1,27 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  heading="Are you sure you want to skip the review and complete the report?"
+  [showReturnLink]="true"
+  submitText="Confirm and complete"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">
+    The report workflow will be marked as completed and any regulator review progress will be discarded.
+  </p>
+  <div
+    class="govuk-!-width-two-thirds"
+    formControlName="type"
+    govuk-radio
+    legend="Why are you skipping the review?"
+    legendSize="medium">
+    <govuk-radio-option value="NOT_REQUIRED" label="Review not required" />
+    <govuk-radio-option value="OTHER" label="Another reason">
+      <ng-container govukConditionalContent>
+        <div
+          govuk-textarea
+          [maxLength]="10000"
+          formControlName="reason"
+          label="Explain why the report does not need to be reviewed"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

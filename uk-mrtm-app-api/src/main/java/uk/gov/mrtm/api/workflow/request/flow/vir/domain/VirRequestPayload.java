@@ -1,0 +1,46 @@
+package uk.gov.mrtm.api.workflow.request.flow.vir.domain;
+
+import com.fasterxml.jackson.annotation.JsonUnwrapped;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.workflow.request.core.domain.RequestPayload;
+import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.netz.api.workflow.request.flow.rfi.domain.RequestPayloadRfiable;
+import uk.gov.netz.api.workflow.request.flow.rfi.domain.RfiData;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
+@AllArgsConstructor
+@NoArgsConstructor
+public class VirRequestPayload extends RequestPayload implements RequestPayloadRfiable {
+
+    private VirVerificationData verificationData;
+    
+    @Builder.Default
+    private Map<String, OperatorImprovementResponse> operatorImprovementResponses = new HashMap<>();
+
+    private RegulatorReviewResponse regulatorReviewResponse;
+
+    private DecisionNotification decisionNotification;
+
+    @Builder.Default
+    private Map<UUID, String> virAttachments = new HashMap<>();
+
+    @Builder.Default
+    private Map<String, String> sectionsCompleted = new HashMap<>();
+
+    @JsonUnwrapped
+    private RfiData rfiData;
+
+    private FileInfoDTO officialNotice;
+}

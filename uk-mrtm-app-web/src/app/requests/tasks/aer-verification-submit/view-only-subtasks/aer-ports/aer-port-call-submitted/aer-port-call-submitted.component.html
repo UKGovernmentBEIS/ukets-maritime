@@ -1,0 +1,5 @@
+<netz-page-heading [caption]="map.caption">Port call for {{ ship()?.details?.name }}</netz-page-heading>
+
+<mrtm-port-call-summary-template [data]="port()" [relatedShip]="ship()" />
+
+<a govukLink [routerLink]="['../']">Return to: {{ map.title }}</a>

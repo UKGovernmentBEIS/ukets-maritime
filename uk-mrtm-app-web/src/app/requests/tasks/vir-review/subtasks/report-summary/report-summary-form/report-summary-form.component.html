@@ -1,0 +1,16 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Create report summary"
+  heading="Create summary"
+  [isTwoThirds]="true"
+  [showReturnLink]="true"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">Here you can give a short summary response to the operator's proposed improvements.</p>
+  <div
+    govuk-textarea
+    formControlName="reportSummary"
+    label="Report summary"
+    labelSize="small"
+    hint="This text will be added to the improvement response letter"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

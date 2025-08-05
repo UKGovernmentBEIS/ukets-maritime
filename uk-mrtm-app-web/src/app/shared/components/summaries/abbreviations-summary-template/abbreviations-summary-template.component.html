@@ -1,0 +1,47 @@
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ abbreviationsMap.abbreviationsQuestion.title }}</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="abbreviations?.exist | booleanToText"
+      [previous]="originalAbbreviations?.exist | booleanToText"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.ABBREVIATIONS_QUESTION]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>
+
+@for (abbrDef of combinedAbbreviationDefinitions(); track abbrDef; let i = $index) {
+  <h2 class="govuk-heading-m">Definition {{ i + 1 }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Abbreviation, acronym or terminology</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="abbrDef?.current?.abbreviation"
+        [previous]="abbrDef?.previous?.abbreviation"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.ABBREVIATIONS_QUESTION]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Definition</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="abbrDef?.current?.definition"
+        [previous]="abbrDef?.previous?.definition"></dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.ABBREVIATIONS_QUESTION]" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

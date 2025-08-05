@@ -1,0 +1,26 @@
+<netz-page-heading size="xl">Enter a query</netz-page-heading>
+
+<p class="govuk-body">
+  To see all SQL queries needed to execute the relevant MI reports,
+  <a
+    class="govuk-link"
+    href="https://beisgov.sharepoint.com/sites/UKETSDelShare/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FUKETSDelShare%2FShared%20Documents%2FMaritime%2FMI%20Reports%2FCustom%20SQL&sortField=Modified&isAscending=false&viewid=0549546b%2D3033%2D442b%2D8aa1%2Dbe575a722daa&FolderCTID=0x012000D45D800A4D252F429663ECE0A857FB3E&OR=Teams%2DHL&CT=1675179946974&clickparams=eyJBcHBOYW1lIjoiVGVhbXMtRGVza3RvcCIsIkFwcFZlcnNpb24iOiIxNDE1LzIzMDEwMTAwOTEzIiwiSGFzRmVkZXJhdGVkVXNlciI6ZmFsc2V9"
+    target="_blank"
+    rel="noreferrer noopener">
+    access the SQL query list.
+  </a>
+</p>
+
+@if (errorMessage$ | async; as errorMessage) {
+  <div>
+    <p class="govuk-error-message">{{ errorMessage }}</p>
+  </div>
+}
+
+<form (ngSubmit)="exportToExcel()" [formGroup]="reportOptionsForm">
+  <div govuk-textarea formControlName="query" label="Enter a query"></div>
+
+  <div class="govuk-button-group">
+    <button govukButton type="submit">Export to excel</button>
+  </div>
+</form>

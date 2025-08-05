@@ -1,0 +1,17 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [formGroup]="form"
+    [heading]="vm.greenhouseGasMap.decision.title"
+    [caption]="vm.greenhouseGasMap.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-greenhouses-summary-template
+      [greenhouseGas]="vm.greenhouseGas"
+      [greenhouseGasMap]="vm.greenhouseGasMap"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-review-decision />
+  </mrtm-wizard-step>
+}

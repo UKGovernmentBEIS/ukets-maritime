@@ -1,0 +1,4 @@
+<netz-page-heading caption="Add new user">Check your answers</netz-page-heading>
+<mrtm-user-account-summary-info [summaryInfo]="summaryInfo$ | async" formRouterLink="../" />
+
+<button (click)="handleSubmit()" govukButton netzPendingButton type="button">Submit</button>

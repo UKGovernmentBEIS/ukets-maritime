@@ -1,0 +1,19 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">Total ship emissions</h3>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt class="govuk-!-width-one-third" govukSummaryListRowKey>Total ship emissions (tCO2e)</dt>
+      <dd
+        class="govuk-!-font-weight-bold"
+        govukSummaryListRowValue
+        [notProvided]="data?.totalShipEmissions | bigNumber: 7"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt class="govuk-!-width-one-third" govukSummaryListRowKey>Emissions figure for surrender (tCO2e)</dt>
+      <dd
+        class="govuk-!-font-weight-bold"
+        govukSummaryListRowValue
+        [notProvided]="data?.surrenderEmissions | bigNumber: 7"></dd>
+    </div>
+  </dl>
+}

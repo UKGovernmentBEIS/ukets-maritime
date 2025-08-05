@@ -1,0 +1,98 @@
+@if (data(); as data) {
+  <mrtm-verification-body-details-summary-template [data]="data.verificationBodyDetails" />
+
+  <h2 class="govuk-heading-m">{{ map.verifierContact.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.name.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.verifierContact?.name"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.email.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.verifierContact?.email"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.phoneNumber.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.verifierContact?.phoneNumber"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">{{ map.verificationTeamDetails.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.leadEtsAuditor.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.verificationTeamDetails?.leadEtsAuditor"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.etsAuditors.title }}</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data?.verificationTeamDetails?.etsAuditors"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.etsTechnicalExperts.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        class="pre-wrap"
+        [notProvided]="data?.verificationTeamDetails?.etsTechnicalExperts"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.independentReviewer.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.verificationTeamDetails?.independentReviewer"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.technicalExperts.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        class="pre-wrap"
+        [notProvided]="data?.verificationTeamDetails?.technicalExperts"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.authorisedSignatoryName.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.verificationTeamDetails?.authorisedSignatoryName"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

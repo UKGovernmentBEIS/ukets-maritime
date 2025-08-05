@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_request_payment_model.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_METHOD_FOR_EA" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO request_payment_method( id, competent_authority, type)
+            VALUES(nextval('request_payment_method_seq'), 'ENGLAND', 'CREDIT_OR_DEBIT_CARD');
+
+            INSERT INTO request_payment_method( id, competent_authority, type)
+            VALUES(nextval('request_payment_method_seq'), 'ENGLAND', 'BANK_TRANSFER');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_method
+                WHERE competent_authority = 'ENGLAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_BANK_ACCOUNT_DETAILS_FOR_EA" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO request_payment_bank_account_details( id, competent_authority, sort_code, account_number, account_name, iban, swift_code)
+            VALUES(nextval('request_payment_bank_account_details_seq'), 'ENGLAND', '60-70-80', '10014411', 'Environment Agency', 'GB23NWBK60708010014411', 'NWBKGB2L');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_bank_account_details
+                WHERE competent_authority = 'ENGLAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_FEE_FOR_DOE" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type_id, type)
+            SELECT nextval('request_payment_fee_method_seq'), 'ENGLAND', r.id, 'STANDARD'
+            FROM request_type r
+            WHERE r.code = 'DOE';
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM request_payment_fee_method
+                WHERE request_type_id IN (
+                SELECT id FROM request_task WHERE code = 'DOE'
+                );
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_FEE_FOR_EA_EMP_ISSUANCE" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type_id, type)
+            SELECT nextval('request_payment_fee_method_seq'), 'ENGLAND', r.id, 'STANDARD'
+            FROM request_type r
+            WHERE r.code = 'EMP_ISSUANCE';
+
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '2246'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'ENGLAND'
+            AND request_type_id in (SELECT r.id
+                FROM request_type r
+                WHERE r.code = 'EMP_ISSUANCE');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_fee
+                WHERE fee_method_id = (SELECT id
+                    FROM request_payment_fee_method
+                    WHERE competent_authority = 'ENGLAND'
+                    AND request_type_id in (SELECT r.id
+                        FROM request_type r
+                        WHERE r.code = 'EMP_ISSUANCE'));
+
+                DELETE
+                FROM request_payment_fee_method
+                WHERE competent_authority = 'ENGLAND'
+                AND request_type_id in (SELECT r.id
+                    FROM request_type r
+                    WHERE r.code = 'EMP_ISSUANCE';);
+            </sql>
+        </rollback>
+    </changeSet>
+
+	<changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_FEE_FOR_EA_EMP_VARIATION" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO request_payment_fee_method(id, competent_authority, request_type_id, type)
+            SELECT nextval('request_payment_fee_method_seq'), 'ENGLAND', r.id, 'STANDARD'
+            FROM request_type r
+            WHERE r.code = 'EMP_VARIATION';
+            INSERT INTO request_payment_fee(fee_method_id, type, amount)
+            SELECT id , 'FIXED', '0'
+            FROM request_payment_fee_method
+            WHERE competent_authority = 'ENGLAND'
+            AND request_type_id in (SELECT r.id
+                FROM request_type r
+                WHERE r.code = 'EMP_VARIATION');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_fee
+                WHERE fee_method_id = (SELECT id
+                    FROM request_payment_fee_method
+                    WHERE competent_authority = 'ENGLAND'
+                    AND request_type_id in (SELECT r.id
+                        FROM request_type r
+                        WHERE r.code = 'EMP_VARIATION'));
+                DELETE
+                FROM request_payment_fee_method
+                WHERE competent_authority = 'ENGLAND'
+                AND request_type_id in (SELECT r.id
+                    FROM request_type r
+                    WHERE r.code = 'EMP_VARIATION';);
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

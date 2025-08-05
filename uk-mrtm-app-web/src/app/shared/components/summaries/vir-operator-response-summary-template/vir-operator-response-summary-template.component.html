@@ -1,0 +1,66 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">
+        Have you addressed this recommendation or do you plan to in future?
+      </dt>
+      <dd govukSummaryListRowValue>{{ data?.isAddressed | booleanToText }}</dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep()?.RESPOND_TO]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">
+        {{
+          data?.isAddressed
+            ? 'Tell us how this recommendation will be (or has been) addressed'
+            : 'Tell us why you have chosen not to address'
+        }}
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ data?.addressedDescription }}</dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep()?.RESPOND_TO]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    @if (data.isAddressed) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Date of improvement</dt>
+        <dd govukSummaryListRowValue>{{ data?.addressedDate | govukDate }}</dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep()?.RESPOND_TO]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">
+        Would you like to upload evidence to support your response?
+      </dt>
+      <dd govukSummaryListRowValue>{{ data?.uploadEvidence | booleanToText }}</dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep()?.UPLOAD_EVIDENCE_QUESTION]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    @if (data?.uploadEvidence) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey class="govuk-!-width-one-quarter">Uploaded files</dt>
+        <dd govukSummaryListRowValue>
+          <mrtm-summary-download-files [files]="data?.files" />
+        </dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep()?.UPLOAD_EVIDENCE_FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

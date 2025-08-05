@@ -1,0 +1,37 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Verifier improvement report</dt>
+      <dd govukSummaryListRowValue><a routerLink="." govukLink>Verifier improvement report</a></dd>
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Official notice recipients</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue>
+        @for (recipientId of recipientIds(); track recipientId) {
+          <p class="govuk-body">{{ recipientId | userInfoResolver: data?.usersInfo }}</p>
+        }
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="data?.decisionNotification?.signatory | userInfoResolver: data?.usersInfo"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        @if (officialNotice(); as officialNotice) {
+          <a govukLink [routerLink]="officialNotice.downloadUrl" target="_blank">{{ officialNotice.fileName }}</a>
+        } @else {
+          <span class="govuk-hint">No official notice</span>
+        }
+      </dd>
+    </div>
+  </dl>
+}

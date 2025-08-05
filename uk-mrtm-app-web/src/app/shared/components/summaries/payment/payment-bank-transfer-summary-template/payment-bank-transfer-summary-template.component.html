@@ -1,0 +1,29 @@
+@if (data(); as data) {
+  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <dl govuk-summary-list [hasBottomMargin]="false">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Sort code</dt>
+      <dd govukSummaryListRowValue>{{ data?.bankAccountDetails?.sortCode }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Account number</dt>
+      <dd govukSummaryListRowValue>{{ data?.bankAccountDetails?.accountNumber }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Account name</dt>
+      <dd govukSummaryListRowValue>{{ data?.bankAccountDetails?.accountName }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Your payment reference</dt>
+      <dd govukSummaryListRowValue>{{ data?.paymentRefNum }}</dd>
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Amount to pay</dt>
+      <dd govukSummaryListRowValue>{{ data?.amount | currency: 'GBP' }}</dd>
+    </div>
+  </dl>
+}

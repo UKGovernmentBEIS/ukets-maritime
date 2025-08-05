@@ -1,0 +1,68 @@
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { RouterLink } from '@angular/router';
+
+import { BehaviorSubject, filter, startWith, take } from 'rxjs';
+
+import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
+import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
+
+import { CsvErrorSummaryComponent, XmlErrorSummaryComponent } from '@shared/components';
+import { XmlValidationError } from '@shared/types';
+
+@Component({
+  selector: 'mrtm-data-parser-wizard-step',
+  standalone: true,
+  imports: [
+    RouterLink,
+    AsyncPipe,
+    PageHeadingComponent,
+    ButtonDirective,
+    PendingButtonDirective,
+    ReactiveFormsModule,
+    LinkDirective,
+    CsvErrorSummaryComponent,
+    forwardRef(() => XmlErrorSummaryComponent),
+    ReturnToTaskOrActionPageComponent,
+  ],
+  templateUrl: './data-parser-wizard-step.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DataParserWizardStepComponent {
+  @Input() showBackLink = false;
+  @Input() formGroup: UntypedFormGroup;
+  @Input() heading: string;
+  @Input() caption: string;
+  @Input() submitText = 'Continue';
+  @Input() hideSubmit: boolean;
+  @Input() showReturnLink = false;
+  @Input() showCancelLink: boolean = false;
+  @Input() cancelLinkPath: string;
+  @Input() isTwoThirds: boolean = false;
+  @Input() xmlErrors: XmlValidationError[] = [];
+  @Output() readonly formSubmit = new EventEmitter<UntypedFormGroup>();
+
+  isSummaryDisplayedSubject = new BehaviorSubject(false);
+
+  onSubmit(): void {
+    this.formGroup.statusChanges
+      .pipe(
+        startWith(this.formGroup.status),
+        filter((status) => status !== 'PENDING'),
+        take(1),
+      )
+      .subscribe((status) => {
+        switch (status) {
+          case 'VALID':
+            this.formSubmit.emit(this.formGroup);
+            break;
+          case 'INVALID':
+            this.formGroup.markAllAsTouched();
+            this.isSummaryDisplayedSubject.next(true);
+            break;
+        }
+      });
+  }
+}

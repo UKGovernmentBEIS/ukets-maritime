@@ -1,0 +1,10 @@
+<mrtm-wizard-step [formGroup]="form" (formSubmit)="onSubmit()">
+  <p class="govuk-body">This account will be permanently closed down. You will not be able to reverse this action.</p>
+  <div
+    formControlName="reason"
+    govuk-textarea
+    label="Reason for closing this account"
+    hint="The operator will be able to view this"
+    [maxLength]="2000"></div>
+</mrtm-wizard-step>
+<a govukLink routerLink="/dashboard">Return to: Tasks</a>

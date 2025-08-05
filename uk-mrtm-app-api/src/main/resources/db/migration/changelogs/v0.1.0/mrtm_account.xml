@@ -1,0 +1,535 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.1.0/changelog_mrtm_account.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+	
+	<changeSet id="0_1_0_MRTM_ACCOUNT_CREATE_TABLE" author="P35066">
+		<createTable tableName="account_mrtm">
+            <column name="id" type="bigint" remarks="The account id">
+                <constraints foreignKeyName="account_mrtm_account_fk" references="account(id)" nullable="false"
+                             primaryKey="true" primaryKeyName="account_mrtm_pk" />
+            </column>
+            <column name="status" type="varchar(255)" remarks="The mrtm account status">
+                <constraints nullable="false" />
+            </column>
+            <column name="emission_trading_scheme" type="varchar(255)" remarks="The emission trading scheme of the mrtm account">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS account_mrtm CASCADE;
+            </sql>
+        </rollback>
+	</changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_MRTM_CREATE_SEQUENCE" author="dimopoulosc@unisystems.gr">
+        <createSequence sequenceName="account_mrtm_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS account_mrtm_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_MRTM_ADD_IMO_NUMBER_FIRST_MARITIME_ACTIVITY_DATE_ADDRESS_SOP_ID_REGISTRY_ID_COLUMNS" author="dimopoulosc@unisystems.gr">
+        <addColumn tableName="account_mrtm">
+            <column name="imo_number" type="varchar(7)" remarks="The company IMO number">
+                <constraints nullable="false" unique="true" uniqueConstraintName="imo_number_uc" />
+            </column>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="address_line1" type="varchar(255)" >
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="address_line2" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="city" type="varchar(255)" >
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="country" type="varchar(255)" >
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="postcode" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="state" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="first_maritime_activity_date" type="date" remarks="First maritime activity date">
+                <constraints nullable="false" />
+            </column>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="sop_id" type="bigint" remarks="The sop id of the account">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="registry_id" type="int" remarks="The uk ets registry id of the account">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account_mrtm
+                DROP COLUMN IF EXISTS imo_number,
+                DROP COLUMN IF EXISTS address_line1,
+                DROP COLUMN IF EXISTS address_line2,
+                DROP COLUMN IF EXISTS city,
+                DROP COLUMN IF EXISTS country,
+                DROP COLUMN IF EXISTS postcode,
+                DROP COLUMN IF EXISTS state,
+                DROP COLUMN IF EXISTS first_maritime_activity_date,
+                DROP COLUMN IF EXISTS sop_id,
+                DROP COLUMN IF EXISTS registry_id
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_INDEX_FOR_MRTM_ACCOUNT_SEARCHABLE_COLUMNS" author="dimopoulosc@unisystems.gr">
+        <sql>
+            CREATE INDEX trgm_gin_idx_account_mrtm_imo_number ON account_mrtm USING gin (imo_number gin_trgm_ops);
+        </sql>
+        <rollback>
+            <sql>
+                DROP INDEX trgm_gin_idx_account_mrtm_imo_number;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_MARITIME_ACCOUNT_ADD_ACCOUNT_CLOSURE_COLUMNS" author="P44065">
+        <addColumn tableName="account_mrtm">
+            <column name="closing_date" type="timestamp" remarks="The closing date of the account">
+            </column>
+            <column name="closed_by" type="varchar(255)" remarks="The id of the user who closed the account">
+            </column>
+            <column name="closed_by_name" type="varchar(512)" remarks="The name of the user who closed the account">
+            </column>
+            <column name="closure_reason" type="varchar(10000)" remarks="The reason why the account was closed">
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account_mrtm
+                DROP COLUMN IF EXISTS closing_date, closed_by, closed_by_name, closure_reason;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_MARITIME_ACCOUNT_UPDATE_BUSINESS_ID_TO_CORRECT_FORMAT" author="P44065">
+        <sql>
+            UPDATE public.account SET business_id = 'MR' || TO_CHAR(id, 'FM00000');
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_SEARCH_ADDITIONAL_KEYWORD_POPULATE_RECORDS" author="P44065">
+        <sql>
+            INSERT INTO public.account_search_additional_keyword (id, account_id, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, ac.name  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+
+            INSERT INTO public.account_search_additional_keyword (id, account_id, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, mac.imo_number  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+
+            INSERT INTO public.account_search_additional_keyword (id, account_id, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, ac.business_id  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ACCOUNT_REPORTING_STATUS_SEQUENCE" author="dimopoulosc@unisystems.gr">
+        <createSequence sequenceName="account_reporting_status_history_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS account_reporting_status_history_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ACCOUNT_REPORTING_STATUS_HISTORY_TABLE" author="dimopoulosc@unisystems.gr">
+        <createTable tableName="account_reporting_status_history"
+                     remarks="Represents an account reporting status entry">
+            <column name="id" type="bigint" remarks="The reporting status entry id">
+                <constraints primaryKey="true" primaryKeyName="account_reporting_status_history_pk" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)" remarks="The reporting status">
+                <constraints nullable="false" />
+            </column>
+            <column name="reason" type="varchar(2000)" remarks="The reason for entering a new reporting status"/>
+            <column name="submitter_id" type="varchar(255)" remarks="The id of the user that submitted the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="submitter_name" type="varchar(512)" remarks="The full name of the user that submitted the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="submission_date" type="timestamp" remarks="The submission date and time of the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id to which the reporting status entry refers to">
+                <constraints nullable="false" foreignKeyName="account_reporting_status_account_fk" referencedTableName="account_mrtm" referencedColumnNames="id" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS account_reporting_status_history CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_reporting_status_column_in_account" author="dimopoulosc@unisystems.gr">
+        <addColumn tableName="account_mrtm">
+            <column name="reporting_status" type="varchar(255)" remarks="The reporting status of the account">
+                <constraints nullable="true" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                alter table account_mrtm
+                drop column if exists reporting_status;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_populate_account_reporting_status_history" author="dimopoulosc@unisystems.gr">
+        <sql>
+            with list as
+                     (
+                         select distinct on (id) id
+            from account_mrtm
+            order by id desc
+                )
+            insert into  account_reporting_status_history(id, status, reason, submitter_id, submitter_name, submission_date, account_id)
+            select nextval('account_reporting_status_history_seq'), 'REQUIRED_TO_REPORT', '', 'SYSTEM', 'SYSTEM', '2024-06-29T15:30:00', l.id
+            from list as l
+        </sql>
+        <rollback></rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_populate_account_reporting_status" author="dimopoulosc@unisystems.gr">
+        <sql>
+            with list as
+                     (
+                         select distinct on (account_id) account_id, submission_date, status
+            from account_reporting_status_history
+            order by account_id, submission_date desc
+                )
+            update account_mrtm as acc
+            set reporting_status = l.status
+                from list as l
+            where acc.id = l.account_id;
+        </sql>
+        <rollback></rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_not_null_constraint_in_account_reporting_status" author="dimopoulosc@unisystems.gr" >
+        <addNotNullConstraint tableName="account_mrtm" columnName="reporting_status" />
+        <rollback>
+            <dropNotNullConstraint tableName="account_mrtm" columnName="reporting_status"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emission_trading_scheme_values" author="dimopoulosc@unisystems.gr">
+        <sql>
+            update account_mrtm
+            set emission_trading_scheme = 'UK_MARITIME_EMISSION_TRADING_SCHEME'
+        </sql>
+        <rollback>
+            update account_mrtm
+            set emission_trading_scheme = 'DUMMY_EMISSION_TRADING_SCHEME'
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_account_business_id_format" author="dimopoulosc@unisystems.gr">
+        <update tableName="account">
+            <column name="business_id" valueComputed="CONCAT('MA', SUBSTR(business_id, 3))"/>
+            <where>business_id LIKE 'MR%'</where>
+        </update>
+        <rollback>
+            <update tableName="account">
+                <column name="business_id" valueComputed="CONCAT('MR', SUBSTR(business_id, 3))"/>
+                <where>business_id LIKE 'MA%'</where>
+            </update>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_account_search_additional_keywords_business_id_format" author="dimopoulosc@unisystems.gr">
+        <sql>
+            DELETE FROM account_search_additional_keyword;
+        </sql>
+        <sql>
+            INSERT INTO public.account_search_additional_keyword (id, account_id, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, ac.name  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+
+            INSERT INTO public.account_search_additional_keyword (id, account_id, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, mac.imo_number  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+
+            INSERT INTO public.account_search_additional_keyword (id, account_id, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, ac.business_id  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_account_search_additional_keywords_add_key" author="P44065">
+        <sql>
+            INSERT INTO public.account_search_additional_keyword (id, account_id, key, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, 'ACCOUNT_NAME',ac.name  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+
+            INSERT INTO public.account_search_additional_keyword (id, account_id, key, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, 'IMO_NUMBER',mac.imo_number  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+
+            INSERT INTO public.account_search_additional_keyword (id, account_id, key, value)
+            SELECT nextval('account_search_additional_keyword_seq'), ac.id, 'BUSINESS_ID',ac.business_id  FROM public.account ac INNER JOIN public.account_mrtm mac ON ac.id = mac.id;
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_MRTM_ADD_REGISTERED_ADDRESS_STATE_COLUMNS" author="tsaktsirasl@unisystems.gr">
+        <addColumn tableName="account_mrtm">
+            <column name="reg_address_line1" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="reg_address_line2" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="reg_city" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="reg_country" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="reg_postcode" type="varchar(255)" />
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="reg_state" type="varchar(255)" />
+        </addColumn>
+        <rollback>
+            <sql>
+                ALTER TABLE account_mrtm
+                DROP COLUMN IF EXISTS reg_address_line1,
+                DROP COLUMN IF EXISTS reg_address_line2,
+                DROP COLUMN IF EXISTS reg_city,
+                DROP COLUMN IF EXISTS reg_country,
+                DROP COLUMN IF EXISTS reg_postcode,
+                DROP COLUMN IF EXISTS reg_state
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ACCOUNT_REPORTING_STATUS_YEAR_SEQUENCE" author="tsaktsirasl@unisystems.gr">
+        <createSequence sequenceName="account_reporting_status_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS account_reporting_status_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_ACCOUNT_REPORTING_STATUS_TABLE" author="tsaktsirasl@unisystems.gr">
+        <createTable tableName="account_reporting_status"
+                     remarks="Represents an account reporting status entry for each year">
+            <column name="id" type="bigint" remarks="The reporting status entry id">
+                <constraints primaryKey="true" primaryKeyName="account_reporting_status_pk" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)" remarks="The reporting status">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="smallint" remarks="The reporting status year">
+                <constraints nullable="false" />
+            </column>
+            <column name="reason" type="varchar(2000)" remarks="The reason for entering a new reporting status"/>
+            <column name="last_update" type="timestamp" remarks="The latest status update date and time of the reporting status entry">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id to which the reporting status entry refers to">
+                <constraints nullable="false" foreignKeyName="account_reporting_status_account_fk" referencedTableName="account_mrtm" referencedColumnNames="id" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS account_reporting_status CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_account_reporting_status_in_account_reporting_status_history" author="tsaktsirasl@unisystems.gr">
+        <addColumn tableName="account_reporting_status_history">
+            <column name="account_reporting_status_id" type="bigint" remarks="The account status report of a specific year">
+                <constraints nullable="true" foreignKeyName="account_reporting_status_history_account_reporting_status_fk" referencedTableName="account_reporting_status" referencedColumnNames="id" />
+            </column>
+        </addColumn>
+        <rollback>
+            <sql>
+                alter table account_reporting_status_history
+                drop column if exists account_reporting_status_id;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_null_constraint_in_account_reporting_status_history" author="P44065" >
+        <dropNotNullConstraint tableName="account_reporting_status_history" columnName="submitter_id" />
+        <rollback>
+            <addNotNullConstraint tableName="account_reporting_status_history" columnName="submitter_id"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_account_reporting_status_uc" author="P44065" >
+        <sql>
+            ALTER TABLE account_reporting_status ADD CONSTRAINT account_reporting_status_uc UNIQUE (account_id, year);
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE account_reporting_status DROP CONSTRAINT IF EXISTS account_reporting_status_uc;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_migrate_reporting_status_history" author="P44065">
+        <sql>
+            WITH inserted_rows AS (
+            INSERT INTO account_reporting_status (id, status, year, reason, last_update, account_id)
+            SELECT
+                nextval('account_reporting_status_seq'),
+                t1.status,
+                2025 AS year,
+                t1.reason,
+                t1.submission_date AS last_update,
+                t1.account_id
+            FROM
+                account_reporting_status_history t1
+                JOIN (
+                SELECT
+                account_id,
+                MAX(submission_date) AS latest_submission
+                FROM
+                account_reporting_status_history
+                GROUP BY
+                account_id
+                ) t2 ON t1.account_id = t2.account_id AND t1.submission_date = t2.latest_submission
+                ON CONFLICT DO NOTHING
+                RETURNING id, account_id
+                )
+            UPDATE account_reporting_status_history
+            SET account_reporting_status_id = inserted_rows.id FROM inserted_rows
+            WHERE account_reporting_status_history.account_id = inserted_rows.account_id
+              AND account_reporting_status_id IS NULL;
+        </sql>
+        <rollback>
+            <sql>
+                update account_reporting_status_history set account_reporting_status_id = null;
+                delete FROM public.account_reporting_status
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_not_null_constraint_of_account_id_in_account_reporting_status_history" author="P44065">
+        <dropNotNullConstraint tableName="account_reporting_status_history" columnName="account_id" />
+        <rollback>
+            <addNotNullConstraint tableName="account_reporting_status_history" columnName="account_id"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_reporting_status_column_of_account_mrtm" author="P44065" >
+        <sql>
+            ALTER TABLE account_mrtm DROP COLUMN reporting_status CASCADE;
+        </sql>
+        <rollback>
+            <addColumn tableName="account_mrtm">
+                <column name="reporting_status" type="varchar(255)" remarks="The reporting status of the account">
+                    <constraints nullable="true" />
+                </column>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_not_null_constraint_in_account_reporting_status_history" author="P44065" >
+        <addNotNullConstraint tableName="account_reporting_status_history" columnName="account_reporting_status_id" />
+        <rollback>
+            <dropNotNullConstraint tableName="account_reporting_status_history" columnName="account_reporting_status_id"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_col_size_of_account_reporting_reason" author="P44065" >
+        <sql>
+            ALTER TABLE account_reporting_status ALTER COLUMN reason SET DATA TYPE VARCHAR(10000);
+            ALTER TABLE account_reporting_status_history ALTER COLUMN reason SET DATA TYPE VARCHAR(10000);
+        </sql>
+        <rollback>
+            ALTER TABLE account_reporting_status ALTER COLUMN reason SET DATA TYPE VARCHAR(2000);
+            ALTER TABLE account_reporting_status_history ALTER COLUMN reason SET DATA TYPE VARCHAR(2000);
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_account_mrtm_registry_id_uc" author="P44065" >
+        <sql>
+            update account_mrtm set registry_id = null;
+            ALTER TABLE account_mrtm ADD CONSTRAINT registry_id_uc UNIQUE (registry_id);
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE account_mrtm DROP CONSTRAINT IF EXISTS registry_id_uc;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_account_mrtm_registry_id_size_check" author="P44065" >
+        <sql>
+            ALTER TABLE public.account_mrtm
+                ADD CONSTRAINT registry_id_size_chk CHECK (registry_id BETWEEN 1000000 AND 9999999);
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE public.account_mrtm DROP CONSTRAINT registry_id_size_chk;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_account_id_in_account_reporting_status_history" author="P44065">
+        <dropColumn tableName="account_reporting_status_history" columnName="account_id" />
+        <rollback>
+            <addColumn tableName="account_reporting_status_history">
+                <column name="account_id" type="bigint" remarks="The account id to which the reporting status entry refers to">
+                    <constraints nullable="false" foreignKeyName="account_reporting_status_account_fk" referencedTableName="account_mrtm" referencedColumnNames="id" />
+                </column>
+            </addColumn>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ACCOUNT_ADD_CREATED_DATE_CREATED_BY_UPDATED_DATE_UPDATED_BY_COLUMNS" author="dimopoulosc@unisystems.gr">
+        <addColumn tableName="account_mrtm">
+            <column name="created_date" type="timestamp"/>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="created_by" type="varchar(255)"/>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="last_updated_date" type="timestamp"/>
+        </addColumn>
+        <addColumn tableName="account_mrtm">
+            <column name="last_updated_by" type="varchar(255)"/>
+        </addColumn>
+        <rollback>
+            <dropColumn tableName="account_mrtm">
+                <column name="created_date"/>
+            </dropColumn>
+            <dropColumn tableName="account_mrtm">
+                <column name="created_by"/>
+            </dropColumn>
+            <dropColumn tableName="account_mrtm">
+                <column name="last_updated_date"/>
+            </dropColumn>
+            <dropColumn tableName="account_mrtm">
+                <column name="last_updated_by"/>
+            </dropColumn>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

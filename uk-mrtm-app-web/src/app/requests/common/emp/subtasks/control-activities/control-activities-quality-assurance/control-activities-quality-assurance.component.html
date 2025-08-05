@@ -1,0 +1,24 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="controlActivitiesMap.title"
+  [formGroup]="formGroup"
+  [heading]="controlActivitiesMap?.qualityAssurance?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Explain how your internal IT systems are designed, documented, tested, implemented, controlled and maintained to
+    ensure that data is processed in a reliable, accurate and timely way. You should describe:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>what back-up procedures are in place, including how often backups are taken and where they are stored</li>
+    <li>
+      the user access management procedure, including who is responsible for granting privileges and the password policy
+    </li>
+    <li>
+      the change management procedure, including how requests are reviewed and tracked and whether user acceptance tests
+      are performed.
+    </li>
+  </ul>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

@@ -1,0 +1,8 @@
+<mrtm-wizard-step [formGroup]="form" (formSubmit)="onSubmit()" [showReturnLink]="true" heading="Choose a way to pay">
+  <div formControlName="paymentMethod" govuk-radio>
+    <ng-container govukLegend><span class="govuk-visually-hidden">Choose a way to pay</span></ng-container>
+    @for (item of options(); track item.value) {
+      <govuk-radio-option [value]="item.value" [label]="item.text" />
+    }
+  </div>
+</mrtm-wizard-step>

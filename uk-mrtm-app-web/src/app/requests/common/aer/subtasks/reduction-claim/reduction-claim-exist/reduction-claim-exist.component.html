@@ -1,0 +1,21 @@
+<mrtm-wizard-step
+  [caption]="wizardMap.exist.caption"
+  [heading]="wizardMap.exist.title"
+  [formGroup]="formGroup"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true">
+  <p class="govuk-body">{{ wizardMap.exist.description }}</p>
+
+  <div
+    formControlName="exist"
+    govuk-radio
+    legend="Will you be making an emissions reduction claims as a result of the purchase?"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

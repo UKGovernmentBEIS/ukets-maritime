@@ -1,0 +1,57 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="taskMap.title"
+  [formGroup]="form"
+  [heading]="taskMap.empVariationDetails.title"
+  [showReturnLink]="true">
+  <p class="govuk-body">Select all the actions that apply to this variation.</p>
+
+  <div
+    formControlName="significantChanges"
+    govuk-checkboxes
+    hint='<div class="govuk-inset-text">You must apply for this variation at least 14 days before making any of these significant changes, or as soon as
+      possible if this is not practicable. You must make the changes directly in the relevant section of the plan.</div>'
+    legend="Significant changes"
+    legendSize="medium">
+    @for (opt of significantChangesOptions; track opt) {
+      <govuk-checkbox [value]="opt.value" [label]="opt.text">
+        @if (opt.value === 'OTHER_SIGNIFICANT') {
+          <ng-container govukConditionalContent>
+            <div
+              [maxLength]="10000"
+              formControlName="otherSignificantChangeReason"
+              govuk-textarea
+              label="Explain what you are changing"></div>
+          </ng-container>
+        }
+      </govuk-checkbox>
+    }
+  </div>
+  <div
+    formControlName="nonSignificantChanges"
+    govuk-checkboxes
+    hint='<div class="govuk-inset-text">You must notify the regulator by 31 December in the year in which the change occurred, either through this
+      variation
+      workflow or the notification workflow. These changes can then be made to the permit when it is next updated.</div>'
+    legend="Non significant changes"
+    legendSize="medium">
+    @for (opt of nonSignificantChangesOptions; track opt) {
+      <govuk-checkbox [value]="opt.value" [label]="opt.text">
+        @if (opt.value === 'OTHER_NON_SIGNIFICANT') {
+          <ng-container govukConditionalContent>
+            <div
+              [maxLength]="10000"
+              formControlName="otherNonSignificantChangeReason"
+              govuk-textarea
+              label="Explain what you are changing "></div>
+          </ng-container>
+        }
+      </govuk-checkbox>
+    }
+  </div>
+  <div
+    [maxLength]="10000"
+    formControlName="reason"
+    govuk-textarea
+    label="Explain what you are changing and the reasons for the changes"></div>
+</mrtm-wizard-step>

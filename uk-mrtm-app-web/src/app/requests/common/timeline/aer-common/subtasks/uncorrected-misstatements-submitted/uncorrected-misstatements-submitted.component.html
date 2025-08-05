@@ -1,0 +1,8 @@
+<netz-page-heading [caption]="map.title">{{ map.title }}</netz-page-heading>
+
+<mrtm-uncorrected-misstatements-summary-template [data]="uncorrectedMisstatements()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+<netz-return-to-task-or-action-page />

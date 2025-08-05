@@ -1,0 +1,73 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.cct.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Some principles are aspirational and you may not be able to confirm absolute compliance. Some are reliant on others
+    being met before compliance can be confirmed.
+  </p>
+
+  <h2 class="govuk-heading-m">Consistency, comparability and transparency of report</h2>
+  <p class="govuk-body">
+    Monitoring and reporting need to be consistent and comparable over time. For that reason, Maritime operators must
+    use the same monitoring methodologies and data sets, subject to changes and exemptions approved by the regulator.
+  </p>
+  <p class="govuk-body">
+    Maritime operators need to obtain, record, compile, analyse and document monitoring data, including assumptions,
+    references, activity data and calculation factors, in a transparent manner that enables the reproduction of the
+    determination of emissions by the verifier and the regulator.
+  </p>
+
+  <div formControlName="consistencyCompliant" govuk-radio [legend]="map.consistencyCompliant.title" legendSize="medium">
+    <govuk-radio-option [value]="true" [label]="true | complianceToText" />
+    <govuk-radio-option [value]="false" [label]="false | complianceToText">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="consistencyNonCompliantReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="comparabilityCompliant"
+    govuk-radio
+    [legend]="map.comparabilityCompliant.title"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" [label]="true | complianceToText" />
+    <govuk-radio-option [value]="false" [label]="false | complianceToText">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="comparabilityNonCompliantReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+
+  <div
+    formControlName="transparencyCompliant"
+    govuk-radio
+    [legend]="map.transparencyCompliant.title"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" [label]="true | complianceToText" />
+    <govuk-radio-option [value]="false" [label]="false | complianceToText">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="transparencyNonCompliantReason"
+          govuk-textarea
+          label="Provide a reason"
+          labelSize="normal"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

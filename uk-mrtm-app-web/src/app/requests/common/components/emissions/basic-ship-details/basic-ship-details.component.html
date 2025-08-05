@@ -1,0 +1,77 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="isAer() ? map.title : (map.title | shipStepTitle: 1)"
+  [formGroup]="formGroup"
+  [heading]="map.details.title"
+  [showReturnLink]="false"
+  [isTwoThirds]="true">
+  <div
+    formControlName="imoNumber"
+    govuk-text-input
+    [label]="map.imoNumber.title"
+    widthClass="govuk-!-width-one-third"></div>
+  <div formControlName="name" govuk-text-input [label]="map.name.title"></div>
+  <div
+    [options]="typeSelectOptions"
+    formControlName="type"
+    govuk-select
+    [label]="map.type.title"
+    widthClass="govuk-!-width-one-third"></div>
+  <div
+    formControlName="grossTonnage"
+    govuk-text-input
+    [label]="map.grossTonnage.title"
+    widthClass="govuk-!-width-one-third"></div>
+  <div
+    [options]="flagStateOptions"
+    formControlName="flagState"
+    govuk-select
+    [label]="map.flagState.title"
+    widthClass="govuk-!-width-one-third"></div>
+  <div
+    [options]="iceClassesOptions"
+    formControlName="iceClass"
+    govuk-select
+    [label]="map.iceClass.title"
+    widthClass="govuk-!-width-one-third"></div>
+
+  @if (isAer() && showHasIceClassDerogation()) {
+    <div formControlName="hasIceClassDerogation" govuk-radio [legend]="map.hasIceClassDerogation.title">
+      <govuk-radio-option [value]="true" label="Yes" />
+      <govuk-radio-option [value]="false" label="No" />
+    </div>
+  }
+
+  <div
+    formControlName="natureOfReportingResponsibility"
+    govuk-radio
+    hint="Select whether you are the registered owner of the ship, or an International Safety Management (ISM) company distinct from the registered owner"
+    [legend]="map.natureOfReportingResponsibility.title">
+    <govuk-radio-option label="Registered owner" value="SHIPOWNER" />
+    <govuk-radio-option label="ISM Company" value="ISM_COMPANY" />
+  </div>
+
+  @if (isAer()) {
+    <div
+      formControlName="allYear"
+      govuk-radio
+      [legend]="map.allYear.title"
+      legendSize="medium"
+      class="govuk-!-margin-top-9">
+      <govuk-radio-option [value]="true" label="All year" />
+      <govuk-radio-option [value]="false" label="Select specific period">
+        <ng-container govukConditionalContent>
+          <div class="govuk-grid-row row-container">
+            <div class="govuk-grid-column-one-half">
+              <div mrtm-date-picker formControlName="from" label="From" hint="For example, 17/5/2024"></div>
+            </div>
+            <div class="govuk-grid-column-one-half">
+              <div mrtm-date-picker formControlName="to" label="To" hint="For example, 17/5/2024"></div>
+            </div>
+          </div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  }
+</mrtm-wizard-step>
+<mrtm-return-to-ships-list-table [label]="returnToLabel()" />

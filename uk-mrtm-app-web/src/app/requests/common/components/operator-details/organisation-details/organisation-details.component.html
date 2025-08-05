@@ -1,0 +1,76 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="operatorDetailsMap.title"
+  [formGroup]="formGroup"
+  [heading]="operatorDetails?.organisationStructure?.legalStatusType | organisationDetailsTitle"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <h2 class="govuk-label">Organisation legal status</h2>
+  <p class="govuk-body">{{ formGroup.get('legalStatusTypeText').value }}</p>
+
+  @switch (operatorDetails?.organisationStructure?.legalStatusType) {
+    @case ('LIMITED_COMPANY') {
+      <div
+        formControlName="registrationNumber"
+        govuk-text-input
+        label="Company registration number"
+        hint="Enter 'not applicable' if the company does not have a registration number."></div>
+    }
+    @case ('INDIVIDUAL') {
+      <div formControlName="fullName" govuk-text-input label="Full name"></div>
+    }
+    @case ('PARTNERSHIP') {
+      <div formControlName="partnershipName" govuk-text-input label="Name of the partnership (Optional)"></div>
+    }
+  }
+
+  <h3 class="govuk-heading-m govuk-!-margin-bottom-2">
+    {{ operatorDetails?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle }}
+  </h3>
+  <div class="govuk-hint">
+    {{
+      operatorDetails?.organisationStructure?.legalStatusType === 'LIMITED_COMPANY'
+        ? 'This is the address provided when registering the company.'
+        : null
+    }}
+  </div>
+
+  <div formControlName="sameAsContactAddress" govuk-checkboxes>
+    <ng-container govukLegend>
+      <span class="govuk-visually-hidden">Same address as Operator Contact address</span>
+    </ng-container>
+    <govuk-checkbox [value]="true" label="Same address as Operator Contact address"></govuk-checkbox>
+  </div>
+
+  <mrtm-location-state-form
+    [hiddenLegend]="true"
+    [legendLabel]="operatorDetails?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle"
+    formGroupName="registeredAddress"
+    [isReadonly]="sameAsContactAddressCtrl.value?.includes(true)" />
+
+  @switch (operatorDetails?.organisationStructure?.legalStatusType) {
+    @case ('PARTNERSHIP') {
+      <h2 class="govuk-heading-m">List the partners</h2>
+      <div formArrayName="partners">
+        @for (partner of partnersCtrl.controls; track partner; let i = $index) {
+          <fieldset govukFieldset>
+            <legend govukLegend legendSize="small">Name of partner {{ i + 1 }}</legend>
+            @if (partnersCtrl.length > 1) {
+              <button (click)="removePartner(i)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
+            }
+            <div govuk-text-input [formControlName]="i"></div>
+          </fieldset>
+        }
+        <button (click)="addPartner()" govukSecondaryButton type="button">Add another partner</button>
+      </div>
+    }
+    @case ('LIMITED_COMPANY') {
+      <mrtm-multiple-file-input
+        [baseDownloadUrl]="downloadUrl"
+        label="Upload proof of registered address (optional)"
+        hint="For example, a screenshot from your company register"
+        listTitle="Uploaded files"
+        formControlName="evidenceFiles"></mrtm-multiple-file-input>
+    }
+  }
+</mrtm-wizard-step>

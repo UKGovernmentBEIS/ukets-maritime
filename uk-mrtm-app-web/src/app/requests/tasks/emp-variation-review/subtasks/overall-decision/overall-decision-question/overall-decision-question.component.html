@@ -1,0 +1,16 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="determinationType | determinationType"
+  [formGroup]="form"
+  [heading]=""
+  [hideSubmit]="false"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div
+    [label]="determinationType | variationDeterminationHeaderType"
+    [maxLength]="10000"
+    formControlName="reason"
+    govuk-textarea
+    hint="This cannot be viewed by the operator"
+    labelSize="large"></div>
+</mrtm-wizard-step>

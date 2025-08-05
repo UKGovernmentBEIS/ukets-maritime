@@ -1,0 +1,25 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="controlActivitiesMap.title"
+  [formGroup]="formGroup"
+  [heading]="controlActivitiesMap?.documentation?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Explain how your procedure for relevant documentation has been extended to include MRV relevant documents and data.
+  </p>
+  <p class="govuk-body">
+    You must include information about your document and data retention process, including how data is stored so that it
+    can be provided to your Regulator or verifier on request.
+  </p>
+  <p class="govuk-body">
+    You should have a version management system in place for relevant documentation, so that versions in force can be
+    easily identified and revision history can be tracked.
+  </p>
+  <p class="govuk-body">
+    All records should be kept in specific files on board and in the office and be legible, readily identifiable and
+    retrievable, and stored in a way that avoids deterioration or damage.
+  </p>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

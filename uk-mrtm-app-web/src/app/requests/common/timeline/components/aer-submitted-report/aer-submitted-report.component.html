@@ -1,0 +1,93 @@
+@if (vm(); as vm) {
+  @if (!hasVerification()) {
+    <netz-page-heading>{{ vm.title }}</netz-page-heading>
+
+    <p class="govuk-body govuk-!-margin-top-2">{{ vm.creationDate | govukDate: 'datetime' }}</p>
+  }
+
+  @if (vm.operatorDetails) {
+    <netz-page-heading>{{ vm.operatorDetailsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-operator-details-summary-template [operatorDetails]="vm.operatorDetails" [files]="vm.operatorDetailsFiles" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.monitoringPlanChanges) {
+    <netz-page-heading>{{ vm.monitoringPlanChangesSubtaskMap.title }}</netz-page-heading>
+    <mrtm-monitoring-plan-changes-summary-template
+      [monitoringPlanVersion]="vm.monitoringPlanVersion"
+      [monitoringPlanChanges]="vm.monitoringPlanChanges" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.aerEmissions) {
+    <netz-page-heading>{{ vm.aerEmissionsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-list-of-ships-summary-template [data]="vm.aerEmissions" editUrl="./ships" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.aerVoyages) {
+    <netz-page-heading>{{ vm.aerVoyagesSubtaskMap.title }}</netz-page-heading>
+    <mrtm-voyages-list-summary-template [data]="vm.aerVoyages" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.aerPorts) {
+    <netz-page-heading>{{ vm.aerPortsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-port-calls-list-summary-template [data]="vm.aerPorts" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.aerAggregatedData) {
+    <netz-page-heading>{{ vm.aerAggregatedDataSubtaskMap.title }}</netz-page-heading>
+    <mrtm-aggregated-data-list-summary-template [data]="vm.aerAggregatedData" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.reportingRequired !== undefined) {
+    <netz-page-heading>{{ vm.reportingObligationSubtaskMap.title }}</netz-page-heading>
+    <mrtm-reporting-obligation-summary-template
+      [reportingYear]="vm.reportingYear"
+      [reportingRequired]="vm.reportingRequired"
+      [reportingObligationDetails]="vm.reportingObligationDetails"
+      [files]="vm.reportingObligationFiles"
+      [map]="vm.reportingObligationSubtaskMap" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.aerReductionClaim) {
+    <netz-page-heading>{{ vm.aerReductionClaimSubtaskMap.title }}</netz-page-heading>
+    <mrtm-reduction-claim-summary-template
+      [header]="vm.aerReductionClaimSubtaskMap.exist.title"
+      [data]="vm.aerReductionClaim" />
+    @if (vm.aerReductionClaim.exist) {
+      <div>
+        <h3 class="govuk-heading-m">{{ vm.aerReductionClaimSubtaskMap.smfDetails.title }}</h3>
+        <mrtm-reduction-claim-details-summary-template [data]="vm.fuelPurchases" />
+      </div>
+    }
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.additionalDocuments) {
+    <netz-page-heading>{{ vm.additionalDocumentsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-additional-documents-summary-template
+      [additionalDocuments]="vm.additionalDocuments"
+      [additionalDocumentsMap]="vm.additionalDocumentsSubtaskMap"
+      [files]="vm.additionalDocumentsFiles" />
+    <div style="page-break-after: always">&nbsp;</div>
+    <div style="page-break-before: always">&nbsp;</div>
+  }
+
+  @if (vm.totalEmissions) {
+    <netz-page-heading>{{ vm.totalEmissionsSubtaskMap.title }}</netz-page-heading>
+    <mrtm-aer-total-emissions-summary-template [totalEmissions]="vm.totalEmissions" />
+  }
+}

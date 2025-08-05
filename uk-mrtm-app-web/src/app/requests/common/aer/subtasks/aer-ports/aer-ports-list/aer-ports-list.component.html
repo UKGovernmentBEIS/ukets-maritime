@@ -1,0 +1,41 @@
+<mrtm-notification-banner />
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading caption="Ports">{{ wizardMap.title }}</netz-page-heading>
+    <p class="govuk-body">You can manually add or upload the details for ports and emissions.</p>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-button-group float-right">
+      <a govukLink [routerLink]="['./', wizardStep.SELECT_SHIP]" govukSecondaryButton type="button">Add port call</a>
+      <a govukLink govukSecondaryButton [routerLink]="['../', wizardStep.UPLOAD_PORTS]">Upload file</a>
+    </div>
+  </div>
+</div>
+
+@if (warningMessage(); as warningMessage) {
+  <govuk-warning-text [assistiveText]="warningMessage"></govuk-warning-text>
+}
+
+@if (editable() && ports()?.length) {
+  <mrtm-aer-filter-by-ship
+    [items]="filterPortsSelectItems()"
+    header="View port calls per ship"
+    (filterChanged)="onFilter($event)" />
+}
+
+<mrtm-port-calls-list-summary-template
+  [header]="portsListHeader()"
+  [editable]="editable()"
+  [data]="ports()"
+  (deleteItems)="onDeletePorts($event)" />
+
+@if (canContinue()) {
+  <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>
+}
+
+<div>
+  @if (canContinue() || !ports()?.length) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

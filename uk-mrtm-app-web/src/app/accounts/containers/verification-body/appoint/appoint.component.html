@@ -1,0 +1,35 @@
+@if (appointedAccount$ | async; as appointedAccount) {
+  @if (appointedAccount.value === -1) {
+    <mrtm-unappoint-confirmation />
+  } @else {
+    <mrtm-confirmation [verificationAccount]="appointedAccount.text" />
+  }
+} @else {
+  @if (isSummaryDisplayed$ | async) {
+    <govuk-error-summary [form]="form"></govuk-error-summary>
+  }
+  <netz-page-heading size="xl">
+    {{ (currentVerificationBody$ | async) ? 'Replace a verifier' : 'Appoint a verifier' }}
+  </netz-page-heading>
+
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-warning-text assistiveText="">
+        A verifier will have read-only access to your account.
+        <br />
+        This allows staff at the verifier organization to prepare in advance for the review and verification of your
+        Annual Emissions Monitoring (AEM) report.
+      </govuk-warning-text>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="form">
+        <div
+          [options]="activeBodies$ | async"
+          formControlName="verificationBodyId"
+          govuk-select
+          label="Select verification body"></div>
+
+        <button netzPendingButton govukButton type="submit">Submit</button>
+      </form>
+    </div>
+  </div>
+}

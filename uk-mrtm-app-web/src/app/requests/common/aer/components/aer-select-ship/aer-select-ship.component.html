@@ -1,0 +1,18 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [caption]="wizardMap?.imoNumber?.caption"
+  (formSubmit)="onSubmit()"
+  [heading]="wizardMap?.imoNumber?.title">
+  <div
+    govuk-select
+    [options]="availableShips()"
+    formControlName="imoNumber"
+    [label]="wizardMap?.imoNumber?.title"
+    [isLabelHidden]="true"
+    widthClass="govuk-!-width-one-third"></div>
+</mrtm-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="objectId() ? ['../../'] : ['../']">Return to: {{ wizardMap.title }}</a>
+</div>

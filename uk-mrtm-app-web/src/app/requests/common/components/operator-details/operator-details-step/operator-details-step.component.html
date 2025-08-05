@@ -1,0 +1,12 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="operatorDetailsMap.title"
+  [formGroup]="formGroup"
+  [heading]="operatorDetailsMap.organisationDetails.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <h2 class="govuk-label">Company IMO number</h2>
+  <p class="govuk-body">{{ formGroup.get('imoNumber').value }}</p>
+  <div formControlName="operatorName" govuk-text-input label="Operator name"></div>
+  <mrtm-location-state-form legendLabel="Contact address" formGroupName="contactAddress" />
+</mrtm-wizard-step>

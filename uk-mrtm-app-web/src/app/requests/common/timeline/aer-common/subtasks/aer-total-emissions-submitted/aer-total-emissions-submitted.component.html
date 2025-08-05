@@ -1,0 +1,9 @@
+<netz-page-heading>Emissions summary for all ships</netz-page-heading>
+
+<mrtm-aer-total-emissions-summary-template [totalEmissions]="totalEmissions()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

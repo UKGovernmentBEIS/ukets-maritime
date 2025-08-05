@@ -1,0 +1,14 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Start a batch variation"
+  heading="Provide a summary of changes for the emissions monitoring plan log"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <div
+    govuk-textarea
+    formControlName="summary"
+    hint="The operator will see this in the approved emissions monitoring plan notice.
+    Enter a summary for all items that were added to the status log."
+    title="Batch variation reason"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

@@ -1,0 +1,24 @@
+<netz-page-heading [caption]="wizardMap.smfDetails.caption">{{ wizardMap.smfDetails.title }}</netz-page-heading>
+<mrtm-reduction-claim-details-summary-template
+  [editable]="isEditable()"
+  [data]="data()"
+  (handleChange)="onChange($event)"
+  (handleDelete)="onDelete($event)" />
+
+@if (isEditable()) {
+  @if (data()?.length) {
+    <div class="govuk-body">
+      <a govukSecondaryButton [routerLink]="['./', wizardStep.FUEL_PURCHASE]">Add another item</a>
+    </div>
+    <div class="govuk-body">
+      <a govukButton [routerLink]="['../']">Continue</a>
+    </div>
+  } @else {
+    <a govukButton [routerLink]="['./', wizardStep.FUEL_PURCHASE]">Add new item</a>
+  }
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

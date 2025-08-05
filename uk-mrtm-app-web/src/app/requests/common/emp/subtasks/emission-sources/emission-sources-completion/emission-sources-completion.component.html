@@ -1,0 +1,14 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="emissionSourcesMap.title"
+  [formGroup]="formGroup"
+  [heading]="emissionSourcesMap?.listCompletion?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Provide details of the procedures, systems and responsibilities used to manage the completeness of the list of ships
+    and emissions sources on each ship.
+  </p>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

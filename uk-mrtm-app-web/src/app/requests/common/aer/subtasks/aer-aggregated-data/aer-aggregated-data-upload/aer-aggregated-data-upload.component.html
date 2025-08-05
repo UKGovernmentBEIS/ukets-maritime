@@ -1,0 +1,53 @@
+<mrtm-data-parser-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="taskMap.caption"
+  [formGroup]="formGroup"
+  [heading]="taskMap.uploadAggregatedData.title"
+  [showReturnLink]="false"
+  [isTwoThirds]="false"
+  submitText="Confirm and upload"
+  [xmlErrors]="xmlErrors()">
+  <p class="govuk-body">
+    You must include all required fields that are set out in the XML schema file for each ship you upload.
+  </p>
+  <p class="govuk-body">
+    The file contains the schema for the bulk upload:
+    <br />
+    <a href="assets/files/emissions-aggregated-data-v1.0.xsd" govukLink target="_blank">
+      Download the XML schema definition (XSD)
+    </a>
+  </p>
+  <p class="govuk-body">When uploading a file:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>the file must be an XML</li>
+    <li>the file must be smaller than 20MB</li>
+    <li>the tag names and values must be identical to the ones included in the XML schema definition (XSD)</li>
+  </ul>
+
+  @if (existingAggregatedData()?.length) {
+    <govuk-warning-text assistiveText="If you upload a file, all of the data that has been entered will be replaced." />
+  }
+  <h2 class="govuk-heading-m">Upload the aggregated data file</h2>
+  <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
+  <div class="govuk-button-group">
+    <button type="button" govukSecondaryButton (click)="fileInput.click()">Choose file</button>
+    @if (uploadedFile) {
+      <p class="govuk-body">{{ uploadedFile?.name }}</p>
+    } @else {
+      <p class="govuk-body">No file chosen</p>
+    }
+  </div>
+
+  @if (aggregatedTableData()?.length) {
+    <govuk-table [columns]="columns" [data]="aggregatedTableData()" caption="Check the ships to upload">
+      <ng-template let-column="column" let-row="row">
+        {{ row[column.field] }}
+      </ng-template>
+    </govuk-table>
+  }
+</mrtm-data-parser-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a [routerLink]="['../', wizardSteps.LIST_OF_AGGREGATED_DATA]" govukLink>Return to: {{ taskMap.title }}</a>
+</div>

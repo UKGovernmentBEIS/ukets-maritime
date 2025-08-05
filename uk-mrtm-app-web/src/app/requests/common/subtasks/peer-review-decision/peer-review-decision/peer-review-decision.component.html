@@ -1,0 +1,22 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  heading="Peer review decision"
+  caption="{{ map.caption }}"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true">
+  <fieldset govukFieldset>
+    <legend govukLegend legendSize="medium">What is your assessment of this determination?</legend>
+    <div formControlName="type" govuk-radio>
+      <govuk-radio-option value="AGREE" label="I agree with the determination" />
+      <govuk-radio-option value="DISAGREE" label="I do not agree with the determination" />
+    </div>
+  </fieldset>
+  <div
+    govuk-textarea
+    labelSize="small"
+    formControlName="notes"
+    label="Add notes to support your decision"
+    hint="The operator cannot view this"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

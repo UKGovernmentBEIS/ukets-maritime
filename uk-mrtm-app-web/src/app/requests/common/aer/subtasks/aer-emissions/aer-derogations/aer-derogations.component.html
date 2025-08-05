@@ -1,0 +1,33 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="shipName()"
+  [formGroup]="formGroup"
+  [heading]="map.derogations.title"
+  [showReturnLink]="false"
+  [isTwoThirds]="true">
+  <div
+    formControlName="exceptionFromPerVoyageMonitoring"
+    govuk-radio
+    [legend]="map.exceptionFromPerVoyageMonitoring.title"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+  <div
+    formControlName="carbonCaptureAndStorageReduction"
+    govuk-radio
+    [legend]="map.carbonCaptureAndStorageReduction.title"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+  <div
+    formControlName="smallIslandFerryOperatorReduction"
+    govuk-radio
+    [legend]="map.smallIslandFerryOperatorReduction.title"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>
+<mrtm-return-to-ships-list-table [label]="returnToLabel" />

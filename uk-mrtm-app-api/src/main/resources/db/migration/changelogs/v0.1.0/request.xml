@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_request.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<changeSet id="0_1_0_populate_request_task_action_type" author="P35066">
+        <sql>
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RFI_SUBMIT', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RFI_UPLOAD_ATTACHMENT', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RFI_RESPONSE_SUBMIT', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RFI_CANCEL', false);
+            
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RDE_SUBMIT', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RDE_RESPONSE_SUBMIT', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RDE_FORCE_DECISION', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'RDE_UPLOAD_ATTACHMENT', false);
+            
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'PAYMENT_MARK_AS_PAID', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'PAYMENT_MARK_AS_RECEIVED', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'PAYMENT_PAY_BY_CARD', false);
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'PAYMENT_CANCEL', false);
+        </sql>
+        <rollback>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_delete_payment_cancel_and_rfi_cancel" author="P44065">
+        <sql>
+            delete from request_task_action_type where code = 'PAYMENT_CANCEL';
+            delete from request_task_action_type where code = 'RFI_CANCEL';
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_cancel_application" author="P44065">
+        <sql>
+            insert into request_task_action_type(id, code, blocked_by_payment) values (nextval('request_task_action_type_seq'), 'CANCEL_APPLICATION', false);
+        </sql>
+        <rollback>
+            delete from request_task_action_type where code = 'CANCEL_APPLICATION';
+        </rollback>
+    </changeSet>
+    
+</databaseChangeLog>

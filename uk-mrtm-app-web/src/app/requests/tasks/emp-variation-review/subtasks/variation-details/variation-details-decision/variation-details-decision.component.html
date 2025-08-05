@@ -1,0 +1,16 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [caption]="vm.variationDetailsMap.title"
+    [formGroup]="form"
+    [heading]="vm.variationDetailsMap.decision.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-variation-details-summary-template
+      [variationDetails]="vm.variationDetails"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-review-decision />
+  </mrtm-wizard-step>
+}

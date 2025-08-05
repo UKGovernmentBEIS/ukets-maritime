@@ -1,0 +1,18 @@
+<govuk-table [columns]="columns()" [data]="history()">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) {
+      @case ('status') {
+        {{ row[column.field] | accountReportingStatus }}
+      }
+      @case ('submissionDate') {
+        {{ row[column.field] | govukDate: 'datetime' }}
+      }
+      @case ('reason') {
+        <span [notProvided]="row[column.field]"></span>
+      }
+      @default {
+        {{ row[column.field] }}
+      }
+    }
+  </ng-template>
+</govuk-table>

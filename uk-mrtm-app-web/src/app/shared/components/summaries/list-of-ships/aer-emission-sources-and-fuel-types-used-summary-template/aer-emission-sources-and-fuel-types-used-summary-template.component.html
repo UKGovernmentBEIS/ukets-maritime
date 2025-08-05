@@ -1,0 +1,58 @@
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table
+    [columns]="columns()"
+    [data]="data()"
+    description="Emissions sources and fuel types used"
+    emptyTableText="No items to display">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('name') {
+          <span [notProvided]="row[column.field]"></span>
+        }
+        @case ('type') {
+          <span [notProvided]="row[column.field] | selectOptionToTitle: typeOptions"></span>
+        }
+        @case ('sourceClass') {
+          <span [notProvided]="row[column.field] | selectOptionToTitle: sourceClassOptions"></span>
+        }
+        @case ('methaneSlip') {
+          {{ row[column.field] | methaneSlipValue: row?.methaneSlipValueType }}
+        }
+        @case ('fuelDetails') {
+          @if (row?.fuelDetails?.length) {
+            <ul class="govuk-list--bullet govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+              @for (fuel of row.fuelDetails; track i; let i = $index) {
+                <li class="pre-wrap" [innerHTML]="fuel | fuelOriginTitle"></li>
+              }
+            </ul>
+          } @else {
+            <span [notProvided]="undefined"></span>
+          }
+        }
+        @case ('monitoringMethod') {
+          @if (row?.monitoringMethod?.length) {
+            <ul class="govuk-list--bullet govuk-!-margin-top-0 govuk-!-margin-bottom-0">
+              @for (monitoringMethod of getSortedMonitoringMethods(row); track i; let i = $index) {
+                <li>{{ monitoringMethodMap[monitoringMethod].text }}</li>
+              }
+            </ul>
+          } @else {
+            <span [notProvided]="undefined"></span>
+          }
+        }
+        @case ('actionLinks') {
+          <div class="control-row justify-content-end">
+            <a [routerLink]="[changeLink(), row?.uniqueIdentifier]" [queryParams]="queryParams()" govukLink>Change</a>
+
+            @if (isDeletable()) {
+              <a (click)="handleRemove($event, row)" routerLink="." govukLink>Remove</a>
+            }
+          </div>
+        }
+        @default {
+          <span [notProvided]="row[column.field]"></span>
+        }
+      }
+    </ng-template>
+  </govuk-table>
+</div>

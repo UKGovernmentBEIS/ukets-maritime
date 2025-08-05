@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.1.0/main.xml"
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<!-- application changelogs -->
+    <include file="au_authority.xml" relativeToChangelogFile="true" />
+    <include file="au_authorization_rules.xml" relativeToChangelogFile="true" />
+    <include file="au_user_authority.xml" relativeToChangelogFile="true" />
+
+    <include file="request.xml" relativeToChangelogFile="true" />
+    <include file="request_payment.xml" relativeToChangelogFile="true" />
+
+
+    <include file="notification_template.xml" relativeToChangelogFile="true" />
+
+    <include file="request_mrtm.xml" relativeToChangelogFile="true" />
+    <include file="emissions_monitoring_plan.xml" relativeToChangelogFile="true" />
+    <include file="changelog_configuration.xml" relativeToChangelogFile="true" />
+    <include file="mi_reports_views.xml" relativeToChangelogFile="true" />
+    <include file="mi_reports.xml" relativeToChangelogFile="true" />
+    <include file="changelog_payload_modifications.xml" relativeToChangelogFile="true"/>
+    <include file="changelog_request_payment_model.xml" relativeToChangelogFile="true"/>
+</databaseChangeLog>

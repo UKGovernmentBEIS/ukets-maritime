@@ -1,0 +1,69 @@
+<mrtm-data-parser-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="taskMap.caption"
+  [formGroup]="form"
+  [heading]="taskMap.uploadVoyages.title"
+  [showReturnLink]="false"
+  [isTwoThirds]="false"
+  submitText="Confirm and upload">
+  <p class="govuk-body">
+    Download and complete the voyage and emission details template, then upload it on this page.
+    <br />
+    You should read the
+    <a href="assets/files/CSV_Guidance_v4.pdf" govukLink target="_blank">CSV guidance</a>
+    before you fill in the template.
+  </p>
+
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Download and complete file</h2>
+  <p class="govuk-body">
+    <a href="assets/files/Voyages_and_emission_details_template_v1.xlsx" govukLink target="_blank">
+      Voyages_and_emission_details_template_v1.xlsx
+    </a>
+  </p>
+
+  <h2 class="govuk-heading-m govuk-!-margin-bottom-0">Upload file</h2>
+  <p class="govuk-body govuk-!-margin-bottom-0 govuk-hint">When uploading a file:</p>
+  <ul class="govuk-list govuk-list--bullet govuk-hint">
+    <li>the file must be a CSV UTF-8 (Comma delimited) (*.csv)</li>
+    <li>the file must be smaller than 20MB</li>
+  </ul>
+
+  <input type="file" (change)="onFileSelect($event)" style="display: none" #fileInput />
+  <div class="govuk-button-group">
+    <button type="button" govukSecondaryButton (click)="fileInput.click()">Choose file</button>
+    @if (uploadedFile) {
+      <p class="govuk-body">{{ uploadedFile?.name }}</p>
+    } @else {
+      <p class="govuk-body">No file chosen</p>
+    }
+  </div>
+
+  @if (voyagesTableData()?.length) {
+    <govuk-table [columns]="columns" [data]="voyagesTableData()" caption="Check the voyages to upload">
+      <ng-template let-column="column" let-row="row">
+        @switch (column?.field) {
+          @case ('departurePort') {
+            {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
+          }
+          @case ('departureTime') {
+            {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+          }
+          @case ('arrivalTime') {
+            {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+          }
+          @case ('arrivalPort') {
+            {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
+          }
+          @default {
+            {{ row?.[column?.field] }}
+          }
+        }
+      </ng-template>
+    </govuk-table>
+  }
+</mrtm-data-parser-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a [routerLink]="['../', wizardStep.LIST_OF_VOYAGES]" govukLink>Return to: {{ taskMap.title }}</a>
+</div>

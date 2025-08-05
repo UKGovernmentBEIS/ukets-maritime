@@ -1,0 +1,31 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="isEditMode ? map.itemEdit.title : map.itemAdd.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">You should state:</p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-7">
+    <li>the nature and size of the misstatement</li>
+    <li>if it is higher than it should be (overstated) or lower (understated)</li>
+    <li>which part of the report it relates to</li>
+    <li>why it has a material effect, if applicable</li>
+  </ul>
+  <div
+    class="govuk-!-margin-bottom-7"
+    formControlName="explanation"
+    govuk-textarea
+    label="Explain the uncorrected misstatement"
+    labelSize="small"
+    [maxLength]="10000"></div>
+  <div
+    formControlName="materialEffect"
+    govuk-radio
+    legend="Does this have a material effect on the total emissions reported?"
+    legendSize="small"
+    class="govuk-!-margin-bottom-9">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

@@ -1,0 +1,23 @@
+@if (emp(); as emp) {
+  <h2 class="govuk-heading-m">Active emissions plan</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Downloadable version</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="[empFiles().empDocument]" />
+        @if (empFiles().empAttachments.length) {
+          <details class="govuk-details" data-module="govuk-details">
+            <summary class="govuk-details__summary">
+              <span>Attached documents</span>
+            </summary>
+            <mrtm-summary-download-files [files]="empFiles().empAttachments" />
+          </details>
+        }
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Emissions plan ID</dt>
+      <dd govukSummaryListRowValue>{{ emp.id }}</dd>
+    </div>
+  </dl>
+}

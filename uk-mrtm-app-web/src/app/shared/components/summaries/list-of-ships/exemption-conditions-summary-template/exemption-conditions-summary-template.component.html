@@ -1,0 +1,27 @@
+@if (data) {
+  <h2 class="govuk-heading-m">Conditions of exemption from per voyage reporting</h2>
+  <dl [hasBorders]="true" govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Do you intend to make use of the derogation for monitoring the amount of fuel consumed on a per-voyage basis?
+      </dt>
+      <dd govukSummaryListRowValue>{{ data.exist | booleanToText }}</dd>
+      @if (isEditable) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        </dd>
+      }
+    </div>
+    @if (data?.minVoyages) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Minimum number of expected voyages during the reporting period</dt>
+        <dd govukSummaryListRowValue>{{ data.minVoyages }}</dd>
+        @if (isEditable) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

@@ -1,0 +1,28 @@
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading caption="Ports">Check your answers</netz-page-heading>
+    <p class="govuk-body">You can manually add or upload the details for ports and emissions.</p>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div class="govuk-button-group float-right">
+      @if (editable()) {
+        <a govukLink [routerLink]="['./', wizardStep.LIST_OF_PORTS]" [queryParams]="{ change: true }" type="button">
+          Change
+        </a>
+      }
+    </div>
+  </div>
+</div>
+
+<mrtm-port-calls-list-summary-template [data]="ports()" [editPath]="wizardStep.LIST_OF_PORTS" />
+
+@if (canSubmit()) {
+  <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and continue</button>
+}
+
+<div>
+  @if (canSubmit()) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

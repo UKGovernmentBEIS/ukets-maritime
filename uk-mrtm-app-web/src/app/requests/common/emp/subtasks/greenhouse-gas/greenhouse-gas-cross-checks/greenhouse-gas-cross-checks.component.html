@@ -1,0 +1,14 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="greenhouseGasMap.title"
+  [formGroup]="formGroup"
+  [heading]="greenhouseGasMap?.crossChecks?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Explain how regular cross-checks are carried out between the bunkering quantity as displayed in the Bunker Delivery
+    Note (BDN) and the bunkering quantity indicated by onboard measurements.
+  </p>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

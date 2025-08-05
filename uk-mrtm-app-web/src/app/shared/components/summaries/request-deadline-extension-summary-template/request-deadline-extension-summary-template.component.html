@@ -1,0 +1,42 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Proposed details</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Proposed due date</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.extensionDate | govukDate: 'date'"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reply deadline</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.deadline | govukDate: 'date'"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[deadlineFormEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Recipients</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.operators.join(',')"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[deadlineNotificationEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.signatory"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[deadlineNotificationEditUrl()]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

@@ -1,0 +1,66 @@
+<div
+  autoComplete="given-name"
+  formControlName="firstName"
+  govuk-text-input
+  label="First name"
+  class="govuk-!-margin-bottom-3"
+  widthClass="govuk-!-width-one-half"></div>
+
+<div
+  autoComplete="family-name"
+  formControlName="lastName"
+  govuk-text-input
+  label="Last name"
+  widthClass="govuk-!-width-one-half"></div>
+
+@if (hasJobTitle) {
+  <div
+    autoComplete="job-title"
+    formControlName="jobTitle"
+    govuk-text-input
+    label="Job Title"
+    class="govuk-!-padding-top-3 govuk-!-padding-bottom-3"
+    widthClass="govuk-!-width-three-quarters"></div>
+}
+
+@switch (phoneType) {
+  @case ('full') {
+    <div mrtm-phone-input formControlName="phoneNumber" label="Phone number 1" class="govuk-!-margin-bottom-1"></div>
+    <div mrtm-phone-input formControlName="mobileNumber" label="Phone number 2 (optional)"></div>
+  }
+  @case ('national') {
+    <div
+      autoComplete="tel-national"
+      formControlName="phoneNumber"
+      govuk-text-input
+      inputType="tel"
+      label="Phone number 1"
+      widthClass="govuk-!-width-one-third"></div>
+    <div
+      autoComplete="mobile tel-national"
+      formControlName="mobileNumber"
+      govuk-text-input
+      inputType="tel"
+      label="Phone number 2 (optional)"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+}
+@if (!isNotification) {
+  <div>
+    <div
+      autoComplete="email"
+      formControlName="email"
+      govuk-text-input
+      class="break-line"
+      [hint]="emailHint"
+      label="Email address"
+      widthClass="govuk-!-width-one-half"></div>
+  </div>
+} @else {
+  <div
+    autoComplete="email"
+    formControlName="email"
+    govuk-text-input
+    label="Email address"
+    widthClass="govuk-!-width-three-quarters"></div>
+}

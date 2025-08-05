@@ -1,0 +1,29 @@
+@if (currentUser$ | async; as currentUser) {
+  @if (successBoxVisible$ | async) {
+    <govuk-notification-banner heading="Success" type="success">
+      <h3 class="govuk-notification-banner__heading">User details updated</h3>
+    </govuk-notification-banner>
+  }
+
+  <netz-page-heading>{{ currentUser | userFullName }}</netz-page-heading>
+  <h2 class="govuk-heading-m">User details</h2>
+  <mrtm-user-account-summary-info
+    [editable]="true"
+    [showPhoneFields]="true"
+    [summaryInfo]="currentUser$ | async"
+    phoneType="national"
+    viewMode="VIEW" />
+  <h2 class="govuk-heading-m">Credentials</h2>
+
+  @if (isCurrentUser$ | async) {
+    <mrtm-two-fa-link [link]="['/', '2fa', 'change']" [title]="'Change two factor authentication'" />
+  } @else {
+    <mrtm-two-fa-link
+      [accountId]="accountId$ | async"
+      [link]="['/', '2fa', 'reset-2fa']"
+      [role]="'VERIFIER'"
+      [title]="'Change two-factor authentication'"
+      [userId]="userId$ | async"
+      [userName]="currentUser | userFullName" />
+  }
+}

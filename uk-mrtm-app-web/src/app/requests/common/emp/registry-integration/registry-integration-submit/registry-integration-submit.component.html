@@ -1,0 +1,14 @@
+<netz-page-heading caption="Integration with Registry">Send information to the registry</netz-page-heading>
+<div class="govuk-inset-text">
+  By selecting ‘Confirm and send’ you confirm that part of the EMP information can be
+  <br />
+  communicated to the Registry service to create a Registry account.
+</div>
+<mrtm-registry-operator-details-summary-template [operatorDetails]="operatorDetails" [account]="account()" />
+
+<button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and send</button>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

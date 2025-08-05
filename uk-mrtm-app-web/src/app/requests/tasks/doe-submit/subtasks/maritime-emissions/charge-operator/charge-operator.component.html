@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="maritimeEmissionsMap.title"
+  [formGroup]="form"
+  [heading]="maritimeEmissionsMap.chargeOperator.title"
+  [hideSubmit]="false"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div formControlName="chargeOperator" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

@@ -1,0 +1,223 @@
+@if (data(); as maritimeEmissions) {
+  <h2 class="govuk-heading-m">{{ map()?.determinationReason?.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Why are you determining the maritime emissions or emissions figure for surrender?</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="maritimeEmissions?.determinationReason?.type | i18nSelect: determineReasonTypeMap"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().DETERMINATION_REASON]" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      }
+    </div>
+    @if (userRole() === 'REGULATOR') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Further details</dt>
+        <dd
+          govukSummaryListRowValue
+          class="pre-wrap"
+          [notProvided]="maritimeEmissions?.determinationReason?.furtherDetails"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep().DETERMINATION_REASON]" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+
+  <h2 class="govuk-heading-m">{{ map()?.totalMaritimeEmissions?.title }}</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().determinationType.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.determinationType | i18nSelect: determinationTypeMap
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().totalReportableEmissions.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions
+            ? maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions + ' tCO2e'
+            : maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().smallIslandFerryDeduction.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.smallIslandFerryDeduction
+            ? maritimeEmissions?.totalMaritimeEmissions?.smallIslandFerryDeduction + ' tCO2e'
+            : maritimeEmissions?.totalMaritimeEmissions?.smallIslandFerryDeduction
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().iceClassDeduction.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.iceClassDeduction
+            ? maritimeEmissions?.totalMaritimeEmissions?.iceClassDeduction + ' tCO2e'
+            : maritimeEmissions?.totalMaritimeEmissions?.iceClassDeduction
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().surrenderEmissions.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions
+            ? maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions + ' tCO2e'
+            : maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>How have you calculated the emissions?</dt>
+      <dd
+        govukSummaryListRowValue
+        class="pre-wrap"
+        [notProvided]="maritimeEmissions?.totalMaritimeEmissions?.calculationApproach"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Supporting documents</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="files()" />
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Operator fee</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map()?.chargeOperator?.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="maritimeEmissions?.chargeOperator | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().CHARGE_OPERATOR]" [queryParams]="{ change: true }">Change</a>
+        </dd>
+      }
+    </div>
+    @if (maritimeEmissions?.chargeOperator === true) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Billable hours</dt>
+        <dd
+          govukSummaryListRowValue
+          [notProvided]="
+            maritimeEmissions?.feeDetails?.totalBillableHours
+              ? maritimeEmissions?.feeDetails?.totalBillableHours + ' hours'
+              : maritimeEmissions?.feeDetails?.totalBillableHours
+          "></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep().FEE_DETAILS]" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Hourly rate</dt>
+        <dd
+          govukSummaryListRowValue
+          [notProvided]="
+            maritimeEmissions?.feeDetails?.hourlyRate
+              ? (maritimeEmissions?.feeDetails?.hourlyRate | currency: 'GBP' : 'symbol' : '.0') + ' per hour'
+              : maritimeEmissions?.feeDetails?.hourlyRate
+          "></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep().FEE_DETAILS]" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Payment due date</dt>
+        <dd
+          govukSummaryListRowValue
+          [notProvided]="maritimeEmissions?.feeDetails?.dueDate | govukDate: 'date' : null : { month: 'long' }"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep().FEE_DETAILS]" [queryParams]="{ change: true }">Change</a>
+          </dd>
+        }
+      </div>
+      @if (userRole() === 'REGULATOR') {
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Regulator comments</dt>
+          <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="maritimeEmissions?.feeDetails?.comments"></dd>
+          @if (isEditable()) {
+            <dd govukSummaryListRowActions>
+              <a govukLink [routerLink]="[wizardStep().FEE_DETAILS]" [queryParams]="{ change: true }">Change</a>
+            </dd>
+          }
+        </div>
+      }
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Total operator fee</dt>
+        <dd govukSummaryListRowValue>
+          <strong>
+            {{ totalOperatorFee() | currency: 'GBP' : 'symbol' : '.2' }}
+          </strong>
+        </dd>
+        <dd govukSummaryListRowActions></dd>
+      </div>
+    }
+  </dl>
+}

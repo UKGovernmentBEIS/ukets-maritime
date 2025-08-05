@@ -1,0 +1,6 @@
+<netz-page-heading>Are you sure you want to delete the selected ships?</netz-page-heading>
+<p class="govuk-body">All information entered will be lost.</p>
+<div class="govuk-button-group">
+  <button (click)="onConfirm()" govukWarnButton netzPendingButton type="button">Confirm delete</button>
+  <a [routerLink]="backlink" queryParamsHandling="merge" govukLink>Cancel</a>
+</div>

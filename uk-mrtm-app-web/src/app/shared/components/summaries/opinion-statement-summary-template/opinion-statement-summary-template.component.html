@@ -1,0 +1,176 @@
+<h2 class="govuk-heading-m">Total emissions</h2>
+<mrtm-aer-emissions-overview-summary-template [data]="totalEmissions()" [hasBottomMargin]="false" />
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ map.emissionsCorrect.caption }}</dt>
+    <dd govukSummaryListRowValue [notProvided]="opinionStatement()?.emissionsCorrect | booleanToText"></dd>
+    @if (isEditable()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+      </dd>
+    }
+  </div>
+  @if (opinionStatement()?.emissionsCorrect === false) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.manuallyProvidedTotalEmissions.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          isNil(opinionStatement()?.manuallyProvidedTotalEmissions)
+            ? opinionStatement()?.manuallyProvidedTotalEmissions
+            : opinionStatement()?.manuallyProvidedTotalEmissions + ' tCO2e'
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.manuallyProvidedLessIslandFerryDeduction.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          isNil(opinionStatement()?.manuallyProvidedLessIslandFerryDeduction)
+            ? opinionStatement()?.manuallyProvidedLessIslandFerryDeduction
+            : opinionStatement()?.manuallyProvidedLessIslandFerryDeduction + ' tCO2e'
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.manuallyProvidedLess5PercentIceClassDeduction.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          isNil(opinionStatement()?.manuallyProvidedLess5PercentIceClassDeduction)
+            ? opinionStatement()?.manuallyProvidedLess5PercentIceClassDeduction
+            : opinionStatement()?.manuallyProvidedLess5PercentIceClassDeduction + ' tCO2e'
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.manuallyProvidedSurrenderEmissions.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          isNil(opinionStatement()?.manuallyProvidedSurrenderEmissions)
+            ? opinionStatement()?.manuallyProvidedSurrenderEmissions
+            : opinionStatement()?.manuallyProvidedSurrenderEmissions + ' tCO2e'
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  }
+</dl>
+
+<mrtm-monitoring-plan-version-summary-template [monitoringPlanVersion]="monitoringPlanVersion()" />
+<h2 class="govuk-heading-m">{{ map.additionalChangesNotCovered.title }}</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Changes reported by the operator</dt>
+    <dd
+      govukSummaryListRowValue
+      class="pre-wrap"
+      [notProvided]="monitoringPlanChanges()?.changesExist ? monitoringPlanChanges()?.changes : 'None'"></dd>
+  </div>
+
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Changes reported by the verifier</dt>
+    <dd
+      govukSummaryListRowValue
+      class="pre-wrap"
+      [notProvided]="
+        opinionStatement()?.additionalChangesNotCovered
+          ? opinionStatement()?.additionalChangesNotCoveredDetails
+          : 'None'
+      "></dd>
+    @if (isEditable()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="wizardStep.ADDITIONAL_CHANGES" [queryParams]="queryParams()">Change</a>
+      </dd>
+    }
+  </div>
+</dl>
+
+<h2 class="govuk-heading-m">Site verification</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ map.siteVisitType.title }}</dt>
+    <dd
+      govukSummaryListRowValue
+      class="pre-wrap"
+      [notProvided]="opinionStatement()?.siteVisit?.type | aerSiteVisitTypeToLabel"></dd>
+    @if (isEditable()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="wizardStep.SITE_VISIT_TYPE" [queryParams]="queryParams()">Change</a>
+      </dd>
+    }
+  </div>
+
+  @if (opinionStatement()?.siteVisit?.type === 'IN_PERSON') {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Site visits</dt>
+      <dd govukSummaryListRowValue>
+        @if ($any(opinionStatement()?.siteVisit)?.visitDates?.length) {
+          <ol class="govuk-list govuk-list--number">
+            @for (visitDate of $any(opinionStatement()?.siteVisit)?.visitDates; track $index) {
+              <li>
+                {{ visitDate.startDate | govukDate: 'date' }} for {{ visitDate.numberOfDays }}
+                {{ visitDate.numberOfDays === 1 ? 'day' : 'days' }}
+              </li>
+            }
+          </ol>
+        } @else {
+          <span class="govuk-hint">Not provided</span>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.SITE_VISIT_IN_PERSON" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.siteVisitDetailsInPersonTeamMembers.title }}</dt>
+      <dd govukSummaryListRowValue>
+        @if (teamMembersList()?.length) {
+          <ol class="govuk-list govuk-list--number">
+            @for (teamMember of teamMembersList(); track $index) {
+              <li>{{ teamMember }}</li>
+            }
+          </ol>
+        } @else {
+          <span class="govuk-hint">Not provided</span>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.SITE_VISIT_IN_PERSON" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  }
+
+  @if (opinionStatement()?.siteVisit?.type === 'VIRTUAL') {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reasons for making a virtual site visit</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="$any(opinionStatement()?.siteVisit)?.reason"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep.SITE_VISIT_VIRTUAL" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  }
+</dl>

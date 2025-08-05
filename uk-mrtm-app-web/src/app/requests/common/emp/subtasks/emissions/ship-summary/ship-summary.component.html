@@ -1,0 +1,16 @@
+@if (data(); as ship) {
+  <netz-page-heading>{{ ship?.details?.name }}</netz-page-heading>
+  <mrtm-ship-summary-template
+    [data]="ship"
+    [isEditable]="isEditable"
+    [changeLinks]="changeLinks"
+    [carbonCaptureFiles]="getCarbonCaptureFiles(ship?.carbonCapture?.technologies?.files)"
+    (deleteEmissionsSource)="onDeleteEmissionSource($event)"
+    (deleteFuelsAndEmissionsFactor)="onDeleteFuelsAndEmissions($event)" />
+
+  @if (isEditable && !isShipCompleted()) {
+    <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
+  }
+
+  <mrtm-return-to-ships-list-table />
+}

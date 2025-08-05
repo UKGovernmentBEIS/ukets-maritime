@@ -1,0 +1,3327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_request_cca.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_SET_UP_ACCOUNT_CLOSURE_PROCESS" author="P44065">
+        <validCheckSum>1:any</validCheckSum>
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'ACCOUNT_CLOSURE', 'Account closure', 'PROCESS_ACCOUNT_CLOSURE', 'PERMIT', true, true, false, true, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'ACCOUNT_CLOSURE_SUBMIT', true, null, false,
+                   (SELECT id FROM public.request_type WHERE code = 'ACCOUNT_CLOSURE'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'ACCOUNT_CLOSURE_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'ACCOUNT_CLOSURE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'ACCOUNT_CLOSURE_SAVE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'ACCOUNT_CLOSURE_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'ACCOUNT_CLOSURE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'ACCOUNT_CLOSURE_SUBMIT_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'ACCOUNT_CLOSURE_CANCEL_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'ACCOUNT_CLOSURE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'ACCOUNT_CLOSURE_CANCEL_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_ACCOUNT_CLOSURE_SUPPORTING_COL_VALUE_TO_NULL" author="P44065">
+        <sql>
+            UPDATE public.request_task_type SET supporting = null WHERE code = 'ACCOUNT_CLOSURE_SUBMIT';
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_PROCESS" author="dimopoulosc@unisystems.gr">
+        <validCheckSum>1:any</validCheckSum>
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'EMP_ISSUANCE', 'Emission monitoring plan issuance', 'PROCESS_EMP_ISSUANCE', 'PERMIT', true, true, false, false, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_APPLICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SAVE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SUBMIT_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_UPLOAD_SECTION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_UPLOAD_SECTION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_request_id_format_for_emp_issuance_workflows" author="dimopoulosc@unisystems.gr">
+        <dropForeignKeyConstraint baseTableName="request_task" constraintName="request_task_request_fk"/>
+        <dropForeignKeyConstraint baseTableName="request_action" constraintName="request_action_request_fk"/>
+        <dropForeignKeyConstraint baseTableName="request_task_history" constraintName="request_task_history_request_fk"/>
+
+        <update tableName="request">
+            <column name="id" valueComputed="CONCAT('MAMP', SUBSTR(id, 5))"/>
+            <where>id LIKE 'MEMP%'</where>
+        </update>
+
+        <update tableName="request_task">
+            <column name="request_id" valueComputed="CONCAT('MAMP', SUBSTR(request_id, 5))"/>
+            <where>request_id LIKE 'MEMP%'</where>
+        </update>
+
+        <update tableName="request_action">
+            <column name="request_id" valueComputed="CONCAT('MAMP', SUBSTR(request_id, 5))"/>
+            <where>request_id LIKE 'MEMP%'</where>
+        </update>
+
+        <update tableName="request_task_history">
+            <column name="request_id" valueComputed="CONCAT('MAMP', SUBSTR(request_id, 5))"/>
+            <where>request_id LIKE 'MEMP%'</where>
+        </update>
+
+        <addForeignKeyConstraint baseTableName="request_task"
+                                 baseColumnNames="request_id"
+                                 constraintName="request_task_request_fk"
+                                 referencedTableName="request"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="request_action"
+                                 baseColumnNames="request_id"
+                                 constraintName="request_action_request_fk"
+                                 referencedTableName="request"
+                                 referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint baseTableName="request_task_history"
+                                 baseColumnNames="request_id"
+                                 constraintName="request_task_history_request_fk"
+                                 referencedTableName="request"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_PROCESS" author="P44065">
+        <validCheckSum>1:any</validCheckSum>
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'EMP_NOTIFICATION', 'Emission monitoring plan notification', 'PROCESS_EMP_NOTIFICATION', 'PERMIT', true, true, false, true, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_APPLICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_SAVE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_SUBMIT_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_CANCEL_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_CANCEL_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_UPLOAD_SECTION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_UPLOAD_SECTION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_REVIEW_SUBPROCESS_APPLICATION_REVIEW_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_APPLICATION_REVIEW', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SAVE_APPLICATION_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SAVE_APPLICATION_REVIEW')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SAVE_REVIEW_GROUP_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SAVE_REVIEW_GROUP_DECISION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SAVE_REVIEW_DETERMINATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SAVE_REVIEW_DETERMINATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_REVIEW_SUBPROCESS_WAIT_FOR_REVIEW_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_WAIT_FOR_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_REVIEW_SUBPROCESS_APPLICATION_REVIEW_TASK" author="P44065">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_APPLICATION_REVIEW', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_NOTIFY_OPERATOR_FOR_DECISION', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_NOTIFY_OPERATOR_FOR_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_REVIEW_SUBPROCESS_WAIT_FOR_REVIEW_TASK" author="P44065">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_WAIT_FOR_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_REQUEST_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_REQUEST_PEER_REVIEW', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_REQUEST_PEER_REVIEW')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_REVIEW_SUBPROCESS_PEER_REVIEW_TASK" author="P44065">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_APPLICATION_PEER_REVIEW', true, 'applicationReview', 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_REVIEW_SUBPROCESS_WAIT_FOR_PEER_REVIEW_TASK" author="P44065">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_WAIT_FOR_PEER_REVIEW', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_SUBPROCESS_FOLLOW_UP_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP', true, 'followUpResponse', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_SUBMIT_RESPONSE', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                   (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP'),
+                   (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_SUBMIT_RESPONSE')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_SAVE_RESPONSE', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                    (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP'),
+                    (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_SAVE_RESPONSE')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_UPLOAD_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                    (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP'),
+                    (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_SUBPROCESS_WAIT_FOR_FOLLOW_UP_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_WAIT_FOR_FOLLOW_UP', true, 'followUpResponse', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_EXTEND_DATE', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                    (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_WAIT_FOR_FOLLOW_UP'),
+                    (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_EXTEND_DATE')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_PROCESS" author="P44065">
+        <validCheckSum>1:any</validCheckSum>
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'EMP_VARIATION', 'Emission monitoring plan variation', 'PROCESS_EMP_VARIATION', 'PERMIT', true, true, false, true, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_APPLICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_FOLLOW_UP_REVIEW_SUBPROCESS_APPLICATION_REVIEW_TASK" author="tsaktsil">
+        <sql>
+
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_REVIEW', true, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_SAVE_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_REVIEW'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_SAVE_REVIEW_DECISION')
+            );
+
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_NOTIFY_OPERATOR_FOR_DECISION', true);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_REVIEW'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_NOTIFY_OPERATOR_FOR_DECISION')
+            );
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_REVIEW'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_UPLOAD_ATTACHMENT')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_FOLLOW_UP_REVIEW_SUBPROCESS_WAIT_FOR_REVIEW_TASK" author="tsaktsil">
+        <sql>
+
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_REVIEW', true, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_PROCESS_SUBMIT_APPLICATION_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SUBMIT_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_FOLLOW_UP_RETURN_FOR_AMENDS_TASK_ACTION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_RETURN_FOR_AMENDS', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_RETURN_FOR_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMIT_TASK" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMIT', true, 'followUpResponse', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_UPLOAD_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_SAVE_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_SAVE_APPLICATION_AMEND')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_SUBMIT_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_SUBMIT_APPLICATION_AMEND')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS_TASK" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS', true, 'followUpResponse', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_EXTEND_DATE')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REVIEW_SUBPROCESS_APPLICATION_REVIEW_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_APPLICATION_REVIEW', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_APPLICATION_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_APPLICATION_REVIEW')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_UPLOAD_SECTION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_UPLOAD_SECTION_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_DETAILS_REVIEW_GROUP_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_DETAILS_REVIEW_GROUP_DECISION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_REVIEW_DETERMINATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_REVIEW_DETERMINATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_REQUEST_PEER_REVIEW', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_REQUEST_PEER_REVIEW')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_REVIEW_RETURN_FOR_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_REVIEW_RETURN_FOR_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REVIEW_SUBPROCESS_WAIT_FOR_REVIEW_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_WAIT_FOR_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_APPLICATION_PEER_REVIEW_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_APPLICATION_PEER_REVIEW', true, 'applicationReview', 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_REVIEW_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_REVIEW_SUBMIT_PEER_REVIEW_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_APPLICATION_WAIT_FOR_PEER_REVIEW_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_WAIT_FOR_PEER_REVIEW', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_REVIEW_SUBPROCESS_APPLICATION_REVIEW_TASK_PEER_REVIEW_SUBTASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_REQUEST_PEER_REVIEW', true);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_REQUEST_PEER_REVIEW')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_APPLICATION_PEER_REVIEW_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_APPLICATION_PEER_REVIEW', true, 'applicationReview', 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_DELETE_EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS" author="P44065">
+        <sql>
+
+            DELETE FROM public.request_task_type_action_type WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS');
+
+            DELETE FROM public.request_task_action_type WHERE code = 'EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS';
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_REVIEW_RETURN_FOR_AMENDS_ACTION_OF_EMP_ISSUANCE_APPLICATION_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_REVIEW_RETURN_FOR_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_REVIEW_RETURN_FOR_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT', true, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_APPLICATION_REGULATOR_LED', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_APPLICATION_REGULATOR_LED')
+            );
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_UPLOAD_SECTION_ATTACHMENT')
+            );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_REGULATOR_LED_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_REGULATOR_LED', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_REGULATOR_LED')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_APPLICATION_WAIT_FOR_PEER_REVIEW_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_WAIT_FOR_PEER_REVIEW', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_CANCEL_APPLICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_CANCEL_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_CANCEL_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_CANCEL_APPLICATION_REGULATOR_LED" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_CANCEL_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_APPLICATION_AMENDS_SUBMIT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_APPLICATION_AMENDS_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SAVE_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SAVE_APPLICATION_AMEND')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SUBMIT_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SUBMIT_APPLICATION_AMEND')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_UPLOAD_SECTION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_WAIT_FOR_AMENDS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_WAIT_FOR_AMENDS', true, 'applicationReview', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_RECALL_FROM_AMENDS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_RECALL_FROM_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_RECALL_FROM_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_UPLOAD_SECTION_ATTACHMENT_TASK_ACTION_OF_EMP_ISSUANCE_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_UPLOAD_SECTION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_UPLOAD_SECTION_ATTACHMENT_OF_EMP_VARIATION_APPLICATION_SUBMIT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_UPLOAD_SECTION_ATTACHMENT')
+                  );
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW', true, 'applicationReview', 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION_REGULATOR_LED')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW_TASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_REGULATOR_LED_WAIT_FOR_PEER_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REVIEW_SUBPROCESS_APPLICATION_REQUEST_PEER_REVIEW_REGULATOR_SUBTASK" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_RDE_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+        INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+        VALUES(
+                  (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                  (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_SUBMIT')
+              );
+
+        INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+        VALUES(
+                  (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_AMENDS'),
+                  (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_SUBMIT')
+              );
+
+        INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+        VALUES(
+                  (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_PEER_REVIEW'),
+                  (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_SUBMIT')
+              );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_RDE_RESPONSE_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_RDE_RESPONSE_SUBMIT', false, 'rde', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_RDE_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_RESPONSE_SUBMIT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE', false, 'rde', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_FORCE_DECISION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_APPLICATION_AMENDS_SUBMIT" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_APPLICATION_AMENDS_SUBMIT', true, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SAVE_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_AMENDS_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SAVE_APPLICATION_AMEND')
+            );
+
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_SUBMIT_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_AMENDS_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_SUBMIT_APPLICATION_AMEND')
+            );
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_AMENDS_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_UPLOAD_SECTION_ATTACHMENT')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_WAIT_FOR_AMENDS" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_WAIT_FOR_AMENDS', true, 'applicationReview', null,
+            (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_RECALL_FROM_AMENDS" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_VARIATION_RECALL_FROM_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_AMENDS'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_VARIATION_RECALL_FROM_AMENDS')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_RFI_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_SUBMIT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_RFI_RESPONSE_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_RFI_RESPONSE_SUBMIT', false, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_RESPONSE_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_WAIT_FOR_RFI_RESPONSE" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_WAIT_FOR_RFI_RESPONSE', false, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'RFI_CANCEL', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_RFI_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_WAIT_FOR_AMENDS_SUBPROCESS_RFI_UPLOAD_ATTACHMENT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_VARIATION_RDE_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_SUBMIT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_RDE_RESPONSE_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_RDE_RESPONSE_SUBMIT', false, 'rde', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_RDE_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_RESPONSE_SUBMIT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_WAIT_FOR_RDE_RESPONSE" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_WAIT_FOR_RDE_RESPONSE', false, 'rde', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_RDE_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_FORCE_DECISION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_RDE_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_VARIATION_RFI_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_SUBMIT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_RFI_RESPONSE_SUBMIT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_RFI_RESPONSE_SUBMIT', true, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_RESPONSE_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_WAIT_FOR_RFI_RESPONSE" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_WAIT_FOR_RFI_RESPONSE', false, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_RFI_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_RFI_UPLOAD_ATTACHMENT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_APPLICATION_REVIEW_SUBPROCESS_RFI_UPLOAD_ATTACHMENT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_REINTRODUCE_EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_NOTIFICATION_FOLLOW_UP_RECALL_FROM_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_APPLICATION_REVIEW_SUBPROCESS_RFI_UPLOAD_ATTACHMENT" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_REISSUE_PROCESS" author="tsaktsirasl@unisystems">
+        <validCheckSum>1:any</validCheckSum>
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'EMP_BATCH_REISSUE', 'EMP Batch Reissue', 'PROCESS_EMP_BATCH_REISSUE', 'CA', false, true, false, true, 'CA');
+
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'EMP_REISSUE', 'EMP Reissue', 'PROCESS_EMP_REISSUE', 'PERMIT', false, false, false, false, 'ACCOUNT');
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_HOLD_HISTORY_SET_UP_TO_FALSE_FOR_ALL_EXISTING_REQUESTS" author="P44065">
+        <sql>
+            UPDATE public.request_type set hold_history = false WHERE code IN ('ACCOUNT_CLOSURE', 'EMP_ISSUANCE', 'EMP_NOTIFICATION', 'EMP_VARIATION')
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_type set hold_history = true WHERE code IN ('ACCOUNT_CLOSURE', 'EMP_ISSUANCE', 'EMP_NOTIFICATION', 'EMP_VARIATION')
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_DELETE_RFI_CANCEL" author="P44065">
+        <sql>
+            DELETE FROM public.request_task_type_action_type
+            WHERE request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_CANCEL');
+
+            DELETE FROM request_task_action_type rtat WHERE rtat.code = 'RFI_CANCEL';
+        </sql>
+        <rollback>
+            <sql>
+                INSERT INTO public.request_task_action_type
+                    (id, code, blocked_by_payment)
+                VALUES(nextval('request_task_action_type_seq'), 'RFI_CANCEL', false);
+
+                INSERT INTO public.request_task_type_action_type
+                    (request_task_type_id, request_task_action_type_id)
+                VALUES(
+                    (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_RFI_RESPONSE'),
+                    (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_CANCEL')
+                );
+
+                INSERT INTO public.request_task_type_action_type
+                    (request_task_type_id, request_task_action_type_id)
+                VALUES(
+                    (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_RFI_RESPONSE'),
+                    (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_CANCEL')
+                );
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_RFI_CANCEL_APPLICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_WAIT_FOR_RFI_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'CANCEL_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_RFI_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'CANCEL_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_RDE_SUBMIT_FOR_EMP_VARIATION_WAIT_FOR_PEER_REVIEW" author="dimopoulosc@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RDE_SUBMIT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_NOTIFICATION_RFI" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_RFI_RESPONSE_SUBMIT', false, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_RESPONSE_SUBMIT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_NOTIFICATION_WAIT_FOR_RFI_RESPONSE', false, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_NOTIFICATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_NOTIFICATION_WAIT_FOR_RFI_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'CANCEL_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_ISSUANCE_RDE_RESPONSE_SUBMIT_ASSIGNABLE_COL_VALUE_TO_TRUE" author="dimopoulosc@unisystems.gr">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_ISSUANCE_RDE_RESPONSE_SUBMIT';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_ISSUANCE_RDE_RESPONSE_SUBMIT';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_VARIATION_RDE_RESPONSE_SUBMIT_ASSIGNABLE_COL_VALUE_TO_TRUE" author="dimopoulosc@unisystems.gr">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_VARIATION_RDE_RESPONSE_SUBMIT';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_VARIATION_RDE_RESPONSE_SUBMIT';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_ISSUANCE_RFI_RESPONSE_SUBMIT_ASSIGNABLE_COL_VALUE_TO_TRUE" author="dimopoulosc@unisystems.gr">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_ISSUANCE_RFI_RESPONSE_SUBMIT';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_ISSUANCE_RFI_RESPONSE_SUBMIT';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_VARIATION_RFI_RESPONSE_SUBMIT_ASSIGNABLE_COL_VALUE_TO_TRUE" author="dimopoulosc@unisystems.gr">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_VARIATION_RFI_RESPONSE_SUBMIT';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_VARIATION_RFI_RESPONSE_SUBMIT';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_NOTIFICATION_RFI_RESPONSE_SUBMIT_ASSIGNABLE_COL_VALUE_TO_TRUE" author="dimopoulosc@unisystems.gr">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_NOTIFICATION_RFI_RESPONSE_SUBMIT';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_NOTIFICATION_RFI_RESPONSE_SUBMIT';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE_ASSIGNABLE_COL_VALUE_TO_TRUE" author="P44065">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_ISSUANCE_WAIT_FOR_RDE_RESPONSE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_REQUEST_TASK_TYPE_EMP_VARIATION_WAIT_FOR_RDE_RESPONSE_ASSIGNABLE_COL_VALUE_TO_TRUE" author="P44065">
+        <sql>
+            UPDATE public.request_task_type SET assignable = true WHERE code = 'EMP_VARIATION_WAIT_FOR_RDE_RESPONSE';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_type set assignable = false WHERE code = 'EMP_VARIATION_WAIT_FOR_RDE_RESPONSE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_populate_resource_type_column_for_emp_reissue_request_type" author="P35066">
+		<sql>
+			update public.request_type set resource_type = 'ACCOUNT' where code	= 'EMP_REISSUE';
+		</sql>
+		<rollback>
+			<sql>
+				update public.request_type set resource_type = null where code = 'EMP_REISSUE';
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="0_1_0_populate_resource_type_column_for_emp_issuance_request_type" author="P35066">
+		<sql>
+			update public.request_type set resource_type = 'ACCOUNT' where code	= 'EMP_ISSUANCE';
+		</sql>
+		<rollback>
+			<sql>
+				update public.request_type set resource_type = null where code = 'EMP_ISSUANCE';
+			</sql>
+		</rollback>
+	</changeSet>
+
+    <changeSet id="0_1_0_add_not_null_constraint_for_resource_type_column_of_request_type_table_mrmt" author="P35066">
+		<preConditions onFail="MARK_RAN">
+		    <sqlCheck expectedResult="YES">
+				SELECT is_nullable FROM information_schema.columns
+				WHERE
+				table_schema = 'public'
+				AND table_name = 'request_type'
+				AND column_name = 'resource_type';
+			</sqlCheck>
+		</preConditions>
+		<addNotNullConstraint tableName="request_type"
+			columnName="resource_type" />
+		<rollback>
+			<dropNotNullConstraint tableName="request_type"
+				columnName="resource_type" />
+		</rollback>
+	</changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_PROCESS" author="P44065">
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'AER', 'AER', 'PROCESS_AER', 'REPORTING', true, true, false, false, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_APPLICATION_SUBMIT', true, 'aer', null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_SAVE_APPLICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SAVE_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_UPLOAD_SECTION_ATTACHMENT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_UPLOAD_SECTION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_UPLOAD_SECTION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_FETCH_EMP_LIST_OF_SHIPS" author="spapagiannakopoulou">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_FETCH_EMP_LIST_OF_SHIPS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_FETCH_EMP_LIST_OF_SHIPS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_PROCESS" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'DOE', 'DOE', 'PROCESS_DOE', 'REPORTING', false, true, false, true, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'DOE_APPLICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'DOE'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_SAVE_APPLICATION" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'DOE_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'DOE_SAVE_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_UPLOAD_ATTACHMENT" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'DOE_UPLOAD_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'DOE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+    <changeSet id="0_1_0_SET_UP_DOE_SUBMIT_NOTIFY_OPERATOR_FOR_DECISION_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'DOE_SUBMIT_NOTIFY_OPERATOR', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'DOE_SUBMIT_NOTIFY_OPERATOR')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_REQUEST_PEER_REVIEW" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'DOE_REQUEST_PEER_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'DOE_REQUEST_PEER_REVIEW')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_REVIEW_SUBPROCESS_PEER_REVIEW_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'DOE_APPLICATION_PEER_REVIEW', true, null, 'PEER_REVIEW',
+            (SELECT id FROM public.request_type WHERE code = 'DOE'));
+
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'DOE_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_APPLICATION_PEER_REVIEW'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'DOE_SUBMIT_PEER_REVIEW_DECISION')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_REVIEW_SUBPROCESS_WAIT_FOR_PEER_REVIEW_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'DOE_WAIT_FOR_PEER_REVIEW', true, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'DOE'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_CANCEL_APPLICATION" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'DOE_CANCEL_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_APPLICATION_SUBMIT'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'DOE_CANCEL_APPLICATION')
+            );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_SAVE_APPLICATION_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'EMP_ISSUANCE_SEND_REGISTRY_ACCOUNT_OPENING_EVENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'EMP_ISSUANCE_SEND_REGISTRY_ACCOUNT_OPENING_EVENT')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_AER_SUBMIT_APPLICATION_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_AER_APPLICATION_VERIFICATION_SUBMIT_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_REQUEST_VERIFICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_REQUEST_VERIFICATION')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_AER_VERIFICATION_TASKS" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_APPLICATION_VERIFICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_WAIT_FOR_VERIFICATION', true, 'aer', null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_SAVE_APPLICATION_VERIFICATION_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SAVE_APPLICATION_VERIFICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_VERIFICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SAVE_APPLICATION_VERIFICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_SUBMIT_APPLICATION_VERIFICATION_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SUBMIT_APPLICATION_VERIFICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_VERIFICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_VERIFICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_VERIFICATION_RETURN_TO_OPERATOR_TASK" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_VERIFICATION_RETURN_TO_OPERATOR', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_VERIFICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_VERIFICATION_RETURN_TO_OPERATOR')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_VIR_PROCESS" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'VIR', 'VIR', 'PROCESS_VIR', 'REPORTING', false, true, false, false, 'ACCOUNT');
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VIR_APPLICATION_SUBMIT', true, 'vir', null,
+                   (SELECT id FROM public.request_type WHERE code = 'VIR'));
+        </sql>
+    </changeSet>
+	
+	<changeSet id="0_1_0_SET_UP_VIR_SAVE_APPLICATION" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_SAVE_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_VIR_UPLOAD_ATTACHMENT" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_UPLOAD_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_VIR_SUBMIT_APPLICATION_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_SUBMIT_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_APPLICATION_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_WAIT_FOR_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_RECALL_FROM_VERIFICATION_REQUEST_TASK_ACTION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_RECALL_FROM_VERIFICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_WAIT_FOR_VERIFICATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_RECALL_FROM_VERIFICATION')
+                  );
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_VIR_REVIEW_SUBPROCESS_FOR_REVIEW_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VIR_APPLICATION_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'VIR'));
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_SAVE_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_SAVE_REVIEW')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_NOTIFY_OPERATOR_FOR_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_NOTIFY_OPERATOR_FOR_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_VIR_REVIEW_SUBPROCESS_WAIT_FOR_REVIEW_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VIR_WAIT_FOR_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'VIR'));
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_AER_SAVE_REVIEW_GROUP_DECISION" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SAVE_REVIEW_GROUP_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SAVE_REVIEW_GROUP_DECISION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_UPLOAD_REVIEW_GROUP_DECISION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_COMPLETE_REVIEW" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_COMPLETE_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_COMPLETE_REVIEW')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_REVIEW_RETURN_FOR_AMENDS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_REVIEW_RETURN_FOR_AMENDS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_REVIEW_RETURN_FOR_AMENDS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_AMENDS_REQUEST_TASKS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_APPLICATION_AMENDS_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_WAIT_FOR_AMENDS', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_SAVE_APPLICATION_AMEND" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SAVE_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SAVE_APPLICATION_AMEND')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_ASSOCIATE_AER_UPLOAD_SECTION_ATTACHMENT_WITH_AER_AMENDS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_UPLOAD_SECTION_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_REQUEST_AMENDS_VERIFICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_REQUEST_AMENDS_VERIFICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_REQUEST_AMENDS_VERIFICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_VIR_RFI_SUBMIT_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_REVIEW'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_SUBMIT')
+            );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_VIR_RFI_RESPONSE_SUBMIT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VIR_RFI_RESPONSE_SUBMIT', true, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'VIR'));
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_RESPONSE_SUBMIT')
+                  );
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_RFI_RESPONSE_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+    <changeSet id="0_1_0_SET_UP_VIR_WAIT_FOR_RFI_RESPONSE" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VIR_WAIT_FOR_RFI_RESPONSE', false, 'rfi', null,
+                   (SELECT id FROM public.request_type WHERE code = 'VIR'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_WAIT_FOR_RFI_RESPONSE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'CANCEL_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_VIR_RESPOND_TO_REGULATOR_COMMENTS_TASK" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VIR_RESPOND_TO_REGULATOR_COMMENTS', true, 'vir', null,
+                   (SELECT id FROM public.request_type WHERE code = 'VIR'));
+
+			INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS', false);
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_RESPOND_TO_REGULATOR_COMMENTS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_SUBMIT_RESPOND_TO_REGULATOR_COMMENTS')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'VIR_SAVE_RESPOND_TO_REGULATOR_COMMENTS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_RESPOND_TO_REGULATOR_COMMENTS'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'VIR_SAVE_RESPOND_TO_REGULATOR_COMMENTS')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_SUBMIT_APPLICATION_AMEND" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SUBMIT_APPLICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_AMEND')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_AMEND_APPLICATION_VERIFICATION_TASKS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'AER_AMEND_WAIT_FOR_VERIFICATION', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'AER'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_AMEND_APPLICATION_VERIFICATION_REQUEST_TASK_ACTION_TYPES" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SAVE_APPLICATION_VERIFICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_VERIFICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_WAIT_FOR_VERIFICATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_RECALL_FROM_VERIFICATION')
+                  );
+        </sql>
+    </changeSet>
+
+
+	<changeSet id="0_1_0_SET_UP_DOE_MAKE_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'DOE_MAKE_PAYMENT', true, 'payment', null,
+                   (SELECT id FROM public.request_type WHERE code = 'DOE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_PAID')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_PAY_BY_CARD')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_DOE_TRACK_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'DOE_TRACK_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'DOE'));
+
+			INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'PAYMENT_CANCEL', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+	
+	<changeSet id="0_1_0_SET_UP_DOE_CONFIRM_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'DOE_CONFIRM_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'DOE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'DOE_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_MAKE_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_MAKE_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_PAID')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_PAY_BY_CARD')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_TRACK_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_TRACK_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_EMP_ISSUANCE_CONFIRM_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_ISSUANCE_CONFIRM_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_ISSUANCE'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_ISSUANCE_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_EMP_VARIATION_MAKE_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_MAKE_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_PAID')
+                  );
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_PAY_BY_CARD')
+                  );
+        </sql>
+    </changeSet>
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_TRACK_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_TRACK_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_EMP_VARIATION_CONFIRM_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_CONFIRM_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_PROCESS" author="P44065">
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'NON_COMPLIANCE', 'Non-compliance', 'PROCESS_NON_COMPLIANCE', 'PERMIT', false, true, false, true, 'ACCOUNT');
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_APPLICATION_SUBMIT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_APPLICATION_SUBMIT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_EMP_VARIATION_REGULATOR_LED_MAKE_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_REGULATOR_LED_MAKE_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_PAID')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_MAKE_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_PAY_BY_CARD')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_EMP_VARIATION_REGULATOR_LED_TRACK_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_REGULATOR_LED_TRACK_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_TRACK_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+	<changeSet id="0_1_0_SET_UP_EMP_VARIATION_REGULATOR_LED_CONFIRM_PAYMENT" author="tsaktsirasl@unisystems">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'EMP_VARIATION_REGULATOR_LED_CONFIRM_PAYMENT', true, null, 'DEFAULT',
+                   (SELECT id FROM public.request_type WHERE code = 'EMP_VARIATION'));
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_MARK_AS_RECEIVED')
+                  );
+
+			INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'EMP_VARIATION_REGULATOR_LED_CONFIRM_PAYMENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'PAYMENT_CANCEL')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_UPLOAD_ATTACHMENT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_UPLOAD_ATTACHMENT', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_SAVE_APPLICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_SAVE_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_SUBMIT_APPLICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_SUBMIT_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_RFI_UPLOAD_ATTACHMENT_FOR_VIR_APPLICATION_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VIR_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'RFI_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_UPLOAD_ATTACHMENT_OF_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_TASK" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SAVE_APPLICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SAVE_APPLICATION')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_NOTIFY_OPERATOR" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_NOTIFY_OPERATOR', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_NOTIFY_OPERATOR')
+                  );
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_NON_COMPLIANCE_HISTORY_CATEGORY" author="P44065">
+        <sql>
+            update public.request_type set history_category = 'NON_COMPLIANCE' WHERE code = 'NON_COMPLIANCE';
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_PEER_REVIEW', true, null, 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SUBMIT_PEER_REVIEW_DECISION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_TASK_ACTIONS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_NOTIFY_OPERATOR';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW', true, null, 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_SUBMIT_PEER_REVIEW_DECISION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_TASK_ACTIONS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW', true, null, 'PEER_REVIEW',
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_FINAL_DETERMINATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+                (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NON_COMPLIANCE_FINAL_DETERMINATION', true, null, null,
+                   (SELECT id FROM public.request_type WHERE code = 'NON_COMPLIANCE'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NON_COMPLIANCE_FINAL_DETERMINATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_FINAL_DETERMINATION_REQUEST_TASK_ACTIONS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION';
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_FINAL_DETERMINATION_SUBMIT_APPLICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_SKIP_REVIEW" author="dimopoulosc@unisystems.gr">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SKIP_REVIEW', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SKIP_REVIEW')
+                  );
+        </sql>
+    </changeSet>
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_CLOSE_APPLICATION_AND_UPLOAD_ATTACHMENT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_CLOSE_APPLICATION', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_APPLICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_UPLOAD_ATTACHMENT');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_APPLICATION_SUBMIT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_CLOSE_APPLICATION');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_CLOSE_APPLICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

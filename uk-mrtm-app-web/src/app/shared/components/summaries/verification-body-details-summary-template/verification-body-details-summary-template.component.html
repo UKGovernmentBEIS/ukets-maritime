@@ -1,0 +1,37 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Verification body</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Company name</dt>
+      <dd govukSummaryListRowValue>{{ data.name }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Address</dt>
+      <dd govukSummaryListRowValue>
+        <div>
+          {{ data.address?.line1 }}
+          @if (data.address?.line2) {
+            , {{ data.address?.line2 }}
+          }
+        </div>
+        <div>{{ data.address?.city }}</div>
+        <div>{{ data.address?.postcode }}</div>
+        <div>{{ data.address?.country | country }}</div>
+      </dd>
+    </div>
+  </dl>
+  <h2 class="govuk-heading-m">Accreditation information</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Accreditation number</dt>
+      <dd govukSummaryListRowValue>{{ data.accreditationReferenceNumber }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Accreditation body</dt>
+      <dd govukSummaryListRowValue>
+        <!-- TODO MRTM-1616 -->
+        UKAS
+      </dd>
+    </div>
+  </dl>
+}

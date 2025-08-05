@@ -1,0 +1,22 @@
+@if (data(); as data) {
+  <dl govuk-summary-list [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.exist.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.exist | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+
+  @if (data.uncorrectedMisstatements) {
+    <mrtm-uncorrected-items-list-template
+      [data]="data.uncorrectedMisstatements"
+      [description]="map.list.title"
+      [queryParams]="queryParams()"
+      [isEditable]="isEditable()"
+      editLinkPrefix="" />
+  }
+}

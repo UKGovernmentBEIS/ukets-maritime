@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()"
+  heading="Cancel payment task"
+  submitText="Confirm and complete"
+  [showReturnLink]="true">
+  <div
+    govuk-textarea
+    formControlName="reason"
+    label="Explain why payment is no longer needed"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

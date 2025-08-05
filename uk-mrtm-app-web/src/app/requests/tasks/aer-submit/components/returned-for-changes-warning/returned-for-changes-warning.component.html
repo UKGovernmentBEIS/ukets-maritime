@@ -1,0 +1,9 @@
+@if (returnedForChangesTimelineEntry()) {
+  <govuk-warning-text assistiveText="The verifier has returned the report to you for changes to be made.">
+    <div>
+      <a govukLink [routerLink]="['timeline', returnedForChangesTimelineEntry().id]" [relativeTo]="route">
+        View the required changes
+      </a>
+    </div>
+  </govuk-warning-text>
+}

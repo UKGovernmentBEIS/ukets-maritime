@@ -1,0 +1,20 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="controlActivitiesMap.title"
+  [formGroup]="formGroup"
+  [heading]="controlActivitiesMap?.corrections?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Explain how any non-conformity is reported and reviewed, and how follow-up corrections and corrective actions are
+    decided. You should include:
+  </p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>how an MRV non-conformity is reported</li>
+    <li>how a non-conformity is reviewed</li>
+    <li>how corrective action is carried out</li>
+    <li>how corrective actions are followed-up</li>
+  </ul>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

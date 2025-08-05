@@ -1,0 +1,16 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="greenhouseGasMap.title"
+  [formGroup]="formGroup"
+  [heading]="greenhouseGasMap?.qaEquipment?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Enter details of the procedures that are used to ensure the effective functioning of measuring equipment, for
+    example repairs and comparative measurements. You must include, where applicable, the uncertainty of tank sounding
+    equipment, and uncertainty and calibration methods for flow metering devices and direct emissions measure equipment.
+    You can use references including measuring equipment manuals, technical datasheets and certificates.
+  </p>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

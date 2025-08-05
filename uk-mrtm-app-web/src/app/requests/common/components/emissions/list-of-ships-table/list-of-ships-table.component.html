@@ -1,0 +1,32 @@
+@if (data(); as tableData) {
+  <section>
+    <h2 class="govuk-heading-m">List of ships</h2>
+    @if (tableData.length) {
+      <button
+        govukSecondaryButton
+        type="button"
+        (click)="handleRemoveShips(tableData)"
+        [disabled]="tableData.every(checkIsSelected)">
+        Delete
+      </button>
+    }
+    <mrtm-multi-select-table [columns]="columns" [data]="tableData" emptyTableText="No items to display">
+      <ng-template let-column="column" let-row="row">
+        @switch (column.field) {
+          @case ('imoNumber') {
+            <a govukLink [routerLink]="[editUrl, row.uniqueIdentifier]">{{ row[column.field] }}</a>
+          }
+          @case ('type') {
+            {{ row[column.field] | shipType }}
+          }
+          @case ('status') {
+            <govuk-tag [color]="row[column.field] | statusTagColor">{{ row[column.field] | shipTaskStatus }}</govuk-tag>
+          }
+          @default {
+            {{ row[column.field] }}
+          }
+        }
+      </ng-template>
+    </mrtm-multi-select-table>
+  </section>
+}

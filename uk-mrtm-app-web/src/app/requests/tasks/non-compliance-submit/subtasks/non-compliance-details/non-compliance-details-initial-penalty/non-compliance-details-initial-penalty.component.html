@@ -1,0 +1,12 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.initialPenalty.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="initialPenalty" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

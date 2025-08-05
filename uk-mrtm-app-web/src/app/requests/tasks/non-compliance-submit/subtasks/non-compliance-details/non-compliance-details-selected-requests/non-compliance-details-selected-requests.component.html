@@ -1,0 +1,35 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.selectedRequests.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-hint">Select the relevant item to which this non-compliance applies.</p>
+
+  <ng-container formArrayName="selectedRequests">
+    @for (requestId of selectedRequestsFormArray.controls; track i; let i = $index) {
+      <div class="control-row align-items-end">
+        <div
+          class="flex-grow-1 govuk-!-margin-bottom-0"
+          [formControlName]="i"
+          govuk-select
+          [options]="availableRequestsOptions()"
+          label="Task {{ i + 1 }}"
+          labelSize="normal"
+          widthClass="govuk-!-width-full"></div>
+        <button govukSecondaryButton (click)="onRemove(i)" type="button" class="govuk-!-margin-bottom-0">Remove</button>
+      </div>
+      <hr class="govuk-!-margin-top-3 govuk-!-margin-bottom-2" />
+    }
+  </ng-container>
+
+  <button
+    class="govuk-!-margin-bottom-9"
+    govukSecondaryButton
+    [disabled]="isAddButtonDisabled()"
+    (click)="onAdd()"
+    type="button">
+    {{ selectedRequests()?.length ? 'Add another item' : 'Add an item' }}
+  </button>
+</mrtm-wizard-step>

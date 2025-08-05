@@ -1,0 +1,46 @@
+import { MrtmRequestTaskActionPayloadType, MrtmRequestTaskActionType, MrtmRequestTaskType } from '@shared/types';
+
+export const peerReviewActionPayloadMap: Record<
+  MrtmRequestTaskType,
+  {
+    assigneesRequestTaskType: MrtmRequestTaskType;
+    requestTaskActionType: MrtmRequestTaskActionType;
+    payloadType: MrtmRequestTaskActionPayloadType;
+  }
+> = {
+  EMP_NOTIFICATION_APPLICATION_REVIEW: {
+    assigneesRequestTaskType: 'EMP_NOTIFICATION_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'EMP_NOTIFICATION_REQUEST_PEER_REVIEW',
+    payloadType: 'EMP_NOTIFICATION_REQUEST_PEER_REVIEW_PAYLOAD',
+  },
+  EMP_ISSUANCE_APPLICATION_REVIEW: {
+    assigneesRequestTaskType: 'EMP_ISSUANCE_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'EMP_ISSUANCE_REQUEST_PEER_REVIEW',
+    payloadType: 'EMP_ISSUANCE_REQUEST_PEER_REVIEW_PAYLOAD',
+  },
+  EMP_VARIATION_APPLICATION_REVIEW: {
+    assigneesRequestTaskType: 'EMP_VARIATION_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'EMP_VARIATION_REQUEST_PEER_REVIEW',
+    payloadType: 'EMP_VARIATION_REQUEST_PEER_REVIEW_PAYLOAD',
+  },
+  EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT: {
+    assigneesRequestTaskType: 'EMP_VARIATION_REGULATOR_LED_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED',
+    payloadType: 'EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED_PAYLOAD',
+  },
+  DOE_APPLICATION_SUBMIT: {
+    assigneesRequestTaskType: 'DOE_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'DOE_REQUEST_PEER_REVIEW',
+    payloadType: 'DOE_REQUEST_PEER_REVIEW_PAYLOAD',
+  },
+  NON_COMPLIANCE_INITIAL_PENALTY_NOTICE: {
+    assigneesRequestTaskType: 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW',
+    payloadType: 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_REQUEST_PEER_REVIEW_PAYLOAD',
+  },
+  NON_COMPLIANCE_NOTICE_OF_INTENT: {
+    assigneesRequestTaskType: 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW',
+    requestTaskActionType: 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW',
+    payloadType: 'NON_COMPLIANCE_NOTICE_OF_INTENT_REQUEST_PEER_REVIEW_PAYLOAD',
+  },
+};

@@ -1,0 +1,75 @@
+<h2 class="govuk-heading-m">Reports</h2>
+<form [formGroup]="searchForm">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-quarter">
+      <div class="govuk-grid-row">
+        <div class="govuk-checkboxes govuk-checkboxes--small">
+          <div class="govuk-grid-column-full">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Type</h3>
+            <div formControlName="requestTypes" govuk-checkboxes>
+              @for (type of reportTypesMap | keyvalue: originalOrder; track type.key) {
+                <govuk-checkbox [value]="type.key" [label]="type.value" />
+              }
+            </div>
+          </div>
+          <div class="govuk-grid-column-full">
+            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Status</h3>
+            <div formControlName="requestStatuses" govuk-checkboxes>
+              @for (type of reportStatusMap | keyvalue: originalOrder; track type.key) {
+                <govuk-checkbox [value]="type.key" [label]="type.value" />
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="govuk-grid-column-three-quarters">
+      @for (reportGroup of groupedReports(); track reportGroup.reportingYear) {
+        <div>
+          <h4 class="govuk-heading-s">{{ reportGroup.reportingYear }}</h4>
+
+          @if (reportGroup.total) {
+            <p class="govuk-body">
+              <strong>Emissions figure for surrender:</strong>
+              {{ reportGroup.total | bigNumber: 5 }}
+            </p>
+          } @else {
+            <p class="govuk-body">No emissions reported</p>
+          }
+
+          <ul class="govuk-list">
+            @for (workflow of reportGroup.items; track workflow.id) {
+              <li class="search-results-list_item">
+                <div class="govuk-grid-row">
+                  <div class="govuk-grid-column-three-quarters">
+                    <a [routerLink]="['workflows', workflow.id]" govukLink>
+                      {{ taskActionTypeToTitleTransformer(workflow.requestType, getYearFromRequestId(workflow.id)) }}
+                    </a>
+                    @if ($any(workflow?.requestMetadata)?.emissions) {
+                      <p class="govuk-body govuk-!-margin-0">
+                        {{ $any(workflow?.requestMetadata)?.emissions?.totalEmissions | bigNumber }} tCO2 total maritime
+                        emissions
+                      </p>
+                      <p class="govuk-body govuk-!-margin-0">
+                        {{ $any(workflow?.requestMetadata)?.emissions?.surrenderEmissions | bigNumber }} tCO2 emissions
+                        figure for surrender
+                      </p>
+                    } @else {
+                      <p class="govuk-body govuk-!-margin-0">No emissions reported</p>
+                    }
+                    <div>Created on: {{ workflow.creationDate | govukDate }}</div>
+                  </div>
+                  <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+                    <govuk-tag [color]="workflow.requestStatus | requestStatusTagColor">
+                      {{ workflow.requestStatus | i18nSelect: reportStatusMap }}
+                    </govuk-tag>
+                  </div>
+                </div>
+              </li>
+            }
+          </ul>
+        </div>
+      }
+    </div>
+  </div>
+</form>

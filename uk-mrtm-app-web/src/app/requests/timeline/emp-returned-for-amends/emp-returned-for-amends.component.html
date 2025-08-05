@@ -1,0 +1,5 @@
+@for (decision of decisions(); track decision) {
+  <mrtm-emp-review-return-for-amends-subtask-summary-template
+    [caption]="subtaskTitleMap[decision.subtask]"
+    [reviewDecision]="decision.decision" />
+}

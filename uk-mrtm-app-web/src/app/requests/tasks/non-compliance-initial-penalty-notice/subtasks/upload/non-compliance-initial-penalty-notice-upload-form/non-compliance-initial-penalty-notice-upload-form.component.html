@@ -1,0 +1,25 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.upload.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">Upload the initial penalty notice to be sent to the operator.</p>
+  <p class="govuk-body">If you need to add extra documents you can use the notes feature on the task list.</p>
+  <p class="govuk-body">The maximum file size we can accept is 20 megabytes (MB).</p>
+
+  <mrtm-file-input
+    formControlName="initialPenaltyNotice"
+    [downloadUrl]="getDownloadUrl"
+    [showFileUploadList]="false"
+    label="Upload file"
+    labelSize="small" />
+  <div
+    formControlName="comments"
+    govuk-textarea
+    label="Your comments (optional)"
+    labelSize="small"
+    hint="The operator cannot view this"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

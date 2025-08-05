@@ -1,0 +1,12 @@
+<div class="govuk-!-width-two-thirds">
+  <netz-page-heading>{{ map.fetchFromEMP.title }}</netz-page-heading>
+  <govuk-warning-text
+    assistiveText="If you import the ships from the Emissions Monitoring Plan (EMP), all of the data that has been entered will be replaced." />
+</div>
+
+<button govukButton netzPendingButton type="button" (click)="onFetchFromEMP()">Yes, import ships from EMP</button>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a [routerLink]="['../', wizardSteps.LIST_OF_SHIPS]" govukLink>Return to: {{ map.ships.title }}</a>
+</div>

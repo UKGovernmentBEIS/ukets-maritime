@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.exist.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-hint">For example data errors, omissions or misrepresentations</p>
+  <div formControlName="exist" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

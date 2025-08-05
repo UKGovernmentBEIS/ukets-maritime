@@ -1,0 +1,55 @@
+<fieldset [id]="identifier" govukFieldset>
+  <legend govukLegend [legendSize]="legendSize()">{{ label() }}</legend>
+  @if (hint(); as hint) {
+    <div govukFieldsetHint [innerHTML]="hint"></div>
+  }
+  <div [formGroup]="formGroup" class="govuk-date-input">
+    @if (shouldDisplayErrors) {
+      <govuk-error-message [errors]="control.errors" [identifier]="identifier"></govuk-error-message>
+    }
+    <div class="govuk-date-input__item">
+      <label [for]="identifier + '-hours'" class="govuk-label govuk-date-input__label">Hour</label>
+      <input
+        (blur)="onInputBlur()"
+        [class.govuk-input--error]="hasFieldError('hours')"
+        [id]="identifier + '-hours'"
+        [name]="identifier + '-hours'"
+        class="govuk-input govuk-date-input__input govuk-input--width-2"
+        formControlName="hours"
+        inputmode="numeric"
+        max="24"
+        min="0"
+        type="text" />
+    </div>
+
+    <div class="govuk-date-input__item">
+      <label [for]="identifier + '-minutes'" class="govuk-label govuk-date-input__label">Minute</label>
+      <input
+        (blur)="onInputBlur()"
+        [class.govuk-input--error]="hasFieldError('minutes')"
+        [id]="identifier + '-minutes'"
+        [name]="identifier + '-minutes'"
+        class="govuk-input govuk-date-input__input govuk-input--width-2"
+        formControlName="minutes"
+        inputmode="numeric"
+        max="59"
+        min="0"
+        type="text" />
+    </div>
+
+    <div class="govuk-date-input__item">
+      <label [for]="identifier + '-seconds'" class="govuk-label govuk-date-input__label">Second</label>
+      <input
+        (blur)="onInputBlur()"
+        [class.govuk-input--error]="hasFieldError('minutes')"
+        [id]="identifier + '-seconds'"
+        [name]="identifier + '-seconds'"
+        class="govuk-input govuk-date-input__input govuk-input--width-2"
+        formControlName="seconds"
+        inputmode="numeric"
+        max="59"
+        min="0"
+        type="text" />
+    </div>
+  </div>
+</fieldset>

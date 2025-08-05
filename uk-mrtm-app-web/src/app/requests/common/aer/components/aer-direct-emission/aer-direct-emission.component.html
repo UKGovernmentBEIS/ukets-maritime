@@ -1,0 +1,17 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [isTwoThirds]="true"
+  caption="{{ wizardMap?.directEmissions?.caption }} {{ ship()?.details?.name }}"
+  [heading]="wizardMap.directEmissions.title"
+  (formSubmit)="onSubmit()">
+  <div govuk-text-input label="CO2 emissions (t)" formControlName="co2" widthClass="govuk-!-width-one-third"></div>
+  <div govuk-text-input label="CH4 emissions (tCO2e)" formControlName="ch4" widthClass="govuk-!-width-one-third"></div>
+  <div govuk-text-input label="N2O emissions (tCO2e)" formControlName="n2o" widthClass="govuk-!-width-one-third"></div>
+
+  <h4 class="govuk-heading-s">Total emissions (tCO2e)</h4>
+  <p class="govuk-heading-s">{{ form?.value?.total }}</p>
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../']" fragment="directEmissions">Return to: {{ wizardMap.totalEmissions.title }}</a>
+</div>

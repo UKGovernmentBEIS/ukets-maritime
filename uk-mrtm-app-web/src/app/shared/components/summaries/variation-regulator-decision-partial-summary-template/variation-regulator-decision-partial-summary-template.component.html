@@ -1,0 +1,31 @@
+<h2 class="govuk-heading-m">List changes to include in the variation schedule</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Changes added to the variation schedule</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">
+      @if (variationDecisionDetails?.variationScheduleItems?.length > 0) {
+        <ul class="govuk-list govuk-list--number">
+          @for (scheduleItem of variationDecisionDetails?.variationScheduleItems; track scheduleItem) {
+            <li>{{ scheduleItem }}</li>
+          }
+        </ul>
+      } @else {
+        <span class="govuk-hint">Not provided</span>
+      }
+    </dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.VARIATION_REGULATOR_DECISION]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Notes</dt>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="variationDecisionDetails?.notes"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.VARIATION_REGULATOR_DECISION]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>

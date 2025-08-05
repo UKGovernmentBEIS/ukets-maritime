@@ -1,0 +1,30 @@
+<netz-page-heading>Pay by bank transfer</netz-page-heading>
+<p class="govuk-body">Use the Environment Agency's bank details to make a payment by bank transfer.</p>
+<govuk-details summary="How long does a bank transfer take?">
+  <p class="govuk-body">
+    Faster Payments are usually received on the same day they are sent, including weekends and bank holidays.
+  </p>
+
+  <p class="govuk-body">
+    CHAPS payments are usually received on the same working day, if you send the payment within your bank's processing
+    times.
+  </p>
+
+  <p class="govuk-body">BACS payments usually take 3 working days to be received.</p>
+</govuk-details>
+
+<govuk-warning-text assistiveText="You must include your payment reference when paying" />
+
+<mrtm-payment-bank-transfer-summary-template [data]="paymentDetails()" />
+
+<govuk-details summary="International payments">
+  <p class="govuk-body">Use the following details if you are making an international payment:</p>
+  <mrtm-international-payment-details-summary-template [data]="paymentDetails()?.bankAccountDetails" />
+</govuk-details>
+
+<button type="button" govukButton (click)="onSubmit()">Mark as paid</button>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

@@ -1,0 +1,93 @@
+@if (rows(); as rows) {
+  @if (totalItems() > 0) {
+    @if (totalEmissionsSummary(); as totalEmissionsSummary) {
+      <dl govuk-summary-list [hasBorders]="true">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions from voyages (tCO2e)</dt>
+          <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions figure for surrender (tCO2e)</dt>
+          <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.surrenderEmissions | bigNumber: 4 }}</dd>
+        </div>
+      </dl>
+    }
+
+    @if (editable()) {
+      <button
+        type="button"
+        govukSecondaryButton
+        netzPendingButton
+        (click)="onDelete(rows)"
+        [disabled]="rows.every(checkIsSelected)">
+        Delete
+      </button>
+    }
+  }
+  @if (editable()) {
+    <mrtm-multi-select-table
+      [columns]="columns()"
+      [data]="rows"
+      (sort)="sort.set($event)"
+      emptyTableText="No items to display"
+      description="Voyages and emission details list">
+      <ng-template let-row="row" let-column="column">
+        <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
+      </ng-template>
+    </mrtm-multi-select-table>
+  } @else {
+    <govuk-table
+      [columns]="columns()"
+      [data]="rows"
+      (sort)="sort.set($event)"
+      emptyTableText="No items to display"
+      description="Voyages and emission details list">
+      <ng-template let-row="row" let-column="column">
+        <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
+      </ng-template>
+    </govuk-table>
+  }
+
+  @if (totalItems() > pageSize()) {
+    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
+  }
+
+  <ng-template let-column="column" let-row="row" #tableContent>
+    @switch (column?.field) {
+      @case ('imoNumber') {
+        @if (row?.['shipName'] && row.canViewDetails) {
+          <a
+            govukLink
+            [routerLink]="editPath() ? ['./', editPath(), row.uniqueIdentifier] : ['./', row.uniqueIdentifier]">
+            {{ row[column.field] }}
+          </a>
+        } @else {
+          {{ row?.[column?.field] }}
+        }
+      }
+      @case ('arrivalTime') {
+        {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+      }
+      @case ('departureTime') {
+        {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+      }
+      @case ('country') {
+        {{ row?.[column?.field] | selectOptionToTitle: countrySelectItems }}
+      }
+      @case ('arrivalPort') {
+        {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
+      }
+      @case ('departurePort') {
+        {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
+      }
+      @case ('status') {
+        <govuk-tag [color]="row[column.field] | statusTagColor">
+          {{ row?.[column?.field] | portVoyageStatus }}
+        </govuk-tag>
+      }
+      @default {
+        {{ row?.[column?.field] | bigNumber: 7 }}
+      }
+    }
+  </ng-template>
+}

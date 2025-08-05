@@ -1,0 +1,53 @@
+<mrtm-notification-banner />
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    <netz-page-heading caption="{{ wizardMap?.totalEmissions?.caption }} {{ ship()?.details?.name }}">
+      {{ wizardMap.totalEmissions.title }}
+    </netz-page-heading>
+  </div>
+  @if (editable()) {
+    <div class="govuk-grid-column-one-half">
+      <div class="govuk-button-group float-right">
+        <button govukButton type="button" (click)="onAddFuelConsumption()">Add fuel consumption</button>
+      </div>
+    </div>
+  }
+</div>
+<p class="govuk-body govuk-!-width-two-thirds">
+  Emissions can be calculated by adding the fuel consumption. If the ship uses direct emissions measurement (Method D)
+  then the emissions can be added in the direct emissions tab below.
+</p>
+
+@if (emissionsCalculationObject()?.journeyType === 'International') {
+  <govuk-warning-text
+    assistiveText="International voyages are not counted towards the emissions figure for surrender"></govuk-warning-text>
+}
+
+<mrtm-voyage-or-port-call-emissions-summary-template
+  [header]="emissionsCalculationObject()?.journeyType ? null : 'Port calculations'"
+  [journeyType]="emissionsCalculationObject()?.journeyType"
+  [editable]="editable()"
+  [totalEmissions]="emissionsCalculationObject()?.totalEmissions"
+  [surrenderEmissions]="emissionsCalculationObject()?.surrenderEmissions" />
+
+<mrtm-fuel-consumption-and-direct-emissions-summary-template
+  [isSummary]="false"
+  [editable]="editable()"
+  [deletable]="true"
+  [directEmissionsEditPath]="wizardStep.DIRECT_EMISSIONS"
+  [fuelConsumptionsEditPath]="wizardStep.FUEL_CONSUMPTION"
+  [directEmissions]="emissionsCalculationObject()?.directEmissions"
+  [fuelConsumptions]="emissionsCalculationObject()?.fuelConsumptions"
+  (removeDirectEmission)="onRemoveDirectEmissions()"
+  (removeFuelConsumption)="onRemoveFuelConsumption($event)"
+  [emissionFactors]="shipEmissionFactors()"
+  (addDirectEmission)="onAddDirectEmissions()" />
+
+@if (editable()) {
+  <button (click)="onSubmit()" govukButton netzPendingButton type="button">Continue</button>
+}
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="objectId() ? ['../../'] : ['../']">Return to: {{ wizardMap.title }}</a>
+</div>

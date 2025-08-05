@@ -1,0 +1,26 @@
+<span class="app-task-list__task-name" [class.govuk-!-margin-bottom-3]="hasContent">
+  @if (link) {
+    @if (warningHint) {
+      <span>
+        <a [routerLink]="link" govukLink>{{ linkText }}</a>
+        <govuk-warning-text [bottomSpacing]="0" [assistiveText]="null">{{ warningHint }}</govuk-warning-text>
+      </span>
+    } @else {
+      <a [routerLink]="link" govukLink>{{ linkText }}</a>
+    }
+  } @else {
+    <span>{{ linkText }}</span>
+  }
+  @if (hint) {
+    <span class="app-task-list__task-hint govuk-hint">{{ hint }}</span>
+  }
+</span>
+@if (status) {
+  <govuk-tag [color]="status | statusTagColor" class="app-task-list__tag">
+    {{ status | statusTagText }}
+  </govuk-tag>
+}
+<ng-content></ng-content>
+@if (postContentComponent) {
+  <ng-container *ngComponentOutlet="postContentComponent; inputs: postContentComponentInputs" />
+}

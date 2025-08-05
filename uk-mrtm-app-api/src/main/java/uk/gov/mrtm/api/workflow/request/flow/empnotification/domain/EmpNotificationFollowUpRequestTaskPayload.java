@@ -1,0 +1,56 @@
+package uk.gov.mrtm.api.workflow.request.flow.empnotification.domain;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
+import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.UUID;
+
+import java.time.LocalDate;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class EmpNotificationFollowUpRequestTaskPayload extends RequestTaskPayload {
+
+    private String followUpRequest;
+
+    private LocalDate followUpResponseExpirationDate;
+
+    @NotBlank
+    @Size(max = 10000)
+    private String followUpResponse;
+
+    @Builder.Default
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private Set<UUID> followUpFiles = new HashSet<>();
+
+    @Builder.Default
+    private Map<UUID, String> followUpAttachments = new HashMap<>();
+
+    @Builder.Default
+    private Map<String, String> sectionsCompleted = new HashMap<>();
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+        return this.followUpAttachments;
+    }
+
+    @Override
+    public Set<UUID> getReferencedAttachmentIds() {
+        return this.followUpFiles;
+    }
+}

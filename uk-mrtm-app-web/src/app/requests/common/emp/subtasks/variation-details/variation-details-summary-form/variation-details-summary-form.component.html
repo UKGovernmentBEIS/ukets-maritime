@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  [caption]="map.title"
+  [heading]="map.summary.title"
+  [formGroup]="form"
+  [isTwoThirds]="true"
+  [showReturnLink]="true"
+  (formSubmit)="onSubmit()">
+  <div
+    govuk-textarea
+    hint="The operator will see this in the emissions monitoring plan document. Enter a summary for all items that were added to the status log."
+    formControlName="summary"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

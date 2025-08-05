@@ -1,0 +1,46 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="taskMap.title | shipStepTitle: 6 : shipName"
+  [formGroup]="formGroup"
+  [heading]="taskMap.carbonCapture.title"
+  [showReturnLink]="false"
+  [isTwoThirds]="true">
+  <ng-container formGroupName="carbonCapture">
+    <div
+      formControlName="exist"
+      govuk-radio
+      [isInline]="true"
+      legendSize="small"
+      legend="Are carbon capture and storage technologies being applied?">
+      <govuk-radio-option [value]="true" [label]="'Yes'" />
+      <govuk-radio-option [value]="false" [label]="'No'" />
+    </div>
+
+    @if (existCtrl.value) {
+      <ng-container formGroupName="technologies">
+        <div
+          formControlName="description"
+          govuk-textarea
+          label="Describe the technology that is used for carbon capture and storage"
+          [maxLength]="10000"></div>
+        <mrtm-multiple-file-input
+          [baseDownloadUrl]="downloadUrl"
+          label="Upload any relevant information about the application and technology used (optional)"
+          hint="For example technical specifications or diagrams."
+          listTitle="Uploaded files"
+          formControlName="files"
+          headerSize="s" />
+        <div
+          formControlName="technologyEmissionSources"
+          govuk-checkboxes
+          legend="Select the emission sources this technology is applied to"
+          legendSize="normal">
+          @for (name of emissionSourcesNames; track name) {
+            <govuk-checkbox [value]="name" [label]="name"></govuk-checkbox>
+          }
+        </div>
+      </ng-container>
+    }
+  </ng-container>
+</mrtm-wizard-step>
+<mrtm-return-to-ships-list-table />

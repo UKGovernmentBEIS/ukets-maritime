@@ -1,0 +1,81 @@
+<dl govuk-summary-list [class]="cssClass" [hasBottomMargin]="!cssClass">
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Procedure reference</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="procedureForm?.reference"
+      [previous]="originalProcedureForm?.reference"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Procedure version</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="procedureForm?.version"
+      [previous]="originalProcedureForm?.version"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Description of procedure</dt>
+    <dd
+      govukSummaryListRowValue
+      class="pre-wrap"
+      htmlDiff
+      [current]="procedureForm?.description"
+      [previous]="originalProcedureForm?.description"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name of person or position responsible for this procedure</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="procedureForm?.responsiblePersonOrPosition"
+      [previous]="originalProcedureForm?.responsiblePersonOrPosition"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Location where records are kept</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="procedureForm?.recordsLocation"
+      [previous]="originalProcedureForm?.recordsLocation"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name of IT system used</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="procedureForm?.itSystemUsed"
+      [previous]="originalProcedureForm?.itSystemUsed"></dd>
+    @if (isEditable) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+      </dd>
+    }
+  </div>
+</dl>

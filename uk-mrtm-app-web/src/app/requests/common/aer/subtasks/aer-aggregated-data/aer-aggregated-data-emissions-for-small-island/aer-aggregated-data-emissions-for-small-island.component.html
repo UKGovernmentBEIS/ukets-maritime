@@ -1,0 +1,16 @@
+<mrtm-wizard-step
+  [isTwoThirds]="true"
+  [formGroup]="formGroup"
+  caption="{{ wizardMap.smallIslandSurrenderReduction.caption }} {{ ship()?.details?.name }}"
+  [heading]="wizardMap.smallIslandSurrenderReduction.title"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">{{ wizardMap.smallIslandSurrenderReduction.description }}</p>
+  <mrtm-aer-aggregated-emissions-form
+    class="govuk-!-display-block govuk-!-margin-bottom-5"
+    formGroupName="smallIslandSurrenderReduction"
+    [showSummaryForCo2Captured]="true" />
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
+</div>

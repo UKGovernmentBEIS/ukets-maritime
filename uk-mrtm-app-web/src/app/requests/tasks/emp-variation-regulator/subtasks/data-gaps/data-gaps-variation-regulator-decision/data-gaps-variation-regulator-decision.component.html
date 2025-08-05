@@ -1,0 +1,17 @@
+@if (vm(); as vm) {
+  <mrtm-wizard-step
+    [formGroup]="form"
+    [heading]="vm.dataGapsMap.variationRegulatorDecision.title"
+    [caption]="vm.dataGapsMap.title"
+    (formSubmit)="onSubmit()"
+    [hideSubmit]="!vm.isEditable"
+    [showReturnLink]="true">
+    <mrtm-data-gaps-summary-template
+      [dataGaps]="vm.dataGaps"
+      [originalDataGaps]="vm.originalDataGaps"
+      [isEditable]="vm.isEditable"
+      [wizardStep]="vm.wizardStep"
+      [queryParams]="{ change: true }" />
+    <mrtm-variation-regulator-decision />
+  </mrtm-wizard-step>
+}

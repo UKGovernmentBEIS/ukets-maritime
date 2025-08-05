@@ -1,0 +1,12 @@
+@if (vm(); as vm) {
+  <netz-page-heading caption="Management procedures">{{ vm.managementProceduresMap.title }}</netz-page-heading>
+  <mrtm-management-procedures-summary-template
+    [managementProcedures]="vm.managementProcedures"
+    [managementProceduresMap]="vm.managementProceduresMap"
+    [dataFlowFiles]="vm.dataFlowFiles"
+    [riskAssessmentFiles]="vm.riskAssessmentFiles" />
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

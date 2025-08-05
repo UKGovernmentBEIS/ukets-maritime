@@ -1,0 +1,17 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.heading.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <mrtm-monitoring-plan-version-summary-template [monitoringPlanVersion]="monitoringPlanVersion()" />
+  <div formControlName="changesExist" govuk-radio [legend]="map.changesExist.title" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div formControlName="changes" [maxLength]="10000" govuk-textarea [label]="map.changes.title"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

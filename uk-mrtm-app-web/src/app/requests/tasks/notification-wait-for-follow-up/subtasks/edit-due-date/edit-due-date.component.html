@@ -1,0 +1,9 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="form"
+  [showBackLink]="true"
+  [heading]="title"
+  submitText="Confirm and complete">
+  <div formControlName="dueDate" govuk-date-input legendSize="medium"></div>
+</mrtm-wizard-step>
+<netz-return-to-task-or-action-page />

@@ -1,0 +1,127 @@
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+
+import { BehaviorSubject, catchError, map, shareReplay, switchMap, take, throwError } from 'rxjs';
+
+import { PageHeadingComponent } from '@netz/common/components';
+import { BusinessErrorService, ErrorCodes, isBadRequest } from '@netz/common/error';
+import { TabDirective, TabsComponent } from '@netz/govuk-components';
+
+import { VerifierUsersListComponent } from '@shared/components';
+import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
+import { deleteUniqueActiveVerifierError, savePartiallyNotFoundVerifierError } from '@shared/errors';
+import { FormUtils } from '@shared/utils';
+import {
+  selectCurrentVerificationBody,
+  selectIsVerificationBodySubmitted,
+  selectVerificationBodyContactsState,
+} from '@verification-bodies/+state/verification-bodies.selectors';
+import { VerificationBodiesStoreService } from '@verification-bodies/+state/verification-bodies-store.service';
+import { VerificationBodySummaryComponent } from '@verification-bodies/components';
+
+@Component({
+  selector: 'mrtm-verification-body-details',
+  standalone: true,
+  imports: [
+    PageHeadingComponent,
+    TabsComponent,
+    TabDirective,
+    VerificationBodySummaryComponent,
+    AsyncPipe,
+    NotificationBannerComponent,
+    VerifierUsersListComponent,
+  ],
+  templateUrl: './verification-body-details.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class VerificationBodyDetailsComponent implements OnInit {
+  readonly currentTab$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  private readonly router: Router = inject(Router);
+  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  public readonly verificationBodyId$ = this.activatedRoute.paramMap.pipe(
+    map((paramMap) => Number(paramMap.get('id'))),
+  );
+  private readonly businessErrorService: BusinessErrorService = inject(BusinessErrorService);
+  private readonly verificationBodiesStoreService: VerificationBodiesStoreService =
+    inject(VerificationBodiesStoreService);
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
+  public readonly summaryInfo$ = this.verificationBodiesStoreService.pipe(selectCurrentVerificationBody);
+  private readonly verifierUsers$ = this.verificationBodiesStoreService.pipe(
+    selectVerificationBodyContactsState,
+    shareReplay({
+      bufferSize: 1,
+      refCount: true,
+    }),
+  );
+  public readonly authorities$ = this.verifierUsers$.pipe(map((verifierUsers) => verifierUsers.items));
+  public readonly isEditable$ = this.verifierUsers$.pipe(map((verifierUsers) => verifierUsers.editable));
+
+  ngOnInit(): void {
+    this.verificationBodiesStoreService.pipe(selectIsVerificationBodySubmitted, take(1)).subscribe((isSubmitted) => {
+      if (isSubmitted) {
+        this.notificationBannerStore.setSuccessMessages(['Verification body details updated']);
+        this.verificationBodiesStoreService.setUpdateVerificationBodyIsSubmitted(false);
+      }
+    });
+  }
+
+  public handleSelectedTab(tab: string): void {
+    this.router.navigate([], {
+      relativeTo: this.activatedRoute,
+      preserveFragment: true,
+    });
+    this.currentTab$.next(tab);
+  }
+
+  public handleSaveChanges({ authoritiesToUpdate, form }) {
+    const dirtyControlsKeys = FormUtils.findDirtyControlsKeys(form);
+    this.verificationBodyId$
+      .pipe(
+        switchMap((verificationBodyId) =>
+          this.verificationBodiesStoreService.updateVerifierUsersStatuses(verificationBodyId, authoritiesToUpdate),
+        ),
+        catchError((err: unknown) => {
+          if (!isBadRequest(err)) {
+            return throwError(() => err);
+          }
+
+          switch (err?.error?.code) {
+            case ErrorCodes.AUTHORITY1007:
+              return this.verificationBodyId$.pipe(
+                switchMap((verificationBodyId) =>
+                  this.businessErrorService.showError(deleteUniqueActiveVerifierError(verificationBodyId)),
+                ),
+              );
+            case ErrorCodes.AUTHORITY1006:
+              return this.businessErrorService.showError(savePartiallyNotFoundVerifierError);
+            default:
+              return throwError(() => err);
+          }
+        }),
+        take(1),
+      )
+      .subscribe(() => {
+        this.notificationBannerStore.setSuccessMessages(
+          dirtyControlsKeys.map((key) => {
+            let message = '';
+            if (key === 'authorityStatus') {
+              message = 'Account status';
+            } else if (key === 'roleCode') {
+              message = 'User type';
+            }
+            return `${message} updated`;
+          }),
+        );
+      });
+  }
+
+  public handleDiscardChanges() {
+    this.verificationBodyId$
+      .pipe(
+        switchMap((verificationBodyId) => this.verificationBodiesStoreService.loadVerifierUsers(verificationBodyId)),
+        take(1),
+      )
+      .subscribe();
+  }
+}

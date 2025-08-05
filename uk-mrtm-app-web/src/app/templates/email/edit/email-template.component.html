@@ -1,0 +1,15 @@
+@if (emailTemplate$ | async; as emailTemplate) {
+  @if (displayErrorSummary$ | async) {
+    <govuk-error-summary [form]="form$ | async"></govuk-error-summary>
+  }
+  <netz-page-heading>Edit {{ emailTemplate.name }}</netz-page-heading>
+  <h1 class="govuk-heading-m">Template Content</h1>
+  @if (form$ | async; as form) {
+    <form (ngSubmit)="onSubmit()" [formGroup]="form">
+      <div formControlName="subject" govuk-text-input label="Email subject"></div>
+      <div formControlName="message" govuk-textarea [maxLength]="10000" label="Email message"></div>
+      <button netzPendingButton govukButton type="submit">Confirm and complete</button>
+    </form>
+  }
+  <mrtm-email-template-details-template [emailTemplate]="emailTemplate"></mrtm-email-template-details-template>
+}

@@ -1,0 +1,24 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    As well as stating the materiality level to which the report has been assessed, provide any other relevant details
+    or criteria around the work performed, or the basis of the opinion, so the operator can understand its depth and
+    scope.
+  </p>
+  <p class="govuk-body govuk-!-margin-bottom-7">
+    For example, if you had to check 100% of data because non-conformities were found during the verification, this may
+    be helpful for the operator to understand.
+  </p>
+  <div
+    class="govuk-!-margin-bottom-9"
+    formControlName="materialityDetails"
+    govuk-textarea
+    label="{{ map.materialityDetails.title }}"
+    labelSize="small"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

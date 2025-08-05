@@ -1,0 +1,27 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="variationDetailsSubtaskMap.title"
+  [formGroup]="form"
+  [heading]="variationDetailsSubtaskMap.reasonRegulatorLed.title"
+  [isTwoThirds]="true"
+  [showReturnLink]="true">
+  <div formControlName="type" govuk-radio hint="This will add the relevant text template to the notice">
+    <govuk-radio-option
+      value="FOLLOWING_IMPROVING_REPORT"
+      label="Following an improvement report submitted by the maritime operator"
+      hint="Notice text: The Environment Agency has varied your emissions monitoring plan as it considered it necessary as a consequence of a verifier improvement report submitted by you." />
+    <govuk-radio-option
+      value="FAILED_TO_COMPLY_OR_APPLY"
+      label="Maritime operator failed to comply with a requirement in the plan, or to apply in accordance with conditions"
+      hint="Notice text: The Environment Agency has varied your emissions monitoring plan as you failed to comply with a requirement or condition of your emissions monitoring plan." />
+    <govuk-radio-option value="OTHER" label="none of the above" [divider]="true">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="reasonOtherSummary"
+          govuk-textarea
+          label="Provide a reason to include in the operator notice"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

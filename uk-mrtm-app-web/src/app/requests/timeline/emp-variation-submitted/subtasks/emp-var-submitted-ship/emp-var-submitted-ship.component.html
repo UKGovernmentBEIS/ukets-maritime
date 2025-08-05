@@ -1,0 +1,5 @@
+@if (data(); as ship) {
+  <netz-page-heading>{{ ship?.details?.name }}</netz-page-heading>
+  <mrtm-ship-summary-template [data]="ship" [changeLinks]="changeLinks" />
+  <mrtm-return-to-ships-list-table />
+}

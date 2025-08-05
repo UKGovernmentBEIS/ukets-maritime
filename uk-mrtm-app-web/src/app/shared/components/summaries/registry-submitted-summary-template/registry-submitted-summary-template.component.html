@@ -1,0 +1,62 @@
+<h2 class="govuk-heading-m">Operator details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Emitter ID</dt>
+    <dd govukSummaryListRowValue>{{ data()?.businessId }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Company IMO Number</dt>
+    <dd govukSummaryListRowValue>{{ data()?.imoNumber }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Operator name</dt>
+    <dd govukSummaryListRowValue>{{ data()?.name }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>First year of reporting obligation</dt>
+    <dd govukSummaryListRowValue>{{ data()?.firstMaritimeActivityDate | govukDate }}</dd>
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Regulator</dt>
+    <dd govukSummaryListRowValue>{{ data()?.competentAuthority | competentAuthority }}</dd>
+  </div>
+</dl>
+
+<h2 class="govuk-heading-m">Organisation details</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Organisation legal status</dt>
+    <dd govukSummaryListRowValue>
+      {{ data()?.organisationStructure.legalStatusType | legalStatusTypeDisplayText }}
+    </dd>
+  </div>
+  <div govukSummaryListRow>
+    @switch (data()?.organisationStructure.legalStatusType) {
+      @case ('INDIVIDUAL') {
+        <dt govukSummaryListRowKey>Full name</dt>
+        <dd govukSummaryListRowValue>{{ $any(data()?.organisationStructure)?.fullName }}</dd>
+      }
+      @case ('LIMITED_COMPANY') {
+        <dt govukSummaryListRowKey>Company registration number</dt>
+        <dd govukSummaryListRowValue>{{ $any(data()?.organisationStructure)?.registrationNumber }}</dd>
+      }
+      @case ('PARTNERSHIP') {
+        <dt govukSummaryListRowKey>Name of the partnership</dt>
+        <dd govukSummaryListRowValue>{{ $any(data()?.organisationStructure)?.partnershipName }}</dd>
+      }
+    }
+  </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>
+      {{ data()?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle }}
+    </dt>
+    <dd govukSummaryListRowValue>
+      <div>{{ data()?.organisationStructure?.registeredAddress?.line1 }}</div>
+      <div>{{ data()?.organisationStructure?.registeredAddress?.line2 }}</div>
+      <div>{{ data()?.organisationStructure?.registeredAddress?.city }}</div>
+      <div>{{ data()?.organisationStructure?.registeredAddress?.state }}</div>
+      <div>{{ data()?.organisationStructure?.registeredAddress?.postcode }}</div>
+      <div>{{ data()?.organisationStructure?.registeredAddress?.country | country }}</div>
+    </dd>
+  </div>
+</dl>

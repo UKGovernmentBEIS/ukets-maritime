@@ -1,0 +1,31 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="taskMap.title | shipStepTitle: 7 : shipName"
+  [formGroup]="formGroup"
+  [heading]="taskMap.exemptionConditions.title"
+  [isTwoThirds]="true"
+  [showReturnLink]="false">
+  <p class="govuk-body">
+    If all of a ship’s voyages during the reporting period either start from or end at a point in the UK and if the
+    ship, according to its schedule, is planned to perform more than 300 voyages during the reporting period, you may be
+    exempted from the obligation to monitor relevant information on a per-voyage basis.
+  </p>
+  <div
+    [isInline]="true"
+    formControlName="exist"
+    govuk-radio
+    legend="Do you intend to make use of the derogation for monitoring the amount of fuel consumed on a per-voyage basis?">
+    <govuk-radio-option [label]="'Yes'" [value]="true" />
+    <govuk-radio-option [label]="'No'" [value]="false" />
+  </div>
+
+  @if (existCtrl.value) {
+    <div
+      formControlName="minVoyages"
+      govuk-text-input
+      inputType="number"
+      widthClass="govuk-!-width-one-third"
+      label="Minimum number of expected voyages during the reporting period according to the ship's schedule"></div>
+  }
+</mrtm-wizard-step>
+<mrtm-return-to-ships-list-table />

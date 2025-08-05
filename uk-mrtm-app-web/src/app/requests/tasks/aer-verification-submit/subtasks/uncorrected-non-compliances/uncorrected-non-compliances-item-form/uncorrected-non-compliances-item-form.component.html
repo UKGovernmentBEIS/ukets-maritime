@@ -1,0 +1,29 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="isEditMode ? map.itemEdit.title : map.itemAdd.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">Give as much detail as possible, including:</p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-7">
+    <li>the nature and size of the non-compliance</li>
+    <li>which element of the non-compliance it relates to</li>
+  </ul>
+  <div
+    class="govuk-!-margin-bottom-7"
+    formControlName="explanation"
+    govuk-textarea
+    label="Explanation"
+    labelSize="small"
+    [maxLength]="10000"></div>
+  <div
+    formControlName="materialEffect"
+    govuk-radio
+    legend="Does this have a material effect on the total emissions reported?"
+    legendSize="small"
+    class="govuk-!-margin-bottom-9">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

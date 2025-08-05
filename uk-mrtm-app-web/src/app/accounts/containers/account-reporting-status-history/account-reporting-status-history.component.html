@@ -1,0 +1,10 @@
+@if (vm$(); as vm) {
+  <netz-page-heading size="l">Reporting status history</netz-page-heading>
+  <govuk-accordion>
+    @for (item of vm | keyvalue: descOrder; track item.key) {
+      <govuk-accordion-item [header]="item.key">
+        <mrtm-account-reporting-status-history-list [history]="item.value" />
+      </govuk-accordion-item>
+    }
+  </govuk-accordion>
+}

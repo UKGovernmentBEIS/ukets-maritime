@@ -1,0 +1,27 @@
+<netz-page-heading>{{ overallDecisionMap.title }}</netz-page-heading>
+<h3 class="govuk-heading-m govuk-!-margin-bottom-1">Available actions</h3>
+<p class="govuk-body govuk-hint">These are based on the current status of the review</p>
+<div class="govuk-button-group govuk-!-margin-bottom-5">
+  @if (isAcceptedEnabled) {
+    <button govukButton netzPendingButton (click)="onSubmit('APPROVED')" type="button">Approve</button>
+  }
+  @if (isRejectedEnabled) {
+    <button govukButton netzPendingButton (click)="onSubmit('REJECTED')" type="button">Reject</button>
+  }
+  <button (click)="onSubmit('DEEMED_WITHDRAWN')" govukSecondaryButton netzPendingButton type="button">Withdraw</button>
+</div>
+<h3 class="govuk-heading-m govuk-!-margin-bottom-1">Unavailable actions</h3>
+
+@if (!isAcceptedEnabled) {
+  <p class="govuk-heading-s govuk-!-margin-bottom-1">Approve</p>
+  <p class="govuk-body govuk-hint">All sections must have a decision of “accepted”</p>
+}
+
+@if (!isRejectedEnabled) {
+  <p class="govuk-heading-s govuk-!-margin-bottom-1">Reject</p>
+  <p class="govuk-body govuk-hint">All sections must have a decision with one or more marked as “rejected”</p>
+}
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

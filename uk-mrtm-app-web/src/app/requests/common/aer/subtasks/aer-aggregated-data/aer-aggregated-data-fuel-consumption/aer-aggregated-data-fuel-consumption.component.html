@@ -1,0 +1,43 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="wizardMap?.fuelConsumptions?.title"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true"
+  caption="{{ wizardMap?.fuelConsumptions?.caption }} {{ ship()?.details?.name }}">
+  <ng-container formArrayName="fuelConsumptions">
+    @for (consumption of fuelConsumptionsFormArray.controls; track consumption; let i = $index) {
+      <fieldset govukFieldset [formGroupName]="i">
+        <legend govukLegend legendSize="small">
+          Fuel type {{ fuelConsumptionsFormArray.controls.length === 1 ? '' : i + 1 }}
+        </legend>
+        @if (fuelConsumptionsFormArray.controls.length > 1) {
+          <button (click)="onRemoveFuelConsumption(i)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
+        }
+        <div class="govuk-grid-row">
+          <div
+            govuk-select
+            class="govuk-grid-column-one-third"
+            widthClass="govuk-!-width-one-quarter"
+            formControlName="fuelOriginTypeName"
+            [options]="fuelTypeSelectItems()[i]"
+            label="Fuel type"></div>
+          <div
+            govuk-text-input
+            class="govuk-grid-column-two-thirds"
+            label="Total consumption (tonnes)"
+            formControlName="totalConsumption"
+            widthClass="govuk-!-width-one-quarter"
+            type="number"></div>
+        </div>
+      </fieldset>
+      <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-4" />
+    }
+  </ng-container>
+  @if (availableFuelSelectItems()?.length > fuelConsumptionsFormArray.controls.length) {
+    <button govukSecondaryButton (click)="addFuelConsumption()" type="button">Add another fuel</button>
+  }
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
+</div>

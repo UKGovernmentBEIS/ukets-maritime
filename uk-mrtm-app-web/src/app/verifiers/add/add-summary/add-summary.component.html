@@ -1,0 +1,8 @@
+<netz-page-heading [caption]="formHint$ | async">Check your answers</netz-page-heading>
+<mrtm-user-account-summary-info
+  [showPhoneFields]="true"
+  [summaryInfo]="summaryInfo$ | async"
+  formRouterLink="../"
+  phoneType="national"
+  viewMode="CREATE" />
+<button (click)="handleSubmit()" govukButton netzPendingButton type="button">Submit</button>

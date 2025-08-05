@@ -1,0 +1,72 @@
+@if (data(); as data) {
+  <p class="govuk-body">
+    You have conducted a verification of the greenhouse gas data reported by this operator in its annual emissions
+    report.
+  </p>
+  <p class="govuk-body govuk-!-margin-bottom-7">
+    @switch (data.type) {
+      @case ('VERIFIED_AS_SATISFACTORY') {
+        On the basis of your verification work these data are fairly stated.
+      }
+      @case ('VERIFIED_AS_SATISFACTORY_WITH_COMMENTS') {
+        {{ map.commentsList.description }}
+      }
+      @case ('NOT_VERIFIED') {
+        On the basis of your verification work these data cannot be verified due to the following reasons.
+      }
+    }
+  </p>
+
+  <h2 class="govuk-heading-m">Details</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Decision</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.type | overallVerificationDecision"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.ASSESSMENT]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    @if (data.type === 'VERIFIED_AS_SATISFACTORY_WITH_COMMENTS') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason</dt>
+        <dd govukSummaryListRowValue>
+          @for (reason of $any(data)?.reasons; track i; let i = $index) {
+            <div class="pre-wrap" [class.govuk-!-margin-top-5]="i > 0">{{ i + 1 }}. {{ reason }}</div>
+          }
+        </dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.VERIFIED_WITH_COMMENTS_LIST]" [queryParams]="queryParams()">
+              Change
+            </a>
+          </dd>
+        }
+      </div>
+    }
+    @if (data.type === 'NOT_VERIFIED') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Reason</dt>
+        <dd govukSummaryListRowValue>
+          <ul class="govuk-list govuk-list--bullet">
+            @for (reason of $any(data)?.notVerifiedReasons; track i; let i = $index) {
+              <li class="pre-wrap" [class.govuk-!-margin-top-5]="i > 0">
+                {{ reason.type | notVerifiedReasonType }}
+                @if (reason.details) {
+                  - {{ reason.details }}
+                }
+              </li>
+            }
+          </ul>
+        </dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.NOT_VERIFIED_REASONS]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

@@ -1,0 +1,11 @@
+@if (vm(); as vm) {
+  <netz-page-heading caption="Account details">{{ vm.operatorDetailsMap.title }}</netz-page-heading>
+  <mrtm-operator-details-summary-template
+    [operatorDetails]="vm.operatorDetails"
+    [files]="vm.files"
+    [declarationFiles]="vm.declarationFiles" />
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

@@ -1,0 +1,28 @@
+@if (availableTasks$ | async; as availableTasks) {
+  <netz-page-heading>Start a new task</netz-page-heading>
+  @for (task of availableTasks; track task; let last = $last) {
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-full">
+        <h2 class="govuk-heading-m">{{ task.title }}</h2>
+        @if (!task.errors) {
+          <button netzPendingButton govukButton (click)="onRequestButtonClick(task.type)" type="button">
+            {{ task.button }}
+          </button>
+        } @else {
+          <ul class="govuk-list">
+            @for (error of task?.errors; track error) {
+              <li>{{ error }}</li>
+            }
+          </ul>
+        }
+      </div>
+    </div>
+    @if (!last) {
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    }
+  } @empty {
+    <ul class="govuk-list">
+      <li>There are no available processes to initiate.</li>
+    </ul>
+  }
+}

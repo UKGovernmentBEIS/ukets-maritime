@@ -1,0 +1,47 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="abbreviationsMap.abbreviationsQuestion.title"
+  [caption]="abbreviationsMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="false"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div
+    formControlName="exist"
+    govuk-radio
+    [isInline]="true"
+    hint="This includes any abbreviations, acronyms or definitions that you have used, for example Ship Management System (SMS).">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+
+  <ng-container formArrayName="abbreviationDefinitions">
+    @for (abbreviationDef of abbrDefFormArray.controls; track abbreviationDef; let i = $index) {
+      <fieldset [formGroupName]="i" govukFieldset id="abbreviation-def-{{ i }}">
+        <div class="govuk-grid-row">
+          <div class="govuk-grid-column-two-thirds">
+            <legend legendSize="medium" govukLegend>Definition {{ i + 1 }}</legend>
+          </div>
+          <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+            @if (abbrDefFormArray.length > 1) {
+              <button
+                govukSecondaryButton
+                (click)="removeAbbrDefFormGroup(i)"
+                type="button"
+                class="govuk-!-margin-bottom-0">
+                Remove
+              </button>
+            }
+          </div>
+        </div>
+        <div formControlName="abbreviation" govuk-text-input label="Abbreviation, acronym or terminology"></div>
+        <div formControlName="definition" govuk-text-input label="Definition"></div>
+      </fieldset>
+    }
+    <div class="govuk-button-group">
+      @if (existCtrl.value === true) {
+        <button (click)="addAbbrDefFormGroup()" govukSecondaryButton type="button">Add another</button>
+      }
+    </div>
+  </ng-container>
+</mrtm-wizard-step>

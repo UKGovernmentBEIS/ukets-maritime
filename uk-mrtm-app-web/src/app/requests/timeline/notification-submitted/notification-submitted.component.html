@@ -1,0 +1,7 @@
+<hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+@if (vm(); as vm) {
+  <mrtm-notification-details-of-change-summary-template
+    [detailsOfChange]="vm.detailsOfChange"
+    [notificationFiles]="vm.notificationFiles"
+    heading="Details of change" />
+}

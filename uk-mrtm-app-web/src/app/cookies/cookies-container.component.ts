@@ -1,0 +1,32 @@
+import { AsyncPipe } from '@angular/common';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+
+import { CookiesPopUpComponent } from '@netz/govuk-components';
+
+import { CookiesService } from '@cookies/cookies.service';
+import { AnalyticsService } from '@core/services/analytics.service';
+
+@Component({
+  selector: 'mrtm-cookies-container',
+  standalone: true,
+  template: `
+    <govuk-cookies-pop-up
+      cookiesExpirationTime="1"
+      [areBrowserCookiesEnabled]="cookiesEnabled"
+      [cookiesAccepted]="cookiesAccepted$ | async"
+      (cookiesAcceptedEmitter)="acceptCookies($event)"></govuk-cookies-pop-up>
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [CookiesPopUpComponent, AsyncPipe],
+})
+export class CookiesContainerComponent {
+  private readonly cookiesService = inject(CookiesService);
+  private readonly analyticsService = inject(AnalyticsService);
+  cookiesEnabled = this.cookiesService.cookiesEnabled();
+  cookiesAccepted$ = this.cookiesService.accepted$;
+
+  acceptCookies(expired: string) {
+    this.cookiesService.acceptAllCookies(+expired);
+    this.analyticsService.enableGoogleTagManager();
+  }
+}

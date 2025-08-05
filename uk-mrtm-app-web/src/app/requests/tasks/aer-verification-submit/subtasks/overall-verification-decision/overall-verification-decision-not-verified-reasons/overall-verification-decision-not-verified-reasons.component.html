@@ -1,0 +1,63 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.notVerifiedReasons.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-hint">Select all options that apply.</p>
+  <div formControlName="reasons" govuk-checkboxes>
+    <govuk-checkbox
+      value="UNCORRECTED_MATERIAL_MISSTATEMENT"
+      [label]="'UNCORRECTED_MATERIAL_MISSTATEMENT' | notVerifiedReasonType" />
+    <govuk-checkbox
+      value="UNCORRECTED_MATERIAL_NON_CONFORMITY"
+      [label]="'UNCORRECTED_MATERIAL_NON_CONFORMITY' | notVerifiedReasonType" />
+
+    <govuk-checkbox
+      value="VERIFICATION_DATA_OR_INFORMATION_LIMITATIONS"
+      [label]="'VERIFICATION_DATA_OR_INFORMATION_LIMITATIONS' | notVerifiedReasonType">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="detailsVerificationDataLimitations"
+          govuk-textarea
+          label="Provide a reason"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox
+      value="SCOPE_LIMITATIONS_DUE_TO_LACK_OF_CLARITY"
+      [label]="'SCOPE_LIMITATIONS_DUE_TO_LACK_OF_CLARITY' | notVerifiedReasonType">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="detailsScopeLimitationsClarity"
+          govuk-textarea
+          label="Provide a reason"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox
+      value="SCOPE_LIMITATIONS_OF_APPROVED_MONITORING_PLAN"
+      [label]="'SCOPE_LIMITATIONS_OF_APPROVED_MONITORING_PLAN' | notVerifiedReasonType">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="detailsScopeLimitationsEmp"
+          govuk-textarea
+          label="Provide a reason"
+          [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox
+      value="NOT_APPROVED_MONITORING_PLAN_BY_REGULATOR"
+      [label]="'NOT_APPROVED_MONITORING_PLAN_BY_REGULATOR' | notVerifiedReasonType">
+      <ng-container govukConditionalContent>
+        <div formControlName="detailsEmpNotApproved" govuk-textarea label="Provide a reason" [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+    <govuk-checkbox value="ANOTHER_REASON" [label]="'ANOTHER_REASON' | notVerifiedReasonType">
+      <ng-container govukConditionalContent>
+        <div formControlName="detailsAnotherReason" govuk-textarea label="Provide a reason" [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</mrtm-wizard-step>

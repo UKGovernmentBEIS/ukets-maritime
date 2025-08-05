@@ -1,0 +1,24 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.methodConservative.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-hint">
+    If the method used to complete the data gap was not approved by the regulator, you need to confirm if this method
+    was conservative.
+  </p>
+  <div formControlName="methodConservative" govuk-radio>
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          govuk-textarea
+          [maxLength]="10000"
+          formControlName="noConservativeMethodDetails"
+          [label]="map.noConservativeMethodDetails.title"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

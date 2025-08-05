@@ -1,0 +1,15 @@
+<netz-page-heading caption="Return to operator for changes">Check your answers</netz-page-heading>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey class="app-column-width-20-per">Changes required from operator</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ changesRequired() }}</dd>
+    <dd govukSummaryListRowActions>
+      <a govukLink [routerLink]="['../']">Change</a>
+    </dd>
+  </div>
+</dl>
+<button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and send</button>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

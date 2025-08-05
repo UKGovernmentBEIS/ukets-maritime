@@ -1,0 +1,14 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="greenhouseGasMap.title"
+  [formGroup]="formGroup"
+  [heading]="greenhouseGasMap?.fuel?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Enter details of how bunkering is performed to ensure that tanks are fuelled with agreed quantities. You must
+    describe how fuel consumption is monitored accurately to ensure consistency.
+  </p>
+  <mrtm-about-procedure-details />
+  <mrtm-emp-procedure-form />
+</mrtm-wizard-step>

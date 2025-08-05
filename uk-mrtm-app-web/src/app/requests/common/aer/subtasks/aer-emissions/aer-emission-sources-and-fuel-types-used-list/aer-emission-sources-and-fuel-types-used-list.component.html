@@ -1,0 +1,24 @@
+<mrtm-notification-banner />
+<netz-page-heading [caption]="shipName()">
+  {{ taskMap.emissionsSources.title }}
+</netz-page-heading>
+
+<mrtm-aer-emission-sources-and-fuel-types-used-summary-template
+  [data]="emissionSources()"
+  (delete)="onDelete($event)"
+  [isDeletable]="true"
+  [isEditable]="isEditable" />
+
+<div class="govuk-button-group">
+  @if (emissionSources().length) {
+    <button (click)="onAddItem()" govukButton govukSecondaryButton type="button">Add another item</button>
+  } @else {
+    <button (click)="onAddItem()" govukButton type="button">Add item</button>
+  }
+</div>
+
+@if (emissionSources().length) {
+  <button (click)="onContinue()" govukButton type="button">Continue</button>
+}
+
+<mrtm-return-to-ships-list-table [label]="returnToLabel" />

@@ -1,0 +1,25 @@
+<h2 class="govuk-heading-m">{{ caption() }}</h2>
+<dl govuk-summary-list>
+  @if (reviewDecision()?.details?.requiredChanges?.length > 0) {
+    <div govukSummaryListRow>
+      @if (showAssignee()) {
+        <dt govukSummaryListRowKey>Changes required by operator</dt>
+      } @else {
+        <dt govukSummaryListRowKey>Changes required by operator</dt>
+      }
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <ul class="govuk-list govuk-list--number">
+          @for (change of reviewDecision()?.details?.requiredChanges; track change) {
+            <li>
+              {{ change?.reason }}
+              @if (change?.files?.length > 0) {
+                <br />
+                <mrtm-summary-download-files [files]="change?.files" />
+              }
+            </li>
+          }
+        </ul>
+      </dd>
+    </div>
+  }
+</dl>

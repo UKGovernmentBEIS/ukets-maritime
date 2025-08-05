@@ -1,0 +1,17 @@
+<netz-page-heading caption="Create user account" size="xl">Check your answers</netz-page-heading>
+
+<mrtm-user-input-summary-template
+  [changeLink]="'../contact-details'"
+  [userInfo]="userInfo$ | async"></mrtm-user-input-summary-template>
+
+@if ((invitationStatus$ | async) !== 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD') {
+  <h2
+    mrtm-summary-header
+    [changeRoute]="['/registration', 'user', 'choose-password']"
+    class="govuk-heading-m govuk-!-padding-bottom-2"
+    style="border-bottom: 1px solid #b1b4b6">
+    Password
+  </h2>
+}
+
+<button (click)="registerUser()" [disabled]="isSubmitDisabled" govukButton type="button">Submit</button>

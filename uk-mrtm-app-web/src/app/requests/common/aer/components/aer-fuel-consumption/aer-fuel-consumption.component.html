@@ -1,0 +1,53 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()"
+  caption="{{ wizardMap?.fuelConsumptions?.caption }} {{ ship()?.details?.name }}"
+  [heading]="wizardMap?.fuelConsumptions?.title">
+  <div
+    govuk-select
+    [options]="fuelTypeSelectItems()"
+    (change)="onChangeFuelOrigin()"
+    formControlName="fuelOrigin"
+    label="Fuel type"
+    widthClass="govuk-!-width-one-half"></div>
+  <div
+    govuk-select
+    [options]="emissionSourceSelectItems()"
+    (change)="onChangeEmissionName()"
+    formControlName="name"
+    label="Unique emission source name (optional)"
+    widthClass="govuk-!-width-one-third"></div>
+  @if (isLNGType()) {
+    <div
+      govuk-select
+      [options]="methaneSlipSelectItems()"
+      formControlName="methaneSlip"
+      label="Methane slip (%)"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  <div govuk-text-input formControlName="amount" label="Amount" widthClass="govuk-!-width-one-third"></div>
+  <div
+    govuk-select
+    [options]="measuringUnitSelectItems"
+    formControlName="measuringUnit"
+    label="Measuring unit"
+    widthClass="govuk-!-width-one-third"></div>
+  @if (formGroup?.value?.measuringUnit === 'M3') {
+    <div govuk-text-input formControlName="fuelDensity" label="Density" widthClass="govuk-!-width-one-third"></div>
+  }
+
+  <h4 class="govuk-heading-s">Consumption (tonnes)</h4>
+  @if (isNil(formGroup?.value?.totalConsumption)) {
+    <p class="govuk-body">Not calculated yet</p>
+  } @else {
+    <p class="govuk-heading-s">{{ formGroup?.value?.totalConsumption }}</p>
+  }
+</mrtm-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="this.fuelConsumptionId() ? ['../../'] : ['../']">
+    Return to: {{ wizardMap.totalEmissions.title }}
+  </a>
+</div>

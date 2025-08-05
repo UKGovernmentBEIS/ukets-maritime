@@ -1,0 +1,16 @@
+<netz-page-heading [caption]="map.caption">Check your answers</netz-page-heading>
+
+<mrtm-compliance-monitoring-reporting-summary-template
+  [data]="complianceMonitoringReporting()"
+  [isEditable]="isEditable()" />
+
+@if (isEditable() && !isSubtaskCompleted()) {
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+}
+
+<div>
+  @if (isEditable() && !isSubtaskCompleted()) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

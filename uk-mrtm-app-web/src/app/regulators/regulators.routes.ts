@@ -1,0 +1,69 @@
+import { Routes } from '@angular/router';
+
+import { PendingRequestGuard } from '@core/guards/pending-request.guard';
+import { DeleteComponent } from '@regulators/delete/delete.component';
+import { DeleteResolver } from '@regulators/delete/delete.resolver';
+import { DetailsComponent } from '@regulators/details/details.component';
+import { detailsResolver } from '@regulators/details/details.resolver';
+import { permissionsResolver } from '@regulators/details/permissions.resolver';
+import { SignatureFileDownloadComponent } from '@regulators/file-download/signature-file-download.component';
+import { RegulatorsComponent } from '@regulators/regulators.component';
+import { RegulatorsGuard } from '@regulators/regulators.guard';
+
+export const REGULATORS_ROUTES: Routes = [
+  {
+    path: '',
+    title: 'Regulator users',
+    component: RegulatorsComponent,
+    resolve: { regulators: RegulatorsGuard },
+    canDeactivate: [PendingRequestGuard],
+  },
+  {
+    path: 'add',
+    title: 'Add a new user',
+    data: { breadcrumb: true },
+    component: DetailsComponent,
+    canDeactivate: [PendingRequestGuard],
+  },
+  {
+    path: ':userId',
+    children: [
+      {
+        path: '',
+        title: 'User details',
+        data: { breadcrumb: ({ user }) => `${user.firstName} ${user.lastName}` },
+        pathMatch: 'full',
+        component: DetailsComponent,
+        resolve: {
+          user: detailsResolver,
+          permissions: permissionsResolver,
+        },
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: 'delete',
+        title: 'Confirm that this user account will be deleted',
+        data: { breadcrumb: ({ user }) => `Delete ${user.firstName} ${user.lastName}` },
+        component: DeleteComponent,
+        resolve: { user: DeleteResolver },
+        canDeactivate: [PendingRequestGuard],
+      },
+      {
+        path: '2fa',
+        loadChildren: () => import('../two-fa/two-fa.routes').then((m) => m.TWO_FA_ROUTES),
+      },
+      {
+        path: 'file-download/:uuid',
+        component: SignatureFileDownloadComponent,
+      },
+    ],
+  },
+  {
+    path: 'file-download/:uuid',
+    component: SignatureFileDownloadComponent,
+  },
+  {
+    path: 'external-contacts',
+    loadChildren: () => import('./external-contacts/external-contacts.routes').then((m) => m.EXTERNAL_CONTACTS_ROUTES),
+  },
+];

@@ -1,0 +1,9 @@
+<netz-page-heading [caption]="map.caption">{{ map.caption }}</netz-page-heading>
+
+<mrtm-ets-compliance-rules-summary-template [data]="etsComplianceRules()" />
+
+@if (withReviewDecision()) {
+  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+}
+
+<netz-return-to-task-or-action-page />

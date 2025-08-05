@@ -1,0 +1,13 @@
+<div class="govuk-!-width-two-thirds">
+  <govuk-panel title="Returned to operator for amends"></govuk-panel>
+  @if (isEmpVariation()) {
+    <p class="govuk-body">The application has been returned to the operator so they can make necessary changes.</p>
+  }
+  <h3 class="govuk-heading-m">What happens next</h3>
+  @if (isEmpVariation()) {
+    <p class="govuk-body">They will return the application to you when the changes have been made.</p>
+  } @else {
+    <p class="govuk-body">The operator will return the application to you when the amendments have been made.</p>
+  }
+</div>
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

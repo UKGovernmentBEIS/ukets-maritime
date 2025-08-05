@@ -1,0 +1,100 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="isAer() ? shipName() : (map.title | shipStepTitle: 3 : shipName())"
+  [formGroup]="formGroup"
+  [heading]="heading()"
+  [isTwoThirds]="true"
+  [showReturnLink]="false">
+  <p class="govuk-body">Enter a description of the:</p>
+  <ul class="govuk-list govuk-list--bullet govuk-!-margin-bottom-6">
+    <li>emission source</li>
+    <li>fuel types associated with the emission source</li>
+    <li>monitoring method applied for determining fuel consumption</li>
+  </ul>
+
+  @if (!isAer()) {
+    <div
+      formControlName="referenceNumber"
+      govuk-text-input
+      label="Emission source reference number (optional)"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  <div
+    formControlName="name"
+    govuk-text-input
+    hint="For example 'Main Engine' or 'Aux Boiler 1'"
+    label="Unique emission source name"></div>
+  <div
+    [options]="typeOptions"
+    formControlName="type"
+    govuk-select
+    label="Emission source type"
+    widthClass="govuk-!-width-one-third"></div>
+  <div
+    [options]="sourceClassOptions"
+    formControlName="sourceClass"
+    govuk-select
+    label="Emission source class"
+    widthClass="govuk-!-width-one-third"></div>
+  <ng-container formArrayName="fuelDetails">
+    <h2 class="govuk-heading-m">Potential fuel types used</h2>
+    <div class="govuk-hint">Fuel types can be updated in the 'Enter emission factors' section</div>
+    @for (fuelDetailControl of fuelDetailsControl.controls; track fuelDetailControl; let i = $index) {
+      <fieldset govukFieldset [formGroupName]="i">
+        <legend govukLegend legendSize="small">Fuel {{ i + 1 }}</legend>
+        @if (fuelDetailsControl.length > 1) {
+          <button (click)="removeFuelDetails(i)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
+        }
+        <div
+          govuk-select
+          formControlName="uniqueIdentifier"
+          [options]="fuelDetailsOptions(i)"
+          (change)="onChangeFuelDetails(i)"
+          widthClass="govuk-!-width-full"></div>
+
+        @if (isLNGType(i)) {
+          <div
+            govuk-select
+            formControlName="methaneSlip"
+            [options]="methaneSlipOptions"
+            (change)="onChangeMethaneSlip(i)"
+            label="Methane slip (%)"
+            hint="Emission factor of slipped fuel (slippage coefficient) as a percentage of the mass of the fuel used by the emission source"
+            widthClass="govuk-!-width-one-third"></div>
+
+          @if (fuelDetailControl.get('methaneSlip')?.value === 'OTHER') {
+            <div
+              formControlName="methaneSlipOther"
+              govuk-text-input
+              label="Other (Methane slip (%))"
+              widthClass="govuk-!-width-one-third"
+              inputType="number"></div>
+          }
+        }
+      </fieldset>
+    }
+    @if (fuelFactors.length > 1 && fuelDetailsControl.length < fuelFactors.length) {
+      <button (click)="addFuelDetails()" govukSecondaryButton type="button">Add another fuel</button>
+    }
+  </ng-container>
+
+  <div
+    formControlName="monitoringMethod"
+    govuk-checkboxes
+    hint="Select all that apply"
+    legend="Monitoring methods"
+    legendSize="medium">
+    @for (method of monitoringMethodMap | keyvalue: sortMonitoringMethodsByText; track method.key) {
+      <govuk-checkbox [label]="method.value.text" [hint]="method.value.hint" [value]="method.key" />
+    }
+  </div>
+</mrtm-wizard-step>
+
+@if (isAer()) {
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink routerLink="../list">Return to: {{ returnToLabel() }}</a>
+  </div>
+} @else {
+  <mrtm-return-to-ships-list-table [label]="returnToLabel()" />
+}

@@ -1,0 +1,32 @@
+<h2 class="govuk-heading-m">Reporting status</h2>
+@if (vm(); as vm) {
+  <govuk-table [columns]="vm.columns" [data]="vm.data">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('status') {
+          {{ row[column.field] | accountReportingStatus }}
+        }
+        @case ('actions') {
+          <a [routerLink]="['./', 'edit-reporting-status', row?.year]" govukLink>Update status</a>
+        }
+        @case ('lastUpdate') {
+          {{ row[column.field] | govukDate: 'datetime' }}
+        }
+        @default {
+          {{ row[column.field] }}
+        }
+      }
+    </ng-template>
+  </govuk-table>
+  @if (vm?.total > vm?.paging?.pageSize) {
+    <govuk-pagination
+      [count]="vm?.total"
+      [pageSize]="vm?.paging?.pageSize"
+      (currentPageChange)="onPageChange($event)" />
+  }
+  @if (editable()) {
+    <p>
+      <a govukLink routerLink="reporting-status-history">View reporting status history</a>
+    </p>
+  }
+}

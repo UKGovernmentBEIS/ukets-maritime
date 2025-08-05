@@ -1,0 +1,30 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  submitText="Confirm and complete"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="!canBeDisplayed">
+  @if (questionFiles()?.length) {
+    <p class="govuk-body row-flex govuk-!-margin-right-0 govuk-!-margin-left-0">
+      <span class="govuk-label--s govuk-!-margin-right-2">Files shared by the regulator:</span>
+      <mrtm-summary-download-files [files]="questionFiles()" />
+    </p>
+  }
+
+  <ng-container formArrayName="answers">
+    @for (answer of answersCtrl.controls; track answer; let i = $index) {
+      <p class="govuk-heading-m">Question {{ i + 1 }}</p>
+      <p class="govuk-body pre-wrap">{{ questions?.questions[i] }}</p>
+      @if (canBeDisplayed) {
+        <div govuk-textarea labelSize="medium" label="Your response" [formControlName]="i" [maxLength]="10000"></div>
+      }
+    }
+  </ng-container>
+
+  @if (canBeDisplayed) {
+    <mrtm-multiple-file-input
+      [baseDownloadUrl]="downloadUrl"
+      label="Upload a file (optional)"
+      listTitle="Uploaded files"
+      formControlName="files"></mrtm-multiple-file-input>
+  }
+</mrtm-wizard-step>

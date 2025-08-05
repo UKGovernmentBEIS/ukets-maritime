@@ -1,0 +1,18 @@
+package uk.gov.mrtm.api.workflow.request.flow.common.constants;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public enum MrtmRequestCustomContext {
+
+	EMP_NOTIFICATION_FOLLOW_UP("EMP_NOTIFICATION_FOLLOW_UP"),
+	EMP_VARIATION_REGULATOR_LED("EMP_VARIATION_REGULATOR_LED"),
+	AER_AMEND("AER_AMEND"),
+	NON_COMPLIANCE_INITIAL_PENALTY_NOTICE("NON_COMPLIANCE_INITIAL_PENALTY_NOTICE"),
+	NON_COMPLIANCE_NOTICE_OF_INTENT("NON_COMPLIANCE_NOTICE_OF_INTENT"),
+	NON_COMPLIANCE_CIVIL_PENALTY("NON_COMPLIANCE_CIVIL_PENALTY");
+
+	private final String code;
+}

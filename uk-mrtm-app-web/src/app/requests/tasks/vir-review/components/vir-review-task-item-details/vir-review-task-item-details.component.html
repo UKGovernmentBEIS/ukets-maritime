@@ -1,0 +1,12 @@
+@if (explanation(); as explanation) {
+  <dl
+    govuk-summary-list
+    [hasBorders]="false"
+    [hasBottomMargin]="false"
+    class="govuk-!-margin-bottom-0 govuk-!-margin-top-4">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey class="govuk-!-width-one-third">Operator's response</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">{{ explanation }}</dd>
+    </div>
+  </dl>
+}

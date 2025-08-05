@@ -1,0 +1,39 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  [caption]="verificationData()?.reference"
+  (formSubmit)="onSubmit()"
+  [showReturnLink]="true"
+  heading="Respond to {{ key() | uppercase }}">
+  <mrtm-vir-verifier-recommendation-summary-template [data]="verificationData()" />
+  <mrtm-vir-operator-response-summary-template header="Operator's response" [data]="operatorResponseData()" />
+  <mrtm-vir-regulator-response-operator-side-summary-template
+    header="Regulator's response"
+    [data]="regulatorResponseData()" />
+
+  <fieldset govukFieldset>
+    <legend govukLegend legendSize="medium">Is the required improvement complete?</legend>
+    <div formControlName="improvementCompleted" govuk-radio>
+      <govuk-radio-option [value]="true" label="Yes">
+        <ng-container govukConditionalContent>
+          <div
+            govuk-date-input
+            legendSize="small"
+            class="govuk-!-width-two-thirds"
+            label="When was the improvement completed?"
+            formControlName="dateCompleted"></div>
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option [value]="false" label="No">
+        <ng-container govukConditionalContent>
+          <div
+            govuk-textarea
+            formControlName="reason"
+            [maxLength]="10000"
+            labelSize="small"
+            class="govuk-!-width-two-thirds"
+            label="Tell us why you have chosen not to address this recommendation"></div>
+        </ng-container>
+      </govuk-radio-option>
+    </div>
+  </fieldset>
+</mrtm-wizard-step>

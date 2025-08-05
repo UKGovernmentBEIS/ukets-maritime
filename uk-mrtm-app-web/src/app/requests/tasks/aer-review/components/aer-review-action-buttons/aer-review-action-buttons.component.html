@@ -1,0 +1,10 @@
+@if (hasAvailableActions()) {
+  <div class="govuk-button-group">
+    @if (canCompleteReport()) {
+      <a govukButton [routerLink]="['aer-review', 'complete']">Complete report</a>
+    }
+    @if (canReturnForAmends()) {
+      <a govukButton [routerLink]="['aer-review', 'return-for-changes']">Return for changes</a>
+    }
+  </div>
+}

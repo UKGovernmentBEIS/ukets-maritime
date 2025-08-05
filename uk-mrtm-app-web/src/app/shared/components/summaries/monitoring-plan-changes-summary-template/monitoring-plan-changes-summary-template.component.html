@@ -1,0 +1,26 @@
+<mrtm-monitoring-plan-version-summary-template [monitoringPlanVersion]="monitoringPlanVersion()" />
+
+<h2 class="govuk-heading-m">Changes not covered by the emissions monitoring plan</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ map.changesExist.title }}</dt>
+    <dd govukSummaryListRowValue notProvided="{{ monitoringPlanChanges()?.changesExist | booleanToText }}"></dd>
+    @if (isEditable() && changeLink()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+      </dd>
+    }
+  </div>
+
+  @if (monitoringPlanChanges()?.changesExist) {
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.changes.title }}</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="monitoringPlanChanges()?.changes"></dd>
+      @if (isEditable() && changeLink()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  }
+</dl>

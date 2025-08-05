@@ -1,0 +1,60 @@
+@if (data(); as data) {
+  <div govuk-summary-card title="Emission source {{ index() + 1 }}">
+    @if (isEditable()) {
+      <ng-template #actions>
+        <a [queryParams]="queryParams()" [routerLink]="[changeLink(), data.uniqueIdentifier]" govukLink="summaryAction">
+          Change
+        </a>
+        @if (isDeletable()) {
+          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">Remove</a>
+        }
+      </ng-template>
+    }
+    <dl [hasBottomMargin]="false" govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emission source reference number</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.referenceNumber"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Unique emission source name</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.name"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emission source type</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.type | selectOptionToTitle: typeOptions"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emission source class</dt>
+        <dd govukSummaryListRowValue [notProvided]="data?.sourceClass | selectOptionToTitle: sourceClassOptions"></dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Potential fuel types used</dt>
+        <dd govukSummaryListRowValue class="pre-wrap">
+          @if (data?.fuelDetails?.length) {
+            <ul class="govuk-list--bullet">
+              @for (fuel of data.fuelDetails; track fuel) {
+                <li [innerHTML]="fuel | fuelOriginTitle"></li>
+              }
+            </ul>
+          } @else {
+            <span [notProvided]="undefined"></span>
+          }
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Monitoring method</dt>
+        <dd govukSummaryListRowValue>
+          @if (data?.monitoringMethod?.length) {
+            <ul class="govuk-list--bullet">
+              @for (monitoringMethod of sortedMonitoringMethods(); track monitoringMethod) {
+                <li>{{ monitoringMethodMap[monitoringMethod].text }}</li>
+              }
+            </ul>
+          } @else {
+            <span [notProvided]="undefined"></span>
+          }
+        </dd>
+      </div>
+    </dl>
+  </div>
+}

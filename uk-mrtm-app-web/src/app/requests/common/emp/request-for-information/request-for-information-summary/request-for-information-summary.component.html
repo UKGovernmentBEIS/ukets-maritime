@@ -1,0 +1,16 @@
+@if (vm(); as vm) {
+  <netz-page-heading>Check your answers</netz-page-heading>
+  <mrtm-request-for-information-summary-template
+    [data]="vm?.data"
+    [isEditable]="vm?.isEditable"
+    [queryParams]="vm?.queryParams"
+    [notificationEditUrl]="vm?.wizardSteps?.RFI_NOTIFICATION"
+    [questionEditUrl]="vm?.wizardSteps?.RFI_REQUEST" />
+
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

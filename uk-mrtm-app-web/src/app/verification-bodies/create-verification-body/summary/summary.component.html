@@ -1,0 +1,11 @@
+<netz-page-heading caption="Add a verification body">Check your answers</netz-page-heading>
+<div>
+  <h2 class="govuk-heading-m">Verification body</h2>
+  <mrtm-verification-body-summary [summaryInfo]="summaryInfo$ | async" routerLink="../" />
+  <h2 class="govuk-heading-m">Admin user</h2>
+  <mrtm-verification-body-admin-user-summary
+    [summaryInfo]="(summaryInfo$ | async)?.adminVerifierUserInvitation"
+    routerLink="../" />
+  <button (click)="handleSubmit()" govukButton netzPendingButton type="button">Confirm and submit</button>
+</div>
+<a govukLink routerLink="/dashboard">Return to: Tasks</a>

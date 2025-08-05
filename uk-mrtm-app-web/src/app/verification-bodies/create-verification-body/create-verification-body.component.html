@@ -1,0 +1,21 @@
+<mrtm-wizard-step
+  (formSubmit)="handleFormSubmit()"
+  [formGroup]="form"
+  caption="Add a verification body"
+  heading="Verification body details">
+  <h2 class="govuk-heading-m">Add a verification body</h2>
+  <mrtm-verification-body-form />
+  <mrtm-location-state-form
+    legendLabel="Address"
+    legendSize="small"
+    [withState]="false"
+    [optionalFields]="{ line2: true }"
+    formGroupName="address" />
+  <hr class="govuk-!-margin-bottom-6 govuk-!-margin-top-6" />
+  <h2 class="govuk-heading-m">Add an admin user</h2>
+  <mrtm-user-account-form
+    emailHint="All system alerts, notices and official communications will be sent by email Contact your regulator if you require a specific notice to be sent by post."
+    formGroupName="adminVerifierUserInvitation"
+    formMode="EDIT"
+    phoneType="national" />
+</mrtm-wizard-step>

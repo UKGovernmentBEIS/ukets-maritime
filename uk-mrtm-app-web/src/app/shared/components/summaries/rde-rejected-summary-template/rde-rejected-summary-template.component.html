@@ -1,0 +1,12 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Response</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.decision | titlecase"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reason</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.reason"></dd>
+    </div>
+  </dl>
+}

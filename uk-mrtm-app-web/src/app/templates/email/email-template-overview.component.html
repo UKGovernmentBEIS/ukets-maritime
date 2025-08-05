@@ -1,0 +1,27 @@
+@if (notification) {
+  <govuk-notification-banner type="success">
+    <h1 class="govuk-notification-banner__heading">Template updated</h1>
+  </govuk-notification-banner>
+}
+
+@if (emailTemplate$ | async; as emailTemplate) {
+  <netz-page-heading>{{ emailTemplate.name }}</netz-page-heading>
+  <h1 class="govuk-heading-m">Template Content</h1>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Email subject</dt>
+      <dd govukSummaryListRowValue>{{ emailTemplate.subject }}</dd>
+      <dd govukSummaryListRowActions>
+        <a govukLink routerLink="edit">Change</a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Email message</dt>
+      <dd class="pre-wrap" govukSummaryListRowValue>{{ emailTemplate.text }}</dd>
+      <dd govukSummaryListRowActions>
+        <a govukLink routerLink="edit">Change</a>
+      </dd>
+    </div>
+  </dl>
+  <mrtm-email-template-details-template [emailTemplate]="emailTemplate"></mrtm-email-template-details-template>
+}

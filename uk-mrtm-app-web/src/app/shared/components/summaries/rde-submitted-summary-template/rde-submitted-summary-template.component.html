@@ -1,0 +1,33 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Request details</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Proposed due date</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.extensionDate | govukDate: 'date'"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Reply deadline</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.deadline | govukDate: 'date'"></dd>
+    </div>
+  </dl>
+
+  <h2 class="govuk-heading-m">Recipients</h2>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Users</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.operators.join(',')"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
+      <dd govukSummaryListRowValue [notProvided]="data?.signatory"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="data.officialNotice" />
+      </dd>
+    </div>
+  </dl>
+}

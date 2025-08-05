@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="operatorDetailsMap.title"
+  [formGroup]="formGroup"
+  [heading]="operatorDetailsMap.legalStatusOfOrganisation.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="legalStatusType" govuk-radio>
+    @for (radioOption of radioGroupOptions; track radioOption.value) {
+      <govuk-radio-option [value]="radioOption.value" [label]="radioOption.text" />
+    }
+  </div>
+</mrtm-wizard-step>

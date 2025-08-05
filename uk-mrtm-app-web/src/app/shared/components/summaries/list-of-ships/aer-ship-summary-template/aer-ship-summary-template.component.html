@@ -1,0 +1,85 @@
+@if (data()?.details) {
+  <mrtm-basic-ship-details-summary-template
+    [changeLink]="changeLinks()?.['details']?.link"
+    [data]="data()?.details"
+    [isEditable]="isEditable()"
+    [queryParams]="changeLinks()?.['details']?.queryParams"
+    [isAer]="true" />
+}
+
+@if (data()?.fuelsAndEmissionsFactors) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h2 class="govuk-heading-m">Fuels and emissions factors</h2>
+    </div>
+    <div class="govuk-body govuk-grid-column-one-quarter govuk-!-text-align-right">
+      @if (isEditable()) {
+        <a
+          govukLink
+          [routerLink]="changeLinks()?.['fuelsAndEmissionFactorsList']?.link"
+          [queryParams]="changeLinks()?.['fuelsAndEmissionFactorsList']?.queryParams">
+          Change
+        </a>
+      }
+    </div>
+  </div>
+
+  <div class="govuk-!-margin-bottom-6">
+    <mrtm-aer-fuels-and-emission-factors-summary-template
+      [data]="data()?.fuelsAndEmissionsFactors"
+      [changeLink]="changeLinks()?.['fuelsAndEmissionsFactors']?.link"
+      [isEditable]="isEditable()"
+      (delete)="onDeleteFuelAndEmissionFactor($event)" />
+
+    @if (isEditable()) {
+      <button type="button" (click)="onAddItem('fuelsAndEmissionsFactors')" govukSecondaryButton>
+        Add another item
+      </button>
+    }
+  </div>
+}
+
+@if (data()?.emissionsSources) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <h2 class="govuk-heading-m">Emissions sources and fuel types used</h2>
+    </div>
+    <div class="govuk-body govuk-grid-column-one-quarter govuk-!-text-align-right">
+      @if (isEditable()) {
+        <a
+          govukLink
+          [routerLink]="changeLinks()?.['emissionSourcesList']?.link"
+          [queryParams]="changeLinks()?.['emissionSourcesList']?.queryParams">
+          Change
+        </a>
+      }
+    </div>
+  </div>
+  <div class="govuk-!-margin-bottom-6">
+    <mrtm-aer-emission-sources-and-fuel-types-used-summary-template
+      [data]="data()?.emissionsSources"
+      [changeLink]="changeLinks()?.['emissionsSources']?.link"
+      [isEditable]="isEditable()"
+      (delete)="onDeleteEmissionSource($event)" />
+
+    @if (isEditable()) {
+      <button type="button" (click)="onAddItem('emissionsSources')" govukSecondaryButton>Add another item</button>
+    }
+  </div>
+}
+
+@if (data()?.uncertaintyLevel) {
+  <mrtm-uncertainty-level-summary-template
+    [changeLink]="changeLinks()?.['uncertaintyLevel']?.link"
+    [data]="data()?.uncertaintyLevel"
+    [isEditable]="isEditable()"
+    [queryParams]="changeLinks()?.['uncertaintyLevel']?.queryParams" />
+}
+
+@if (data()?.derogations) {
+  <mrtm-aer-derogations-summary-template
+    [changeLink]="changeLinks()?.['derogations']?.link"
+    [data]="data()?.derogations"
+    [isEditable]="isEditable()"
+    [queryParams]="changeLinks()?.['derogations']?.queryParams" />
+}

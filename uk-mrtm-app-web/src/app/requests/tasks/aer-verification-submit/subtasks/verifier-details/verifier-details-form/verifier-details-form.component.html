@@ -1,0 +1,62 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="map.caption"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <mrtm-verification-body-details-summary-template [data]="verifierDetails()?.verificationBodyDetails" />
+
+  <h2 class="govuk-heading-m">{{ map.verifierContact.title }}</h2>
+  <div formControlName="name" govuk-text-input label="{{ map.name.title }}" labelSize="normal"></div>
+  <div
+    formControlName="email"
+    govuk-text-input
+    label="{{ map.email.title }}"
+    labelSize="normal"
+    widthClass="govuk-!-width-one-half"></div>
+  <div
+    class="govuk-!-margin-bottom-9"
+    formControlName="phoneNumber"
+    govuk-text-input
+    inputType="tel"
+    label="{{ map.phoneNumber.title }}"
+    labelSize="normal"
+    widthClass="govuk-!-width-one-half"></div>
+
+  <h2 class="govuk-heading-m">{{ map.verificationTeamDetails.title }}</h2>
+  <div
+    formControlName="leadEtsAuditor"
+    govuk-text-input
+    label="{{ map.leadEtsAuditor.title }}"
+    labelSize="normal"></div>
+  <div
+    formControlName="etsAuditors"
+    govuk-textarea
+    label="{{ map.etsAuditors.title }}"
+    labelSize="normal"
+    [maxLength]="10000"></div>
+  <div
+    formControlName="etsTechnicalExperts"
+    govuk-textarea
+    label="{{ map.etsTechnicalExperts.title }}"
+    labelSize="normal"
+    [maxLength]="10000"></div>
+  <div
+    formControlName="independentReviewer"
+    govuk-text-input
+    label="{{ map.independentReviewer.title }}"
+    labelSize="normal"></div>
+  <div
+    formControlName="technicalExperts"
+    govuk-textarea
+    label="{{ map.technicalExperts.title }}"
+    labelSize="normal"
+    [maxLength]="10000"></div>
+  <div
+    class="govuk-!-margin-bottom-9"
+    formControlName="authorisedSignatoryName"
+    govuk-text-input
+    label="{{ map.authorisedSignatoryName.title }}"
+    labelSize="normal"></div>
+</mrtm-wizard-step>

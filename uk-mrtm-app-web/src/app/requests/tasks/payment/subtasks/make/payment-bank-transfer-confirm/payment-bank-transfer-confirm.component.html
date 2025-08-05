@@ -1,0 +1,10 @@
+<netz-page-heading>Are you sure you want to mark this payment as paid?</netz-page-heading>
+<div class="govuk-button-group">
+  <button type="button" netzPendingButton (click)="onSubmit()" govukButton>Confirm and complete</button>
+  <a govukLink [routerLink]="['../../../../']">Cancel</a>
+</div>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

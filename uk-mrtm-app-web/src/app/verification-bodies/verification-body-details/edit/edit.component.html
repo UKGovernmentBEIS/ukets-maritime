@@ -1,0 +1,13 @@
+<mrtm-wizard-step
+  (formSubmit)="handleFormSubmit()"
+  [formGroup]="form"
+  heading="Edit verification body details"
+  submitText="Save">
+  <mrtm-verification-body-form />
+  <mrtm-location-state-form
+    legendLabel="Address"
+    legendSize="small"
+    [withState]="false"
+    [optionalFields]="{ line2: true }"
+    formGroupName="address" />
+</mrtm-wizard-step>

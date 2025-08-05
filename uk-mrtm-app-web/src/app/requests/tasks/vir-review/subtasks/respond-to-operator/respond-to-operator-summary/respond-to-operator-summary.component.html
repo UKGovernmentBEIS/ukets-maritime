@@ -1,0 +1,18 @@
+<netz-page-heading [caption]="verificationData()?.reference">Check your answers</netz-page-heading>
+<mrtm-vir-verifier-recommendation-summary-template [data]="verificationData()" />
+<mrtm-vir-operator-response-summary-template header="Operator's response" [data]="operatorResponseData()" />
+<mrtm-vir-regulator-response-summary-template
+  header="Your response"
+  [data]="regulatorResponseData()"
+  [isEditable]="isEditable()"
+  [wizardStep]="wizardStepMap"
+  [queryParams]="{ change: true }" />
+@if (isEditable() && !isSubTaskCompleted()) {
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
+}
+<div>
+  @if (isEditable() && !isSubTaskCompleted()) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
+  <netz-return-to-task-or-action-page />
+</div>

@@ -1,0 +1,19 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.title"
+  [formGroup]="formGroup"
+  [heading]="isEditMode ? map.improvementEdit.title : map.improvementAdd.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    Suggest how the operator could improve their performance in monitoring and reporting emissions, and why you think an
+    improvement is relevant.
+  </p>
+  <p class="govuk-body">Improvements can cover a wide range of issues including:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>risk assessment</li>
+    <li>data flow and control activities and procedures</li>
+    <li>accuracy of monitoring and reporting</li>
+  </ul>
+  <div formControlName="explanation" govuk-textarea label="Explanation" labelSize="small" [maxLength]="10000"></div>
+</mrtm-wizard-step>
