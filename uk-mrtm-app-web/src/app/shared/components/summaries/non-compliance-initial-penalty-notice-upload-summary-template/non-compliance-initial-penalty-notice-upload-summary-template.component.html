@@ -12,14 +12,16 @@
       }
     </div>
 
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Your comments</dt>
-      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.comments"></dd>
-      @if (isEditable()) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.UPLOAD_FORM]" [queryParams]="queryParams()">Change</a>
-        </dd>
-      }
-    </div>
+    @if (userRole() === 'REGULATOR') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ isTimeline() ? "Regulator's comments" : 'Your comments' }}</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.comments"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.UPLOAD_FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
   </dl>
 }

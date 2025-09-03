@@ -3,20 +3,16 @@
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Peer review decision</dt>
-      @if (vm.peerReviewDecision.accepted) {
-        <dd govukSummaryListRowValue>I agree with the determination</dd>
-      } @else {
-        <dd govukSummaryListRowValue>I do not agree with the determination</dd>
-      }
+      <dd govukSummaryListRowValue>
+        {{ vm.peerReviewDecision.accepted | peerReviewDecision }}
+      </dd>
       <dd govukSummaryListRowActions>
         <a govukLink [routerLink]="['../']">Change</a>
       </dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Notes</dt>
-      <dd govukSummaryListRowValue>
-        {{ vm.peerReviewDecision.notes }}
-      </dd>
+      <dd govukSummaryListRowValue>{{ vm.peerReviewDecision.notes }}</dd>
       <dd govukSummaryListRowActions>
         <a govukLink [routerLink]="['../']">Change</a>
       </dd>

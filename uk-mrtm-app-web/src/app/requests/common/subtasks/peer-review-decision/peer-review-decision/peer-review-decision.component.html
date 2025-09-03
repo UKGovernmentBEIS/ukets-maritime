@@ -8,8 +8,8 @@
   <fieldset govukFieldset>
     <legend govukLegend legendSize="medium">What is your assessment of this determination?</legend>
     <div formControlName="type" govuk-radio>
-      <govuk-radio-option value="AGREE" label="I agree with the determination" />
-      <govuk-radio-option value="DISAGREE" label="I do not agree with the determination" />
+      <govuk-radio-option value="AGREE" [label]="'AGREE' | peerReviewDecision" />
+      <govuk-radio-option value="DISAGREE" [label]="'DISAGREE' | peerReviewDecision" />
     </div>
   </fieldset>
   <div

@@ -10,7 +10,6 @@ import {
   monitoringPlanChangesMap,
   reportingObligationMap,
 } from '@requests/common/aer';
-import { aerCommonQuery } from '@requests/common/aer/+state';
 import {
   AER_AGGREGATED_DATA_SUB_TASK,
   aerAggregatedDataSubtasksListMap,
@@ -27,6 +26,7 @@ import { emissionsSubTasksMap } from '@requests/common/emp/subtasks/subtask-list
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import { aerAmendQuery } from '@requests/tasks/aer-amend/+state';
 import { REQUESTED_CHANGES_SUB_TASK } from '@requests/tasks/aer-amend/subtasks/requested-changes';
+import { getCanSubmitAer } from '@requests/tasks/aer-submit/aer-submit.helpers';
 
 export const AER_SUBTASK_TITLES_MAP = {
   [REPORTING_OBLIGATION_SUB_TASK]: reportingObligationMap.title,
@@ -44,11 +44,7 @@ export const AER_SUBTASK_TITLES_MAP = {
 export function getCanSubmitAmendAer(): boolean {
   const store = inject(RequestTaskStore);
   const requestedChangesStatus = store.select(aerAmendQuery.selectStatusForSubtask(REQUESTED_CHANGES_SUB_TASK))();
+  const canSubmitAer = getCanSubmitAer();
 
-  return (
-    requestedChangesStatus === TaskItemStatus.COMPLETED &&
-    Object.keys(AER_SUBTASK_TITLES_MAP)
-      .map((key) => store.select(aerCommonQuery.selectStatusForAerSubtask(key))())
-      .every((status) => status === TaskItemStatus.COMPLETED)
-  );
+  return requestedChangesStatus === TaskItemStatus.COMPLETED && canSubmitAer;
 }

@@ -73,7 +73,7 @@ describe('FileUploadListComponent', () => {
     hostComponent.listTitle = listTitle;
     fixture.detectChanges();
 
-    expect(page.listTitle.textContent).toBe(listTitle);
+    expect(page.listTitle.textContent.trim()).toBe(listTitle);
   });
 
   it('should list the files and their status', () => {

@@ -7,7 +7,7 @@ import { dataGapsMethodologiesMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
   DataGapsMethodologiesSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     DataGapsMethodologiesSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './data-gaps-methodologies-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,7 @@ export class DataGapsMethodologiesSubmittedComponent {
   readonly dataGapsMethodologies = this.store.select(aerTimelineCommonQuery.selectDataGapsMethodologies);
   readonly map = dataGapsMethodologiesMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('CLOSE_DATA_GAPS_METHODOLOGIES'),
   );

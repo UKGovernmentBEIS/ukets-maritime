@@ -5,10 +5,7 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { opinionStatementMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
-import {
-  EmpReviewDecisionSummaryTemplateComponent,
-  OpinionStatementSummaryTemplateComponent,
-} from '@shared/components';
+import { OpinionStatementSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-opinion-statement-submitted',
@@ -17,7 +14,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     OpinionStatementSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './opinion-statement-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,6 +28,6 @@ export class OpinionStatementSubmittedComponent {
 
   readonly map = opinionStatementMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('OPINION_STATEMENT'));
 }

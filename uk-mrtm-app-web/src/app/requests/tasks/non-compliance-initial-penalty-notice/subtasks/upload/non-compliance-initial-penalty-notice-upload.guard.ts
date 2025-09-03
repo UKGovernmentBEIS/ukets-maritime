@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
 
 import { NonComplianceInitialPenaltyNoticeUploadStep } from '@requests/common/non-compliance';
 import { nonComplianceInitialPenaltyNoticeCommonQuery } from '@requests/common/non-compliance/non-compliance-initial-penalty-notice/+state';
@@ -12,7 +12,7 @@ export const canActivateNonComplianceInitialPenaltyNoticeUploadSummary: CanActiv
   const nonComplianceInitialPenaltyNoticeUpload = store.select(
     nonComplianceInitialPenaltyNoticeCommonQuery.selectNonComplianceInitialPenaltyNoticeUpload,
   )();
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const isEditable = store.select(nonComplianceInitialPenaltyNoticeCommonQuery.selectIsFormEditable)();
 
   return (
     !isEditable ||
@@ -27,7 +27,7 @@ export const canActivateNonComplianceInitialPenaltyNoticeUploadStep: CanActivate
   const nonComplianceInitialPenaltyNoticeUpload = store.select(
     nonComplianceInitialPenaltyNoticeCommonQuery.selectNonComplianceInitialPenaltyNoticeUpload,
   )();
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const isEditable = store.select(nonComplianceInitialPenaltyNoticeCommonQuery.selectIsFormEditable)();
 
   return (
     ((!isWizardCompleted(nonComplianceInitialPenaltyNoticeUpload) || isChange) && isEditable) ||

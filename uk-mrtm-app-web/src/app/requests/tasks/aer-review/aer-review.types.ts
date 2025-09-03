@@ -1,4 +1,4 @@
-import { Type } from '@angular/core';
+import { Signal, Type } from '@angular/core';
 import { FormArray, FormControl, FormGroup } from '@angular/forms';
 
 import {
@@ -37,5 +37,5 @@ export type ReviewApplicationFormGroupModel = FormGroup<
 
 export interface AerReviewSummaryDetailsSection {
   component: Type<unknown>;
-  inputs?: Record<string, unknown>;
+  inputs?: Signal<Record<string, unknown>>;
 }

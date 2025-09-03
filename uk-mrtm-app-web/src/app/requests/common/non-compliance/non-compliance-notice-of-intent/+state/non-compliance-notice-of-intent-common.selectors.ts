@@ -13,7 +13,7 @@ import {
   NON_COMPLIANCE_NOTICE_OF_INTENT_UPLOAD_SUB_TASK,
   NonComplianceNoticeOfIntentUpload,
 } from '@requests/common/non-compliance';
-import { AttachedFile } from '@shared/types';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 
 const selectPayload: StateSelector<RequestTaskState, NonComplianceNoticeOfIntentRequestTaskPayload> =
   createDescendingSelector(
@@ -21,32 +21,15 @@ const selectPayload: StateSelector<RequestTaskState, NonComplianceNoticeOfIntent
     (payload) => payload as NonComplianceNoticeOfIntentRequestTaskPayload,
   );
 
-const selectNonComplianceAttachments: StateSelector<
-  RequestTaskState,
-  NonComplianceNoticeOfIntentRequestTaskPayload['nonComplianceAttachments']
-> = createDescendingSelector(selectPayload, (payload) => payload?.nonComplianceAttachments);
-
-const selectAttachedFiles = (files?: string[]): StateSelector<RequestTaskState, AttachedFile[]> =>
-  createAggregateSelector(
-    requestTaskQuery.selectTasksDownloadUrl,
-    selectNonComplianceAttachments,
-    (downloadUrl, attachments) =>
-      files?.map((id) => ({ downloadUrl: downloadUrl + id, fileName: attachments?.[id] })) ?? [],
-  );
-
-const selectSectionsCompleted: StateSelector<
-  RequestTaskState,
-  NonComplianceNoticeOfIntentRequestTaskPayload['sectionsCompleted']
-> = createDescendingSelector(selectPayload, (payload) => payload?.sectionsCompleted);
-
-const selectStatusForSubtask = (subtask: string): StateSelector<RequestTaskState, TaskItemStatus> => {
-  return createDescendingSelector(selectSectionsCompleted, (sectionsCompleted) => {
-    return (sectionsCompleted?.[subtask] as TaskItemStatus) ?? TaskItemStatus.NOT_STARTED;
-  });
-};
+const selectIsFormEditable: StateSelector<RequestTaskState, boolean> = createAggregateSelector(
+  requestTaskQuery.selectIsEditable,
+  requestTaskQuery.selectAllowedRequestTaskActions,
+  (isEditable, allowedRequestTaskActions) =>
+    isEditable && allowedRequestTaskActions.includes('NON_COMPLIANCE_NOTICE_OF_INTENT_SAVE_APPLICATION'),
+);
 
 const selectStatusForUploadSubtask: StateSelector<RequestTaskState, TaskItemStatus> = createDescendingSelector(
-  selectSectionsCompleted,
+  nonComplianceCommonQuery.selectSectionsCompleted,
   (sectionsCompleted) => {
     const taskStatus = sectionsCompleted?.[NON_COMPLIANCE_NOTICE_OF_INTENT_UPLOAD_SUB_TASK] as TaskItemStatus;
     return taskStatus ?? TaskItemStatus.NOT_STARTED;
@@ -67,10 +50,7 @@ const selectNonComplianceNoticeOfIntentUpload: StateSelector<RequestTaskState, N
 
 export const nonComplianceNoticeOfIntentCommonQuery = {
   selectPayload,
-  selectNonComplianceAttachments,
-  selectAttachedFiles,
-  selectSectionsCompleted,
-  selectStatusForSubtask,
+  selectIsFormEditable,
   selectStatusForUploadSubtask,
   selectIsUploadSubtaskCompleted,
   selectNonComplianceNoticeOfIntentUpload,

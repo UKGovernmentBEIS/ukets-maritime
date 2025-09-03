@@ -102,7 +102,8 @@ class EmpVariationApplicationReviewRequestTaskInitializerTest {
                         EmpReviewGroup.MANAGEMENT_PROCEDURES,
                         EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
                         EmpReviewGroup.DATA_GAPS,
-                        EmpReviewGroup.CONTROL_ACTIVITIES);
+                        EmpReviewGroup.CONTROL_ACTIVITIES,
+                        EmpReviewGroup.MANDATE);
 
         verify(empQueryService).getEmissionsMonitoringPlanDTOByAccountId(accountId);
         verifyNoMoreInteractions(empQueryService);

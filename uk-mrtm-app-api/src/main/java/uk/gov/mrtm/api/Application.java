@@ -9,6 +9,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.retry.annotation.EnableRetry;
+import uk.gov.mrtm.api.common.config.JvmDnsCacheInitializer;
 
 /**
  * Used to initialize the Spring Boot application.
@@ -21,12 +22,19 @@ import org.springframework.retry.annotation.EnableRetry;
 @EnableJpaRepositories(basePackages = "uk.gov")
 @EntityScan("uk.gov")
 public class Application {
+
+
     /**
      * Main method to initialize the Spring Boot application.
      *
      * @param args The command line arguments
      */
     public static void main(final String[] args) {
-        SpringApplication.run(Application.class, args);
+        SpringApplication app = new SpringApplication(Application.class);
+        // Set DNS cache TTL early during Spring initialization to ensure updated IP addresses are not cached indefinitely at runtime in AWS.
+        app.addListeners(new JvmDnsCacheInitializer());
+        app.run(args);
     }
+
+
 }

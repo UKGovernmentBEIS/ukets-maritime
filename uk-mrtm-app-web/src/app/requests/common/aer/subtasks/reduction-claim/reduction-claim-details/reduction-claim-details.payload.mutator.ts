@@ -21,7 +21,7 @@ export class ReductionClaimDetailsPayloadMutator extends PayloadMutator {
     return of(
       produce(currentPayload, (payload: AerSubmitTaskPayload) => {
         payload.aer.smf.smfDetails.purchases = payload.aer.smf.smfDetails.purchases.filter(
-          (x) => x.fuelOriginTypeName.uniqueIdentifier !== userInput.fuelOriginTypeName.uniqueIdentifier,
+          (x) => x?.uniqueIdentifier !== userInput?.uniqueIdentifier,
         );
       }),
     );

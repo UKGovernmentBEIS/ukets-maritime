@@ -48,9 +48,9 @@ describe('ReturnToOperatorForChangesFormComponent', () => {
     expect(errorSummary).toBeTruthy();
 
     const errorMessages = errorSummary.queryAll(By.css('a'));
-    expect(
-      errorMessages.some((message) => message.nativeElement.text.trim() === 'Enter changes required by the operator'),
-    ).toEqual(true);
+    expect(errorMessages.some((message) => message.nativeElement.text.trim() === 'Enter the changes required')).toEqual(
+      true,
+    );
 
     expect(store.state).toEqual(initialReturnToOperatorForChangesState);
   });

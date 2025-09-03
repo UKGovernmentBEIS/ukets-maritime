@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.workflow.request.StartProcessRequestService;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
@@ -42,8 +41,6 @@ class AerCreationServiceTest {
     @Test
     void createRequestAer() {
         RequestParams requestParams = mock(RequestParams.class);
-        AppUser user = AppUser.builder()
-                .userId("userId").firstName("firstName").lastName("lastName").build();
         when(aerCreationRequestParamsBuilderService.buildRequestParams(ACCOUNT_ID, REPORTING_YEAR))
             .thenReturn(requestParams);
         when(aerCreationValidatorService.validateAccountStatus(ACCOUNT_ID))
@@ -63,8 +60,6 @@ class AerCreationServiceTest {
 
     @Test
     void createRequestAer_invalid_status() {
-        AppUser user = AppUser.builder()
-                .userId("userId").firstName("firstName").lastName("lastName").build();
         when(aerCreationValidatorService.validateAccountStatus(ACCOUNT_ID))
             .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
 
@@ -81,8 +76,6 @@ class AerCreationServiceTest {
 
     @Test
     void createRequestAer_invalid_year() {
-        AppUser user = AppUser.builder()
-                .userId("userId").firstName("firstName").lastName("lastName").build();
         when(aerCreationValidatorService.validateAccountStatus(ACCOUNT_ID))
             .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
         when(aerCreationValidatorService.validateReportingYear(ACCOUNT_ID, REPORTING_YEAR))

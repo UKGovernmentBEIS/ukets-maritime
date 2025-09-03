@@ -16,8 +16,8 @@ import {
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   ListOfShipsSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 
@@ -32,7 +32,7 @@ import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shar
     RouterLink,
     LinkDirective,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './list-of-ships-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

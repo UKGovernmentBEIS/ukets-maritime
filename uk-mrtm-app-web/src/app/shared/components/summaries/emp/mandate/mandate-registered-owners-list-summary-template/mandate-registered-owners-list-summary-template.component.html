@@ -1,0 +1,57 @@
+<govuk-table
+  [columns]="columns()"
+  [data]="page()"
+  emptyTableText="No items to display"
+  [rowCssClasses]="onDefineRowAdditionalStyle">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) {
+      @case ('name') {
+        <p class="govuk-!-margin-0">{{ row[column.field] }}</p>
+        <span class="govuk-hint">{{ row['imoNumber'] }}</span>
+      }
+      @case ('contactName') {
+        <p class="govuk-!-margin-0">{{ row[column.field] }}</p>
+        <span class="govuk-hint">{{ row['email'] }}</span>
+      }
+      @case ('ships') {
+        @if (row[column.field]; as ships) {
+          <ul class="govuk-list govuk-list--number">
+            @for (
+              ship of ships.slice(
+                0,
+                ships.length > 2 && !this.expandedAssociatedShips.has(row?.uniqueIdentifier) ? 2 : this.ships.length
+              );
+              track ship.imoNumber
+            ) {
+              <li>{{ ship.name }} (IMO: {{ ship.imoNumber }})</li>
+            }
+          </ul>
+          @if (ships.length > 2) {
+            <a
+              class="govuk-link--no-visited-state"
+              routerLink="."
+              govukLink
+              (click)="onToggleAssociatedShips($event, row?.uniqueIdentifier)">
+              {{ expandedAssociatedShips.has(row?.uniqueIdentifier) ? 'View less' : 'View more' }}
+            </a>
+          }
+        }
+      }
+      @case ('effectiveDate') {
+        {{ row[column.field] | govukDate }}
+      }
+      @case ('actions') {
+        <div class="control-row justify-content-end">
+          <a class="govuk-link--no-visited-state" (click)="onEdit(row)" routerLink="." govukLink>Change</a>
+          <a class="govuk-link--no-visited-state" (click)="onDelete(row)" routerLink="." govukLink>Remove</a>
+        </div>
+      }
+      @default {
+        {{ row[column.field] }}
+      }
+    }
+  </ng-template>
+</govuk-table>
+@if (totalItems() > pageSize) {
+  <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize" (currentPageChange)="onPageChange($event)" />
+}

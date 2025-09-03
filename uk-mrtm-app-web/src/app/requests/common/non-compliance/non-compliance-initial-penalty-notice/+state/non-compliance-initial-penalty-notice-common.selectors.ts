@@ -13,7 +13,7 @@ import {
   NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_UPLOAD_SUB_TASK,
   NonComplianceInitialPenaltyNoticeUpload,
 } from '@requests/common/non-compliance';
-import { AttachedFile } from '@shared/types';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 
 const selectPayload: StateSelector<RequestTaskState, NonComplianceInitialPenaltyNoticeRequestTaskPayload> =
   createDescendingSelector(
@@ -21,32 +21,15 @@ const selectPayload: StateSelector<RequestTaskState, NonComplianceInitialPenalty
     (payload) => payload as NonComplianceInitialPenaltyNoticeRequestTaskPayload,
   );
 
-const selectNonComplianceAttachments: StateSelector<
-  RequestTaskState,
-  NonComplianceInitialPenaltyNoticeRequestTaskPayload['nonComplianceAttachments']
-> = createDescendingSelector(selectPayload, (payload) => payload?.nonComplianceAttachments);
-
-const selectAttachedFiles = (files?: string[]): StateSelector<RequestTaskState, AttachedFile[]> =>
-  createAggregateSelector(
-    requestTaskQuery.selectTasksDownloadUrl,
-    selectNonComplianceAttachments,
-    (downloadUrl, attachments) =>
-      files?.map((id) => ({ downloadUrl: downloadUrl + id, fileName: attachments?.[id] })) ?? [],
-  );
-
-const selectSectionsCompleted: StateSelector<
-  RequestTaskState,
-  NonComplianceInitialPenaltyNoticeRequestTaskPayload['sectionsCompleted']
-> = createDescendingSelector(selectPayload, (payload) => payload?.sectionsCompleted);
-
-const selectStatusForSubtask = (subtask: string): StateSelector<RequestTaskState, TaskItemStatus> => {
-  return createDescendingSelector(selectSectionsCompleted, (sectionsCompleted) => {
-    return (sectionsCompleted?.[subtask] as TaskItemStatus) ?? TaskItemStatus.NOT_STARTED;
-  });
-};
+const selectIsFormEditable: StateSelector<RequestTaskState, boolean> = createAggregateSelector(
+  requestTaskQuery.selectIsEditable,
+  requestTaskQuery.selectAllowedRequestTaskActions,
+  (isEditable, allowedRequestTaskActions) =>
+    isEditable && allowedRequestTaskActions.includes('NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_SAVE_APPLICATION'),
+);
 
 const selectStatusForUploadSubtask: StateSelector<RequestTaskState, TaskItemStatus> = createDescendingSelector(
-  selectSectionsCompleted,
+  nonComplianceCommonQuery.selectSectionsCompleted,
   (sectionsCompleted) => {
     const taskStatus = sectionsCompleted?.[NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_UPLOAD_SUB_TASK] as TaskItemStatus;
     return taskStatus ?? TaskItemStatus.NOT_STARTED;
@@ -69,10 +52,7 @@ const selectNonComplianceInitialPenaltyNoticeUpload: StateSelector<
 
 export const nonComplianceInitialPenaltyNoticeCommonQuery = {
   selectPayload,
-  selectNonComplianceAttachments,
-  selectAttachedFiles,
-  selectSectionsCompleted,
-  selectStatusForSubtask,
+  selectIsFormEditable,
   selectStatusForUploadSubtask,
   selectIsUploadSubtaskCompleted,
   selectNonComplianceInitialPenaltyNoticeUpload,

@@ -120,7 +120,7 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
       'Total emissions from all ships',
       'Less captured CO2',
       'Less voyages not in scope',
-      'Less any ERC',
+      'Less emissions reduction claim',
       'Total maritime emissions',
     ]);
   });

@@ -38,6 +38,7 @@ describe('RelatedActionsComponent', () => {
     fixture.componentRef.setInput('taskId', 1);
     fixture.componentRef.setInput('allowedRequestTaskActions', []);
     fixture.componentRef.setInput('previewDocuments', previewDocuments);
+    fixture.componentRef.setInput('requestTaskType', 'TEST_REQUEST');
     page = new Page(fixture);
     fixture.detectChanges();
   };

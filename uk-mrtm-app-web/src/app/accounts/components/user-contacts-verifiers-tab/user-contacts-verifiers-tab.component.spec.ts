@@ -318,11 +318,9 @@ describe('UserContactsVerifiersTabComponent', () => {
 
       expect(component.usersForm.invalid).toBeTruthy();
       expect(component.usersForm.touched).toBeTruthy();
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You cannot assign the same user as a primary and secondary contact on your account',
-        ),
-      ).toBeTruthy();
+      expect(component.usersForm.errors).toEqual({
+        samePrimarySecondary: 'You cannot assign the same user as a primary and secondary contact on your account',
+      });
 
       page.contactRadios[3][1].click();
       page.usersFormSubmitButton.click();
@@ -341,46 +339,27 @@ describe('UserContactsVerifiersTabComponent', () => {
 
       expect(component.usersForm.invalid).toBeTruthy();
       expect(component.usersForm.touched).toBeTruthy();
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You must have a primary contact on your account',
-        ),
-      ).toBeTruthy();
+      expect(component.usersForm.errors).toEqual({
+        noActiveOperatorAdmin: 'The account must have at least one operator admin user',
+        primaryNotActive: 'You must have a primary contact on your account on a user with ACTIVE status',
+      });
 
       page.accountStatusSelectsValue = ['ACTIVE', undefined, 'DISABLED'];
       page.usersFormSubmitButton.click();
       fixture.detectChanges();
 
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You must have a primary contact on your account',
-        ),
-      ).toBeFalsy();
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You must have a service contact on your account',
-        ),
-      ).toBeTruthy();
+      expect(component.usersForm.errors).toEqual({
+        secondaryNotActive: 'You must have a secondary contact on your account on a user with ACTIVE status',
+        serviceNotActive: 'You must have a service contact on your account on a user with ACTIVE status',
+      });
 
       page.accountStatusSelectsValue = [undefined, undefined, 'ACTIVE', 'DISABLED'];
       page.usersFormSubmitButton.click();
       fixture.detectChanges();
 
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You must have a primary contact on your account',
-        ),
-      ).toBeFalsy();
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You must have a service contact on your account',
-        ),
-      ).toBeFalsy();
-      expect(
-        Object.values(component.usersForm.errors).some(
-          (text) => text === 'You must have a financial contact on your account',
-        ),
-      ).toBeTruthy();
+      expect(component.usersForm.errors).toEqual({
+        financialNotActive: 'You must have a financial contact on your account on a user with ACTIVE status',
+      });
 
       page.accountStatusSelectsValue = [undefined, undefined, undefined, 'ACTIVE'];
       page.usersFormSubmitButton.click();
@@ -605,11 +584,11 @@ describe('UserContactsVerifiersTabComponent', () => {
       expect(page.appointVerifierLink).toBeFalsy();
     });
 
-    it('should display check marks for declariong contact types', () => {
+    it('should display check marks for declaring contact types', () => {
       const checkNonEditableContacts = () => {
         expect(page.rows[0].querySelectorAll('td')[2].textContent.trim()).toEqual('✓');
         expect(page.rows[0].querySelectorAll('td')[3].textContent.trim()).toBeFalsy();
-        expect(page.rows[1].querySelectorAll('td')[3].textContent.trim()).toEqual('✓');
+        expect(page.rows[1].querySelectorAll('td')[3].textContent.trim()).toEqual('');
         expect(page.rows[1].querySelectorAll('td')[2].textContent.trim()).toBeFalsy();
         expect(page.roleSelects[0]).toBeFalsy();
         expect(page.roleSelects[2]).toBeFalsy();

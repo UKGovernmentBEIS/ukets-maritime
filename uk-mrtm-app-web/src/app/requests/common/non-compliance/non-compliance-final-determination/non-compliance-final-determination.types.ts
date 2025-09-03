@@ -1,0 +1,8 @@
+import {
+  NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload,
+  NonComplianceFinalDeterminationRequestTaskPayload,
+} from '@mrtm/api';
+
+export type NonComplianceFinalDeterminationTaskPayload = NonComplianceFinalDeterminationRequestTaskPayload;
+export type NonComplianceFinalDeterminationSubmittedTimelinePayload =
+  NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload;

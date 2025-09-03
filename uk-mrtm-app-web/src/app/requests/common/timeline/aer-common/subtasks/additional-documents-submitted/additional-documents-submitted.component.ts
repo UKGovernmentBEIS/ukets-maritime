@@ -7,7 +7,7 @@ import { additionalDocumentsMap } from '@requests/common/emp/subtasks/subtask-li
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
   AdditionalDocumentsSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     AdditionalDocumentsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './additional-documents-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -31,7 +31,7 @@ export class AdditionalDocumentsSubmittedComponent {
     this.store.select(aerTimelineCommonQuery.selectAttachedFiles(this.additionalDocuments()?.documents))(),
   );
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('ADDITIONAL_DOCUMENTS'),
   );

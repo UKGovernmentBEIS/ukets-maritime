@@ -17,7 +17,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
 import { portArrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { mergeDates } from '@shared/utils';
+import { mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherPortCall =
   (
@@ -47,8 +47,8 @@ const arrivalDepartureDateTimeOverlapOtherPortCall =
       return null;
     }
 
-    const arrivalTime = new Date(mergeDates(arrivalDateCtrl.value, arrivalTimeCtrl.value));
-    const departureTime = new Date(mergeDates(departureDateCtrl.value, departureTimeCtrl.value));
+    const arrivalTime = mergeDatesToDate(arrivalDateCtrl.value, arrivalTimeCtrl.value);
+    const departureTime = mergeDatesToDate(departureDateCtrl.value, departureTimeCtrl.value);
 
     if (
       otherPortCalls.some(

@@ -150,7 +150,9 @@ const uploadCSVFormValidators = (store: RequestTaskStore) => {
     csvFieldDateComparisonValidator(
       'arrivalDate',
       'arrivalDate',
+      'arrivalActualTime',
       'departureDate',
+      'departureActualTime',
       aerPortCsvMap,
       `The field '${aerPortCsvMap.arrivalDate}' must be before the '${aerPortCsvMap.departureDate}'`,
     ),
@@ -166,7 +168,9 @@ const uploadCSVFormValidators = (store: RequestTaskStore) => {
     csvFieldDateComparisonValidator(
       'departureDate',
       'arrivalDate',
+      'arrivalActualTime',
       'departureDate',
+      'departureActualTime',
       aerPortCsvMap,
       `The field '${aerPortCsvMap.departureDate}' must be after the '${aerPortCsvMap.arrivalDate}'`,
     ),

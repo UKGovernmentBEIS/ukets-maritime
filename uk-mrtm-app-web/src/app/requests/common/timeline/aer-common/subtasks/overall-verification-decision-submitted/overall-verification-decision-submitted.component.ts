@@ -7,7 +7,7 @@ import { overallVerificationDecisionMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
   AerOverallVerificationDecisionSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     AerOverallVerificationDecisionSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './overall-verification-decision-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +27,6 @@ export class OverallVerificationDecisionSubmittedComponent {
   readonly overallVerificationDecision = this.store.select(aerTimelineCommonQuery.selectOverallVerificationDecision);
   readonly map = overallVerificationDecisionMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('OVERALL_DECISION'));
 }

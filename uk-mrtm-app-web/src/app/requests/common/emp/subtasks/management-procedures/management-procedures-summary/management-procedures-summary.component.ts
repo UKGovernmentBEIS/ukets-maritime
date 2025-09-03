@@ -22,8 +22,8 @@ import {
 } from '@requests/common/emp/subtasks/management-procedures';
 import { managementProceduresMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   ManagementProceduresSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { AttachedFile, EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
@@ -55,7 +55,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './management-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

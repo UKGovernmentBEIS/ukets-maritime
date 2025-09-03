@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { AuthStore } from '@netz/common/auth';
 import { BasePage } from '@netz/common/testing';
 
 import {
@@ -13,6 +14,7 @@ describe('NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent', () =
   let component: NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent;
   let fixture: ComponentFixture<NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent>;
   let page: Page;
+  let authStore: AuthStore;
 
   class Page extends BasePage<NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent> {}
 
@@ -21,6 +23,14 @@ describe('NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent', () =
       imports: [NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent],
       providers: [provideRouter([])],
     }).compileComponents();
+
+    authStore = TestBed.inject(AuthStore);
+    authStore.setUserState({
+      ...authStore.state.userState,
+      roleType: 'REGULATOR',
+      userId: 'regTestId',
+      status: 'ENABLED',
+    });
 
     fixture = TestBed.createComponent(NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent);
     component = fixture.componentInstance;

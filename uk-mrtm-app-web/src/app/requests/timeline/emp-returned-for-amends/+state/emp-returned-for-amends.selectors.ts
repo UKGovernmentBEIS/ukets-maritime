@@ -10,7 +10,7 @@ import {
 import { timelineCommonQuery, timelineUtils } from '@requests/common';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { EmpReturnedForAmendsPayload } from '@requests/timeline/emp-returned-for-amends/emp-returned-for-amends.types';
-import { EmpReviewDecisionDto, EmpReviewDecisionUnion } from '@shared/types';
+import { ReviewDecisionDto, ReviewDecisionUnion } from '@shared/types';
 
 const selectPayload: StateSelector<RequestActionState, EmpReturnedForAmendsPayload> =
   timelineCommonQuery.selectPayload<EmpReturnedForAmendsPayload>();
@@ -18,17 +18,17 @@ const selectPayload: StateSelector<RequestActionState, EmpReturnedForAmendsPaylo
 const selectAmendsAttachments: StateSelector<RequestActionState, EmpReturnedForAmendsPayload['reviewAttachments']> =
   createDescendingSelector(selectPayload, (payload) => payload.reviewAttachments);
 
-const selectReviewGroupDecisions: StateSelector<RequestActionState, { [key: string]: EmpReviewDecisionUnion }> =
+const selectReviewGroupDecisions: StateSelector<RequestActionState, { [key: string]: ReviewDecisionUnion }> =
   createDescendingSelector(
     selectPayload,
-    (payload) => payload.reviewGroupDecisions as { [key: string]: EmpReviewDecisionUnion },
+    (payload) => payload.reviewGroupDecisions as { [key: string]: ReviewDecisionUnion },
   );
 
 const selectAmendsDecisionsDTO: StateSelector<
   RequestActionState,
   Array<{
     subtask: keyof EmissionsMonitoringPlan;
-    decision: EmpReviewDecisionDto;
+    decision: ReviewDecisionDto;
   }>
 > = createAggregateSelector(
   selectAmendsAttachments,
@@ -49,7 +49,7 @@ const selectAmendsDecisionsDTO: StateSelector<
 
     const result: Array<{
       subtask: keyof EmissionsMonitoringPlan;
-      decision: EmpReviewDecisionDto;
+      decision: ReviewDecisionDto;
     }> = [];
 
     for (const section of sections) {

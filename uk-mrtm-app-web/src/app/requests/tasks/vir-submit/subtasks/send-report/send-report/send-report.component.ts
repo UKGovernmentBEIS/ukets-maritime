@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
@@ -23,9 +24,12 @@ import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendReportComponent {
+  private readonly store = inject(RequestTaskStore);
   private readonly service = inject(TaskService<AerSubmitTaskPayload>);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+
+  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
 
   onSubmit() {
     this.service.submit().subscribe(() => {

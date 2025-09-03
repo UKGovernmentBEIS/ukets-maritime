@@ -4,7 +4,7 @@
   [formGroup]="form"
   (formSubmit)="onSubmit()">
   @for (amendsDecision of decisionForAmends(); track amendsDecision.subtask) {
-    <mrtm-emp-review-return-for-amends-subtask-summary-template
+    <mrtm-review-return-for-amends-subtask-summary-template
       [caption]="subtaskTitleMap[amendsDecision.subtask]"
       [reviewDecision]="amendsDecision.decision" />
   }

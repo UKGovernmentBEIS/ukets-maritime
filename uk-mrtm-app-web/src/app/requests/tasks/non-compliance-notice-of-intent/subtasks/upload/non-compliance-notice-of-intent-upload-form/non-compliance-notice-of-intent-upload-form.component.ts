@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
@@ -31,14 +31,13 @@ export class NonComplianceNoticeOfIntentUploadFormComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly service = inject(TaskService<NonComplianceNoticeOfIntentRequestTaskPayload>);
   private readonly store = inject(RequestTaskStore);
-  private readonly downloadUrl = this.store.select(requestTaskQuery.selectTasksDownloadUrl)();
 
   readonly map = nonComplianceNoticeOfIntentMap;
   readonly formGroup = inject<FormGroup>(TASK_FORM);
-
-  getDownloadUrl(uuid: string): string | string[] {
-    return [this.downloadUrl, uuid];
-  }
+  readonly getDownloadUrl: Signal<(uuid: string) => string | string[]> = computed(() => (uuid: string) => [
+    this.store.select(requestTaskQuery.selectTasksDownloadUrl)(),
+    uuid,
+  ]);
 
   onSubmit() {
     this.service

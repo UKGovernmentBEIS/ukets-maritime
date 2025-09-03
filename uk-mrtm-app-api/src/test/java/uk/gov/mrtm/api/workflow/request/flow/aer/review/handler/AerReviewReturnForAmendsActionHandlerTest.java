@@ -9,6 +9,7 @@ import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerReviewDecision;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerReviewGroup;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerApplicationReturnedForAmendsRequestActionPayload;
@@ -32,6 +33,7 @@ import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -66,7 +68,8 @@ class AerReviewReturnForAmendsActionHandlerTest {
         AppUser user = AppUser.builder().userId("userId").build();
         RequestTaskActionEmptyPayload taskActionEmptyPayload = RequestTaskActionEmptyPayload.builder().build();
 
-        Request request = Request.builder().id("REQ-ID").build();
+        AerRequestPayload requestPayload = mock(AerRequestPayload.class);
+        Request request = Request.builder().id("REQ-ID").payload(requestPayload).build();
 
         Map<AerReviewGroup, AerReviewDecision> reviewGroupDecisions = new HashMap<>();
         Aer aer = Aer.builder().build();
@@ -99,6 +102,7 @@ class AerReviewReturnForAmendsActionHandlerTest {
         verify(requestTaskService).findTaskById(requestTaskId);
         verify(aerReviewValidatorService).validateAtLeastOneReviewGroupAmendsNeeded(requestTaskPayload);
         verify(aerReviewService).updateRequestPayloadWithReviewOutcome(requestTask, user);
+        verify(aerReviewService).removeAmendRequestedChangesSubtaskStatus(requestPayload);
         verify(aerReviewMapper).toAerApplicationReturnedForAmendsRequestActionPayload(requestTaskPayload,
                 MrtmRequestActionPayloadType.AER_APPLICATION_RETURNED_FOR_AMENDS_PAYLOAD);
         verify(aerReviewMapper).toAerApplicationReturnedForAmendsRequestActionPayload(requestTaskPayload,

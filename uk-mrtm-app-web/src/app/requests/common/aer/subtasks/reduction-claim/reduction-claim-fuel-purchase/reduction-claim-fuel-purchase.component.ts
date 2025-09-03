@@ -46,6 +46,7 @@ export class ReductionClaimFuelPurchaseComponent {
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly fuelOriginTitlePipe: FuelOriginTitlePipe = new FuelOriginTitlePipe();
+  private readonly route = inject(ActivatedRoute);
 
   public readonly form: FormGroup = inject(TASK_FORM);
 
@@ -55,23 +56,14 @@ export class ReductionClaimFuelPurchaseComponent {
   public readonly wizardMap = reductionClaimMap;
   public readonly isNil: typeof isNil = isNil;
   public readonly downloadUrl: Signal<string> = this.store.select(requestTaskQuery.selectTasksDownloadUrl);
-
-  public readonly currentFuelValue = toSignal(this.form.get('fuelOriginTypeName').valueChanges, {
-    initialValue: this.form.get('fuelOriginTypeName').value,
+  private readonly isChange = this.route.snapshot.queryParamMap.get('change') === 'true';
+  protected readonly heading = computed(() => {
+    return this.isChange ? this.wizardMap.purchaseEdit : this.wizardMap.purchaseAdd;
   });
 
-  public fuelTypeSelectItems = computed(() => {
-    const currentFuelType = this.currentFuelValue();
-    const allFuels = this.store.select(aerCommonQuery.selectSupersetOfFuelTypes)();
-
-    const alreadyUsedReductionClaimFuels =
-      this.store
-        .select(aerCommonQuery.selectReductionClaimFuelPurchases)()
-        ?.filter((fuel) => fuel?.fuelOriginTypeName?.uniqueIdentifier !== currentFuelType)
-        ?.map((fuel) => fuel?.fuelOriginTypeName?.uniqueIdentifier) ?? [];
-
-    return allFuels
-      .filter((shipFuel) => !alreadyUsedReductionClaimFuels.includes(shipFuel?.uniqueIdentifier))
+  public fuelTypeSelectItems = computed(() =>
+    this.store
+      .select(aerCommonQuery.selectSupersetOfFuelTypes)()
       .map<GovukSelectOption>((shipFuel) => ({
         value: shipFuel.uniqueIdentifier,
         text: this.fuelOriginTitlePipe.transform(shipFuel),
@@ -82,8 +74,8 @@ export class ReductionClaimFuelPurchaseComponent {
         }
 
         return acc;
-      }, []);
-  });
+      }, []),
+  );
 
   constructor() {
     effect(() => {

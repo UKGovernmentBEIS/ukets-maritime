@@ -2,7 +2,7 @@ import { EnvironmentProviders, makeEnvironmentProviders, Provider } from '@angul
 
 import { PAYLOAD_MUTATORS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
-import { nonComplianceNoticeOfIntentCommonQuery } from '@requests/common/non-compliance/non-compliance-notice-of-intent/+state';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 import {
   PEER_REVIEW_DECISION_SELECTOR,
   PEER_REVIEW_DECISION_STATUS_SELECTOR,
@@ -53,7 +53,7 @@ export const peerReviewDecisionProviders: Provider[] = [
   },
   {
     provide: PEER_REVIEW_DECISION_STATUS_SELECTOR,
-    useValue: nonComplianceNoticeOfIntentCommonQuery.selectStatusForSubtask(PEER_REVIEW_DECISION_SUB_TASK),
+    useValue: nonComplianceCommonQuery.selectStatusForSubtask(PEER_REVIEW_DECISION_SUB_TASK),
   },
   {
     provide: PEER_REVIEW_DECISION_TEXT_MAP,

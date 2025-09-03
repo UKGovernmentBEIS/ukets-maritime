@@ -11,8 +11,9 @@
 
   <mrtm-file-input
     formControlName="noticeOfIntent"
-    [downloadUrl]="getDownloadUrl"
-    [showFileUploadList]="false"
+    [downloadUrl]="getDownloadUrl()"
+    [showNoFilesHint]="false"
+    listTitle="Uploaded file"
     label="Upload file"
     labelSize="small" />
   <div

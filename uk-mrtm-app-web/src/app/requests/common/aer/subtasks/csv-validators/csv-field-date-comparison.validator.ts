@@ -1,6 +1,8 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 
-import { formatDateFromString, isSameOrBefore } from '@shared/utils';
+import { isAfter } from 'date-fns';
+
+import { formatDateTimeFromString } from '@shared/utils';
 
 /**
  * Validates a CSV field for comparing the departureDate and arrivalDate
@@ -9,7 +11,9 @@ import { formatDateFromString, isSameOrBefore } from '@shared/utils';
 export function csvFieldDateComparisonValidator<T>(
   field: keyof T,
   earlierDateField: keyof T,
+  earlierTimeField: keyof T,
   laterDateField: keyof T,
+  laterTimeField: keyof T,
   csvMap: Record<keyof T, string>,
   message: string,
 ): ValidatorFn {
@@ -23,10 +27,10 @@ export function csvFieldDateComparisonValidator<T>(
     const errorMessageRows = [];
 
     data.forEach((dataRow, index) => {
-      const earlierDate = formatDateFromString(dataRow[earlierDateField], null, true);
-      const laterDate = formatDateFromString(dataRow[laterDateField], null, true);
+      const earlierDateTime = formatDateTimeFromString(dataRow[earlierDateField], dataRow[earlierTimeField], true);
+      const laterDateTime = formatDateTimeFromString(dataRow[laterDateField], dataRow[laterTimeField], true);
 
-      if (!earlierDate || !laterDate || !isSameOrBefore(earlierDate, laterDate)) {
+      if (!earlierDateTime || !laterDateTime || !isAfter(laterDateTime, earlierDateTime)) {
         errorMessageRows.push({
           rowIndex: index + 1,
         });

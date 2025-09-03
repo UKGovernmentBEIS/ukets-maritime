@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
+import { isNil } from 'lodash-es';
 
 import { AerSmfPurchase } from '@mrtm/api';
 
@@ -25,13 +26,13 @@ export class ReductionClaimFuelPurchasePayloadMutator extends PayloadMutator {
   ): Observable<AerSubmitTaskPayload> {
     return of(
       produce(currentPayload, (payload: AerSubmitTaskPayload) => {
-        const found = payload.aer.smf.smfDetails?.purchases?.find(
-          (purchase) => purchase.fuelOriginTypeName.uniqueIdentifier === userInput.fuelOriginTypeName,
-        );
-
         const relatedFuelOrigin = this.store
           .select(aerCommonQuery.selectSupersetOfFuelTypes)()
           .find((fuel) => fuel.uniqueIdentifier === userInput.fuelOriginTypeName);
+
+        const editedPurchase = payload.aer.smf?.smfDetails?.purchases?.find(
+          (x) => x.uniqueIdentifier === userInput.uniqueIdentifier,
+        );
 
         const currentFuelPurchase: AerSmfPurchase = {
           ...userInput,
@@ -44,16 +45,19 @@ export class ReductionClaimFuelPurchasePayloadMutator extends PayloadMutator {
           evidenceFiles: createFileUploadPayload(userInput?.evidenceFiles ?? []),
         };
 
-        payload.aer.smf.smfDetails = {
-          ...payload.aer.smf.smfDetails,
-          purchases: found
-            ? payload.aer.smf?.smfDetails?.purchases.map((purchase) =>
-                purchase.fuelOriginTypeName.uniqueIdentifier === userInput.fuelOriginTypeName
-                  ? currentFuelPurchase
-                  : purchase,
-              )
-            : [...(payload.aer.smf?.smfDetails?.purchases ?? []), currentFuelPurchase],
-        };
+        if (!isNil(editedPurchase)) {
+          payload.aer.smf.smfDetails = {
+            ...payload.aer.smf.smfDetails,
+            purchases: payload.aer.smf.smfDetails.purchases.map((purchase: AerSmfPurchase) =>
+              purchase.uniqueIdentifier !== userInput.uniqueIdentifier ? purchase : currentFuelPurchase,
+            ),
+          };
+        } else {
+          payload.aer.smf.smfDetails = {
+            ...payload.aer.smf.smfDetails,
+            purchases: [...(payload.aer.smf?.smfDetails?.purchases ?? []), currentFuelPurchase],
+          };
+        }
 
         payload.aerAttachments = {
           ...payload.aerAttachments,

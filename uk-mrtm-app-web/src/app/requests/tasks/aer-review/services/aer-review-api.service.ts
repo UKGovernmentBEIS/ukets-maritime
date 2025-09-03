@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -23,6 +23,7 @@ import { requestTaskQuery } from '@netz/common/store';
 import { AerReviewTaskPayload } from '@requests/tasks/aer-review/aer-review.types';
 import { SaveActionTypes } from '@shared/types';
 
+@Injectable()
 export class AerReviewApiService extends TaskApiService<AerReviewTaskPayload> {
   private readonly pendingRequestService = inject(PendingRequestService);
   private readonly businessErrorService = inject(BusinessErrorService);

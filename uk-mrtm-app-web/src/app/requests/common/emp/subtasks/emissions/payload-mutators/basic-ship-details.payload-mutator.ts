@@ -23,6 +23,7 @@ export class BasicShipDetailPayloadMutator extends PayloadMutator {
         const editedShip = payload.emissionsMonitoringPlan[this.subtask]?.ships?.find(
           (x) => x.uniqueIdentifier === uniqueIdentifier,
         );
+
         if (!isNil(editedShip)) {
           payload.emissionsMonitoringPlan[this.subtask].ships = [
             ...payload.emissionsMonitoringPlan[this.subtask].ships.map((ship: EmpShipEmissions) =>
@@ -46,6 +47,16 @@ export class BasicShipDetailPayloadMutator extends PayloadMutator {
               },
             ],
           };
+        }
+
+        if (
+          payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED &&
+          payload?.emissionsMonitoringPlan?.mandate?.registeredOwners
+            ?.map((ro) => ro.ships.map((ship) => ship.imoNumber))
+            ?.flat()
+            ?.includes(editedShip?.details?.imoNumber)
+        ) {
+          payload.empSectionsCompleted['mandate'] = TaskItemStatus.NEEDS_REVIEW;
         }
 
         payload.empSectionsCompleted[`${this.subtask}-ship-${userInput.uniqueIdentifier}`] = TaskItemStatus.IN_PROGRESS;

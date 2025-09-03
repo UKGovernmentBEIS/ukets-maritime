@@ -18,7 +18,7 @@ import {
 } from '@requests/common/emp/+state';
 import { EmpCommonTaskPayload } from '@requests/common/emp/emp.types';
 import { identifyMaritimeOperatorMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { EmpReviewDecisionSummaryTemplateComponent, OperatorDetailsSummaryTemplateComponent } from '@shared/components';
+import { OperatorDetailsSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { AttachedFile, EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
@@ -49,7 +49,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './operator-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

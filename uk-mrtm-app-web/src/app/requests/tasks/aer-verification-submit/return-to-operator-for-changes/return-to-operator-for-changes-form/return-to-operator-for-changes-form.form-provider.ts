@@ -14,7 +14,7 @@ export const returnToOperatorForChangesFormProvider = {
 
     return fb.group({
       changesRequired: fb.control(changesRequired ?? null, [
-        GovukValidators.required('Enter changes required by the operator'),
+        GovukValidators.required('Enter the changes required'),
         GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
       ]),
     });

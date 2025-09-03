@@ -57,7 +57,7 @@ export class AerTotalEmissionsSummaryTemplateComponent {
             total: totalEmissions.lessVoyagesNotInScope.total,
           },
           {
-            emissionLabel: 'Less any ERC',
+            emissionLabel: 'Less emissions reduction claim',
             co2: totalEmissions.lessAnyERC.co2,
             ch4: totalEmissions.lessAnyERC.ch4,
             n2o: totalEmissions.lessAnyERC.n2o,

@@ -1,10 +1,11 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { isNil } from 'lodash-es';
+import { isAfter } from 'date-fns';
 
 import { AerFuelConsumption, AerFuelOriginFossilTypeName, AerShipEmissions } from '@mrtm/api';
 
-import { isSameOrBefore } from '@shared/utils';
+import { isSameOrBefore, mergeDatesToDate } from '@shared/utils';
 
 export const portArrivalDepartureDateValidator: ValidatorFn = (
   group: FormGroup<{
@@ -50,29 +51,34 @@ export const voyageArrivalDepartureDateValidator: ValidatorFn = (
     departureDate: AbstractControl;
   }>,
 ): ValidationErrors => {
-  const { arrivalDate, departureDate } = group.value;
-  const arrivalDateCtrl = group.get('arrivalDate');
+  const { departureDate, departureTime, arrivalDate, arrivalTime } = group.value;
   const departureDateCtrl = group.get('departureDate');
+  const departureTimeCtrl = group.get('departureTime');
+  const arrivalDateCtrl = group.get('arrivalDate');
+  const arrivalTimeCtrl = group.get('arrivalTime');
 
   if (
-    (!departureDateCtrl.valid && !departureDateCtrl.hasError('invalidDepartureDate')) ||
-    (!arrivalDateCtrl.valid && !arrivalDateCtrl.hasError('invalidArrivalDate')) ||
-    isNil(departureDateCtrl.value) ||
-    isNil(arrivalDateCtrl.value)
+    (departureDateCtrl.invalid && !departureDateCtrl.hasError('invalidDepartureDate')) ||
+    (arrivalDateCtrl.invalid && !arrivalDateCtrl.hasError('invalidArrivalDate')) ||
+    isNil(departureDate) ||
+    isNil(arrivalDate) ||
+    departureTimeCtrl.invalid ||
+    isNil(departureTime) ||
+    arrivalTimeCtrl.invalid ||
+    isNil(arrivalTime)
   ) {
     return null;
   }
 
-  if (!isNil(arrivalDate) && !isNil(departureDate) && isSameOrBefore(arrivalDate, departureDate)) {
-    group
-      .get('arrivalDate')
-      .setErrors({ invalidArrivalDate: 'The date of arrival must be after the date of departure' });
-    group
-      .get('departureDate')
-      .setErrors({ invalidDepartureDate: 'The date of departure must be before the date of arrival' });
+  const departureDateTime = mergeDatesToDate(departureDate, departureTime);
+  const arrivalDateTime = mergeDatesToDate(arrivalDate, arrivalTime);
+
+  if (isAfter(departureDateTime, arrivalDateTime)) {
+    departureDateCtrl.setErrors({ invalidDepartureDate: 'The date of departure must be before the date of arrival' });
+    arrivalDateCtrl.setErrors({ invalidArrivalDate: 'The date of arrival must be after the date of departure' });
   } else {
-    group.get('arrivalDate').setErrors(null);
-    group.get('departureDate').setErrors(null);
+    departureDateCtrl.setErrors(null);
+    arrivalDateCtrl.setErrors(null);
   }
 
   return null;

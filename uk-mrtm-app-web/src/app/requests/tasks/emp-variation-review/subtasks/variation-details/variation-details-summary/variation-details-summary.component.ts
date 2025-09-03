@@ -17,10 +17,7 @@ import {
   VARIATION_DETAILS_SUB_TASK,
   VariationDetailsWizardStep,
 } from '@requests/common/emp/subtasks/variation-details/variation-details.helper';
-import {
-  EmpReviewDecisionSummaryTemplateComponent,
-  VariationDetailsSummaryTemplateComponent,
-} from '@shared/components';
+import { ReviewDecisionSummaryTemplateComponent, VariationDetailsSummaryTemplateComponent } from '@shared/components';
 import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
 interface ViewModel {
@@ -41,7 +38,7 @@ interface ViewModel {
     PendingButtonDirective,
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './variation-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

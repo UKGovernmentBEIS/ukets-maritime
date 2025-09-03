@@ -9,6 +9,7 @@ import {
 import { RequestActionStore } from '@netz/common/store';
 
 import { actionProviders } from '@requests/common/action.providers';
+import { AER_REVIEW_SKIPPED_ROUTE_PREFIX } from '@requests/timeline/aer-review-skipped/aer-review-skipped.routes';
 import { AER_REVIEWED_ROUTE_PREFIX } from '@requests/timeline/aer-reviewed';
 import { AER_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/aer-submitted/aer-submitted.routes';
 import { AER_VERIFICATION_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/aer-verification-submitted/aer-verification-submitted.routes';
@@ -72,6 +73,13 @@ export const TIMELINE_ROUTES: Routes = [
         loadChildren: () =>
           import('@requests/timeline/aer-verification-submitted/aer-verification-submitted.routes').then(
             (r) => r.AER_VERIFICATION_SUBMITTED_ROUTES,
+          ),
+      },
+      {
+        path: AER_REVIEW_SKIPPED_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/timeline/aer-review-skipped/aer-review-skipped.routes').then(
+            (r) => r.AER_REVIEW_SKIPPED_ROUTES,
           ),
       },
       {

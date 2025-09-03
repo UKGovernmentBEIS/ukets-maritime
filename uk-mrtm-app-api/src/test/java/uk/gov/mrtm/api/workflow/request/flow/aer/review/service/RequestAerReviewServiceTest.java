@@ -149,6 +149,22 @@ class RequestAerReviewServiceTest {
     }
 
     @Test
+    void removeAmendRequestedChangesSubtaskStatus() {
+        Map<String, String> sectionsCompleted = new HashMap<>();
+        sectionsCompleted.put("section_a", "completed");
+        sectionsCompleted.put("amendRequestedChanges", "completed");
+
+        AerRequestPayload payload = AerRequestPayload.builder()
+            .aerSubmitSectionsCompleted(sectionsCompleted)
+            .build();
+
+        reviewService.removeAmendRequestedChangesSubtaskStatus(payload);
+
+        assertThat(payload.getAerSubmitSectionsCompleted())
+            .containsExactlyInAnyOrderEntriesOf(Map.of("section_a", "completed"));
+    }
+
+    @Test
     void updateRequestPayloadWithReviewOutcome() {
         String userId = "userId";
         AppUser user = AppUser.builder().userId(userId).build();
@@ -190,7 +206,8 @@ class RequestAerReviewServiceTest {
 
         assertEquals(userId, updatedRequestPayload.getRegulatorReviewer());
         assertThat(updatedRequestPayload.getReviewGroupDecisions()).containsExactlyInAnyOrderEntriesOf(reviewGroupDecisions);
-        assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(reviewSectionsCompleted);
+        assertThat(updatedRequestPayload.getAerReviewSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(reviewSectionsCompleted);
+        assertThat(updatedRequestPayload.getAerSubmitSectionsCompleted()).isEmpty();
         assertThat(updatedRequestPayload.getReviewAttachments()).containsExactlyInAnyOrderEntriesOf(reviewAttachments);
     }
 
@@ -242,8 +259,8 @@ class RequestAerReviewServiceTest {
             .aerAttachments(aerAttachments)
             .verificationPerformed(isVerificationPerformed)
             .aerMonitoringPlanVersion(AerMonitoringPlanVersion.builder().build())
-            .aerSectionsCompleted(sectionsCompleted)
             .reviewGroupDecisions(reviewGroupDecisions)
+            .aerSubmitSectionsCompleted(sectionsCompleted)
             .build();
 
         final Request request = Request.builder()
@@ -357,7 +374,7 @@ class RequestAerReviewServiceTest {
             .aerAttachments(aerAttachments)
             .verificationPerformed(isVerificationPerformed)
             .aerMonitoringPlanVersion(AerMonitoringPlanVersion.builder().build())
-            .aerSectionsCompleted(sectionsCompleted)
+            .aerSubmitSectionsCompleted(sectionsCompleted)
             .reviewGroupDecisions(reviewGroupDecisions)
             .build();
 

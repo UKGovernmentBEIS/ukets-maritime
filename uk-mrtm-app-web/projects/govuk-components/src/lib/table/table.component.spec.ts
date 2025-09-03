@@ -11,7 +11,12 @@ describe('TableComponent', () => {
     standalone: true,
     imports: [TableComponent],
     template: `
-      <govuk-table [columns]="columns" [data]="data" [caption]="caption" (sort)="onSort($event)"></govuk-table>
+      <govuk-table
+        [columns]="columns"
+        [data]="data"
+        [caption]="caption"
+        (sort)="onSort($event)"
+        [rowCssClasses]="rowCssClasses"></govuk-table>
     `,
   })
   class TestComponent {
@@ -23,6 +28,7 @@ describe('TableComponent', () => {
     data: any[] = [];
     caption: string;
     onSort = jest.fn((_: SortEvent) => null);
+    rowCssClasses?: (row: any) => string | string[] = undefined;
   }
 
   @Component({
@@ -53,6 +59,12 @@ describe('TableComponent', () => {
   let component: TableComponent<any>;
   let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
+
+  const TABLE_DATA = [
+    { name: 'Name 1', surname: 'Surname 1', age: 23 },
+    { name: 'Name 2', surname: 'Surname 2', age: 48 },
+    { name: 'Name 3', surname: 'Surname 3', age: 32 },
+  ];
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -100,11 +112,7 @@ describe('TableComponent', () => {
   });
 
   it('should render the data', () => {
-    hostComponent.data = [
-      { name: 'Name 1', surname: 'Surname 1', age: 23 },
-      { name: 'Name 2', surname: 'Surname 2', age: 48 },
-      { name: 'Name 3', surname: 'Surname 3', age: 32 },
-    ];
+    hostComponent.data = TABLE_DATA;
     fixture.detectChanges();
 
     const hostElement: HTMLElement = fixture.nativeElement;
@@ -132,11 +140,7 @@ describe('TableComponent', () => {
   });
 
   it('should assign numeric class', () => {
-    hostComponent.data = [
-      { name: 'Name 1', surname: 'Surname 1', age: 23 },
-      { name: 'Name 2', surname: 'Surname 2', age: 48 },
-      { name: 'Name 3', surname: 'Surname 3', age: 32 },
-    ];
+    hostComponent.data = TABLE_DATA;
     fixture.detectChanges();
 
     const hostElement: HTMLElement = fixture.nativeElement;
@@ -194,5 +198,17 @@ describe('TableComponent', () => {
 
     expect(anchors.length).toEqual(1);
     expect(anchors[0].textContent).toEqual('Go to');
+  });
+
+  it('should add additional css class to row element', () => {
+    hostComponent.rowCssClasses = (item: any) => 'test-custom-css-row-class';
+    hostComponent.data = TABLE_DATA;
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const rows = element.querySelectorAll<HTMLTableRowElement>('tbody tr');
+    rows.forEach((row: HTMLTableRowElement) => {
+      expect(row.getAttribute('class')).toContain('test-custom-css-row-class');
+    });
   });
 });

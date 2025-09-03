@@ -397,6 +397,10 @@ export class HtmlDiffService {
     return rendering;
   }
 
+  private isNullOrEmpty(value: any) {
+    return value === null || value === undefined || value === '';
+  }
+
   diff(before: string, after: string): string {
     if (before === after) {
       return before;
@@ -407,5 +411,21 @@ export class HtmlDiffService {
     const ops = this.calculateOperations(beforeTokens, afterTokens);
 
     return this.renderOperations(beforeTokens, afterTokens, ops);
+  }
+
+  fileNameDiff(before: string, after: string): string {
+    if (before === after) {
+      return before;
+    }
+
+    if (this.isNullOrEmpty(before)) {
+      return `<ins class="diffmod">${after}</ins>`;
+    }
+
+    if (this.isNullOrEmpty(after)) {
+      return `<del class="diffmod">${before}</del>`;
+    }
+
+    return `<del class="diffmod">${before}</del><ins class="diffmod">${after}</ins>`;
   }
 }

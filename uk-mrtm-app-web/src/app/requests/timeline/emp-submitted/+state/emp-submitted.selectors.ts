@@ -8,6 +8,7 @@ import {
   EmpEmissionSources,
   EmpIssuanceApplicationSubmittedRequestActionPayload,
   EmpManagementProcedures,
+  EmpMandate,
   EmpMonitoringGreenhouseGas,
   EmpOperatorDetails,
   EmpShipEmissions,
@@ -122,6 +123,11 @@ const selectShip = (
 ): StateSelector<RequestActionState, EmpShipEmissions> =>
   createDescendingSelector(selectShips, (ships) => ships?.find((ship) => ship.uniqueIdentifier === shipId));
 
+const selectMandate: StateSelector<RequestActionState, EmpMandate> = createDescendingSelector(
+  selectPayload,
+  (payload) => payload?.emissionsMonitoringPlan?.mandate,
+);
+
 export const empSubmittedQuery = {
   selectIsSubtaskCompleted,
   selectStatusForSubtask,
@@ -136,4 +142,5 @@ export const empSubmittedQuery = {
   selectEmissionSources,
   selectShip,
   selectListOfShips,
+  selectMandate,
 };

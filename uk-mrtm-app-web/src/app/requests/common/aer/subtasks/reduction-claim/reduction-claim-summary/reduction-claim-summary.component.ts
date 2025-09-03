@@ -74,7 +74,7 @@ export class ReductionClaimSummaryComponent {
   );
 
   public onChange(item: ReductionClaimDetailsListItemDto): void {
-    this.router.navigate([this.wizardStep.DETAILS, item.fuelOriginTypeName.uniqueIdentifier], {
+    this.router.navigate([this.wizardStep.DETAILS, item?.uniqueIdentifier], {
       relativeTo: this.activatedRoute,
       queryParams: { change: true },
     });

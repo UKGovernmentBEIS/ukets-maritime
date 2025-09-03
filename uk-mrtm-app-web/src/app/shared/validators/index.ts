@@ -8,3 +8,4 @@ export * from './required-fields.validator';
 export * from './after-given-date.validator';
 export * from './today-or-future-date.validator';
 export * from './today-or-past-date.validator';
+export * from './recommendation.validator';

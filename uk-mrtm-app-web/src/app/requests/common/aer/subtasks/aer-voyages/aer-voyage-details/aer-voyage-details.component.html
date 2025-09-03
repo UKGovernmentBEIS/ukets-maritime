@@ -2,7 +2,7 @@
   [formGroup]="form"
   [heading]="wizardMap.voyageDetails.title"
   [isTwoThirds]="true"
-  caption="New voyage for {{ ship()?.details?.name }}"
+  caption="{{ wizardMap.voyageDetails.caption }} {{ ship()?.details?.name }}"
   (formSubmit)="onSubmit()">
   <h3 class="govuk-heading-m">Departure details</h3>
   <div

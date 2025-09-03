@@ -104,11 +104,11 @@ export class AerEmissionsCalculationsComponent {
     let isValid = true;
     const errors: ValidationErrors = {};
 
-    if (isNil(currentPort?.totalEmissions?.total) || new BigNumber(currentPort?.totalEmissions?.total).lte(0)) {
+    if (isNil(currentPort?.totalEmissions?.total) || new BigNumber(currentPort?.totalEmissions?.total).lt(0)) {
       errors['totalEmissions'] =
         this.subtask === AER_PORTS_SUB_TASK
           ? 'The total in port emissions should be greater than or equal to 0'
-          : 'The total voyage emissions should be greater than or equal to 0';
+          : 'The total emissions from voyage should be greater than or equal to 0';
       isValid = false;
     }
 

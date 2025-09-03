@@ -68,10 +68,4 @@ public enum MrtmErrorCode implements NetzErrorCode {
         this.httpStatus = httpStatus;
         this.message = message;
     }
-
-    MrtmErrorCode(String code, HttpStatus httpStatus, String message, boolean isSecurity) {
-        this(code, httpStatus, message);
-        this.security = isSecurity;
-    }
-
 }

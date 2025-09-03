@@ -41,9 +41,9 @@ export const mockedClosedAccount: MrtmAccountEmpDTO = {
 
 export const mockMrtmAccountResults: AccountSearchResults = {
   accounts: [
-    { id: 1, name: 'account1', businessId: 'EM00001', status: 'NEW', imoNumber: '1234567' },
-    { id: 2, name: 'account2', businessId: 'EM00002', status: 'NEW', imoNumber: '1234568' },
-    { id: 3, name: 'account3', businessId: 'EM00003', status: 'NEW', imoNumber: '1234569' },
+    { id: 1, name: 'account1', businessId: 'EM00001', status: 'NEW' },
+    { id: 2, name: 'account2', businessId: 'EM00002', status: 'NEW' },
+    { id: 3, name: 'account3', businessId: 'EM00003', status: 'NEW' },
   ],
   total: 3,
 };
@@ -101,7 +101,7 @@ export const mockOperatorListData: AccountOperatorsUsersAuthoritiesInfoDTO = {
   ] as UserAuthorityInfoDTO[],
   contactTypes: {
     PRIMARY: 'userTest1',
-    SECONDARY: 'userTest3',
+    SECONDARY: 'userTest2',
     SERVICE: 'userTest2',
     FINANCIAL: 'userTest4',
   },

@@ -14,3 +14,4 @@ export * from './monitoring-method-code.enum';
 export * from './nature.enum';
 export * from './ship-type.enum';
 export * from './use-of-derogation-code.enum';
+export * from './create-action-type.enum';

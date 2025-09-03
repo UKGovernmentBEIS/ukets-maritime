@@ -1,0 +1,6 @@
+@for (decision of decisions(); track decision) {
+  <mrtm-review-return-for-amends-subtask-summary-template
+    [caption]="subtaskTitleMap[decision.subtask]"
+    [reviewDecision]="decision.decision"
+    [showAssignee]="userRoleType() !== 'OPERATOR'" />
+}

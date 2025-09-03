@@ -6,7 +6,7 @@ import { RequestActionStore } from '@netz/common/store';
 import { verifierDetailsMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
   VerifierDetailsSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     VerifierDetailsSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './verifier-details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +27,6 @@ export class VerifierDetailsSubmittedComponent {
   readonly verifierDetails = this.store.select(aerTimelineCommonQuery.selectVerifierDetails);
   readonly map = verifierDetailsMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('VERIFIER_DETAILS'));
 }

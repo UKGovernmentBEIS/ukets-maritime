@@ -38,6 +38,7 @@ import uk.gov.netz.api.common.validation.uniqueelements.UniqueElementsValidator;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -117,6 +118,20 @@ class AerEmissionsValidatorTest {
     }
 
     @Test
+    void validate_duplicate_emissions_fuel_name_case_insensitive_invalid() {
+        FuelOriginEFuelTypeName fuelOriginEFuelTypeName = getFuelOriginEFuelTypeName(EFuelType.E_LNG);
+        AerEmissions aerEmissions = createAerEmissions(IMO_NUMBER_2, OTHER_FUEL_NAME_1.toLowerCase(Locale.ROOT), EMISSION_SOURCES_NAME_2, E_FUEL_TYPE_1,
+                Set.of(MonitoringMethod.BDN, MonitoringMethod.BUNKER_TANK, MonitoringMethod.DIRECT), FuelOrigin.FOSSIL, Set.of(fuelOriginEFuelTypeName));
+        AerContainer aerContainer = createAerContainer(aerEmissions);
+
+        AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
+
+        assertFalse(result.isValid());
+        assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
+                emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_FUEL_NAME.getMessage()));
+    }
+
+    @Test
     void validate_duplicate_emissions_source_name_invalid() {
         FuelOriginEFuelTypeName fuelOriginEFuelTypeName = getFuelOriginEFuelTypeName(EFuelType.E_LNG);
         AerEmissions aerEmissions = createAerEmissions(IMO_NUMBER_2, OTHER_FUEL_NAME_2, EMISSION_SOURCES_NAME_1, E_FUEL_TYPE_1,
@@ -128,6 +143,20 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
+    }
+
+    @Test
+    void validate_duplicate_emissions_source_name_case_insensitive_invalid() {
+        FuelOriginEFuelTypeName fuelOriginEFuelTypeName = getFuelOriginEFuelTypeName(EFuelType.E_LNG);
+        AerEmissions aerEmissions = createAerEmissions(IMO_NUMBER_2, OTHER_FUEL_NAME_2, EMISSION_SOURCES_NAME_1.toLowerCase(Locale.ROOT), E_FUEL_TYPE_1,
+                Set.of(MonitoringMethod.BDN, MonitoringMethod.BUNKER_TANK, MonitoringMethod.DIRECT), FuelOrigin.BIOFUEL, Set.of(fuelOriginEFuelTypeName));
+        AerContainer aerContainer = createAerContainer(aerEmissions);
+
+        AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
+
+        assertFalse(result.isValid());
+        assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
+                emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
     }
 
     @Test
@@ -145,12 +174,7 @@ class AerEmissionsValidatorTest {
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_POTENTIAL_FUEL_TYPE.getMessage()));
         assertThat(result.getAerViolations()).extracting(AerViolation::getData)
-            .containsExactlyInAnyOrder(Set.of(FuelOriginEFuelTypeName.builder()
-                .origin(FuelOrigin.RFNBO)
-                .type(EFuelType.E_LNG)
-                .methaneSlip(new BigDecimal("1"))
-                .methaneSlipValueType(MethaneSlipValueType.OTHER)
-                .build()).toArray());
+            .containsExactlyInAnyOrder(Set.of(fuelOriginEFuelTypeName).toArray());
     }
 
     @Test

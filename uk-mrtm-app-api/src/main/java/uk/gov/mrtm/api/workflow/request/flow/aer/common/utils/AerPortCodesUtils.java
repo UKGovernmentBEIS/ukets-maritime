@@ -1,8 +1,10 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.common.utils;
 
+import lombok.experimental.UtilityClass;
 import uk.gov.mrtm.api.reporting.enumeration.PortCountries;
 import uk.gov.mrtm.api.reporting.enumeration.PortType;
 
+@UtilityClass
 public class AerPortCodesUtils {
 
     public static PortType getJourneyType(PortCountries from, PortCountries to) {

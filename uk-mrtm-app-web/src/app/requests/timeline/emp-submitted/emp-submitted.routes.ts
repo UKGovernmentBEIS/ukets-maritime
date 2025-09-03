@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 
+import { MANDATE_SUB_TASK, mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate';
 import {
   abbreviationsMap,
   additionalDocumentsMap,
@@ -104,6 +105,13 @@ export const EMP_SUBMITTED_ROUTES: Routes = [
               import('@requests/timeline/emp-submitted/subtasks/emissions').then((c) => c.ShipSummaryComponent),
           },
         ],
+      },
+      {
+        path: MANDATE_SUB_TASK,
+        title: mandateSubtaskMap.title,
+        data: { breadcrumb: false, backlink: '../../' },
+        loadComponent: () =>
+          import('@requests/timeline/emp-submitted/subtasks/mandate').then((c) => c.MandateSubmittedComponent),
       },
     ],
   },

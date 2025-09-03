@@ -6,6 +6,7 @@ import { GovukSpacingUnit } from '../types';
   selector: 'govuk-warning-text',
   standalone: true,
   templateUrl: './warning-text.component.html',
+  styleUrl: './warning-text.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WarningTextComponent {

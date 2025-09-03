@@ -55,8 +55,8 @@ describe('PeerReviewDecisionSummaryComponent', () => {
     });
     fixture.detectChanges();
     const ddElements: HTMLElement[] = Array.from(fixture.nativeElement.querySelectorAll('dd'));
-    expect(ddElements.some((el) => el.textContent === 'I agree with the determination')).toEqual(true);
-    expect(ddElements.some((el) => el.textContent === 'I do not agree with the determination')).toEqual(false);
+    expect(ddElements.some((el) => el.textContent.trim() === 'I agree with the determination')).toEqual(true);
+    expect(ddElements.some((el) => el.textContent.trim() === 'I do not agree with the determination')).toEqual(false);
     expect(ddElements.some((el) => el.textContent.trim() === 'agreement notes')).toEqual(true);
   }));
 
@@ -68,8 +68,8 @@ describe('PeerReviewDecisionSummaryComponent', () => {
     });
     fixture.detectChanges();
     const ddElements: HTMLElement[] = Array.from(fixture.nativeElement.querySelectorAll('dd'));
-    expect(ddElements.some((el) => el.textContent === 'I agree with the determination')).toEqual(false);
-    expect(ddElements.some((el) => el.textContent === 'I do not agree with the determination')).toEqual(true);
+    expect(ddElements.some((el) => el.textContent.trim() === 'I agree with the determination')).toEqual(false);
+    expect(ddElements.some((el) => el.textContent.trim() === 'I do not agree with the determination')).toEqual(true);
     expect(ddElements.some((el) => el.textContent.trim() === 'disagreement notes')).toEqual(true);
   }));
 

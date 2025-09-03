@@ -13,6 +13,7 @@ import {
   RespondToRecommendationFormGroup,
   RespondToRecommendationFormModel,
 } from '@requests/tasks/vir-submit/subtasks/respond-to-recommendation/respond-to-recommendation-form/respond-to-recommendation-form.types';
+import { addressedDescriptionValidator } from '@shared/validators/recommendation.validator';
 
 export const respondToRecommendationFormProvider: Provider = {
   provide: TASK_FORM,
@@ -31,20 +32,23 @@ export const respondToRecommendationFormProvider: Provider = {
         operatorResponse?.isAddressed,
         {
           validators: GovukValidators.required(
-            'Select yes if you addressed this recommendation or do you plan to in future',
+            'Select yes if you have addressed this recommendation or plan to in the future',
           ),
         },
       ),
       addressedDate: formBuilder.control<Date | null>(
         !isNil(operatorResponse?.addressedDate) ? new Date(operatorResponse.addressedDate) : null,
         {
-          validators: GovukValidators.required('Recommendation date is required'),
+          validators: GovukValidators.required('Enter a date'),
         },
       ),
       addressedDescription: formBuilder.control<RespondToRecommendationFormModel['addressedDescription'] | null>(
         operatorResponse?.addressedDescription,
         {
-          validators: GovukValidators.required('Recommendation description is required'),
+          validators: [
+            addressedDescriptionValidator(),
+            GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
+          ],
         },
       ),
     });

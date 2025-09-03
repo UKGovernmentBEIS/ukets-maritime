@@ -26,28 +26,17 @@ export class AerFetchFromVoyagesAndPortsPayloadMutator extends PayloadMutator {
           ]),
         );
 
-        const manualAggregatedData = (currentPayload?.aer?.aggregatedData?.emissions ?? [])
-          .filter((aggregatedData) => !aggregatedData.fromFetch)
-          .map((aggregatedData) => aggregatedData.imoNumber);
-
-        const fetchedAggregatedData = imoNumbers
-          .filter((imoNumber) => !manualAggregatedData.includes(imoNumber))
-          .map(
-            (imoNumber) =>
-              ({
-                imoNumber,
-                fromFetch: true,
-                uniqueIdentifier: crypto.randomUUID(),
-              }) as AerShipAggregatedData,
-          );
+        const fetchedAggregatedData = imoNumbers.map(
+          (imoNumber) =>
+            ({
+              imoNumber,
+              fromFetch: true,
+              uniqueIdentifier: crypto.randomUUID(),
+            }) as AerShipAggregatedData,
+        );
 
         payload.aer.aggregatedData = {
-          emissions: [
-            ...(payload.aer.aggregatedData?.emissions ?? []).filter((aggregatedData) =>
-              manualAggregatedData.includes(aggregatedData.imoNumber),
-            ),
-            ...fetchedAggregatedData,
-          ],
+          emissions: fetchedAggregatedData,
         };
 
         payload.aerSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;

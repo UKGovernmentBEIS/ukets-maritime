@@ -1,43 +1,31 @@
 <div class="moj-multi-file__uploaded-files">
-  <h2 [class]="'govuk-heading-' + headerSize">{{ listTitle }}</h2>
+  @if (listTitle && (showNoFilesHint || files.length > 0)) {
+    <h2 [class]="'govuk-heading-' + headerSize" [class.govuk-!-margin-bottom-0]="headerSize === 's'">
+      {{ listTitle }}
+    </h2>
+  }
   @if (files.length === 0 && showNoFilesHint) {
-    <div class="govuk-body">No files have been uploaded yet</div>
+    <div class="govuk-body govuk-!-margin-bottom-0">No files have been uploaded yet</div>
   }
-  @if (files.length === 1) {
-    <div class="govuk-summary-list moj-multi-file-upload__list">
-      <div aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
-        <ng-container
-          *ngTemplateOutlet="
-            files[0].errors ? error : files[0].progress === 1 ? success : progress;
-            context: { $implicit: files[0], message: files[0].errors ? files[0].errors : null }
-          "></ng-container>
+
+  <dl class="govuk-summary-list moj-multi-file-upload__list">
+    @for (file of files; track i; let i = $index) {
+      <div class="govuk-summary-list__row moj-multi-file-upload__row">
+        <dd aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
+          <ng-container
+            *ngTemplateOutlet="
+              file.errors ? error : file.progress === 1 ? success : progress;
+              context: { $implicit: file, message: file.errors ? file.errors : null }
+            "></ng-container>
+        </dd>
+        <dd class="govuk-summary-list__actions moj-multi-file-upload__actions">
+          <ng-container
+            [ngTemplateOutlet]="fileDeleteButton"
+            [ngTemplateOutletContext]="{ fileIndex: i, file: file }"></ng-container>
+        </dd>
       </div>
-      <div class="govuk-summary-list__actions moj-multi-file-upload__actions">
-        <ng-container
-          [ngTemplateOutlet]="fileDeleteButton"
-          [ngTemplateOutletContext]="{ fileIndex: 0, file: files[0] }"></ng-container>
-      </div>
-    </div>
-  } @else {
-    <dl class="govuk-summary-list moj-multi-file-upload__list">
-      @for (file of files; track i; let i = $index) {
-        <div class="govuk-summary-list__row moj-multi-file-upload__row">
-          <dd aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
-            <ng-container
-              *ngTemplateOutlet="
-                file.errors ? error : file.progress === 1 ? success : progress;
-                context: { $implicit: file, message: file.errors ? file.errors : null }
-              "></ng-container>
-          </dd>
-          <dd class="govuk-summary-list__actions moj-multi-file-upload__actions">
-            <ng-container
-              [ngTemplateOutlet]="fileDeleteButton"
-              [ngTemplateOutletContext]="{ fileIndex: i, file: file }"></ng-container>
-          </dd>
-        </div>
-      }
-    </dl>
-  }
+    }
+  </dl>
 
   <ng-template #fileDeleteButton let-file="file" let-fileIndex="fileIndex">
     <button

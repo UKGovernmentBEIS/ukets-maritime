@@ -88,7 +88,7 @@ public class ItemResponseCreationService {
             .map(resource -> resource.get(ResourceType.ACCOUNT))
             .filter(Objects::nonNull)
             .map(Long::parseLong)
-            .collect(Collectors.toList());
+            .toList();
 
         if (CollectionUtils.isEmpty(accountIds)) {
             return Collections.emptyMap();

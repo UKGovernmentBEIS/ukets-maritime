@@ -13,7 +13,7 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
     path: '',
     title: nonComplianceDetailsMap.title,
     canActivate: [canActivateNonComplianceDetailsSummary],
-    data: { breadcrumb: false, backlink: '../../' },
+    data: { breadcrumb: false, backlink: '../' },
     loadComponent: () =>
       import(
         '@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-summary'

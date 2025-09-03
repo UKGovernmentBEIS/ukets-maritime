@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerApplicationReturnedForAmendsRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.mapper.AerReviewMapper;
@@ -48,6 +49,7 @@ public class AerReviewReturnForAmendsActionHandler implements RequestTaskActionH
 
         // Update request payload
         aerReviewService.updateRequestPayloadWithReviewOutcome(requestTask, appUser);
+        aerReviewService.removeAmendRequestedChangesSubtaskStatus((AerRequestPayload) requestTask.getRequest().getPayload());
 
         // Add request action
         createRequestAction(requestTask, appUser);

@@ -4,7 +4,11 @@ export const dateFormatPattern = /(\d{1,2})([-/,. ])(\d{1,2})\2(\d{4})/;
 
 export const timeFormatPattern = /^([01][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])$/;
 
-export const mergeDates = (dateDate: Date, timeDate: Date): string => {
+export const mergeDatesToString = (dateDate: Date, timeDate: Date): string => {
+  return mergeDatesToDate(dateDate, timeDate).toISOString();
+};
+
+export const mergeDatesToDate = (dateDate: Date, timeDate: Date): Date => {
   const currentDate = new Date(
     dateDate.getFullYear(),
     dateDate.getMonth(),
@@ -15,7 +19,7 @@ export const mergeDates = (dateDate: Date, timeDate: Date): string => {
   );
   const tzoffset = currentDate.getTimezoneOffset() * 60000;
 
-  return new Date(currentDate.valueOf() - tzoffset).toISOString();
+  return new Date(currentDate.valueOf() - tzoffset);
 };
 
 /**

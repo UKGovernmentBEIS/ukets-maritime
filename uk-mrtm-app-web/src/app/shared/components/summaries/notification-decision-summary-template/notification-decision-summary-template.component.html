@@ -2,7 +2,7 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Decision status</dt>
-    <dd govukSummaryListRowValue [notProvided]="reviewDecision.type | empReviewDecisionType"></dd>
+    <dd govukSummaryListRowValue [notProvided]="reviewDecision.type | reviewDecisionType"></dd>
     @if (isEditable) {
       <dd govukSummaryListRowActions>
         <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>

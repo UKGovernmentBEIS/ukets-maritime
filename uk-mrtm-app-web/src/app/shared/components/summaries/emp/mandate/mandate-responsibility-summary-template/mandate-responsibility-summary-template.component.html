@@ -1,0 +1,18 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt class="govuk-!-width-one-quarter" govukSummaryListRowKey>
+        Has the responsibility for compliance with UK ETS been delegated to you by one or more registered owners for one
+        or more ships?
+      </dt>
+      <dd govukSummaryListRowValue [notProvided]="data.exist | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStepPrefix(), wizardStep()?.RESPONSIBILITY]" [queryParams]="queryParams()">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

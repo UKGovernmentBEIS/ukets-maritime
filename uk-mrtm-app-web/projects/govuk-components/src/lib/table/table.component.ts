@@ -29,6 +29,7 @@ export class TableComponent<T> {
   @Input() caption: string;
   @Input() description: string;
   @Input() emptyTableText: string;
+  @Input() rowCssClasses: (rowItem: T) => string | string[];
   @Output() readonly sort = new EventEmitter<SortEvent>();
   @ContentChild(TemplateRef) template?: TemplateRef<{
     column: GovukTableColumn<T>;

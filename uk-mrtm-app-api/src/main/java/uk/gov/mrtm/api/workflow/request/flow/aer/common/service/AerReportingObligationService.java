@@ -114,7 +114,7 @@ public class AerReportingObligationService {
         startProcessRequestService.reStartProcess(request, processVars);
 
         //add timeline event
-        requestService.addActionToRequest(request, null, MrtmRequestActionType.AER_APPLICATION_RE_INITIATED, submitterId);
+        requestService.addActionToRequest(request, null, MrtmRequestActionType.AER_APPLICATION_EXEMPTION_REVERTED, submitterId);
 
         //remove emissions from request metadata and set exempt flag to false
         AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();

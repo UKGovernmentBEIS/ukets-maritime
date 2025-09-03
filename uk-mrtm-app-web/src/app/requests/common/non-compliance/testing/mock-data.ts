@@ -1,6 +1,8 @@
 import { produce } from 'immer';
 
 import {
+  NonComplianceCivilPenaltyRequestTaskPayload,
+  NonComplianceFinalDetermination,
   NonComplianceInitialPenaltyNoticeRequestTaskPayload,
   NonComplianceNoticeOfIntentRequestTaskPayload,
   RequestInfoDTO,
@@ -10,11 +12,13 @@ import { mockRequestTask } from '@netz/common/request-task';
 import { RequestTaskState } from '@netz/common/store';
 
 import { TaskItemStatus } from '@requests/common';
+import { NonComplianceCivilPenaltyUpload } from '@requests/common/non-compliance/non-compliance-civil-penalty/non-compliance-civil-penalty.types';
 import {
   NonComplianceDetails,
   NonComplianceDetailsSummary,
   NonComplianceSubmitTaskPayload,
 } from '@requests/common/non-compliance/non-compliance-details/non-compliance-details.types';
+import { NonComplianceFinalDeterminationTaskPayload } from '@requests/common/non-compliance/non-compliance-final-determination/non-compliance-final-determination.types';
 import { NonComplianceInitialPenaltyNoticeUpload } from '@requests/common/non-compliance/non-compliance-initial-penalty-notice/non-compliance-initial-penalty-notice.types';
 import { AttachedFile } from '@shared/types';
 
@@ -85,12 +89,31 @@ export const mockNonComplianceInitialPenaltyNoticeUpload: NonComplianceInitialPe
   },
 };
 
+export const mockNonComplianceCivilPenaltyUpload: NonComplianceCivilPenaltyUpload = {
+  civilPenalty: '66b0ddb3-dc64-4ea3-8a68-0afa59128e99',
+  penaltyAmount: '50.01',
+  dueDate: '2026-06-21',
+  comments: 'GG',
+  nonComplianceAttachments: {
+    '66b0ddb3-dc64-4ea3-8a68-0afa59128e99': 'just-a-filename.jpg',
+  },
+};
+
 export const mockNonComplianceFiles: AttachedFile[] = [
   {
     downloadUrl: 'download/66b0ddb3-dc64-4ea3-8a68-0afa59128e99',
     fileName: 'just-a-filename.jpg',
   },
 ];
+
+export const mockNonComplianceFinalDetermination: NonComplianceFinalDetermination = {
+  complianceRestored: 'YES',
+  complianceRestoredDate: '2026-06-20',
+  reissuePenalty: false,
+  operatorPaid: true,
+  operatorPaidDate: '2026-06-21',
+  comments: 'GG',
+};
 
 export const mockNonComplianceInitialPenaltyNoticeRequestTask = {
   ...mockRequestTask,
@@ -144,6 +167,56 @@ export const mockNonComplianceNoticeOfIntentRequestTask = {
           upload: 'COMPLETED',
         },
       } as NonComplianceNoticeOfIntentRequestTaskPayload,
+    },
+  },
+};
+
+export const mockNonComplianceCivilPenaltyRequestTask = {
+  ...mockRequestTask,
+  requestTaskItem: {
+    ...mockRequestTask.requestTaskItem,
+    requestInfo: {
+      accountId: 1,
+      competentAuthority: 'ENGLAND',
+      id: 'MANC00010-1',
+      type: 'NON_COMPLIANCE',
+    } as RequestInfoDTO,
+    requestTask: {
+      ...mockRequestTask.requestTaskItem.requestTask,
+      type: 'NON_COMPLIANCE_CIVIL_PENALTY',
+      payload: {
+        payloadType: 'NON_COMPLIANCE_CIVIL_PENALTY_PAYLOAD',
+        ...mockNonComplianceCivilPenaltyUpload,
+        sendEmailNotification: true,
+        sectionsCompleted: {
+          upload: 'COMPLETED',
+        },
+      } as NonComplianceCivilPenaltyRequestTaskPayload,
+    },
+  },
+};
+
+export const mockNonComplianceFinalDeterminationRequestTask = {
+  ...mockRequestTask,
+  requestTaskItem: {
+    ...mockRequestTask.requestTaskItem,
+    requestInfo: {
+      accountId: 1,
+      competentAuthority: 'ENGLAND',
+      id: 'MANC00010-1',
+      type: 'NON_COMPLIANCE',
+    } as RequestInfoDTO,
+    requestTask: {
+      ...mockRequestTask.requestTaskItem.requestTask,
+      type: 'NON_COMPLIANCE_FINAL_DETERMINATION',
+      payload: {
+        payloadType: 'NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD',
+        ...mockNonComplianceFinalDetermination,
+        sendEmailNotification: true,
+        sectionsCompleted: {
+          upload: 'COMPLETED',
+        },
+      } as NonComplianceFinalDeterminationTaskPayload,
     },
   },
 };

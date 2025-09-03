@@ -23,7 +23,7 @@ const canActivatePaymentSubtask =
   };
 
 export const canActivateMakePayment: CanActivateFn = canActivatePaymentSubtask('PAYMENT_MARK_AS_PAID');
-export const canActivateCancelPayment: CanActivateFn = canActivatePaymentSubtask('PAYMENT_CANCEL');
+export const canActivateCancelPayment: CanActivateFn = canActivatePaymentSubtask('CANCEL_APPLICATION');
 export const canActivateMarkAsReceivedPayment: CanActivateFn = canActivatePaymentSubtask('PAYMENT_MARK_AS_RECEIVED');
 
 export const resetState: CanActivateFn = () => {

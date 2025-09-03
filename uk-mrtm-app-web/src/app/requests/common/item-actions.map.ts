@@ -358,9 +358,14 @@ export const itemActionsMap: Record<MrtmRequestActionType, { text: string; trans
       transformed: false,
       linkable: false,
     },
-    AER_APPLICATION_RE_INITIATED: {
+    AER_APPLICATION_EXEMPTION_REVERTED: {
       text: 'Complete annual emissions report re-initiated after exemption',
       transformed: false,
+      linkable: false,
+    },
+    AER_APPLICATION_RE_INITIATED: {
+      text: 'Complete annual emissions report returned for amends to operator',
+      transformed: true,
       linkable: false,
     },
     NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_REQUESTED: {
@@ -384,27 +389,27 @@ export const itemActionsMap: Record<MrtmRequestActionType, { text: string; trans
       linkable: true,
     },
     AER_APPLICATION_REVIEW_SKIPPED: {
-      text: 'Complete annual emission report completed without review',
+      text: 'Complete annual emissions report completed without review',
       transformed: true,
       linkable: true,
     },
     AER_APPLICATION_COMPLETED: {
-      text: 'Complete annual emission report reviewed',
+      text: 'Complete annual emissions report reviewed',
       transformed: true,
       linkable: true,
     },
     AER_APPLICATION_RETURNED_FOR_AMENDS: {
-      text: 'Complete annual emission report returned for amends to operator',
+      text: 'Complete annual emissions report returned for amends to operator',
       transformed: true,
-      linkable: false,
+      linkable: true,
     },
     AER_APPLICATION_AMENDS_SUBMITTED: {
-      text: 'Complete annual emission report amends submitted to regulator',
+      text: 'Complete annual emissions report amends submitted to regulator',
       transformed: true,
       linkable: true,
     },
     AER_APPLICATION_AMENDS_SENT_TO_VERIFIER: {
-      text: 'Complete annual emission report amends submitted to verifier',
+      text: 'Complete annual emissions report amends submitted to verifier',
       transformed: true,
       linkable: true,
     },
@@ -412,5 +417,35 @@ export const itemActionsMap: Record<MrtmRequestActionType, { text: string; trans
       text: 'Workflow terminated by the system',
       transformed: false,
       linkable: false,
+    },
+    NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_REQUESTED: {
+      text: 'Peer review of civil penalty notice requested',
+      transformed: true,
+      linkable: false,
+    },
+    NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED: {
+      text: 'Peer review agreement for civil penalty notice submitted',
+      transformed: true,
+      linkable: true,
+    },
+    NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED: {
+      text: 'Peer review disagreement for civil penalty notice submitted',
+      transformed: true,
+      linkable: true,
+    },
+    NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED: {
+      text: 'Civil penalty notice sent to operator',
+      transformed: true,
+      linkable: true,
+    },
+    NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED: {
+      text: 'Conclusion provided',
+      transformed: true,
+      linkable: true,
+    },
+    NON_COMPLIANCE_APPLICATION_CLOSED: {
+      text: 'Non-compliance closed',
+      transformed: true,
+      linkable: true,
     },
   };

@@ -4,6 +4,7 @@ import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/c
 import { RequestTaskStore } from '@netz/common/store';
 
 import { nonComplianceNoticeOfIntentMap } from '@requests/common/non-compliance';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 import { nonComplianceNoticeOfIntentCommonQuery } from '@requests/common/non-compliance/non-compliance-notice-of-intent/+state';
 import { NonComplianceNoticeOfIntentUploadSummaryTemplateComponent } from '@shared/components/summaries';
 
@@ -27,9 +28,7 @@ export class NonComplianceNoticeOfIntentUploadSummaryReviewComponent {
   );
   readonly files = computed(() =>
     this.store.select(
-      nonComplianceNoticeOfIntentCommonQuery.selectAttachedFiles([
-        this.nonComplianceNoticeOfIntentUpload()?.noticeOfIntent,
-      ]),
+      nonComplianceCommonQuery.selectAttachedFiles([this.nonComplianceNoticeOfIntentUpload()?.noticeOfIntent]),
     )(),
   );
 }

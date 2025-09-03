@@ -18,7 +18,7 @@ import {
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { GREENHOUSE_GAS_SUB_TASK, GreenhouseGasWizardStep } from '@requests/common/emp/subtasks/greenhouse-gas';
 import { greenhouseGasMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { EmpReviewDecisionSummaryTemplateComponent, GreenhousesSummaryTemplateComponent } from '@shared/components';
+import { GreenhousesSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
@@ -45,7 +45,7 @@ interface ViewModel {
     ReturnToTaskOrActionPageComponent,
     GreenhousesSummaryTemplateComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './greenhouse-gas-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

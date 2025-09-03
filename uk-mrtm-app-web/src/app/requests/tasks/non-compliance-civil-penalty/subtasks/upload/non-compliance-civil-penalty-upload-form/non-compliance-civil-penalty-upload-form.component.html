@@ -1,0 +1,38 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.upload.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">Upload the civil penalty to be sent to the operator.</p>
+  <p class="govuk-body">If you need to add extra documents you can use the notes feature on the task list.</p>
+  <p class="govuk-body">The maximum file size we can accept is 20 megabytes (MB).</p>
+
+  <mrtm-file-input
+    formControlName="civilPenalty"
+    [downloadUrl]="getDownloadUrl()"
+    [showNoFilesHint]="false"
+    listTitle="Uploaded file"
+    label="Upload file"
+    labelSize="small" />
+  <div
+    formControlName="penaltyAmount"
+    govuk-text-input
+    [label]="map.penaltyAmount.title"
+    labelSize="small"
+    prefix="£"
+    [widthClass]="'govuk-input--width-5'"></div>
+  <div
+    formControlName="dueDate"
+    govuk-date-input
+    label="Enter the date by which the penalty must be paid"
+    legendSize="small"></div>
+  <div
+    formControlName="comments"
+    govuk-textarea
+    label="Your comments (optional)"
+    labelSize="small"
+    hint="The operator cannot view this"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

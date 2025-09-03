@@ -12,7 +12,7 @@ import { GovukSelectOption, SelectComponent, TextInputComponent } from '@netz/go
 import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
 import { emissionsShipSubtaskMap, emissionsSubtaskMap } from '@requests/common/components/emissions';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { ShipStepTitlePipe } from '@requests/common/components/emissions/pipes';
+import { ShipStepTitleCustomPipe } from '@requests/common/components/emissions/pipes';
 import { ReturnToShipsListTableComponent } from '@requests/common/components/emissions/return-to-ships-list-table';
 import { uncertaintyLevelFormProvider } from '@requests/common/components/emissions/uncertainty-level/uncertainty-level.form-provider';
 import { UNCERTAINTY_LEVEL_STEP } from '@requests/common/components/emissions/uncertainty-level/uncertainty-level.helpers';
@@ -27,7 +27,7 @@ import { isAer } from '@shared/utils';
   selector: 'mrtm-uncertainty-level',
   standalone: true,
   imports: [
-    ShipStepTitlePipe,
+    ShipStepTitleCustomPipe,
     WizardStepComponent,
     ReactiveFormsModule,
     SelectComponent,

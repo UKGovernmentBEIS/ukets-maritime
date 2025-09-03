@@ -5,7 +5,7 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
-import { EmpReviewDecisionSummaryTemplateComponent, VoyagesListSummaryTemplateComponent } from '@shared/components';
+import { ReviewDecisionSummaryTemplateComponent, VoyagesListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-list-of-voyages-submitted',
@@ -14,7 +14,7 @@ import { EmpReviewDecisionSummaryTemplateComponent, VoyagesListSummaryTemplateCo
     VoyagesListSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './aer-list-of-voyages-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +24,6 @@ export class AerListOfVoyagesSubmittedComponent {
   readonly map = aerVoyagesMap;
   readonly voyages = this.store.select(aerTimelineCommonQuery.selectVoyagesList);
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('VOYAGES'));
 }

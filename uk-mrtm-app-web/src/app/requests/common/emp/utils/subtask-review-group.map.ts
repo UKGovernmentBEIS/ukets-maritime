@@ -18,4 +18,5 @@ export const subtaskReviewGroupMap: Record<
   emissions: 'SHIPS_CALCULATION_EMISSIONS',
   sources: 'EMISSION_SOURCES',
   greenhouseGas: 'MONITORING_APPROACH',
+  mandate: 'MANDATE',
 };

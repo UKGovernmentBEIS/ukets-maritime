@@ -90,10 +90,11 @@ class EmpNotificationFollowUpExtendDateActionHandlerTest {
                         .build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
+        final Long requestTaskId = requestTask.getId();
 
         // Invoke
         BusinessException be = assertThrows(BusinessException.class,
-            () ->handler.process(requestTask.getId(), MrtmRequestTaskActionType.EMP_NOTIFICATION_FOLLOW_UP_EXTEND_DATE,
+            () ->handler.process(requestTaskId, MrtmRequestTaskActionType.EMP_NOTIFICATION_FOLLOW_UP_EXTEND_DATE,
                 appUser, taskActionPayload));
 
         // Verify

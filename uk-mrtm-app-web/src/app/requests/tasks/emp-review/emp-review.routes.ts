@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
 import { NOTIFY_OPERATOR_SUCCESS_COMPONENT } from '@requests/common/components/notify-operator/notify-operator.providers';
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import { EmpReviewNotifyOperatorSuccessComponent } from '@requests/tasks/emp-review/components/emp-review-notify-operator-success';
 import {
   provideEmpReviewPayloadMutators,
@@ -71,6 +72,10 @@ export const EMP_REVIEW_ROUTES: Routes = [
       {
         path: 'emissions',
         loadChildren: () => import('@requests/tasks/emp-review/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
+      },
+      {
+        path: MANDATE_SUB_TASK,
+        loadChildren: () => import('@requests/tasks/emp-review/subtasks/mandate').then((r) => r.MANDATE_REVIEW_ROUTES),
       },
       {
         path: 'overall-decision',

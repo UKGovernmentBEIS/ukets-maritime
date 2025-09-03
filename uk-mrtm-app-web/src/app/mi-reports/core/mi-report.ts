@@ -46,11 +46,14 @@ export const manipulateResultsAndExportToExcel = (
     [x: string]: any;
   }[],
 ) => {
-  const removedColumnsResults = miReportResult.results.map((result) =>
-    miReportResult.columnNames
-      .map((columnName) => ({ [columnName]: result[columnName] }))
-      .reduce((prev, cur) => ({ ...prev, ...cur }), {}),
-  );
+  const removedColumnsResults =
+    miReportResult.results.length > 0
+      ? miReportResult.results.map((result) =>
+          miReportResult.columnNames
+            .map((columnName) => ({ [columnName]: result[columnName] }))
+            .reduce((prev, cur) => ({ ...prev, ...cur }), {}),
+        )
+      : [miReportResult.columnNames.reduce((acc, col) => ({ ...acc, [col]: '' }), {})];
 
   const results = manipulateResultsFn ? manipulateResultsFn(removedColumnsResults) : removedColumnsResults;
   const ws = utils.json_to_sheet(results);

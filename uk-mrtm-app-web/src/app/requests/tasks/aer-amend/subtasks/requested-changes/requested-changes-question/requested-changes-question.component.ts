@@ -17,7 +17,7 @@ import {
   RequestedChangesWizardStep,
 } from '@requests/tasks/aer-amend/subtasks/requested-changes/requested-changes.helpers';
 import { requestedChangesQuestionFormProvider } from '@requests/tasks/aer-amend/subtasks/requested-changes/requested-changes-question/requested-changes-question.form.provider';
-import { EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
+import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-requested-changes-question',
@@ -28,7 +28,7 @@ import { EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepComp
     CheckboxesComponent,
     WizardStepComponent,
     ReactiveFormsModule,
-    EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent,
+    ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
   ],
   templateUrl: './requested-changes-question.component.html',
   providers: [requestedChangesQuestionFormProvider],

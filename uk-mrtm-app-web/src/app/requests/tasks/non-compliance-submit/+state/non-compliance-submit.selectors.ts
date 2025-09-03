@@ -1,10 +1,4 @@
-import {
-  createAggregateSelector,
-  createDescendingSelector,
-  requestTaskQuery,
-  RequestTaskState,
-  StateSelector,
-} from '@netz/common/store';
+import { createDescendingSelector, requestTaskQuery, RequestTaskState, StateSelector } from '@netz/common/store';
 
 import { TaskItemStatus } from '@requests/common';
 import {
@@ -13,31 +7,15 @@ import {
   NonComplianceDetailsSummary,
   NonComplianceSubmitTaskPayload,
 } from '@requests/common/non-compliance';
-import { AttachedFile } from '@shared/types';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 
 const selectPayload: StateSelector<RequestTaskState, NonComplianceSubmitTaskPayload> = createDescendingSelector(
   requestTaskQuery.selectRequestTaskPayload,
   (payload) => payload as NonComplianceSubmitTaskPayload,
 );
 
-const selectNonComplianceAttachments: StateSelector<
-  RequestTaskState,
-  NonComplianceSubmitTaskPayload['nonComplianceAttachments']
-> = createDescendingSelector(selectPayload, (payload) => payload?.nonComplianceAttachments);
-
-const selectAttachedFiles = (files?: string[]): StateSelector<RequestTaskState, AttachedFile[]> =>
-  createAggregateSelector(
-    requestTaskQuery.selectTasksDownloadUrl,
-    selectNonComplianceAttachments,
-    (downloadUrl, attachments) =>
-      files?.map((id) => ({ downloadUrl: downloadUrl + id, fileName: attachments?.[id] })) ?? [],
-  );
-
-const selectSectionsCompleted: StateSelector<RequestTaskState, NonComplianceSubmitTaskPayload['sectionsCompleted']> =
-  createDescendingSelector(selectPayload, (payload) => payload?.sectionsCompleted);
-
 const selectStatusForDetailsSubtask: StateSelector<RequestTaskState, TaskItemStatus> = createDescendingSelector(
-  selectSectionsCompleted,
+  nonComplianceCommonQuery.selectSectionsCompleted,
   (sectionsCompleted) => {
     const taskStatus = sectionsCompleted?.[NON_COMPLIANCE_DETAILS_SUB_TASK] as TaskItemStatus;
     return taskStatus ?? TaskItemStatus.NOT_STARTED;
@@ -52,39 +30,36 @@ const selectIsDetailsSubtaskCompleted: StateSelector<RequestTaskState, boolean> 
 const selectNonComplianceDetails: StateSelector<RequestTaskState, NonComplianceDetails> = createDescendingSelector(
   selectPayload,
   (payload) => ({
-    reason: payload.reason,
-    nonComplianceDate: payload.nonComplianceDate,
-    complianceDate: payload.complianceDate,
-    comments: payload.comments,
-    availableRequests: payload.availableRequests,
-    selectedRequests: payload.selectedRequests,
-    civilPenalty: payload.civilPenalty,
-    noCivilPenaltyJustification: payload.noCivilPenaltyJustification,
-    noticeOfIntent: payload.noticeOfIntent,
-    initialPenalty: payload.initialPenalty,
+    reason: payload?.reason,
+    nonComplianceDate: payload?.nonComplianceDate,
+    complianceDate: payload?.complianceDate,
+    comments: payload?.comments,
+    availableRequests: payload?.availableRequests,
+    selectedRequests: payload?.selectedRequests,
+    civilPenalty: payload?.civilPenalty,
+    noCivilPenaltyJustification: payload?.noCivilPenaltyJustification,
+    noticeOfIntent: payload?.noticeOfIntent,
+    initialPenalty: payload?.initialPenalty,
   }),
 );
 
 const selectNonComplianceDetailsSummary: StateSelector<RequestTaskState, NonComplianceDetailsSummary> =
   createDescendingSelector(selectPayload, (payload) => ({
-    reason: payload.reason,
-    nonComplianceDate: payload.nonComplianceDate,
-    complianceDate: payload.complianceDate,
-    comments: payload.comments,
-    selectedRequestsMapped: payload.selectedRequests?.map((selectedId) =>
-      payload.availableRequests.find(({ id }) => id === selectedId),
+    reason: payload?.reason,
+    nonComplianceDate: payload?.nonComplianceDate,
+    complianceDate: payload?.complianceDate,
+    comments: payload?.comments,
+    selectedRequestsMapped: payload?.selectedRequests?.map((selectedId) =>
+      payload?.availableRequests.find(({ id }) => id === selectedId),
     ),
-    civilPenalty: payload.civilPenalty,
-    noCivilPenaltyJustification: payload.noCivilPenaltyJustification,
-    noticeOfIntent: payload.noticeOfIntent,
-    initialPenalty: payload.initialPenalty,
+    civilPenalty: payload?.civilPenalty,
+    noCivilPenaltyJustification: payload?.noCivilPenaltyJustification,
+    noticeOfIntent: payload?.noticeOfIntent,
+    initialPenalty: payload?.initialPenalty,
   }));
 
 export const nonComplianceSubmitQuery = {
   selectPayload,
-  selectNonComplianceAttachments,
-  selectAttachedFiles,
-  selectSectionsCompleted,
   selectStatusForDetailsSubtask,
   selectIsDetailsSubtaskCompleted,
   selectNonComplianceDetails,

@@ -49,6 +49,7 @@ export const selectIsEmpSectionCompleted: StateSelector<RequestTaskState, boolea
       'controlActivities',
       'abbreviations',
       'additionalDocuments',
+      'mandate',
     ];
 
     for (const key of sections) {

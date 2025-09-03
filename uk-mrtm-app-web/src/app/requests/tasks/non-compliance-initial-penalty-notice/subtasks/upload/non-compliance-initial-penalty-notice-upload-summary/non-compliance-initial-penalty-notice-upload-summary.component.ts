@@ -5,7 +5,7 @@ import { NonComplianceInitialPenaltyNoticeRequestTaskPayload } from '@mrtm/api';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { TaskService } from '@netz/common/forms';
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
 
 import {
@@ -13,6 +13,7 @@ import {
   nonComplianceInitialPenaltyNoticeMap,
   NonComplianceInitialPenaltyNoticeUploadStep,
 } from '@requests/common/non-compliance';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 import { nonComplianceInitialPenaltyNoticeCommonQuery } from '@requests/common/non-compliance/non-compliance-initial-penalty-notice/+state';
 import { NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent } from '@shared/components/summaries';
 
@@ -35,7 +36,7 @@ export class NonComplianceInitialPenaltyNoticeUploadSummaryComponent {
   private readonly store = inject(RequestTaskStore);
 
   readonly map = nonComplianceInitialPenaltyNoticeMap;
-  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly isEditable = this.store.select(nonComplianceInitialPenaltyNoticeCommonQuery.selectIsFormEditable);
   readonly isSubtaskCompleted = this.store.select(
     nonComplianceInitialPenaltyNoticeCommonQuery.selectIsUploadSubtaskCompleted,
   );
@@ -48,9 +49,7 @@ export class NonComplianceInitialPenaltyNoticeUploadSummaryComponent {
   );
   readonly files = computed(() =>
     this.initialPenaltyNotice()
-      ? this.store.select(
-          nonComplianceInitialPenaltyNoticeCommonQuery.selectAttachedFiles([this.initialPenaltyNotice()]),
-        )()
+      ? this.store.select(nonComplianceCommonQuery.selectAttachedFiles([this.initialPenaltyNotice()]))()
       : [],
   );
 

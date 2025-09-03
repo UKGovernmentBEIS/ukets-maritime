@@ -1,30 +1,24 @@
-@if (vm(); as vm) {
-  <netz-page-heading caption="{{ map.caption }}">Check your answers</netz-page-heading>
-  <dl govuk-summary-list>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ map.decision }}</dt>
-      @if (vm?.decision?.type === 'AGREE') {
-        <dd govukSummaryListRowValue>I agree with the determination</dd>
-      } @else {
-        <dd govukSummaryListRowValue>I do not agree with the determination</dd>
-      }
-      <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[vm.wizardStep.DECISION]">Change</a>
-      </dd>
-    </div>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ map.notes }}</dt>
-      <dd govukSummaryListRowValue class="pre-wrap">
-        {{ vm?.decision?.notes }}
-      </dd>
-      <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[vm.wizardStep.DECISION]">Change</a>
-      </dd>
-    </div>
-  </dl>
-  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
-  <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-    <netz-return-to-task-or-action-page />
+<netz-page-heading caption="{{ map.caption }}">Check your answers</netz-page-heading>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ map.decision }}</dt>
+    <dd govukSummaryListRowValue>
+      {{ decision()?.type | peerReviewDecision }}
+    </dd>
+    <dd govukSummaryListRowActions>
+      <a govukLink [routerLink]="[wizardStep.DECISION]">Change</a>
+    </dd>
   </div>
-}
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>{{ map.notes }}</dt>
+    <dd govukSummaryListRowValue class="pre-wrap">{{ decision()?.notes }}</dd>
+    <dd govukSummaryListRowActions>
+      <a govukLink [routerLink]="[wizardStep.DECISION]">Change</a>
+    </dd>
+  </div>
+</dl>
+<button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

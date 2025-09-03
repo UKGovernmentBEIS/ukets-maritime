@@ -23,7 +23,7 @@ import {
 } from '@requests/common/utils/additional-documents';
 import {
   AdditionalDocumentsSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { AttachedFile, EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
@@ -53,7 +53,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './additional-documents-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -104,25 +104,25 @@ export class PaymentsService {
     taskId: number,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<CardPaymentCreateResponseDTO>;
   public createCardPayment(
     taskId: number,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpResponse<CardPaymentCreateResponseDTO>>;
   public createCardPayment(
     taskId: number,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpEvent<CardPaymentCreateResponseDTO>>;
   public createCardPayment(
     taskId: number,
     observe: any = 'body',
     reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
     if (taskId === null || taskId === undefined) {
       throw new Error('Required parameter taskId was null or undefined when calling createCardPayment.');
@@ -139,7 +139,7 @@ export class PaymentsService {
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', '*/*'];
+      const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {

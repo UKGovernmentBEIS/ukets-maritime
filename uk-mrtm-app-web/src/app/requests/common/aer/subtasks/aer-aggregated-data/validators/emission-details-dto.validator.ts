@@ -185,7 +185,11 @@ export class EmissionDetailsDtoValidator {
     const errors: XmlValidationError[] = [];
 
     if (!this.isShipUnique(shipData, emissionDetails?.shipImoNumber)) {
-      errors.push({ row: index + 1, column: 'shipImoNumber', message: 'There are duplicated IMO numbers in the file' });
+      errors.push({
+        row: index + 1,
+        column: 'shipImoNumber',
+        message: 'There are duplicated IMO numbers in the file. Check the information entered and reupload the file',
+      });
     }
 
     if (!this.isShipImoNumberValid(emissionDetails?.shipImoNumber)) {

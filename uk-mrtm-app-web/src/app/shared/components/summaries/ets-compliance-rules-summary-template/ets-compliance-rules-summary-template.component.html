@@ -200,7 +200,7 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>{{ map.nonConformities.title }}</dt>
       <dd govukSummaryListRowValue>
-        {{ data?.nonConformities | nonConformitiesToText }}
+        {{ data?.nonConformities | yesNoToText }}
         @if (data?.nonConformities === 'NO') {
           <div class="govuk-!-margin-top-1 pre-wrap" [notProvided]="data?.nonConformitiesDetails"></div>
         }

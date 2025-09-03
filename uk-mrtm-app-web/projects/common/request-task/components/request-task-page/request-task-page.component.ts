@@ -77,6 +77,7 @@ export class RequestTaskPageComponent {
     optional: true,
   });
   private readonly injector: Injector = inject(Injector);
+  private readonly relatedActionsHiddenFromSidebar = ['SYSTEM_MESSAGE_DISMISS'];
 
   vm: Signal<ViewModel> = computed(() => {
     const requestTask = this.store.select(requestTaskQuery.selectRequestTask)();
@@ -101,6 +102,10 @@ export class RequestTaskPageComponent {
     const previewDocuments = this.relatedPreviewDocumentsMap?.()?.[requestTask.type]
       ? this.relatedPreviewDocumentsMap()[requestTask.type].filter((item) => item.visibleInRelatedActions)
       : [];
+    const hasSidebar =
+      relatedActions?.filter((action) => !this.relatedActionsHiddenFromSidebar.includes(action)).length > 0 ||
+      previewDocuments?.length > 0 ||
+      showAssignAction;
 
     return {
       requestId,
@@ -118,7 +123,7 @@ export class RequestTaskPageComponent {
       showAssignAction,
       hasRelatedTasks: relatedTasks?.length > 0,
       hasTimeline: timeline?.length > 0,
-      hasSidebar: relatedActions?.length > 0 || previewDocuments?.length > 0 || showAssignAction,
+      hasSidebar,
       previewDocuments,
     };
   });

@@ -68,7 +68,7 @@
   @if (isVariationRegulator) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Enter a summary of the changes for emissions monitoring plan variation log</dt>
-      <dd govukSummaryListRowValue [notProvided]="regulatorLedReason?.summary"></dd>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="regulatorLedReason?.summary"></dd>
       @if (isEditable) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="[wizardStep.CHANGES_SUMMARY]" [queryParams]="queryParams">Change</a>

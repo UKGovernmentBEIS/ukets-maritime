@@ -23,6 +23,17 @@ export const getPeerReviewDecisionTimelineTextMap = (actionType: string): PeerRe
     };
   }
 
+  if (
+    actionType === 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED' ||
+    actionType === 'NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED'
+  ) {
+    return {
+      caption: 'Review civil penalty notice reponse',
+      decision: 'Peer review decision',
+      notes: 'Supporting notes',
+    };
+  }
+
   return {
     caption: 'Peer review response',
     decision: 'Peer review decision',

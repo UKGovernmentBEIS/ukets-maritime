@@ -21,7 +21,7 @@ describe('AerShipsXmlService', () => {
       value: { getRandomValues: getFixedUUID, randomUUID: getFixedUUID },
     });
 
-    const result = service.parse(mockAerShipsXml, '2023');
+    const result = service.parse(mockAerShipsXml, '2025');
     expect(result).toEqual({
       data: [
         {
@@ -33,23 +33,31 @@ describe('AerShipsXmlService', () => {
           details: {
             allYear: true,
             flagState: 'GR',
+            from: null,
             grossTonnage: 10000,
             hasIceClassDerogation: true,
             iceClass: 'PC1',
             imoNumber: '1111111',
             name: 'Ship A1',
             natureOfReportingResponsibility: 'SHIPOWNER',
+            to: null,
             type: 'RORO',
           },
           emissionsSources: [
             {
               fuelDetails: [
                 {
+                  methaneSlip: null,
+                  methaneSlipValueType: null,
+                  name: null,
                   origin: 'FOSSIL',
                   type: 'HFO',
                   uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
                 },
                 {
+                  methaneSlip: null,
+                  methaneSlipValueType: null,
+                  name: null,
                   origin: 'BIOFUEL',
                   type: 'BIO_DIESEL',
                   uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -64,6 +72,9 @@ describe('AerShipsXmlService', () => {
             {
               fuelDetails: [
                 {
+                  methaneSlip: null,
+                  methaneSlipValueType: null,
+                  name: null,
                   origin: 'FOSSIL',
                   type: 'HFO',
                   uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -79,16 +90,18 @@ describe('AerShipsXmlService', () => {
           fuelsAndEmissionsFactors: [
             {
               carbonDioxide: '3.114',
-              methane: '0.14',
-              nitrousOxide: '0.12',
+              methane: 0.14,
+              name: null,
+              nitrousOxide: 0.12,
               origin: 'FOSSIL',
               type: 'HFO',
               uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
             },
             {
               carbonDioxide: '2.834',
-              methane: '0.24',
-              nitrousOxide: '0.22',
+              methane: 0.24,
+              name: null,
+              nitrousOxide: 0.22,
               origin: 'BIOFUEL',
               type: 'BIO_DIESEL',
               uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -117,13 +130,14 @@ describe('AerShipsXmlService', () => {
           details: {
             allYear: false,
             flagState: 'US',
-            from: '2023-01-01',
+            from: '2025-01-01',
             grossTonnage: 20000,
+            hasIceClassDerogation: null,
             iceClass: 'NA',
             imoNumber: '2222222',
             name: 'Ship B1',
             natureOfReportingResponsibility: 'ISM_COMPANY',
-            to: '2023-12-31',
+            to: '2025-12-31',
             type: 'OIL',
           },
           emissionsSources: [
@@ -132,6 +146,7 @@ describe('AerShipsXmlService', () => {
                 {
                   methaneSlip: '3.1',
                   methaneSlipValueType: 'PRESELECTED',
+                  name: null,
                   origin: 'FOSSIL',
                   type: 'LNG',
                   uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -148,6 +163,7 @@ describe('AerShipsXmlService', () => {
             {
               carbonDioxide: '2.75',
               methane: '0',
+              name: null,
               nitrousOxide: '0.00011',
               origin: 'FOSSIL',
               type: 'LNG',
@@ -175,20 +191,7 @@ describe('AerShipsXmlService', () => {
     });
     const result = service.parse(mockAerShipsPartialErrorsXml, '2023');
     expect(result).toEqual({
-      data: [
-        {
-          derogations: {},
-          details: {
-            imoNumber: '1111111',
-            name: 'Ship1',
-            type: 'RORO',
-          },
-          emissionsSources: [],
-          fuelsAndEmissionsFactors: [],
-          uncertaintyLevel: [],
-          uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
-        },
-      ],
+      data: [],
       errors: [
         {
           column: 'shipImoNumber',
@@ -201,13 +204,8 @@ describe('AerShipsXmlService', () => {
           row: 1,
         },
         {
-          column: 'shipType',
-          message: 'The Ship Type is invalid',
-          row: 1,
-        },
-        {
           column: 'shipImoNumber',
-          message: 'There are duplicated IMO numbers in the file',
+          message: 'There are duplicated IMO numbers in the file. Check the information entered and reupload the file',
           row: 3,
         },
       ],

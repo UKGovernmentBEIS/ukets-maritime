@@ -1,3 +1,5 @@
+import { RequestActionUserInfo } from '@mrtm/api';
+
 import {
   createAggregateSelector,
   createDescendingSelector,
@@ -37,8 +39,12 @@ const selectAttachedFiles = (files?: string[]): StateSelector<RequestActionState
       files?.map((id) => ({ downloadUrl: downloadUrl + id, fileName: attachments?.[id] })) ?? [],
   );
 
+const selectNotifiedUsersInfo: StateSelector<RequestActionState, { [key: string]: RequestActionUserInfo }> =
+  createDescendingSelector(selectPayload, (payload) => payload?.usersInfo);
+
 export const nonComplianceInitialPenaltyNoticeSubmittedQuery = {
   selectPayload,
   selectNonComplianceInitialPenaltyNoticeUpload,
   selectAttachedFiles,
+  selectNotifiedUsersInfo,
 };

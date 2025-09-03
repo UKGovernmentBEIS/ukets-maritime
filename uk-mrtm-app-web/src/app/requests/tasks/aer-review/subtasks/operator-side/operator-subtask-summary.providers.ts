@@ -1,4 +1,4 @@
-import { Provider } from '@angular/core';
+import { computed, Provider } from '@angular/core';
 
 import { LimitedCompanyOrganisation } from '@mrtm/api';
 
@@ -34,18 +34,20 @@ const provideOperatorSubtaskSummary: Provider = {
   provide: AER_REVIEW_SUBTASK_DETAILS,
   deps: [RequestTaskStore],
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
-    const operatorDetails = store.select(aerCommonQuery.selectAerOperatorDetails)();
-
     return {
       component: OperatorDetailsSummaryTemplateComponent,
-      inputs: {
-        operatorDetails,
-        files: store.select(
-          aerCommonQuery.selectAttachedFiles(
-            (operatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
+      inputs: computed(() => {
+        const operatorDetails = store.select(aerCommonQuery.selectAerOperatorDetails)();
+
+        return {
+          operatorDetails,
+          files: store.select(
+            aerCommonQuery.selectAttachedFiles(
+              (operatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
+            ),
           ),
-        ),
-      },
+        };
+      }),
     };
   },
 };
@@ -54,15 +56,12 @@ const provideMonitoringPlanChangesSubtaskSummary: Provider = {
   provide: AER_REVIEW_SUBTASK_DETAILS,
   deps: [RequestTaskStore],
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
-    const monitoringPlanChanges = store.select(aerCommonQuery.selectMonitoringPlanChanges)();
-    const monitoringPlanVersion = store.select(aerCommonQuery.selectMonitoringPlanVersion)();
-
     return {
       component: MonitoringPlanChangesSummaryTemplateComponent,
-      inputs: {
-        monitoringPlanChanges,
-        monitoringPlanVersion,
-      },
+      inputs: computed(() => ({
+        monitoringPlanChanges: store.select(aerCommonQuery.selectMonitoringPlanChanges)(),
+        monitoringPlanVersion: store.select(aerCommonQuery.selectMonitoringPlanVersion)(),
+      })),
     };
   },
 };
@@ -73,9 +72,10 @@ const provideEmissionSourceSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: ListOfShipsSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerCommonQuery.selectListOfShips)(),
-      },
+        editUrl: '.',
+      })),
     };
   },
 };
@@ -86,9 +86,9 @@ const provideReductionClaimSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: ReductionClaimSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerCommonQuery.selectReductionClaim)(),
-      },
+      })),
     };
   },
 };
@@ -97,16 +97,18 @@ const provideAdditionalDocumentSubtaskSummary: Provider = {
   provide: AER_REVIEW_SUBTASK_DETAILS,
   deps: [RequestTaskStore],
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
-    const additionalDocuments = store.select(aerCommonQuery.selectAerAdditionalDocuments)();
-    const files = store.select(aerCommonQuery.selectAttachedFiles(additionalDocuments?.documents))();
-
     return {
       component: AdditionalDocumentsSummaryTemplateComponent,
-      inputs: {
-        additionalDocuments,
-        additionalDocumentsMap: aerAdditionalDocumentsMap,
-        files,
-      },
+      inputs: computed(() => {
+        const additionalDocuments = store.select(aerCommonQuery.selectAerAdditionalDocuments)();
+        const files = store.select(aerCommonQuery.selectAttachedFiles(additionalDocuments?.documents))();
+
+        return {
+          additionalDocuments,
+          additionalDocumentsMap: aerAdditionalDocumentsMap,
+          files,
+        };
+      }),
     };
   },
 };
@@ -117,9 +119,9 @@ const provideTotalEmissionsSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: AerTotalEmissionsSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         totalEmissions: store.select(aerCommonQuery.selectTotalEmissions)(),
-      },
+      })),
     };
   },
 };
@@ -130,9 +132,14 @@ const provideAerAggregatedDataSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: AggregatedDataListSummaryTemplateComponent,
-      inputs: {
-        data: store.select(aerCommonQuery.selectAggregatedDataList)(),
-      },
+      inputs: computed(() => ({
+        data: store
+          .select(aerCommonQuery.selectAggregatedDataList)()
+          .map((item) => ({
+            ...item,
+            status: TaskItemStatus.COMPLETED,
+          })),
+      })),
     };
   },
 };
@@ -143,11 +150,11 @@ const provideVoyagesSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: VoyagesListSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store
           .select(aerCommonQuery.selectVoyagesList)()
           .map((item) => ({ ...item, status: TaskItemStatus.COMPLETED })),
-      },
+      })),
     };
   },
 };
@@ -158,11 +165,11 @@ const providePortsSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: PortCallsListSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store
           .select(aerCommonQuery.selectPortsList)()
           .map((item) => ({ ...item, status: TaskItemStatus.COMPLETED })),
-      },
+      })),
     };
   },
 };

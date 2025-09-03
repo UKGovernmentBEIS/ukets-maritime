@@ -21,13 +21,10 @@ import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.mrtm.api.web.orchestrator.workflow.dto.EmpBatchReissuesResponseDTO;
 import uk.gov.mrtm.api.web.orchestrator.workflow.service.EmpBatchReissueRequestsAndInitiatePermissionOrchestrator;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
-import uk.gov.mrtm.api.workflow.request.core.domain.constants.RequestHistoryCategory;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpBatchReissueRequestMetadata;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.netz.api.authorization.rules.services.resource.CompAuthAuthorizationResourceService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.domain.PagingRequest;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -36,18 +33,13 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
-import uk.gov.netz.api.workflow.request.core.domain.constants.RequestStatuses;
 import uk.gov.netz.api.workflow.request.core.domain.dto.RequestDetailsDTO;
 import uk.gov.netz.api.workflow.request.core.domain.dto.RequestDetailsSearchResults;
-import uk.gov.netz.api.workflow.request.core.domain.dto.RequestSearchCriteria;
-import uk.gov.netz.api.workflow.request.core.service.RequestQueryService;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
-import java.util.Set;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -59,7 +51,7 @@ import static uk.gov.netz.api.common.constants.RoleTypeConstants.REGULATOR;
 import static uk.gov.netz.api.workflow.request.core.domain.constants.RequestStatuses.COMPLETED;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpBatchReissueRequestControllerTest {
+class EmpBatchReissueRequestControllerTest {
 
     private static final String BASE_PATH = "/v1.0/batch-reissue-requests";
 
@@ -77,14 +69,8 @@ public class EmpBatchReissueRequestControllerTest {
     @Mock
     private AppSecurityComponent appSecurityComponent;
 
-    @Mock
-    private RequestQueryService requestQueryService;
-
-    @Mock
-    private CompAuthAuthorizationResourceService compAuthAuthorizationResourceService;
-
     @BeforeEach
-    public void setUp() {
+     void setUp() {
 
         MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter = new MappingJackson2HttpMessageConverter();
 
@@ -130,21 +116,9 @@ public class EmpBatchReissueRequestControllerTest {
                 .canInitiateBatchReissue(true)
                 .build();
 
-        RequestDetailsSearchResults results = RequestDetailsSearchResults.builder()
-                .requestDetails(List.of(new RequestDetailsDTO("1", MrtmRequestType.EMP_BATCH_REISSUE, RequestStatuses.IN_PROGRESS, LocalDateTime.now(), EmpBatchReissueRequestMetadata.builder().build())))
-                .build();
-
         PagingRequest paging = PagingRequest.builder()
                 .pageNumber(0)
                 .pageSize(1)
-                .build();
-
-        RequestSearchCriteria criteria = RequestSearchCriteria.builder()
-        		.resourceType(ResourceType.CA)
-                .resourceId(CompetentAuthorityEnum.ENGLAND.name())
-                .requestTypes(Set.of(MrtmRequestType.EMP_BATCH_REISSUE))
-                .historyCategory(RequestHistoryCategory.CA)
-                .paging(paging)
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);

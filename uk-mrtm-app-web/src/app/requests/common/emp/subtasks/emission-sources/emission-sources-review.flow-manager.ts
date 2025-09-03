@@ -17,6 +17,8 @@ export class EmissionSourcesReviewFlowManager extends WizardFlowManager {
       case EmissionSourcesWizardStep.LIST_COMPLETION:
         return of(`../${EmissionSourcesWizardStep.EMISSION_FACTORS}`);
       case EmissionSourcesWizardStep.EMISSION_FACTORS:
+        return of(`../${EmissionSourcesWizardStep.EMISSION_COMPLIANCE}`);
+      case EmissionSourcesWizardStep.EMISSION_COMPLIANCE:
         return of(`../${EmissionSourcesWizardStep.DECISION}`);
       case EmissionSourcesWizardStep.DECISION:
         return of(EmissionSourcesWizardStep.SUMMARY);

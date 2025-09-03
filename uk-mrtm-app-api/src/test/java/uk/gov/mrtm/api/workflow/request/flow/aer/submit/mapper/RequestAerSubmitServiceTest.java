@@ -162,9 +162,9 @@ class RequestAerSubmitServiceTest {
         assertTrue(updatedRequestPayload.isVerificationPerformed());
         assertEquals(aer, updatedRequestPayload.getAer());
         assertThat(updatedRequestPayload.getAerAttachments()).containsExactlyInAnyOrderEntriesOf(aerAttachments);
-        assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
         assertThat(updatedRequestPayload.getTotalEmissions()).isEqualTo(reportingRequired ? totalReportableEmissions : null);
         assertEquals(empOriginatedData, updatedRequestPayload.getEmpOriginatedData());
+        assertThat(updatedRequestPayload.getAerSubmitSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
 
         verify(aerSubmitMapper, times(1))
             .toAerContainer(aerSubmitRequestTaskPayload);
@@ -277,9 +277,9 @@ class RequestAerSubmitServiceTest {
         assertTrue(updatedRequestPayload.isVerificationPerformed());
         assertEquals(aer, updatedRequestPayload.getAer());
         assertThat(updatedRequestPayload.getAerAttachments()).containsExactlyInAnyOrderEntriesOf(aerAttachments);
-        assertThat(updatedRequestPayload.getAerSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
         assertThat(updatedRequestPayload.getTotalEmissions()).isEqualTo(reportingRequired ? totalReportableEmissions : null);
         assertEquals(empOriginatedData, updatedRequestPayload.getEmpOriginatedData());
+        assertThat(updatedRequestPayload.getAerSubmitSectionsCompleted()).containsExactlyInAnyOrderEntriesOf(aerSectionsCompleted);
 
         AerRequestMetadata updatedRequestMetadata = (AerRequestMetadata) request.getMetadata();
         assertEquals(metadataEmissions, updatedRequestMetadata.getEmissions());

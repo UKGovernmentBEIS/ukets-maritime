@@ -6,6 +6,7 @@ import { NonComplianceInitialPenaltyNoticeRequestTaskPayload } from '@mrtm/api';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';
 
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 import { nonComplianceInitialPenaltyNoticeCommonQuery } from '@requests/common/non-compliance/non-compliance-initial-penalty-notice/+state';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { taskActionTypeToUploadSectionTaskActionTypeMap } from '@shared/constants/upload-attachment-request-task-action-type.map';
@@ -18,10 +19,8 @@ export const nonComplianceInitialPenaltyNoticeUploadFormProvider: Provider = {
     const nonComplianceInitialPenaltyNoticeUpload = store.select(
       nonComplianceInitialPenaltyNoticeCommonQuery.selectNonComplianceInitialPenaltyNoticeUpload,
     )();
-    const nonComplianceAttachments = store.select(
-      nonComplianceInitialPenaltyNoticeCommonQuery.selectNonComplianceAttachments,
-    )();
-    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+    const nonComplianceAttachments = store.select(nonComplianceCommonQuery.selectNonComplianceAttachments)();
+    const isEditable = store.select(nonComplianceInitialPenaltyNoticeCommonQuery.selectIsFormEditable)();
     const requestTaskId = store.select(requestTaskQuery.selectRequestTaskId)();
     const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
 

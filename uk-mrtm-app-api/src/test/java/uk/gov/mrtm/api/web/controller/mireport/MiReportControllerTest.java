@@ -23,6 +23,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.mrtm.api.mireport.outstandingrequesttasks.MaritimeOutstandingRequestTasksReportService;
+import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
+import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
@@ -41,9 +43,6 @@ import uk.gov.netz.api.mireport.domain.MiReportResult;
 import uk.gov.netz.api.mireport.domain.MiReportSearchResult;
 import uk.gov.netz.api.mireport.jsonprovider.MiReportParamsTypesProvider;
 import uk.gov.netz.api.mireport.jsonprovider.MiReportResultTypesProvider;
-import uk.gov.netz.api.mireport.outstandingrequesttasks.OutstandingRequestTasksReportService;
-import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
-import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
@@ -52,7 +51,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.times;
@@ -90,7 +88,7 @@ class MiReportControllerTest {
     private static final String USER_ID = "userId";
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
         objectMapper.registerSubtypes(new MiReportParamsTypesProvider().getTypes().toArray(NamedType[]::new));
@@ -299,7 +297,7 @@ class MiReportControllerTest {
         return reportNames.stream()
                 .map(t -> MiReportEntity.builder().miReportType(t).competentAuthority(CompetentAuthorityEnum.ENGLAND))
                 .map(e -> factory.createProjection(MiReportSearchResult.class, e))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 }

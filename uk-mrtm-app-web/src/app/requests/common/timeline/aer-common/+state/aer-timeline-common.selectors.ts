@@ -46,10 +46,11 @@ import {
   AerAggregatedDataSummaryItemDto,
   AerJourneyTypeEnum,
   AerPortSummaryItemDto,
-  AerReviewDecisionDto,
   AerVoyageSummaryItemDto,
   AttachedFile,
   ReductionClaimDetailsListItemDto,
+  ReviewDecisionDto,
+  ReviewDecisionUnion,
   ShipEmissionTableListItem,
 } from '@shared/types';
 
@@ -351,9 +352,9 @@ const selectMaterialityLevel: StateSelector<RequestActionState, AerMaterialityLe
   (verificationReport) => verificationReport?.materialityLevel,
 );
 
-const withReviewDetermination: StateSelector<RequestActionState, boolean> = createDescendingSelector(
+const isReviewCompletedActionType: StateSelector<RequestActionState, boolean> = createDescendingSelector(
   requestActionQuery.selectActionType,
-  (payload) => ['AER_APPLICATION_COMPLETED'].includes(payload),
+  (actionType) => actionType === 'AER_APPLICATION_COMPLETED',
 );
 
 const selectReviewAttachments: StateSelector<
@@ -361,13 +362,11 @@ const selectReviewAttachments: StateSelector<
   AerApplicationAmendsSubmitRequestTaskPayload['reviewAttachments']
 > = createDescendingSelector(selectPayload, (payload) => payload?.reviewAttachments);
 
-const selectReviewGroupDecisions: StateSelector<
-  RequestActionState,
-  Record<string, AerDataReviewDecision>
-> = createDescendingSelector(
-  selectPayload,
-  (payload) => payload?.reviewGroupDecisions as Record<string, AerDataReviewDecision>,
-);
+const selectReviewGroupDecisions: StateSelector<RequestActionState, { [key: string]: ReviewDecisionUnion }> =
+  createDescendingSelector(
+    selectPayload,
+    (payload) => payload.reviewGroupDecisions as { [key: string]: ReviewDecisionUnion },
+  );
 
 const selectReviewGroupDecision = (
   group: AerSaveReviewGroupDecisionRequestTaskActionPayload['group'],
@@ -379,19 +378,22 @@ const selectSummaryReviewGroupDecision = (group: AerSaveReviewGroupDecisionReque
     timelineCommonQuery.selectDownloadUrl,
     selectReviewAttachments,
     selectReviewGroupDecision(group),
-    (downloadUrl, attachments, groupDecision) => ({
-      ...groupDecision,
-      details: {
-        ...groupDecision?.details,
-        requiredChanges: (groupDecision as AerReviewDecisionDto)?.details?.requiredChanges?.map((change) => ({
-          ...change,
-          files: change?.files?.map((file) => ({
-            fileName: attachments[file as any],
-            downloadUrl: `${downloadUrl}/${file}`,
-          })),
-        })),
-      },
-    }),
+    (downloadUrl, attachments, groupDecision) =>
+      groupDecision
+        ? {
+            ...groupDecision,
+            details: {
+              ...groupDecision?.details,
+              requiredChanges: (groupDecision as ReviewDecisionDto)?.details?.requiredChanges?.map((change) => ({
+                ...change,
+                files: change?.files?.map((file) => ({
+                  fileName: attachments[file as any],
+                  downloadUrl: `${downloadUrl}/${file}`,
+                })),
+              })),
+            },
+          }
+        : null,
   );
 
 export const aerTimelineCommonQuery = {
@@ -429,6 +431,7 @@ export const aerTimelineCommonQuery = {
   selectRecommendedImprovements,
   selectDataGapsMethodologies,
   selectMaterialityLevel,
-  withReviewDetermination,
+  isReviewCompletedActionType,
   selectSummaryReviewGroupDecision,
+  selectReviewGroupDecisions,
 };

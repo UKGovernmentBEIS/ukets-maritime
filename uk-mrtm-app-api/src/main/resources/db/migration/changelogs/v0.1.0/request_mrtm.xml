@@ -3324,4 +3324,38 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_UPDATE_AER_CAN_CREATE_MANUALLY" author="dimopoulosc@unisystems.gr">
+        <sql>
+            update public.request_type set can_create_manually = true WHERE code = 'AER';
+        </sql>
+        <rollback>
+            <sql>
+                update public.request_type set can_create_manually = false where code = 'AER';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_PAYMENT_CANCEL_TO_USE_CANCEL_APPLICATION_REQUEST_TASK_ACTION" author="P44065">
+        <sql>
+            update public.request_task_type_action_type
+            set request_task_action_type_id = (select id from request_task_action_type where code = 'CANCEL_APPLICATION')
+            where request_task_action_type_id = (select id from request_task_action_type where code = 'PAYMENT_CANCEL');
+
+            delete from public.request_task_action_type
+            where code = 'PAYMENT_CANCEL';
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_EMP_VARIATION_REGULATOR_LED_NOTIFY_OPERATOR_TO_BE_BLOCKED_BY_PAYMENT" author="P44065">
+        <sql>
+            UPDATE public.request_task_action_type set blocked_by_payment = true
+            WHERE code = 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_action_type set blocked_by_payment = false
+                WHERE code = 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

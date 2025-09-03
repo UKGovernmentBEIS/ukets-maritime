@@ -1,12 +1,14 @@
-import {
-  EmpEmissionsSources,
-  EmpFuelsAndEmissionsFactors,
-  FuelOriginBiofuelTypeName,
-  FuelOriginEFuelTypeName,
-  FuelOriginFossilTypeName,
-} from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { EmissionSourceEditDTO, FuelTypeCodeDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
+import { EmpEmissionsSources, EmpFuelsAndEmissionsFactors } from '@mrtm/api';
+
+import { EmpFuelsAndEmissionsFactorsExtended } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
+import {
+  EmissionSourceEditDTO,
+  FuelTypeCodeDTO,
+  FuelTypeEmissionFactorEditDTO,
+  ShipParticularsDTO,
+} from '@requests/common/emp/subtasks/emissions/interfaces';
 import {
   EmissionSourceClassCodeEnum,
   EmissionSourceTypeCodeEnum,
@@ -14,29 +16,49 @@ import {
   MonitoringMethodCodeEnum,
 } from '@requests/common/types';
 import { EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS } from '@shared/constants';
-import { AllFuels, BioFuels, EFuels, FossilFuels } from '@shared/types';
+import { AllFuelOriginTypeName, AllFuels, XmlResult } from '@shared/types';
 import { isLNG } from '@shared/utils';
 import { XmlValidator } from '@shared/validators';
 
-export class EmpEmissionSourceEditDtoValidator {
-  private static isEmissionNameValid(value?: EmissionSourceEditDTO['name']) {
-    return XmlValidator.maxLength(value, 255);
+export class EmissionSourceEditDtoValidator {
+  private static isEmissionSourceIdentificationNumberValid(value?: EmissionSourceEditDTO['name']): boolean {
+    return XmlValidator.isEmpty(value) || (XmlValidator.isString(value) && XmlValidator.maxLength(value, 30));
   }
 
-  private static isEmissionSourceTypeCodeValid(value?: EmissionSourceTypeCodeEnum) {
+  private static isEmissionSourceNameValid(value?: EmissionSourceEditDTO['name']): boolean {
+    return XmlValidator.isRequired(value) && XmlValidator.isString(value) && XmlValidator.maxLength(value, 255);
+  }
+
+  private static isEmissionSourceTypeCodeValid(value?: EmissionSourceTypeCodeEnum): boolean {
     return XmlValidator.isEnum(value, EmissionSourceTypeCodeEnum);
   }
 
-  private static isEmissionSourceClassCodeValid(value?: EmissionSourceClassCodeEnum) {
+  private static isEmissionSourceClassCodeValid(value?: EmissionSourceClassCodeEnum): boolean {
     return XmlValidator.isEnum(value, EmissionSourceClassCodeEnum);
   }
 
-  private static isMonitoringMethodCodeValid(value?: MonitoringMethodCodeEnum) {
+  private static isMonitoringMethodCodeValid(value?: MonitoringMethodCodeEnum): boolean {
     return XmlValidator.isEnum(value, MonitoringMethodCodeEnum);
   }
 
-  private static isSlipPercentageValid(fuel: AllFuels, value?: number) {
-    return isLNG(fuel) && XmlValidator.min(value, 0) && XmlValidator.max(value, 1);
+  private static isSlipPercentageValid(fuel: AllFuels, value?: number): boolean {
+    return isLNG(fuel) ? XmlValidator.min(value, 0) && XmlValidator.max(value, 1) : XmlValidator.isEmpty(value);
+  }
+
+  private static getFuelKey(fuel: FuelTypeCodeDTO | FuelTypeEmissionFactorEditDTO): string {
+    return fuel?.otherFuelType ? `${fuel?.fuelTypeCode}-${fuel?.otherFuelType.toUpperCase()}` : fuel?.fuelTypeCode;
+  }
+
+  private static getExistingEmissionFactor(
+    fuelTypeCode?: FuelTypeCodeDTO,
+    fuelsEmissionsFactors?: EmpFuelsAndEmissionsFactorsExtended[],
+  ) {
+    return fuelsEmissionsFactors?.find((fuelEmissionFactor) =>
+      fuelTypeCode?.fuelTypeCode === FuelTypeCodeEnum.OTHER
+        ? fuelTypeCode?.fuelTypeCode === fuelEmissionFactor?.type &&
+          fuelTypeCode?.otherFuelType?.toUpperCase() === fuelEmissionFactor?.name?.toUpperCase()
+        : fuelTypeCode?.fuelTypeCode === fuelEmissionFactor?.type,
+    );
   }
 
   /**
@@ -48,120 +70,169 @@ export class EmpEmissionSourceEditDtoValidator {
     return String(parseInt(String(percentage * 100)) / 100);
   }
 
-  private static getExistingFuelTypeCode(
-    value?: FuelTypeCodeDTO,
-    emissionFactors?: Partial<FossilFuels | BioFuels | EFuels>[],
-  ): FuelOriginBiofuelTypeName | FuelOriginEFuelTypeName | FuelOriginFossilTypeName | null {
-    const isValidEnum = XmlValidator.isEnum(value?.fuelTypeCode, FuelTypeCodeEnum);
-    const foundEmissionFactor = emissionFactors?.find((emissionFactor) => {
-      return value?.fuelTypeCode === FuelTypeCodeEnum.OTHER
-        ? value?.fuelTypeCode === emissionFactor?.type && value?.otherFuelType === emissionFactor?.name
-        : value?.fuelTypeCode === emissionFactor?.type;
+  /**
+   * Validates that all FuelTypeCodeDTO[] are valid, based on already mapped EmpFuelsAndEmissionsFactors[]
+   */
+  private static areFuelTypeCodeDTOsValid(
+    fuelTypeCodes?: FuelTypeCodeDTO[],
+    fuelsEmissionsFactors?: EmpFuelsAndEmissionsFactorsExtended[],
+  ) {
+    const uniqueIds = fuelTypeCodes?.map((fuelTypeCode) => this.getFuelKey(fuelTypeCode));
+    const noDuplicatesValid = new Set(uniqueIds).size === uniqueIds?.length;
+    const fuelTypeCodesLengthValid = fuelTypeCodes?.length > 0;
+    const allFuelTypeCodesValid = fuelTypeCodes?.every((fuelTypeCode) => {
+      const isFuelTypeCodeValid =
+        XmlValidator.isEnum(fuelTypeCode?.fuelTypeCode, FuelTypeCodeEnum) &&
+        (fuelTypeCode?.fuelTypeCode !== FuelTypeCodeEnum.OTHER
+          ? XmlValidator.isEmpty(fuelTypeCode?.otherFuelType)
+          : true);
+      const foundEmissionFactor = this.getExistingEmissionFactor(fuelTypeCode, fuelsEmissionsFactors);
+      const isSlipPercentageValid = this.isSlipPercentageValid(
+        {
+          uniqueIdentifier: foundEmissionFactor?.uniqueIdentifier,
+          origin: foundEmissionFactor?.origin,
+          type: foundEmissionFactor?.type,
+          name: foundEmissionFactor?.name,
+        } as AllFuels,
+        fuelTypeCode?.slipPercentage,
+      );
+
+      return isFuelTypeCodeValid && foundEmissionFactor && isSlipPercentageValid;
     });
 
-    if (isValidEnum && foundEmissionFactor?.uniqueIdentifier && foundEmissionFactor?.origin) {
-      const fuelOriginTypeName: FuelOriginBiofuelTypeName | FuelOriginEFuelTypeName | FuelOriginFossilTypeName = {
+    return fuelTypeCodesLengthValid && noDuplicatesValid && allFuelTypeCodesValid;
+  }
+
+  private static areAllMonitoringMethodCodesValid(monitoringMethodCodes?: MonitoringMethodCodeEnum[]) {
+    const monitoringMethodCodesLengthValid =
+      XmlValidator.minLength(monitoringMethodCodes, 1) && XmlValidator.maxLength(monitoringMethodCodes, 4);
+    const allMonitoringMethodCodes = monitoringMethodCodes?.map((monitoringMethodCode) => monitoringMethodCode);
+    const hasNoDuplicateMethodCode = new Set(allMonitoringMethodCodes).size === allMonitoringMethodCodes.length;
+    const allMonitoringMethodCodesValid = monitoringMethodCodes.every((monitoringMethodCode) =>
+      this.isMonitoringMethodCodeValid(monitoringMethodCode),
+    );
+    return monitoringMethodCodesLengthValid && allMonitoringMethodCodesValid && hasNoDuplicateMethodCode;
+  }
+
+  /**
+   * Validates all EmissionSourceEditDTO[], including basic property validation,
+   * duplication and inclusion in FuelTypeEmissionFactorEditDTO[]
+   */
+  private static areEmissionSourceEditDTOsValid(
+    emissionDTOs?: EmissionSourceEditDTO[],
+    fuelDTOs?: FuelTypeEmissionFactorEditDTO[],
+    empFuelsAndEmissionsFactors?: EmpFuelsAndEmissionsFactors[],
+  ): boolean {
+    const uniqueIds = emissionDTOs?.map((emissionDTO) => emissionDTO?.name?.toUpperCase());
+    const noDuplicatesValid = new Set(uniqueIds).size === uniqueIds?.length;
+    const emissionsLengthValid = XmlValidator.minLength(emissionDTOs, 1);
+    const allFuelsTypeCodes = fuelDTOs?.map((fuelDTO) => this.getFuelKey(fuelDTO));
+    const allEmissionFuelTypeCodes = emissionDTOs?.flatMap((emissionDTO) =>
+      emissionDTO?.fuelTypeCodes?.map((fuelTypeCode) => this.getFuelKey(fuelTypeCode)),
+    );
+    const fuelsExistInEmissionsValid = allFuelsTypeCodes?.every((fuelTypeCode) =>
+      allEmissionFuelTypeCodes?.includes(fuelTypeCode),
+    );
+    const allEmissionsValid = emissionDTOs?.every(
+      (emissionDTO) =>
+        this.isEmissionSourceIdentificationNumberValid(emissionDTO?.identificationNumber) &&
+        this.isEmissionSourceNameValid(emissionDTO?.name) &&
+        noDuplicatesValid &&
+        this.isEmissionSourceTypeCodeValid(emissionDTO?.emissionSourceTypeCode) &&
+        this.isEmissionSourceClassCodeValid(emissionDTO?.emissionSourceClassCode) &&
+        this.areFuelTypeCodeDTOsValid(
+          emissionDTO?.fuelTypeCodes,
+          empFuelsAndEmissionsFactors as EmpFuelsAndEmissionsFactorsExtended[],
+        ) &&
+        fuelsExistInEmissionsValid &&
+        this.areAllMonitoringMethodCodesValid(emissionDTO?.monitoringMethodCode),
+    );
+
+    return emissionsLengthValid && allEmissionsValid;
+  }
+
+  /**
+   * Transforms FuelTypeCodeDTO[] to AllFuelOriginTypeName[]
+   * Assumes that fuelTypeCodes, fuelsEmissionsFactors are valid at this point
+   */
+  private static transformFuelTypeCodeDTOs(
+    fuelTypeCodes: FuelTypeCodeDTO[],
+    fuelsEmissionsFactors: EmpFuelsAndEmissionsFactorsExtended[],
+  ): AllFuelOriginTypeName[] {
+    return fuelTypeCodes?.map((fuelTypeCode) => {
+      const foundEmissionFactor = this.getExistingEmissionFactor(fuelTypeCode, fuelsEmissionsFactors);
+      const methaneSlipValue = !isNil(fuelTypeCode?.slipPercentage)
+        ? this.transformSlipPercentage(fuelTypeCode.slipPercentage)
+        : null;
+      const methaneSlipValueType = methaneSlipValue
+        ? EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS.find(
+            (methaneSlipItem) => methaneSlipItem.value === methaneSlipValue,
+          )
+          ? 'PRESELECTED'
+          : 'OTHER'
+        : null;
+
+      return {
         uniqueIdentifier: foundEmissionFactor.uniqueIdentifier,
         origin: foundEmissionFactor.origin,
         type: foundEmissionFactor.type,
-        name: foundEmissionFactor?.name,
+        name: foundEmissionFactor?.name ? foundEmissionFactor.name : null,
+        methaneSlip: methaneSlipValue,
+        methaneSlipValueType: methaneSlipValueType,
       };
-
-      if (this.isSlipPercentageValid(fuelOriginTypeName as AllFuels, value?.slipPercentage)) {
-        const methaneSlipValue = this.transformSlipPercentage(value.slipPercentage);
-        fuelOriginTypeName.methaneSlip = methaneSlipValue;
-        fuelOriginTypeName.methaneSlipValueType = EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS.find(
-          (methaneSlipItem) => methaneSlipItem.value === methaneSlipValue,
-        )
-          ? 'PRESELECTED'
-          : 'OTHER';
-      }
-
-      return fuelOriginTypeName;
-    }
-
-    return null;
+    });
   }
 
-  private static transformFuelTypeCodes = (
-    fuelTypeCodes?: FuelTypeCodeDTO[],
-    emissionFactors?: Partial<EmpFuelsAndEmissionsFactors>[],
-  ) => {
-    const fuelDetails: Array<FuelOriginBiofuelTypeName | FuelOriginEFuelTypeName | FuelOriginFossilTypeName> = [];
-    const existingFuelTypeCodes: string[] = [];
-
-    if (fuelTypeCodes?.length) {
-      for (const fuelTypeCode of fuelTypeCodes) {
-        if (existingFuelTypeCodes.includes(`${fuelTypeCode.fuelTypeCode}-${fuelTypeCode.otherFuelType}`)) {
-          break;
-        }
-
-        const fuelDetailsItem = this.getExistingFuelTypeCode(fuelTypeCode, emissionFactors);
-        if (fuelDetailsItem) {
-          existingFuelTypeCodes.push(`${fuelTypeCode.fuelTypeCode}-${fuelTypeCode.otherFuelType}`);
-          fuelDetails.push(fuelDetailsItem);
-        }
-      }
-    }
-
-    return fuelDetails;
-  };
-
-  private static transformMonitoringMethodCodes = (monitoringMethodCodes?: MonitoringMethodCodeEnum[]) => {
-    const empMonitoringMethods: Array<'BDN' | 'BUNKER_TANK' | 'FLOW_METERS' | 'DIRECT'> = [];
-
-    if (monitoringMethodCodes?.length) {
-      for (const monitoringMethodCode of monitoringMethodCodes) {
-        if (empMonitoringMethods.includes(monitoringMethodCode)) {
-          break;
-        }
-        if (this.isMonitoringMethodCodeValid(monitoringMethodCode)) {
-          empMonitoringMethods.push(monitoringMethodCode);
-        }
-      }
-    }
-
-    return empMonitoringMethods;
-  };
+  /**
+   * Transforms EmissionSourceEditDTO[] to EmpEmissionsSources[],
+   * taking into account the already transformed EmpFuelsAndEmissionsFactors[]
+   * Assumes that all EmissionSourceEditDTO[] are valid and EmpFuelsAndEmissionsFactors[] exist at this point
+   */
+  private static transformEmissionSourceEditDTOs(
+    emissionDTOs: EmissionSourceEditDTO[],
+    empFuelsAndEmissionsFactors: EmpFuelsAndEmissionsFactors[],
+  ): EmpEmissionsSources[] {
+    return emissionDTOs.map((emissionDTO) => ({
+      uniqueIdentifier: crypto.randomUUID(),
+      referenceNumber: XmlValidator.isEmpty(emissionDTO?.identificationNumber)
+        ? null
+        : emissionDTO.identificationNumber,
+      name: emissionDTO.name,
+      type: emissionDTO.emissionSourceTypeCode,
+      sourceClass: emissionDTO.emissionSourceClassCode,
+      fuelDetails: this.transformFuelTypeCodeDTOs(
+        emissionDTO.fuelTypeCodes,
+        empFuelsAndEmissionsFactors as EmpFuelsAndEmissionsFactorsExtended[],
+      ),
+      monitoringMethod: emissionDTO.monitoringMethodCode,
+    }));
+  }
 
   /**
-   * Validate and transform EmissionSourceEditDTO to EmpEmissionsSources[]
+   * Validates EmissionSourceEditDTO[] and returns XmlResult<EmpEmissionsSources[]>
+   * This should be explicitly called and displayed after validateCoreShipParticularsDTO is valid
    */
-  public static transformEmissionSourceEditDTOs(
-    emissionDTOs?: EmissionSourceEditDTO[],
-    emissionFactors?: Partial<EmpFuelsAndEmissionsFactors>[],
-  ): Partial<EmpEmissionsSources>[] {
-    const emissionSources: Partial<EmpEmissionsSources>[] = [];
-
-    if (emissionDTOs?.length) {
-      for (const emissionDTO of emissionDTOs) {
-        const emissionSource: Partial<EmpEmissionsSources> = {
-          uniqueIdentifier: crypto.randomUUID(),
-        };
-
-        if (emissionDTO?.identificationNumber) {
-          emissionSource.referenceNumber = emissionDTO.identificationNumber;
-        }
-
-        if (this.isEmissionNameValid(emissionDTO?.name)) {
-          emissionSource.name = emissionDTO.name;
-        }
-
-        if (this.isEmissionSourceTypeCodeValid(emissionDTO?.emissionSourceTypeCode)) {
-          emissionSource.type = emissionDTO.emissionSourceTypeCode;
-        }
-
-        if (this.isEmissionSourceClassCodeValid(emissionDTO?.emissionSourceClassCode)) {
-          emissionSource.sourceClass = emissionDTO.emissionSourceClassCode;
-        }
-
-        emissionSource.fuelDetails = this.transformFuelTypeCodes(emissionDTO?.fuelTypeCodes, emissionFactors);
-        emissionSource.monitoringMethod = this.transformMonitoringMethodCodes(emissionDTO?.monitoringMethodCode);
-
-        emissionSources.push(emissionSource);
-      }
+  public static validateEmissionSourceEditDTOs(
+    shipParticular: ShipParticularsDTO,
+    empFuelsAndEmissionsFactors?: EmpFuelsAndEmissionsFactors[],
+  ): XmlResult<EmpEmissionsSources[]> {
+    const emissionDTOs = shipParticular?.monitoringPlan?.emissionSources?.emissionSourceEntry;
+    const fuelDTOs = shipParticular?.monitoringPlan?.fuelTypes?.fuelTypeEntry;
+    if (this.areEmissionSourceEditDTOsValid(emissionDTOs, fuelDTOs, empFuelsAndEmissionsFactors)) {
+      return {
+        data: this.transformEmissionSourceEditDTOs(emissionDTOs, empFuelsAndEmissionsFactors),
+      };
     }
 
-    return emissionSources;
+    return {
+      errors: [
+        {
+          row: shipParticular.name,
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the emissions sources and fuel types used data you uploaded. Check the information entered and reupload the file',
+        },
+      ],
+    };
   }
 }

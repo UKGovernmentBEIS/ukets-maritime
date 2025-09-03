@@ -1,3 +1,4 @@
+import { Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { concatMap, Observable, tap } from 'rxjs';
@@ -10,6 +11,7 @@ import { virRespondToRegulatorCommentsQuery } from '@requests/tasks/vir-respond-
 import { VirRespondToRegulatorApiService } from '@requests/tasks/vir-respond-to-regulator-comments/services/vir-respond-to-regulator.api-service';
 import { VirRespondToRegulatorCommentsTaskPayload } from '@requests/tasks/vir-respond-to-regulator-comments/vir-respond-to-regulator-comments.types';
 
+@Injectable()
 export class VirRespondToRegulatorService extends TaskService<VirRespondToRegulatorCommentsTaskPayload> {
   get payload(): VirRespondToRegulatorCommentsTaskPayload {
     return this.store.select(virRespondToRegulatorCommentsQuery.selectPayload)();

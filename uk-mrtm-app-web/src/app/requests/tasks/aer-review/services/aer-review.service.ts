@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,7 @@ import { aerReviewQuery } from '@requests/tasks/aer-review/+state';
 import { AerReviewTaskPayload } from '@requests/tasks/aer-review/aer-review.types';
 import { AerReviewApiService } from '@requests/tasks/aer-review/services/aer-review-api.service';
 
+@Injectable()
 export class AerReviewService extends TaskService<AerReviewTaskPayload> {
   override apiService = inject(TaskApiService) as AerReviewApiService;
   get payload(): AerApplicationReviewRequestTaskPayload {

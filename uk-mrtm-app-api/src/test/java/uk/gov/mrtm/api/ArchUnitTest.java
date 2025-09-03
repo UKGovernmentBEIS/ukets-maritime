@@ -22,6 +22,7 @@ class ArchUnitTest {
     static final String REFERENCE_DATA_PACKAGE = BASE_PACKAGE + ".referencedata..";
     static final String FILES_PACKAGE = BASE_PACKAGE + ".files..";
     static final String DOCUMENT_TEMPLATE_PACKAGE = BASE_PACKAGE + ".documenttemplate..";
+    static final String NOTIFICATIONAPI_PACKAGE = BASE_PACKAGE + ".notificationapi..";
     static final String NOTIFICATION_PACKAGE = BASE_PACKAGE + ".notification..";
     static final String TOKEN_PACKAGE = BASE_PACKAGE + ".token..";
     static final String AUTHORIZATION_PACKAGE = BASE_PACKAGE + ".authorization..";
@@ -174,6 +175,8 @@ class ArchUnitTest {
                     .resideInAnyPackage(except(
                             ACCOUNT_PACKAGE,
                             COMMON_PACKAGE,
+                            NOTIFICATIONAPI_PACKAGE,
+                            NOTIFICATION_PACKAGE,
                             AUTHORIZATION_PACKAGE,
                             CA_PACKAGE,
                             FILES_PACKAGE, /* for notes */

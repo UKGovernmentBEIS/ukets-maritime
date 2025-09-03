@@ -14,12 +14,20 @@ import {
   AER_VERIFICATION_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/aer/aer.consts';
 import {
+  NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_ROUTE_PREFIX,
+  NON_COMPLIANCE_CIVIL_PENALTY_ROUTE_PREFIX,
+  NON_COMPLIANCE_CLOSE_ROUTE_PREFIX,
+  NON_COMPLIANCE_FINAL_DETERMINATION_ROUTE_PREFIX,
   NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_PEER_REVIEW_ROUTE_PREFIX,
   NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_ROUTE_PREFIX,
   NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_ROUTE_PREFIX,
   NON_COMPLIANCE_NOTICE_OF_INTENT_ROUTE_PREFIX,
   NON_COMPLIANCE_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/non-compliance';
+import {
+  canActivateProvideNoteRedirect,
+  PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX,
+} from '@requests/common/provide-note-redirect';
 import { taskProviders } from '@requests/common/task.providers';
 import { AER_REVIEW_ROUTE_PREFIX } from '@requests/tasks/aer-review';
 import { PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment';
@@ -196,6 +204,11 @@ export const TASKS_ROUTES: Routes = [
         loadChildren: () => import('@requests/common/components/recall').then((r) => r.RECALL_ROUTES),
       },
       {
+        path: PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX,
+        canActivate: [canActivateProvideNoteRedirect],
+        children: [],
+      },
+      {
         path: 'rde',
         loadChildren: () =>
           import('@requests/common/emp/request-deadline-extension').then((r) => r.REQUEST_DEADLINE_EXTENSION_ROUTES),
@@ -287,6 +300,30 @@ export const TASKS_ROUTES: Routes = [
           import('@requests/tasks/non-compliance-notice-of-intent-peer-review').then(
             (r) => r.NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_ROUTES,
           ),
+      },
+      {
+        path: NON_COMPLIANCE_CIVIL_PENALTY_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/tasks/non-compliance-civil-penalty').then((r) => r.NON_COMPLIANCE_CIVIL_PENALTY_ROUTES),
+      },
+      {
+        path: NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/tasks/non-compliance-civil-penalty-peer-review').then(
+            (r) => r.NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_ROUTES,
+          ),
+      },
+      {
+        path: NON_COMPLIANCE_FINAL_DETERMINATION_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/tasks/non-compliance-final-determination').then(
+            (r) => r.NON_COMPLIANCE_FINAL_DETERMINATION_ROUTES,
+          ),
+      },
+      {
+        path: NON_COMPLIANCE_CLOSE_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/common/non-compliance/non-compliance-close').then((r) => r.NON_COMPLIANCE_CLOSE_ROUTES),
       },
     ],
   },

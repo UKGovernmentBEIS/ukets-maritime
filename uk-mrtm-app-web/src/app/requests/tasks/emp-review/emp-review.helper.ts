@@ -7,10 +7,10 @@ import { EmpReviewTaskPayload, TaskItemStatus } from '@requests/common';
 import { OVERALL_DECISION_SUB_TASK } from '@requests/common/emp/subtasks/overall-decision';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { ReviewDecisionFormModel } from '@requests/tasks/emp-review/components/review-decision';
-import { EmpReviewDecisionUnion } from '@shared/types';
+import { ReviewDecisionUnion } from '@shared/types';
 import { transformToTaskAttachments } from '@shared/utils';
 
-const transformReviewDecision = (userInput: ReviewDecisionFormModel['value']): EmpReviewDecisionUnion => ({
+const transformReviewDecision = (userInput: ReviewDecisionFormModel['value']): ReviewDecisionUnion => ({
   type: userInput.type,
   details: {
     notes: userInput.notes,

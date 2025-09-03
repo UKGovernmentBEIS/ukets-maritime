@@ -5,6 +5,7 @@ export * from './emission-sources.guard';
 export * from './emission-sources.helper';
 export * from './emission-sources.wizard';
 export * from './emission-sources-completion';
+export * from './emission-sources-compliance';
 export * from './emission-sources-factors';
 export * from './emission-sources.routes';
 export * from './emission-sources-summary';

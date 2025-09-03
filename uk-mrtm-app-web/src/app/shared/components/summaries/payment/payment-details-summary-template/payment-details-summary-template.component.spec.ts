@@ -34,6 +34,8 @@ describe('PaymentDetailsSummaryTemplateComponent', () => {
   it('should display all HTML elements', () => {
     expect(page.heading3.textContent).toEqual('Payment details');
     expect(page.summariesContents).toEqual([
+      'Payment status',
+      'Not paid',
       'Date created',
       '12 Jun 2025',
       'Reference number',

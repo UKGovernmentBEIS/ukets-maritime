@@ -41,7 +41,7 @@ public class PayloadFieldsUtils {
     public static final String REGISTRY_ID = "Registry ID";
 
     public static String asStringOrEmpty(Object obj) {
-        return Optional.ofNullable(obj).map(Object::toString).filter(s -> !s.isBlank()).orElse("[empty]");
+        return Optional.ofNullable(obj).map(Object::toString).filter(s -> !s.isBlank()).orElse(EMPTY);
     }
 
     public static final String EMPTY = "[empty]";

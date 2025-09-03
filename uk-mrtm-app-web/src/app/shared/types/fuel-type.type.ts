@@ -18,6 +18,6 @@ export type AllFuels = BioFuels | EFuels | FossilFuels;
 
 export type FuelType = FossilFuels['type'] | BioFuels['type'] | EFuels['type'];
 
-export type AllFuelOriginTypeName = FuelOriginBiofuelTypeName | FuelOriginEFuelTypeName | FuelOriginFossilTypeName;
+export type AllFuelOriginTypeName = FuelOriginFossilTypeName | FuelOriginBiofuelTypeName | FuelOriginEFuelTypeName;
 
 export type AerFuel = AerFossilFuels | AerBioFuels | AerEFuels;

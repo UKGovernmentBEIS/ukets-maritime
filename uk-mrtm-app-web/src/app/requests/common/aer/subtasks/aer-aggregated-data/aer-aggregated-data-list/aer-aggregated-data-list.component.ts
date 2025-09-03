@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
+import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
@@ -21,8 +22,9 @@ import {
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { AggregatedDataListSummaryTemplateComponent } from '@shared/components';
+import { AggregatedDataListSummaryTemplateComponent, NotificationBannerComponent } from '@shared/components';
 import { DropdownButtonGroupComponent, DropdownButtonItemComponent } from '@shared/components/dropdown-button-group';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
 
 @Component({
@@ -39,6 +41,7 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
     AggregatedDataListSummaryTemplateComponent,
     PendingButtonDirective,
     WarningTextComponent,
+    NotificationBannerComponent,
   ],
   templateUrl: './aer-aggregated-data-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -49,6 +52,8 @@ export class AerAggregatedDataListComponent {
   private readonly currentFilter: WritableSignal<AerShipAggregatedData['imoNumber'] | null> = signal(null);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly router: Router = inject(Router);
+  private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
+  private readonly form: UntypedFormGroup = new UntypedFormGroup({});
 
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   public readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;
@@ -128,5 +133,29 @@ export class AerAggregatedDataListComponent {
 
   public async onContinue(): Promise<void> {
     await this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+  }
+
+  public onAddAggregatedData(event: MouseEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+
+    const aggregatedDataImoNumbers = (this.allAggregatedData() ?? []).map((aggregatedData) => aggregatedData.imoNumber);
+    const shipsImoNumbers = (this.store.select(aerCommonQuery.selectListOfShips)() ?? [])
+      .filter((ship) => ship.status === TaskItemStatus.COMPLETED)
+      .map((ship) => ship?.imoNumber);
+
+    if (shipsImoNumbers.every((shipImoNumber) => aggregatedDataImoNumbers.includes(shipImoNumber))) {
+      this.form.setErrors({
+        notAllowed: 'All ships already have aggregated data recorded',
+      });
+
+      this.notificationBannerStore.setInvalidForm(this.form);
+      return;
+    }
+
+    this.form.reset();
+    this.notificationBannerStore.reset();
+
+    this.router.navigate([this.wizardStep.SELECT_SHIP], { relativeTo: this.activatedRoute });
   }
 }

@@ -18427,4 +18427,300 @@
         </rollback>
     </changeSet>
 
+	<changeSet id="0_1_0_fix_create_execute_rules_for_EMP_VARIATION_REGULATOR_LED_TRACK_PAYMENT_request_task_type" author="tsaktsirasl@unisystems.gr">
+        <sql>
+            update public.au_resource_scope_permission set resource_sub_type = 'EMP_VARIATION_REGULATOR_LED_TRACK_PAYMENT' where resource_sub_type = 'EMP_VΑΡΙΑΤΙΟΝ_REGULATOR_LED_TRACK_PAYMENT'
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_rule_for_ACCOUNT_resource_and_AER_subresource_and_request_create_handler_for_regulator" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'ACCOUNT', 'AER', 'accountRequestCreateHandler', 'REGULATOR', 'REQUEST_CREATE');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_rule
+                where resource_type = 'ACCOUNT'
+                and resource_sub_type = 'AER'
+                and handler = 'accountRequestCreateHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'REQUEST_CREATE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_associate_processRequestCreateAction_service_with_ACCOUNT_AER_create_handler_rule" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'processRequestCreateAction'
+              and r.resource_type = 'ACCOUNT'
+              and r.resource_sub_type = 'AER'
+              and r.handler = 'accountRequestCreateHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'REQUEST_CREATE';
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'processRequestCreateAction'
+                and r.resource_type = 'ACCOUNT'
+                and r.resource_sub_type = 'AER'
+                and r.handler = 'accountRequestCreateHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_CREATE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_resource_scope_permission_for_ACCOUNT_resource_type_and_AER_subtype_for_request_create_scope" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'ACCOUNT',
+                        'AER',
+                        'REQUEST_CREATE',
+                        'PERM_AER_APPLICATION_REVIEW_EXECUTE_TASK',
+                        'REGULATOR');
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_resource_scope_permission
+                where resource_type = 'ACCOUNT'
+                and resource_sub_type = 'AER'
+                and scope = 'REQUEST_CREATE'
+                and permission = 'PERM_AER_APPLICATION_REVIEW_EXECUTE_TASK'
+                and role_type = 'REGULATOR';
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_create_view_scope_permission_for_NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK' , 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION', 'requestTaskAccountBasedAccessHandler', 'VERIFIER');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getTaskItemInfoById'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION'
+            and r.handler = 'requestTaskAccountBasedAccessHandler'
+            and r.role_type = 'VERIFIER'
+            and r.scope is null;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'processRequestTaskAction'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION'
+            and r.handler = 'requestTaskAccountBasedAccessHandler'
+            and r.role_type = 'VERIFIER'
+            and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getTaskItemInfoById'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION'
+                and r.handler = 'requestTaskAccountBasedAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'processRequestTaskAction'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION'
+                and r.handler = 'requestTaskAccountBasedAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_TASK'
+                and resource_sub_type = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION'
+                and handler = 'requestTaskAccountBasedAccessHandler'
+                and role_type = 'VERIFIER'
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_view_scope_permission_for_VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION_request_task_type_and_role_OPERATOR" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_TASK' , 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION', 'requestTaskAccessHandler', 'OPERATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'getTaskItemInfoById'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope is null;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+            cross join au_rule r
+            where s.name = 'processRequestTaskAction'
+            and r.resource_type = 'REQUEST_TASK'
+            and r.resource_sub_type = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION'
+            and r.handler = 'requestTaskAccessHandler'
+            and r.role_type = 'OPERATOR'
+            and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getTaskItemInfoById'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'processRequestTaskAction'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_TASK'
+                and resource_sub_type = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION'
+                and handler = 'requestTaskAccessHandler'
+                and role_type = 'OPERATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_rule_for_request_action_type_AER_APPLICATION_EXEMPTION_REVERTED_for_roles_OPERATOR_VERIFIER_and_REGULATOR" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'AER_APPLICATION_EXEMPTION_REVERTED', 'requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'AER_APPLICATION_EXEMPTION_REVERTED', 'requestActionViewHandler', 'REGULATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'AER_APPLICATION_EXEMPTION_REVERTED', 'requestActionAccountBasedViewHandler', 'VERIFIER');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'AER_APPLICATION_EXEMPTION_REVERTED'
+                and handler = 'requestActionViewHandler'
+                and scope is null
+                and role_type in ('OPERATOR', 'REGULATOR');
+
+                delete
+                from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'AER_APPLICATION_EXEMPTION_REVERTED'
+                and handler = 'requestActionAccountBasedViewHandler'
+                and scope is null
+                and role_type in ('VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_associate_getRequestActionById_service_with_request_action_type_AER_APPLICATION_EXEMPTION_REVERTED" author="P44065">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'AER_APPLICATION_EXEMPTION_REVERTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.scope is null
+              and r.role_type in ('OPERATOR', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'AER_APPLICATION_EXEMPTION_REVERTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.scope is null
+              and r.role_type in ('VERIFIER');
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'AER_APPLICATION_EXEMPTION_REVERTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.scope is null
+                and s.name = 'getRequestActionById'
+                and r.role_type in ('OPERATOR', 'REGULATOR');
+
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'AER_APPLICATION_EXEMPTION_REVERTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.scope is null
+                and s.name = 'getRequestActionById'
+                and r.role_type in ('VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

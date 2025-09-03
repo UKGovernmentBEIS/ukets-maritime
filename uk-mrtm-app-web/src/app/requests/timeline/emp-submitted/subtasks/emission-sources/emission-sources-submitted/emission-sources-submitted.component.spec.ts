@@ -57,6 +57,7 @@ describe('EmissionSourcesSubmittedComponent', () => {
     expect(summarySections).toEqual([
       emissionSourcesMap.listCompletion.title,
       emissionSourcesMap.emissionFactors.title,
+      emissionSourcesMap.emissionCompliance.title,
     ]);
 
     expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
@@ -67,6 +68,7 @@ describe('EmissionSourcesSubmittedComponent', () => {
       'Location where records are kept',
       'Name of IT system used',
       'Are you using default values for all emissions factors?',
+      'Will you be making an emissions reduction claim as a result of the purchase and delivery of sustainable fuel?',
     ]);
   });
 });

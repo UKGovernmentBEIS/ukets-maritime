@@ -6,13 +6,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerCreationService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 
 import java.time.Year;
-import java.util.List;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.timeout;
@@ -35,7 +33,6 @@ class InitiateAersHandlerTest {
     @Test
     void execute_auto_without_provided_accounts() throws Exception {
         Long accountId1 = 1L;
-        List<MrtmAccountStatus> validAccountStatuses = List.of(MrtmAccountStatus.NEW, MrtmAccountStatus.LIVE);
         when(execution.getVariable("accountId")).thenReturn(accountId1);
 
         // Invoke

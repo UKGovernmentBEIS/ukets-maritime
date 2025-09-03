@@ -6,8 +6,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { etsComplianceRulesMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   EtsComplianceRulesSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     EtsComplianceRulesSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './ets-compliance-rules-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,7 @@ export class EtsComplianceRulesSubmittedComponent {
   readonly etsComplianceRules = this.store.select(aerTimelineCommonQuery.selectEtsComplianceRules);
   readonly map = etsComplianceRulesMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('ETS_COMPLIANCE_RULES'),
   );

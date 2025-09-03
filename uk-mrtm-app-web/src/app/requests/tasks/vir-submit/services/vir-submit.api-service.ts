@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { catchError, Observable, throwError } from 'rxjs';
 
@@ -20,6 +20,7 @@ import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { VirSubmitTaskPayload } from '@requests/tasks/vir-submit/vir-submit.types';
 import { SaveActionTypes } from '@shared/types';
 
+@Injectable()
 export class VirSubmitApiService extends TaskApiService<VirSubmitTaskPayload> {
   private readonly pendingRequestService = inject(PendingRequestService);
   private readonly businessErrorService = inject(BusinessErrorService);

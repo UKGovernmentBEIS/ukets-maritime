@@ -9,6 +9,11 @@ import { RelatedDocumentsComponent } from '../related-documents/related-document
 import { PreviewDocument } from '../related-documents/related-documents.providers';
 import { RelatedActionsMap, TASK_RELATED_ACTIONS_MAP } from './related-actions.providers';
 
+interface RelatedAction {
+  text: string;
+  link: string[];
+}
+
 @Component({
   selector: 'netz-related-actions',
   standalone: true,
@@ -18,9 +23,11 @@ import { RelatedActionsMap, TASK_RELATED_ACTIONS_MAP } from './related-actions.p
       <nav role="navigation" aria-labelledby="subsection-title">
         <ul class="govuk-list govuk-!-font-size-16">
           @for (action of relatedActions(); track action) {
-            <li>
-              <a [routerLink]="action.link" govukLink [relativeTo]="route">{{ action.text }}</a>
-            </li>
+            @if (action.link) {
+              <li>
+                <a [routerLink]="action.link" govukLink [relativeTo]="route">{{ action.text }}</a>
+              </li>
+            }
           }
         </ul>
       </nav>
@@ -37,10 +44,11 @@ export class RelatedActionsComponent {
 
   allowedRequestTaskActions = input.required<RequestTaskItemDTO['allowedRequestTaskActions']>();
   taskId = input.required<RequestTaskDTO['id'] | RequestDetailsDTO['id']>();
+  requestTaskType = input<RequestTaskDTO['type'] | RequestDetailsDTO['requestType']>();
   previewDocuments = input.required<PreviewDocument[]>();
   showReassignAction = input<boolean>(false);
-  reassignAction = input<{ text: string; link: string[] }>({ text: 'Reassign task', link: ['change-assignee'] });
-  relatedActions: Signal<{ text: string; link: string[] }[]> = computed(() => this.filterRelatedActions());
+  reassignAction = input<RelatedAction>({ text: 'Reassign task', link: ['change-assignee'] });
+  relatedActions: Signal<RelatedAction[]> = computed(() => this.filterRelatedActions());
 
   private filterRelatedActions() {
     let result: { text: string; link: string[] }[];
@@ -53,7 +61,13 @@ export class RelatedActionsComponent {
         const path = this.actionsMap[action].path;
         return {
           text: this.actionsMap[action].text,
-          link: typeof path === 'function' ? path(this.taskId()) : path,
+          link:
+            typeof path === 'function'
+              ? path({
+                  taskId: this.taskId(),
+                  requestTaskType: this.requestTaskType?.(),
+                })
+              : path,
         };
       })
       .sort((a, b) => order.indexOf(a.text) - order.indexOf(b.text));

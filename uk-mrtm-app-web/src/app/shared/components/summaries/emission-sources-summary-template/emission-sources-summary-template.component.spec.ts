@@ -52,10 +52,14 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
       emissionFactors: {
         title: 'Determination of emission factors',
       },
+      emissionCompliance: {
+        title: 'Compliance with sustainability criteria and greenhouse gas emission saving criteria',
+      },
     };
     component.wizardStep = {
       LIST_COMPLETION: 'completion',
       EMISSION_FACTORS: 'factors',
+      EMISSION_COMPLIANCE: 'compliance',
     };
     component.isEditable = true;
     page = new Page(fixture);
@@ -106,6 +110,9 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
       'Change',
       'Name of IT system used',
       'Not provided',
+      'Change',
+      'Will you be making an emissions reduction claim as a result of the purchase and delivery of sustainable fuel?',
+      'No',
       'Change',
     ]);
   });

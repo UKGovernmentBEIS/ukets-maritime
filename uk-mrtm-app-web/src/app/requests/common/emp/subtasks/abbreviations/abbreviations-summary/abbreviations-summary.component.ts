@@ -18,7 +18,7 @@ import {
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { ABBREVIATIONS_SUB_TASK, AbbreviationsWizardStep } from '@requests/common/emp/subtasks/abbreviations';
 import { abbreviationsMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { AbbreviationsSummaryTemplateComponent, EmpReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { AbbreviationsSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
@@ -45,7 +45,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './abbreviations-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

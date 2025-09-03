@@ -1,0 +1,11 @@
+<h2 class="govuk-heading-m">Official notice recipients</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Users</dt>
+    <dd govukSummaryListRowValue>
+      @for (recipientId of notifiedUsersIds(); track recipientId) {
+        <p class="govuk-body">{{ recipientId | userInfoResolver: notifiedUsersInfo() }}</p>
+      }
+    </dd>
+  </div>
+</dl>

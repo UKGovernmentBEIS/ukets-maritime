@@ -9,9 +9,12 @@ import {
   EmpEmissionsSources,
   EmpFuelsAndEmissionsFactors,
   EmpManagementProcedures,
+  EmpMandate,
   EmpMonitoringGreenhouseGas,
   EmpOperatorDetails,
+  EmpRegisteredOwner,
   EmpShipEmissions,
+  RegisteredOwnerShipDetails,
 } from '@mrtm/api';
 
 import {
@@ -77,6 +80,7 @@ const selectIsEmpSectionCompleted: StateSelector<RequestTaskState, boolean> = cr
           'additionalDocuments',
           'abbreviations',
           'operatorDetails',
+          'mandate',
         ];
 
     for (const key of sectionKeys) {
@@ -278,6 +282,86 @@ const selectAnySubtaskNeedsAmend: StateSelector<RequestTaskState, boolean> = cre
   (completed) => Object.values(completed ?? {}).includes(TaskItemStatus.OPERATOR_AMENDS_NEEDED),
 );
 
+export const selectMandate: StateSelector<RequestTaskState, EmpMandate> = createDescendingSelector(
+  selectPayload(),
+  (payload) => payload?.emissionsMonitoringPlan?.mandate,
+);
+
+export const selectMandateRegisteredOwners: StateSelector<RequestTaskState, EmpMandate['registeredOwners']> =
+  createDescendingSelector(selectMandate, (payload) => payload?.registeredOwners ?? []);
+
+export const selectMandateRegisteredOwnersList: StateSelector<
+  RequestTaskState,
+  Array<EmpRegisteredOwner & { needsReview: boolean }>
+> = createAggregateSelector(selectMandateRegisteredOwners, selectShips, (registeredOwners, ships) => {
+  const empShips = (ships ?? []).filter((ship) => ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY');
+
+  return (registeredOwners ?? []).map((registeredOwner: EmpRegisteredOwner) => {
+    let needsReview = false;
+    const ships: EmpRegisteredOwner['ships'] = [];
+
+    for (const roShip of registeredOwner.ships) {
+      const sourceShip = empShips.find((empShip) => empShip?.details?.imoNumber === roShip.imoNumber);
+      if (!sourceShip || sourceShip?.status !== TaskItemStatus.COMPLETED) {
+        needsReview = true;
+        continue;
+      }
+
+      ships.push(roShip);
+    }
+
+    return {
+      ...registeredOwner,
+      needsReview,
+      ships,
+    };
+  });
+});
+
+export const selectExtendedMandate: StateSelector<
+  RequestTaskState,
+  Omit<EmpMandate, 'registeredOwners'> & {
+    registeredOwners: Array<EmpRegisteredOwner & { needsReview: boolean }>;
+  }
+> = createAggregateSelector(selectMandate, selectMandateRegisteredOwnersList, (mandate, registeredOwners) => ({
+  ...mandate,
+  registeredOwners,
+}));
+
+export const selectMandateRegisteredOwnerByUniqueIdentifier = (
+  uniqueIdentifier: EmpRegisteredOwner['uniqueIdentifier'],
+): StateSelector<RequestTaskState, EmpRegisteredOwner> =>
+  createDescendingSelector(selectMandateRegisteredOwners, (payload) =>
+    payload?.find((registeredOwner) => registeredOwner.uniqueIdentifier === uniqueIdentifier),
+  );
+
+export const selectMandateRegisteredOwnerAvailableShips = (
+  registeredOwnerId: EmpRegisteredOwner['uniqueIdentifier'],
+): StateSelector<RequestTaskState, Array<RegisteredOwnerShipDetails & { isSelected?: boolean }>> =>
+  createAggregateSelector(selectShips, selectMandateRegisteredOwners, (ships, registeredOwners) => {
+    const usedShips = registeredOwners
+      .filter((registeredOwner) => registeredOwner.uniqueIdentifier !== registeredOwnerId)
+      .map((registeredOwner) => registeredOwner.ships.map((ship) => ship.imoNumber))
+      .flat();
+    const currentShips = (
+      (registeredOwners ?? []).find((registeredOwner) => registeredOwner.uniqueIdentifier === registeredOwnerId)
+        ?.ships ?? []
+    ).map((ship) => ship.imoNumber);
+
+    const availableShips = ships.filter(
+      (ship) =>
+        ship.status === TaskItemStatus.COMPLETED &&
+        ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY' &&
+        !usedShips.includes(ship?.details?.imoNumber),
+    );
+
+    return availableShips.map((ship) => ({
+      name: ship?.details?.name,
+      imoNumber: ship?.details?.imoNumber,
+      isSelected: currentShips.includes(ship?.details?.imoNumber),
+    }));
+  });
+
 export const empCommonQuery = {
   selectPayload,
   selectEmpAttachments,
@@ -315,4 +399,10 @@ export const empCommonQuery = {
   selectIsPeerReview,
   selectAnySubtaskNeedsAmend,
   selectShipName,
+  selectMandate,
+  selectExtendedMandate,
+  selectMandateRegisteredOwners,
+  selectMandateRegisteredOwnerByUniqueIdentifier,
+  selectMandateRegisteredOwnerAvailableShips,
+  selectMandateRegisteredOwnersList,
 };

@@ -73,7 +73,12 @@ public class RequestAerReviewService {
         requestPayload.setRegulatorReviewer(appUser.getUserId());
         requestPayload.setReviewGroupDecisions(requestTaskPayload.getReviewGroupDecisions());
         requestPayload.setReviewAttachments(requestTaskPayload.getReviewAttachments());
-        requestPayload.setAerSectionsCompleted(requestTaskPayload.getAerSectionsCompleted());
+        requestPayload.setAerReviewSectionsCompleted(requestTaskPayload.getAerSectionsCompleted());
+    }
+
+    // This is used to remove the "Changes requested by the regulator" subtask status when re-initiating the amends task.
+    public void removeAmendRequestedChangesSubtaskStatus(AerRequestPayload requestTaskPayload) {
+        requestTaskPayload.getAerSubmitSectionsCompleted().keySet().removeIf(entry -> entry.equals("amendRequestedChanges"));
     }
 
     @Transactional
@@ -193,7 +198,7 @@ public class RequestAerReviewService {
         aerRequestPayload.setAerAttachments(aerApplicationAmendsSubmitRequestTaskPayload.getAerAttachments());
         aerRequestPayload.setVerificationPerformed(aerApplicationAmendsSubmitRequestTaskPayload.isVerificationPerformed());
         aerRequestPayload.setAerMonitoringPlanVersion(aerApplicationAmendsSubmitRequestTaskPayload.getAerMonitoringPlanVersion());
-        aerRequestPayload.setAerSectionsCompleted(aerApplicationAmendsSubmitRequestTaskPayload.getAerSectionsCompleted());
+        aerRequestPayload.setAerSubmitSectionsCompleted(aerApplicationAmendsSubmitRequestTaskPayload.getAerSectionsCompleted());
 
         if (Boolean.TRUE.equals(aerApplicationAmendsSubmitRequestTaskPayload.getReportingRequired())) {
             aerRequestPayload.setTotalEmissions(

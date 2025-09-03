@@ -77,7 +77,6 @@ export const mockAerShipsXml = `
             <monitoringMethodEntry>
                 <monitoringMethodCode>BDN</monitoringMethodCode>
                 <levelOfUncertaintyTypeCode>DEFAULT</levelOfUncertaintyTypeCode>
-                <shipSpecificUncertainty>0.02</shipSpecificUncertainty>
             </monitoringMethodEntry>
             <monitoringMethodEntry>
                 <monitoringMethodCode>FLOW_METERS</monitoringMethodCode>
@@ -98,10 +97,9 @@ export const mockAerShipsXml = `
         <grossTonnage>20000</grossTonnage>
         <flag>US</flag>
         <iceClassPolarCode>NA</iceClassPolarCode>
-        <iceClassSurrenderReduction>false</iceClassSurrenderReduction>
         <allYear>false</allYear>
-        <partialPeriodFromDate>2023-01-01</partialPeriodFromDate>
-        <partialPeriodToDate>2023-12-31</partialPeriodToDate>
+        <partialPeriodFromDate>2025-01-01</partialPeriodFromDate>
+        <partialPeriodToDate>2025-12-31</partialPeriodToDate>
         <company>
             <nature>ISM_COMPANY</nature>
         </company>
@@ -139,7 +137,6 @@ export const mockAerShipsXml = `
             <monitoringMethodEntry>
                 <monitoringMethodCode>DIRECT</monitoringMethodCode>
                 <levelOfUncertaintyTypeCode>DEFAULT</levelOfUncertaintyTypeCode>
-                <shipSpecificUncertainty>0.01</shipSpecificUncertainty>
             </monitoringMethodEntry>
         </monitoringMethods>
         <additionalInformation>

@@ -13,6 +13,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.additionaldocuments.Additi
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.controlactivities.EmpControlActivities;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.datagaps.EmpDataGaps;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissionsources.EmpEmissionSources;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpMandate;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.monitoringreenhousegas.EmpMonitoringGreenhouseGas;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.managementprocedures.EmpManagementProcedures;
@@ -64,6 +65,10 @@ public class EmissionsMonitoringPlan {
     @Valid
     @NotNull
     private EmpMonitoringGreenhouseGas greenhouseGas;
+
+    @Valid
+    @NotNull
+    private EmpMandate mandate;
 
     @JsonIgnore
     public Set<UUID> getEmpSectionAttachmentIds() {

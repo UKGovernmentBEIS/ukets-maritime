@@ -32,6 +32,7 @@ import {
   provideAerVerificationSubmitStepFlowManagers,
   provideAerVerificationSubmitTaskServices,
 } from '@requests/tasks/aer-verification-submit/aer-verification-submit.providers';
+import { canActivateReturnToOperatorForChanges } from '@requests/tasks/aer-verification-submit/return-to-operator-for-changes/return-to-operator-for-changes.guard';
 import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-verification-submit/subtasks/send-report/send-report.helpers';
 
 export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
@@ -264,6 +265,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       // Return to operator for changes
       {
         path: AER_VERIFICATION_RETURN_TO_OPERATOR_ROUTE,
+        canActivate: [canActivateReturnToOperatorForChanges],
         loadChildren: () =>
           import('@requests/tasks/aer-verification-submit/return-to-operator-for-changes').then(
             (r) => r.RETURN_TO_OPERATOR_FOR_CHANGES_ROUTES,

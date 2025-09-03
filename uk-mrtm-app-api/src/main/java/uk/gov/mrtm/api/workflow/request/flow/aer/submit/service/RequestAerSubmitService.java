@@ -95,10 +95,10 @@ public class RequestAerSubmitService {
         aerRequestPayload.setReportingObligationDetails(aerApplicationSubmitRequestTaskPayload.getReportingObligationDetails());
         aerRequestPayload.setAer(aerApplicationSubmitRequestTaskPayload.getAer());
         aerRequestPayload.setAerAttachments(aerApplicationSubmitRequestTaskPayload.getAerAttachments());
-        aerRequestPayload.setAerSectionsCompleted(aerApplicationSubmitRequestTaskPayload.getAerSectionsCompleted());
         aerRequestPayload.setVerificationPerformed(aerApplicationSubmitRequestTaskPayload.isVerificationPerformed());
         aerRequestPayload.setAerMonitoringPlanVersion(aerApplicationSubmitRequestTaskPayload.getAerMonitoringPlanVersion());
         aerRequestPayload.setEmpOriginatedData(aerApplicationSubmitRequestTaskPayload.getEmpOriginatedData());
+        aerRequestPayload.setAerSubmitSectionsCompleted(aerApplicationSubmitRequestTaskPayload.getAerSectionsCompleted());
 
         if (Boolean.TRUE.equals(aerApplicationSubmitRequestTaskPayload.getReportingRequired())) {
             aerRequestPayload.setTotalEmissions(

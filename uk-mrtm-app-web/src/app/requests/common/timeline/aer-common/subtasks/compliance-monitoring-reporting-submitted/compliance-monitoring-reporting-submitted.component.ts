@@ -7,7 +7,7 @@ import { complianceMonitoringReportingMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
   ComplianceMonitoringReportingSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     ComplianceMonitoringReportingSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './compliance-monitoring-reporting-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +29,7 @@ export class ComplianceMonitoringReportingSubmittedComponent {
   );
   readonly map = complianceMonitoringReportingMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('COMPLIANCE_MONITORING_REPORTING'),
   );

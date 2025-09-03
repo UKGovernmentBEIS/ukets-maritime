@@ -9,7 +9,7 @@ import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AerPortDetailsModel } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
 import { AER_PORTS_SUB_TASK, AerPortsWizardStep } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { mergeDates } from '@shared/utils';
+import { mergeDatesToString } from '@shared/utils';
 
 export class AerPortDetailsPayloadMutator extends PayloadMutator {
   public readonly subtask = AER_PORTS_SUB_TASK;
@@ -26,8 +26,8 @@ export class AerPortDetailsPayloadMutator extends PayloadMutator {
             ? {
                 ...portItem,
                 portDetails: {
-                  arrivalTime: mergeDates(arrivalDate, arrivalTime),
-                  departureTime: mergeDates(departureDate, departureTime),
+                  arrivalTime: mergeDatesToString(arrivalDate, arrivalTime),
+                  departureTime: mergeDatesToString(departureDate, departureTime),
                   visit: {
                     port,
                     country,

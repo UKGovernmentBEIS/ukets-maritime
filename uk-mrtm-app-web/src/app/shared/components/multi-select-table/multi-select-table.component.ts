@@ -27,6 +27,8 @@ export class MultiSelectTableComponent<T extends { isSelected?: boolean }> {
   @Input() data: Pick<T, GovukTableColumn<T>['field']>[];
 
   @Output() readonly sort = new EventEmitter<SortEvent>();
+  @Output() readonly selectionChanged = new EventEmitter<Pick<T, GovukTableColumn<T>['field']>[]>();
+
   @ContentChild(TemplateRef) template?: TemplateRef<{
     column: GovukTableColumn<T>;
     row: Pick<T, GovukTableColumn<T>['field']>;
@@ -59,6 +61,8 @@ export class MultiSelectTableComponent<T extends { isSelected?: boolean }> {
     this.isAllSelected()
       ? this.data.map((item) => (item.isSelected = false))
       : this.data.map((item) => (item.isSelected = true));
+
+    this.selectionChanged.emit(this.data);
   }
 
   /**
@@ -66,6 +70,7 @@ export class MultiSelectTableComponent<T extends { isSelected?: boolean }> {
    */
   toggle(item: T) {
     item.isSelected = !item?.isSelected;
+    this.selectionChanged.emit(this.data);
   }
 
   sortBy(columnField: GovukTableColumn<T>['field']): void {

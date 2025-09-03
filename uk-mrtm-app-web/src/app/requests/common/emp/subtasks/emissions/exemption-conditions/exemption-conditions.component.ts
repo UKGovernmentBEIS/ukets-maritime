@@ -8,7 +8,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { RadioComponent, RadioOptionComponent, TextInputComponent } from '@netz/govuk-components';
 
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { ShipStepTitlePipe } from '@requests/common/components/emissions/pipes';
+import { ShipStepTitleCustomPipe } from '@requests/common/components/emissions/pipes';
 import { ReturnToShipsListTableComponent } from '@requests/common/components/emissions/return-to-ships-list-table';
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
@@ -23,7 +23,7 @@ import { WizardStepComponent } from '@shared/components';
   standalone: true,
   imports: [
     WizardStepComponent,
-    ShipStepTitlePipe,
+    ShipStepTitleCustomPipe,
     FormsModule,
     ReactiveFormsModule,
     RadioComponent,

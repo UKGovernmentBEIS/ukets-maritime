@@ -47,8 +47,9 @@ export class ReductionClaimDetailsComponent {
   );
 
   public onChange(item: ReductionClaimDetailsListItemDto): void {
-    this.router.navigate([item.fuelOriginTypeName.uniqueIdentifier], {
+    this.router.navigate([item.uniqueIdentifier], {
       relativeTo: this.activatedRoute,
+      queryParams: { change: true },
     });
   }
 

@@ -30,7 +30,6 @@ import java.util.stream.Stream;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.DUPLICATE_FUEL_ENTRIES;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.INVALID_FUEL_CONSUMPTION;
 
 @ExtendWith(MockitoExtension.class)
@@ -126,9 +125,8 @@ class AerSmfValidatorTest {
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
-        assertFalse(result.isValid());
-        assertThat(result.getAerViolations()).allMatch(aerViolation ->
-            aerViolation.getMessage().equals(DUPLICATE_FUEL_ENTRIES.getMessage()));
+        assertTrue(result.isValid());
+        assertThat(result.getAerViolations()).isEmpty();
     }
 
     private AerContainer getAerContainer(boolean exist, List<AerSmfPurchase> aerSmfPurchases,

@@ -55,13 +55,6 @@ import {
   ShipEmissionTableListItem,
 } from '@shared/types';
 
-const TASK_TYPE_TO_STATUS_MAPPER: Record<string, (currentStatus?: TaskItemStatus) => TaskItemStatus> = {
-  AER_APPLICATION_AMENDS_SUBMIT: (status?: TaskItemStatus): TaskItemStatus =>
-    isNil(status) || [TaskItemStatus.ACCEPTED, TaskItemStatus.OPERATOR_AMENDS_NEEDED].includes(status)
-      ? TaskItemStatus.COMPLETED
-      : status,
-};
-
 const selectReportingYear: StateSelector<RequestTaskState, string> = createDescendingSelector(
   requestTaskQuery.selectRequestId,
   (requestId) => getYearFromRequestId(requestId),
@@ -103,9 +96,8 @@ const selectStatusForAerSubtask = (
     selectAerSectionsCompleted,
     (requestTaskType, sectionsCompleted) => {
       const taskStatus = sectionsCompleted?.[subtask] as TaskItemStatus;
-      const mapper = TASK_TYPE_TO_STATUS_MAPPER[requestTaskType];
 
-      return mapper ? mapper(taskStatus) : (taskStatus ?? defaultStatus);
+      return taskStatus ?? defaultStatus;
     },
   );
 };
@@ -570,7 +562,7 @@ const selectReductionClaimFuelPurchases: StateSelector<
 
 const selectReductionClaimFuelPurchase = (fuelPurchaseId: string): StateSelector<RequestTaskState, AerSmfPurchase> =>
   createDescendingSelector(selectReductionClaimFuelPurchases, (payload) =>
-    payload?.find((purchase) => purchase.fuelOriginTypeName?.uniqueIdentifier === fuelPurchaseId),
+    payload?.find((purchase) => purchase?.uniqueIdentifier === fuelPurchaseId),
   );
 
 const selectSupersetOfFuelTypes: StateSelector<RequestTaskState, Array<FuelOriginTypeName>> = createDescendingSelector(
@@ -638,8 +630,16 @@ const selectShipEmissionSourcesByImoNumber = (
 ): StateSelector<RequestTaskState, EmissionsSources[]> =>
   createDescendingSelector(selectShipByImoNumber(imoNumber), (ship) => ship?.emissionsSources ?? []);
 
+const selectShipEmissionSourceByName = (
+  imoNumber: AerShipDetails['imoNumber'],
+  emissionSourceName: EmissionsSources['name'],
+): StateSelector<RequestTaskState, EmissionsSources> =>
+  createDescendingSelector(selectShipEmissionSourcesByImoNumber(imoNumber), (emissionSources) => {
+    return emissionSources?.find((item) => item.name?.toUpperCase() === emissionSourceName?.toUpperCase());
+  });
+
 /**
- * Match specific fuel origin/fuel type/ emissionSourceName/methaneSlip combination related to a ship's IMO number but based on emissionSources.
+ * Match specific fuel origin/fuel type/emissionSourceName/methaneSlip combination related to a ship's IMO number but based on emissionSources.
  * If emissionSourceName is provided, it will try to match fuelDetails from that specific EmissionSources
  */
 const selectShipFuelOriginMethaneCombination = (
@@ -652,7 +652,8 @@ const selectShipFuelOriginMethaneCombination = (
   createDescendingSelector(selectShipEmissionSourcesByImoNumber(imoNumber), (emissionSources) => {
     const currentFuelDetails = isNil(emissionSourceName)
       ? (emissionSources?.flatMap((item) => item?.fuelDetails) as AllFuelOriginTypeName[])
-      : (emissionSources?.find((item) => item.name === emissionSourceName)?.fuelDetails as AllFuelOriginTypeName[]);
+      : (emissionSources?.find((item) => item.name?.toUpperCase() === emissionSourceName?.toUpperCase())
+          ?.fuelDetails as AllFuelOriginTypeName[]);
 
     return currentFuelDetails?.find((fuelDetail) => {
       const methaneSlipFound = isNil(methaneSlip) ? true : fuelDetail?.methaneSlip === methaneSlip;
@@ -741,6 +742,7 @@ export const aerCommonQuery = {
   selectTotalEmissions,
   selectVoyageEmissions,
   selectPortEmissions,
+  selectShipEmissionSourceByName,
   selectShipFuelOriginMethaneCombination,
   selectShipFuelOriginTypeCombination,
   selectShipFuelOriginTypeNameCombination,

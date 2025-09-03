@@ -16,6 +16,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -85,7 +86,7 @@ public class AerEmissionsValidator implements AerContextValidator {
 
                 Set<Pair<String, String>> otherNames = aerShipEmissions.getFuelsAndEmissionsFactors().stream()
                     .filter(e -> e.getName() != null)
-                    .map(e -> Pair.of(e.getOrigin().name(), e.getName()))
+                    .map(e -> Pair.of(e.getOrigin().name(), e.getName().toLowerCase(Locale.ROOT)))
                     .collect(Collectors.toSet());
 
                 return (otherNames.size() + names.size()) == aerShipEmissions.getFuelsAndEmissionsFactors().size();
@@ -114,18 +115,18 @@ public class AerEmissionsValidator implements AerContextValidator {
 
     private Set<String> getDuplicateEmissionSourceNames(Set<AerShipEmissions> ships) {
         Set<String> duplicateNames = new HashSet<>();
-        ships.forEach(
-            aerShipEmissions -> {
-                Set<String> names = new HashSet<>();
-                duplicateNames.addAll(
-                        aerShipEmissions.getEmissionsSources()
-                                .stream()
-                                .map(EmissionsSources::getName)
-                                .filter(name -> !names.add(name))
-                                .collect(Collectors.toSet())
-                );
-            }
-        );
+
+        ships.forEach(aerShipEmissions -> {
+            Set<String> namesSeen = new HashSet<>();
+
+            duplicateNames.addAll(
+                    aerShipEmissions.getEmissionsSources().stream()
+                            .map(EmissionsSources::getName)
+                            .filter(name -> !namesSeen.add(name.toLowerCase(Locale.ROOT)))
+                            .collect(Collectors.toSet())
+            );
+        });
+
         return duplicateNames;
     }
 

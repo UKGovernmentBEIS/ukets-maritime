@@ -14,7 +14,6 @@ import { NoteFileDownloadComponent } from '@notes/components';
 import { itemActionsMap } from '@requests/common/item-actions.map';
 import { relatedActionsMap } from '@requests/common/related-actions.map';
 import { statusTagMap } from '@requests/common/status-tag.map';
-import { requestCreateActionGuard } from '@requests/workflows/request-create-action.guard';
 import { getWorkflowCanActivateGuard, getWorkflowCanDeactivateGuard } from '@requests/workflows/workflows.guards';
 import { requestTypesWhitelistForItemLinkPipe } from '@shared/constants';
 import {
@@ -48,7 +47,7 @@ export const WORKFLOWS_ROUTES: Route[] = [
       { path: 'notes', loadChildren: () => import('@notes/notes.routes').then((r) => r.NOTES_ROUTES) },
       {
         path: 'create-action',
-        children: [{ path: ':requestCreateActionType', canActivate: [requestCreateActionGuard], children: [] }],
+        loadChildren: () => import('@requests/workflows/create-action').then((r) => r.CREATE_ACTION_ROUTES),
       },
       { path: 'file-download/:uuid', component: NoteFileDownloadComponent },
     ],

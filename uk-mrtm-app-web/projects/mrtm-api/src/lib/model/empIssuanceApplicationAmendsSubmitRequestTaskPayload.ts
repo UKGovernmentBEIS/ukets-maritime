@@ -32,5 +32,6 @@ export interface EmpIssuanceApplicationAmendsSubmitRequestTaskPayload {
     | 'ADDITIONAL_DOCUMENTS'
     | 'DATA_GAPS'
     | 'CONTROL_ACTIVITIES'
+    | 'MANDATE'
   >;
 }

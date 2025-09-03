@@ -1,9 +1,9 @@
 <netz-page-heading [caption]="caption">Check your answers</netz-page-heading>
 @if (summaryDetails) {
-  <ng-container *ngComponentOutlet="summaryDetails.component; inputs: summaryDetails.inputs" />
+  <ng-container *ngComponentOutlet="summaryDetails.component; inputs: summaryDetails.inputs()" />
 }
-<mrtm-emp-review-decision-summary-template
-  [reviewDecision]="$any(decision())"
+<mrtm-review-decision-summary-template
+  [reviewDecision]="decision()"
   [isEditable]="isEditable()"
   [changeLink]="wizardMap.FORM"
   [queryParams]="{ change: true }" />

@@ -10,7 +10,7 @@ import {
   AerVoyagesWizardStep,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { mergeDates } from '@shared/utils';
+import { mergeDatesToString } from '@shared/utils';
 
 export class AerVoyageDetailsPayloadMutator extends PayloadMutator {
   public readonly subtask = AER_VOYAGES_SUB_TASK;
@@ -29,8 +29,8 @@ export class AerVoyageDetailsPayloadMutator extends PayloadMutator {
             ? {
                 ...voyageItem,
                 voyageDetails: {
-                  arrivalTime: mergeDates(voyageDetails.arrivalDate, voyageDetails.arrivalTime),
-                  departureTime: mergeDates(voyageDetails.departureDate, voyageDetails.departureTime),
+                  arrivalTime: mergeDatesToString(voyageDetails.arrivalDate, voyageDetails.arrivalTime),
+                  departureTime: mergeDatesToString(voyageDetails.departureDate, voyageDetails.departureTime),
                   departurePort: {
                     country: voyageDetails.departureCountry,
                     port: voyageDetails.departurePort,

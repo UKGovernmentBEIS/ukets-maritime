@@ -7,7 +7,7 @@
   [wizardStep]="wizardStepMap"
   [queryParams]="{ change: true }" />
 @if (isEditable() && !isSubTaskCompleted()) {
-  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and complete</button>
 }
 <div>
   @if (isEditable() && !isSubTaskCompleted()) {

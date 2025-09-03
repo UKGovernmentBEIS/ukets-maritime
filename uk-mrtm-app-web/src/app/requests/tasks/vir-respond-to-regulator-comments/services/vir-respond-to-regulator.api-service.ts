@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { catchError, Observable, throwError } from 'rxjs';
 
@@ -27,6 +27,7 @@ import { virRespondToRegulatorCommentsQuery } from '@requests/tasks/vir-respond-
 import { VirRespondToRegulatorCommentsTaskPayload } from '@requests/tasks/vir-respond-to-regulator-comments/vir-respond-to-regulator-comments.types';
 import { SaveActionTypes } from '@shared/types';
 
+@Injectable()
 export class VirRespondToRegulatorApiService extends TaskApiService<VirRespondToRegulatorCommentsTaskPayload> {
   private readonly pendingRequestService = inject(PendingRequestService);
   private readonly businessErrorService = inject(BusinessErrorService);

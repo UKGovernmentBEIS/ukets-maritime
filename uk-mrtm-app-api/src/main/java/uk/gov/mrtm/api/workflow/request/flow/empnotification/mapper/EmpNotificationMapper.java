@@ -84,6 +84,7 @@ public interface EmpNotificationMapper {
     }
 
     @Named("reviewDecisionWithoutNotes")
+    @SuppressWarnings("java:S3252")
     default EmpNotificationReviewDecision setReviewDecision(EmpNotificationReviewDecision sourceReviewDecision) {
         ReviewDecisionDetails details;
         if (sourceReviewDecision.getType()== EmpNotificationReviewDecisionType.ACCEPTED) {

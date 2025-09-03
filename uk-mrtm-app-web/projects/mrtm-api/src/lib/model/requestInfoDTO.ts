@@ -17,4 +17,5 @@ export interface RequestInfoDTO {
   requestMetadata?: RequestMetadata;
   paymentCompleted?: boolean;
   paymentAmount?: string;
+  creationDate?: string;
 }

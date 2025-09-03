@@ -45,7 +45,7 @@ public class AerTotalEmissions {
 
     @NotNull
     @Valid
-    @Positive
+    @PositiveOrZero
     @Digits(integer = Integer.MAX_VALUE, fraction= 7)
     private BigDecimal totalShipEmissions;
 
@@ -57,7 +57,7 @@ public class AerTotalEmissions {
 
     @NotNull
     @Valid
-    @Positive
+    @PositiveOrZero
     @Digits(integer = Integer.MAX_VALUE, fraction= 0)
     private BigDecimal totalShipEmissionsSummary;
 

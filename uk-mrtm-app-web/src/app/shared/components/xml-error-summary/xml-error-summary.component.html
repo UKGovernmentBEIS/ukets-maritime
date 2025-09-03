@@ -11,14 +11,18 @@
                 @if (errorItem.columns?.length && errorItem.columns?.[0] !== null) {
                   <govuk-details summary="View details">
                     <p class="govuk-body">
-                      <span>
-                        Check the data
-                        @if (!(errorItem.columns | includes: 'NO_FIELD')) {
-                          in field '{{ errorItem.columns }}'
-                        }
-                        on {{ errorItem.type }}
-                        {{ errorItem.rows.join(', ') }}
-                      </span>
+                      @if (formatNestedErrorDetails(); as formatNestedErrorDetails) {
+                        <span [innerHTML]="formatNestedErrorDetails(errorItem) | safeHtml"></span>
+                      } @else {
+                        <span>
+                          Check the data
+                          @if (!(errorItem.columns | includes: 'NO_FIELD')) {
+                            in field '{{ errorItem.columns }}'
+                          }
+                          on {{ errorItem.type }}
+                          {{ errorItem.rows.join(', ') }}
+                        </span>
+                      }
                     </p>
                   </govuk-details>
                 }

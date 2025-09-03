@@ -9,4 +9,5 @@ export const requestTypesWhitelistForItemLinkPipe = [
   'DOE',
   'VIR',
   'NON_COMPLIANCE',
+  'SYSTEM_MESSAGE_NOTIFICATION',
 ];

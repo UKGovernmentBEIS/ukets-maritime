@@ -1,45 +1,63 @@
 import { ExemptionConditions } from '@mrtm/api';
 
-import { ConditionsOfExemptionDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
+import { ConditionsOfExemptionDTO, ShipParticularsDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
 import { UseOfDerogationCodeEnum } from '@requests/common/types';
+import { XmlResult } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
 
 export class ConditionsOfExemptionDtoValidator {
-  private static isUseOfDerogationCodeValid(value?: UseOfDerogationCodeEnum) {
-    return XmlValidator.isEnum(value, UseOfDerogationCodeEnum);
+  private static isUseOfDerogationCodeValid(conditionsOfExemptionDTO?: ConditionsOfExemptionDTO) {
+    return XmlValidator.isEnum(conditionsOfExemptionDTO?.useOfDerogationCode, UseOfDerogationCodeEnum);
   }
 
-  private static isMinimumNumberOfVoyagesValid(value?: number) {
-    return XmlValidator.min(value, 301);
+  private static isMinimumNumberOfVoyagesValid(conditionsOfExemptionDTO?: ConditionsOfExemptionDTO) {
+    return conditionsOfExemptionDTO?.useOfDerogationCode === 'YES'
+      ? XmlValidator.min(conditionsOfExemptionDTO?.minimumNumberOfVoyages, 301)
+      : XmlValidator.isEmpty(conditionsOfExemptionDTO?.minimumNumberOfVoyages);
   }
 
-  private static transformUseOfDerogationCode(value?: UseOfDerogationCodeEnum): boolean {
-    switch (value) {
-      case UseOfDerogationCodeEnum.YES:
-        return true;
-      case UseOfDerogationCodeEnum.NO:
-        return false;
-      default:
-        return null;
-    }
+  private static isConditionsOfExemptionValid(conditionsOfExemption?: ConditionsOfExemptionDTO) {
+    return (
+      this.isUseOfDerogationCodeValid(conditionsOfExemption) &&
+      this.isMinimumNumberOfVoyagesValid(conditionsOfExemption)
+    );
   }
 
   /**
-   * Validates and transforms ConditionsOfExemptionDTO to ExemptionConditions
+   * Transforms ConditionsOfExemptionDTO to ExemptionConditions
+   * Assumes that conditionsOfExemption is valid at this point
    */
-  public static transformConditionsOfExemptionDTO(
-    conditionsOfExemption?: ConditionsOfExemptionDTO,
-  ): Partial<ExemptionConditions> {
-    const result: Partial<ExemptionConditions> = {};
+  private static transformConditionsOfExemptionDTO(
+    conditionsOfExemption: ConditionsOfExemptionDTO,
+  ): ExemptionConditions {
+    return {
+      exist: conditionsOfExemption?.useOfDerogationCode === UseOfDerogationCodeEnum.YES,
+      minVoyages:
+        conditionsOfExemption?.useOfDerogationCode === 'YES' ? conditionsOfExemption?.minimumNumberOfVoyages : null,
+    };
+  }
 
-    if (this.isUseOfDerogationCodeValid(conditionsOfExemption?.useOfDerogationCode)) {
-      result.exist = this.transformUseOfDerogationCode(conditionsOfExemption.useOfDerogationCode);
+  /**
+   * Validates ConditionsOfExemptionDTO and returns XmlResult<ExemptionConditions>
+   * This should be explicitly called and displayed after validateCoreShipParticularsDTO is valid
+   */
+  public static validateConditionsOfExemptionDTO(shipParticular: ShipParticularsDTO): XmlResult<ExemptionConditions> {
+    const conditionsOfExemptionDTO = shipParticular?.conditionsOfExemption;
+    if (this.isConditionsOfExemptionValid(conditionsOfExemptionDTO)) {
+      return {
+        data: this.transformConditionsOfExemptionDTO(conditionsOfExemptionDTO),
+      };
     }
 
-    if (this.isMinimumNumberOfVoyagesValid(conditionsOfExemption?.minimumNumberOfVoyages)) {
-      result.minVoyages = conditionsOfExemption.minimumNumberOfVoyages;
-    }
-
-    return result;
+    return {
+      errors: [
+        {
+          row: shipParticular.name,
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the conditions of exemption from per voyage monitoring and reporting data you uploaded. Check the information entered and reupload the file',
+        },
+      ],
+    };
   }
 }

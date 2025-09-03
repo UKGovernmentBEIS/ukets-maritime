@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
@@ -15,23 +15,15 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { EmpPeerReviewTaskPayload } from '@requests/common/emp/emp.types';
 import {
   PEER_REVIEW_DECISION_SUB_TASK,
   PeerReviewWizardStep,
 } from '@requests/common/subtasks/peer-review-decision/peer-review-decision.helper';
 import {
   PEER_REVIEW_DECISION_SELECTOR,
-  PEER_REVIEW_DECISION_STATUS_SELECTOR,
   PEER_REVIEW_DECISION_TEXT_MAP,
 } from '@requests/common/subtasks/peer-review-decision/peer-review-decision.providers';
-import { TaskItemStatus } from '@requests/common/task-item-status';
-
-interface ViewModel {
-  decision: EmpPeerReviewTaskPayload['decision'];
-  status: TaskItemStatus;
-  wizardStep: { [s: string]: string };
-}
+import { PeerReviewDecisionPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-peer-review-summary',
@@ -48,23 +40,20 @@ interface ViewModel {
     RouterLink,
     SummaryListRowActionsDirective,
     ReturnToTaskOrActionPageComponent,
+    PeerReviewDecisionPipe,
   ],
   templateUrl: './peer-review-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeerReviewDecisionSummaryComponent {
   private readonly route = inject(ActivatedRoute);
-  private readonly service = inject(TaskService<EmpPeerReviewTaskPayload>);
+  private readonly service = inject(TaskService);
   private readonly store = inject(RequestTaskStore);
   private readonly decisionSelector = inject(PEER_REVIEW_DECISION_SELECTOR);
-  private readonly decisionStatusSelector = inject(PEER_REVIEW_DECISION_STATUS_SELECTOR);
-  readonly map = inject(PEER_REVIEW_DECISION_TEXT_MAP);
 
-  vm: Signal<ViewModel> = computed(() => ({
-    decision: this.store.select(this.decisionSelector)(),
-    status: this.store.select(this.decisionStatusSelector)(),
-    wizardStep: PeerReviewWizardStep,
-  }));
+  readonly map = inject(PEER_REVIEW_DECISION_TEXT_MAP);
+  readonly decision = this.store.select(this.decisionSelector);
+  readonly wizardStep = PeerReviewWizardStep;
 
   onSubmit() {
     this.service.submitSubtask(PEER_REVIEW_DECISION_SUB_TASK, PeerReviewWizardStep.SUMMARY, this.route).subscribe();

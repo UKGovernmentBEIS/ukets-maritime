@@ -8,6 +8,7 @@ import {
   MarkAsReceivedFormGroupModel,
   MarkAsReceivedFormModel,
 } from '@requests/tasks/payment/subtasks/mark-as-received/mark-as-received-form/mark-as-received-form.types';
+import { todayOrPastDateValidator } from '@shared/validators';
 
 export const markAsReceivedFormProvider: Provider = {
   provide: TASK_FORM,
@@ -15,7 +16,7 @@ export const markAsReceivedFormProvider: Provider = {
   useFactory: (formBuilder: FormBuilder): MarkAsReceivedFormGroupModel =>
     formBuilder.group({
       receivedDate: formBuilder.control<MarkAsReceivedFormModel['receivedDate'] | null>(null, {
-        validators: GovukValidators.required('Received date is required'),
+        validators: [GovukValidators.required('Received date is required'), todayOrPastDateValidator()],
       }),
     }),
 };

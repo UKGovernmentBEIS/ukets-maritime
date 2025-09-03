@@ -2,8 +2,8 @@
 
 <mrtm-aer-overall-verification-decision-summary-template [data]="overallVerificationDecision()" />
 
-@if (withReviewDecision()) {
-  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+@if (isReviewCompletedActionType() && decision()) {
+  <mrtm-review-decision-summary-template [reviewDecision]="decision()" />
 }
 
 <netz-return-to-task-or-action-page />

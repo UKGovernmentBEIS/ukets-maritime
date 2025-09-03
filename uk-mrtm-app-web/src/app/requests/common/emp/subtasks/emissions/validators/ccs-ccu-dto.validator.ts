@@ -1,64 +1,106 @@
 import { EmpCarbonCapture, EmpEmissionsSources } from '@mrtm/api';
 
-import { CcsCcuDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
+import { CcsCcuDTO, ShipParticularsDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
 import { CaptureAndStorageAppliedEnum } from '@requests/common/types';
-import { RecursivePartial } from '@shared/types';
+import { XmlResult } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
 
 export class CcsCcuDtoValidator {
-  private static isCaptureAndStorageAppliedValid(value?: CaptureAndStorageAppliedEnum) {
-    return XmlValidator.isEnum(value, CaptureAndStorageAppliedEnum);
+  private static isCaptureAndStorageAppliedValid(ccsCcuDTO?: CcsCcuDTO) {
+    return XmlValidator.isEnum(ccsCcuDTO?.captureAndStorageApplied, CaptureAndStorageAppliedEnum);
   }
 
-  private static transformIsCaptureAndStorageApplied(value?: CaptureAndStorageAppliedEnum): boolean {
-    switch (value) {
-      case CaptureAndStorageAppliedEnum.YES:
-        return true;
-      case CaptureAndStorageAppliedEnum.NO:
-        return false;
-      default:
-        return null;
-    }
+  private static isDescriptionValid(ccsCcuDTO?: CcsCcuDTO) {
+    return ccsCcuDTO?.captureAndStorageApplied === CaptureAndStorageAppliedEnum.YES
+      ? XmlValidator.isRequired(ccsCcuDTO?.technology) &&
+          XmlValidator.isString(ccsCcuDTO?.technology) &&
+          XmlValidator.maxLength(ccsCcuDTO?.technology, 10000)
+      : XmlValidator.isEmpty(ccsCcuDTO?.technology);
   }
 
-  private static transformEmissionSourceNames(
-    emissionSourceNames?: string[],
-    empEmissionSources?: RecursivePartial<EmpEmissionsSources>[],
-  ) {
-    const technologyEmissionSources = [];
+  private static areEmissionSourceNamesValid(ccsCcuDTO?: CcsCcuDTO, empEmissionSources?: EmpEmissionsSources[]) {
+    const uniqueIds = ccsCcuDTO?.emissionSourceName?.map((name) => name?.toUpperCase());
+    const noDuplicatesValid = new Set(uniqueIds)?.size === uniqueIds?.length;
+    const emissionSourcesNamesFound = empEmissionSources?.some((empEmissionSource) =>
+      ccsCcuDTO?.emissionSourceName?.some(
+        (emissionSourceName) => emissionSourceName?.toUpperCase() === empEmissionSource?.name?.toUpperCase(),
+      ),
+    );
 
-    if (emissionSourceNames?.length) {
-      for (const source of emissionSourceNames) {
-        if (empEmissionSources?.some((item) => item?.name === source)) {
-          technologyEmissionSources.push(source);
-        }
-      }
-    }
+    return ccsCcuDTO?.captureAndStorageApplied === CaptureAndStorageAppliedEnum.YES
+      ? XmlValidator.minLength(ccsCcuDTO?.emissionSourceName, 1) && emissionSourcesNamesFound && noDuplicatesValid
+      : XmlValidator.isEmpty(ccsCcuDTO?.emissionSourceName);
+  }
 
-    return technologyEmissionSources;
+  private static isCcsCcuDTOValid(ccsCcuDTO: CcsCcuDTO, emissionSources?: EmpEmissionsSources[]) {
+    return (
+      this.isCaptureAndStorageAppliedValid(ccsCcuDTO) &&
+      this.isDescriptionValid(ccsCcuDTO) &&
+      this.areEmissionSourceNamesValid(ccsCcuDTO, emissionSources)
+    );
   }
 
   /**
-   * Validate and transform CcsCcuDTO to EmpCarbonCapture.
-   * EmpCarbonCapture.technologyEmissionSources must be found in EmpEmissionsSources[i].name
+   * Transform CcsCcuDTO['emissionSourceName'] to its mapped name in EmpEmissionsSources[]
+   * and returns a string[] with these names
+   * Assumes that ccsCcuDTO, empEmissionSources are valid at this point
    */
-  public static transformCcsCcuDTO(
-    ccsCcuDTO?: CcsCcuDTO,
-    emissionSources?: RecursivePartial<EmpEmissionsSources>[],
-  ): Partial<EmpCarbonCapture> {
-    const empCarbonCapture: Partial<EmpCarbonCapture> = {};
+  private static transformCcsCcuDTOEmissionSourceNames(
+    ccsCcuDTO: CcsCcuDTO,
+    empEmissionSources: EmpEmissionsSources[],
+  ): string[] {
+    return ccsCcuDTO.emissionSourceName.map((name) => {
+      const existingEmpEmissionSource = empEmissionSources.find(
+        (emissionSource) => name.toUpperCase() === emissionSource?.name.toUpperCase(),
+      );
+      return existingEmpEmissionSource.name;
+    });
+  }
 
-    if (this.isCaptureAndStorageAppliedValid(ccsCcuDTO?.captureAndStorageApplied)) {
-      empCarbonCapture.exist = this.transformIsCaptureAndStorageApplied(ccsCcuDTO.captureAndStorageApplied);
-    }
+  /**
+   * Transforms CcsCcuDTO to EmpCarbonCapture
+   * Assumes that ccsCcuDTO is valid at this point
+   */
+  public static transformCcsCcuDTO(ccsCcuDTO: CcsCcuDTO, empEmissionSources: EmpEmissionsSources[]): EmpCarbonCapture {
+    const empCarbonCapture: EmpCarbonCapture = {
+      exist: ccsCcuDTO.captureAndStorageApplied === CaptureAndStorageAppliedEnum?.YES,
+    };
 
-    if (empCarbonCapture?.exist && (ccsCcuDTO?.technology || ccsCcuDTO?.emissionSourceName)) {
+    if (empCarbonCapture?.exist) {
       empCarbonCapture.technologies = {
         description: ccsCcuDTO?.technology,
-        technologyEmissionSources: this.transformEmissionSourceNames(ccsCcuDTO?.emissionSourceName, emissionSources),
+        technologyEmissionSources: this.transformCcsCcuDTOEmissionSourceNames(ccsCcuDTO, empEmissionSources),
       };
     }
 
     return empCarbonCapture;
+  }
+
+  /**
+   * Validates CcsCcuDTO and returns XmlResult<EmpCarbonCapture>
+   * This should be explicitly called and displayed after validateCoreShipParticularsDTO is valid
+   */
+  public static validateCcsCcuDTO(
+    shipParticular: ShipParticularsDTO,
+    empEmissionsSources?: EmpEmissionsSources[],
+  ): XmlResult<EmpCarbonCapture> {
+    const ccsCcuDTO = shipParticular?.ccsCcu;
+
+    if (this.isCcsCcuDTOValid(ccsCcuDTO, empEmissionsSources)) {
+      return {
+        data: this.transformCcsCcuDTO(ccsCcuDTO, empEmissionsSources),
+      };
+    }
+
+    return {
+      errors: [
+        {
+          row: shipParticular.name,
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the application of carbon capture and storage technologies data you uploaded. Check the information entered and reupload the file',
+        },
+      ],
+    };
   }
 }

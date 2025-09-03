@@ -35,7 +35,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class EmpVariationApplicationSubmitRegulatorLedRequestTaskInitializerTest {
+class EmpVariationApplicationSubmitRegulatorLedRequestTaskInitializerTest {
 
     @InjectMocks
     private EmpVariationApplicationSubmitRegulatorLedRequestTaskInitializer cut;
@@ -144,13 +144,6 @@ public class EmpVariationApplicationSubmitRegulatorLedRequestTaskInitializerTest
                 .builder()
                 .empContainer(empContainer)
                 .build();
-
-        AddressState addressState = AddressState.builder().line1("line1")
-                .state("state")
-                .city("city")
-                .country("country")
-                .build();
-        MrtmAccount accountInfo = MrtmAccount.builder().name(operatorName).address(addressState).id(accountId).build();
 
         EmpVariationRequestPayload requestPayload = EmpVariationRequestPayload.builder().originalEmpContainer(empContainer).emissionsMonitoringPlan(emp).reasonRegulatorLed(
                         EmpVariationRegulatorLedReason.builder()

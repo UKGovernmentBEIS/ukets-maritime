@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
+import { AuthStore } from '@netz/common/auth';
 import { BasePage } from '@netz/common/testing';
 
 import { mockNonComplianceFiles } from '@requests/common/non-compliance/testing';
@@ -10,6 +11,7 @@ describe('NonComplianceNoticeOfIntentUploadSummaryTemplateComponent', () => {
   let component: NonComplianceNoticeOfIntentUploadSummaryTemplateComponent;
   let fixture: ComponentFixture<NonComplianceNoticeOfIntentUploadSummaryTemplateComponent>;
   let page: Page;
+  let authStore: AuthStore;
 
   class Page extends BasePage<NonComplianceNoticeOfIntentUploadSummaryTemplateComponent> {}
 
@@ -18,6 +20,14 @@ describe('NonComplianceNoticeOfIntentUploadSummaryTemplateComponent', () => {
       imports: [NonComplianceNoticeOfIntentUploadSummaryTemplateComponent],
       providers: [provideRouter([])],
     }).compileComponents();
+
+    authStore = TestBed.inject(AuthStore);
+    authStore.setUserState({
+      ...authStore.state.userState,
+      roleType: 'REGULATOR',
+      userId: 'regTestId',
+      status: 'ENABLED',
+    });
 
     fixture = TestBed.createComponent(NonComplianceNoticeOfIntentUploadSummaryTemplateComponent);
     component = fixture.componentInstance;

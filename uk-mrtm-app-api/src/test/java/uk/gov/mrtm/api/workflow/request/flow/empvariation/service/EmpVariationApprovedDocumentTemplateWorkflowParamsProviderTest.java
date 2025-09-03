@@ -59,7 +59,6 @@ class EmpVariationApprovedDocumentTemplateWorkflowParamsProviderTest {
                                 .details(ReviewDecisionDetails.builder().notes("notes").build()).build()
                 ))
                 .build();
-//        String requestId = "1";
 
         Map<String, Object> result = provider.constructParams(payload);
 

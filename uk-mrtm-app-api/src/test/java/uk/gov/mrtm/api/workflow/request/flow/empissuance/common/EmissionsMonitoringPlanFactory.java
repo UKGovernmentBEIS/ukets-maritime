@@ -38,6 +38,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissionsources.EmpEmissio
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissionsources.EmpEmissionSources;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.managementprocedures.EmpManagementProcedures;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.managementprocedures.EmpMonitoringReportingRole;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpMandate;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.monitoringreenhousegas.EmpMonitoringGreenhouseGas;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.DeclarationDocuments;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
@@ -67,6 +68,7 @@ public class EmissionsMonitoringPlanFactory {
             .emissions(createEmpEmissions())
             .greenhouseGas(createEmpMonitoringGreenhouseGas())
             .sources(createEmpEmissionSources())
+            .mandate(EmpMandate.builder().exist(Boolean.FALSE).build())
             .build();
     }
 

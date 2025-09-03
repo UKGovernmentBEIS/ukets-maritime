@@ -26,5 +26,6 @@ export interface EmpVariationSaveApplicationRequestTaskActionPayload {
     | 'ADDITIONAL_DOCUMENTS'
     | 'DATA_GAPS'
     | 'CONTROL_ACTIVITIES'
+    | 'MANDATE'
   >;
 }

@@ -27,7 +27,9 @@ const uniqueNameValidation =
   (control: AbstractControl): ValidationErrors => {
     if (
       emissionsSources.filter(
-        (emissionsSource) => emissionsSource.uniqueIdentifier !== sourceId && emissionsSource.name === control.value,
+        (emissionsSource) =>
+          emissionsSource.uniqueIdentifier !== sourceId &&
+          emissionsSource.name?.toUpperCase() === control.value?.toUpperCase(),
       ).length > 0
     ) {
       return { nameExist: 'This emission source name already exists. Enter a unique name.' };

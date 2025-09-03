@@ -29,6 +29,7 @@ export interface EmpVariationApplicationSubmitRegulatorLedRequestTaskPayload {
     | 'ADDITIONAL_DOCUMENTS'
     | 'DATA_GAPS'
     | 'CONTROL_ACTIVITIES'
+    | 'MANDATE'
   >;
   empAttachments?: { [key: string]: string };
   empSectionsCompleted?: { [key: string]: string };

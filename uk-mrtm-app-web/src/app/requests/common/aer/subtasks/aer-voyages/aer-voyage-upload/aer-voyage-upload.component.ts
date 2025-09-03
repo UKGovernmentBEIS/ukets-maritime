@@ -167,12 +167,15 @@ export class AerVoyageUploadComponent {
         fv.fuelConsumptionType as unknown as AerFuel['type'],
       ),
     )();
+    const matchedEmissionSource = this.store.select(
+      aerCommonQuery.selectShipEmissionSourceByName(fv.imoNumber, fv.fuelConsumptionEmissionSourceName),
+    )();
 
     return hasFuelConsumption(fv)
       ? [
           {
             uniqueIdentifier: crypto.randomUUID(),
-            name: fv.fuelConsumptionEmissionSourceName,
+            name: matchedEmissionSource ? matchedEmissionSource.name : null,
             amount: fv.fuelConsumptionAmount,
             measuringUnit: fv.fuelConsumptionMeasuringUnit,
             fuelDensity: fv.fuelConsumptionFuelDensity,

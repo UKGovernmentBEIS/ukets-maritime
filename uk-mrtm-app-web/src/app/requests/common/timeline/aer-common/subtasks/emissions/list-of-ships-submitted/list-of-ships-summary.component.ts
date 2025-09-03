@@ -5,8 +5,8 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   ListOfShipsSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -16,7 +16,7 @@ import {
     PageHeadingComponent,
     ListOfShipsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './list-of-ships-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -25,6 +25,6 @@ export class ListOfShipsSummaryComponent {
   private readonly store = inject(RequestActionStore);
   readonly ships = this.store.select(aerTimelineCommonQuery.selectListOfShips);
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('LIST_OF_SHIPS'));
 }

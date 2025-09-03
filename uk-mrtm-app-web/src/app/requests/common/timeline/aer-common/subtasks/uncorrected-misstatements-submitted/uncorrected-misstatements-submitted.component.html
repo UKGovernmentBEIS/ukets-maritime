@@ -2,7 +2,8 @@
 
 <mrtm-uncorrected-misstatements-summary-template [data]="uncorrectedMisstatements()" />
 
-@if (withReviewDecision()) {
-  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+@if (isReviewCompletedActionType() && decision()) {
+  <mrtm-review-decision-summary-template [reviewDecision]="decision()" />
 }
+
 <netz-return-to-task-or-action-page />

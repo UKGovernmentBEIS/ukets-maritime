@@ -7,8 +7,8 @@ import { reportingObligationMap } from '@requests/common/aer';
 import { timelineCommonQuery } from '@requests/common/timeline';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   ReportingObligationSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -18,7 +18,7 @@ import {
     ReturnToTaskOrActionPageComponent,
     ReportingObligationSummaryTemplateComponent,
     PageHeadingComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './reporting-obligation-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +34,7 @@ export class ReportingObligationSubmittedComponent {
     aerTimelineCommonQuery.selectAttachedFiles(this.reportingObligationDetails()?.supportingDocuments),
   );
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('REPORTING_OBLIGATION_DETAILS'),
   );

@@ -20,34 +20,34 @@ public class KafkaCorrelationParentHeaderProducerMrtmInterceptor<K, V>
         implements KafkaCorrelationParentHeaderProducerInterceptor<K, V> {
 
     @Override
-    public ProducerRecord<K, V> onSend(ProducerRecord<K, V> record) {
-        if (record.headers().lastHeader(KafkaConstants.CORRELATION_PARENT_ID_HEADER) == null) {
+    public ProducerRecord<K, V> onSend(ProducerRecord<K, V> producerRecord) {
+        if (producerRecord.headers().lastHeader(KafkaConstants.CORRELATION_PARENT_ID_HEADER) == null) {
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder
                     .getRequestAttributes();
             if (servletRequestAttributes != null) {
                 HttpServletResponse response = servletRequestAttributes.getResponse();
                 if (response != null) {
-                    record.headers().add(KafkaConstants.CORRELATION_PARENT_ID_HEADER,
+                    producerRecord.headers().add(KafkaConstants.CORRELATION_PARENT_ID_HEADER,
                             response.getHeader(RestLoggingUtils.CORRELATION_ID_HEADER).getBytes());
                 }
             }
         }
 
-        return record;
+        return producerRecord;
     }
 
     @Override
     public void onAcknowledgement(RecordMetadata metadata, Exception exception) {
-
+        // No-op: No post-send acknowledgement handling required for this interceptor
     }
 
     @Override
     public void close() {
-
+        // No-op: No resources to close for this interceptor
     }
 
     @Override
     public void configure(Map<String, ?> configs) {
-
+        // No-op: No specific configuration required for this interceptor
     }
 }

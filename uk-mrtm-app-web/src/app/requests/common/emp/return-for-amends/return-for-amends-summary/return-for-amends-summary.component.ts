@@ -12,7 +12,7 @@ import {
   RETURN_FOR_AMENDS_SERVICE,
 } from '@requests/common/emp/return-for-amends/return-for-amends.providers';
 import { IReturnForAmendsService } from '@requests/common/emp/return-for-amends/return-for-amends.types';
-import { EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/components';
+import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/components';
 import { empSubtaskToTitle } from '@shared/constants';
 
 @Component({
@@ -20,7 +20,7 @@ import { empSubtaskToTitle } from '@shared/constants';
   standalone: true,
   imports: [
     PageHeadingComponent,
-    EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent,
+    ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
     ButtonDirective,
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,

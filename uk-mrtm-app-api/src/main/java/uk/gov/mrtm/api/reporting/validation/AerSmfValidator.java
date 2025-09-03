@@ -42,12 +42,6 @@ public class AerSmfValidator implements AerContextValidator {
                 aerViolations.add(new AerViolation(AerSmf.class.getSimpleName(),
                     AerViolation.ViolationMessage.INVALID_FUEL_CONSUMPTION));
             }
-
-            boolean hasDuplicateFuelConsumptions = smf.getSmfDetails().getPurchases().size() != smfFuels.size();
-            if (hasDuplicateFuelConsumptions) {
-                aerViolations.add(new AerViolation(AerSmf.class.getSimpleName(),
-                    AerViolation.ViolationMessage.DUPLICATE_FUEL_ENTRIES));
-            }
         }
 
         return AerValidationResult.builder()

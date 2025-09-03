@@ -33,10 +33,11 @@ export const userContactsVerifiersTabFormProvider: Provider = {
       {
         validators: [
           activeOperatorAdminValidator('The account must have at least one operator admin user'),
-          activeContactValidator('PRIMARY'),
           primarySecondaryValidator(
             'You cannot assign the same user as a primary and secondary contact on your account',
           ),
+          activeContactValidator('PRIMARY'),
+          activeContactValidator('SECONDARY'),
           activeContactValidator('SERVICE'),
           activeContactValidator('FINANCIAL'),
         ],

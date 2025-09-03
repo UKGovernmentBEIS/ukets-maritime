@@ -17,7 +17,7 @@ export const cancelPaymentFormProvider: Provider = {
       reason: formBuilder.control<CancelPaymentFormModel['reason'] | null>(null, {
         validators: [
           GovukValidators.required('Enter the reason that no payment is required'),
-          GovukValidators.maxLength(10000, 'The no payment reason should not be more than 10000 characters'),
+          GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
         ],
       }),
     }),

@@ -59,6 +59,11 @@ import {
   ManagementProceduresSummarySideEffect,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
+  MandateFlowManager,
+  provideMandatePayloadMutators,
+  provideMandateSideEffects,
+} from '@requests/common/emp/subtasks/mandate';
+import {
   DeclarationDocumentsPayloadMutator,
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsFlowManager,
@@ -110,6 +115,7 @@ export function provideEmpAmendPayloadMutators(): EnvironmentProviders {
     ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: VariationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: RequestedChangesQuestionPayloadMutator },
+    ...provideMandatePayloadMutators(),
   ]);
 }
 
@@ -148,6 +154,7 @@ export function provideEmpAmendSideEffects(): EnvironmentProviders {
     provideEmpAmendResetReviewDecisionSubtaskSideEffect('controlActivities'),
     provideEmpAmendResetReviewDecisionSubtaskSideEffect('managementProcedures'),
     provideEmpAmendResetReviewDecisionSubtaskSideEffect('greenhouseGas'),
+    ...provideMandateSideEffects(),
   ]);
 }
 
@@ -164,5 +171,6 @@ export function provideEmpAmendStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: VariationDetailsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: RequestedChangesFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
   ]);
 }

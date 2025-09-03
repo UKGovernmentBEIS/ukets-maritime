@@ -74,6 +74,7 @@ describe('OverallDecisionActionsComponent', () => {
           controlActivities: TaskItemStatus.ACCEPTED,
           additionalDocuments: TaskItemStatus.ACCEPTED,
           managementProcedures: TaskItemStatus.ACCEPTED,
+          mandate: TaskItemStatus.ACCEPTED,
         },
       ),
     );

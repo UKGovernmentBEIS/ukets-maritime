@@ -25,7 +25,6 @@ export class TaskItemComponent {
   @Input() link: string;
   @Input() linkText: string;
   @Input() status: string;
-  @Input() hasContent: boolean;
   @Input() warningHint: string;
   @Input() hint: string;
   @Input() postContentComponent: Type<unknown>;

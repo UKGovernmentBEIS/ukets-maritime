@@ -17,7 +17,7 @@ import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages';
 import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation';
 import { AerReviewTaskPayload } from '@requests/tasks/aer-review/aer-review.types';
-import { AerReviewDecisionDto } from '@shared/types';
+import { ReviewDecisionDto } from '@shared/types';
 
 const selectPayload: StateSelector<RequestTaskState, AerReviewTaskPayload> = createDescendingSelector(
   requestTaskQuery.selectRequestTaskPayload,
@@ -115,7 +115,7 @@ const selectCanCompleteReport: StateSelector<RequestTaskState, boolean> = create
       }
 
       if (
-        aerSectionsCompleted[section] !== TaskItemStatus.ACCEPTED &&
+        aerSectionsCompleted[section] !== TaskItemStatus.ACCEPTED ||
         (reviewGroupDecisions[group] as AerDataReviewDecision)?.type !== 'ACCEPTED'
       ) {
         return false;
@@ -141,11 +141,11 @@ const selectDecisionNeededAmends = createAggregateSelector(
   ({ attachments, downloadUrl, completed }, groupDecisions) => {
     const result: Array<{
       subtask: string;
-      decision: AerReviewDecisionDto;
+      decision: ReviewDecisionDto;
     }> = [];
 
     for (const [sectionKey, groupKey] of Object.entries(AER_SUBTASK_REVIEW_GROUP_MAP)) {
-      const subtask = groupDecisions?.[groupKey] as AerReviewDecisionDto;
+      const subtask = groupDecisions?.[groupKey] as ReviewDecisionDto;
 
       if (
         !subtask ||
@@ -186,7 +186,7 @@ const selectSummaryReviewGroupDecision = (group: AerSaveReviewGroupDecisionReque
       ...groupDecision,
       details: {
         ...groupDecision?.details,
-        requiredChanges: (groupDecision as AerReviewDecisionDto)?.details?.requiredChanges?.map((change) => ({
+        requiredChanges: (groupDecision as ReviewDecisionDto)?.details?.requiredChanges?.map((change) => ({
           ...change,
           files: change?.files?.map((file) => ({
             fileName: attachments[file as any],

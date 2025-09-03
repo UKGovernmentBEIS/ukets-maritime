@@ -5,7 +5,7 @@ import { NonComplianceNoticeOfIntentRequestTaskPayload } from '@mrtm/api';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { TaskService } from '@netz/common/forms';
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
 
 import {
@@ -13,6 +13,7 @@ import {
   nonComplianceNoticeOfIntentMap,
   NonComplianceNoticeOfIntentUploadStep,
 } from '@requests/common/non-compliance';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 import { nonComplianceNoticeOfIntentCommonQuery } from '@requests/common/non-compliance/non-compliance-notice-of-intent/+state';
 import { NonComplianceNoticeOfIntentUploadSummaryTemplateComponent } from '@shared/components/summaries';
 
@@ -35,7 +36,7 @@ export class NonComplianceNoticeOfIntentUploadSummaryComponent {
   private readonly store = inject(RequestTaskStore);
 
   readonly map = nonComplianceNoticeOfIntentMap;
-  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly isEditable = this.store.select(nonComplianceNoticeOfIntentCommonQuery.selectIsFormEditable);
   readonly isSubtaskCompleted = this.store.select(
     nonComplianceNoticeOfIntentCommonQuery.selectIsUploadSubtaskCompleted,
   );
@@ -46,7 +47,7 @@ export class NonComplianceNoticeOfIntentUploadSummaryComponent {
   private readonly noticeOfIntent = computed(() => this.nonComplianceNoticeOfIntentUpload()?.noticeOfIntent);
   readonly files = computed(() =>
     this.noticeOfIntent()
-      ? this.store.select(nonComplianceNoticeOfIntentCommonQuery.selectAttachedFiles([this.noticeOfIntent()]))()
+      ? this.store.select(nonComplianceCommonQuery.selectAttachedFiles([this.noticeOfIntent()]))()
       : [],
   );
 

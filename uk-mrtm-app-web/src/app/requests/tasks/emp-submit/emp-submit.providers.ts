@@ -30,6 +30,7 @@ import {
 import {
   EmissionSourceFlowManager,
   EmissionSourcesCompletionPayloadMutator,
+  EmissionSourcesCompliancePayloadMutator,
   EmissionSourcesFactorsPayloadMutator,
   EmissionSourcesSummarySideEffect,
 } from '@requests/common/emp/subtasks/emission-sources';
@@ -58,6 +59,11 @@ import {
   ManagementProceduresRolesPayloadMutator,
   ManagementProceduresSummarySideEffect,
 } from '@requests/common/emp/subtasks/management-procedures';
+import {
+  MandateFlowManager,
+  provideMandatePayloadMutators,
+  provideMandateSideEffects,
+} from '@requests/common/emp/subtasks/mandate';
 import {
   DeclarationDocumentsPayloadMutator,
   LegalStatusOfOrganisationPayloadMutator,
@@ -95,8 +101,10 @@ export function provideEmpSubmitPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasQaEquipmentPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasInformationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
     ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
+    ...provideMandatePayloadMutators(),
   ]);
 }
 
@@ -124,6 +132,7 @@ export function provideEmpSubmitSideEffects(): EnvironmentProviders {
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_FORM),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_LIST),
+    ...provideMandateSideEffects(),
   ]);
 }
 
@@ -138,5 +147,6 @@ export function provideEmpSubmitStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: GreenhouseGasFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourceFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
   ]);
 }

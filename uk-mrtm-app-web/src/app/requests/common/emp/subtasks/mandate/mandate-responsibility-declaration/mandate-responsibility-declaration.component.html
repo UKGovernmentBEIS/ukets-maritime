@@ -1,0 +1,37 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [caption]="wizardMap.title"
+  [heading]="wizardMap.responsibilityDeclaration.title"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body govuk-!-width-three-quarters">
+    I declare that the information I have provided is accurate and complete.
+  </p>
+  <p class="govuk-body govuk-!-width-three-quarters">
+    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
+    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
+    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+    remaining essentially unchanged.
+  </p>
+  <p class="govuk-body govuk-!-width-three-quarters">
+    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
+    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+  </p>
+
+  <details class="govuk-details" data-module="govuk-details">
+    <summary class="govuk-details__summary">
+      <span class="govuk-details__summary-text">View the provided Registered owners</span>
+    </summary>
+    <h3 class="govuk-heading-m">Registered owners</h3>
+    <mrtm-mandate-registered-owners-list-summary-template [data]="registeredOwners()" />
+  </details>
+
+  <div formControlName="responsibilityDeclaration" govuk-checkboxes>
+    <govuk-checkbox [value]="true">
+      <ng-container govukLabel>
+        <strong>
+          I confirm that all submitted details are true and correct, and I take full responsibility for their accuracy
+        </strong>
+      </ng-container>
+    </govuk-checkbox>
+  </div>
+</mrtm-wizard-step>

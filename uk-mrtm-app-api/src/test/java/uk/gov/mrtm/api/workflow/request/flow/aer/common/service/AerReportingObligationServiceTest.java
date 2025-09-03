@@ -271,7 +271,7 @@ class AerReportingObligationServiceTest {
         verify(aerRequestIdGenerator).generate(getAerRequestParams(accountId));
         verify(startProcessRequestService).reStartProcess(aerRequest, processVars);
         verify(requestService)
-            .addActionToRequest(aerRequest, null, MrtmRequestActionType.AER_APPLICATION_RE_INITIATED, submitterId);
+            .addActionToRequest(aerRequest, null, MrtmRequestActionType.AER_APPLICATION_EXEMPTION_REVERTED, submitterId);
 
         verify(requestService, never()).updateRequestStatus(any(), any());
         verifyNoInteractions(workflowService);

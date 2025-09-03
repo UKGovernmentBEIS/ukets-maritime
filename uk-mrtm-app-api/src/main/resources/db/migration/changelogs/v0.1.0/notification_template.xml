@@ -4,6 +4,60 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+        
+    <changeSet id="0_1_0_INSERT_NEW_VERIFICATION_BODY_MESSAGE_NOTIFICATION_TEMPLATE" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'NewVerificationBody',
+                       'New maritime operator',
+                       'You have been appointed as the verifier for ${emitterName} (${emitterId}).
+
+You can manage the individual who is assigned as the site contact by navigating to [Manage verifier users]({"action": "VERIFICATION_BODY_USERS_SETUP"}).
+
+You can assign and re-assign site contacts at any time.'
+                   )]]>;
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'NewVerificationBody';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_INSERT_VERIFIER_NO_LONGER_AVAILABLE_MESSAGE_NOTIFICATION_TEMPLATE" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'VerificationBodyNoLongerAvailable',
+                       'Verifier is no longer available',
+                       'The verifier you have appointed at your account has been removed or suspended by the regulator and is no longer available.
+
+You can appoint a new verifier at any time from your dashboard by selecting "Manage users, contacts or verifiers" or by clicking on this link to [Manage users, contacts and verifiers]({"action": "ACCOUNT_USERS_SETUP", "accountId": ${accountId?c}}).
+
+If you do not appoint a verifier now, you will be reminded at the end of each calendar year and prior to the deadline for submission of your Annual Emission Monitoring report that you must appoint a verifier.'
+                   )]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'VerificationBodyNoLongerAvailable';
+            </sql>
+        </rollback>
+
+    </changeSet>
 
     <changeSet id="0_1_0_INSERT_INVITATION_TO_REGULATOR_NOTIFICATION_TEMPLATE" author="dimopoulosc@unisystems.gr">
 

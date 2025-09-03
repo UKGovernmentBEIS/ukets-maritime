@@ -19,6 +19,11 @@ describe('ReductionClaimFuelPurchaseComponent', () => {
     uploadRequestTaskAttachment: jest.fn().mockReturnValue(asyncData<any>(new HttpResponse({ body: { uuid: uuid4 } }))),
   };
 
+  const getFixedUUID = jest.fn().mockReturnValue(uuid4);
+  Object.defineProperty(window, 'crypto', {
+    value: { getRandomValues: getFixedUUID, randomUUID: getFixedUUID },
+  });
+
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReductionClaimFuelPurchaseComponent],

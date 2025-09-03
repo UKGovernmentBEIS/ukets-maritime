@@ -18,6 +18,7 @@ export class HtmlDiffDirective {
 
   previous = input<string | null>(null);
   current = input.required<string>();
+  isFiles = input<boolean | null>(false);
 
   constructor() {
     effect(() => {
@@ -27,8 +28,11 @@ export class HtmlDiffDirective {
         const previousSanitized = this.sanitize(this.previous());
         const currentSanitized = this.sanitize(this.current());
         const diff = this.htmlDiffProvider
-          ? this.diffService.diff(previousSanitized, currentSanitized)
+          ? this.isFiles()
+            ? this.diffService.fileNameDiff(previousSanitized, currentSanitized)
+            : this.diffService.diff(previousSanitized, currentSanitized)
           : currentSanitized;
+
         this.renderer.setProperty(this.el.nativeElement, 'innerHTML', diff);
       }
     });

@@ -11,6 +11,10 @@ export class XmlValidator {
     return Object.values(enumType).includes(value);
   }
 
+  static isString(value: any) {
+    return typeof value === 'string';
+  }
+
   static isDate(value: any) {
     const date = new Date(value);
 

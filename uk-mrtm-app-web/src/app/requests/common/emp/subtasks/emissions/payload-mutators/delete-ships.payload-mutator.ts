@@ -17,6 +17,10 @@ export class DeleteShipsPayloadMutator extends PayloadMutator {
   apply(currentPayload: EmpTaskPayload, userInput: Array<EmpShipEmissions['uniqueIdentifier']>): Observable<any> {
     return of(
       produce(currentPayload, (payload: EmpTaskPayload) => {
+        const deletedImoNumbers = payload.emissionsMonitoringPlan[this.subtask].ships
+          .filter((ship) => userInput.includes(ship.uniqueIdentifier))
+          .map((ship) => ship?.details?.imoNumber);
+
         payload.emissionsMonitoringPlan[this.subtask].ships = [
           ...payload.emissionsMonitoringPlan[this.subtask].ships.filter(
             (ship: EmpShipEmissions) => !userInput.includes(ship.uniqueIdentifier),
@@ -28,6 +32,16 @@ export class DeleteShipsPayloadMutator extends PayloadMutator {
             delete payload.empSectionsCompleted[`${this.subtask}-ship-${uniqueIdentifier}`];
           }
         });
+
+        if (
+          payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED &&
+          payload?.emissionsMonitoringPlan?.mandate?.registeredOwners
+            ?.map((ro) => ro.ships.map((ship) => deletedImoNumbers.includes(ship.imoNumber)))
+            ?.flat()
+            ?.includes(true)
+        ) {
+          payload.empSectionsCompleted['mandate'] = TaskItemStatus.NEEDS_REVIEW;
+        }
 
         payload.empSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
       }),

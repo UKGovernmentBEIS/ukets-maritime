@@ -12,7 +12,7 @@ import {
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { DetailsComponent } from '@netz/govuk-components';
+import { DetailsComponent, SafeHtmlPipe } from '@netz/govuk-components';
 
 import { IncludesPipe } from '@shared/pipes';
 import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
@@ -20,7 +20,7 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
 @Component({
   selector: 'mrtm-xml-error-summary',
   standalone: true,
-  imports: [DetailsComponent, IncludesPipe],
+  imports: [DetailsComponent, IncludesPipe, SafeHtmlPipe],
   templateUrl: './xml-error-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -30,6 +30,8 @@ export class XmlErrorSummaryComponent implements AfterViewInit {
   xmlErrors = input<XmlValidationError[]>();
   container = contentChild<ElementRef<HTMLDivElement>>('container');
   xmlErrorList: Signal<NestedMessageValidationError[]> = computed(() => this.getGroupedErrors());
+  formatNestedErrorDetails: Signal<(error: NestedMessageValidationError) => string | undefined> =
+    input<(error: NestedMessageValidationError) => string | undefined>();
 
   /**
    * Transforms XmlValidationError[] to NestedMessageValidationError[]

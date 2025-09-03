@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { map, Observable, of, tap } from 'rxjs';
 
@@ -28,6 +28,7 @@ import { paymentQuery } from '@requests/tasks/payment/+state';
 import { PaymentTaskPayload } from '@requests/tasks/payment/payment.types';
 import { SaveActionTypes } from '@shared/types';
 
+@Injectable()
 export class PaymentApiService extends TaskApiService<PaymentTaskPayload> {
   private readonly paymentsService = inject(PaymentsService);
   private readonly pendingRequestService = inject(PendingRequestService);
@@ -66,7 +67,7 @@ export class PaymentApiService extends TaskApiService<PaymentTaskPayload> {
     const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
 
     return {
-      requestTaskActionType: 'PAYMENT_CANCEL',
+      requestTaskActionType: 'CANCEL_APPLICATION',
       requestTaskId,
       requestTaskActionPayload: {
         ...payload,

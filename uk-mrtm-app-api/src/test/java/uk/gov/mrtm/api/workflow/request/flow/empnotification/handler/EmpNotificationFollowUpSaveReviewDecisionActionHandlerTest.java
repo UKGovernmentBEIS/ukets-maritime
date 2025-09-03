@@ -118,10 +118,11 @@ class EmpNotificationFollowUpSaveReviewDecisionActionHandlerTest {
                 .build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
+        final Long requestTaskId = requestTask.getId();
 
         // Invoke
         BusinessException be = assertThrows(BusinessException.class,
-            () -> handler.process(requestTask.getId(),
+            () -> handler.process(requestTaskId,
                 MrtmRequestTaskActionType.EMP_NOTIFICATION_FOLLOW_UP_SAVE_REVIEW_DECISION,
                 appUser,
                 actionPayload));

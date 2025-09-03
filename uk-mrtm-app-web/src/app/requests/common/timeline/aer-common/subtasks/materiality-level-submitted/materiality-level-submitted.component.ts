@@ -6,8 +6,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { materialityLevelMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   MaterialityLevelSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     MaterialityLevelSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './materiality-level-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,6 +27,6 @@ export class MaterialityLevelSubmittedComponent {
   readonly materialityLevel = this.store.select(aerTimelineCommonQuery.selectMaterialityLevel);
   readonly map = materialityLevelMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('MATERIALITY_LEVEL'));
 }

@@ -14,13 +14,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
+import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
-import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
@@ -31,7 +31,6 @@ import uk.gov.netz.api.workflow.request.core.assignment.taskassign.service.UserR
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
@@ -77,7 +76,7 @@ class RequestTaskAssignmentControllerTest {
     private RequestTaskAssignmentQueryService requestTaskAssignmentQueryService;
 
     @BeforeEach
-    public void setUp() {
+     void setUp() {
         AuthorizationAspectUserResolver authorizationAspectUserResolver = new AuthorizationAspectUserResolver(appSecurityComponent);
         AuthorizedAspect aspect = new AuthorizedAspect(appUserAuthorizationService, authorizationAspectUserResolver);
 
@@ -214,7 +213,7 @@ class RequestTaskAssignmentControllerTest {
     private List<AssigneeUserInfoDTO> buildMockUserInfoList(List<String> userIds) {
         return userIds.stream()
             .map(userId -> AssigneeUserInfoDTO.builder().id(userId).firstName(userId).lastName(userId).build())
-            .collect(Collectors.toList());
+            .toList();
     }
 
 }

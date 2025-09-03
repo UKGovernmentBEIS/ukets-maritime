@@ -25,10 +25,6 @@ public class AerRequestIdGenerator implements RequestIdGenerator {
         return String.format("%s%05d-%d", getPrefix(), accountId, year.getValue());
     }
 
-//    public String generatePastAerId(Long accountId, Year year, Integer yearsBefore) {
-//        return generate(year.minusYears(yearsBefore),accountId);
-//    }
-
     @Override
     public List<String> getTypes() {
         return List.of(MrtmRequestType.AER);

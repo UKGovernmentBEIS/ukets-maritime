@@ -21,10 +21,7 @@ import {
   ControlActivitiesWizardStep,
 } from '@requests/common/emp/subtasks/control-activities';
 import { controlActivitiesMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import {
-  ControlActivitiesSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
-} from '@shared/components';
+import { ControlActivitiesSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
@@ -51,7 +48,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './control-activities-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

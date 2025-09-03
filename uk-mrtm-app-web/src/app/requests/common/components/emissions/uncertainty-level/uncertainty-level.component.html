@@ -1,6 +1,6 @@
 <mrtm-wizard-step
   (formSubmit)="onSubmit()"
-  [caption]="isAer() ? shipName : (taskMap.title | shipStepTitle: 4 : shipName)"
+  [caption]="isAer() ? shipName : (shipName | shipStepTitleCustom: 4)"
   [formGroup]="formGroup"
   [heading]="taskMap.uncertaintyLevel.title"
   [isTwoThirds]="true"

@@ -6,8 +6,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { recommendedImprovementsMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   RecommendedImprovementsSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     RecommendedImprovementsSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './recommended-improvements-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,7 @@ export class RecommendedImprovementsSubmittedComponent {
   readonly recommendedImprovements = this.store.select(aerTimelineCommonQuery.selectRecommendedImprovements);
   readonly map = recommendedImprovementsMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('RECOMMENDED_IMPROVEMENTS'),
   );

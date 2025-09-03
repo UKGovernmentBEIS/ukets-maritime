@@ -1,8 +1,8 @@
 <netz-page-heading [caption]="operatorDetailsMap.title">{{ operatorDetailsMap.title }}</netz-page-heading>
 <mrtm-operator-details-summary-template [operatorDetails]="operatorDetails()" [files]="files()" />
 
-@if (withReviewDecision()) {
-  <mrtm-emp-review-decision-summary-template [reviewDecision]="$any(decision())" />
+@if (isReviewCompletedActionType() && decision()) {
+  <mrtm-review-decision-summary-template [reviewDecision]="decision()" />
 }
 
 <netz-return-to-task-or-action-page />

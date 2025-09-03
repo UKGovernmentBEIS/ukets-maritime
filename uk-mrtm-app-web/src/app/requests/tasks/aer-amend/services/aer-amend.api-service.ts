@@ -1,9 +1,12 @@
+import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 import { requestTaskQuery } from '@netz/common/store';
 
 import { AerCommonApiService } from '@requests/common/aer/services';
 
+@Injectable()
 export class AerAmendApiService extends AerCommonApiService {
   submitForVerification(): Observable<void> {
     return this.handleSubmit({

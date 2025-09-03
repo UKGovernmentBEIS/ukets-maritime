@@ -31,6 +31,9 @@ import { empVariationWaitForReviewTaskContent } from '@requests/tasks/emp-variat
 import { empWaitForAmendTaskContent } from '@requests/tasks/emp-wait-for-amend';
 import { empWaitForPeerReviewTaskContent } from '@requests/tasks/emp-wait-for-peer-review';
 import { empWaitForReviewTaskContent } from '@requests/tasks/emp-wait-for-review';
+import { nonComplianceCivilPenaltyTaskContent } from '@requests/tasks/non-compliance-civil-penalty/non-compliance-civil-penalty-task-content';
+import { nonComplianceCivilPenaltyPeerReviewTaskContent } from '@requests/tasks/non-compliance-civil-penalty-peer-review/non-compliance-civil-penalty-peer-review.task-content';
+import { nonComplianceFinalDeterminationTaskContent } from '@requests/tasks/non-compliance-final-determination/non-compliance-final-determination-task-content';
 import { nonComplianceInitialPenaltyNoticeTaskContent } from '@requests/tasks/non-compliance-initial-penalty-notice/non-compliance-initial-penalty-notice-task-content';
 import { nonComplianceInitialPenaltyNoticePeerReviewTaskContent } from '@requests/tasks/non-compliance-initial-penalty-notice-peer-review/non-compliance-initial-penalty-notice-peer-review.task-content';
 import { nonComplianceNoticeOfIntentTaskContent } from '@requests/tasks/non-compliance-notice-of-intent/non-compliance-notice-of-intent-task-content';
@@ -48,6 +51,7 @@ import { waitForFollowUpReviewTaskContent } from '@requests/tasks/notification-w
 import { waitForPeerReviewTaskContent } from '@requests/tasks/notification-wait-for-peer-review/wait-for-peer-review-task-content';
 import { waitForReviewTaskContent } from '@requests/tasks/notification-wait-for-review/wait-for-review-task-content';
 import { paymentTaskContent } from '@requests/tasks/payment';
+import { systemMessageNotificationTaskContent } from '@requests/tasks/system-message-notification/system-message-notification-task-content';
 import { virRespondToRegulatorCommentsTaskContent } from '@requests/tasks/vir-respond-to-regulator-comments/vir-respond-to-regulator-comments-task-content';
 import { virReviewTaskContent } from '@requests/tasks/vir-review';
 import { virSubmitTaskContent } from '@requests/tasks/vir-submit/vir-submit-task-content';
@@ -122,6 +126,7 @@ export const tasksContent: RequestTaskPageContentFactoryMap = {
   AER_WAIT_FOR_AMENDS: aerReviewTaskContent,
   AER_APPLICATION_AMENDS_SUBMIT: aerAmendsTaskContent,
   AER_AMEND_WAIT_FOR_VERIFICATION: aerWaitForVerificationTaskContent,
+  AER_AMEND_APPLICATION_VERIFICATION_SUBMIT: aerVerificationSubmitTaskContent,
   NON_COMPLIANCE_APPLICATION_SUBMIT: nonComplianceSubmitTaskContent,
   NON_COMPLIANCE_INITIAL_PENALTY_NOTICE: nonComplianceInitialPenaltyNoticeTaskContent,
   NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_WAIT_FOR_PEER_REVIEW: nonComplianceInitialPenaltyNoticeTaskContent,
@@ -129,4 +134,10 @@ export const tasksContent: RequestTaskPageContentFactoryMap = {
   NON_COMPLIANCE_NOTICE_OF_INTENT: nonComplianceNoticeOfIntentTaskContent,
   NON_COMPLIANCE_NOTICE_OF_INTENT_WAIT_FOR_PEER_REVIEW: nonComplianceNoticeOfIntentTaskContent,
   NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_PEER_REVIEW: nonComplianceNoticeOfIntentPeerReviewTaskContent,
+  NON_COMPLIANCE_CIVIL_PENALTY: nonComplianceCivilPenaltyTaskContent,
+  NON_COMPLIANCE_CIVIL_PENALTY_WAIT_FOR_PEER_REVIEW: nonComplianceCivilPenaltyTaskContent,
+  NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_PEER_REVIEW: nonComplianceCivilPenaltyPeerReviewTaskContent,
+  NON_COMPLIANCE_FINAL_DETERMINATION: nonComplianceFinalDeterminationTaskContent,
+  NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION: systemMessageNotificationTaskContent,
+  VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION: systemMessageNotificationTaskContent,
 };

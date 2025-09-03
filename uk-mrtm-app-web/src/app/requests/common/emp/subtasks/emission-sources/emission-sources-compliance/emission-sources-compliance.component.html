@@ -1,0 +1,30 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="emissionSourcesMap.title"
+  [formGroup]="formGroup"
+  [heading]="emissionSourcesMap?.emissionCompliance?.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-body">
+    To make an emissions reduction claim through the annual emissions reporting process you must calculate the mass of
+    eligible fuel which meets the sustainability criteria as set out in legislation.
+  </p>
+  <div
+    [isInline]="true"
+    formControlName="exist"
+    govuk-radio
+    legendSize="medium"
+    legend="Will you be making an emissions reduction claim as a result of the purchase and delivery of sustainable fuel?">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+
+  @if (existCtrl.value) {
+    <p class="govuk-body">
+      Provide details of procedures, systems and responsibilities used to determine and update emission factors for
+      biofuels and Renewable Fuels of Non-Biological Origin (RFNBOs) and Recycled Carbon Fuels (RCFs).
+    </p>
+    <mrtm-about-procedure-details />
+    <mrtm-emp-procedure-form formGroupName="criteria" />
+  }
+</mrtm-wizard-step>

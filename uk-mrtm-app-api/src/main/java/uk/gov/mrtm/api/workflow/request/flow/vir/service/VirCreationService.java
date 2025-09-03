@@ -23,7 +23,6 @@ import uk.gov.netz.api.workflow.request.core.service.RequestService;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestCreateValidationResult;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestParams;
 
-import java.time.Year;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -66,7 +65,7 @@ public class VirCreationService {
         // Add Expiration Date
         final Map<String, Object> processVars = new HashMap<>();
         processVars.put(MrtmBpmnProcessConstants.VIR_EXPIRATION_DATE,
-                virDueDateService.generateDueDate(Year.of(aerRequest.getCreationDate().getYear())));
+                virDueDateService.generateDueDate(aerRequestMetadata.getYear()));
 
         // Start VIR flow
         final RequestParams params = RequestParams.builder()

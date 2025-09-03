@@ -1,0 +1,69 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.complianceRestored.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.complianceRestored | yesNoToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    @if (data.complianceRestored === 'YES') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.complianceRestoredDate.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.complianceRestoredDate | govukDate"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+
+    @if (userRole() === 'REGULATOR') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.comments.title }}</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.comments"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.reissuePenalty.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.reissuePenalty | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.operatorPaid.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.operatorPaid | booleanToText"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+
+    @if (data.operatorPaid) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ map.operatorPaidDate.title }}</dt>
+        <dd govukSummaryListRowValue [notProvided]="data.operatorPaidDate | govukDate"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
+}

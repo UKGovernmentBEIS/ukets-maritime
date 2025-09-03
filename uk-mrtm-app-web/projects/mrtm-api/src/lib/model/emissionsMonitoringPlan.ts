@@ -14,6 +14,7 @@ import { EmpDataGaps } from './empDataGaps';
 import { EmpEmissions } from './empEmissions';
 import { EmpEmissionSources } from './empEmissionSources';
 import { EmpManagementProcedures } from './empManagementProcedures';
+import { EmpMandate } from './empMandate';
 import { EmpMonitoringGreenhouseGas } from './empMonitoringGreenhouseGas';
 import { EmpOperatorDetails } from './empOperatorDetails';
 
@@ -27,4 +28,5 @@ export interface EmissionsMonitoringPlan {
   emissions: EmpEmissions;
   sources: EmpEmissionSources;
   greenhouseGas: EmpMonitoringGreenhouseGas;
+  mandate: EmpMandate;
 }

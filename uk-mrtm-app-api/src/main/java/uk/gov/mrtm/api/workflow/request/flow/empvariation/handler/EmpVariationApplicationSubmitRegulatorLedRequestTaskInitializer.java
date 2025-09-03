@@ -36,6 +36,7 @@ public class EmpVariationApplicationSubmitRegulatorLedRequestTaskInitializer imp
     private static final AddressStateMapper addressStateMapper = Mappers.getMapper(AddressStateMapper.class);
 
     @Override
+    @SuppressWarnings("java:S3252")
     public RequestTaskPayload initializePayload(Request request) {
         final EmpVariationRequestPayload requestPayload = (EmpVariationRequestPayload) request.getPayload();
 

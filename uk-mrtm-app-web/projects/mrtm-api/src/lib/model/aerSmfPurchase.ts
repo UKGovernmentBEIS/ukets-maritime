@@ -16,4 +16,5 @@ export interface AerSmfPurchase {
   co2EmissionFactor: string;
   co2Emissions: string;
   evidenceFiles?: Array<string>;
+  uniqueIdentifier: string;
 }

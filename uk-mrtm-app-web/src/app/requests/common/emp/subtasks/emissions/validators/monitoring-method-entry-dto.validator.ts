@@ -1,70 +1,95 @@
 import { EmpEmissionsSources, UncertaintyLevel } from '@mrtm/api';
 
-import { MonitoringMethodEntryDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
+import { MonitoringMethodEntryDTO, ShipParticularsDTO } from '@requests/common/emp/subtasks/emissions/interfaces';
 import { LevelOfUncertaintyTypeCodeEnum, MonitoringMethodCodeEnum } from '@requests/common/types';
-import { RecursivePartial } from '@shared/types';
+import { RecursivePartial, XmlResult } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
 
 export class MonitoringMethodEntryDtoValidator {
-  private static isMonitoringMethodCodeValid(value?: MonitoringMethodCodeEnum) {
-    return XmlValidator.isEnum(value, MonitoringMethodCodeEnum);
+  private static isMonitoringMethodCodeValid(monitoringMethodEntryDTO?: MonitoringMethodEntryDTO): boolean {
+    return XmlValidator.isEnum(monitoringMethodEntryDTO?.monitoringMethodCode, MonitoringMethodCodeEnum);
   }
 
-  private static isLevelOfUncertaintyTypeCodeValid(value?: LevelOfUncertaintyTypeCodeEnum) {
-    return XmlValidator.isEnum(value, LevelOfUncertaintyTypeCodeEnum);
+  private static isLevelOfUncertaintyTypeCodeValid(monitoringMethodEntryDTO?: MonitoringMethodEntryDTO): boolean {
+    return XmlValidator.isEnum(monitoringMethodEntryDTO?.levelOfUncertaintyTypeCode, LevelOfUncertaintyTypeCodeEnum);
   }
 
-  private static isShipSpecificUncertaintyValid(value?: string) {
-    const regex = new RegExp(`^-?(100?|(\\d{1,2})(\\.\\d{1,${2}})?)$`);
-    return XmlValidator.gt(value, 0) && regex.test(value?.toString());
+  private static isShipSpecificUncertaintyValid(monitoringMethodEntryDTO?: MonitoringMethodEntryDTO): boolean {
+    const regex = new RegExp(`^(100?|(\\d{1,2})(\\.\\d{1,${2}})?)$`);
+    return monitoringMethodEntryDTO?.levelOfUncertaintyTypeCode === LevelOfUncertaintyTypeCodeEnum.SHIP_SPECIFIC
+      ? XmlValidator.gt(monitoringMethodEntryDTO?.shipSpecificUncertainty, 0) &&
+          regex.test(monitoringMethodEntryDTO?.shipSpecificUncertainty?.toString())
+      : XmlValidator.isEmpty(monitoringMethodEntryDTO?.shipSpecificUncertainty);
   }
 
   private static isMonitoringMethodFoundInEmissionSources(
-    value?: MonitoringMethodCodeEnum,
+    monitoringMethodCodeEnum?: MonitoringMethodCodeEnum,
     emissionSources?: RecursivePartial<EmpEmissionsSources>[],
   ): boolean {
-    return emissionSources?.some((source) => source?.monitoringMethod?.includes(value));
+    return emissionSources?.some((source) => source?.monitoringMethod?.includes(monitoringMethodCodeEnum));
+  }
+
+  private static areMonitoringMethodEntryDTOsValid(
+    monitoringMethodEntries?: MonitoringMethodEntryDTO[],
+    emissionSources?: EmpEmissionsSources[],
+  ): boolean {
+    const monitoringMethodsLengthValid =
+      XmlValidator.minLength(monitoringMethodEntries, 1) && XmlValidator.maxLength(monitoringMethodEntries, 4);
+    const allMonitoringMethodCodes = monitoringMethodEntries?.map(
+      (monitoringMethod) => monitoringMethod?.monitoringMethodCode,
+    );
+    const noDuplicatesValid = new Set(allMonitoringMethodCodes).size === allMonitoringMethodCodes?.length;
+    const allMonitoringMethodsValid = monitoringMethodEntries?.every(
+      (monitoringMethodEntry) =>
+        this.isMonitoringMethodFoundInEmissionSources(monitoringMethodEntry?.monitoringMethodCode, emissionSources) &&
+        this.isMonitoringMethodCodeValid(monitoringMethodEntry) &&
+        this.isLevelOfUncertaintyTypeCodeValid(monitoringMethodEntry) &&
+        this.isShipSpecificUncertaintyValid(monitoringMethodEntry),
+    );
+    return monitoringMethodsLengthValid && noDuplicatesValid && allMonitoringMethodsValid;
   }
 
   /**
-   * Validates and transforms MonitoringMethodEntryDTO[] to UncertaintyLevel[]
+   * Transforms MonitoringMethodEntryDTO[] to UncertaintyLevel[]
+   * Assumes monitoringMethodEntries are valid at this point
    */
-  public static transformMonitoringMethodEntryDTOs(
+  private static transformMonitoringMethodEntryDTOs(
     monitoringMethodEntries?: MonitoringMethodEntryDTO[],
-    emissionSources?: RecursivePartial<EmpEmissionsSources>[],
-  ): Partial<UncertaintyLevel>[] {
-    const uncertaintyLevels: Partial<UncertaintyLevel>[] = [];
-    const existingCodes: UncertaintyLevel['monitoringMethod'][] = [];
+  ): UncertaintyLevel[] {
+    return monitoringMethodEntries?.map((monitoringMethodEntry) => ({
+      monitoringMethod: monitoringMethodEntry.monitoringMethodCode,
+      methodApproach: monitoringMethodEntry.levelOfUncertaintyTypeCode,
+      value:
+        monitoringMethodEntry.levelOfUncertaintyTypeCode === LevelOfUncertaintyTypeCodeEnum.DEFAULT
+          ? '7.5'
+          : monitoringMethodEntry.shipSpecificUncertainty.toString(),
+    }));
+  }
 
-    if (monitoringMethodEntries?.length) {
-      for (const monitoringMethodEntry of monitoringMethodEntries) {
-        if (
-          this.isMonitoringMethodFoundInEmissionSources(monitoringMethodEntry?.monitoringMethodCode, emissionSources)
-        ) {
-          const uncertaintyLevelItem: Partial<UncertaintyLevel> = {};
-
-          if (this.isMonitoringMethodCodeValid(monitoringMethodEntry?.monitoringMethodCode)) {
-            uncertaintyLevelItem.monitoringMethod = monitoringMethodEntry.monitoringMethodCode;
-          }
-
-          if (this.isLevelOfUncertaintyTypeCodeValid(monitoringMethodEntry?.levelOfUncertaintyTypeCode)) {
-            uncertaintyLevelItem.methodApproach = monitoringMethodEntry.levelOfUncertaintyTypeCode;
-          }
-
-          if (monitoringMethodEntry.levelOfUncertaintyTypeCode === LevelOfUncertaintyTypeCodeEnum.DEFAULT) {
-            uncertaintyLevelItem.value = '7.5';
-          } else if (this.isShipSpecificUncertaintyValid(monitoringMethodEntry?.shipSpecificUncertainty)) {
-            uncertaintyLevelItem.value = monitoringMethodEntry.shipSpecificUncertainty;
-          }
-
-          if (!existingCodes?.includes(uncertaintyLevelItem.monitoringMethod)) {
-            existingCodes.push(uncertaintyLevelItem.monitoringMethod);
-            uncertaintyLevels.push(uncertaintyLevelItem);
-          }
-        }
-      }
+  /**
+   * Validates MonitoringMethodEntryDTO[] and returns XmlResult<UncertaintyLevel[]>
+   * This should be explicitly called and displayed after validateCoreShipParticularsDTO is valid
+   */
+  public static validateMonitoringMethodEntryDTOs(
+    shipParticular: ShipParticularsDTO,
+    emissionSources?: EmpEmissionsSources[],
+  ): XmlResult<UncertaintyLevel[]> {
+    const monitoringMethodDTOs = shipParticular?.monitoringPlan?.monitoringMethods?.monitoringMethodEntry;
+    if (this.areMonitoringMethodEntryDTOsValid(monitoringMethodDTOs, emissionSources)) {
+      return {
+        data: this.transformMonitoringMethodEntryDTOs(monitoringMethodDTOs),
+      };
     }
 
-    return uncertaintyLevels;
+    return {
+      errors: [
+        {
+          row: shipParticular.name,
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the level of uncertainty associated with the fuel monitoring methods data you uploaded. Check the information entered and reupload the file',
+        },
+      ],
+    };
   }
 }

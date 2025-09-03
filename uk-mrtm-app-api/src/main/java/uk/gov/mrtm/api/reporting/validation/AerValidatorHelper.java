@@ -14,8 +14,8 @@ import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortVisit;
 import uk.gov.mrtm.api.reporting.enumeration.PortCodes1;
 import uk.gov.mrtm.api.reporting.enumeration.PortCodes2;
@@ -28,6 +28,13 @@ import java.util.Objects;
 import java.util.Set;
 
 public class AerValidatorHelper {
+
+    private static final String UNEXPECTED_FUEL_TYPE =
+            "Unexpected FuelsAndEmissionsFactors type: ";
+
+    private AerValidatorHelper() {
+    }
+
 
     public static FuelOriginTypeName buildFuelOriginTypeName(AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors) {
         return switch (fuelsAndEmissionsFactors) {
@@ -46,7 +53,7 @@ public class AerValidatorHelper {
                 .type(eFuels.getType())
                 .name(eFuels.getName())
                 .build();
-            default -> throw new IllegalStateException("Unexpected FuelsAndEmissionsFactors type: "
+            default -> throw new IllegalStateException(UNEXPECTED_FUEL_TYPE
                 + fuelsAndEmissionsFactors);
         };
     }
@@ -71,7 +78,7 @@ public class AerValidatorHelper {
                 .name(eFuels.getName())
                 .uniqueIdentifier(fuelsAndEmissionsFactors.getUniqueIdentifier())
                 .build();
-            default -> throw new IllegalStateException("Unexpected FuelsAndEmissionsFactors type: "
+            default -> throw new IllegalStateException(UNEXPECTED_FUEL_TYPE
                 + fuelsAndEmissionsFactors);
         };
     }
@@ -96,7 +103,7 @@ public class AerValidatorHelper {
                 .name(eFuels.getName())
                 .uniqueIdentifier(fuelOriginTypeName.getUniqueIdentifier())
                 .build();
-            default -> throw new IllegalStateException("Unexpected FuelsAndEmissionsFactors type: "
+            default -> throw new IllegalStateException(UNEXPECTED_FUEL_TYPE
                 + fuelOriginTypeName);
         };
     }
@@ -208,11 +215,11 @@ public class AerValidatorHelper {
     }
 
     protected static void validateSmallIslandFerryReduction(Boolean smallIslandFerryReduction,
-                                                            Boolean SmallIslandFerryOperatorReduction,
+                                                            Boolean smallIslandFerryOperatorReduction,
                                                             List<AerViolation> aerViolations, Class<?> className) {
 
         boolean hasInvalidSmallIslandFerryReductionValue = isSmallIslandFerryReductionInvalid(
-            smallIslandFerryReduction, SmallIslandFerryOperatorReduction);
+            smallIslandFerryReduction, smallIslandFerryOperatorReduction);
         if (hasInvalidSmallIslandFerryReductionValue) {
             aerViolations.add(new AerViolation(className.getSimpleName(),
                 AerViolation.ViolationMessage.SMALL_ISLAND_FERRY_OPERATOR_INVALID_VALUE));
@@ -247,15 +254,13 @@ public class AerValidatorHelper {
                                                                  List<AerViolation> aerViolations,
                                                                  Class<?> className) {
 
-        if (emissions != null) {
-
-            if (emissions.getCo2().compareTo(BigDecimal.ZERO) < 0 ||
-                emissions.getCh4().compareTo(BigDecimal.ZERO) < 0 ||
-                emissions.getN2o().compareTo(BigDecimal.ZERO) < 0) {
+        if (emissions != null &&
+                (emissions.getCo2().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getCh4().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getN2o().compareTo(BigDecimal.ZERO) < 0)) {
 
                 aerViolations.add(new AerViolation(className.getSimpleName(),
                     AerViolation.ViolationMessage.NEGATIVE_EMISSIONS_INPUT));
-            }
         }
     }
 
@@ -263,16 +268,14 @@ public class AerValidatorHelper {
                                                                  List<AerViolation> aerViolations,
                                                                  Class<?> className) {
 
-        if (emissions != null) {
-
-            if (emissions.getCo2Captured().compareTo(BigDecimal.ZERO) < 0 ||
-                emissions.getCo2().compareTo(BigDecimal.ZERO) < 0 ||
-                emissions.getCh4().compareTo(BigDecimal.ZERO) < 0 ||
-                emissions.getN2o().compareTo(BigDecimal.ZERO) < 0) {
+        if (emissions != null &&
+                (emissions.getCo2Captured().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getCo2().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getCh4().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getN2o().compareTo(BigDecimal.ZERO) < 0)) {
 
                 aerViolations.add(new AerViolation(className.getSimpleName(),
                     AerViolation.ViolationMessage.NEGATIVE_EMISSIONS_INPUT));
-            }
         }
     }
 

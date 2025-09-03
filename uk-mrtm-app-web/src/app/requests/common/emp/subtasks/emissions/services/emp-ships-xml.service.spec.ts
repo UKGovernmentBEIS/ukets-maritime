@@ -1,7 +1,11 @@
 import { TestBed } from '@angular/core/testing';
 
 import { EmpShipsXmlService } from '@requests/common/emp/subtasks/emissions/services';
-import { mockEmpShipsPartialErrorsXml, mockEmpShipsXml } from '@requests/common/emp/testing/mock-emp-ship-xml';
+import {
+  mockEmpShipsCoreErrorsXml,
+  mockEmpShipsErrorsXml,
+  mockEmpShipsXml,
+} from '@requests/common/emp/testing/mock-emp-ship-xml';
 
 describe('EmpShipsXmlService', () => {
   let service: EmpShipsXmlService;
@@ -126,7 +130,7 @@ describe('EmpShipsXmlService', () => {
             {
               methodApproach: 'SHIP_SPECIFIC',
               monitoringMethod: 'FLOW_METERS',
-              value: 99.12,
+              value: '99.12',
             },
           ],
           uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -136,29 +140,14 @@ describe('EmpShipsXmlService', () => {
     });
   });
 
-  it('should return errors on false XML', () => {
+  it('should return core errors on false core XML', () => {
     const getFixedUUID = jest.fn().mockReturnValue('11111111-1111-4111-a111-111111111111');
     Object.defineProperty(window, 'crypto', {
       value: { getRandomValues: getFixedUUID, randomUUID: getFixedUUID },
     });
-    const result = service.parse(mockEmpShipsPartialErrorsXml);
+    const result = service.parse(mockEmpShipsCoreErrorsXml);
     expect(result).toEqual({
-      data: [
-        {
-          carbonCapture: {},
-          details: {
-            imoNumber: '1111111',
-            name: 'Ship1',
-            type: 'RORO',
-          },
-          emissionsSources: [],
-          exemptionConditions: {},
-          fuelsAndEmissionsFactors: [],
-          measurements: [],
-          uncertaintyLevel: [],
-          uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
-        },
-      ],
+      data: [],
       errors: [
         {
           column: 'shipImoNumber',
@@ -171,14 +160,64 @@ describe('EmpShipsXmlService', () => {
           row: 1,
         },
         {
-          column: 'shipType',
-          message: 'The Ship Type is invalid',
-          row: 1,
+          column: 'shipImoNumber',
+          message: 'There are duplicated IMO numbers in the file. Check the information entered and reupload the file',
+          row: 3,
+        },
+      ],
+    });
+  });
+
+  it('should return errors on false XML', () => {
+    const getFixedUUID = jest.fn().mockReturnValue('11111111-1111-4111-a111-111111111111');
+    Object.defineProperty(window, 'crypto', {
+      value: { getRandomValues: getFixedUUID, randomUUID: getFixedUUID },
+    });
+    const result = service.parse(mockEmpShipsErrorsXml);
+    expect(result).toEqual({
+      data: [],
+      errors: [
+        {
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the basic ship details data you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
         },
         {
-          column: 'shipImoNumber',
-          message: 'There are duplicated IMO numbers in the file',
-          row: 3,
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the fuels and emissions factors you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
+        },
+        {
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the emissions sources and fuel types used data you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
+        },
+        {
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the level of uncertainty associated with the fuel monitoring methods data you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
+        },
+        {
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the measurement instruments involved data you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
+        },
+        {
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the conditions of exemption from per voyage monitoring and reporting data you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
+        },
+        {
+          column: 'NO_FIELD',
+          message:
+            'There are errors in the application of carbon capture and storage technologies data you uploaded. Check the information entered and reupload the file',
+          row: 'Ever Green',
         },
       ],
     });

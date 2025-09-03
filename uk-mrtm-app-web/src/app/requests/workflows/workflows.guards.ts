@@ -7,6 +7,7 @@ import { RequestActionsService, RequestDetailsDTO, RequestItemsService, Requests
 
 import { AuthStore, selectUserRoleType } from '@netz/common/auth';
 
+import { TaskItemStatus } from '@requests/common';
 import { WorkflowStore } from '@requests/workflows/+state/workflow.store';
 import { MrtmRequestType } from '@shared/types';
 
@@ -61,6 +62,12 @@ const aerRelatedTasks = (
     requestsService.getAvailableAerWorkflows(requestDetailsDTO.id),
     of({}),
   ).pipe(
+    map((availableCreateActions) => ({
+      AER_REINITIATE: {
+        valid: requestDetailsDTO.requestType === 'AER' && requestDetailsDTO.requestStatus === TaskItemStatus.COMPLETED,
+      },
+      ...availableCreateActions,
+    })),
     map((availableCreateActions) =>
       Object.keys(availableCreateActions).filter((createActionType) => availableCreateActions[createActionType]?.valid),
     ),

@@ -40,11 +40,6 @@ export const mockEmpShipsXml = `
                     <emissionFactors>
                         <factorReferenceCode>DEFINED_BY_USER</factorReferenceCode>
                         <ghgCode>N2O</ghgCode>
-                        <ttwEF>0.1</ttwEF>
-                    </emissionFactors>
-                    <emissionFactors>
-                        <factorReferenceCode>DEFINED_BY_USER</factorReferenceCode>
-                        <ghgCode>N2O</ghgCode>
                         <ttwEF>0.2</ttwEF>
                     </emissionFactors>
                 </fuelTypeEntry>
@@ -67,11 +62,6 @@ export const mockEmpShipsXml = `
                     <emissionFactors>
                         <factorReferenceCode>DEFINED_BY_USER</factorReferenceCode>
                         <ghgCode>N2O</ghgCode>
-                        <ttwEF>0.1</ttwEF>
-                    </emissionFactors>
-                    <emissionFactors>
-                        <factorReferenceCode>DEFINED_BY_USER</factorReferenceCode>
-                        <ghgCode>N2O</ghgCode>
                         <ttwEF>0.2</ttwEF>
                     </emissionFactors>
                 </fuelTypeEntry>
@@ -89,11 +79,6 @@ export const mockEmpShipsXml = `
                     <emissionFactors>
                         <factorReferenceCode>DEFINED_BY_USER</factorReferenceCode>
                         <ghgCode>CH4</ghgCode>
-                        <ttwEF>0.1</ttwEF>
-                    </emissionFactors>
-                    <emissionFactors>
-                        <factorReferenceCode>DEFINED_BY_USER</factorReferenceCode>
-                        <ghgCode>N2O</ghgCode>
                         <ttwEF>0.1</ttwEF>
                     </emissionFactors>
                     <emissionFactors>
@@ -145,7 +130,7 @@ export const mockEmpShipsXml = `
 </shipParticularsList>
 `;
 
-export const mockEmpShipsPartialErrorsXml = `
+export const mockEmpShipsCoreErrorsXml = `
 <shipParticularsList>
   <shipParticulars></shipParticulars>
   <shipParticulars>
@@ -155,8 +140,39 @@ export const mockEmpShipsPartialErrorsXml = `
   </shipParticulars>
   <shipParticulars>
     <shipImoNumber>1111111</shipImoNumber>
-      <name>Ship1</name>
+      <name>Ship</name>
       <shipType>RORO</shipType>
   </shipParticulars>
+</shipParticularsList>
+`;
+
+export const mockEmpShipsErrorsXml = `
+<shipParticularsList>
+    <shipParticulars>
+        <shipImoNumber>2222222</shipImoNumber>
+        <name>Ever Green</name>
+        <conditionsOfExemption></conditionsOfExemption>
+        <ccsCcu></ccsCcu>
+        <company></company>
+        <monitoringPlan>
+            <fuelTypes>
+                <fuelTypeEntry>
+                    <emissionFactors></emissionFactors>
+                </fuelTypeEntry>
+            </fuelTypes>
+            <emissionSources>
+                <emissionSourceEntry>
+                    <fuelTypeCodes></fuelTypeCodes>
+                </emissionSourceEntry>
+            </emissionSources>
+            <monitoringMethods>
+                <monitoringMethodEntry>
+                </monitoringMethodEntry>
+            </monitoringMethods>
+        </monitoringPlan>
+        <measuringEquipment>
+            <measuringEquipmentEntry></measuringEquipmentEntry>
+        </measuringEquipment>
+    </shipParticulars>
 </shipParticularsList>
 `;

@@ -115,6 +115,7 @@ class EmpVariationReviewDeterminationRejectedValidatorTest {
         reviewGroupDecisions.put(EmpReviewGroup.ADDITIONAL_DOCUMENTS, buildAcceptedReviewDecision());
         reviewGroupDecisions.put(EmpReviewGroup.DATA_GAPS, buildAcceptedReviewDecision());
         reviewGroupDecisions.put(EmpReviewGroup.CONTROL_ACTIVITIES, buildAcceptedReviewDecision());
+        reviewGroupDecisions.put(EmpReviewGroup.MANDATE, buildAcceptedReviewDecision());
         return reviewGroupDecisions;
     }
 

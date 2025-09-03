@@ -4,6 +4,10 @@ import {
   AER_VERIFICATION_RETURN_TO_OPERATOR_ROUTE,
   AER_VERIFICATION_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/aer/aer.consts';
+import { isCancelActionAvailable } from '@requests/common/is-cancel-action-available';
+import { NON_COMPLIANCE_CLOSE_ROUTE_PREFIX } from '@requests/common/non-compliance/non-compliance-close';
+import { PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX } from '@requests/common/provide-note-redirect';
+import { CREATE_ACTION_TYPE } from '@requests/common/types';
 
 export const relatedActionsMap: RelatedActionsMap = {
   ACCOUNT_CLOSURE_CANCEL_APPLICATION: { text: 'Cancel application', path: ['cancel'] },
@@ -14,8 +18,11 @@ export const relatedActionsMap: RelatedActionsMap = {
   EMP_VARIATION_CANCEL_APPLICATION: { text: 'Cancel task', path: ['cancel'] },
   RFI_SUBMIT: { text: 'Request for information', path: ['rfi', 'submit'] },
   RDE_SUBMIT: { text: 'Request deadline extension', path: ['rde', 'submit'] },
-  CANCEL_APPLICATION: { text: 'Cancel request', path: ['cancel'] },
-  DOE: { text: 'Determine maritime emissions', path: ['create-action', 'DOE'] },
+  CANCEL_APPLICATION: {
+    text: 'Cancel request',
+    path: ({ requestTaskType }) => (isCancelActionAvailable(requestTaskType) ? ['cancel'] : undefined),
+  },
+  DOE: { text: 'Determine maritime emissions', path: ['create-action', `${CREATE_ACTION_TYPE.DOE}`] },
   DOE_CANCEL_APPLICATION: { text: 'Cancel task', path: ['cancel'] },
   EMP_ISSUANCE_SEND_REGISTRY_ACCOUNT_OPENING_EVENT: { text: 'Integration with Registry', path: ['registry', 'submit'] },
   AER_RECALL_FROM_VERIFICATION: { text: 'Recall report from verifier', path: ['recall'] },
@@ -24,5 +31,13 @@ export const relatedActionsMap: RelatedActionsMap = {
     path: [AER_VERIFICATION_SUBMIT_ROUTE_PREFIX, AER_VERIFICATION_RETURN_TO_OPERATOR_ROUTE],
   },
   AER_SKIP_REVIEW: { text: 'Skip review and complete report', path: ['aer-review', 'skip-review'] },
-  // NON_COMPLIANCE_CLOSE_APPLICATION: { text: 'Close task', path: ['.'] }, // TODO MRTM-2443
+  AER_REINITIATE: {
+    text: 'Return to operator for changes',
+    path: ['create-action', `${CREATE_ACTION_TYPE.AER_REINITIATE}`],
+  },
+  NON_COMPLIANCE_CLOSE_APPLICATION: { text: 'Close task', path: [NON_COMPLIANCE_CLOSE_ROUTE_PREFIX] },
+  NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION: {
+    text: 'Provide note on appeal',
+    path: [PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX],
+  },
 };

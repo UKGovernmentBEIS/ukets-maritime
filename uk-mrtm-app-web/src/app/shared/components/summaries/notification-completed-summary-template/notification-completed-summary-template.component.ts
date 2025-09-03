@@ -13,7 +13,7 @@ import {
 
 import { SummaryDownloadFilesComponent } from '@shared/components';
 import { NotProvidedDirective } from '@shared/directives';
-import { EmpReviewDecisionTypePipe, UserInfoResolverPipe } from '@shared/pipes';
+import { ReviewDecisionTypePipe, UserInfoResolverPipe } from '@shared/pipes';
 import { NotificationCompleted } from '@shared/types/notification-completed.interface';
 
 @Component({
@@ -29,7 +29,7 @@ import { NotificationCompleted } from '@shared/types/notification-completed.inte
     SummaryListRowActionsDirective,
     RouterLink,
     NotProvidedDirective,
-    EmpReviewDecisionTypePipe,
+    ReviewDecisionTypePipe,
     UserInfoResolverPipe,
     SummaryDownloadFilesComponent,
   ],

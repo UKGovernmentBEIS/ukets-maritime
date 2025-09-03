@@ -5,7 +5,7 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { aerPortsMap } from '@requests/common/aer/subtasks/aer-ports';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
-import { EmpReviewDecisionSummaryTemplateComponent, PortCallsListSummaryTemplateComponent } from '@shared/components';
+import { PortCallsListSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-list-of-port-calls-submitted',
@@ -14,7 +14,7 @@ import { EmpReviewDecisionSummaryTemplateComponent, PortCallsListSummaryTemplate
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     PortCallsListSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './aer-list-of-port-calls-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -24,6 +24,6 @@ export class AerListOfPortCallsSubmittedComponent {
   readonly ports = this.store.select(aerTimelineCommonQuery.selectPortsList);
   readonly map = aerPortsMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('PORTS'));
 }

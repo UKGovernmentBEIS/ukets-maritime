@@ -15,7 +15,6 @@ import uk.gov.netz.api.workflow.request.core.repository.RequestRepository;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanEntity.CONSOLIDATION_NUMBER_DEFAULT_VALUE;
@@ -48,6 +47,6 @@ public class EmpVariationRequestQueryService {
                     .map(EmpVariationRequestMetadata::getEmpConsolidationNumber)
                     .orElse(CONSOLIDATION_NUMBER_DEFAULT_VALUE)
             ))
-            .collect(Collectors.toList());
+            .toList();
     }
 }

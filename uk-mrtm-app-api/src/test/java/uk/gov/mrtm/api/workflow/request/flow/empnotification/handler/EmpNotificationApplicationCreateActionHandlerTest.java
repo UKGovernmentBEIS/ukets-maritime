@@ -40,7 +40,6 @@ class EmpNotificationApplicationCreateActionHandlerTest {
     @Test
     void process() {
         Long accountId = 1L;
-        String type = MrtmRequestType.EMP_NOTIFICATION;
         RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder()
             .payloadType(RequestCreateActionPayloadTypes.EMPTY_PAYLOAD).build();
         AppUser appUser = AppUser.builder().userId("user").authorities(List.of(AppAuthority.builder()

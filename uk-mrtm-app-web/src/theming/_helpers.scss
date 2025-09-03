@@ -9,8 +9,9 @@ main {
   }
 }
 
+.pre-line,
 .pre-wrap {
-  white-space: pre-wrap;
+  white-space: pre-line;
 }
 
 .float-left {

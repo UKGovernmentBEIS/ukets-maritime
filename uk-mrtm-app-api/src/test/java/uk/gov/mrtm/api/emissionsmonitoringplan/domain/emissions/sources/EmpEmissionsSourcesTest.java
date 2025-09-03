@@ -196,7 +196,7 @@ class EmpEmissionsSourcesTest {
 
         final Set<ConstraintViolation<EmpEmissionsSources>> violations = validator.validate(empShipDetails);
 
-        assertEquals(0, violations.size());
+        assertThat(violations).isEmpty();
     }
 
     public static Stream<Arguments> validMethaneSlipScenarios() {

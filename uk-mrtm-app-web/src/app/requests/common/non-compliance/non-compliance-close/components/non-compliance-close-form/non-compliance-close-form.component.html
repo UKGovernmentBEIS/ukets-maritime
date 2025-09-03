@@ -1,0 +1,27 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [formGroup]="formGroup"
+  heading="Close task"
+  submitText="Close task"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <p class="govuk-inset-text">
+    You can close this task if you believe there is nothing left for you or others to complete.
+  </p>
+  <div
+    formControlName="reason"
+    govuk-textarea
+    class="govuk-!-margin-bottom-7"
+    label="Explain why you have decided to close this task"
+    labelSize="small"
+    hint="The operator cannot view this"
+    [maxLength]="10000"></div>
+  <mrtm-multiple-file-input
+    [baseDownloadUrl]="downloadUrl()"
+    label="Upload supporting documents (optional)"
+    listTitle="Uploaded files"
+    headerSize="s"
+    formControlName="files" />
+  <p class="govuk-body">Are you sure you want to close this task?</p>
+  <govuk-warning-text [bottomSpacing]="8" assistiveText="You cannot make changes after you click 'close task'." />
+</mrtm-wizard-step>

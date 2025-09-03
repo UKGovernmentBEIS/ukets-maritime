@@ -41,5 +41,85 @@
             delete from request_task_action_type where code = 'CANCEL_APPLICATION';
         </rollback>
     </changeSet>
-    
+
+    <changeSet id="0_1_0_SET_UP_SYSTEM_MESSAGE_NOTIFICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_type
+            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
+            VALUES(nextval('request_type_seq'), 'SYSTEM_MESSAGE_NOTIFICATION', 'System Message Notification', 'SYSTEM_MESSAGE_NOTIFICATION', 'SYSTEM_MESSAGE_NOTIFICATION', false, true, false, false, 'ACCOUNT');
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_type
+                WHERE code = 'SYSTEM_MESSAGE_NOTIFICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION', false, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'SYSTEM_MESSAGE_NOTIFICATION'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type
+            (id, code, assignable, expiration_key, supporting, request_type_id)
+            VALUES(nextval('request_task_type_seq'), 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION', false, null, null,
+            (SELECT id FROM public.request_type WHERE code = 'SYSTEM_MESSAGE_NOTIFICATION'));
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type
+                WHERE code = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_SYSTEM_NOTIFICATION_TASK_ACTION_SYSTEM_MESSAGE_DISMISS" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+            (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'SYSTEM_MESSAGE_DISMISS', false);
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'SYSTEM_MESSAGE_DISMISS')
+            );
+
+            INSERT INTO public.request_task_type_action_type
+            (request_task_type_id, request_task_action_type_id)
+            VALUES(
+            (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION'),
+            (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'SYSTEM_MESSAGE_DISMISS')
+            );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'VERIFICATION_BODY_NO_LONGER_AVAILABLE_SYSTEM_NOTIFICATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'SYSTEM_MESSAGE_DISMISS');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'SYSTEM_MESSAGE_DISMISS');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'SYSTEM_MESSAGE_DISMISS';
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

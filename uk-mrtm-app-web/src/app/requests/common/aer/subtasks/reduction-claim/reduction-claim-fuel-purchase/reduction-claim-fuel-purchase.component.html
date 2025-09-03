@@ -1,10 +1,10 @@
 <mrtm-wizard-step
-  [caption]="wizardMap.purchases.caption"
-  [heading]="wizardMap.purchases.title"
+  [caption]="heading().caption"
+  [heading]="heading().title"
   [formGroup]="form"
   [isTwoThirds]="true"
   (formSubmit)="onSubmit()">
-  <p class="govuk-body">{{ wizardMap.purchases.description }}</p>
+  <p class="govuk-body">{{ heading().description }}</p>
 
   <div
     govuk-select

@@ -150,7 +150,9 @@ const uniqueFuelName = (
     'This fuel name already exists. Enter a new fuel name',
     (control: FormControl<string>) => {
       const duplicates = listOfFuelsAndEmissions.filter((item) =>
-        typeControl.value === 'OTHER' ? item.origin === originControl.value && item.name === control.value : false,
+        typeControl.value === 'OTHER'
+          ? item.origin === originControl.value && item.name?.toUpperCase() === control.value?.toUpperCase()
+          : false,
       );
       return duplicates.length > 0 ? { duplicateFuelOriginAndName: true } : null;
     },

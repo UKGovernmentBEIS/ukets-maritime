@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
+import { AuthStore, selectUserRoleType } from '@netz/common/auth';
 import {
   LinkDirective,
   SummaryListComponent,
@@ -11,7 +12,6 @@ import {
 } from '@netz/govuk-components';
 
 import {
-  nonComplianceNoticeOfIntentMap,
   NonComplianceNoticeOfIntentUpload,
   NonComplianceNoticeOfIntentUploadStep,
 } from '@requests/common/non-compliance';
@@ -37,11 +37,14 @@ import { AttachedFile } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceNoticeOfIntentUploadSummaryTemplateComponent {
+  private readonly authStore = inject(AuthStore);
+  readonly userRole = this.authStore.select(selectUserRoleType);
+
   readonly data = input.required<NonComplianceNoticeOfIntentUpload>();
   readonly files = input.required<AttachedFile[]>();
   readonly isEditable = input<boolean>(false);
   readonly queryParams = input<Params>({ change: true });
+  readonly isTimeline = input<boolean>(false);
 
   readonly wizardStep = NonComplianceNoticeOfIntentUploadStep;
-  readonly map = nonComplianceNoticeOfIntentMap;
 }

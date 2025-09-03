@@ -23,7 +23,7 @@ import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/
 import { empCommonSubtaskStepsQuery } from '@requests/common/emp/+state';
 import { EmpShipsXmlService } from '@requests/common/emp/subtasks/emissions/services';
 import { mockEmpIssuanceSubmitRequestTask } from '@requests/common/emp/testing/mock-data';
-import { mockEmpShipsPartialErrorsXml, mockEmpShipsXml } from '@requests/common/emp/testing/mock-emp-ship-xml';
+import { mockEmpShipsCoreErrorsXml, mockEmpShipsXml } from '@requests/common/emp/testing/mock-emp-ship-xml';
 import { taskProviders } from '@requests/common/task.providers';
 
 describe('UploadShipsComponent', () => {
@@ -87,23 +87,27 @@ describe('UploadShipsComponent', () => {
       row: 1,
     },
     {
-      column: 'shipType',
-      message: 'The Ship Type is invalid',
-      row: 1,
-    },
-    {
       column: 'shipImoNumber',
-      message: 'There are duplicated IMO numbers in the file',
+      message: 'There are duplicated IMO numbers in the file. Check the information entered and reupload the file',
       row: 3,
     },
   ];
 
-  const expectedPartialEmissionListItems = [
+  const expectedAerValidationErrors = [
     {
-      imoNumber: '1111111',
-      name: 'Ship1',
-      type: 'RORO',
-      uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
+      column: 'shipImoNumber',
+      message: 'The IMO Number must be 7 digits and is required',
+      row: 1,
+    },
+    {
+      column: 'name',
+      message: 'The Ship Name is required and must be less than 30 characters',
+      row: 1,
+    },
+    {
+      column: 'shipImoNumber',
+      message: 'There are duplicated IMO numbers in the file. Check the information entered and reupload the file',
+      row: 3,
     },
   ];
 
@@ -199,7 +203,7 @@ describe('UploadShipsComponent', () => {
         {
           methodApproach: 'SHIP_SPECIFIC',
           monitoringMethod: 'FLOW_METERS',
-          value: 99.12,
+          value: '99.12',
         },
       ],
       carbonCapture: {
@@ -227,23 +231,31 @@ describe('UploadShipsComponent', () => {
       details: {
         allYear: true,
         flagState: 'GR',
+        from: null,
         grossTonnage: 10000,
         hasIceClassDerogation: true,
         iceClass: 'PC1',
         imoNumber: '1111111',
         name: 'Ship A1',
         natureOfReportingResponsibility: 'SHIPOWNER',
+        to: null,
         type: 'RORO',
       },
       emissionsSources: [
         {
           fuelDetails: [
             {
+              methaneSlip: null,
+              methaneSlipValueType: null,
+              name: null,
               origin: 'FOSSIL',
               type: 'HFO',
               uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
             },
             {
+              methaneSlip: null,
+              methaneSlipValueType: null,
+              name: null,
               origin: 'BIOFUEL',
               type: 'BIO_DIESEL',
               uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -258,6 +270,9 @@ describe('UploadShipsComponent', () => {
         {
           fuelDetails: [
             {
+              methaneSlip: null,
+              methaneSlipValueType: null,
+              name: null,
               origin: 'FOSSIL',
               type: 'HFO',
               uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -273,16 +288,18 @@ describe('UploadShipsComponent', () => {
       fuelsAndEmissionsFactors: [
         {
           carbonDioxide: '3.114',
-          methane: '0.14',
-          nitrousOxide: '0.12',
+          methane: 0.14,
+          name: null,
+          nitrousOxide: 0.12,
           origin: 'FOSSIL',
           type: 'HFO',
           uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
         },
         {
           carbonDioxide: '2.834',
-          methane: '0.24',
-          nitrousOxide: '0.22',
+          methane: 0.24,
+          name: null,
+          nitrousOxide: 0.22,
           origin: 'BIOFUEL',
           type: 'BIO_DIESEL',
           uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -311,11 +328,14 @@ describe('UploadShipsComponent', () => {
       details: {
         allYear: false,
         flagState: 'US',
+        from: '2025-01-01',
         grossTonnage: 20000,
+        hasIceClassDerogation: null,
         iceClass: 'NA',
         imoNumber: '2222222',
         name: 'Ship B1',
         natureOfReportingResponsibility: 'ISM_COMPANY',
+        to: '2025-12-31',
         type: 'OIL',
       },
       emissionsSources: [
@@ -324,6 +344,7 @@ describe('UploadShipsComponent', () => {
             {
               methaneSlip: '3.1',
               methaneSlipValueType: 'PRESELECTED',
+              name: null,
               origin: 'FOSSIL',
               type: 'LNG',
               uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
@@ -340,6 +361,7 @@ describe('UploadShipsComponent', () => {
         {
           carbonDioxide: '2.75',
           methane: '0',
+          name: null,
           nitrousOxide: '0.00011',
           origin: 'FOSSIL',
           type: 'LNG',
@@ -404,27 +426,12 @@ describe('UploadShipsComponent', () => {
     });
 
     it('should handle XML validation errors', async () => {
-      await component.onFileSelect(createMockFileEvent(mockEmpShipsPartialErrorsXml));
+      await component.onFileSelect(createMockFileEvent(mockEmpShipsCoreErrorsXml));
       fixture.detectChanges();
 
       expect(component.xmlErrors()).toEqual(expectedValidationErrors);
-      expect(component.shipEmissionListItems()).toEqual(expectedPartialEmissionListItems);
-      expect(component.listOfShips()).toEqual([
-        {
-          details: {
-            imoNumber: '1111111',
-            name: 'Ship1',
-            type: 'RORO',
-          },
-          emissionsSources: [],
-          fuelsAndEmissionsFactors: [],
-          uncertaintyLevel: [],
-          carbonCapture: {},
-          exemptionConditions: {},
-          measurements: [],
-          uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
-        },
-      ]);
+      expect(component.shipEmissionListItems()).toEqual([]);
+      expect(component.listOfShips()).toEqual([]);
       expect(page.errorSummaryListContents).toEqual([]);
     });
 
@@ -488,22 +495,9 @@ describe('UploadShipsComponent', () => {
       await component.onFileSelect(createMockFileEvent(mockAerShipsPartialErrorsXml));
       fixture.detectChanges();
 
-      expect(component.xmlErrors()).toEqual(expectedValidationErrors);
-      expect(component.shipEmissionListItems()).toEqual(expectedPartialEmissionListItems);
-      expect(component.listOfShips()).toEqual([
-        {
-          derogations: {},
-          details: {
-            imoNumber: '1111111',
-            name: 'Ship1',
-            type: 'RORO',
-          },
-          emissionsSources: [],
-          fuelsAndEmissionsFactors: [],
-          uncertaintyLevel: [],
-          uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
-        },
-      ]);
+      expect(component.xmlErrors()).toEqual(expectedAerValidationErrors);
+      expect(component.shipEmissionListItems()).toEqual([]);
+      expect(component.listOfShips()).toEqual([]);
       expect(page.errorSummaryListContents).toEqual([]);
     });
 
@@ -516,23 +510,28 @@ describe('UploadShipsComponent', () => {
         {
           allYear: true,
           flagState: 'GR',
+          from: null,
           grossTonnage: 10000,
           hasIceClassDerogation: true,
           iceClass: 'PC1',
           imoNumber: '1111111',
           name: 'Ship A1',
           natureOfReportingResponsibility: 'SHIPOWNER',
+          to: null,
           type: 'RORO',
           uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
         },
         {
           allYear: false,
           flagState: 'US',
+          from: '2025-01-01',
           grossTonnage: 20000,
+          hasIceClassDerogation: null,
           iceClass: 'NA',
           imoNumber: '2222222',
           name: 'Ship B1',
           natureOfReportingResponsibility: 'ISM_COMPANY',
+          to: '2025-12-31',
           type: 'OIL',
           uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
         },

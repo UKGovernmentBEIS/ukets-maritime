@@ -163,7 +163,7 @@ export const emissionSourcesMap: SubTaskListMap<
     title: 'Determination of emission factors',
   },
   emissionCompliance: {
-    title: 'Compliance with sustainability criteria and greenhouse gas emission saving criteria',
+    title: 'Emissions reduction claim',
   },
   variationRegulatorDecision: {
     title: 'Update procedures related to emissions sources and emissions factors',

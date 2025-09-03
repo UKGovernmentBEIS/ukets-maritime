@@ -29,3 +29,10 @@ export const canActivateReturnToOperatorForChangesSuccess: CanActivateFn = (rout
   const store = inject(ReturnToOperatorForChangesStore);
   return store.select(returnToOperatorForChangesQuery.selectIsSubmitted)() || createUrlTreeFromSnapshot(route, ['../']);
 };
+
+export const canActivateReturnToOperatorForChanges: CanActivateFn = () => {
+  const store = inject(ReturnToOperatorForChangesStore);
+  store.reset();
+
+  return true;
+};

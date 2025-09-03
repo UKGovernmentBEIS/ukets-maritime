@@ -17,6 +17,8 @@ public class MrtmNotificationTemplateWorkflowTaskType {
         NotificationTemplateWorkflowTaskType.add(MrtmRequestType.EMP_NOTIFICATION, "Determination");
         NotificationTemplateWorkflowTaskType.add(MrtmRequestType.AER, "Submission");
         NotificationTemplateWorkflowTaskType.add(MrtmRequestType.VIR, "Submission");
+        NotificationTemplateWorkflowTaskType.add(MrtmRequestType.EMP_ISSUANCE, "EMP determination");
+        NotificationTemplateWorkflowTaskType.add(MrtmRequestType.EMP_VARIATION, "EMP variation determination");
         NotificationTemplateWorkflowTaskType.add(MrtmRequestTaskType.VIR_RESPOND_TO_REGULATOR_COMMENTS, "Follow up Action");
     }
 }

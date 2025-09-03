@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
@@ -10,14 +10,14 @@ import { ButtonDirective } from '@netz/govuk-components';
 import { AER_REVIEW_SUBTASK_TO_TITLE_MAP } from '@requests/common/aer/common';
 import { aerReviewQuery } from '@requests/tasks/aer-review/+state';
 import { AerReviewService } from '@requests/tasks/aer-review/services';
-import { EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/components';
+import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/components';
 
 @Component({
-  selector: 'mrtm-operator-amends',
+  selector: 'mrtm-aer-operator-amends',
   standalone: true,
   imports: [
     PageHeadingComponent,
-    EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent,
+    ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
     ButtonDirective,
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
@@ -30,7 +30,7 @@ export class ReturnForChangesSummaryComponent {
   private readonly service = inject(TaskService) as AerReviewService;
   private readonly router: Router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
-  public readonly decisionForAmends = computed(() => this.store.select(aerReviewQuery.selectDecisionNeededAmends)());
+  public readonly decisionForAmends = this.store.select(aerReviewQuery.selectDecisionNeededAmends);
   public readonly subtaskTitleMap = AER_REVIEW_SUBTASK_TO_TITLE_MAP;
 
   public onSubmit() {

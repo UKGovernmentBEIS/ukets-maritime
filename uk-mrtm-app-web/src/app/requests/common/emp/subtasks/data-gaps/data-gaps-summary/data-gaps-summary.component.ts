@@ -18,7 +18,7 @@ import {
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { DATA_GAPS_SUB_TASK, DataGapsWizardStep } from '@requests/common/emp/subtasks/data-gaps';
 import { dataGapsMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { DataGapsSummaryTemplateComponent, EmpReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { DataGapsSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
@@ -45,7 +45,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './data-gaps-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

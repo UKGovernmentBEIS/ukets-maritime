@@ -39,6 +39,7 @@ export const environment = {
   keycloakOptions,
   apiOptions,
   timeoutBanner,
+  supportMETSEmail: 'ukets-mets-support@energysecurity.gov.uk',
 };
 
 /*

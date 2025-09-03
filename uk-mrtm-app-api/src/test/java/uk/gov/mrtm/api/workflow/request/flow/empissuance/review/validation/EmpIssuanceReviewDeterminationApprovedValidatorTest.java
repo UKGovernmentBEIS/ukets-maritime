@@ -39,7 +39,8 @@ class EmpIssuanceReviewDeterminationApprovedValidatorTest {
             EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
             EmpReviewGroup.ADDITIONAL_DOCUMENTS,
             EmpReviewGroup.CONTROL_ACTIVITIES,
-            EmpReviewGroup.DATA_GAPS));
+            EmpReviewGroup.DATA_GAPS,
+            EmpReviewGroup.MANDATE));
 
         EmpIssuanceApplicationReviewRequestTaskPayload requestTaskPayload =
             EmpIssuanceApplicationReviewRequestTaskPayload.builder()
@@ -106,7 +107,8 @@ class EmpIssuanceReviewDeterminationApprovedValidatorTest {
             EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
             EmpReviewGroup.ADDITIONAL_DOCUMENTS,
             EmpReviewGroup.CONTROL_ACTIVITIES,
-            EmpReviewGroup.DATA_GAPS));
+            EmpReviewGroup.DATA_GAPS,
+            EmpReviewGroup.MANDATE));
 
         EmpIssuanceApplicationReviewRequestTaskPayload requestTaskPayload =
             EmpIssuanceApplicationReviewRequestTaskPayload.builder()

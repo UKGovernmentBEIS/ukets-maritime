@@ -38,10 +38,13 @@ public class AerRequestPayload extends RequestPayload {
     private AerMonitoringPlanVersion aerMonitoringPlanVersion;
 
     @Builder.Default
-    private Map<String, String> aerSectionsCompleted = new HashMap<>();
+    private Map<String, String> aerReviewSectionsCompleted = new HashMap<>();
 
     @Builder.Default
     private Map<String, String> verificationSectionsCompleted = new HashMap<>();
+
+    @Builder.Default
+    private Map<String, String> aerSubmitSectionsCompleted = new HashMap<>();
 
     @Builder.Default
     private Map<UUID, String> aerAttachments = new HashMap<>();
@@ -68,7 +71,10 @@ public class AerRequestPayload extends RequestPayload {
 
     private AerSkipReviewDecision aerSkipReviewDecision;
 
-//    private AviationAerUkEtsSubmittedEmissions submittedEmissions;
+    public void clearRegulatorData() {
+        this.reviewGroupDecisions.clear();
+        this.reviewAttachments.clear();
+    }
 
     @JsonIgnore
     public AerVerificationData getVerificationData() {

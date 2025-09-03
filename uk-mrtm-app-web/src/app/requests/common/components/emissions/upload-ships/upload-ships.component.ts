@@ -99,7 +99,7 @@ export class UploadShipsComponent {
   }
 
   /**
-   * Set custom error when no file is uploaded but submit is clicked
+   * Set a custom error when no file is uploaded but submit is clicked
    */
   private setNoFileUploadedError() {
     this.xmlErrors.set([

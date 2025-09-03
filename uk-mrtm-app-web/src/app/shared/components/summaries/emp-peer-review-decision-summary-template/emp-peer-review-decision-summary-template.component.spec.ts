@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { BasePage } from '@netz/common/testing';
 
 import { EmpPeerReviewDecisionSummaryTemplateComponent } from '@shared/components/summaries/emp-peer-review-decision-summary-template';
-import { determinationTypeMap } from '@shared/components/summaries/emp-peer-review-decision-summary-template/emp-peer-review-decision-summary-template.consts';
+import { PeerReviewDecisionPipe } from '@shared/pipes';
 import { EmpPeerReviewDecisionDto } from '@shared/types';
 
 describe('EmpPeerReviewDecisionSummaryTemplateComponent', () => {
@@ -11,6 +11,7 @@ describe('EmpPeerReviewDecisionSummaryTemplateComponent', () => {
   let component: EmpPeerReviewDecisionSummaryTemplateComponent;
   let fixture: ComponentFixture<EmpPeerReviewDecisionSummaryTemplateComponent>;
   let page: Page;
+  const peerReviewDecisionPipe = new PeerReviewDecisionPipe();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -52,7 +53,7 @@ describe('EmpPeerReviewDecisionSummaryTemplateComponent', () => {
 
       expect(page.summariesContents).toEqual([
         'Peer review decision',
-        determinationTypeMap[type],
+        peerReviewDecisionPipe.transform(type),
         'Supporting notes',
         'some test notes',
         'Peer reviewer',

@@ -6,7 +6,7 @@ import { RequestActionStore } from '@netz/common/store';
 import { uncorrectedNonCompliancesMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
   UncorrectedNonCompliancesSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     UncorrectedNonCompliancesSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './uncorrected-non-compliances-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,7 @@ export class UncorrectedNonCompliancesSubmittedComponent {
   readonly uncorrectedNonCompliances = this.store.select(aerTimelineCommonQuery.selectUncorrectedNonCompliances);
   readonly map = uncorrectedNonCompliancesMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('UNCORRECTED_NON_COMPLIANCES'),
   );

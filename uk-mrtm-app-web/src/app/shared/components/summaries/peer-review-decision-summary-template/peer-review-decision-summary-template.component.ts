@@ -13,6 +13,7 @@ import {
 } from '@netz/govuk-components';
 
 import { NotProvidedDirective } from '@shared/directives';
+import { PeerReviewDecisionPipe } from '@shared/pipes';
 import { PeerReviewDecisionTimelineTextMap } from '@shared/types';
 
 @Component({
@@ -27,6 +28,7 @@ import { PeerReviewDecisionTimelineTextMap } from '@shared/types';
     LinkDirective,
     RouterLink,
     NotProvidedDirective,
+    PeerReviewDecisionPipe,
   ],
   templateUrl: './peer-review-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

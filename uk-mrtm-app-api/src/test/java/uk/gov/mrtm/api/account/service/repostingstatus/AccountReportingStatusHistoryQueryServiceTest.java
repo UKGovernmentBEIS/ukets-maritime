@@ -5,8 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import uk.gov.mrtm.api.account.domain.AccountReportingStatus;
 import uk.gov.mrtm.api.account.domain.AccountReportingStatusHistory;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
@@ -46,15 +44,6 @@ class AccountReportingStatusHistoryQueryServiceTest {
         String submitterName = "submitterName";
         LocalDateTime submissionDate = LocalDateTime.now();
         Year year = Year.now();
-        AccountReportingStatusHistory reportingStatusEntry = AccountReportingStatusHistory.builder()
-                .id(1L)
-                .status(status)
-                .reason(reason)
-                .submitterName(submitterName)
-                .submissionDate(submissionDate)
-                .build();
-        List<AccountReportingStatusHistory> reportingStatusEntries = List.of(reportingStatusEntry);
-        Page<AccountReportingStatusHistory> pagedResponse = new PageImpl<>(reportingStatusEntries);
 
         when(mapper.toReportingStatusHistoryDTO(anyList())).thenReturn(List.of(AccountReportingStatusHistoryDTO.builder()
                 .status(status)

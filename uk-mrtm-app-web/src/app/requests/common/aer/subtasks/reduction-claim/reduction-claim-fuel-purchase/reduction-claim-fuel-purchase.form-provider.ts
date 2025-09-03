@@ -33,6 +33,9 @@ export const reductionClaimFuelPurchaseFormProvider: Provider = {
     const fuelPurchase = store.select(aerCommonQuery.selectReductionClaimFuelPurchase(fuelPurchaseId))();
 
     return formBuilder.group<ReductionClaimFuelPurchaseFormGroupModel>({
+      uniqueIdentifier: formBuilder.control<ReductionClaimFuelPurchaseFormModel['uniqueIdentifier']>(
+        fuelPurchase?.uniqueIdentifier ?? crypto.randomUUID(),
+      ),
       fuelOriginTypeName: formBuilder.control<ReductionClaimFuelPurchaseFormModel['fuelOriginTypeName'] | null>(
         fuelPurchase?.fuelOriginTypeName?.uniqueIdentifier ?? null,
         {

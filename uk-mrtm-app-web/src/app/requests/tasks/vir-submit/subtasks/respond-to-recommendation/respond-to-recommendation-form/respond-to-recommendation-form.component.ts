@@ -87,4 +87,8 @@ export class RespondToRecommendationFormComponent implements AfterViewInit {
       .pipe(take(1))
       .subscribe();
   }
+
+  get isAddressedSelected(): boolean | null {
+    return this.formGroup.get('isAddressed')?.value;
+  }
 }

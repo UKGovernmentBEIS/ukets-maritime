@@ -9,6 +9,7 @@ import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import {
   AER_VOYAGES_SUB_TASK,
   AerVoyagesWizardStep,
+  getAerJourneyType,
   isVoyageWizardCompleted,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
@@ -31,9 +32,16 @@ export class AerVoyageUploadPayloadMutator extends PayloadMutator {
         payload.aer.voyageEmissions.voyages = mergedVoyages;
         payload.aerSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
 
+        const ships = payload.aer?.emissions?.ships ?? [];
         mergedVoyages.forEach((voyage) => {
+          const voyageItem = {
+            ...voyage,
+            relatedShip: ships?.find((ship) => ship?.details?.imoNumber === voyage?.imoNumber),
+            journeyType: getAerJourneyType(voyage?.voyageDetails),
+          };
+
           payload.aerSectionsCompleted[`${this.subtask}-voyage-${voyage.uniqueIdentifier}`] = isVoyageWizardCompleted(
-            voyage,
+            voyageItem,
             true,
           )
             ? TaskItemStatus.COMPLETED

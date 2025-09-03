@@ -17,7 +17,7 @@ import {
 import { requestedChangesQuestionComponentFormProvider } from '@requests/common/emp/subtasks/requested-changes/requested-changes-question/requested-changes-question.component.form-provider';
 import { regulatorCommentsSubtaskMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
+import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
 import { empSubtaskToTitle } from '@shared/constants';
 
 @Component({
@@ -29,7 +29,7 @@ import { empSubtaskToTitle } from '@shared/constants';
     CheckboxesComponent,
     WizardStepComponent,
     ReactiveFormsModule,
-    EmpReviewReturnForAmendsSubtaskSummaryTemplateComponent,
+    ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
   ],
   templateUrl: './requested-changes-question.component.html',
   providers: [requestedChangesQuestionComponentFormProvider],

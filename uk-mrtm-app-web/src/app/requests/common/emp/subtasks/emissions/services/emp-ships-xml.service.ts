@@ -3,17 +3,17 @@ import { Injectable } from '@angular/core';
 import { EmpShipEmissions } from '@mrtm/api';
 
 import { ShipsXmlService } from '@requests/common/components/emissions/upload-ships';
-import { EmpShipsXML, EmpShipsXMLResultDto } from '@requests/common/emp/subtasks/emissions/interfaces';
+import { EmpShipsXML } from '@requests/common/emp/subtasks/emissions/interfaces';
 import {
   CcsCcuDtoValidator,
   ConditionsOfExemptionDtoValidator,
-  EmpEmissionSourceEditDtoValidator,
-  EmpFuelTypeEmissionFactorEditDtoValidator,
+  EmissionSourceEditDtoValidator,
+  FuelTypeEmissionFactorEditDtoValidator,
   MeasuringEquipmentEditDtoValidator,
   MonitoringMethodEntryDtoValidator,
-  ShipParticularsDTOValidator,
+  ShipParticularsDtoValidator,
 } from '@requests/common/emp/subtasks/emissions/validators';
-import { RecursivePartial, XmlValidationError } from '@shared/types';
+import { XmlResult, XmlValidationError } from '@shared/types';
 import { X2jOptions, XMLParser } from 'fast-xml-parser';
 
 @Injectable({
@@ -44,7 +44,7 @@ export class EmpShipsXmlService implements ShipsXmlService {
   /**
    * Parses an XML as text and returns EmpShipsXMLResultDto, which includes any validation errors and the actual data
    */
-  parse(xmlText: string): EmpShipsXMLResultDto {
+  parse(xmlText: string): XmlResult<EmpShipEmissions[]> {
     const shipsXML: EmpShipsXML = new XMLParser(this.options).parse(xmlText) as EmpShipsXML;
     return this.transformShipsXMLToShipEmissions(shipsXML);
   }
@@ -52,67 +52,85 @@ export class EmpShipsXmlService implements ShipsXmlService {
   /**
    * Validates ShipsXML and returns EmpShipsXMLResultDto, containing both EmpShipEmission[] and XmlValidationError[]
    */
-  private transformShipsXMLToShipEmissions(empShipsXML: EmpShipsXML): EmpShipsXMLResultDto {
+  private transformShipsXMLToShipEmissions(empShipsXML: EmpShipsXML): XmlResult<EmpShipEmissions[]> {
     const empShipEmissions: EmpShipEmissions[] = [];
     let errors: XmlValidationError[] = [];
 
     if (empShipsXML?.shipParticularsList?.shipParticulars?.length > 0) {
       const shipParticulars = empShipsXML.shipParticularsList.shipParticulars;
-      const maxAllowedShipsErrors = ShipParticularsDTOValidator.maxAllowedShipsErrors(shipParticulars);
+      const maxAllowedShipsErrors = ShipParticularsDtoValidator.validateMaxAllowedShips(shipParticulars);
+      const shipParticularCoreErrors = ShipParticularsDtoValidator.validateCoreShipParticularsDTO(shipParticulars);
 
       if (maxAllowedShipsErrors?.length) {
         errors = maxAllowedShipsErrors;
+      } else if (shipParticularCoreErrors?.length) {
+        errors = shipParticularCoreErrors;
       } else {
-        for (const [index, shipParticular] of shipParticulars.entries()) {
-          const shipParticularsDTOPartiallyErrors = ShipParticularsDTOValidator.shipParticularsDTOPartiallyErrors(
-            index,
-            empShipEmissions,
+        shipParticulars?.forEach((shipParticular) => {
+          const shipDetailsResult = ShipParticularsDtoValidator.validateShipParticularsDTO(shipParticular);
+          const fuelsAndEmissionsFactorsResult =
+            FuelTypeEmissionFactorEditDtoValidator.validateFuelTypeEmissionFactorEditDTOs(shipParticular);
+          const emissionsSourcesResult = EmissionSourceEditDtoValidator.validateEmissionSourceEditDTOs(
             shipParticular,
+            fuelsAndEmissionsFactorsResult?.data,
           );
-          if (shipParticularsDTOPartiallyErrors?.length === 0) {
-            const ship: RecursivePartial<EmpShipEmissions> = {
-              uniqueIdentifier: crypto.randomUUID(),
-              details: ShipParticularsDTOValidator.transformShipParticularDTO(shipParticular),
-              exemptionConditions: ConditionsOfExemptionDtoValidator.transformConditionsOfExemptionDTO(
-                shipParticular?.conditionsOfExemption,
-              ),
-              fuelsAndEmissionsFactors:
-                EmpFuelTypeEmissionFactorEditDtoValidator.transformFuelTypeEmissionFactorEditDTO(
-                  shipParticular?.monitoringPlan?.fuelTypes?.fuelTypeEntry,
-                ),
-            };
+          const uncertaintyLevelResult = MonitoringMethodEntryDtoValidator.validateMonitoringMethodEntryDTOs(
+            shipParticular,
+            emissionsSourcesResult?.data,
+          );
+          const measurementsResult = MeasuringEquipmentEditDtoValidator.validateMeasuringEquipmentEditDTOs(
+            shipParticular,
+            emissionsSourcesResult?.data,
+          );
+          const exemptionConditionsResult =
+            ConditionsOfExemptionDtoValidator.validateConditionsOfExemptionDTO(shipParticular);
+          const carbonCaptureResult = CcsCcuDtoValidator.validateCcsCcuDTO(
+            shipParticular,
+            emissionsSourcesResult?.data,
+          );
 
-            ship.emissionsSources = EmpEmissionSourceEditDtoValidator.transformEmissionSourceEditDTOs(
-              shipParticular?.monitoringPlan?.emissionSources?.emissionSourceEntry,
-              ship.fuelsAndEmissionsFactors,
+          if (
+            shipDetailsResult?.errors ||
+            fuelsAndEmissionsFactorsResult?.errors ||
+            emissionsSourcesResult?.errors ||
+            uncertaintyLevelResult?.errors ||
+            measurementsResult?.errors ||
+            exemptionConditionsResult?.errors ||
+            carbonCaptureResult?.errors
+          ) {
+            errors.push(
+              ...(shipDetailsResult?.errors ?? []),
+              ...(fuelsAndEmissionsFactorsResult?.errors ?? []),
+              ...(emissionsSourcesResult?.errors ?? []),
+              ...(uncertaintyLevelResult?.errors ?? []),
+              ...(measurementsResult?.errors ?? []),
+              ...(exemptionConditionsResult?.errors ?? []),
+              ...(carbonCaptureResult?.errors ?? []),
             );
-
-            ship.uncertaintyLevel = MonitoringMethodEntryDtoValidator.transformMonitoringMethodEntryDTOs(
-              shipParticular?.monitoringPlan?.monitoringMethods?.monitoringMethodEntry,
-              ship.emissionsSources,
-            );
-
-            ship.measurements = MeasuringEquipmentEditDtoValidator.transformMeasuringEquipmentEditDTOs(
-              shipParticular?.measuringEquipment?.measuringEquipmentEntry,
-              ship.emissionsSources,
-            );
-
-            ship.carbonCapture = CcsCcuDtoValidator.transformCcsCcuDTO(shipParticular?.ccsCcu, ship.emissionsSources);
-
-            empShipEmissions.push(ship as EmpShipEmissions);
           } else {
-            errors.push(...shipParticularsDTOPartiallyErrors);
+            empShipEmissions.push({
+              uniqueIdentifier: crypto.randomUUID(),
+              details: shipDetailsResult.data,
+              fuelsAndEmissionsFactors: fuelsAndEmissionsFactorsResult.data,
+              emissionsSources: emissionsSourcesResult.data,
+              uncertaintyLevel: uncertaintyLevelResult.data,
+              measurements: measurementsResult.data,
+              exemptionConditions: exemptionConditionsResult.data,
+              carbonCapture: carbonCaptureResult.data,
+            });
           }
-        }
+        });
       }
     }
 
     if (!empShipEmissions?.length && !errors?.length) {
-      errors.push({ row: null, column: null, message: 'The required fields are out of the expected criteria' });
+      errors = [
+        { row: null, column: null, message: 'The header names must be the same as the ones included in the template' },
+      ];
     }
 
     return {
-      data: empShipEmissions,
+      data: !errors?.length ? empShipEmissions : [],
       errors: errors,
     };
   }

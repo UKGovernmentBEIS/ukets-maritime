@@ -190,25 +190,25 @@ export class TasksService {
     requestTaskActionProcessDTO: RequestTaskActionProcessDTO,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<RequestTaskPayload>;
   public processRequestTaskAction(
     requestTaskActionProcessDTO: RequestTaskActionProcessDTO,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpResponse<RequestTaskPayload>>;
   public processRequestTaskAction(
     requestTaskActionProcessDTO: RequestTaskActionProcessDTO,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpEvent<RequestTaskPayload>>;
   public processRequestTaskAction(
     requestTaskActionProcessDTO: RequestTaskActionProcessDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
     if (requestTaskActionProcessDTO === null || requestTaskActionProcessDTO === undefined) {
       throw new Error(
@@ -227,7 +227,7 @@ export class TasksService {
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', '*/*'];
+      const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {

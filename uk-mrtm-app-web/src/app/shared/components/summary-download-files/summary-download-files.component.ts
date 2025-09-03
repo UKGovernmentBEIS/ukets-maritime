@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { LinkDirective } from '@netz/govuk-components';
@@ -17,9 +17,10 @@ import { mergeDiffArray } from '@shared/utils';
         govukLink
         target="_blank"
         htmlDiff
+        [isFiles]="true"
         [current]="file?.current?.fileName"
         [previous]="file?.previous?.fileName"></a>
-      @if (!isLast && files?.length !== 1) {
+      @if (!isLast && combinedFiles()?.length > 1) {
         <br />
       }
     } @empty {
@@ -31,8 +32,8 @@ import { mergeDiffArray } from '@shared/utils';
   imports: [LinkDirective, RouterLink, HtmlDiffDirective],
 })
 export class SummaryDownloadFilesComponent {
-  @Input({ required: true }) files: AttachedFile[];
-  @Input() originalFiles: AttachedFile[];
+  files = input.required<AttachedFile[]>();
+  originalFiles = input<AttachedFile[]>(null);
 
-  combinedFiles = computed(() => mergeDiffArray<AttachedFile>(this.files, this.originalFiles));
+  combinedFiles = computed(() => mergeDiffArray<AttachedFile>(this.files(), this.originalFiles()));
 }

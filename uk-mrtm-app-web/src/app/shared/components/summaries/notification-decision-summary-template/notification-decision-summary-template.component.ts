@@ -16,7 +16,7 @@ import {
 
 import { SummaryDownloadFilesComponent } from '@shared/components/summary-download-files/summary-download-files.component';
 import { NotProvidedDirective } from '@shared/directives';
-import { BooleanToTextPipe, EmpReviewDecisionTypePipe, UserInfoResolverPipe } from '@shared/pipes';
+import { BooleanToTextPipe, ReviewDecisionTypePipe, UserInfoResolverPipe } from '@shared/pipes';
 import { AttachedFile, NotificationReviewDecisionUnion, NotifyAccountOperatorUsersInfo } from '@shared/types';
 
 @Component({
@@ -33,7 +33,7 @@ import { AttachedFile, NotificationReviewDecisionUnion, NotifyAccountOperatorUse
     SummaryListRowActionsDirective,
     RouterLink,
     NotProvidedDirective,
-    EmpReviewDecisionTypePipe,
+    ReviewDecisionTypePipe,
     BooleanToTextPipe,
     UserInfoResolverPipe,
   ],

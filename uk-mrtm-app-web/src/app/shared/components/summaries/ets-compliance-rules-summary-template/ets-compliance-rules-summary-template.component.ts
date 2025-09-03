@@ -15,7 +15,7 @@ import {
 import { EtsComplianceRulesStep } from '@requests/common/aer/subtasks/ets-compliance-rules/ets-compliance-rules.helpers';
 import { etsComplianceRulesMap } from '@requests/common/aer/subtasks/ets-compliance-rules/ets-compliance-rules-subtask-list.map';
 import { NotProvidedDirective } from '@shared/directives';
-import { BooleanToTextPipe, NonConformitiesToTextPipe } from '@shared/pipes';
+import { BooleanToTextPipe, YesNoToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-ets-compliance-rules-summary-template',
@@ -30,7 +30,7 @@ import { BooleanToTextPipe, NonConformitiesToTextPipe } from '@shared/pipes';
     SummaryListRowValueDirective,
     SummaryListRowActionsDirective,
     NotProvidedDirective,
-    NonConformitiesToTextPipe,
+    YesNoToTextPipe,
   ],
   templateUrl: './ets-compliance-rules-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

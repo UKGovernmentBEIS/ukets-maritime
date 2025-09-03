@@ -10,8 +10,8 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { determinationTypeMap } from '@shared/components/summaries/emp-peer-review-decision-summary-template/emp-peer-review-decision-summary-template.consts';
 import { NotProvidedDirective } from '@shared/directives';
+import { PeerReviewDecisionPipe } from '@shared/pipes';
 import { EmpPeerReviewDecisionDto } from '@shared/types';
 
 @Component({
@@ -26,12 +26,12 @@ import { EmpPeerReviewDecisionDto } from '@shared/types';
     RouterLink,
     SummaryListComponent,
     LinkDirective,
+    PeerReviewDecisionPipe,
   ],
   templateUrl: './emp-peer-review-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpPeerReviewDecisionSummaryTemplateComponent {
-  public readonly determinationTypeMap: Record<EmpPeerReviewDecisionDto['type'], string> = determinationTypeMap;
   public readonly data = input.required<EmpPeerReviewDecisionDto>();
   public readonly isEditable = input<boolean>(false);
   public readonly changeLink = input<string>();

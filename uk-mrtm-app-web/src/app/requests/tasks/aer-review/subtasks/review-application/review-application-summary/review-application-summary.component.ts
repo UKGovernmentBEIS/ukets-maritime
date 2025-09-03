@@ -19,14 +19,14 @@ import {
   AerReviewWizardSteps,
 } from '@requests/tasks/aer-review';
 import { aerReviewQuery } from '@requests/tasks/aer-review/+state';
-import { EmpReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-review-application-summary',
   standalone: true,
   imports: [
     PageHeadingComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     ButtonDirective,
     PendingButtonDirective,

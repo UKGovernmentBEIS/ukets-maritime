@@ -12,7 +12,8 @@ public enum EmpReviewGroup {
     ABBREVIATIONS_AND_DEFINITIONS,
     ADDITIONAL_DOCUMENTS,
     DATA_GAPS,
-    CONTROL_ACTIVITIES
+    CONTROL_ACTIVITIES,
+    MANDATE
     ;
 
     public static Set<EmpReviewGroup> getStandardReviewGroups() {
@@ -25,7 +26,8 @@ public enum EmpReviewGroup {
                 EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
                 EmpReviewGroup.ADDITIONAL_DOCUMENTS,
                 EmpReviewGroup.DATA_GAPS,
-                EmpReviewGroup.CONTROL_ACTIVITIES
+                EmpReviewGroup.CONTROL_ACTIVITIES,
+                EmpReviewGroup.MANDATE
         );
     }
 }

@@ -14,6 +14,7 @@ import { TASK_FORM } from '@requests/common/task-form.token';
 import { PeerReviewStore } from '@requests/tasks/notification-peer-review/+state/peer-review.store';
 import { peerReviewDecisionFormProvider } from '@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision/peer-review-decision.form-provider';
 import { WizardStepComponent } from '@shared/components';
+import { PeerReviewDecisionPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-peer-review-decision',
@@ -26,6 +27,7 @@ import { WizardStepComponent } from '@shared/components';
     LegendDirective,
     TextareaComponent,
     FieldsetDirective,
+    PeerReviewDecisionPipe,
   ],
   templateUrl: './peer-review-decision.component.html',
   providers: [peerReviewDecisionFormProvider],

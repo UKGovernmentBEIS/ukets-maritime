@@ -23,6 +23,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.uncertainty.Unce
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -105,7 +106,7 @@ public class EmpEmissionsValidator implements EmpContextValidator {
 
                 Set<Pair<String, String>> otherNames = empShipEmissions.getFuelsAndEmissionsFactors().stream()
                     .filter(e -> e.getName() != null)
-                    .map(e -> Pair.of(e.getOrigin().name(), e.getName()))
+                    .map(e -> Pair.of(e.getOrigin().name(), e.getName().toLowerCase(Locale.ROOT)))
                     .collect(Collectors.toSet());
 
                 return (otherNames.size() + names.size()) == empShipEmissions.getFuelsAndEmissionsFactors().size();
@@ -134,18 +135,18 @@ public class EmpEmissionsValidator implements EmpContextValidator {
 
     private Set<String> getDuplicateEmissionSourceNames(Set<EmpShipEmissions> ships) {
         Set<String> duplicateNames = new HashSet<>();
-        ships.forEach(
-            empShipEmissions -> {
-                Set<String> names = new HashSet<>();
-                duplicateNames.addAll(
-                        empShipEmissions.getEmissionsSources()
-                                .stream()
-                                .map(EmpEmissionsSources::getName)
-                                .filter(name -> !names.add(name))
-                                .collect(Collectors.toSet())
-                );
-            }
-        );
+
+        ships.forEach(empShipEmissions -> {
+            Set<String> namesSeen = new HashSet<>();
+
+            duplicateNames.addAll(
+                    empShipEmissions.getEmissionsSources().stream()
+                            .map(EmpEmissionsSources::getName)
+                            .filter(name -> !namesSeen.add(name.toLowerCase(Locale.ROOT)))
+                            .collect(Collectors.toSet())
+            );
+        });
+
         return duplicateNames;
     }
 

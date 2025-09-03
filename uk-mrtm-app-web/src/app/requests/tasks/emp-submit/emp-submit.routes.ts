@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import { canActivateEmpSubmitSendApplicationAction } from '@requests/tasks/emp-submit/emp-submit.guard';
 import {
   provideEmpSubmitPayloadMutators,
@@ -62,6 +63,10 @@ export const EMP_SUBMIT_ROUTES: Routes = [
       {
         path: 'emissions',
         loadChildren: () => import('@requests/common/emp/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
+      },
+      {
+        path: MANDATE_SUB_TASK,
+        loadChildren: () => import('@requests/common/emp/subtasks/mandate').then((r) => r.MANDATE_ROUTES),
       },
       {
         path: 'send-application',

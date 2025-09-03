@@ -3,7 +3,10 @@
     <netz-page-heading>Send report to regulator</netz-page-heading>
     <govuk-warning-text assistiveText="You cannot make changes after you click 'confirm and send'" />
     <p class="govuk-body">Are you sure you want to submit this form to your regulator for assessment?</p>
-    <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and send</button>
+
+    @if (isEditable()) {
+      <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and send</button>
+    }
   </div>
 </div>
 <div>

@@ -18,7 +18,7 @@ import {
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EMISSION_SOURCES_SUB_TASK, EmissionSourcesWizardStep } from '@requests/common/emp/subtasks/emission-sources';
 import { emissionSourcesMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { EmissionSourcesSummaryTemplateComponent, EmpReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { EmissionSourcesSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
@@ -45,7 +45,7 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './emission-sources-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

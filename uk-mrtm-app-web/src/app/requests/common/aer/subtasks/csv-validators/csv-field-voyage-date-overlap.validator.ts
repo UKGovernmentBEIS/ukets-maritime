@@ -1,7 +1,7 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 
 import { isNil } from 'lodash-es';
-import { areIntervalsOverlapping } from 'date-fns';
+import { areIntervalsOverlapping, isBefore } from 'date-fns';
 
 import { RequestTaskStore } from '@netz/common/store';
 
@@ -85,6 +85,13 @@ export function csvFieldVoyageDateOverlapValidator<T>(
       const laterDateTime = new Date(formatIsoDateTimeNoMs(entry.arrivalDate, entry.arrivalActualTime));
 
       combinations.forEach((combination) => {
+        if (
+          isBefore(earlierDateTime, laterDateTime) ||
+          isBefore(combination.earlierDateTime, combination.laterDateTime)
+        ) {
+          return;
+        }
+
         if (
           entityUuid !== combination.entityUuid &&
           imoNumber === combination.imoNumber &&

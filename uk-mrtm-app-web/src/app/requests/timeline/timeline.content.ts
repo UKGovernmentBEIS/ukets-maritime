@@ -1,6 +1,8 @@
 import { RequestActionPageContentFactoryMap } from '@netz/common/request-action';
 
 import { accountClosureSubmittedTaskContent } from '@requests/timeline/account-closure-submitted/account-closure-submitted-task-content';
+import { aerReturnedForAmendsTaskContent } from '@requests/timeline/aer-returned-for-amends/aer-returned-for-amends-task-content';
+import { aerReviewSkippedTaskContent } from '@requests/timeline/aer-review-skipped/aer-review-skipped-task-content';
 import { aerReviewedTaskContent } from '@requests/timeline/aer-reviewed';
 import { aerSubmittedTaskContent } from '@requests/timeline/aer-submitted/aer-submitted-task-content';
 import { aerVerificationReturnedToOperatorTaskContent } from '@requests/timeline/aer-verification-returned-to-operator';
@@ -17,6 +19,9 @@ import { empVariationReviewedTaskContent } from '@requests/timeline/emp-variatio
 import { empVariationSubmittedTaskContent } from '@requests/timeline/emp-variation-submitted/emp-variation-submitted-task-content';
 import { followUpResponseSubmittedTaskContent } from '@requests/timeline/follow-up-response-submitted/follow-up-response-submitted-task-content';
 import { followUpReturnedForAmendsTaskContent } from '@requests/timeline/follow-up-returned-for-amends/follow-up-returned-for-amends-task-content';
+import { nonComplianceCivilPenaltySubmittedTaskContent } from '@requests/timeline/non-compliance-civil-penalty-submitted/non-compliance-civil-penalty-submitted-task-content';
+import { nonComplianceClosedTaskContent } from '@requests/timeline/non-compliance-closed/non-compliance-closed-task-content';
+import { nonComplianceFinalDeterminationSubmittedTaskContent } from '@requests/timeline/non-compliance-final-determination-submitted/non-compliance-final-determination-submitted-task-content';
 import { nonComplianceInitialPenaltyNoticeSubmittedTaskContent } from '@requests/timeline/non-compliance-initial-penalty-notice-submitted/non-compliance-initial-penalty-notice-submitted-task-content';
 import { nonComplianceNoticeOfIntentSubmittedTaskContent } from '@requests/timeline/non-compliance-notice-of-intent-submitted/non-compliance-notice-of-intent-submitted-task-content';
 import { nonComplianceSubmittedTaskContent } from '@requests/timeline/non-compliance-submitted/non-compliance-submitted-task-content';
@@ -95,8 +100,14 @@ export const timelineContent: RequestActionPageContentFactoryMap = {
   NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_ACCEPTED: peerReviewDecisionTaskContent,
   NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEWER_REJECTED: peerReviewDecisionTaskContent,
   NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED: nonComplianceNoticeOfIntentSubmittedTaskContent,
-  AER_APPLICATION_REVIEW_SKIPPED: aerVerificationSubmittedTaskContent,
+  AER_APPLICATION_REVIEW_SKIPPED: aerReviewSkippedTaskContent,
   AER_APPLICATION_AMENDS_SUBMITTED: aerSubmittedTaskContent,
   AER_APPLICATION_AMENDS_SENT_TO_VERIFIER: aerSubmittedTaskContent,
   AER_APPLICATION_COMPLETED: aerReviewedTaskContent,
+  NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_ACCEPTED: peerReviewDecisionTaskContent,
+  NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEWER_REJECTED: peerReviewDecisionTaskContent,
+  NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED: nonComplianceCivilPenaltySubmittedTaskContent,
+  NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED: nonComplianceFinalDeterminationSubmittedTaskContent,
+  NON_COMPLIANCE_APPLICATION_CLOSED: nonComplianceClosedTaskContent,
+  AER_APPLICATION_RETURNED_FOR_AMENDS: aerReturnedForAmendsTaskContent,
 };

@@ -7,20 +7,12 @@ import {
 } from '@netz/common/store';
 
 import { TaskItemStatus } from '@requests/common';
-import { AER_PORTS_SUB_TASK, AER_TOTAL_EMISSIONS_SUB_TASK } from '@requests/common/aer';
 import { aerCommonQuery } from '@requests/common/aer/+state';
+import { OPERATOR_SUBTASKS, REPORTING_OBLIGATION_SUBTASKS } from '@requests/common/aer/aer-subtask-groups.const';
 import { AER_SUBTASK_REVIEW_GROUP_MAP } from '@requests/common/aer/common';
-import { AER_AGGREGATED_DATA_SUB_TASK } from '@requests/common/aer/subtasks/aer-aggregated-data';
-import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages';
-import { MONITORING_PLAN_CHANGES_SUB_TASK } from '@requests/common/aer/subtasks/monitoring-plan-changes';
-import { AER_REDUCTION_CLAIM_SUB_TASK } from '@requests/common/aer/subtasks/reduction-claim';
-import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation';
-import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
 import { ReviewAmendDecisionDTO } from '@requests/common/emp/return-for-amends';
-import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import { AerAmendTaskPayload } from '@requests/tasks/aer-amend/aer-amend.types';
-import { EmpReviewDecisionDto, EmpReviewDecisionUnion, EmpVariationReviewDecisionDto } from '@shared/types';
+import { ReviewDecisionDto, ReviewDecisionUnion } from '@shared/types';
 
 const selectPayload: StateSelector<RequestTaskState, AerAmendTaskPayload> = createDescendingSelector(
   requestTaskQuery.selectRequestTaskPayload,
@@ -30,10 +22,10 @@ const selectPayload: StateSelector<RequestTaskState, AerAmendTaskPayload> = crea
 const selectReviewAttachments: StateSelector<RequestTaskState, AerAmendTaskPayload['reviewAttachments']> =
   createDescendingSelector(selectPayload, (payload) => payload?.reviewAttachments);
 
-const selectReviewGroupDecisions: StateSelector<RequestTaskState, { [key: string]: EmpReviewDecisionUnion }> =
+const selectReviewGroupDecisions: StateSelector<RequestTaskState, { [key: string]: ReviewDecisionUnion }> =
   createDescendingSelector(
     selectPayload,
-    (payload) => payload?.reviewGroupDecisions as { [key: string]: EmpReviewDecisionUnion },
+    (payload) => payload?.reviewGroupDecisions as { [key: string]: ReviewDecisionUnion },
   );
 
 const selectStatusForSubtask = (
@@ -55,20 +47,9 @@ const selectReviewDecisionsForAmends: StateSelector<
   (attachments, downloadUrl, reviewGroupDecisions) => {
     const result: Array<{
       subtask: string;
-      decision: EmpReviewDecisionDto | EmpVariationReviewDecisionDto;
+      decision: ReviewDecisionDto;
     }> = [];
-    const sections = [
-      REPORTING_OBLIGATION_SUB_TASK,
-      OPERATOR_DETAILS_SUB_TASK,
-      MONITORING_PLAN_CHANGES_SUB_TASK,
-      EMISSIONS_SUB_TASK,
-      AER_VOYAGES_SUB_TASK,
-      AER_PORTS_SUB_TASK,
-      AER_AGGREGATED_DATA_SUB_TASK,
-      AER_REDUCTION_CLAIM_SUB_TASK,
-      ADDITIONAL_DOCUMENTS_SUB_TASK,
-      AER_TOTAL_EMISSIONS_SUB_TASK,
-    ];
+    const sections = [REPORTING_OBLIGATION_SUBTASKS, OPERATOR_SUBTASKS].flat();
 
     for (const section of sections) {
       const group = AER_SUBTASK_REVIEW_GROUP_MAP[section];

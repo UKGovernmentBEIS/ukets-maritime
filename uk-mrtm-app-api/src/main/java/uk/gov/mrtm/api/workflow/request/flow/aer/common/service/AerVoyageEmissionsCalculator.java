@@ -96,8 +96,9 @@ public class AerVoyageEmissionsCalculator {
                     voyage.getVoyageDetails().getDeparturePort().getCountry(),
                     voyage.getVoyageDetails().getArrivalPort().getCountry()) : null;
 
-                if (journeyType != null && !PortType.INTERNATIONAL.equals(journeyType)) {
-                    if (BooleanUtils.isNotTrue(voyage.getVoyageDetails().getSmallIslandFerryReduction())) {
+                if (journeyType != null
+                        && !PortType.INTERNATIONAL.equals(journeyType)
+                        && (BooleanUtils.isNotTrue(voyage.getVoyageDetails().getSmallIslandFerryReduction()))) {
 
 
                         BigDecimal ccsAndCcu = voyage.getVoyageDetails().getCcs() != null && voyage.getVoyageDetails().getCcu() != null
@@ -126,9 +127,6 @@ public class AerVoyageEmissionsCalculator {
                             n2oSurrender = AerEmissionsCalculatorUtils.applyEmissionReduction(n2oSurrender, FIVE_PERCENT);
                         }
                     }
-
-                }
-
 
                 co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
                 ch4Surrender = ch4Surrender.setScale(7, RoundingMode.HALF_UP);

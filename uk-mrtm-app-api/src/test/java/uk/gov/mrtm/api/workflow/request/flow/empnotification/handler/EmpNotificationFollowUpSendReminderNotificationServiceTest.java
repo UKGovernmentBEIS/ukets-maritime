@@ -1,11 +1,13 @@
 package uk.gov.mrtm.api.workflow.request.flow.empnotification.handler;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
+import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmNotificationTemplateWorkflowTaskType;
 import uk.gov.mrtm.api.workflow.request.flow.empnotification.service.EmpNotificationFollowUpSendReminderNotificationService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
@@ -43,6 +45,11 @@ class EmpNotificationFollowUpSendReminderNotificationServiceTest {
 
     @Mock
     private RequestExpirationReminderService requestExpirationReminderService;
+
+    @BeforeEach
+    void setUp() {
+        new MrtmNotificationTemplateWorkflowTaskType();
+    }
 
     @Test
     void sendFirstReminderNotification() {
@@ -110,8 +117,6 @@ class EmpNotificationFollowUpSendReminderNotificationServiceTest {
         final String requestId = "1";
         final Date deadline = new Date();
         final Request request = Request.builder().build();
-        final UserInfoDTO primaryContact =
-            UserInfoDTO.builder().firstName("fn").lastName("ln").email("email@email").build();
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 import { PageHeadingComponent } from '@netz/common/components';
 
+import { environment } from '@environments/environment';
 import { BackToTopComponent } from '@shared/components';
 
 @Component({
@@ -11,4 +12,6 @@ import { BackToTopComponent } from '@shared/components';
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [PageHeadingComponent, BackToTopComponent],
 })
-export class AccessibilityComponent {}
+export class AccessibilityComponent {
+  supportMETSEmail = environment.supportMETSEmail;
+}

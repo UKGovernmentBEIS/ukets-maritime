@@ -1,0 +1,57 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  heading="Enter details"
+  [showReturnLink]="true"
+  [isTwoThirds]="true">
+  <div formControlName="complianceRestored" govuk-radio [legend]="map.complianceRestored.title" legendSize="medium">
+    <govuk-radio-option [value]="'YES'" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          govuk-date-input
+          formControlName="complianceRestoredDate"
+          [label]="map.complianceRestoredDate.title"
+          legendSize="small"
+          hint="This date cannot be in the future"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="'NO'" label="No" />
+    <govuk-radio-option
+      [value]="'NOT_APPLICABLE'"
+      label="Not applicable"
+      hint="Select this option if it is not possible for the operator to restore compliance, for example failure to surrender sufficient allowances" />
+  </div>
+
+  <div
+    formControlName="comments"
+    govuk-textarea
+    [label]="map.comments.title"
+    labelSize="medium"
+    hint="The operator cannot view this"
+    [maxLength]="10000"></div>
+
+  <div
+    formControlName="reissuePenalty"
+    govuk-radio
+    [legend]="map.reissuePenalty.title"
+    legendSize="medium"
+    hint="This will start a new task to upload a replacement penalty notice">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+
+  <div formControlName="operatorPaid" govuk-radio [legend]="map.operatorPaid.title" legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes">
+      <ng-container govukConditionalContent>
+        <div
+          govuk-date-input
+          formControlName="operatorPaidDate"
+          [label]="map.operatorPaidDate.title"
+          legendSize="small"
+          hint="This date cannot be in the future"></div>
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option [value]="false" label="No" />
+  </div>
+</mrtm-wizard-step>

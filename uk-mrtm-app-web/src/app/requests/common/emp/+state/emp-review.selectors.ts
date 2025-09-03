@@ -15,11 +15,12 @@ import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps/data
 import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources/emission-sources.helper';
 import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas.helper';
 import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures/management-procedures.helper';
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate/mandate.helper';
 import { OVERALL_DECISION_SUB_TASK } from '@requests/common/emp/subtasks/overall-decision/overall-decision.helpers';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils/subtask-review-group.map';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents/additional-documents.helper';
-import { EmpReviewDecisionDto, EmpReviewDecisionUnion, EmpVariationReviewDecisionDto } from '@shared/types';
+import { EmpVariationReviewDecisionDto, ReviewDecisionDto, ReviewDecisionUnion } from '@shared/types';
 
 const allTasks = [
   ABBREVIATIONS_SUB_TASK,
@@ -31,12 +32,13 @@ const allTasks = [
   GREENHOUSE_GAS_SUB_TASK,
   MANAGEMENT_PROCEDURES_SUB_TASK,
   OPERATOR_DETAILS_SUB_TASK,
+  MANDATE_SUB_TASK,
 ];
 
-const selectReviewGroupDecisions: StateSelector<RequestTaskState, { [key: string]: EmpReviewDecisionUnion }> =
+const selectReviewGroupDecisions: StateSelector<RequestTaskState, { [key: string]: ReviewDecisionUnion }> =
   createDescendingSelector(
     empCommonQuery.selectPayload<EmpReviewTaskPayload>(),
-    (payload) => payload?.reviewGroupDecisions as { [key: string]: EmpReviewDecisionUnion },
+    (payload) => payload?.reviewGroupDecisions as { [key: string]: ReviewDecisionUnion },
   );
 
 const selectReviewDecisionStatus = (
@@ -128,7 +130,7 @@ const selectStatusForSubtask = (
 
 const selectEmpReviewDecisionDTO = (
   subtask: keyof EmissionsMonitoringPlan,
-): StateSelector<RequestTaskState, EmpReviewDecisionDto> => {
+): StateSelector<RequestTaskState, ReviewDecisionDto> => {
   return createAggregateSelector(
     empCommonQuery.selectTasksDownloadUrl,
     selectReviewAttachments,
@@ -178,11 +180,12 @@ const selectEmpReviewDecisionForAmendsDTO: StateSelector<
       'controlActivities',
       'abbreviations',
       'additionalDocuments',
+      'mandate',
     ];
 
     const result: Array<{
       subtask: keyof EmissionsMonitoringPlan;
-      decision: EmpReviewDecisionDto | EmpVariationReviewDecisionDto;
+      decision: ReviewDecisionDto | EmpVariationReviewDecisionDto;
     }> = [];
     for (const section of sections) {
       const group = subtaskReviewGroupMap[section];

@@ -19,6 +19,7 @@ import {
 import { PeerReviewDecisionState } from '@requests/tasks/notification-peer-review/+state/peer-review.state';
 import { PeerReviewStore } from '@requests/tasks/notification-peer-review/+state/peer-review.store';
 import { peerReviewDecisionQuery } from '@requests/tasks/notification-peer-review/+state/peer-review-decision.selectors';
+import { PeerReviewDecisionPipe } from '@shared/pipes';
 
 interface ViewModel {
   peerReviewDecision: PeerReviewDecisionState;
@@ -39,6 +40,7 @@ interface ViewModel {
     RouterLink,
     SummaryListRowActionsDirective,
     ReturnToTaskOrActionPageComponent,
+    PeerReviewDecisionPipe,
   ],
   templateUrl: './peer-review-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

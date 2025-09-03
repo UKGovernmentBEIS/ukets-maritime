@@ -7,7 +7,7 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { operatorDetailsMap } from '@requests/common/components/operator-details';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
-import { EmpReviewDecisionSummaryTemplateComponent, OperatorDetailsSummaryTemplateComponent } from '@shared/components';
+import { OperatorDetailsSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-operator-details-submitted',
@@ -16,7 +16,7 @@ import { EmpReviewDecisionSummaryTemplateComponent, OperatorDetailsSummaryTempla
     PageHeadingComponent,
     OperatorDetailsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './operator-details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,6 +33,6 @@ export class OperatorDetailsSubmittedComponent {
     )(),
   );
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('OPERATOR_DETAILS'));
 }

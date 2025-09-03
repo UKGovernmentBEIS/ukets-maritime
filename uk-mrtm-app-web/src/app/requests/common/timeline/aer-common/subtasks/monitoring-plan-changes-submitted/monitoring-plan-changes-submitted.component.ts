@@ -6,8 +6,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { monitoringPlanChangesMap } from '@requests/common/aer';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   MonitoringPlanChangesSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
     MonitoringPlanChangesSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './monitoring-plan-changes-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -29,7 +29,7 @@ export class MonitoringPlanChangesSubmittedComponent {
   readonly monitoringPlanVersion = this.store.select(aerTimelineCommonQuery.selectMonitoringPlanVersion);
   readonly monitoringPlanChanges = this.store.select(aerTimelineCommonQuery.selectMonitoringPlanChanges);
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('MONITORING_PLAN_CHANGES'),
   );

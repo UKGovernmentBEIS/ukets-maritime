@@ -1,8 +1,11 @@
-import { AerSmf, AerSmfDetails } from '@mrtm/api';
-
 import { SubTaskListMap } from '@shared/types';
 
-export const reductionClaimMap: SubTaskListMap<AerSmf & Pick<AerSmfDetails, 'purchases'>> = {
+export const reductionClaimMap: SubTaskListMap<{
+  exist: string;
+  smfDetails: string;
+  purchaseAdd: string;
+  purchaseEdit: string;
+}> = {
   title: 'Reduction claim',
   exist: {
     title: 'Emissions reduction claim',
@@ -14,9 +17,14 @@ export const reductionClaimMap: SubTaskListMap<AerSmf & Pick<AerSmfDetails, 'pur
     caption: 'Reduction claim',
     title: 'Sustainable fuel purchase list',
   },
-  purchases: {
+  purchaseAdd: {
     caption: 'Reduction claim',
     title: 'Add a sustainable fuel purchase',
+    description: 'Provide information for each batch of sustainable fuel included in your claim.',
+  },
+  purchaseEdit: {
+    caption: 'Reduction claim',
+    title: 'Edit a sustainable fuel purchase',
     description: 'Provide information for each batch of sustainable fuel included in your claim.',
   },
 };

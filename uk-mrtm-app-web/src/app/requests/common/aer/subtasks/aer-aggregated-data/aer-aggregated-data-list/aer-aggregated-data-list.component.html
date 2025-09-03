@@ -1,3 +1,4 @@
+<mrtm-notification-banner />
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <netz-page-heading [caption]="wizardMap.caption">{{ wizardMap.title }}</netz-page-heading>
@@ -6,7 +7,9 @@
   @if (editable()) {
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <mrtm-dropdown-button-group label="Add aggregated data">
-        <mrtm-dropdown-button-item [routerLink]="wizardStep.SELECT_SHIP">Add aggregated data</mrtm-dropdown-button-item>
+        <mrtm-dropdown-button-item routerLink="." (click)="onAddAggregatedData($event)">
+          Add aggregated data
+        </mrtm-dropdown-button-item>
         <mrtm-dropdown-button-item [routerLink]="['../', wizardStep.UPLOAD_AGGREGATED_DATA]">
           Upload file
         </mrtm-dropdown-button-item>

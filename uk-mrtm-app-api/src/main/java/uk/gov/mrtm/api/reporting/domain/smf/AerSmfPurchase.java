@@ -51,4 +51,7 @@ public class AerSmfPurchase {
     @Builder.Default
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Set<UUID> evidenceFiles = new HashSet<>();
+
+    @NotNull
+    private UUID uniqueIdentifier;
 }

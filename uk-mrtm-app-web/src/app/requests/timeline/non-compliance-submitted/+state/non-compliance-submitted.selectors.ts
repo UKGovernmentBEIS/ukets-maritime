@@ -8,15 +8,15 @@ const selectPayload: StateSelector<RequestActionState, NonComplianceSubmittedTim
 
 const selectNonComplianceDetailsSummary: StateSelector<RequestActionState, NonComplianceDetailsSummary> =
   createDescendingSelector(selectPayload, (payload) => ({
-    reason: payload.reason,
-    nonComplianceDate: payload.nonComplianceDate,
-    complianceDate: payload.complianceDate,
-    comments: payload.comments,
-    civilPenalty: payload.civilPenalty,
-    noCivilPenaltyJustification: payload.noCivilPenaltyJustification,
-    noticeOfIntent: payload.noticeOfIntent,
-    initialPenalty: payload.initialPenalty,
-    selectedRequestsMapped: payload.selectedRequests,
+    reason: payload?.reason,
+    nonComplianceDate: payload?.nonComplianceDate,
+    complianceDate: payload?.complianceDate,
+    comments: payload?.comments,
+    civilPenalty: payload?.civilPenalty,
+    noCivilPenaltyJustification: payload?.noCivilPenaltyJustification,
+    noticeOfIntent: payload?.noticeOfIntent,
+    initialPenalty: payload?.initialPenalty,
+    selectedRequestsMapped: payload?.selectedRequests,
   }));
 
 export const nonComplianceSubmittedQuery = {

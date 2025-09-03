@@ -41,6 +41,7 @@ import uk.gov.netz.api.common.validation.uniqueelements.UniqueElementsValidator;
 import java.math.BigDecimal;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -93,8 +94,8 @@ class EmpEmissionsValidatorTest {
 
         EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, ACCOUNT_ID);
 
-        assertTrue(result.isValid());
-        assertThat(result.getEmpViolations()).isEmpty();
+            assertTrue(result.isValid());
+            assertThat(result.getEmpViolations()).isEmpty();
     }
 
     @Test
@@ -128,6 +129,22 @@ class EmpEmissionsValidatorTest {
     }
 
     @Test
+    void validate_duplicate_emissions_fuel_name_case_insensitive_invalid() {
+        FuelOriginEFuelTypeName fuelOriginEFuelTypeName = getFuelOriginEFuelTypeName(EFuelType.E_LNG);
+        EmpEmissions empEmissions = createEmpEmissions(IMO_NUMBER_2, OTHER_FUEL_NAME_1.toLowerCase(Locale.ROOT), EMISSION_SOURCES_NAME_2, E_FUEL_TYPE_1,
+                Set.of(MonitoringMethod.BDN, MonitoringMethod.BUNKER_TANK, MonitoringMethod.DIRECT),
+                Set.of(EMISSION_SOURCES_NAME_1, EMISSION_SOURCES_NAME_2),EMISSION_SOURCES_NAME_2, FuelOrigin.FOSSIL,
+                Set.of(fuelOriginEFuelTypeName));
+        EmissionsMonitoringPlanContainer empContainer = createEmpContainer(empEmissions);
+
+        EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, ACCOUNT_ID);
+
+        assertFalse(result.isValid());
+        assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
+                emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_FUEL_NAME.getMessage()));
+    }
+
+    @Test
     void validate_duplicate_emissions_source_name_invalid() {
         FuelOriginEFuelTypeName fuelOriginEFuelTypeName = getFuelOriginEFuelTypeName(EFuelType.E_LNG);
         EmpEmissions empEmissions = createEmpEmissions(IMO_NUMBER_2, OTHER_FUEL_NAME_2, EMISSION_SOURCES_NAME_1, E_FUEL_TYPE_1,
@@ -140,6 +157,21 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
+    }
+
+    @Test
+    void validate_duplicate_emissions_source_name_case_insensitive_invalid() {
+        FuelOriginEFuelTypeName fuelOriginEFuelTypeName = getFuelOriginEFuelTypeName(EFuelType.E_LNG);
+        EmpEmissions empEmissions = createEmpEmissions(IMO_NUMBER_2, OTHER_FUEL_NAME_2, EMISSION_SOURCES_NAME_1.toLowerCase(Locale.ROOT), E_FUEL_TYPE_1,
+                Set.of(MonitoringMethod.BDN, MonitoringMethod.BUNKER_TANK, MonitoringMethod.DIRECT),
+                Set.of(EMISSION_SOURCES_NAME_1), EMISSION_SOURCES_NAME_1, FuelOrigin.BIOFUEL, Set.of(fuelOriginEFuelTypeName));
+        EmissionsMonitoringPlanContainer empContainer = createEmpContainer(empEmissions);
+
+        EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, ACCOUNT_ID);
+
+        assertFalse(result.isValid());
+        assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
+                emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
     }
 
     @Test
@@ -158,12 +190,7 @@ class EmpEmissionsValidatorTest {
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_POTENTIAL_FUEL_TYPE.getMessage()));
         assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
-            .containsExactlyInAnyOrder(Set.of(FuelOriginEFuelTypeName.builder()
-                .origin(FuelOrigin.RFNBO)
-                .type(EFuelType.E_LNG)
-                .methaneSlip(new BigDecimal("1"))
-                .methaneSlipValueType(MethaneSlipValueType.OTHER)
-                .build()).toArray());
+            .containsExactlyInAnyOrder(Set.of(fuelOriginEFuelTypeName).toArray());
     }
 
     @Test

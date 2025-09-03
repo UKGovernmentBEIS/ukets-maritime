@@ -1,6 +1,6 @@
 <mrtm-wizard-step
   (formSubmit)="onSubmit()"
-  [caption]="taskMap.title | shipStepTitle: 6 : shipName"
+  [caption]="shipName | shipStepTitleCustom: 6"
   [formGroup]="formGroup"
   [heading]="taskMap.carbonCapture.title"
   [showReturnLink]="false"

@@ -43,4 +43,17 @@ export const EMISSION_SOURCE_ROUTES: Routes = [
         (c) => c.EmissionSourcesFactorsComponent,
       ),
   },
+  {
+    path: EmissionSourcesWizardStep.EMISSION_COMPLIANCE,
+    title: emissionSourcesMap.emissionCompliance.title,
+    canActivate: [canActivateEmissionSourcesStep()],
+    data: { breadcrumb: false },
+    resolve: {
+      backlink: backlinkResolver(EmissionSourcesWizardStep.SUMMARY, EmissionSourcesWizardStep.EMISSION_FACTORS),
+    },
+    loadComponent: () =>
+      import('@requests/common/emp/subtasks/emission-sources/emission-sources-compliance').then(
+        (c) => c.EmissionSourcesComplianceComponent,
+      ),
+  },
 ];

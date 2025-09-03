@@ -101,8 +101,8 @@ class AccountCreatedNotifyRegistryServiceTest {
         account.setRegistryId(1000000);
 
         when(accountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(account);
-
-        BusinessException be = assertThrows(BusinessException.class, () -> accountCreatedNotifyRegistryService.notifyRegistry(createEvent()));
+        final EmpApprovedEvent event = createEvent();
+        BusinessException be = assertThrows(BusinessException.class, () -> accountCreatedNotifyRegistryService.notifyRegistry(event));
         assertThat(be.getErrorCode()).isEqualTo(MrtmErrorCode.INTEGRATION_REGISTRY_ACCOUNT_CREATION_REGISTRY_ID_EXISTS);
 
         verify(accountQueryService).getAccountById(ACCOUNT_ID);

@@ -4,6 +4,7 @@ import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/c
 import { RequestTaskStore } from '@netz/common/store';
 
 import { nonComplianceInitialPenaltyNoticeMap } from '@requests/common/non-compliance';
+import { nonComplianceCommonQuery } from '@requests/common/non-compliance/+state';
 import { nonComplianceInitialPenaltyNoticeCommonQuery } from '@requests/common/non-compliance/non-compliance-initial-penalty-notice/+state';
 import { NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent } from '@shared/components/summaries';
 
@@ -27,7 +28,7 @@ export class NonComplianceInitialPenaltyNoticeUploadSummaryReviewComponent {
   );
   readonly files = computed(() =>
     this.store.select(
-      nonComplianceInitialPenaltyNoticeCommonQuery.selectAttachedFiles([
+      nonComplianceCommonQuery.selectAttachedFiles([
         this.nonComplianceInitialPenaltyNoticeUpload()?.initialPenaltyNotice,
       ]),
     )(),

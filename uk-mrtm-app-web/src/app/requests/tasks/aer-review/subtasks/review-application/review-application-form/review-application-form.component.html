@@ -5,7 +5,7 @@
   (formSubmit)="onSubmit()"
   [showReturnLink]="true">
   @if (summaryDetails) {
-    <ng-container *ngComponentOutlet="summaryDetails.component; inputs: summaryDetails.inputs" />
+    <ng-container *ngComponentOutlet="summaryDetails.component; inputs: summaryDetails.inputs()" />
   }
   <div class="govuk-!-width-two-thirds">
     <div

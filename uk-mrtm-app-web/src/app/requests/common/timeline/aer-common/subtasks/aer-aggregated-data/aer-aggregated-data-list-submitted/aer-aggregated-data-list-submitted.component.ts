@@ -7,7 +7,7 @@ import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
   AggregatedDataListSummaryTemplateComponent,
-  EmpReviewDecisionSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components/summaries';
 
 @Component({
@@ -17,7 +17,7 @@ import {
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     AggregatedDataListSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './aer-aggregated-data-list-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,7 +27,7 @@ export class AerAggregatedDataListSubmittedComponent {
   readonly aggregatedData = this.store.select(aerTimelineCommonQuery.selectAggregatedDataList);
   readonly map = aerAggregatedDataSubtasksListMap;
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('AGGREGATED_EMISSIONS_DATA'),
   );

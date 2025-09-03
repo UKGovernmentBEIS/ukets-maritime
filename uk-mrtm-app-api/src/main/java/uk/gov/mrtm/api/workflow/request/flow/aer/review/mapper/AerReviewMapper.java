@@ -45,7 +45,7 @@ public interface AerReviewMapper {
 
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "verificationReport", source = "requestPayload.verificationReport")
-    @Mapping(target = "aerSectionsCompleted", ignore = true)
+    @Mapping(target = "aerSectionsCompleted", source = "requestPayload.aerReviewSectionsCompleted")
     AerApplicationReviewRequestTaskPayload toAerApplicationReviewRequestTaskPayload(
             AerRequestPayload requestPayload,
             String payloadType,
@@ -81,6 +81,7 @@ public interface AerReviewMapper {
     @Mapping(target = "reviewGroupDecisions", source = "requestPayload.reviewGroupDecisions", qualifiedByName =
         "reviewGroupDecisionsForOperatorAmend")
     @Mapping(target = "verificationBodyId", source = "requestPayload", qualifiedByName = "verificationBodyId")
+    @Mapping(target = "aerSectionsCompleted", source = "requestPayload.aerSubmitSectionsCompleted")
     AerApplicationAmendsSubmitRequestTaskPayload toAerApplicationAmendsSubmitRequestTaskPayload(
         AerRequestPayload requestPayload,
         String payloadType,

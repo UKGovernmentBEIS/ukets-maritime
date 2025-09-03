@@ -9,7 +9,7 @@
     @if (allowedActions.includes('PAYMENT_MARK_AS_RECEIVED')) {
       <a [routerLink]="[routePrefix, markAsReceivedPaymentRoute]" govukButton>Mark payment as received</a>
     }
-    @if (allowedActions.includes('PAYMENT_CANCEL')) {
+    @if (allowedActions.includes('CANCEL_APPLICATION')) {
       <a [routerLink]="[routePrefix, cancelPaymentRoute]" govukSecondaryButton>Cancel payment task</a>
     }
   }

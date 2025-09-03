@@ -20,3 +20,7 @@
     min-width: auto;
   }
 }
+
+tr.needs-review{
+  background: $needs-review-background-color;
+}

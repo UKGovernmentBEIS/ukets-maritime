@@ -1,6 +1,6 @@
 import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
-import { PAYLOAD_MUTATORS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
+import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships';
@@ -33,6 +33,7 @@ import {
 import {
   EMISSION_SOURCES_SUB_TASK,
   EmissionSourcesCompletionPayloadMutator,
+  EmissionSourcesCompliancePayloadMutator,
   EmissionSourcesFactorsPayloadMutator,
   EmissionSourcesReviewFlowManager,
 } from '@requests/common/emp/subtasks/emission-sources';
@@ -61,6 +62,12 @@ import {
   ManagementProceduresRolesPayloadMutator,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
+  MANDATE_SUB_TASK,
+  MandateFlowManager,
+  provideMandatePayloadMutators,
+} from '@requests/common/emp/subtasks/mandate';
+import { MandateSaveSideEffect } from '@requests/common/emp/subtasks/mandate/side-effects';
+import {
   DeclarationDocumentsPayloadMutator,
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsReviewFlowManager,
@@ -80,6 +87,7 @@ import { EmissionSourcesDecisionPayloadMutator } from '@requests/tasks/emp-revie
 import { ListOfShipsDecisionPayloadMutator } from '@requests/tasks/emp-review/subtasks/emissions';
 import { GreenhouseGasDecisionPayloadMutator } from '@requests/tasks/emp-review/subtasks/greenhouse-gas';
 import { ManagementProceduresDecisionPayloadMutator } from '@requests/tasks/emp-review/subtasks/management-procedures';
+import { MandateDecisionPayloadMutator } from '@requests/tasks/emp-review/subtasks/mandate/mandate-decision';
 import { OperatorDetailsDecisionPayloadMutator } from '@requests/tasks/emp-review/subtasks/operator-details';
 import {
   OverallDecisionActionsPayloadMutator,
@@ -128,6 +136,7 @@ export function provideEmpReviewPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasDecisionPayloadMutator },
     // Emission Sources
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesDecisionPayloadMutator },
     // Emissions
@@ -137,6 +146,9 @@ export function provideEmpReviewPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OverallDecisionActionsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OverallDecisionQuestionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OverallDecisionReviewSummaryPayloadMutator },
+    // Mandate
+    ...provideMandatePayloadMutators(),
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateDecisionPayloadMutator },
   ]);
 }
 
@@ -166,6 +178,8 @@ export function provideEmpReviewSideEffects(): EnvironmentProviders {
     provideEmpReviewSideEffect(GREENHOUSE_GAS_SUB_TASK),
     provideEmpReviewSideEffect(MANAGEMENT_PROCEDURES_SUB_TASK),
     provideEmpReviewSideEffect(OPERATOR_DETAILS_SUB_TASK),
+    { provide: SIDE_EFFECTS, multi: true, useClass: MandateSaveSideEffect },
+    provideEmpReviewSideEffect(MANDATE_SUB_TASK),
   ]);
 }
 
@@ -181,5 +195,6 @@ export function provideEmpReviewStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourcesReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OverallDecisionFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
   ]);
 }

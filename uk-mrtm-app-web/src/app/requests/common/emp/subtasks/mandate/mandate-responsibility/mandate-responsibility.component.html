@@ -1,0 +1,38 @@
+<mrtm-wizard-step
+  [caption]="showDeleteQuestion() ? null : wizardMap.title"
+  [heading]="showDeleteQuestion() ? wizardMap.exist.description : wizardMap.exist.title"
+  [formGroup]="form"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true"
+  [hideSubmit]="showDeleteQuestion()"
+  [showReturnLink]="true">
+  @if (showDeleteQuestion()) {
+    <govuk-warning-text>
+      If you have not been delegated responsibility for compliance with the UK ETS by a registered owner, all the
+      information you have added will be deleted. This action cannot be undone.
+    </govuk-warning-text>
+    <div class="govuk-button-group">
+      <button govukWarnButton type="button" (click)="onSubmit(true)">Yes, I do not have responsibility</button>
+      <a govukLink routerLink="." role="button" (click)="showDeleteQuestion.set(false)">Cancel</a>
+    </div>
+  } @else {
+    <div formControlName="exist" govuk-radio legendSize="medium">
+      <ng-container govukLegend>
+        <span class="govuk-visually-hidden">{{ wizardMap.exist.title }}</span>
+      </ng-container>
+      <govuk-radio-option [value]="true" label="Yes" />
+      @if (hasAlreadyRegisteredOwners()) {
+        <govuk-radio-option [value]="false" label="No">
+          <ng-container govukConditionalContent>
+            <govuk-warning-text>
+              If you have not been delegated responsibility for compliance with the UK ETS by a registered owner, all
+              the information you have added will be deleted."
+            </govuk-warning-text>
+          </ng-container>
+        </govuk-radio-option>
+      } @else {
+        <govuk-radio-option [value]="false" label="No" />
+      }
+    </div>
+  }
+</mrtm-wizard-step>

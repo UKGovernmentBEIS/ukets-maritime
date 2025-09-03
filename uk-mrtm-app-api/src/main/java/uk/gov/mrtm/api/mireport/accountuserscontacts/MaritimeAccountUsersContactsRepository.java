@@ -5,7 +5,6 @@ import org.hibernate.query.NativeQuery;
 import org.hibernate.type.StandardBasicTypes;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.netz.api.mireport.accountuserscontacts.AccountUserContact;
 import uk.gov.netz.api.mireport.accountuserscontacts.AccountUsersContactsRepository;
 
 import java.util.HashMap;

@@ -20,7 +20,8 @@ export interface EmpVariationSaveReviewGroupDecisionRegulatorLedRequestTaskActio
     | 'ABBREVIATIONS_AND_DEFINITIONS'
     | 'ADDITIONAL_DOCUMENTS'
     | 'DATA_GAPS'
-    | 'CONTROL_ACTIVITIES';
+    | 'CONTROL_ACTIVITIES'
+    | 'MANDATE';
   decision: EmpAcceptedVariationDecisionDetails;
   empSectionsCompleted?: { [key: string]: string };
 }

@@ -2,16 +2,16 @@ import { Injectable } from '@angular/core';
 
 import { AerShipEmissions } from '@mrtm/api';
 
-import { AerShipsXML, AerShipsXMLResultDto } from '@requests/common/aer/subtasks/aer-emissions/interfaces';
+import { AerShipsXML } from '@requests/common/aer/subtasks/aer-emissions/interfaces';
 import {
+  AerAdditionalInformationDtoValidator,
+  AerEmissionReportDetailsDtoValidator,
   AerEmissionSourceEditDtoValidator,
   AerFuelTypeEmissionFactorEditDtoValidator,
-  EmissionReportDetailsDtoValidator,
-  MonitoringMethodEntryDtoValidator,
+  AerMonitoringMethodEntryDtoValidator,
 } from '@requests/common/aer/subtasks/aer-emissions/validators';
-import { AdditionalInformationDtoValidator } from '@requests/common/aer/subtasks/aer-emissions/validators/additional-information-dto.validator';
 import { ShipsXmlService } from '@requests/common/components/emissions/upload-ships';
-import { RecursivePartial, XmlValidationError } from '@shared/types';
+import { XmlResult, XmlValidationError } from '@shared/types';
 import { X2jOptions, XMLParser } from 'fast-xml-parser';
 
 @Injectable({
@@ -29,7 +29,6 @@ export class AerShipsXmlService implements ShipsXmlService {
     'emissionReportsList.emissionReport.emissionSources.emissionSourceEntry.monitoringMethodCode',
     'emissionReportsList.emissionReport.emissionSources.emissionSourceEntry.fuelTypeCodes',
     'emissionReportsList.emissionReport.monitoringMethods.monitoringMethodEntry',
-    'emissionReportsList.emissionReport.additionalInformation.additionalInformationEntry',
   ];
 
   private readonly options: X2jOptions = {
@@ -40,7 +39,7 @@ export class AerShipsXmlService implements ShipsXmlService {
   /**
    * Parses an XML as text and returns AerShipsXMLResultDto which includes any validation errors and the actual data
    */
-  parse(xmlText: string, reportingYear: string): AerShipsXMLResultDto {
+  parse(xmlText: string, reportingYear: string): XmlResult<AerShipEmissions[]> {
     const shipsXML: AerShipsXML = new XMLParser(this.options).parse(xmlText) as AerShipsXML;
     return this.transformShipsXMLToShipEmissions(shipsXML, reportingYear);
   }
@@ -48,62 +47,80 @@ export class AerShipsXmlService implements ShipsXmlService {
   /**
    * Validates ShipsXML and returns AerShipsXMLResultDto, containing both AerShipEmissions[] and XmlValidationError[]
    */
-  private transformShipsXMLToShipEmissions(shipsXML: AerShipsXML, reportingYear: string): AerShipsXMLResultDto {
+  private transformShipsXMLToShipEmissions(
+    shipsXML: AerShipsXML,
+    reportingYear: string,
+  ): XmlResult<AerShipEmissions[]> {
     const aerShipEmissions: AerShipEmissions[] = [];
     let errors: XmlValidationError[] = [];
 
     if (shipsXML?.emissionReportsList?.emissionReport?.length > 0) {
       const emissionReports = shipsXML.emissionReportsList.emissionReport;
-      const maxAllowedShipsErrors = EmissionReportDetailsDtoValidator.maxAllowedShipsErrors(emissionReports);
+      const maxAllowedShipsErrors = AerEmissionReportDetailsDtoValidator.validateMaxAllowedShips(emissionReports);
+      const emissionReportDetailsCoreErrors =
+        AerEmissionReportDetailsDtoValidator.validateCoreEmissionReportDetailsDTOs(emissionReports);
 
       if (maxAllowedShipsErrors?.length) {
         errors = maxAllowedShipsErrors;
+      } else if (emissionReportDetailsCoreErrors?.length) {
+        errors = emissionReportDetailsCoreErrors;
       } else {
-        for (const [index, emissionReport] of emissionReports.entries()) {
-          const emissionReportDetailsDTOPartiallyErrors =
-            EmissionReportDetailsDtoValidator.shipParticularsDTOPartiallyErrors(
-              index,
-              aerShipEmissions,
-              emissionReport,
-            );
-          if (emissionReportDetailsDTOPartiallyErrors?.length === 0) {
-            const ship: RecursivePartial<AerShipEmissions> = {
-              uniqueIdentifier: crypto.randomUUID(),
-              details: EmissionReportDetailsDtoValidator.transformShipParticularDTO(emissionReport, reportingYear),
-              fuelsAndEmissionsFactors:
-                AerFuelTypeEmissionFactorEditDtoValidator.transformFuelTypeEmissionFactorEditDTO(
-                  emissionReport?.fuelTypes?.fuelTypeEntry,
-                ),
-            };
+        emissionReports?.forEach((emissionReport) => {
+          const emissionReportDetailsResult = AerEmissionReportDetailsDtoValidator.validateEmissionReportDetailsDTO(
+            reportingYear,
+            emissionReport,
+          );
+          const fuelsAndEmissionsFactorsResult =
+            AerFuelTypeEmissionFactorEditDtoValidator.validateFuelTypeEmissionFactorEditDTOs(emissionReport);
+          const emissionsSourcesResult = AerEmissionSourceEditDtoValidator.validateEmissionSourceEditDTOs(
+            emissionReport,
+            fuelsAndEmissionsFactorsResult?.data,
+          );
+          const uncertaintyLevelResult = AerMonitoringMethodEntryDtoValidator.validateMonitoringMethodEntryDTOs(
+            emissionReport,
+            emissionsSourcesResult?.data,
+          );
+          const derogationsResult =
+            AerAdditionalInformationDtoValidator.validateAdditionalInformationDTO(emissionReport);
 
-            ship.emissionsSources = AerEmissionSourceEditDtoValidator.transformEmissionSourceEditDTOs(
-              emissionReport?.emissionSources?.emissionSourceEntry,
-              ship.fuelsAndEmissionsFactors,
+          if (
+            emissionReportDetailsResult?.errors ||
+            fuelsAndEmissionsFactorsResult?.errors ||
+            emissionsSourcesResult?.errors ||
+            uncertaintyLevelResult?.errors ||
+            derogationsResult?.errors
+          ) {
+            errors.push(
+              ...(emissionReportDetailsResult?.errors ?? []),
+              ...(fuelsAndEmissionsFactorsResult?.errors ?? []),
+              ...(emissionsSourcesResult?.errors ?? []),
+              ...(uncertaintyLevelResult?.errors ?? []),
+              ...(derogationsResult?.errors ?? []),
             );
-
-            ship.uncertaintyLevel = MonitoringMethodEntryDtoValidator.transformMonitoringMethodEntryDTOs(
-              emissionReport?.monitoringMethods?.monitoringMethodEntry,
-              ship.emissionsSources,
-            );
-
-            ship.derogations = AdditionalInformationDtoValidator.transformAdditionalInformationDTOtoAerDerogations(
-              emissionReport?.additionalInformation,
-            );
-
-            aerShipEmissions.push(ship as AerShipEmissions);
           } else {
-            errors.push(...emissionReportDetailsDTOPartiallyErrors);
+            aerShipEmissions.push({
+              uniqueIdentifier: crypto.randomUUID(),
+              details: emissionReportDetailsResult.data,
+              fuelsAndEmissionsFactors: fuelsAndEmissionsFactorsResult.data,
+              emissionsSources: emissionsSourcesResult.data,
+              uncertaintyLevel: uncertaintyLevelResult.data,
+              derogations: derogationsResult.data,
+            });
           }
-        }
+        });
       }
     }
 
     if (!aerShipEmissions?.length && !errors?.length) {
-      errors.push({ row: null, column: null, message: 'The required fields are out of the expected criteria' });
+      errors.push({
+        row: null,
+        column: null,
+        message: 'The header names must be the same as the ones included in the template',
+      });
     }
 
     return {
-      data: aerShipEmissions,
+      data: !errors?.length ? aerShipEmissions : [],
       errors: errors,
     };
   }

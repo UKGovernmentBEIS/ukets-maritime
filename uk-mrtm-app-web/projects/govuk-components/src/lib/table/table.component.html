@@ -24,7 +24,7 @@
   </thead>
   <tbody class="govuk-table__body">
     @for (row of data; track i; let i = $index) {
-      <tr class="govuk-table__row">
+      <tr class="govuk-table__row {{ rowCssClasses ? [rowCssClasses(row)].flat().join(' ') : '' }}">
         @for (column of columns; track column.field) {
           @if (column.isHeader) {
             <th class="govuk-table__header" scope="row">

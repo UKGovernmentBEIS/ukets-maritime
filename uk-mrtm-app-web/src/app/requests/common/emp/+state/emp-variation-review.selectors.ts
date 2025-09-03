@@ -35,9 +35,9 @@ import { TaskItemStatus } from '@requests/common/task-item-status';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import {
   AttachedFile,
-  EmpReviewDecisionUnion,
   EmpVariationReviewDecisionDto,
   EmpVariationReviewDecisionUnion,
+  ReviewDecisionUnion,
   ShipEmissionTableListItem,
 } from '@shared/types';
 
@@ -386,7 +386,7 @@ const selectEmpReviewDecisionForAmendsDTO: StateSelector<
     (attachments, downloadUrl) => ({ attachments, downloadUrl }),
   ),
   selectEmpVariationDetailsReviewDecision,
-  (groups, { attachments, downloadUrl }, reviewDetails: EmpReviewDecisionUnion) => {
+  (groups, { attachments, downloadUrl }, reviewDetails: ReviewDecisionUnion) => {
     if (reviewDetails?.type !== TaskItemStatus.OPERATOR_AMENDS_NEEDED) {
       return groups;
     }

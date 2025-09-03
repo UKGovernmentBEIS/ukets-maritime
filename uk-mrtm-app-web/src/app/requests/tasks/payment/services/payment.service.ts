@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs';
 
@@ -10,6 +10,7 @@ import { paymentQuery } from '@requests/tasks/payment/+state';
 import { PaymentTaskPayload } from '@requests/tasks/payment/payment.types';
 import { PaymentApiService } from '@requests/tasks/payment/services/payment-api.service';
 
+@Injectable()
 export class PaymentService extends TaskService<PaymentTaskPayload> {
   protected override apiService: PaymentApiService = inject(TaskApiService) as PaymentApiService;
 

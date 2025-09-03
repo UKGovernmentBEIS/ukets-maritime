@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
 
 import { NOTIFY_OPERATOR_PATH } from '@requests/common/components/notify-operator';
@@ -25,7 +25,7 @@ import { nonComplianceInitialPenaltyNoticeCommonQuery } from '@requests/common/n
 })
 export class NonComplianceInitialPenaltyNoticeActionButtonsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  private readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+  private readonly isEditable = this.store.select(nonComplianceInitialPenaltyNoticeCommonQuery.selectIsFormEditable);
   private readonly isUploadSubtaskCompleted = this.store.select(
     nonComplianceInitialPenaltyNoticeCommonQuery.selectIsUploadSubtaskCompleted,
   );

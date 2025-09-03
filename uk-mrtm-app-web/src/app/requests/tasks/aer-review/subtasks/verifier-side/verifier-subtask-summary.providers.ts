@@ -1,4 +1,4 @@
-import { Provider } from '@angular/core';
+import { computed, Provider } from '@angular/core';
 
 import { RequestTaskStore } from '@netz/common/store';
 
@@ -39,9 +39,9 @@ const provideVerificationDetailsSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: VerifierDetailsSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectVerifierDetails)(),
-      },
+      })),
     };
   },
 };
@@ -52,12 +52,12 @@ const provideOpinionStatementSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: OpinionStatementSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         opinionStatement: store.select(aerVerificationSubmitQuery.selectOpinionStatement)(),
         totalEmissions: store.select(aerCommonQuery.selectTotalEmissions)(),
         monitoringPlanVersion: store.select(aerCommonQuery.selectMonitoringPlanVersion)(),
         monitoringPlanChanges: store.select(aerCommonQuery.selectMonitoringPlanChanges)(),
-      },
+      })),
     };
   },
 };
@@ -68,9 +68,9 @@ const provideETSComplianceRulesSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: EtsComplianceRulesSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectEtsComplianceRules)(),
-      },
+      })),
     };
   },
 };
@@ -81,9 +81,9 @@ const provideComplianceMonitoringReportingSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: ComplianceMonitoringReportingSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectComplianceMonitoringReporting)(),
-      },
+      })),
     };
   },
 };
@@ -94,9 +94,9 @@ const provideOverallVerificationDecisionSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: AerOverallVerificationDecisionSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectOverallVerificationDecision)(),
-      },
+      })),
     };
   },
 };
@@ -107,9 +107,9 @@ const provideUncorrectedMisstatementsSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: UncorrectedMisstatementsSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectUncorrectedMisstatements)(),
-      },
+      })),
     };
   },
 };
@@ -120,9 +120,9 @@ const provideUncorrectedNonConformitiesSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: UncorrectedNonConformitiesSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectUncorrectedNonConformities)(),
-      },
+      })),
     };
   },
 };
@@ -133,9 +133,9 @@ const provideUncorrectedNonCompliancesSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: UncorrectedNonCompliancesSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectUncorrectedNonCompliances)(),
-      },
+      })),
     };
   },
 };
@@ -146,9 +146,9 @@ const provideRecommendedImprovementsSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: RecommendedImprovementsSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectRecommendedImprovements)(),
-      },
+      })),
     };
   },
 };
@@ -159,9 +159,9 @@ const provideDataGapsMethodologiesSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: DataGapsMethodologiesSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectDataGapsMethodologies)(),
-      },
+      })),
     };
   },
 };
@@ -172,9 +172,9 @@ const provideMaterialityLevelSubtaskSummary: Provider = {
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
       component: MaterialityLevelSummaryTemplateComponent,
-      inputs: {
+      inputs: computed(() => ({
         data: store.select(aerVerificationSubmitQuery.selectMaterialityLevel)(),
-      },
+      })),
     };
   },
 };

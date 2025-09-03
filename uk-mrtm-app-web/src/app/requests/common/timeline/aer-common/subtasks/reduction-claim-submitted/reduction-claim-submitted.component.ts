@@ -6,9 +6,9 @@ import { RequestActionStore } from '@netz/common/store';
 import { reductionClaimMap } from '@requests/common/aer/subtasks/reduction-claim';
 import { aerTimelineCommonQuery } from '@requests/common/timeline/aer-common';
 import {
-  EmpReviewDecisionSummaryTemplateComponent,
   ReductionClaimDetailsSummaryTemplateComponent,
   ReductionClaimSummaryTemplateComponent,
+  ReviewDecisionSummaryTemplateComponent,
 } from '@shared/components';
 
 @Component({
@@ -19,7 +19,7 @@ import {
     PageHeadingComponent,
     ReductionClaimSummaryTemplateComponent,
     ReductionClaimDetailsSummaryTemplateComponent,
-    EmpReviewDecisionSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
   ],
   templateUrl: './reduction-claim-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -30,7 +30,7 @@ export class ReductionClaimSubmittedComponent {
   public readonly data = this.store.select(aerTimelineCommonQuery.selectReductionClaim);
   public readonly fuelPurchases = this.store.select(aerTimelineCommonQuery.selectReductionClaimDetailsListItems);
 
-  readonly withReviewDecision = this.store.select(aerTimelineCommonQuery.withReviewDetermination);
+  readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('EMISSIONS_REDUCTION_CLAIM'),
   );

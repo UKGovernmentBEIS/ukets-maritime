@@ -21,7 +21,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyage-details/aer-voyage-details.types';
 import { sameReportingYearValidator, voyageArrivalDepartureDateValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { mergeDates } from '@shared/utils';
+import { mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherVoyage =
   (
@@ -51,8 +51,8 @@ const arrivalDepartureDateTimeOverlapOtherVoyage =
       return null;
     }
 
-    const arrivalTime = new Date(mergeDates(arrivalDateCtrl.value, arrivalTimeCtrl.value));
-    const departureTime = new Date(mergeDates(departureDateCtrl.value, departureTimeCtrl.value));
+    const arrivalTime = mergeDatesToDate(arrivalDateCtrl.value, arrivalTimeCtrl.value);
+    const departureTime = mergeDatesToDate(departureDateCtrl.value, departureTimeCtrl.value);
 
     if (
       otherVoyages.some(

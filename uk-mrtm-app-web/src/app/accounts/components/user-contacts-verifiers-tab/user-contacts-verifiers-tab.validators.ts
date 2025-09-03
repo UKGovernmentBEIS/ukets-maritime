@@ -16,13 +16,14 @@ export const activeOperatorAdminValidator = (message: string): ValidatorFn => {
 
 export const activeContactValidator = (contactType: string): ValidatorFn => {
   return GovukValidators.builder(
-    `You must have a ${contactType.toLowerCase()} contact on your account`,
+    `You must have a ${contactType.toLowerCase()} contact on your account on a user with ACTIVE status`,
     (group: UntypedFormGroup) => {
-      // Check if contactType is not selected at all or if it is selected but corresponding user is inactive.
-      return !group.get('contactTypes').get(contactType).value ||
+      // Check if the contactType is not selected at all or if it is selected but corresponding user is inactive.
+      const contactTypeValue = group.get('contactTypes').get(contactType).value;
+      const validContact = contactTypeValue || contactType === 'SECONDARY';
+      return !validContact ||
         (group.get('usersArray').value as Array<AccountOperatorAuthorityUpdateDTO>).find(
-          (item) =>
-            item.authorityStatus !== 'ACTIVE' && item.userId === group.get('contactTypes').get(contactType).value,
+          (item) => item.authorityStatus !== 'ACTIVE' && item.userId === contactTypeValue,
         )
         ? { [`${contactType.toLowerCase()}NotActive`]: true }
         : null;

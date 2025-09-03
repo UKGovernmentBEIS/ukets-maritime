@@ -20,7 +20,8 @@ export interface EmpIssuanceSaveReviewGroupDecisionRequestTaskActionPayload {
     | 'ABBREVIATIONS_AND_DEFINITIONS'
     | 'ADDITIONAL_DOCUMENTS'
     | 'DATA_GAPS'
-    | 'CONTROL_ACTIVITIES';
+    | 'CONTROL_ACTIVITIES'
+    | 'MANDATE';
   decision: EmpIssuanceReviewDecision;
   empSectionsCompleted?: { [key: string]: string };
 }

@@ -1,4 +1,4 @@
-import { Provider } from '@angular/core';
+import { computed, Provider } from '@angular/core';
 
 import { RequestTaskStore } from '@netz/common/store';
 
@@ -12,16 +12,19 @@ export const provideReportingObligationDetailsSubtaskSummary: Provider = {
   provide: AER_REVIEW_SUBTASK_DETAILS,
   deps: [RequestTaskStore],
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
-    const reportingObligationDetails = store.select(aerCommonQuery.selectReportingObligationDetails)();
     return {
       component: ReportingObligationSummaryTemplateComponent,
-      inputs: {
-        reportingYear: store.select(aerCommonQuery.selectReportingYear)(),
-        reportingRequired: store.select(aerCommonQuery.selectReportingRequired)(),
-        reportingObligationDetails,
-        files: store.select(aerCommonQuery.selectAttachedFiles(reportingObligationDetails?.supportingDocuments))(),
-        map: reportingObligationMap,
-      },
+      inputs: computed(() => {
+        const reportingObligationDetails = store.select(aerCommonQuery.selectReportingObligationDetails)();
+
+        return {
+          reportingYear: store.select(aerCommonQuery.selectReportingYear)(),
+          reportingRequired: store.select(aerCommonQuery.selectReportingRequired)(),
+          reportingObligationDetails,
+          files: store.select(aerCommonQuery.selectAttachedFiles(reportingObligationDetails?.supportingDocuments))(),
+          map: reportingObligationMap,
+        };
+      }),
     };
   },
 };

@@ -49,14 +49,14 @@ public class EmissionsUpdatedResponseHandler {
 
             List<IntegrationEventErrorDetails> errorsForMail = event.getErrors().stream().map(
                 integrationEventError -> IntegrationEventErrorDetails.builder().error(integrationEventError).build())
-                .collect(Collectors.toList());
+                .toList();
 
             if (!ObjectUtils.isEmpty(errorsForMail)) {
 
                 List<IntegrationEventErrorDetails> actionErrors = errorsForMail
                     .stream()
                     .filter(entry -> entry.getError().equals(IntegrationEventError.ERROR_0803))
-                    .collect(Collectors.toList());
+                    .toList();
 
                 if (!actionErrors.isEmpty()) {
                     notifyRegulator(event, correlationId,
@@ -67,7 +67,7 @@ public class EmissionsUpdatedResponseHandler {
                 List<IntegrationEventErrorDetails> infoErrors = errorsForMail
                     .stream()
                     .filter(entry -> !entry.getError().equals(IntegrationEventError.ERROR_0803))
-                    .collect(Collectors.toList());
+                    .toList();
 
                 if (!infoErrors.isEmpty()) {
                     notifyRegulator(event, correlationId, infoErrors,

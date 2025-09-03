@@ -7,6 +7,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
 import uk.gov.mrtm.api.reporting.domain.common.UncorrectedItem;
+import uk.gov.mrtm.api.reporting.domain.verification.AerUncorrectedNonConformities;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestMetadataType;
@@ -33,6 +34,7 @@ import java.time.Year;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -77,9 +79,9 @@ class VirCreationServiceTest {
                 .payloadType(MrtmRequestPayloadType.AER_REQUEST_PAYLOAD)
                 .verificationReport(AerVerificationReport.builder()
                         .verificationData(AerVerificationData.builder()
-//                                .uncorrectedNonConformities(AerUncorrectedNonConformities.builder()
-//                                        .uncorrectedNonConformities(Set.of(uncorrectedItem))
-//                                        .build())
+                                .uncorrectedNonConformities(AerUncorrectedNonConformities.builder()
+                                        .uncorrectedNonConformities(Set.of(uncorrectedItem))
+                                        .build())
                                 .build())
                         .build())
                 .build();
@@ -96,7 +98,7 @@ class VirCreationServiceTest {
                 .build();
 
         final VirVerificationData virVerificationData = VirVerificationData.builder()
-//                .uncorrectedNonConformities(uncorrectedItems)
+                .uncorrectedNonConformities(uncorrectedItems)
                 .build();
 
         final RequestCreateValidationResult validationResult =
@@ -119,9 +121,8 @@ class VirCreationServiceTest {
                 .build();
 
         when(requestService.findRequestById(requestId)).thenReturn(aerRequest);
-        // TODO Un-comment when The verification subtasks are implemented
         when(virCreationValidator.validate(virVerificationData, accountId, year)).thenReturn(validationResult);
-        when(virDueDateService.generateDueDate(Year.of(2023))).thenReturn(dueDate);
+        when(virDueDateService.generateDueDate(year)).thenReturn(dueDate);
 
         // Invoke
         virCreationService.createRequestVir(requestId, accountId);
@@ -129,7 +130,7 @@ class VirCreationServiceTest {
         // Verify
         verify(requestService, times(1)).findRequestById(requestId);
         verify(virCreationValidator, times(1)).validate(virVerificationData, accountId, year);
-        verify(virDueDateService, times(1)).generateDueDate(Year.of(2023));
+        verify(virDueDateService, times(1)).generateDueDate(year);
         verify(startProcessRequestService, times(1)).startProcess(params);
     }
 
@@ -149,10 +150,9 @@ class VirCreationServiceTest {
                 .payloadType(MrtmRequestPayloadType.AER_REQUEST_PAYLOAD)
                 .verificationReport(AerVerificationReport.builder()
                         .verificationData(AerVerificationData.builder()
-                                // TODO Un-comment when The verification subtasks are implemented
-//                                .uncorrectedNonConformities(AerUncorrectedNonConformities.builder()
-//                                        .uncorrectedNonConformities(Set.of(uncorrectedItem))
-//                                        .build())
+                                .uncorrectedNonConformities(AerUncorrectedNonConformities.builder()
+                                        .uncorrectedNonConformities(Set.of(uncorrectedItem))
+                                        .build())
                                 .build())
                         .build())
                 .build();
@@ -169,7 +169,7 @@ class VirCreationServiceTest {
 
 
         final VirVerificationData virVerificationData = VirVerificationData.builder()
-//                .uncorrectedNonConformities(uncorrectedItems)
+                .uncorrectedNonConformities(uncorrectedItems)
                 .build();
 
         final RequestCreateValidationResult validationResult =

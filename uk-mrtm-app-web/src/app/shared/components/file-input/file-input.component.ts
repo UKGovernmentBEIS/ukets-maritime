@@ -36,6 +36,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
   private readonly rootNgForm = inject(NgForm, { optional: true })!;
 
   currentLabelClass = 'govuk-label';
+  headerSize: 'm' | 's' = 's';
 
   @Input() listTitle: string;
   @Input() label: string;
@@ -43,15 +44,19 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
     switch (size) {
       case 'small':
         this.currentLabelClass = 'govuk-label govuk-label--s';
+        this.headerSize = 's';
         break;
       case 'medium':
         this.currentLabelClass = 'govuk-label govuk-label--m';
+        this.headerSize = 'm';
         break;
       case 'large':
         this.currentLabelClass = 'govuk-label govuk-label--l';
+        this.headerSize = 'm';
         break;
       default:
         this.currentLabelClass = 'govuk-label';
+        this.headerSize = 's';
         break;
     }
   }

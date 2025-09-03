@@ -1,0 +1,39 @@
+<mrtm-wizard-step
+  [caption]="wizardMap.caption"
+  [heading]="wizardMap.title"
+  [formGroup]="form"
+  (formSubmit)="onSubmit()"
+  [showReturnLink]="true">
+  <div class="govuk-!-width-two-thirds">
+    <h3 class="govuk-heading-m">Registered owner details</h3>
+    <div govuk-text-input formControlName="name" label="Registered owner name"></div>
+    <div
+      govuk-text-input
+      formControlName="imoNumber"
+      widthClass="govuk-!-width-one-third"
+      label="IMO unique company and registered owner identification number"></div>
+    <div govuk-text-input formControlName="contactName" label="Contact name"></div>
+    <div govuk-text-input formControlName="email" label="Contact email"></div>
+    <div
+      label="Date of written agreement"
+      hint="For example, 21/7/2024"
+      widthClass="govuk-!-width-one-quarter"
+      mrtm-date-picker
+      formControlName="effectiveDate"></div>
+  </div>
+  <h3 class="govuk-heading-m">Select ships to associate</h3>
+  <p class="govuk-body">The displayed ships can be selected for this selected owner.</p>
+  <mrtm-multi-select-table
+    [columns]="columns"
+    [data]="page()"
+    (selectionChanged)="onShipsSelectionChanged($event)"
+    emptyTableText="No items to display"
+    description="Select ships to associate">
+    <ng-template let-column="column" let-row="row">
+      {{ row[column.field] }}
+    </ng-template>
+  </mrtm-multi-select-table>
+  @if (totalItems() > pageSize) {
+    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize" (currentPageChange)="onPageChange($event)" />
+  }
+</mrtm-wizard-step>

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
 
 import { NonComplianceNoticeOfIntentUploadStep } from '@requests/common/non-compliance';
 import { nonComplianceNoticeOfIntentCommonQuery } from '@requests/common/non-compliance/non-compliance-notice-of-intent/+state';
@@ -12,7 +12,7 @@ export const canActivateNonComplianceNoticeOfIntentUploadSummary: CanActivateFn 
   const nonComplianceNoticeOfIntentUpload = store.select(
     nonComplianceNoticeOfIntentCommonQuery.selectNonComplianceNoticeOfIntentUpload,
   )();
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const isEditable = store.select(nonComplianceNoticeOfIntentCommonQuery.selectIsFormEditable)();
 
   return (
     !isEditable ||
@@ -27,7 +27,7 @@ export const canActivateNonComplianceNoticeOfIntentUploadStep: CanActivateFn = (
   const nonComplianceNoticeOfIntentUpload = store.select(
     nonComplianceNoticeOfIntentCommonQuery.selectNonComplianceNoticeOfIntentUpload,
   )();
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const isEditable = store.select(nonComplianceNoticeOfIntentCommonQuery.selectIsFormEditable)();
 
   return (
     ((!isWizardCompleted(nonComplianceNoticeOfIntentUpload) || isChange) && isEditable) ||
