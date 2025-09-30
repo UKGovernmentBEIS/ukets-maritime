@@ -14,12 +14,7 @@ import {
 
 import { SummaryDownloadFilesComponent } from '@shared/components';
 import { HtmlDiffDirective } from '@shared/directives';
-import {
-  BooleanToTextPipe,
-  CountryPipe,
-  LegalStatusTypeDisplayTextPipe,
-  OrganisationDetailsAddressTitlePipe,
-} from '@shared/pipes';
+import { CountryPipe, LegalStatusTypeDisplayTextPipe, OrganisationDetailsAddressTitlePipe } from '@shared/pipes';
 import { AttachedFile } from '@shared/types';
 import { mergeDiffArray } from '@shared/utils';
 
@@ -27,7 +22,6 @@ import { mergeDiffArray } from '@shared/utils';
   selector: 'mrtm-operator-details-summary-template',
   standalone: true,
   imports: [
-    BooleanToTextPipe,
     SummaryListComponent,
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
@@ -49,8 +43,6 @@ export class OperatorDetailsSummaryTemplateComponent {
   @Input() originalOperatorDetails: EmpOperatorDetails | AerOperatorDetails;
   @Input({ required: true }) files: AttachedFile[];
   @Input() originalFiles: AttachedFile[];
-  @Input() declarationFiles: AttachedFile[];
-  @Input() originalDeclarationFiles: AttachedFile[];
   @Input() wizardStep: { [s: string]: string };
   @Input() isEditable = false;
   @Input() queryParams: Params = {};

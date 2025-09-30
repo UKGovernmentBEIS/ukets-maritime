@@ -12,5 +12,5 @@ import { EmpRegisteredOwner } from './empRegisteredOwner';
 export interface EmpMandate {
   exist: boolean;
   registeredOwners?: Array<EmpRegisteredOwner>;
-  responsibilityDeclaration: boolean;
+  responsibilityDeclaration?: boolean;
 }

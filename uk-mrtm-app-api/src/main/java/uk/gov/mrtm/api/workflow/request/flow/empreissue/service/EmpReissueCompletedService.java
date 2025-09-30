@@ -16,10 +16,9 @@ import java.time.LocalDate;
 public class EmpReissueCompletedService {
 
 	private final RequestService requestService;
-	private final WorkflowService workflowService;
-	
+
 	@Transactional
-	public void reissueCompleted(String requestId, Long accountId, String reissueRequestId, boolean succeeded) {
+	public void reissueCompleted(String requestId, Long accountId, boolean succeeded) {
 		final Request request = requestService.findRequestById(requestId);
 		
 		// update report metadata
@@ -29,10 +28,6 @@ public class EmpReissueCompletedService {
 		
 		if(succeeded) {
 			report.setIssueDate(LocalDate.now());
-		} else {
-			//delete request
-			final Request reissueRequest = requestService.findRequestById(reissueRequestId);
-			workflowService.deleteProcessInstance(reissueRequest.getProcessInstanceId(), "Reissue failed");
 		}
 	}
 }

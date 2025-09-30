@@ -60,7 +60,6 @@ import {
   ManagementProceduresVariationRegulatorFlowManager,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
-  DeclarationDocumentsPayloadMutator,
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsStepPayloadMutator,
   OperatorDetailsSummarySideEffect,
@@ -109,7 +108,6 @@ export function provideEmpVariationRegulatorPayloadMutators(): EnvironmentProvid
     // Operator details
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsStepPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: UndertakenActivitiesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DeclarationDocumentsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: LegalStatusOfOrganisationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OrganisationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsVariationRegulatorDecisionPayloadMutator },

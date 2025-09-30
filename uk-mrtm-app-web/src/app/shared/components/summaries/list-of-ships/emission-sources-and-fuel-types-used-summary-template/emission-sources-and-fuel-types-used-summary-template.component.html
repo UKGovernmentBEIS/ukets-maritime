@@ -1,5 +1,5 @@
 @if (data(); as data) {
-  <div govuk-summary-card title="Emission source {{ index() + 1 }}">
+  <div govuk-summary-card title="Emission source {{ index() + 1 }}" [class.needs-review]="data.needsReview">
     @if (isEditable()) {
       <ng-template #actions>
         <a [queryParams]="queryParams()" [routerLink]="[changeLink(), data.uniqueIdentifier]" govukLink="summaryAction">

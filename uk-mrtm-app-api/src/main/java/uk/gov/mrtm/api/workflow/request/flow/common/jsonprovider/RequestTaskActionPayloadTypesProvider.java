@@ -30,6 +30,7 @@ import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSav
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSaveReviewDeterminationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSaveReviewGroupDecisionRegulatorLedRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSaveReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceAmendDetailsRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceCloseApplicationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceFinalDeterminationSaveApplicationRequestTaskActionPayload;
@@ -91,6 +92,7 @@ import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequest
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_SAVE_REVIEW_DETERMINATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_REGULATOR_LED_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_CIVIL_PENALTY_SAVE_APPLICATION_PAYLOAD;
@@ -194,7 +196,8 @@ public class RequestTaskActionPayloadTypesProvider implements JsonSubTypesProvid
                 new NamedType(PeerReviewRequestTaskActionPayload.class, NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW_PAYLOAD),
                 new NamedType(PeerReviewDecisionRequestTaskActionPayload.class, NON_COMPLIANCE_CIVIL_PENALTY_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD),
                 new NamedType(NonComplianceFinalDeterminationSaveApplicationRequestTaskActionPayload.class, NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION_PAYLOAD),
-                new NamedType(NonComplianceCloseApplicationRequestTaskActionPayload.class, NON_COMPLIANCE_CLOSE_APPLICATION_PAYLOAD)
+                new NamedType(NonComplianceCloseApplicationRequestTaskActionPayload.class, NON_COMPLIANCE_CLOSE_APPLICATION_PAYLOAD),
+                new NamedType(NonComplianceAmendDetailsRequestTaskActionPayload.class, NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD)
         );
     }
 

@@ -14,6 +14,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceN
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNoticeOfIntentRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -64,6 +65,9 @@ class NonComplianceNoticeOfIntentNotifyOperatorActionHandlerTest {
     @Mock
     private RequestAccountContactQueryService requestAccountContactQueryService;
 
+    @Mock
+    private NonComplianceApplyService nonComplianceApplyService;
+
     @Test
     void process() {
 
@@ -109,6 +113,7 @@ class NonComplianceNoticeOfIntentNotifyOperatorActionHandlerTest {
 
         verify(validator).validateNoticeOfIntent(taskPayload);
         verify(validator).validateUsers(requestTask, operators, Set.of(), appUser);
+        verify(nonComplianceApplyService).submitDetails(request, taskPayload);
         verify(requestService).addActionToRequest(
             request,
             actionPayload,
@@ -123,7 +128,7 @@ class NonComplianceNoticeOfIntentNotifyOperatorActionHandlerTest {
         );
 
         verifyNoMoreInteractions(requestTaskService, validator, requestService, requestActionUserInfoResolver,
-            workflowService, requestAccountContactQueryService, officialNoticeService);
+            workflowService, requestAccountContactQueryService, officialNoticeService, nonComplianceApplyService);
     }
 
     @Test

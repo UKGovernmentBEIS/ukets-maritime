@@ -21,6 +21,7 @@ import { followUpResponseSubmittedTaskContent } from '@requests/timeline/follow-
 import { followUpReturnedForAmendsTaskContent } from '@requests/timeline/follow-up-returned-for-amends/follow-up-returned-for-amends-task-content';
 import { nonComplianceCivilPenaltySubmittedTaskContent } from '@requests/timeline/non-compliance-civil-penalty-submitted/non-compliance-civil-penalty-submitted-task-content';
 import { nonComplianceClosedTaskContent } from '@requests/timeline/non-compliance-closed/non-compliance-closed-task-content';
+import { nonComplianceDetailsAmendedTaskContent } from '@requests/timeline/non-compliance-details-amended/non-compliance-details-amended-task-content';
 import { nonComplianceFinalDeterminationSubmittedTaskContent } from '@requests/timeline/non-compliance-final-determination-submitted/non-compliance-final-determination-submitted-task-content';
 import { nonComplianceInitialPenaltyNoticeSubmittedTaskContent } from '@requests/timeline/non-compliance-initial-penalty-notice-submitted/non-compliance-initial-penalty-notice-submitted-task-content';
 import { nonComplianceNoticeOfIntentSubmittedTaskContent } from '@requests/timeline/non-compliance-notice-of-intent-submitted/non-compliance-notice-of-intent-submitted-task-content';
@@ -110,4 +111,5 @@ export const timelineContent: RequestActionPageContentFactoryMap = {
   NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED: nonComplianceFinalDeterminationSubmittedTaskContent,
   NON_COMPLIANCE_APPLICATION_CLOSED: nonComplianceClosedTaskContent,
   AER_APPLICATION_RETURNED_FOR_AMENDS: aerReturnedForAmendsTaskContent,
+  NON_COMPLIANCE_DETAILS_AMENDED: nonComplianceDetailsAmendedTaskContent,
 };

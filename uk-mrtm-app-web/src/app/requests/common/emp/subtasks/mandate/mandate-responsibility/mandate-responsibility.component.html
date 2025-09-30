@@ -7,7 +7,7 @@
   [hideSubmit]="showDeleteQuestion()"
   [showReturnLink]="true">
   @if (showDeleteQuestion()) {
-    <govuk-warning-text>
+    <govuk-warning-text assistiveText="">
       If you have not been delegated responsibility for compliance with the UK ETS by a registered owner, all the
       information you have added will be deleted. This action cannot be undone.
     </govuk-warning-text>
@@ -24,9 +24,9 @@
       @if (hasAlreadyRegisteredOwners()) {
         <govuk-radio-option [value]="false" label="No">
           <ng-container govukConditionalContent>
-            <govuk-warning-text>
+            <govuk-warning-text assistiveText="">
               If you have not been delegated responsibility for compliance with the UK ETS by a registered owner, all
-              the information you have added will be deleted."
+              the information you have added will be deleted.
             </govuk-warning-text>
           </ng-container>
         </govuk-radio-option>

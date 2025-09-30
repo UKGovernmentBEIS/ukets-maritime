@@ -24,7 +24,7 @@ export interface RequestTaskCommonSubtaskStepsQuery {
 
   selectShips: StateSelector<
     RequestTaskState,
-    Array<(EmpShipEmissions | AerShipEmissions) & { status: TaskItemStatus }>
+    Array<EmpShipEmissions & { status: TaskItemStatus }> | Array<AerShipEmissions & { status: TaskItemStatus }>
   >;
   selectShip: (shipId: string) => StateSelector<RequestTaskState, EmpShipEmissions | AerShipEmissions>;
   selectShipName: (shipId: string) => StateSelector<RequestTaskState, string>;

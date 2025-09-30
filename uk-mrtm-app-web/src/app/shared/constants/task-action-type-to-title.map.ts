@@ -205,4 +205,6 @@ export const taskActionTypeToTitleMap: Record<
   NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED: 'Civil penalty notice sent to operator',
   NON_COMPLIANCE_FINAL_DETERMINATION: 'Provide non-compliance conclusion',
   NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED: 'Conclusion provided',
+  NON_COMPLIANCE_APPLICATION_CLOSED: 'Non-compliance closed',
+  NON_COMPLIANCE_DETAILS_AMENDED: 'Non-compliance details updated',
 };

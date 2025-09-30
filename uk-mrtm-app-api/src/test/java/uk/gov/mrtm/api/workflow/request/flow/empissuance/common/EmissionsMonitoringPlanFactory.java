@@ -40,7 +40,6 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.managementprocedures.EmpMa
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.managementprocedures.EmpMonitoringReportingRole;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpMandate;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.monitoringreenhousegas.EmpMonitoringGreenhouseGas;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.DeclarationDocuments;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.LimitedCompanyOrganisation;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationLegalStatusType;
@@ -219,10 +218,6 @@ public class EmissionsMonitoringPlanFactory {
         return EmpOperatorDetails.builder()
             .operatorName("testOperatorName")
             .imoNumber(imoNumber)
-            .declarationDocuments(DeclarationDocuments.builder()
-                .exist(true)
-                .documents(Set.of(documentId1))
-                .build())
             .contactAddress(AddressStateDTO.builder()
                 .line1("line1")
                 .city("city")

@@ -2,6 +2,7 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
+import { aerCommonSubtaskStepsProvider } from '@requests/common/aer/+state';
 import { AerCommonApiService, AerCommonService } from '@requests/common/aer/services';
 import {
   AerAdditionalDocumentsSummarySideEffect,
@@ -103,7 +104,6 @@ import {
 } from '@requests/common/aer/subtasks/reporting-obligation';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships';
 import { AdditionalDocumentsFlowManager } from '@requests/common/utils/additional-documents';
-import { aerCommonSubtaskStepsProvider } from '@requests/tasks/aer-submit/+state';
 
 export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
   return makeEnvironmentProviders([

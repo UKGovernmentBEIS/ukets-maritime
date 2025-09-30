@@ -3,8 +3,8 @@ package uk.gov.mrtm.api.web.orchestrator.workflow.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.web.orchestrator.workflow.dto.EmpBatchReissuesResponseDTO;
+import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestHistoryCategory;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
-import uk.gov.mrtm.api.workflow.request.core.domain.constants.RequestHistoryCategory;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.domain.Scope;
@@ -29,7 +29,7 @@ public class EmpBatchReissueRequestsAndInitiatePermissionOrchestrator {
                 .resourceType(ResourceType.CA)
         		.resourceId(authUser.getCompetentAuthority().name())
                 .requestTypes(Set.of(MrtmRequestType.EMP_BATCH_REISSUE))
-                .historyCategory(RequestHistoryCategory.CA)
+                .historyCategory(MrtmRequestHistoryCategory.CA.name())
                 .paging(pagingRequestInfo)
                 .build());
         final boolean canInitiateBatchReissue = compAuthAuthorizationResourceService.hasUserScopeOnResourceSubType(authUser,

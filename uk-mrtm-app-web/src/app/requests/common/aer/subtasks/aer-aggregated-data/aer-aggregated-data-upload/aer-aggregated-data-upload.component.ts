@@ -13,6 +13,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AerShipAggregatedDataSave } from '@mrtm/api';
 
+import { PageHeadingComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective, TableComponent, WarningTextComponent } from '@netz/govuk-components';
@@ -29,6 +31,7 @@ import { aerAggregatedDataUploadFormProvider } from '@requests/common/aer/subtas
 import { AerAggregatedDataXmlService } from '@requests/common/aer/subtasks/aer-aggregated-data/services';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { DataParserWizardStepComponent } from '@shared/components';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
 
 @Component({
@@ -41,6 +44,8 @@ import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
     ButtonDirective,
     TableComponent,
     WarningTextComponent,
+    PageHeadingComponent,
+    PendingButtonDirective,
   ],
   templateUrl: './aer-aggregated-data-upload.component.html',
   providers: [aerAggregatedDataUploadFormProvider],
@@ -52,10 +57,12 @@ export class AerAggregatedDataUploadComponent {
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly service = inject(TaskService<AerSubmitTaskPayload>);
   private readonly xmlService = inject(AerAggregatedDataXmlService);
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
 
   @ViewChild(DataParserWizardStepComponent) wizardStep: DataParserWizardStepComponent;
 
   taskMap = aerAggregatedDataSubtasksListMap;
+  showConfirmation = false;
   columns = aerAggregatedDataUploadTableXmlColumns;
   fileCtrl = this.formGroup.controls.file;
   wizardSteps = AerAggregatedDataWizardStep;
@@ -104,9 +111,15 @@ export class AerAggregatedDataUploadComponent {
     this.wizardStep.isSummaryDisplayedSubject.next(true);
   }
 
+  toggleConfirmation(value: boolean) {
+    this.showConfirmation = value;
+  }
+
   onSubmit() {
     if (!this.xmlErrors()?.length && !this.shipEmissionsList()?.length) {
       this.setNoFileUploadedError();
+    } else if (this.existingAggregatedData()?.length && !this.showConfirmation && !this.xmlErrors()?.length) {
+      this.toggleConfirmation(true);
     } else if (this.shipEmissionsList()?.length) {
       this.service
         .saveSubtask(
@@ -115,7 +128,9 @@ export class AerAggregatedDataUploadComponent {
           this.activatedRoute,
           this.shipEmissionsList(),
         )
-        .subscribe();
+        .subscribe(() => {
+          this.notificationBannerStore.setSuccessMessages(['The aggregated data file has been replaced successfully.']);
+        });
     }
   }
 }

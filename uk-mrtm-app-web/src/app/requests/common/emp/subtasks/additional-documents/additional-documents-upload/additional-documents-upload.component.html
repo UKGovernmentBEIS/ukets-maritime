@@ -6,13 +6,11 @@
   [hideSubmit]="false"
   [showReturnLink]="true"
   [isTwoThirds]="true">
-  <div
-    formControlName="exist"
-    govuk-radio
-    [hint]="
-      'Add any information that you think is relevant for your ship and management procedures, for example task lists or organisation charts.'
-    "
-    [isInline]="true">
+  <p class="govuk-hint">
+    Add any information that you think is relevant. The file name should refer to the content of the document, like
+    Task_list.doc
+  </p>
+  <div formControlName="exist" govuk-radio [isInline]="true">
     <govuk-radio-option [value]="true" [label]="'Yes'" />
     <govuk-radio-option [value]="false" [label]="'No'" />
   </div>

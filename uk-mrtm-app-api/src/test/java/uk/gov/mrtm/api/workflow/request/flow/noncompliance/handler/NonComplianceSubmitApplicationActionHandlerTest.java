@@ -17,6 +17,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceA
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonCompliancePenalties;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceRequestPayload;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.WorkflowService;
@@ -51,6 +52,9 @@ class NonComplianceSubmitApplicationActionHandlerTest {
 
     @Mock
     private RequestService requestService;
+
+    @Mock
+    private NonComplianceApplyService nonComplianceApplyService;
 
     @ParameterizedTest
     @MethodSource("processScenarios")
@@ -97,11 +101,12 @@ class NonComplianceSubmitApplicationActionHandlerTest {
         assertThat(((NonComplianceRequestPayload)request.getPayload()).getIssueNoticeOfIntent()).isEqualTo(noticeOfIntent);
 
         verify(validator).validateApplication(taskPayload);
+        verify(nonComplianceApplyService).submitDetails(request, taskPayload);
         verify(requestService).addActionToRequest(request, expectedRequestActionPayload,
             MrtmRequestActionType.NON_COMPLIANCE_APPLICATION_SUBMITTED, userId);
         verify(workflowService).completeTask(processTaskId, variables);
 
-        verifyNoMoreInteractions(requestTaskService, validator, workflowService, requestService);
+        verifyNoMoreInteractions(requestTaskService, validator, workflowService, requestService, nonComplianceApplyService);
      }
 
     private static Stream<Arguments> processScenarios() {

@@ -2,6 +2,9 @@
   @if (legend()) {
     <legend govukLegend [legendSize]="legendSize()">{{ legend() }}</legend>
   }
+  @if (hint()) {
+    <p class="govuk-hint">{{ hint() }}</p>
+  }
   @if (shouldDisplayErrors) {
     <govuk-error-message [errors]="group.errors" [identifier]="identifier" />
   }

@@ -8,6 +8,7 @@ export function csvFieldMaxLengthValidator<T>(
   field: keyof T,
   csvMap: Record<keyof T, string>,
   length: number,
+  message?: string,
 ): ValidatorFn {
   return (control: FormControl): { [key: string]: any } | null => {
     const data = control.value;
@@ -29,11 +30,12 @@ export function csvFieldMaxLengthValidator<T>(
 
     if (errorMessageRows.length > 0) {
       const columnHeader = csvMap?.[field];
+      const errorMessage = message ? message : `The field '${columnHeader}' is too long (max characters ${length})`;
       return {
         ['csvFieldMaxLength' + field.toString()]: {
           rows: errorMessageRows,
           columns: [columnHeader],
-          message: `The field '${columnHeader}' is too long (max characters ${length})`,
+          message: errorMessage,
         },
       };
     }

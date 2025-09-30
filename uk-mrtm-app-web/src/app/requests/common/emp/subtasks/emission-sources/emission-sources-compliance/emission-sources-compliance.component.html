@@ -14,16 +14,19 @@
     formControlName="exist"
     govuk-radio
     legendSize="medium"
-    legend="Will you be making an emissions reduction claim as a result of the purchase and delivery of sustainable fuel?">
+    legend="Will you be making an emissions reduction claim as a result of the purchase and delivery of eligible fuel?">
     <govuk-radio-option [value]="true" label="Yes" />
     <govuk-radio-option [value]="false" label="No" />
   </div>
 
   @if (existCtrl.value) {
-    <p class="govuk-body">
-      Provide details of procedures, systems and responsibilities used to determine and update emission factors for
-      biofuels and Renewable Fuels of Non-Biological Origin (RFNBOs) and Recycled Carbon Fuels (RCFs).
-    </p>
+    <p class="govuk-body">Provide details of procedures, systems and responsibilities for:</p>
+    <ul class="govuk-list govuk-list--bullet">
+      <li>Monitoring and recording the purchase of eligible fuel</li>
+      <li>Meeting the sustainablity criteria</li>
+      <li>Avoiding double accounting</li>
+    </ul>
+    <br />
     <mrtm-about-procedure-details />
     <mrtm-emp-procedure-form formGroupName="criteria" />
   }

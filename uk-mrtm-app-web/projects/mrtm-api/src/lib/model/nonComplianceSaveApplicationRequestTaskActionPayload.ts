@@ -25,7 +25,7 @@ export interface NonComplianceSaveApplicationRequestTaskActionPayload {
   selectedRequests?: Array<string>;
   nonComplianceDate?: string;
   complianceDate?: string;
-  comments?: string;
+  nonComplianceComments?: string;
   civilPenalty: boolean;
   noCivilPenaltyJustification?: string;
   noticeOfIntent?: boolean;

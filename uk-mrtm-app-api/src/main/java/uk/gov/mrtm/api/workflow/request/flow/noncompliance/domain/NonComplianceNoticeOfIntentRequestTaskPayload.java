@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -8,7 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,14 +20,15 @@ import java.util.UUID;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-public class NonComplianceNoticeOfIntentRequestTaskPayload extends RequestTaskPayload implements NonComplianceRequestTaskClosable {
+public class NonComplianceNoticeOfIntentRequestTaskPayload extends NonComplianceDetailsRequestTaskPayload implements NonComplianceRequestTaskClosable {
 
     @NotNull
     private UUID noticeOfIntent;
 
     @Size(max = 10000)
     private String comments;
-    
+
+    @JsonIgnore
     private NonComplianceCloseJustification closeJustification;
     
     @Builder.Default

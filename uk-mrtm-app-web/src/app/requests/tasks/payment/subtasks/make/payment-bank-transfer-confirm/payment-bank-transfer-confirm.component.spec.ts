@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '@netz/common/forms';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
+import { taskProviders } from '@requests/common/task.providers';
 import { PaymentBankTransferConfirmComponent } from '@requests/tasks/payment/subtasks/make/payment-bank-transfer-confirm';
 
 describe('PaymentBankTransferConfirmComponent', () => {
@@ -17,6 +18,7 @@ describe('PaymentBankTransferConfirmComponent', () => {
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+        ...taskProviders,
       ],
     }).compileComponents();
 

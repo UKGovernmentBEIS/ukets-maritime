@@ -17,6 +17,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceF
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceFinalDeterminationRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceRequestPayload;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.WorkflowService;
@@ -54,6 +55,9 @@ class NonComplianceFinalDeterminationSubmitApplicationActionHandlerTest {
     @Mock
     private RequestService requestService;
 
+    @Mock
+    private NonComplianceApplyService nonComplianceApplyService;
+
     @ParameterizedTest
     @MethodSource("processScenarios")
     void process(boolean reissuePenalty, NonComplianceOutcome outcome) {
@@ -89,6 +93,7 @@ class NonComplianceFinalDeterminationSubmitApplicationActionHandlerTest {
         assertEquals(expectedTaskPayload,  actualTaskPayload);
 
         verify(validator).validateFinalDetermination(taskPayload);
+        verify(nonComplianceApplyService).submitDetails(request, taskPayload);
         verify(requestService).addActionToRequest(
             request,
             NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.builder()
@@ -99,7 +104,7 @@ class NonComplianceFinalDeterminationSubmitApplicationActionHandlerTest {
         verify(workflowService).completeTask(processTaskId,
             Map.of(MrtmBpmnProcessConstants.NON_COMPLIANCE_OUTCOME, outcome));
 
-        verifyNoMoreInteractions(requestTaskService, validator, workflowService, requestService);
+        verifyNoMoreInteractions(requestTaskService, validator, workflowService, requestService, nonComplianceApplyService);
     }
 
     public static Stream<Arguments> processScenarios() {

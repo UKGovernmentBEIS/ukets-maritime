@@ -18,6 +18,18 @@ export const canActivateBankTransfer: CanActivateFn = (activatedRouteSnapshot: A
   return paymentMethod === 'BANK_TRANSFER' || createUrlTreeFromSnapshot(activatedRouteSnapshot, ['../']);
 };
 
+export const pendingPaymentExist: CanActivateFn = (activatedRouteSnapshot: ActivatedRouteSnapshot) => {
+  const store = inject(RequestTaskStore);
+  const externalPaymentId = store.select(paymentQuery.selectExternalPaymentId)();
+
+  return (
+    isNil(externalPaymentId) ||
+    createUrlTreeFromSnapshot(activatedRouteSnapshot, ['../', MakePaymentWizardSteps.CONFIRMATION], {
+      method: 'CREDIT_OR_DEBIT_CARD',
+    })
+  );
+};
+
 export const canActivatePaymentSummary: CanActivateFn = (activatedRouteSnapshot: ActivatedRouteSnapshot) => {
   const store = inject(RequestTaskStore);
   const service = inject(TaskService) as PaymentService;
@@ -37,9 +49,16 @@ export const canActivatePaymentSummary: CanActivateFn = (activatedRouteSnapshot:
       return service.loadExistingCardProcessInfo().pipe(
         map((res) => {
           const status = res?.state?.status;
-          return ['failed', 'cancelled', 'expired'].includes(status)
-            ? createUrlTreeFromSnapshot(activatedRouteSnapshot, [`../${MakePaymentWizardSteps.NOT_SUCCESS}`])
-            : true;
+          const nextUrl = res?.nextUrl;
+
+          if (['failed', 'cancelled', 'expired'].includes(status)) {
+            return createUrlTreeFromSnapshot(activatedRouteSnapshot, [`../${MakePaymentWizardSteps.NOT_SUCCESS}`]);
+          } else if (['started', 'submitted'].includes(status) && !isNil(nextUrl)) {
+            window.location.assign(nextUrl);
+            return false;
+          } else {
+            return true;
+          }
         }),
         catchError((err) => {
           if (err.code === 'PAYMENT1003') {

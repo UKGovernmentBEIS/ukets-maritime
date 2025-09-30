@@ -3,9 +3,9 @@
 
   @if (totalItems() > 0) {
     @if (totalEmissionsSummary(); as totalEmissionsSummary) {
-      <dl govuk-summary-list [hasBorders]="true">
+      <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="!warningMessages()?.length">
         <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Total emissions in ports (tCO2e)</dt>
+          <dt govukSummaryListRowKey>Total emissions while in port (tCO2e)</dt>
           <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
         </div>
         <div govukSummaryListRow>
@@ -15,23 +15,21 @@
       </dl>
     }
 
+    @for (warningMessage of warningMessages(); track i; let i = $index) {
+      <govuk-warning-text
+        [assistiveText]="warningMessage"
+        [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
+    }
     @if (editable()) {
-      <button
-        type="button"
-        govukSecondaryButton
-        netzPendingButton
-        (click)="onDelete(rows)"
-        [disabled]="rows.every(checkIsSelected)">
-        Delete
-      </button>
+      <button type="button" govukSecondaryButton netzPendingButton (click)="onDelete(rows)">Delete</button>
     }
   }
   @if (editable()) {
     <mrtm-multi-select-table
-      [columns]="columns()"
+      [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
-      emptyTableText="No items to display"
+      [emptyTableText]="emptyTableText()"
       description="Port calls of all ships">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
@@ -39,10 +37,10 @@
     </mrtm-multi-select-table>
   } @else {
     <govuk-table
-      [columns]="columns()"
+      [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
-      emptyTableText="No items to display"
+      [emptyTableText]="emptyTableText()"
       description="Port calls of all ships">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
@@ -56,7 +54,7 @@
 
   <ng-template let-column="column" let-row="row" #tableContent>
     @switch (column?.field) {
-      @case ('imoNumber') {
+      @case ('shipName') {
         @if (row?.['shipName'] && row.canViewDetails) {
           <a
             govukLink
@@ -66,27 +64,35 @@
         } @else {
           {{ row?.[column?.field] }}
         }
+        <br />
+        <span class="govuk-hint">{{ row?.imoNumber }}</span>
       }
       @case ('arrivalTime') {
-        {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+        <ng-container [ngTemplateOutlet]="detailsCell" [ngTemplateOutletContext]="{ row, column }" />
       }
       @case ('departureTime') {
-        {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
-      }
-      @case ('country') {
-        {{ row?.[column?.field] | selectOptionToTitle: countrySelectItems }}
-      }
-      @case ('port') {
-        {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
+        <ng-container [ngTemplateOutlet]="detailsCell" [ngTemplateOutletContext]="{ row, column }" />
       }
       @case ('status') {
         <govuk-tag [color]="row[column.field] | statusTagColor">
-          {{ row?.[column?.field] | statusTagText }}
+          {{ row?.[column?.field] | portVoyageAggregatedStatus }}
         </govuk-tag>
       }
       @default {
         {{ row?.[column?.field] | bigNumber: 7 }}
       }
+    }
+  </ng-template>
+
+  <ng-template let-column="column" let-row="row" #detailsCell>
+    @if (row?.[column?.field]) {
+      {{ row?.['port'] | selectOptionToTitle: portSelectItems }},
+      <br />
+      <span class="govuk-hint">
+        {{ row?.['country'] | selectOptionToTitle: countrySelectItems }},
+        <br />
+        {{ row?.[column?.field] | govukDate: 'date' }}
+      </span>
     }
   </ng-template>
 }

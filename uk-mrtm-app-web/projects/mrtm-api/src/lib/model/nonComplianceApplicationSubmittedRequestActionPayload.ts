@@ -25,7 +25,7 @@ export interface NonComplianceApplicationSubmittedRequestActionPayload {
     | 'FAILURE_TO_SURRENDER_ALLOWANCE_20';
   nonComplianceDate?: string;
   complianceDate?: string;
-  comments?: string;
+  nonComplianceComments?: string;
   selectedRequests?: Array<RequestInfoDTO>;
   civilPenalty: boolean;
   noCivilPenaltyJustification?: string;

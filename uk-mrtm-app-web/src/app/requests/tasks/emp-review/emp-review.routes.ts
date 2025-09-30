@@ -4,6 +4,7 @@ import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
 import { NOTIFY_OPERATOR_SUCCESS_COMPONENT } from '@requests/common/components/notify-operator/notify-operator.providers';
 import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
+import { isPaymentCompleted } from '@requests/common/payment';
 import { EmpReviewNotifyOperatorSuccessComponent } from '@requests/tasks/emp-review/components/emp-review-notify-operator-success';
 import {
   provideEmpReviewPayloadMutators,
@@ -84,7 +85,7 @@ export const EMP_REVIEW_ROUTES: Routes = [
       },
       {
         path: 'notify-operator',
-        canActivate: [canActivateEmpReviewActions],
+        canActivate: [canActivateEmpReviewActions, isPaymentCompleted],
         providers: [{ provide: NOTIFY_OPERATOR_SUCCESS_COMPONENT, useValue: EmpReviewNotifyOperatorSuccessComponent }],
         loadChildren: () => import('@requests/common/components/notify-operator').then((r) => r.NOTIFY_OPERATOR_ROUTES),
       },

@@ -13,6 +13,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceI
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.mapper.NonComplianceMapper;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -47,6 +48,7 @@ public class NonComplianceInitialPenaltyNoticeNotifyOperatorActionHandler
     private final WorkflowService workflowService;
     private final RequestAccountContactQueryService requestAccountContactQueryService;
     private final NonComplianceSendOfficialNoticeService sendOfficialNoticeService;
+    private final NonComplianceApplyService nonComplianceApplyService;
 
     @Override
     public RequestTaskPayload process(final Long requestTaskId,
@@ -61,10 +63,12 @@ public class NonComplianceInitialPenaltyNoticeNotifyOperatorActionHandler
         final Set<String> operators = decisionNotification.getOperators();
         final Set<Long> externalContacts = decisionNotification.getExternalContacts();
         final Request request = requestTask.getRequest();
-        
+
         // validate
         validator.validateInitialPenalty(taskPayload);
         validator.validateUsers(requestTask, operators, externalContacts,  appUser);
+
+        nonComplianceApplyService.submitDetails(request, taskPayload);
 
         // add timeline action
         Optional<UserInfoDTO> requestAccountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request);

@@ -12,3 +12,8 @@ export type NonComplianceUnionPayload =
   | NonComplianceInitialPenaltyNoticeRequestTaskPayload
   | NonComplianceCivilPenaltyRequestTaskPayload
   | NonComplianceFinalDeterminationRequestTaskPayload;
+
+export type NonComplianceDetailsBase = Pick<
+  NonComplianceUnionPayload,
+  'reason' | 'nonComplianceDate' | 'complianceDate' | 'nonComplianceComments'
+>;

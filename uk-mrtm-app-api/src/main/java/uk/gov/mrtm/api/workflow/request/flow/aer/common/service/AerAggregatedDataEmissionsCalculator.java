@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.common.service;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOriginTypeName;
 import uk.gov.mrtm.api.reporting.domain.Aer;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils.FIFTY_PERCENT;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils.NINETY_FIVE_PERCENT;
+import static uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils.sumAndScale;
 
 @Service
 @RequiredArgsConstructor
@@ -41,219 +43,312 @@ public class AerAggregatedDataEmissionsCalculator {
         }
 
         for (AerShipAggregatedData emissions : aer.getAggregatedData().getEmissions()) {
-
-            Optional<AerShipEmissions> shipEmissionsOptional = aer.getEmissions().getShips()
-                .stream()
-                .filter(aerShipEmissions -> aerShipEmissions.getDetails().getImoNumber().equals(emissions.getImoNumber()))
-                .findFirst();
-
+            Optional<AerShipEmissions> shipEmissionsOptional = aer.getEmissions().getShips().stream()
+                    .filter(aerShipEmission -> aerShipEmission.getDetails().getImoNumber().equals(emissions.getImoNumber()))
+                    .findFirst();
             if (shipEmissionsOptional.isPresent()) {
-                AerShipEmissions shipEmissions = shipEmissionsOptional.get();
+                processShipEmissions(aer, emissions, shipEmissionsOptional.get());
+            }
+        }
+    }
 
-                boolean smallIslandFerryOperatorReduction = shipEmissions.getDerogations() != null
-                    && Boolean.TRUE.equals(shipEmissions.getDerogations().getSmallIslandFerryOperatorReduction());
+    private void processShipEmissions(Aer aer, AerShipAggregatedData emissions, AerShipEmissions shipEmissions) {
+        boolean smallIslandFerryOperatorReduction =
+                shipEmissions.getDerogations() != null &&
+                        Boolean.TRUE.equals(shipEmissions.getDerogations().getSmallIslandFerryOperatorReduction());
 
-                AerAggregatedEmissionsMeasurement emissionsWithinUKPorts = getOrCalculateEmissionsWithinUKPorts(
-                    aer.getPortEmissions(), emissions);
+        AerAggregatedEmissionsMeasurement emissionsWithinUKPorts = getOrCalculateEmissionsWithinUKPorts(
+                aer.getPortEmissions(), emissions);
 
-                AerAggregatedEmissionsMeasurement emissionsBetweenUKPorts = getOrCalculateEmissionsBetweenUKPorts(
-                    aer.getVoyageEmissions(), emissions);
+        AerAggregatedEmissionsMeasurement emissionsBetweenUKPorts = getOrCalculateEmissionsBetweenUKPorts(
+                aer.getVoyageEmissions(), emissions);
 
-                AerAggregatedEmissionsMeasurement emissionsBetweenUKAndEEAVoyages = getOrCalculateEmissionsBetweenUKAndEEAVoyages(
-                    aer.getVoyageEmissions(), emissions);
+        AerAggregatedEmissionsMeasurement emissionsBetweenUKAndEEAVoyages = getOrCalculateEmissionsBetweenUKAndEEAVoyages(
+                aer.getVoyageEmissions(), emissions);
 
-                AerAggregatedEmissionsMeasurement smallIslandSurrenderReduction = getOrCalculateSmallIslandSurrenderReduction(
-                    smallIslandFerryOperatorReduction, aer.getVoyageEmissions(), aer.getPortEmissions(), emissions);
+        AerAggregatedEmissionsMeasurement smallIslandSurrenderReduction = getOrCalculateSmallIslandSurrenderReduction(
+                smallIslandFerryOperatorReduction, aer.getVoyageEmissions(), aer.getPortEmissions(), emissions);
 
-                if (emissionsWithinUKPorts != null && emissionsBetweenUKPorts != null && emissionsBetweenUKAndEEAVoyages != null) {
-                    if (emissions.isFromFetch()) {
-                        setFuelConsumptions(aer, emissions, shipEmissions);
-                    }
-
-                    BigDecimal totalEmissionsWithinUKPorts = calculateTotal(emissionsWithinUKPorts, 7);
-                    emissionsWithinUKPorts.setTotal(totalEmissionsWithinUKPorts);
-
-                    BigDecimal totalEmissionsBetweenUKPorts = calculateTotal(emissionsBetweenUKPorts, 7);
-                    emissionsBetweenUKPorts.setTotal(totalEmissionsBetweenUKPorts);
-
-                    BigDecimal totalEmissionsBetweenUKAndEEAVoyages = calculateTotal(emissionsBetweenUKAndEEAVoyages, 7);
-                    emissionsBetweenUKAndEEAVoyages.setTotal(totalEmissionsBetweenUKAndEEAVoyages);
-
-                    BigDecimal totalAggregatedEmissionsCo2 =
-                        emissionsWithinUKPorts.getCo2()
-                            .add(emissionsBetweenUKPorts.getCo2())
-                            .add(emissionsBetweenUKAndEEAVoyages.getCo2()).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal totalAggregatedEmissionsCo2Captured =
-                        emissionsWithinUKPorts.getCo2Captured()
-                            .add(emissionsBetweenUKPorts.getCo2Captured())
-                            .add(emissionsBetweenUKAndEEAVoyages.getCo2Captured()).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal totalAggregatedEmissionsCh4 =
-                        emissionsWithinUKPorts.getCh4()
-                            .add(emissionsBetweenUKPorts.getCh4())
-                            .add(emissionsBetweenUKAndEEAVoyages.getCh4()).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal totalAggregatedEmissionsN2o =
-                        emissionsWithinUKPorts.getN2o()
-                            .add(emissionsBetweenUKPorts.getN2o())
-                            .add(emissionsBetweenUKAndEEAVoyages.getN2o()).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal totalAggregatedEmissionsTotal =
-                        totalEmissionsWithinUKPorts
-                            .add(totalEmissionsBetweenUKPorts)
-                            .add(totalEmissionsBetweenUKAndEEAVoyages).setScale(7, RoundingMode.HALF_UP);
-
-                    emissions.setTotalEmissionsFromVoyagesAndPorts(
-                        AerPortEmissionsMeasurement.builder()
-                            .co2(totalAggregatedEmissionsCo2)
-                            .n2o(totalAggregatedEmissionsN2o)
-                            .ch4(totalAggregatedEmissionsCh4)
-                            .total(totalAggregatedEmissionsTotal)
-                            .build()
-                    );
-                    emissions.setTotalAggregatedEmissions(
-                        AerAggregatedEmissionsMeasurement
-                            .builder()
-                            .co2(totalAggregatedEmissionsCo2)
-                            .co2Captured(totalAggregatedEmissionsCo2Captured)
-                            .ch4(totalAggregatedEmissionsCh4)
-                            .n2o(totalAggregatedEmissionsN2o)
-                            .total(totalAggregatedEmissionsTotal)
-                            .build()
-                    );
-
-                    BigDecimal sifCo2 = BigDecimal.ZERO;
-                    BigDecimal sifCo2Captured = BigDecimal.ZERO;
-                    BigDecimal sifCh4 = BigDecimal.ZERO;
-                    BigDecimal sifN2o = BigDecimal.ZERO;
-                    if (smallIslandFerryOperatorReduction && smallIslandSurrenderReduction != null) {
-                        sifCo2 = smallIslandSurrenderReduction.getCo2();
-                        sifCo2Captured = smallIslandSurrenderReduction.getCo2Captured();
-                        sifCh4 = smallIslandSurrenderReduction.getCh4();
-                        sifN2o = smallIslandSurrenderReduction.getN2o();
-
-                        BigDecimal totalSmallIslandSurrenderReduction = calculateTotal(smallIslandSurrenderReduction, 7);
-                        smallIslandSurrenderReduction.setTotal(totalSmallIslandSurrenderReduction);
-                    }
-
-                    BigDecimal lessCapturedCo2Co2 = totalAggregatedEmissionsCo2
-                        .subtract(totalAggregatedEmissionsCo2Captured).setScale(7, RoundingMode.HALF_UP);
-                    BigDecimal lessCapturedCo2Ch4 = totalAggregatedEmissionsCh4;
-                    BigDecimal lessCapturedCo2N2o = totalAggregatedEmissionsN2o;
-                    BigDecimal totalLessCapturedCo2 =
-                        lessCapturedCo2Co2
-                            .add(lessCapturedCo2Ch4)
-                            .add(lessCapturedCo2N2o).setScale(7, RoundingMode.HALF_UP);
-
-                    emissions.setLessCapturedCo2(
-                        AerPortEmissionsMeasurement.builder()
-                            .co2(lessCapturedCo2Co2)
-                            .n2o(lessCapturedCo2N2o)
-                            .ch4(lessCapturedCo2Ch4)
-                            .total(totalLessCapturedCo2)
-                            .build()
-                    );
-
-                    BigDecimal halfEmissionCo2 = emissionsBetweenUKAndEEAVoyages.getCo2().multiply(FIFTY_PERCENT);
-                    BigDecimal halfCapturedCo2 = emissionsBetweenUKAndEEAVoyages.getCo2Captured().multiply(FIFTY_PERCENT);
-                    BigDecimal lessVoyagesNotInScopeCo2 = lessCapturedCo2Co2.subtract(halfEmissionCo2).add(halfCapturedCo2).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal halfEmissionN2o = emissionsBetweenUKAndEEAVoyages.getN2o().multiply(FIFTY_PERCENT);
-                    BigDecimal lessVoyagesNotInScopeN2o = lessCapturedCo2N2o.subtract(halfEmissionN2o).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal halfEmissionCh4 = emissionsBetweenUKAndEEAVoyages.getCh4().multiply(FIFTY_PERCENT);
-                    BigDecimal lessVoyagesNotInScopeCh4 = lessCapturedCo2Ch4.subtract(halfEmissionCh4).setScale(7, RoundingMode.HALF_UP);
-
-                    BigDecimal totalLessVoyagesNotInScope =
-                        lessVoyagesNotInScopeCo2
-                            .add(lessVoyagesNotInScopeN2o)
-                            .add(lessVoyagesNotInScopeCh4)
-                            .setScale(7, RoundingMode.HALF_UP);
-
-                    emissions.setLessVoyagesNotInScope(
-                        AerPortEmissionsMeasurement.builder()
-                            .co2(lessVoyagesNotInScopeCo2)
-                            .n2o(lessVoyagesNotInScopeN2o)
-                            .ch4(lessVoyagesNotInScopeCh4)
-                            .total(totalLessVoyagesNotInScope)
-                            .build()
-                    );
-
-                    emissions.setTotalShipEmissions(totalLessVoyagesNotInScope);
-
-                    BigDecimal lessIslandFerryDeductionCo2 = lessVoyagesNotInScopeCo2;
-                    BigDecimal lessIslandFerryDeductionCh4 = lessVoyagesNotInScopeCh4;
-                    BigDecimal lessIslandFerryDeductionN2o = lessVoyagesNotInScopeN2o;
-                    BigDecimal totalLessIslandFerryDeduction = totalLessVoyagesNotInScope;
-
-                    if (smallIslandFerryOperatorReduction) {
-                        lessIslandFerryDeductionCo2 = lessIslandFerryDeductionCo2.subtract(sifCo2).add(sifCo2Captured)
-                            .setScale(7, RoundingMode.HALF_UP);
-                        lessIslandFerryDeductionCh4 = lessIslandFerryDeductionCh4.subtract(sifCh4)
-                            .setScale(7, RoundingMode.HALF_UP);
-                        lessIslandFerryDeductionN2o = lessIslandFerryDeductionN2o.subtract(sifN2o)
-                            .setScale(7, RoundingMode.HALF_UP);
-
-                        totalLessIslandFerryDeduction =
-                            lessIslandFerryDeductionCo2
-                                .add(lessIslandFerryDeductionCh4)
-                                .add(lessIslandFerryDeductionN2o)
-                                .setScale(7, RoundingMode.HALF_UP);
-
-                    } else {
-                        emissions.setSmallIslandSurrenderReduction(null);
-                    }
-
-                    emissions.setLessIslandFerryDeduction(
-                        AerPortEmissionsMeasurement.builder()
-                            .co2(lessIslandFerryDeductionCo2)
-                            .n2o(lessIslandFerryDeductionN2o)
-                            .ch4(lessIslandFerryDeductionCh4)
-                            .total(totalLessIslandFerryDeduction)
-                            .build()
-                    );
-
-                    boolean hasIceClassDerogation = Boolean.TRUE.equals(shipEmissions.getDetails().getHasIceClassDerogation());
-                    BigDecimal less5PercentIceClassDeductionCo2 = lessIslandFerryDeductionCo2;
-                    BigDecimal less5PercentIceClassDeductionCh4 = lessIslandFerryDeductionCh4;
-                    BigDecimal less5PercentIceClassDeductionN2o = lessIslandFerryDeductionN2o;
-
-                    BigDecimal totalLess5PercentIceClassDeduction =
-                        less5PercentIceClassDeductionCo2
-                            .add(less5PercentIceClassDeductionCh4)
-                            .add(less5PercentIceClassDeductionN2o)
-                            .setScale(7, RoundingMode.HALF_UP);
-
-                    if (hasIceClassDerogation) {
-                        less5PercentIceClassDeductionCo2 = less5PercentIceClassDeductionCo2.multiply(NINETY_FIVE_PERCENT)
-                            .setScale(7, RoundingMode.HALF_UP);
-                        less5PercentIceClassDeductionCh4 = less5PercentIceClassDeductionCh4.multiply(NINETY_FIVE_PERCENT)
-                            .setScale(7, RoundingMode.HALF_UP);
-                        less5PercentIceClassDeductionN2o = less5PercentIceClassDeductionN2o.multiply(NINETY_FIVE_PERCENT)
-                            .setScale(7, RoundingMode.HALF_UP);
-
-                        totalLess5PercentIceClassDeduction =
-                            less5PercentIceClassDeductionCo2
-                                .add(less5PercentIceClassDeductionCh4)
-                                .add(less5PercentIceClassDeductionN2o)
-                                .setScale(7, RoundingMode.HALF_UP);
-                    }
-
-                    emissions.setLess5PercentIceClassDeduction(
-                        AerPortEmissionsMeasurement.builder()
-                            .co2(less5PercentIceClassDeductionCo2)
-                            .n2o(less5PercentIceClassDeductionN2o)
-                            .ch4(less5PercentIceClassDeductionCh4)
-                            .total(totalLess5PercentIceClassDeduction)
-                            .build()
-                    );
-
-                    emissions.setSurrenderEmissions(totalLess5PercentIceClassDeduction);
-                }
+        if (emissionsWithinUKPorts != null && emissionsBetweenUKPorts != null && emissionsBetweenUKAndEEAVoyages != null) {
+            if (emissions.isFromFetch()) {
+                setFuelConsumptions(aer, emissions, shipEmissions);
             }
 
+            calculateAndSetTotals(emissions, emissionsWithinUKPorts, emissionsBetweenUKPorts,
+                    emissionsBetweenUKAndEEAVoyages, smallIslandFerryOperatorReduction, smallIslandSurrenderReduction,
+                    shipEmissions);
         }
+    }
+
+    private void calculateAndSetTotals(AerShipAggregatedData emissions,
+                                       AerAggregatedEmissionsMeasurement emissionsWithinUKPorts,
+                                       AerAggregatedEmissionsMeasurement emissionsBetweenUKPorts,
+                                       AerAggregatedEmissionsMeasurement emissionsBetweenUKAndEEAVoyages,
+                                       boolean smallIslandFerryOperatorReduction,
+                                       AerAggregatedEmissionsMeasurement smallIslandSurrenderReduction,
+                                       AerShipEmissions shipEmissions) {
+
+        BigDecimal totalEmissionsWithinUKPorts = calculateTotal(emissionsWithinUKPorts, 7);
+        emissionsWithinUKPorts.setTotal(totalEmissionsWithinUKPorts);
+
+        BigDecimal totalEmissionsBetweenUKPorts = calculateTotal(emissionsBetweenUKPorts, 7);
+        emissionsBetweenUKPorts.setTotal(totalEmissionsBetweenUKPorts);
+
+        BigDecimal totalEmissionsBetweenUKAndEEAVoyages = calculateTotal(emissionsBetweenUKAndEEAVoyages, 7);
+        emissionsBetweenUKAndEEAVoyages.setTotal(totalEmissionsBetweenUKAndEEAVoyages);
+
+        BigDecimal totalAggregatedEmissionsCo2 = sumAndScale(
+                emissionsWithinUKPorts.getCo2(),
+                emissionsBetweenUKPorts.getCo2(),
+                emissionsBetweenUKAndEEAVoyages.getCo2());
+
+        BigDecimal totalAggregatedEmissionsCo2Captured = sumAndScale(
+                emissionsWithinUKPorts.getCo2Captured(),
+                emissionsBetweenUKPorts.getCo2Captured(),
+                emissionsBetweenUKAndEEAVoyages.getCo2Captured());
+
+        BigDecimal totalAggregatedEmissionsCh4 = sumAndScale(
+                emissionsWithinUKPorts.getCh4(),
+                emissionsBetweenUKPorts.getCh4(),
+                emissionsBetweenUKAndEEAVoyages.getCh4());
+
+        BigDecimal totalAggregatedEmissionsN2o = sumAndScale(
+                emissionsWithinUKPorts.getN2o(),
+                emissionsBetweenUKPorts.getN2o(),
+                emissionsBetweenUKAndEEAVoyages.getN2o());
+
+        BigDecimal totalAggregatedEmissionsTotal = sumAndScale(
+                totalEmissionsWithinUKPorts,
+                totalEmissionsBetweenUKPorts,
+                totalEmissionsBetweenUKAndEEAVoyages);
+
+        setTotalEmissions(emissions, totalAggregatedEmissionsCo2, totalAggregatedEmissionsCo2Captured,
+                totalAggregatedEmissionsCh4, totalAggregatedEmissionsN2o, totalAggregatedEmissionsTotal);
+
+        BigDecimal sifCo2 = BigDecimal.ZERO;
+        BigDecimal sifCo2Captured = BigDecimal.ZERO;
+        BigDecimal sifCh4 = BigDecimal.ZERO;
+        BigDecimal sifN2o = BigDecimal.ZERO;
+        if (smallIslandFerryOperatorReduction && smallIslandSurrenderReduction != null) {
+            sifCo2 = smallIslandSurrenderReduction.getCo2();
+            sifCo2Captured = smallIslandSurrenderReduction.getCo2Captured();
+            sifCh4 = smallIslandSurrenderReduction.getCh4();
+            sifN2o = smallIslandSurrenderReduction.getN2o();
+
+            BigDecimal totalSmallIslandSurrenderReduction = calculateTotal(smallIslandSurrenderReduction, 7);
+            smallIslandSurrenderReduction.setTotal(totalSmallIslandSurrenderReduction);
+        }
+
+        calculateDeductions(emissions, emissionsBetweenUKAndEEAVoyages, smallIslandFerryOperatorReduction,
+                Triple.of(sifCo2, sifCh4, sifN2o), sifCo2Captured,
+                Triple.of(totalAggregatedEmissionsCo2, totalAggregatedEmissionsCh4, totalAggregatedEmissionsN2o),
+                totalAggregatedEmissionsCo2Captured, shipEmissions);
+    }
+
+    private void setTotalEmissions(AerShipAggregatedData emissions,
+                                   BigDecimal totalAggregatedEmissionsCo2, BigDecimal totalAggregatedEmissionsCo2Captured,
+                                   BigDecimal totalAggregatedEmissionsCh4, BigDecimal totalAggregatedEmissionsN2o,
+                                   BigDecimal totalAggregatedEmissionsTotal) {
+
+        emissions.setTotalEmissionsFromVoyagesAndPorts(
+                AerPortEmissionsMeasurement.builder()
+                        .co2(totalAggregatedEmissionsCo2)
+                        .n2o(totalAggregatedEmissionsN2o)
+                        .ch4(totalAggregatedEmissionsCh4)
+                        .total(totalAggregatedEmissionsTotal)
+                        .build()
+        );
+        emissions.setTotalAggregatedEmissions(
+                AerAggregatedEmissionsMeasurement.builder()
+                        .co2(totalAggregatedEmissionsCo2)
+                        .co2Captured(totalAggregatedEmissionsCo2Captured)
+                        .ch4(totalAggregatedEmissionsCh4)
+                        .n2o(totalAggregatedEmissionsN2o)
+                        .total(totalAggregatedEmissionsTotal)
+                        .build()
+        );
+    }
+
+    private void calculateDeductions(
+            AerShipAggregatedData emissions,
+            AerAggregatedEmissionsMeasurement emissionsBetweenUKAndEEAVoyages,
+            boolean smallIslandFerryOperatorReduction,
+            Triple<BigDecimal, BigDecimal, BigDecimal> sifValues,
+            BigDecimal sifCo2Captured,
+            Triple<BigDecimal, BigDecimal, BigDecimal> totalAggregatedEmissionsValues,
+            BigDecimal totalAggregatedEmissionsCo2Captured,
+            AerShipEmissions shipEmissions) {
+
+        BigDecimal sifCo2 = sifValues.getLeft();
+        BigDecimal sifCh4 = sifValues.getMiddle();
+        BigDecimal sifN2o = sifValues.getRight();
+
+        BigDecimal totalAggregatedEmissionsCo2 = totalAggregatedEmissionsValues.getLeft();
+        BigDecimal totalAggregatedEmissionsCh4 = totalAggregatedEmissionsValues.getMiddle();
+        BigDecimal totalAggregatedEmissionsN2o = totalAggregatedEmissionsValues.getRight();
+
+        AerPortEmissionsMeasurement lessCapturedCo2EmissionMeasurement = calculateAndSetLessCapturedCo2(emissions, totalAggregatedEmissionsCo2,
+                totalAggregatedEmissionsCo2Captured, totalAggregatedEmissionsCh4, totalAggregatedEmissionsN2o);
+
+        AerPortEmissionsMeasurement lessVoyagesNotInScopeEmissionMeasurement = calculateAndSetLessVoyagesNotInScope(emissions, lessCapturedCo2EmissionMeasurement,
+                emissionsBetweenUKAndEEAVoyages);
+
+        AerPortEmissionsMeasurement smallIslandFerryDeductionMeasurement = calculateAndSetSmallIslandFerryDeduction(emissions,
+                lessVoyagesNotInScopeEmissionMeasurement, smallIslandFerryOperatorReduction, sifCo2, sifCo2Captured, sifCh4, sifN2o, shipEmissions);
+
+        calculateAndSetLess5PercentIceClassDeduction(emissions, smallIslandFerryDeductionMeasurement, shipEmissions);
+    }
+
+    private AerPortEmissionsMeasurement calculateAndSetLessCapturedCo2(AerShipAggregatedData emissions,
+                                                                       BigDecimal totalAggregatedEmissionsCo2,
+                                                                       BigDecimal totalAggregatedEmissionsCo2Captured,
+                                                                       BigDecimal totalAggregatedEmissionsCh4,
+                                                                       BigDecimal totalAggregatedEmissionsN2o){
+        BigDecimal lessCapturedCo2Co2 = totalAggregatedEmissionsCo2
+                .subtract(totalAggregatedEmissionsCo2Captured)
+                .setScale(7, RoundingMode.HALF_UP);
+        BigDecimal lessCapturedCo2Ch4 = totalAggregatedEmissionsCh4;
+        BigDecimal lessCapturedCo2N2o = totalAggregatedEmissionsN2o;
+        BigDecimal totalLessCapturedCo2 = lessCapturedCo2Co2
+                .add(lessCapturedCo2Ch4)
+                .add(lessCapturedCo2N2o)
+                .setScale(7, RoundingMode.HALF_UP);
+
+        emissions.setLessCapturedCo2(
+                AerPortEmissionsMeasurement.builder()
+                        .co2(lessCapturedCo2Co2)
+                        .n2o(lessCapturedCo2N2o)
+                        .ch4(lessCapturedCo2Ch4)
+                        .total(totalLessCapturedCo2)
+                        .build()
+        );
+        return emissions.getLessCapturedCo2();
+    }
+
+    private AerPortEmissionsMeasurement calculateAndSetLessVoyagesNotInScope(AerShipAggregatedData emissions,
+                                                                             AerPortEmissionsMeasurement lessCapturedCo2EmissionMeasurement,
+                                                                             AerAggregatedEmissionsMeasurement emissionsBetweenUKAndEEAVoyages) {
+        BigDecimal halfEmissionCo2 = emissionsBetweenUKAndEEAVoyages.getCo2().multiply(FIFTY_PERCENT);
+        BigDecimal halfCapturedCo2 = emissionsBetweenUKAndEEAVoyages.getCo2Captured().multiply(FIFTY_PERCENT);
+        BigDecimal lessVoyagesNotInScopeCo2 = lessCapturedCo2EmissionMeasurement.getCo2()
+                .subtract(halfEmissionCo2)
+                .add(halfCapturedCo2)
+                .setScale(7, RoundingMode.HALF_UP);
+
+        BigDecimal halfEmissionN2o = emissionsBetweenUKAndEEAVoyages.getN2o().multiply(FIFTY_PERCENT);
+        BigDecimal lessVoyagesNotInScopeN2o = lessCapturedCo2EmissionMeasurement.getN2o()
+                .subtract(halfEmissionN2o)
+                .setScale(7, RoundingMode.HALF_UP);
+
+        BigDecimal halfEmissionCh4 = emissionsBetweenUKAndEEAVoyages.getCh4().multiply(FIFTY_PERCENT);
+        BigDecimal lessVoyagesNotInScopeCh4 = lessCapturedCo2EmissionMeasurement.getCh4()
+                .subtract(halfEmissionCh4)
+                .setScale(7, RoundingMode.HALF_UP);
+
+        BigDecimal totalLessVoyagesNotInScope = lessVoyagesNotInScopeCo2
+                .add(lessVoyagesNotInScopeN2o)
+                .add(lessVoyagesNotInScopeCh4)
+                .setScale(7, RoundingMode.HALF_UP);
+
+        emissions.setLessVoyagesNotInScope(
+                AerPortEmissionsMeasurement.builder()
+                        .co2(lessVoyagesNotInScopeCo2)
+                        .n2o(lessVoyagesNotInScopeN2o)
+                        .ch4(lessVoyagesNotInScopeCh4)
+                        .total(totalLessVoyagesNotInScope)
+                        .build()
+        );
+
+        emissions.setTotalShipEmissions(totalLessVoyagesNotInScope);
+
+        return emissions.getLessVoyagesNotInScope();
+    }
+
+    private AerPortEmissionsMeasurement calculateAndSetSmallIslandFerryDeduction(AerShipAggregatedData emissions,
+                                                          AerPortEmissionsMeasurement lessVoyagesNotInScopeEmissionMeasurement,
+                                                          boolean smallIslandFerryOperatorReduction,
+                                                          BigDecimal sifCo2,
+                                                          BigDecimal sifCo2Captured,
+                                                          BigDecimal sifCh4,
+                                                          BigDecimal sifN2o,
+                                                          AerShipEmissions shipEmissions) {
+        BigDecimal lessIslandFerryDeductionCo2 = lessVoyagesNotInScopeEmissionMeasurement.getCo2();
+        BigDecimal lessIslandFerryDeductionCh4 = lessVoyagesNotInScopeEmissionMeasurement.getCh4();
+        BigDecimal lessIslandFerryDeductionN2o = lessVoyagesNotInScopeEmissionMeasurement.getN2o();
+        BigDecimal totalLessIslandFerryDeduction = lessVoyagesNotInScopeEmissionMeasurement.getTotal();
+
+        if (smallIslandFerryOperatorReduction) {
+            lessIslandFerryDeductionCo2 = lessIslandFerryDeductionCo2
+                    .subtract(sifCo2)
+                    .add(sifCo2Captured)
+                    .setScale(7, RoundingMode.HALF_UP);
+            lessIslandFerryDeductionCh4 = lessIslandFerryDeductionCh4
+                    .subtract(sifCh4)
+                    .setScale(7, RoundingMode.HALF_UP);
+            lessIslandFerryDeductionN2o = lessIslandFerryDeductionN2o
+                    .subtract(sifN2o)
+                    .setScale(7, RoundingMode.HALF_UP);
+
+            totalLessIslandFerryDeduction = lessIslandFerryDeductionCo2
+                    .add(lessIslandFerryDeductionCh4)
+                    .add(lessIslandFerryDeductionN2o)
+                    .setScale(7, RoundingMode.HALF_UP);
+        } else {
+            emissions.setSmallIslandSurrenderReduction(null);
+        }
+
+        emissions.setLessIslandFerryDeduction(
+                AerPortEmissionsMeasurement.builder()
+                        .co2(lessIslandFerryDeductionCo2)
+                        .n2o(lessIslandFerryDeductionN2o)
+                        .ch4(lessIslandFerryDeductionCh4)
+                        .total(totalLessIslandFerryDeduction)
+                        .build()
+        );
+
+        return emissions.getLessIslandFerryDeduction();
+    }
+
+    private void calculateAndSetLess5PercentIceClassDeduction(AerShipAggregatedData emissions,
+                                                              AerPortEmissionsMeasurement smallIslandFerryDeductionMeasurement,
+                                                              AerShipEmissions shipEmissions) {
+        boolean hasIceClassDerogation = Boolean.TRUE.equals(shipEmissions.getDetails().getHasIceClassDerogation());
+        BigDecimal less5PercentIceClassDeductionCo2 = smallIslandFerryDeductionMeasurement.getCo2();
+        BigDecimal less5PercentIceClassDeductionCh4 = smallIslandFerryDeductionMeasurement.getCh4();
+        BigDecimal less5PercentIceClassDeductionN2o = smallIslandFerryDeductionMeasurement.getN2o();
+
+        BigDecimal totalLess5PercentIceClassDeduction = less5PercentIceClassDeductionCo2
+                .add(less5PercentIceClassDeductionCh4)
+                .add(less5PercentIceClassDeductionN2o)
+                .setScale(7, RoundingMode.HALF_UP);
+
+        if (hasIceClassDerogation) {
+            less5PercentIceClassDeductionCo2 = less5PercentIceClassDeductionCo2
+                    .multiply(NINETY_FIVE_PERCENT)
+                    .setScale(7, RoundingMode.HALF_UP);
+            less5PercentIceClassDeductionCh4 = less5PercentIceClassDeductionCh4
+                    .multiply(NINETY_FIVE_PERCENT)
+                    .setScale(7, RoundingMode.HALF_UP);
+            less5PercentIceClassDeductionN2o = less5PercentIceClassDeductionN2o
+                    .multiply(NINETY_FIVE_PERCENT)
+                    .setScale(7, RoundingMode.HALF_UP);
+
+            totalLess5PercentIceClassDeduction = less5PercentIceClassDeductionCo2
+                    .add(less5PercentIceClassDeductionCh4)
+                    .add(less5PercentIceClassDeductionN2o)
+                    .setScale(7, RoundingMode.HALF_UP);
+        }
+
+        emissions.setLess5PercentIceClassDeduction(
+                AerPortEmissionsMeasurement.builder()
+                        .co2(less5PercentIceClassDeductionCo2)
+                        .n2o(less5PercentIceClassDeductionN2o)
+                        .ch4(less5PercentIceClassDeductionCh4)
+                        .total(totalLess5PercentIceClassDeduction)
+                        .build()
+        );
+
+        emissions.setSurrenderEmissions(totalLess5PercentIceClassDeduction);
     }
 
     private AerAggregatedEmissionsMeasurement getOrCalculateEmissionsWithinUKPorts(
@@ -433,7 +528,6 @@ public class AerAggregatedDataEmissionsCalculator {
             .flatMap(aerPort -> aerPort.getFuelConsumptions().stream())
             .forEach(aerFuelConsumption -> addTotalFuelConsumption(aerFuelConsumption, totalFuelConsumptions));
 
-        // if totalFuelConsumptions is empty then use all fuels from list of ships with total consumption of zero.
         if (totalFuelConsumptions.isEmpty()) {
             emissions.getFuelsAndEmissionsFactors()
                 .forEach(fuelsAndEmissionsFactors ->

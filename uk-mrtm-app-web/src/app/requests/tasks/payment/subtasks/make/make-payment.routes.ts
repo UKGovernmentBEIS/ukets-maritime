@@ -4,6 +4,7 @@ import { MakePaymentWizardSteps } from '@requests/tasks/payment/subtasks/make/ma
 import {
   canActivateBankTransfer,
   canActivatePaymentSummary,
+  pendingPaymentExist,
 } from '@requests/tasks/payment/subtasks/make/make-payment.guards';
 
 export const MAKE_PAYMENT_ROUTES: Routes = [
@@ -15,6 +16,7 @@ export const MAKE_PAYMENT_ROUTES: Routes = [
   {
     path: MakePaymentWizardSteps.PAYMENT_METHOD,
     title: 'Make payment options',
+    canActivate: [pendingPaymentExist],
     data: { breadcrumb: false, backlink: '../../../' },
     loadComponent: () => import('@requests/tasks/payment/subtasks/make').then((c) => c.PaymentMethodComponent),
   },

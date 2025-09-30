@@ -30,7 +30,7 @@
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Comments</dt>
-      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.comments"></dd>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.nonComplianceComments"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="[wizardStep.DETAILS_FORM]" [queryParams]="queryParams()">Change</a>

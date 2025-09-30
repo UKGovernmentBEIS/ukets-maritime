@@ -1,6 +1,5 @@
 package uk.gov.mrtm.api.workflow.request.flow.empreissue.service;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,6 +14,7 @@ import uk.gov.netz.api.workflow.request.core.service.RequestService;
 
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -37,7 +37,6 @@ class EmpReissueCompletedServiceTest {
 	void reissueCompleted_not_suceeded() {
 		String requestId = "1";
 		Long accountId = 2L;
-		String reissueRequestId = "3";
 		boolean succeeded = false;
 		
 		EmpBatchReissueRequestMetadata metadata = EmpBatchReissueRequestMetadata.builder()
@@ -47,19 +46,12 @@ class EmpReissueCompletedServiceTest {
 		
 		Request request = Request.builder().metadata(metadata).build();
 		
-		Request permitReissueRequest = Request.builder().processInstanceId("reissueRequestProc").build();
-		
 		when(requestService.findRequestById(requestId))
 				.thenReturn(request);
 		
-		when(requestService.findRequestById(reissueRequestId))
-			.thenReturn(permitReissueRequest);
-		
-		cut.reissueCompleted(requestId, accountId, reissueRequestId, succeeded);
+		cut.reissueCompleted(requestId, accountId, succeeded);
 		
 		verify(requestService, times(1)).findRequestById(requestId);
-		verify(requestService, times(1)).findRequestById(reissueRequestId);
-		verify(camundaWorkflowService, times(1)).deleteProcessInstance("reissueRequestProc", "Reissue failed");
 		assertThat(metadata.getAccountsReports()).hasSize(1);
 		EmpEmpReissueAccountReport report = metadata.getAccountsReports().get(accountId);
 		assertThat(report.getIssueDate()).isNull();
@@ -70,7 +62,6 @@ class EmpReissueCompletedServiceTest {
 	void reissueCompleted_suceeded() {
 		String requestId = "1";
 		Long accountId = 2L;
-		String reissueRequestId = "3";
 		boolean succeeded = true;
 		
 		EmpBatchReissueRequestMetadata metadata = EmpBatchReissueRequestMetadata.builder()
@@ -82,7 +73,7 @@ class EmpReissueCompletedServiceTest {
 		
 		when(requestService.findRequestById(requestId)).thenReturn(request);
 		
-		cut.reissueCompleted(requestId, accountId, reissueRequestId, succeeded);
+		cut.reissueCompleted(requestId, accountId, succeeded);
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		verifyNoMoreInteractions(requestService);

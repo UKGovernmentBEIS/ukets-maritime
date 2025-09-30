@@ -5,7 +5,6 @@ import { SubTaskListMap } from '@shared/types';
 export const aerVoyagesMap: SubTaskListMap<AerVoyage & { uploadVoyages: string }> = {
   caption: 'Voyages',
   title: 'Voyages and emission details list',
-  description: 'You can manually add or upload the details for voyages and emissions.',
   imoNumber: {
     title: 'Select ship',
     caption: 'New voyage',

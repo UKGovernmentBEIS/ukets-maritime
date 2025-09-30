@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import uk.gov.mrtm.api.workflow.request.core.service.MrtmRequestQueryService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
@@ -53,6 +54,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
@@ -85,6 +87,9 @@ class RequestControllerTest {
 
     @Mock
     private RequestQueryService requestQueryService;
+
+    @Mock
+    private MrtmRequestQueryService mrtmRequestQueryService;
 
     private ObjectMapper mapper;
     
@@ -201,7 +206,8 @@ class RequestControllerTest {
         Long accountId = 1L;
         final String requestId = "1";
         String requestType = "DUMMY_REQUEST_TYPE";
-        
+        AppUser user = AppUser.builder().userId("user").build();
+
         RequestSearchCriteria criteria = RequestSearchCriteria.builder()
         		.resourceId(String.valueOf(accountId))
 				.resourceType(ResourceType.ACCOUNT)
@@ -215,17 +221,17 @@ class RequestControllerTest {
                 .total(10L)
                 .build();
 
-        when(requestQueryService.findRequestDetailsBySearchCriteria(criteria)).thenReturn(results);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(mrtmRequestQueryService.findRequestDetailsBySearchCriteria(criteria, user)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + "/workflows")
                 .content(mapper.writeValueAsString(criteria))
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.total").value(results.getTotal()))
-                .andExpect(jsonPath("$.requestDetails[0].id").value(workflowResult1.getId()))
-        ;
+                .andExpect(jsonPath("$.requestDetails[0].id").value(workflowResult1.getId()));
 
-        verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(criteria);
+        verify(mrtmRequestQueryService, times(1)).findRequestDetailsBySearchCriteria(criteria, user);
     }
 
     @Test
@@ -250,7 +256,7 @@ class RequestControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(requestQueryService, never()).findRequestDetailsBySearchCriteria(any());
+        verify(mrtmRequestQueryService, never()).findRequestDetailsBySearchCriteria(any(), eq(user));
     }
     
     private LocalValidatorFactoryBean mockValidatorFactoryBean() {

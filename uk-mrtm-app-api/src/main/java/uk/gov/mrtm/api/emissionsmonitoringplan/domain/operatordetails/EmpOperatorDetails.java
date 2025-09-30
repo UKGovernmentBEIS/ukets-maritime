@@ -40,10 +40,6 @@ public class EmpOperatorDetails implements EmissionMonitoringPlanSection {
     @Valid
     private OrganisationStructure organisationStructure;
 
-    @NotNull
-    @Valid
-    private DeclarationDocuments declarationDocuments;
-
     @NotBlank
     @Size(max = 10000)
     private String activityDescription;
@@ -53,10 +49,6 @@ public class EmpOperatorDetails implements EmissionMonitoringPlanSection {
         Set<UUID> attachments = new HashSet<>();
         if (organisationStructure != null && !ObjectUtils.isEmpty(organisationStructure.getAttachmentIds())) {
             attachments.addAll(organisationStructure.getAttachmentIds());
-        }
-
-        if (declarationDocuments != null && !ObjectUtils.isEmpty(declarationDocuments.getAttachmentIds())) {
-            attachments.addAll(declarationDocuments.getAttachmentIds());
         }
 
         return Collections.unmodifiableSet(attachments);

@@ -4,6 +4,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AerShipEmissions, EmpShipEmissions } from '@mrtm/api';
 
+import { PageHeadingComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import {
@@ -15,15 +17,19 @@ import {
 } from '@netz/govuk-components';
 
 import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
+import { aerEmissionsMap } from '@requests/common/aer';
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { emissionsSubtaskMap } from '@requests/common/components/emissions';
-import { EMISSIONS_SUB_TASK, UPLOAD_SHIPS_STEP } from '@requests/common/components/emissions/emissions.helpers';
-import { LIST_OF_SHIPS_STEP } from '@requests/common/components/emissions/emissions.helpers';
+import {
+  EMISSIONS_SUB_TASK,
+  LIST_OF_SHIPS_STEP,
+  UPLOAD_SHIPS_STEP,
+} from '@requests/common/components/emissions/emissions.helpers';
 import { ShipTypePipe } from '@requests/common/components/emissions/pipes';
 import { uploadShipsFormProvider } from '@requests/common/components/emissions/upload-ships/upload-ships.form-provider';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships/upload-ships-xml-service.token';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { DataParserWizardStepComponent } from '@shared/components';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { ShipEmissionTableListItem, XmlValidationError } from '@shared/types';
 import { isAer } from '@shared/utils';
 
@@ -38,6 +44,8 @@ import { isAer } from '@shared/utils';
     TableComponent,
     ShipTypePipe,
     WarningTextComponent,
+    PendingButtonDirective,
+    PageHeadingComponent,
   ],
   templateUrl: './upload-ships.component.html',
   providers: [uploadShipsFormProvider],
@@ -50,26 +58,27 @@ export class UploadShipsComponent {
   private readonly service = inject(TaskService);
   private readonly xmlService = inject(UPLOAD_SHIPS_XML_SERVICE);
   private readonly commonSubtaskStepsQuery = inject(REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY);
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
+
   private readonly taskType = this.store.select(requestTaskQuery.selectRequestTaskType);
 
   @ViewChild(DataParserWizardStepComponent) wizardStep: DataParserWizardStepComponent;
 
-  readonly isAer = computed(() => isAer(this.taskType()));
-  readonly taskMap = emissionsSubtaskMap;
-  readonly tableColumns: GovukTableColumn<Omit<ShipEmissionTableListItem, 'status'>>[] = [
+  showConfirmation = false;
+  taskMap = aerEmissionsMap;
+  tableColumns: GovukTableColumn<Omit<ShipEmissionTableListItem, 'status'>>[] = [
     { field: 'imoNumber', header: 'IMO number', widthClass: 'govuk-!-width-one-third' },
     { field: 'name', header: 'Name', widthClass: 'govuk-!-width-one-third' },
     { field: 'type', header: 'Type', widthClass: 'govuk-!-width-one-third' },
   ];
-  readonly fileCtrl = this.formGroup.controls.file;
-  readonly listOfShipsStep = LIST_OF_SHIPS_STEP;
-  readonly reportingYear = computed(() =>
-    this.isAer() ? this.store.select(aerCommonQuery.selectReportingYear)() : null,
-  );
-  readonly existingShips = this.store.select(this.commonSubtaskStepsQuery.selectListOfShips);
-  readonly xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
-  readonly shipEmissionListItems: WritableSignal<Omit<ShipEmissionTableListItem, 'status'>[]> = signal([]);
-  readonly listOfShips: WritableSignal<AerShipEmissions[] | EmpShipEmissions[]> = signal([]);
+  fileCtrl = this.formGroup.controls.file;
+  listOfShipsStep = LIST_OF_SHIPS_STEP;
+  isAer = computed(() => isAer(this.taskType()));
+  reportingYear = computed(() => (this.isAer() ? this.store.select(aerCommonQuery.selectReportingYear)() : null));
+  existingShips = this.store.select(this.commonSubtaskStepsQuery.selectListOfShips);
+  xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
+  shipEmissionListItems: WritableSignal<Omit<ShipEmissionTableListItem, 'status'>[]> = signal([]);
+  listOfShips: WritableSignal<AerShipEmissions[] | EmpShipEmissions[]> = signal([]);
   uploadedFile: File;
 
   async onFileSelect(event: any) {
@@ -112,13 +121,23 @@ export class UploadShipsComponent {
     this.wizardStep.isSummaryDisplayedSubject.next(true);
   }
 
+  toggleConfirmation(value: boolean) {
+    this.showConfirmation = value;
+  }
+
   onSubmit() {
     if (!this.xmlErrors()?.length && !this.listOfShips()?.length) {
       this.setNoFileUploadedError();
+    } else if (this.existingShips()?.length && !this.showConfirmation && !this.xmlErrors()?.length) {
+      this.toggleConfirmation(true);
     } else if (this.listOfShips()?.length) {
       this.service
         .saveSubtask(EMISSIONS_SUB_TASK, UPLOAD_SHIPS_STEP, this.activatedRoute, this.listOfShips())
-        .subscribe();
+        .subscribe(() => {
+          this.notificationBannerStore.setSuccessMessages([
+            'The ships and emission details file has been replaced successfully.',
+          ]);
+        });
     }
   }
 }

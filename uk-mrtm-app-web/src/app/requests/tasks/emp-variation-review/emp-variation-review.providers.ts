@@ -62,7 +62,6 @@ import {
   ManagementProceduresRolesPayloadMutator,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
-  DeclarationDocumentsPayloadMutator,
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsReviewFlowManager,
   OperatorDetailsStepPayloadMutator,
@@ -108,7 +107,6 @@ export function provideEmpVariationReviewPayloadMutators(): EnvironmentProviders
     // Operator details
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsStepPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: UndertakenActivitiesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DeclarationDocumentsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: LegalStatusOfOrganisationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OrganisationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsVariationReviewDecisionPayloadMutator },

@@ -11,7 +11,7 @@ const selectNonComplianceDetailsSummary: StateSelector<RequestActionState, NonCo
     reason: payload?.reason,
     nonComplianceDate: payload?.nonComplianceDate,
     complianceDate: payload?.complianceDate,
-    comments: payload?.comments,
+    nonComplianceComments: payload?.nonComplianceComments,
     civilPenalty: payload?.civilPenalty,
     noCivilPenaltyJustification: payload?.noCivilPenaltyJustification,
     noticeOfIntent: payload?.noticeOfIntent,

@@ -1,28 +1,23 @@
 @if (rows(); as rows) {
   <h3 class="govuk-heading-m">{{ header() }}</h3>
-  @if (editable() && rows.length) {
-    <button
-      type="button"
-      govukSecondaryButton
-      netzPendingButton
-      (click)="onDelete(rows)"
-      [disabled]="rows.every(checkIsSelected)">
-      Delete
-    </button>
+  @if (editable()) {
+    @if (totalItems() > 0) {
+      <button type="button" govukSecondaryButton netzPendingButton (click)="onDelete(rows)">Delete</button>
+    }
 
     <mrtm-multi-select-table
-      [columns]="columns()"
+      [columns]="columns"
       [data]="rows"
-      (sort)="sort.set($event)"
       [description]="header()"
-      emptyTableText="No items to display">
+      emptyTableText="No items to display"
+      (sort)="sort.set($event)">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>
     </mrtm-multi-select-table>
   } @else {
     <govuk-table
-      [columns]="columns()"
+      [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
       emptyTableText="No items to display"
@@ -33,13 +28,13 @@
     </govuk-table>
   }
   @if (totalItems() > pageSize()) {
-    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
+    <govuk-pagination [count]="totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
   }
 }
 
 <ng-template let-column="column" let-row="row" #tableContent>
   @switch (column?.field) {
-    @case ('imoNumber') {
+    @case ('shipName') {
       @if (row?.['shipName'] && row.canViewDetails) {
         <a
           govukLink
@@ -49,20 +44,22 @@
       } @else {
         {{ row?.[column?.field] }}
       }
+      <br />
+      <span class="govuk-hint">{{ row?.imoNumber }}</span>
     }
     @case ('totalShipEmissions') {
       <div class="govuk-!-width-full govuk-!-text-align-right">
-        {{ row?.[column?.field] | bigNumber: 4 }}
+        {{ (row?.[column?.field] | bigNumber: 4) ?? 0 }}
       </div>
     }
     @case ('surrenderEmissions') {
       <div class="govuk-!-width-full govuk-!-text-align-right">
-        {{ row?.[column?.field] | bigNumber: 4 }}
+        {{ (row?.[column?.field] | bigNumber: 4) ?? 0 }}
       </div>
     }
     @case ('status') {
       <govuk-tag [color]="row[column.field] | statusTagColor">
-        {{ row?.[column?.field] | statusTagText }}
+        {{ row?.[column?.field] | portVoyageAggregatedStatus }}
       </govuk-tag>
     }
     @default {

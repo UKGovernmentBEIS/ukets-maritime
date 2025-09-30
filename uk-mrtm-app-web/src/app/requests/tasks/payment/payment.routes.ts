@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
+import { PAYMENT_NOT_COMPLETED_ROUTE_PREFIX } from '@requests/common/payment';
 import {
   canActivateCancelPayment,
   canActivateMakePayment,
@@ -45,6 +46,11 @@ export const PAYMENT_ROUTES: Routes = [
         canActivate: [canActivateMarkAsReceivedPayment],
         loadChildren: () =>
           import('@requests/tasks/payment/subtasks/mark-as-received').then((r) => r.MARK_AS_RECEIVED_PAYMENT_ROUTES),
+      },
+      {
+        path: PAYMENT_NOT_COMPLETED_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/tasks/payment/subtasks/not-completed').then((r) => r.NOT_COMPLETED_ROUTES),
       },
     ],
   },

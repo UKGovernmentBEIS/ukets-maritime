@@ -89,4 +89,9 @@ public class AerEmissionsCalculatorUtils {
             .findFirst();
     }
 
+    public static BigDecimal sumAndScale(BigDecimal value1, BigDecimal value2, BigDecimal value3) {
+        return value1.add(value2)
+                .add(value3)
+                .setScale(7, RoundingMode.HALF_UP);
+    }
 }

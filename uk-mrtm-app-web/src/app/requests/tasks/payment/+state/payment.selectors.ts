@@ -31,6 +31,9 @@ const selectRedirectUrl: StateSelector<RequestTaskState, string> = createDescend
   (payload) => payload?.nextUrl,
 );
 
+const selectExternalPaymentId: StateSelector<RequestTaskState, PaymentTaskPayload['externalPaymentId']> =
+  createDescendingSelector(selectPayload, (payload) => payload?.externalPaymentId);
+
 const selectPendingPaymentExist: StateSelector<RequestTaskState, PaymentTaskPayload['pendingPaymentExist']> =
   createDescendingSelector(selectPayload, (payload) => payload?.pendingPaymentExist);
 
@@ -52,4 +55,5 @@ export const paymentQuery = {
   selectPaymentSummary,
   selectRedirectUrl,
   selectPendingPaymentExist,
+  selectExternalPaymentId,
 };

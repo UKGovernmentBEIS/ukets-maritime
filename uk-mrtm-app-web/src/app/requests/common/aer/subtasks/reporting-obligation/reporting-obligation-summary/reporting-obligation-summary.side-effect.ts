@@ -24,7 +24,6 @@ export class ReportingObligationSummarySideEffect extends SideEffect {
         if (currentPayload.reportingRequired) {
           if (!payload.aer?.[this.subtask]) {
             const empOperatorDetails = { ...payload.empOriginatedData?.operatorDetails };
-            delete empOperatorDetails?.declarationDocuments;
             delete empOperatorDetails?.activityDescription;
 
             payload.aer = {

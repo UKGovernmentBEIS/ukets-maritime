@@ -27,8 +27,6 @@ interface ViewModel {
   originalOperatorDetails: EmpOperatorDetails;
   files: AttachedFile[];
   originalFiles: AttachedFile[];
-  declarationFiles: AttachedFile[];
-  originalDeclarationFiles: AttachedFile[];
   isVariationRegulatorDecision: boolean;
   variationDecisionDetails: EmpAcceptedVariationDecisionDetails;
   hasReview: boolean;
@@ -81,14 +79,6 @@ export class OperatorDetailsSummaryComponent {
       originalFiles: this.store.select(
         empVariationRegulatorQuery.selectOriginalAttachedFiles(
           (originalOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
-        ),
-      )(),
-      declarationFiles: this.store.select(
-        empCommonQuery.selectAttachedFiles(empOperatorDetails?.declarationDocuments?.documents),
-      )(),
-      originalDeclarationFiles: this.store.select(
-        empVariationRegulatorQuery.selectOriginalAttachedFiles(
-          originalOperatorDetails?.declarationDocuments?.documents,
         ),
       )(),
       variationDecisionDetails: this.store.select(

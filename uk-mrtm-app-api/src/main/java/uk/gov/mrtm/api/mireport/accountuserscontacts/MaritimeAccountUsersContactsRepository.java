@@ -18,23 +18,41 @@ public class MaritimeAccountUsersContactsRepository implements AccountUsersConta
     @Transactional(readOnly = true)
     @SuppressWarnings("unchecked")
     public List<MaritimeAccountUserContact> findAccountUserContacts(EntityManager entityManager) {
-        return entityManager.createNativeQuery(
-                        "select auth.user_id as \"userId\", role.name as \"role\",  account.business_id as \"accountId\", account.name as \"accountName\", " +
-                                "acc_mrtm.status as \"accountStatus\", auth.status as \"authorityStatus\", acc_mrtm.imo_number as \"imoNumber\",\n" +
-                                "       case when acPrimary.user_id is not null then true else false end as \"primaryContact\",\n" +
-                                "       case when acService.user_id is not null then true else false end as \"serviceContact\",\n" +
-                                "       case when acFinancial.user_id is not null then true else false end as \"financialContact\",\n" +
-                                "       case when acSecondary.user_id is not null then true else false end as \"secondaryContact\",\n" +
-                                "       emp.id as \"permitId\"\n" +
-                                "from account\n" +
-                                "    inner join account_mrtm acc_mrtm on account.id = acc_mrtm.id\n" +
-                                "    left join emp on account.id = emp.account_id\n" +
-                                "    left join au_authority auth on account.id = auth.account_id\n" +
-                                "    left join au_role role on auth.code = role.code\n" +
-                                "    left join account_contact acPrimary on account.id = acPrimary.account_id and auth.user_id=acPrimary.user_id and acPrimary.contact_type='PRIMARY'\n" +
-                                "    left join account_contact acService on account.id = acService.account_id and auth.user_id=acService.user_id and acService.contact_type='SERVICE'\n" +
-                                "    left join account_contact acFinancial on account.id = acFinancial.account_id and auth.user_id=acFinancial.user_id and acFinancial.contact_type='FINANCIAL'\n" +
-                                "    left join account_contact acSecondary on account.id = acSecondary.account_id and auth.user_id=acSecondary.user_id and acSecondary.contact_type='SECONDARY'\n")
+        return entityManager.createNativeQuery("""
+                select auth.user_id as "userId",
+                       role.name as "role",
+                       account.business_id as "accountId",
+                       account.name as "accountName",
+                       acc_mrtm.status as "accountStatus",
+                       auth.status as "authorityStatus",
+                       acc_mrtm.imo_number as "imoNumber",
+                       case when acPrimary.user_id is not null then true else false end as "primaryContact",
+                       case when acService.user_id is not null then true else false end as "serviceContact",
+                       case when acFinancial.user_id is not null then true else false end as "financialContact",
+                       case when acSecondary.user_id is not null then true else false end as "secondaryContact",
+                       emp.id as "permitId"
+                from account
+                         inner join account_mrtm acc_mrtm on account.id = acc_mrtm.id
+                         left join emp on account.id = emp.account_id
+                         left join au_authority auth on account.id = auth.account_id
+                         left join au_role role on auth.code = role.code
+                         left join account_contact acPrimary
+                                   on account.id = acPrimary.account_id
+                                   and auth.user_id = acPrimary.user_id
+                                   and acPrimary.contact_type = 'PRIMARY'
+                         left join account_contact acService
+                                   on account.id = acService.account_id
+                                   and auth.user_id = acService.user_id
+                                   and acService.contact_type = 'SERVICE'
+                         left join account_contact acFinancial
+                                   on account.id = acFinancial.account_id
+                                   and auth.user_id = acFinancial.user_id
+                                   and acFinancial.contact_type = 'FINANCIAL'
+                         left join account_contact acSecondary
+                                   on account.id = acSecondary.account_id
+                                   and auth.user_id = acSecondary.user_id
+                                   and acSecondary.contact_type = 'SECONDARY'
+                """)
                 .unwrap(NativeQuery.class)
                 .addScalar("userId", StandardBasicTypes.STRING)
                 .addScalar("accountId", StandardBasicTypes.STRING)

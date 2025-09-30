@@ -37,7 +37,7 @@ public class NonComplianceApplicationSubmittedRequestActionPayload extends Reque
     private LocalDate complianceDate;
 
     @Size(max = 10000)
-    private String comments;
+    private String nonComplianceComments;
 
     @Builder.Default
     private Set<RequestInfoDTO> selectedRequests = new HashSet<>();

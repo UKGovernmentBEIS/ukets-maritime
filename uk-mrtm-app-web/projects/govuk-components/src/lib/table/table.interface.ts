@@ -1,9 +1,9 @@
-import { GovukTextWidthClass } from '../text-input/text-input.type';
+import { GovukWidthClass } from '../types';
 
 export interface GovukTableColumn<T = any> {
   header: string;
   field: keyof T;
-  widthClass?: GovukTextWidthClass | string;
+  widthClass?: GovukWidthClass | string;
   isSortable?: boolean;
   isHeader?: boolean;
   isNumeric?: boolean;

@@ -33,7 +33,7 @@ public class NonComplianceSaveApplicationRequestTaskActionPayload extends Reques
     private LocalDate complianceDate;
 
     @Size(max = 10000)
-    private String comments;
+    private String nonComplianceComments;
 
     @JsonUnwrapped
     private NonCompliancePenalties nonCompliancePenalties;

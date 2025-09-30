@@ -26,7 +26,7 @@ public class RegulatorUserAuthorityQueryOrchestrator {
 
     public RegulatorUsersAuthoritiesInfoDTO getCaUsersAuthoritiesInfo(AppUser appUser) {
         UserAuthoritiesDTO caAuthorities = regulatorAuthorityQueryService.getCaAuthorities(appUser);
-        List<String> userIds = caAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
+        List<String> userIds = caAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).toList();
 
         List<RegulatorUserInfoDTO> regulatorAuthorityUsersInfo =
                 regulatorUserInfoService.getRegulatorUsersInfo(appUser, userIds);
@@ -46,7 +46,7 @@ public class RegulatorUserAuthorityQueryOrchestrator {
                                                 .filter(info -> info.getId().equals(authority.getUserId()))
                                                 .findFirst()
                                                 .orElse(new RegulatorUserInfoDTO())))
-                        .collect(Collectors.toList());
+                        .toList();
 
         return RegulatorUsersAuthoritiesInfoDTO.builder()
                 .caUsers(caUsers)

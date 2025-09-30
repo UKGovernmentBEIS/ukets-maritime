@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import {
   peerReviewDecisionProviders,
   provideEmpPeerReviewPayloadMutators,
@@ -77,6 +78,10 @@ export const EMP_VARIATION_PEER_REVIEW_ROUTES: Routes = [
         path: 'emissions',
         loadChildren: () =>
           import('@requests/tasks/emp-peer-review/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
+      },
+      {
+        path: MANDATE_SUB_TASK,
+        loadChildren: () => import('@requests/common/emp/subtasks/mandate').then((r) => r.MANDATE_ROUTES),
       },
       {
         path: 'overall-decision',

@@ -15,20 +15,19 @@ export const nonComplianceCloseFormProvider: Provider = {
   provide: TASK_FORM,
   deps: [FormBuilder, RequestTaskStore, RequestTaskFileService],
   useFactory: (formBuilder: FormBuilder, store: RequestTaskStore, fileService: RequestTaskFileService) => {
-    const closeJustification = store.select(nonComplianceCommonQuery.selectCloseJustification)();
     const nonComplianceAttachments = store.select(nonComplianceCommonQuery.selectNonComplianceAttachments)();
     const isEditable = store.select(requestTaskQuery.selectIsEditable)();
     const requestTaskId = store.select(requestTaskQuery.selectRequestTaskId)();
     const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
 
     return formBuilder.group({
-      reason: formBuilder.control<NonComplianceCloseJustification['reason']>(closeJustification?.reason ?? null, [
+      reason: formBuilder.control<NonComplianceCloseJustification['reason']>(null, [
         GovukValidators.required('Explain why you are closing this task'),
         GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
       ]),
       files: fileService.buildFormControl(
         requestTaskId,
-        closeJustification?.files ?? [],
+        [],
         nonComplianceAttachments,
         taskActionTypeToUploadSectionTaskActionTypeMap?.[requestTaskType],
         false,

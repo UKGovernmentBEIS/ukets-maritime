@@ -90,7 +90,7 @@ const fuelDetailsValidator = (fuel: AllFuelOriginTypeName) => {
   return !isNil(fuel?.uniqueIdentifier) && !isNil(fuel?.origin) && isLNGValid;
 };
 
-const emissionsSourcesItemValidator = (emissionsSources: EmissionsSources): boolean =>
+export const emissionsSourcesItemValidator = (emissionsSources: EmissionsSources): boolean =>
   !isNil(emissionsSources?.name) &&
   !isNil(emissionsSources?.type) &&
   !isNil(emissionsSources?.sourceClass) &&

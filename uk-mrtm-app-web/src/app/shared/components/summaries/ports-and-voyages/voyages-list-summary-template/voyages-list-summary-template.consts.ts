@@ -2,28 +2,24 @@ import { GovukTableColumn } from '@netz/govuk-components';
 
 import { AerVoyageSummaryItemDto } from '@shared/types';
 
-export const provideVoyagesSummaryColumns = (sortable: boolean): Array<GovukTableColumn<AerVoyageSummaryItemDto>> => [
+export const VOYAGES_SUMMARY_COLUMNS: Array<GovukTableColumn<AerVoyageSummaryItemDto>> = [
   {
-    field: 'imoNumber',
-    header: 'IMO Number',
-    isSortable: sortable,
-    widthClass: 'app-column-width-15-per',
-  },
-  {
-    field: 'departurePort',
-    header: 'Port of departure',
+    field: 'shipName',
+    header: 'Ship name and IMO number',
+    widthClass: 'app-column-width-20-per',
   },
   {
     field: 'departureTime',
-    header: 'Date and time of departure ',
-  },
-  {
-    field: 'arrivalPort',
-    header: 'Port of arrival',
+    header: 'Departure details (port, country, date)',
   },
   {
     field: 'arrivalTime',
-    header: 'Date and time of arrival',
+    header: 'Arrival details (port, country, date)',
+  },
+  {
+    field: 'totalEmissions',
+    header: 'Emissions from voyage (tCO2e)',
+    isNumeric: true,
   },
   {
     field: 'surrenderEmissions',
@@ -34,7 +30,6 @@ export const provideVoyagesSummaryColumns = (sortable: boolean): Array<GovukTabl
     isHeader: true,
     field: 'status',
     header: 'Status',
-    widthClass: 'app-column-width-15-per',
-    isSortable: sortable,
+    isSortable: true,
   },
 ];

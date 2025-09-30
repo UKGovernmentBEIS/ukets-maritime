@@ -86,8 +86,8 @@ export function csvFieldVoyageDateOverlapValidator<T>(
 
       combinations.forEach((combination) => {
         if (
-          isBefore(earlierDateTime, laterDateTime) ||
-          isBefore(combination.earlierDateTime, combination.laterDateTime)
+          isBefore(laterDateTime, earlierDateTime) ||
+          isBefore(combination.laterDateTime, combination.earlierDateTime)
         ) {
           return;
         }

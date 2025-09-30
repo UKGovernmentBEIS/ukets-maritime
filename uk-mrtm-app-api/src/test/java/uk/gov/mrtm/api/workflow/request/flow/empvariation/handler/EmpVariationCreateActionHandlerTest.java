@@ -16,6 +16,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayload
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
+import uk.gov.netz.api.account.service.AccountContactQueryService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
@@ -27,13 +28,16 @@ import uk.gov.netz.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.netz.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestParams;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -54,9 +58,14 @@ class EmpVariationCreateActionHandlerTest {
     @Mock
     private EmissionsMonitoringPlanQueryService empQueryService;
 
+    @Mock
+    private AccountContactQueryService accountContactQueryService;
+    
     @ParameterizedTest
     @MethodSource("validScenarios")
-    void process_regulator(String role, String regulatorAssignee, String operatorAssignee) {
+    void process_regulator(String role, String regulatorAssignee, String operatorAssignee,
+                           int accountContactQueryServiceInvocations, Map<String, Object> processVars) {
+        String defaultOperatorId = "primary-contact-id";
         RequestCreateActionEmptyPayload payload = RequestCreateActionEmptyPayload.builder().build();
         AppUser appUser = AppUser.builder()
             .roleType(role)
@@ -80,9 +89,7 @@ class EmpVariationCreateActionHandlerTest {
                 .regulatorAssignee(regulatorAssignee)
                 .operatorAssignee(operatorAssignee)
                 .build())
-            .processVars(Map.of(
-                BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, role
-            ))
+            .processVars(processVars)
             .requestMetadata(EmpVariationRequestMetadata.builder()
                 .type(MrtmRequestMetadataType.EMP_VARIATION)
                 .initiatorRoleType(role)
@@ -91,19 +98,31 @@ class EmpVariationCreateActionHandlerTest {
 
         when(startProcessRequestService.startProcess(requestParams))
             .thenReturn(Request.builder().id("1").build());
+        lenient().when(accountContactQueryService.findPrimaryContactByAccount(ACCOUNT_ID))
+            .thenReturn(Optional.of(defaultOperatorId));
 
         String result = handler.process(ACCOUNT_ID, payload, appUser);
 
         assertThat(result).isEqualTo("1");
         verify(startProcessRequestService).startProcess(requestParams);
         verify(empQueryService).getEmissionsMonitoringPlanDTOByAccountId(ACCOUNT_ID);
-        verifyNoMoreInteractions(startProcessRequestService, empQueryService);
+        verify(accountContactQueryService, times(accountContactQueryServiceInvocations))
+            .findPrimaryContactByAccount(ACCOUNT_ID);
+
+        verifyNoMoreInteractions(startProcessRequestService, empQueryService, accountContactQueryService);
     }
 
     public static Stream<Arguments> validScenarios() {
+        Map<String, ? extends Serializable> regulatorProcessVars = Map.of(
+            BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.REGULATOR,
+            BpmnProcessConstants.SKIP_PAYMENT, true
+        );
+        Map<String, ? extends Serializable> operatorProcessVars = Map.of(
+            BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.OPERATOR
+        );
         return Stream.of(
-            Arguments.of(RoleTypeConstants.REGULATOR, USER_ID, null),
-            Arguments.of(RoleTypeConstants.OPERATOR, null, USER_ID)
+            Arguments.of(RoleTypeConstants.REGULATOR, USER_ID, "primary-contact-id", 1, regulatorProcessVars),
+            Arguments.of(RoleTypeConstants.OPERATOR, null, USER_ID, 0, operatorProcessVars)
         );
     }
 

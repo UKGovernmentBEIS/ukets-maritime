@@ -146,6 +146,10 @@ export class AerVoyageUploadComponent {
   private csvValuesTransformer(value: string, field: string) {
     const trimmedValue = value?.trim();
     switch (field) {
+      case aerVoyageCsvMap.departurePort:
+      case aerVoyageCsvMap.arrivalPort:
+        return trimmedValue === 'NA' ? 'NOT_APPLICABLE' : trimmedValue;
+
       case aerVoyageCsvMap.smallIslandFerryReduction:
         return trimmedValue?.toUpperCase() === 'YES' ? true : trimmedValue?.toUpperCase() === 'NO' ? false : null;
 

@@ -14,5 +14,5 @@ import { EmpProcedureForm } from './empProcedureForm';
 export interface EmpEmissionSources {
   listCompletion: EmpProcedureForm;
   emissionFactors: EmpEmissionFactors;
-  emissionCompliance?: EmpEmissionCompliance;
+  emissionCompliance: EmpEmissionCompliance;
 }

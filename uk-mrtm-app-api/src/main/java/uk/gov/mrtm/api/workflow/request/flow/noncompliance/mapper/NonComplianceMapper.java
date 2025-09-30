@@ -48,16 +48,6 @@ public interface NonComplianceMapper {
             ).collect(Collectors.toSet());
     }
 
-    @Mapping(target = "comments", ignore = true)
-    NonComplianceApplicationSubmittedRequestActionPayload toSubmittedRequestActionIgnoreComments(
-        NonComplianceApplicationSubmittedRequestActionPayload actionPayload
-    );
-
-    @Mapping(target = "comments", ignore = true)
-    NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload toNoticeOfIntentSubmittedRequestActionIgnoreComments(
-        NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload actionPayload
-    );
-
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "comments", source = "requestPayload.initialPenaltyComments")
     @Mapping(target = "sectionsCompleted", source = "requestPayload.initialPenaltySectionsCompleted")
@@ -95,11 +85,6 @@ public interface NonComplianceMapper {
         Map<String, RequestActionUserInfo> usersInfo,
         String payloadType);
 
-    @Mapping(target = "comments", ignore = true)
-    NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload toInitialPenaltyNoticeSubmittedRequestActionIgnoreComments(
-        NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload actionPayload
-    );
-
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "sectionsCompleted", source = "requestPayload.civilPenaltySectionsCompleted")
     @Mapping(target = "penaltyAmount", source = "requestPayload.civilPenaltyAmount")
@@ -120,19 +105,11 @@ public interface NonComplianceMapper {
         Map<String, RequestActionUserInfo> usersInfo,
         String payloadType);
 
-    @Mapping(target = "comments", ignore = true)
-    NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload toCivilPenaltySubmittedRequestActionIgnoreComments(
-        NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload actionPayload);
-
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "attachments", ignore = true)
     NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload toFinalDeterminationSubmittedRequestAction(
         NonComplianceFinalDeterminationRequestTaskPayload taskPayload,
         String payloadType);
-
-    @Mapping(target = "finalDetermination.comments", ignore = true)
-    NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload toFinalDeterminationSubmittedRequestActionIgnoreComments(
-        NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload actionPayload);
 
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "attachments", ignore = true)

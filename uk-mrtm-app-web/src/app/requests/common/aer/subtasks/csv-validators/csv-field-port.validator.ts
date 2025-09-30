@@ -23,7 +23,9 @@ export function csvFieldPortValidator<T>(
     data.forEach((dataRow, index) => {
       const currentField = dataRow[field];
       const relatedCountryValue = dataRow[relatedCountryField];
-      const portCountryExists = AER_PORT_COUNTRY_PORTS?.[currentField]?.countryCode === relatedCountryValue;
+      const portCountryExists =
+        AER_PORT_COUNTRY_PORTS?.[currentField]?.countryCode === relatedCountryValue ||
+        currentField === 'NOT_APPLICABLE';
 
       if (currentField && !portCountryExists) {
         errorMessageRows.push({

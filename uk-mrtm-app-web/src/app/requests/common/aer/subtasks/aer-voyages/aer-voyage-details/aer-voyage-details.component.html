@@ -21,11 +21,12 @@
     labelSize="normal"></div>
 
   <div
-    govuk-date-input
-    incompleteMessage="The format should be “DD-MM-YYYY”"
+    mrtm-date-picker
     formControlName="departureDate"
+    [datePickerConfig]="datepickerConfig"
     label="Date of departure"
-    hint="For example, 21 07 2024"></div>
+    hint="For example, 21/7/2024"
+    widthClass="govuk-!-width-one-third"></div>
   <div
     mrtm-time-input
     formControlName="departureTime"
@@ -49,11 +50,12 @@
     labelSize="normal"></div>
 
   <div
-    govuk-date-input
-    incompleteMessage="The format should be “DD-MM-YYYY”"
+    mrtm-date-picker
     formControlName="arrivalDate"
+    [datePickerConfig]="datepickerConfig"
     label="Date of arrival"
-    hint="For example, 21 07 2024"></div>
+    hint="For example, 21/7/2024"
+    widthClass="govuk-!-width-one-third"></div>
   <div
     mrtm-time-input
     formControlName="arrivalTime"

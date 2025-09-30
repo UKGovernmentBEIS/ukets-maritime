@@ -90,7 +90,6 @@ class EmpVariationMapperTest {
         assertEquals(expected.getImoNumber(), actual.getImoNumber());
         assertEquals(expectedAddressStateDTO, actual.getContactAddress());
         assertEquals(expected.getOrganisationStructure(), actual.getOrganisationStructure());
-        assertEquals(expected.getDeclarationDocuments(), actual.getDeclarationDocuments());
         assertEquals(expected.getActivityDescription(), actual.getActivityDescription());
     }
 

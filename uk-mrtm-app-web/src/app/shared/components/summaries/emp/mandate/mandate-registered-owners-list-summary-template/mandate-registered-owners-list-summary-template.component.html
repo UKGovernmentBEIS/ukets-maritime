@@ -6,11 +6,11 @@
   <ng-template let-column="column" let-row="row">
     @switch (column.field) {
       @case ('name') {
-        <p class="govuk-!-margin-0">{{ row[column.field] }}</p>
+        <p class="govuk-!-margin-0" [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] }}</p>
         <span class="govuk-hint">{{ row['imoNumber'] }}</span>
       }
       @case ('contactName') {
-        <p class="govuk-!-margin-0">{{ row[column.field] }}</p>
+        <p class="govuk-!-margin-0" [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] }}</p>
         <span class="govuk-hint">{{ row['email'] }}</span>
       }
       @case ('ships') {
@@ -23,7 +23,7 @@
               );
               track ship.imoNumber
             ) {
-              <li>{{ ship.name }} (IMO: {{ ship.imoNumber }})</li>
+              <li [class.govuk-!-font-weight-bold]="row.needsReview">{{ ship.name }} (IMO: {{ ship.imoNumber }})</li>
             }
           </ul>
           @if (ships.length > 2) {
@@ -38,7 +38,7 @@
         }
       }
       @case ('effectiveDate') {
-        {{ row[column.field] | govukDate }}
+        <span [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] | govukDate }}</span>
       }
       @case ('actions') {
         <div class="control-row justify-content-end">

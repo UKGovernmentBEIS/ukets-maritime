@@ -6,7 +6,9 @@ export interface AerVoyageSummaryItemDto
   extends Pick<AerVoyage, 'imoNumber' | 'uniqueIdentifier'>,
     Omit<AerVoyageDetails, 'departurePort' | 'arrivalPort'> {
   departurePort: AerPortVisit['port'];
+  departureCountry: AerPortVisit['country'];
   arrivalPort: AerPortVisit['port'];
+  arrivalCountry: AerPortVisit['country'];
   surrenderEmissions: AerPortEmissionsMeasurement['total'];
   totalEmissions: AerPortEmissionsMeasurement['total'];
   status: TaskItemStatus;

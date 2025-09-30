@@ -1,27 +1,28 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule, UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { ButtonDirective, GovukSelectOption, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
+import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import { AerFilterByShipComponent } from '@requests/common/aer/components';
 import {
   AER_VOYAGES_SUB_TASK,
   AerVoyagesWizardStep,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-subtask-list.map';
+import { FilterByShipAndDateRange, FilterByShipAndDateRangeComponent } from '@requests/common/components';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { NotificationBannerComponent, VoyagesListSummaryTemplateComponent } from '@shared/components';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerVoyageSummaryItemDto } from '@shared/types';
+import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
 
 @Component({
   selector: 'mrtm-aer-voyages-list',
@@ -35,89 +36,119 @@ import { AerVoyageSummaryItemDto } from '@shared/types';
     ReactiveFormsModule,
     VoyagesListSummaryTemplateComponent,
     PendingButtonDirective,
-    AerFilterByShipComponent,
-    WarningTextComponent,
+    FilterByShipAndDateRangeComponent,
     NotificationBannerComponent,
   ],
   templateUrl: './aer-voyages-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVoyagesListComponent {
-  private readonly store: RequestTaskStore = inject(RequestTaskStore);
+  private readonly formGroup = new UntypedFormGroup({});
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
+  private readonly store = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
-  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private readonly router: Router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly allVoyages = this.store.select(aerCommonQuery.selectVoyagesList);
+  private readonly filter = signal<FilterByShipAndDateRange>(null);
 
-  public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-  public readonly wizardMap = aerVoyagesMap;
-  public readonly wizardStep = AerVoyagesWizardStep;
-  public readonly allVoyages = this.store.select(aerCommonQuery.selectVoyagesList);
-  public readonly currentFilter = signal(null);
+  readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly wizardMap = aerVoyagesMap;
+  readonly wizardStep = AerVoyagesWizardStep;
+  readonly shipsWithVoyages = this.store.select(aerCommonQuery.selectListOfShipsWithVoyages);
 
-  public readonly voyages = computed(() => {
-    const currentFilter = this.currentFilter();
-    const data = this.allVoyages();
+  readonly filteredVoyages = computed<AerVoyageSummaryItemDto[]>(() => {
+    const filteredByShip = this.filter()?.imoNumber
+      ? this.allVoyages().filter((voyage) => voyage.imoNumber === this.filter()?.imoNumber)
+      : this.allVoyages();
 
-    return (data ?? []).filter((voyage) => (!isNil(currentFilter) ? voyage.imoNumber === currentFilter : true));
+    if (this.filter()?.arrivalDate && this.filter()?.departureDate) {
+      // find all the voyages within arrivalDate - departureDate range
+      const filteredByShipAndDates = filteredByShip.filter(
+        (voyage) =>
+          isSameDayOrAfter(new Date(voyage.departureTime), this.filter()?.departureDate) &&
+          isSameDayOrBefore(new Date(voyage.arrivalTime), this.filter()?.arrivalDate),
+      );
+      return filteredByShipAndDates;
+    }
+    return filteredByShip;
   });
 
-  public readonly filterVoyagesSelectItems: Signal<Array<GovukSelectOption>> = computed(() => {
-    const allVoyages = this.allVoyages();
-    const uniqueImoNumbers = Array.from(new Set(allVoyages.map((x) => x.imoNumber)));
+  readonly voyagesListHeader = computed<string>(() =>
+    this.filter()?.shipName ? `Voyages of ${this.filter()?.shipName}` : 'Voyages of all ships',
+  );
 
-    return [
-      { value: null, text: 'All ships' },
-      ...uniqueImoNumbers
-        .map((imoNumber) => {
-          const port = allVoyages.find((item) => item.imoNumber === imoNumber);
+  readonly canContinue = computed<boolean>(() => this.editable() && this.allVoyages()?.length > 0);
 
-          return {
-            value: imoNumber,
-            text: `${port?.shipName} (IMO: ${imoNumber})`,
-          };
-        })
-        .filter((obj, index, arr) => arr.filter((item) => item.value === obj.value).length <= 1),
-    ];
-  });
+  private readonly needsReviewMessage = computed<string>(() => {
+    const needsReviewVoyages = this.allVoyages().filter((voyage) => voyage.status === TaskItemStatus.NEEDS_REVIEW);
 
-  public readonly voyagesListHeader = computed(() => {
-    const selectedShip = this.currentFilter();
-    const allShips = this.filterVoyagesSelectItems();
-
-    return isNil(selectedShip)
-      ? 'Voyages of all ships'
-      : `Voyages of ${allShips.find((x) => x.value === selectedShip)?.text}`;
-  });
-
-  public readonly canContinue: Signal<boolean> = computed(() => {
-    const statuses = this.allVoyages().map((voyage) => voyage.status);
-    return this.editable() && statuses?.length && statuses?.every((task) => task === TaskItemStatus.COMPLETED);
-  });
-
-  public readonly warningMessage: Signal<string> = computed(() => {
-    const voyages = this.allVoyages().filter((voyage) => voyage.status === 'NEEDS_REVIEW');
-
-    if (voyages.length === 0) {
+    if (needsReviewVoyages.length === 0) {
       return undefined;
     }
 
-    return voyages.find((voyage) => !voyage.canViewDetails)
-      ? 'You must go back to the "Ships and emission details list" task and complete the ship details for any records with the status "Needs review".'
-      : 'The voyage and emission details have been updated. Select the IMO numbers for any records that have the status ‘Needs review’ to review and confirm the information.';
+    return needsReviewVoyages.find((voyage) => !voyage.canViewDetails)
+      ? 'You must go back to the ‘Ships and emission details list’ task and complete the ship details for any entries with the status ‘Needs review’.'
+      : 'The voyage and emission details have been updated. Select the Ship name for any entries that have the status ‘Needs review’ to review and confirm the information.';
   });
 
-  public onFilter(imoNumber: AerVoyageSummaryItemDto['imoNumber']): void {
-    this.currentFilter.set(imoNumber);
+  private readonly notCompletedMessage = computed<string>(() => {
+    const isIncomplete = this.allVoyages().some((voyage) => voyage.status === TaskItemStatus.IN_PROGRESS);
+    return isIncomplete ? 'Enter the missing details for all entries with the status ‘Incomplete’' : undefined;
+  });
+
+  readonly warningMessages = computed<string[]>(() =>
+    [this.needsReviewMessage(), this.notCompletedMessage()].filter((message) => message),
+  );
+
+  readonly emptyTableText = computed<string>(() =>
+    this.allVoyages()?.length > this.filteredVoyages()?.length
+      ? 'There are no matching results'
+      : 'No items to display',
+  );
+
+  onFilterChanged(filterValue: FilterByShipAndDateRange): void {
+    this.filter.set(filterValue);
   }
 
-  public onDelete(voyages: Array<AerVoyageSummaryItemDto>): void {
-    this.service
-      .saveSubtask(AER_VOYAGES_SUB_TASK, AerVoyagesWizardStep.DELETE_VOYAGE, this.activatedRoute, voyages)
-      .pipe(take(1))
-      .subscribe();
+  onDelete(voyages: Array<AerVoyageSummaryItemDto>): void {
+    if (voyages.length) {
+      this.formGroup.reset();
+      this.notificationBannerStore.reset();
+
+      this.service
+        .saveSubtask(AER_VOYAGES_SUB_TASK, AerVoyagesWizardStep.DELETE_VOYAGE, this.activatedRoute, voyages)
+        .pipe(take(1))
+        .subscribe();
+    } else {
+      this.formGroup.setErrors({ NONE_SELECTED: 'Select the voyages to delete' });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+    }
   }
 
-  public onContinue(): void {
+  onContinue(): void {
+    const errors: ValidationErrors = {};
+    let isValid = true;
+
+    if (this.notCompletedMessage()) {
+      errors['NOT_COMPLETED'] = this.notCompletedMessage();
+      isValid = false;
+    }
+
+    if (this.needsReviewMessage()) {
+      errors['NEEDS_REVIEW'] = this.needsReviewMessage();
+      isValid = false;
+    }
+
+    if (!isValid) {
+      this.formGroup.setErrors(errors);
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+      return;
+    }
+
+    this.formGroup.reset();
+    this.notificationBannerStore.reset();
+
     this.router.navigate(['../'], { relativeTo: this.activatedRoute });
   }
 }

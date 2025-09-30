@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '@netz/common/forms';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
+import { taskProviders } from '@requests/common/task.providers';
 import { CancelPaymentFormComponent } from '@requests/tasks/payment/subtasks/cancel/cancel-payment-form';
 
 describe('CancelPaymentFormComponent', () => {
@@ -17,6 +18,7 @@ describe('CancelPaymentFormComponent', () => {
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+        ...taskProviders,
       ],
     }).compileComponents();
 

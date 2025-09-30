@@ -2,8 +2,7 @@
   [caption]="wizardMap.caption"
   [heading]="wizardMap.title"
   [formGroup]="form"
-  (formSubmit)="onSubmit()"
-  [showReturnLink]="true">
+  (formSubmit)="onSubmit()">
   <div class="govuk-!-width-two-thirds">
     <h3 class="govuk-heading-m">Registered owner details</h3>
     <div govuk-text-input formControlName="name" label="Registered owner name"></div>
@@ -22,7 +21,7 @@
       formControlName="effectiveDate"></div>
   </div>
   <h3 class="govuk-heading-m">Select ships to associate</h3>
-  <p class="govuk-body">The displayed ships can be selected for this selected owner.</p>
+  <p class="govuk-body">The displayed ships can be selected for this registered owner.</p>
   <mrtm-multi-select-table
     [columns]="columns"
     [data]="page()"
@@ -37,3 +36,7 @@
     <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize" (currentPageChange)="onPageChange($event)" />
   }
 </mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink [routerLink]="isEdit ? ['../../'] : ['../']">Return to: {{ returnToLabel }}</a>
+</div>

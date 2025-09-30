@@ -107,7 +107,7 @@ describe('EmissionSourcesDecisionComponent', () => {
       'Name of IT system used',
       'Not provided',
       'Change',
-      'Will you be making an emissions reduction claim as a result of the purchase and delivery of sustainable fuel?',
+      'Will you be making an emissions reduction claim as a result of the purchase and delivery of eligible fuel?',
       'Yes',
       'Change',
       'Procedure reference',

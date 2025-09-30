@@ -89,6 +89,10 @@ class EmpEmissionSourcesTest {
                         .exist(false)
                         .factors(createValidEmpProcedureForm())
                         .build())
+                .emissionCompliance(EmpEmissionCompliance.builder()
+                    .exist(true)
+                    .criteria(createValidEmpProcedureForm())
+                    .build())
                 .build();
 
         final Set<ConstraintViolation<EmpEmissionSources>> violations = validator.validate(empEmissionSources);

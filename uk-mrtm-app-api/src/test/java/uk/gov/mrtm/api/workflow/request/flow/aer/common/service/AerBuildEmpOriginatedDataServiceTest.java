@@ -13,7 +13,6 @@ import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.DeclarationDocuments;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationStructure;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
@@ -59,11 +58,6 @@ class AerBuildEmpOriginatedDataServiceTest {
         OrganisationStructure organisationStructure = mock(OrganisationStructure.class);
         when(organisationStructure.getAttachmentIds()).thenReturn(Set.of(uuid2));
 
-        DeclarationDocuments declarationDocuments = DeclarationDocuments
-            .builder()
-            .documents(Set.of(uuid))
-            .build();
-
         EmissionsMonitoringPlanDTO emp = EmissionsMonitoringPlanDTO.builder()
             .empContainer(EmissionsMonitoringPlanContainer.builder()
                 .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
@@ -72,7 +66,6 @@ class AerBuildEmpOriginatedDataServiceTest {
                         .imoNumber("7654321")
                         .contactAddress(mock(AddressStateDTO.class))
                         .organisationStructure(organisationStructure)
-                        .declarationDocuments(declarationDocuments)
                         .activityDescription("activityDescription")
                         .build())
                     .build())
@@ -109,7 +102,6 @@ class AerBuildEmpOriginatedDataServiceTest {
                 .imoNumber("1234567")
                 .contactAddress(addressStateDTO)
                 .organisationStructure(organisationStructure)
-                .declarationDocuments(declarationDocuments)
                 .activityDescription("activityDescription")
                 .build())
             .operatorDetailsAttachments(Map.of(uuid2, "fileName2"))

@@ -1,8 +1,12 @@
-<mrtm-notification-banner />
+<mrtm-notification-banner [preventResetOnNavigation]="true" />
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <netz-page-heading caption="Voyages">{{ wizardMap.title }}</netz-page-heading>
-    <p class="govuk-body">{{ wizardMap.description }}</p>
+    <p class="govuk-body">
+      You can manually add or upload the details for voyages and emissions.
+      <br />
+      To add another file, select Upload file.
+    </p>
   </div>
   <div class="govuk-grid-column-one-third">
     <div class="govuk-button-group float-right">
@@ -12,25 +16,33 @@
   </div>
 </div>
 
-@if (editable() && voyages()?.length) {
-  <mrtm-aer-filter-by-ship
-    [items]="filterVoyagesSelectItems()"
-    header="View voyages per ship"
-    (filterChanged)="onFilter($event)" />
+@if (editable()) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-one-half">
+      <mrtm-filter-by-ship-and-date-range
+        type="voyages"
+        [ships]="shipsWithVoyages()"
+        filterByShipLabel="View voyages per ship"
+        (filterChanged)="onFilterChanged($event)" />
+    </div>
+  </div>
 }
 
 <h3 class="govuk-heading-m">{{ voyagesListHeader() }}</h3>
-@if (warningMessage(); as warningMessage) {
-  <govuk-warning-text [assistiveText]="warningMessage" />
-}
-<mrtm-voyages-list-summary-template [editable]="editable()" [data]="voyages()" (deleteItems)="onDelete($event)" />
+
+<mrtm-voyages-list-summary-template
+  [editable]="editable()"
+  [data]="filteredVoyages()"
+  [emptyTableText]="emptyTableText()"
+  [warningMessages]="warningMessages()"
+  (deleteItems)="onDelete($event)" />
 
 @if (canContinue()) {
   <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>
 }
 
 <div>
-  @if (canContinue() || !voyages()?.length) {
+  @if (canContinue() || !filteredVoyages()?.length) {
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   }
   <netz-return-to-task-or-action-page />

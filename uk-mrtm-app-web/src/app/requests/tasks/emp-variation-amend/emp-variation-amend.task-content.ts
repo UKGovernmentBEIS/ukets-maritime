@@ -13,6 +13,7 @@ import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps';
 import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources';
 import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas';
 import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures';
+import { MANDATE_SUB_TASK, mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate';
 import { REQUESTED_CHANGES_SUB_TASK } from '@requests/common/emp/subtasks/requested-changes';
 import {
   abbreviationsMap,
@@ -118,6 +119,20 @@ export const empVariationAmendTaskContent: RequestTaskPageContentFactory = () =>
               ? REQUEST_CHANGES_HINT
               : null,
             link: `${routePrefix}/data-gaps`,
+          },
+        ],
+      },
+      {
+        title: 'Delegated UK ETS responsibility',
+        tasks: [
+          {
+            name: MANDATE_SUB_TASK,
+            status: store.select(empVariationAmendsQuery.selectStatusForSubtask(MANDATE_SUB_TASK))(),
+            linkText: mandateSubtaskMap.title,
+            warningHint: store.select(empAmendQuery.selectIsChangesRequestedForSection(MANDATE_SUB_TASK))()
+              ? REQUEST_CHANGES_HINT
+              : null,
+            link: `${routePrefix}/${MANDATE_SUB_TASK}`,
           },
         ],
       },

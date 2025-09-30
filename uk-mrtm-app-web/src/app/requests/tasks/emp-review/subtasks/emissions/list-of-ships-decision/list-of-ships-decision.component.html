@@ -1,20 +1,28 @@
+<mrtm-notification-banner />
 <mrtm-wizard-step
   [formGroup]="form"
   [heading]="emissionsSubTasksMap.decision.title"
   [caption]="emissionsSubTasksMap.title"
   (formSubmit)="onSubmit()"
-  [hideSubmit]="!isEditable"
+  [hideSubmit]="!isEditable() || !!notCompletedMessage()"
   [showReturnLink]="true">
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
       <h2 class="govuk-heading-m">List of ships</h2>
+      @if (notCompletedMessage(); as warningMessage) {
+        <govuk-warning-text [assistiveText]="warningMessage" />
+      }
     </div>
-    @if (isEditable) {
+    @if (isEditable()) {
       <div class="govuk-grid-column-one-third govuk-!-text-align-right govuk-body govuk-!-margin-bottom-0">
         <a [routerLink]="['../', 'list-of-ships']" [queryParams]="{ change: true }" govukLink>Change</a>
       </div>
     }
   </div>
-  <mrtm-list-of-ships-summary-template [data]="ships" editUrl="../ships" />
+  <mrtm-list-of-ships-summary-template [data]="ships()" editUrl="../ships" />
   <mrtm-review-decision />
+
+  @if (notCompletedMessage()) {
+    <button govukButton type="button" (click)="onContinueAttempt()">Continue</button>
+  }
 </mrtm-wizard-step>

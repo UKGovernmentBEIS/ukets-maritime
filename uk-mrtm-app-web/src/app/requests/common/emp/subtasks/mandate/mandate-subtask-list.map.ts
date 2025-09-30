@@ -7,6 +7,7 @@ export const mandateSubtaskMap: SubTaskListMap<
     registeredOwnersAddForm: boolean;
     registeredOwnersEditForm: boolean;
     decision: string;
+    uploadOwners: string;
   }
 > = {
   caption: 'Delegated UK ETS responsibility',
@@ -32,5 +33,8 @@ export const mandateSubtaskMap: SubTaskListMap<
   },
   decision: {
     title: 'Review delegated responsibility',
+  },
+  uploadOwners: {
+    title: 'Upload the registered owner file',
   },
 };

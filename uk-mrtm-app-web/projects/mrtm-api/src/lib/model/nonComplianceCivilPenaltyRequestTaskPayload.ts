@@ -7,16 +7,29 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { NonComplianceCloseJustification } from './nonComplianceCloseJustification';
 
 export interface NonComplianceCivilPenaltyRequestTaskPayload {
   payloadType?: string;
   sendEmailNotification?: boolean;
+  reason:
+    | 'FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN'
+    | 'FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN'
+    | 'FAILURE_TO_MONITOR_EMISSIONS'
+    | 'FAILURE_TO_REPORT_EMISSIONS'
+    | 'FAILURE_TO_COMPLY_WITH_DEFICIT_NOTICE'
+    | 'FAILURE_TO_COMPLY_WITH_AN_ENFORCEMENT_NOTICE'
+    | 'FAILURE_TO_COMPLY_WITH_AN_INFORMATION_NOTICE'
+    | 'PROVIDING_FALSE_OR_MISLEADING_INFORMATION'
+    | 'REFUSAL_TO_ALLOW_ACCESS_TO_PREMISES'
+    | 'FAILURE_TO_SURRENDER_ALLOWANCE_100'
+    | 'FAILURE_TO_SURRENDER_ALLOWANCE_20';
+  nonComplianceDate?: string;
+  complianceDate?: string;
+  nonComplianceComments?: string;
   civilPenalty: string;
   penaltyAmount?: string;
   dueDate?: string;
   comments?: string;
-  closeJustification?: NonComplianceCloseJustification;
   nonComplianceAttachments?: { [key: string]: string };
   sectionsCompleted?: { [key: string]: string };
 }

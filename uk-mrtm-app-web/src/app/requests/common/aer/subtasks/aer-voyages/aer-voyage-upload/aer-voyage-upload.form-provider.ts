@@ -137,7 +137,7 @@ const uploadCSVFormValidators = (store: RequestTaskStore) => {
     csvFieldPatternValidator(
       'departurePort',
       aerVoyageCsvMap,
-      new RegExp(/^[A-Z]{5}$/),
+      new RegExp(/^([A-Z]{5}|NOT_APPLICABLE)$/),
       `The field '${aerVoyageCsvMap.departurePort}' is in an invalid format`,
     ),
     csvFieldPortValidator<FlattenedVoyage>('departurePort', aerVoyageCsvMap, 'departureCountry'),
@@ -169,7 +169,7 @@ const uploadCSVFormValidators = (store: RequestTaskStore) => {
     csvFieldPatternValidator(
       'arrivalPort',
       aerVoyageCsvMap,
-      new RegExp(/^[A-Z]{5}$/),
+      new RegExp(/^([A-Z]{5}|NOT_APPLICABLE)$/),
       `The field '${aerVoyageCsvMap.arrivalPort}' is in an invalid format`,
     ),
     csvFieldPortValidator<FlattenedVoyage>('arrivalPort', aerVoyageCsvMap, 'arrivalCountry'),

@@ -14,6 +14,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceC
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceDecisionNotification;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -37,6 +38,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -65,6 +67,9 @@ class NonComplianceCivilPenaltyNotifyOperatorActionHandlerTest {
 
     @Mock
     private RequestAccountContactQueryService requestAccountContactQueryService;
+
+    @Mock
+    private NonComplianceApplyService nonComplianceApplyService;
 
     @Test
     void process() {
@@ -115,6 +120,7 @@ class NonComplianceCivilPenaltyNotifyOperatorActionHandlerTest {
 
         verify(validator, times(1)).validateCivilPenalty(taskPayload);
         verify(validator, times(1)).validateUsers(requestTask, operators, Set.of(), appUser);
+        verify(nonComplianceApplyService, times(1)).submitDetails(request, taskPayload);
         verify(requestService, times(1)).addActionToRequest(
             request,
             actionPayload,
@@ -127,6 +133,9 @@ class NonComplianceCivilPenaltyNotifyOperatorActionHandlerTest {
         verify(officialNoticeService, times(1)).sendOfficialNotice(
             civilPenalty, request, decisionNotification
         );
+
+        verifyNoMoreInteractions(validator, nonComplianceApplyService, requestService,
+            workflowService, officialNoticeService);
     }
 
     @Test

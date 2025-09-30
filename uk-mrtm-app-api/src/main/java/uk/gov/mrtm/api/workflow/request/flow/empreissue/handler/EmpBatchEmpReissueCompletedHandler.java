@@ -17,11 +17,10 @@ public class EmpBatchEmpReissueCompletedHandler implements JavaDelegate {
 	@Override
 	public void execute(DelegateExecution execution) throws Exception {
 		final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
-		final String reissueRequestId = (String) execution.getVariable(MrtmBpmnProcessConstants.EMP_REISSUE_REQUEST_ID);
 		final Long accountId = (Long) execution.getVariable(BpmnProcessConstants.ACCOUNT_ID);
 		final boolean reissueSucceeded = (boolean) execution.getVariable(MrtmBpmnProcessConstants.EMP_REISSUE_REQUEST_SUCCEEDED);
 		
-		service.reissueCompleted(requestId, accountId, reissueRequestId, reissueSucceeded);
+		service.reissueCompleted(requestId, accountId, reissueSucceeded);
 		
 		//increment completed number var
 		final Integer numberOfAccountsCompleted = (Integer) execution.getVariable(MrtmBpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED);

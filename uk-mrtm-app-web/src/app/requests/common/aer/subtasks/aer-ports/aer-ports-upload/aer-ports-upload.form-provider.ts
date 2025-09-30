@@ -139,7 +139,7 @@ const uploadCSVFormValidators = (store: RequestTaskStore) => {
     csvFieldPatternValidator(
       'visitPort',
       aerPortCsvMap,
-      new RegExp(/^[A-Z]{5}$/),
+      new RegExp(/^([A-Z]{5}|NOT_APPLICABLE)$/),
       `The field '${aerPortCsvMap.visitPort}' is in an invalid format`,
     ),
     csvFieldPortValidator<FlattenedPort>('visitPort', aerPortCsvMap, 'visitCountry'),

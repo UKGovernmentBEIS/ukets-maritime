@@ -1,12 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { LinkDirective } from '@netz/govuk-components';
+import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
-import { empCommonQuery, EmpReviewTaskPayload } from '@requests/common';
+import { empCommonQuery, EmpReviewTaskPayload, TaskItemStatus } from '@requests/common';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { emissionsSubTasksMap } from '@requests/common/emp/subtasks/subtask-list.map';
@@ -19,11 +19,12 @@ import {
   reviewDecisionFormProvider,
 } from '@requests/tasks/emp-review/components/review-decision';
 import { EmpReviewService } from '@requests/tasks/emp-review/services';
-import { WizardStepComponent } from '@shared/components';
+import { NotificationBannerComponent, WizardStepComponent } from '@shared/components';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summaries';
 
 @Component({
-  selector: 'mrtm-list-of-ships-summary',
+  selector: 'mrtm-list-of-ships-decision',
   standalone: true,
   imports: [
     ListOfShipsSummaryTemplateComponent,
@@ -32,6 +33,9 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
     ReactiveFormsModule,
     WizardStepComponent,
     ReviewDecisionComponent,
+    NotificationBannerComponent,
+    ButtonDirective,
+    WarningTextComponent,
   ],
   templateUrl: './list-of-ships-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -39,16 +43,37 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
 })
 export class ListOfShipsDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(REVIEW_DECISION_FORM);
+
+  private readonly formGroup = new UntypedFormGroup({});
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
+
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<EmpReviewTaskPayload> = inject(TaskService<EmpReviewTaskPayload>);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  ships = this.store.select(empCommonQuery.selectListOfShips)();
-  isEditable = this.store.select(requestTaskQuery.selectIsEditable)();
-  wizardStep = transformWizardStepDecision(EmissionsWizardStep);
-  emissionsSubTasksMap = emissionsSubTasksMap;
+  readonly ships = this.store.select(empCommonQuery.selectListOfShips);
+  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly wizardStep = transformWizardStepDecision(EmissionsWizardStep);
+  readonly emissionsSubTasksMap = emissionsSubTasksMap;
+
+  readonly notCompletedMessage = computed<string>(() => {
+    const notCompleted: boolean = this.ships()?.some((ship) => ship.status !== TaskItemStatus.COMPLETED);
+    return notCompleted ? 'Enter the missing details for all entries with the status ‘Incomplete’' : undefined;
+  });
+
+  onContinueAttempt() {
+    if (this.notCompletedMessage()) {
+      this.formGroup.setErrors({ NOT_COMPLETED: this.notCompletedMessage() });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+    } else {
+      this.formGroup.reset();
+      this.notificationBannerStore.reset();
+    }
+  }
 
   onSubmit() {
+    this.notificationBannerStore.reset();
+
     (this.service as EmpReviewService)
       .saveReviewDecision(
         EMISSIONS_SUB_TASK,

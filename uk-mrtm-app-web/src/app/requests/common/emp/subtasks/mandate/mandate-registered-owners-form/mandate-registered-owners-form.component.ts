@@ -9,13 +9,13 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { PaginationComponent, TextInputComponent } from '@netz/govuk-components';
+import { LinkDirective, PaginationComponent, TextInputComponent } from '@netz/govuk-components';
 
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
@@ -42,6 +42,8 @@ import { SubTaskListMap } from '@shared/types';
     DatePickerComponent,
     MultiSelectTableComponent,
     PaginationComponent,
+    LinkDirective,
+    RouterLink,
   ],
   providers: [mandateRegisteredOwnersFormProvider],
   templateUrl: './mandate-registered-owners-form.component.html',
@@ -80,7 +82,6 @@ export class MandateRegisteredOwnersFormComponent {
 
     const firstIndex = (currentPage - 1) * this.pageSize;
     const lastIndex = Math.min(firstIndex + this.pageSize, ships?.length);
-
     return ships?.length > firstIndex ? ships.slice(firstIndex, lastIndex) : [];
   });
 
@@ -100,8 +101,20 @@ export class MandateRegisteredOwnersFormComponent {
 
   public onSubmit(): void {
     this.service
-      .saveSubtask(MANDATE_SUB_TASK, this.step, this.activatedRoute, this.form.value)
+      .saveSubtask(MANDATE_SUB_TASK, this.step, this.activatedRoute, {
+        ...this.form.value,
+        ships: this.availableShips()
+          .filter((ship) => ship.isSelected)
+          .map((ship) => ({
+            imoNumber: ship.imoNumber,
+            name: ship.name,
+          })),
+      })
       .pipe(take(1))
       .subscribe();
   }
+
+  readonly returnToLabel = mandateSubtaskMap.registeredOwners.title;
+
+  readonly isEdit = this.step === 'edit';
 }

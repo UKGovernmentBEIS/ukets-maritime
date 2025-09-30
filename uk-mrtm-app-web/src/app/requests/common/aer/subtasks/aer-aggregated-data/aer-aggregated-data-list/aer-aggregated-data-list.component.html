@@ -1,15 +1,21 @@
-<mrtm-notification-banner />
+<mrtm-notification-banner [preventResetOnNavigation]="true" />
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <netz-page-heading [caption]="wizardMap.caption">{{ wizardMap.title }}</netz-page-heading>
-    <p class="govuk-body govuk-!-width-three-quarters">{{ wizardMap.description }}</p>
+    <p class="govuk-body">{{ wizardMap.description }}</p>
+
+    @if (editable()) {
+      <mrtm-filter-by-ship
+        class="govuk-!-margin-top-7"
+        [ships]="shipsWithAggregatedData()"
+        filterByShipLabel="Find aggregated per ship"
+        (filterChanged)="onFilterChanged($event)" />
+    }
   </div>
   @if (editable()) {
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
       <mrtm-dropdown-button-group label="Add aggregated data">
-        <mrtm-dropdown-button-item routerLink="." (click)="onAddAggregatedData($event)">
-          Add aggregated data
-        </mrtm-dropdown-button-item>
+        <mrtm-dropdown-button-item (click)="onAddAggregatedData()">Add aggregated data</mrtm-dropdown-button-item>
         <mrtm-dropdown-button-item [routerLink]="['../', wizardStep.UPLOAD_AGGREGATED_DATA]">
           Upload file
         </mrtm-dropdown-button-item>
@@ -23,18 +29,17 @@
   }
 </div>
 
-@if (editable() && data()?.length) {
-  <mrtm-aer-filter-by-ship
-    [items]="filterAggregatedDataSelectItems()"
-    header="View aggregated per ship"
-    (filterChanged)="onFilterChanged($event)" />
-}
-
 <h3 class="govuk-heading-m">{{ aggregatedDataListHeader() }}</h3>
-@if (warningMessage(); as warningMessage) {
+@if (needsReviewMessage(); as warningMessage) {
+  <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="notCompletedMessage() ? 0 : 6" />
+}
+@if (notCompletedMessage(); as warningMessage) {
   <govuk-warning-text [assistiveText]="warningMessage" />
 }
-<mrtm-aggregated-data-list-summary-template [data]="data()" (deleteItems)="onDelete($event)" [editable]="editable()" />
+<mrtm-aggregated-data-list-summary-template
+  [data]="filteredAggregatedDataList()"
+  (deleteItems)="onDelete($event)"
+  [editable]="editable()" />
 
 @if (canContinue()) {
   <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>

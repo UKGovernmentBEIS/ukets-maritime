@@ -2,7 +2,6 @@ package uk.gov.mrtm.api.workflow.request.flow.empvariation.handler;
 
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
@@ -34,9 +33,6 @@ public class EmpVariationNotifyOperatorRegulatorLedActionHandler
     private final EmpVariationNotifyOperatorRegulatorLedValidator validator;
     private final WorkflowService workflowService;
 
-    @Value("${govuk-pay.empVariationPaymentIsActive}")
-    private boolean empVariationPaymentIsActive;
-
     @Override
     public RequestTaskPayload process(Long requestTaskId, String requestTaskActionType,
                                       AppUser appUser, NotifyOperatorForDecisionRequestTaskActionPayload payload) {
@@ -54,8 +50,7 @@ public class EmpVariationNotifyOperatorRegulatorLedActionHandler
                 requestTask.getProcessTaskId(),
                 Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                         MrtmBpmnProcessConstants.EMP_VARIATION_SUBMIT_OUTCOME, EmpVariationSubmitOutcome.SUBMITTED,
-                        BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.NOTIFY_OPERATOR,
-                        BpmnProcessConstants.SKIP_PAYMENT, !empVariationPaymentIsActive)
+                        BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.NOTIFY_OPERATOR)
         );
 
         return requestTask.getPayload();

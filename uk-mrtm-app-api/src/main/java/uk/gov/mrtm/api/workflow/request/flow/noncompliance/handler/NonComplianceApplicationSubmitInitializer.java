@@ -10,6 +10,7 @@ import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.workflow.request.application.taskview.RequestInfoDTO;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
+import uk.gov.netz.api.workflow.request.core.domain.constants.RequestTypes;
 import uk.gov.netz.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.netz.api.workflow.request.core.service.RequestQueryService;
 
@@ -27,7 +28,7 @@ public class NonComplianceApplicationSubmitInitializer implements InitializeRequ
 
         final Long accountId = request.getAccountId();
 
-        final List<String> excludedTypes = List.of(MrtmRequestType.NON_COMPLIANCE);
+        final List<String> excludedTypes = List.of(MrtmRequestType.NON_COMPLIANCE, RequestTypes.SYSTEM_MESSAGE_NOTIFICATION);
         final List<RequestInfoDTO> requestInfoDTOS = requestQueryService
             .findByResourceTypeAndResourceIdAndTypeNotIn(excludedTypes, ResourceType.ACCOUNT, accountId.toString());
 

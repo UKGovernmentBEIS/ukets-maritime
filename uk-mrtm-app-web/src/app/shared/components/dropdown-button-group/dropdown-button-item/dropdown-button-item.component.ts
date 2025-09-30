@@ -1,4 +1,6 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
+
+import { DROPDOWN_BUTTON_GROUP_COMPONENT } from '@shared/components/dropdown-button-group/dropdown-button-group.token';
 
 @Component({
   selector: 'mrtm-dropdown-button-item',
@@ -7,4 +9,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   styleUrl: './dropdown-button-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DropdownButtonItemComponent {}
+export class DropdownButtonItemComponent {
+  private parent = inject(DROPDOWN_BUTTON_GROUP_COMPONENT);
+
+  @HostBinding('attr.tabindex') get tabindex(): string {
+    return '-1';
+  }
+
+  onClick() {
+    this.parent.hidePopover();
+  }
+}

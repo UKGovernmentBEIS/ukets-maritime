@@ -9,14 +9,15 @@
     </div>
   </div>
   <ng-content select="[slot=fullWidthContent]"></ng-content>
-  @if (!hideSubmit) {
-    <button netzPendingButton govukButton type="submit">{{ submitText }}</button>
-  }
-  @if (showCancelLink) {
-    <div>
-      <a govukLink [routerLink]="cancelLinkPath">Cancel</a>
-    </div>
-  }
+
+  <div [class.govuk-button-group]="!hideSubmit && showCancelLink">
+    @if (!hideSubmit) {
+      <button id="wizard-step__button-submit" netzPendingButton govukButton type="submit">{{ submitText }}</button>
+    }
+    @if (showCancelLink) {
+      <a id="wizard-step__link-cancel" govukLink [routerLink]="cancelLinkPath">Cancel</a>
+    }
+  </div>
 </form>
 
 @if (showReturnLink) {

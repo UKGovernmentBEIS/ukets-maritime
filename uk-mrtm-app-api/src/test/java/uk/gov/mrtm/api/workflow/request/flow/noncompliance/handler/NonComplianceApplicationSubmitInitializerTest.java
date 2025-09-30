@@ -14,6 +14,7 @@ import uk.gov.netz.api.workflow.request.application.taskview.RequestInfoDTO;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
+import uk.gov.netz.api.workflow.request.core.domain.constants.RequestTypes;
 import uk.gov.netz.api.workflow.request.core.service.RequestQueryService;
 
 import java.util.List;
@@ -42,8 +43,8 @@ class NonComplianceApplicationSubmitInitializerTest {
                 RequestInfoDTO.builder().id("req1").type("type1").build(),
                 RequestInfoDTO.builder().id("req2").type("type2").build());
 
-        when(requestQueryService.findByResourceTypeAndResourceIdAndTypeNotIn(List.of(MrtmRequestType.NON_COMPLIANCE), ResourceType.ACCOUNT, accountId.toString()))
-            .thenReturn(availableRequests);
+        when(requestQueryService.findByResourceTypeAndResourceIdAndTypeNotIn(List.of(MrtmRequestType.NON_COMPLIANCE,
+            RequestTypes.SYSTEM_MESSAGE_NOTIFICATION), ResourceType.ACCOUNT, accountId.toString())).thenReturn(availableRequests);
 
         final RequestTaskPayload requestTaskPayload = initializer.initializePayload(request);
 

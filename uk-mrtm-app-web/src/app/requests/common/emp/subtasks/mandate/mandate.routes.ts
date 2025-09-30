@@ -90,4 +90,15 @@ export const MANDATE_ROUTES: Routes = [
       },
     ],
   },
+  {
+    path: MandateWizardStep.UPLOAD_OWNERS,
+    title: mandateSubtaskMap.uploadOwners.title,
+    data: { breadcrumb: false },
+    canActivate: [canActivateMandateWizardStep, canActivateRegisteredOwners],
+    resolve: {
+      backlink: backlinkResolver(MandateWizardStep.SUMMARY, MandateWizardStep.REGISTERED_OWNERS),
+    },
+    loadComponent: () =>
+      import('@requests/common/emp/subtasks/mandate/mandate-upload').then((c) => c.MandateUploadComponent),
+  },
 ];

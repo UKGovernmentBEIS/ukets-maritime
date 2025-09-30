@@ -6,6 +6,10 @@
   [hideSubmit]="false"
   [showReturnLink]="true"
   [isTwoThirds]="true">
+  <p class="govuk-hint">
+    Add any information that you think is relevant. The file name should refer to the content of the document, like
+    Task_list.doc
+  </p>
   <div formControlName="exist" govuk-radio [isInline]="true">
     <govuk-radio-option [value]="true" [label]="'Yes'" />
     <govuk-radio-option [value]="false" [label]="'No'" />

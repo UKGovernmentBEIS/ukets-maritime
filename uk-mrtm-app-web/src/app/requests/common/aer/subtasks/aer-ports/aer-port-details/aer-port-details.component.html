@@ -8,7 +8,7 @@
   <div
     govuk-select
     [options]="countrySelectItems"
-    widthClass="govuk-!-width-one-quarter"
+    widthClass="govuk-!-width-one-third"
     formControlName="country"
     label="Country code and name "
     labelSize="normal"></div>
@@ -16,17 +16,18 @@
     govuk-select
     [options]="portSelectItems()"
     formControlName="port"
-    widthClass="govuk-!-width-one-quarter"
+    widthClass="govuk-!-width-one-third"
     label="Port code and name "
     labelSize="normal"></div>
 
   <h3 class="govuk-heading-m">Arrival details</h3>
   <div
-    govuk-date-input
-    incompleteMessage="The format should be “DD-MM-YYYY”"
+    mrtm-date-picker
     formControlName="arrivalDate"
+    [datePickerConfig]="datepickerConfig"
     label="Date of arrival"
-    hint="For example, 21 07 2024"></div>
+    hint="For example, 21/7/2024"
+    widthClass="govuk-!-width-one-third"></div>
   <div
     mrtm-time-input
     formControlName="arrivalTime"
@@ -35,11 +36,12 @@
 
   <h3 class="govuk-heading-m">Departure details</h3>
   <div
-    govuk-date-input
-    incompleteMessage="The format should be “DD-MM-YYYY”"
+    mrtm-date-picker
     formControlName="departureDate"
+    [datePickerConfig]="datepickerConfig"
     label="Date of departure"
-    hint="For example, 21 07 2024"></div>
+    hint="For example, 21/7/2024"
+    widthClass="govuk-!-width-one-third"></div>
   <div
     mrtm-time-input
     formControlName="departureTime"
@@ -52,12 +54,12 @@
       govuk-text-input
       formControlName="ccs"
       label="Carbon capture and storage (CCS)(t)"
-      widthClass="govuk-!-width-one-quarter"></div>
+      widthClass="govuk-!-width-one-third"></div>
     <div
       govuk-text-input
       formControlName="ccu"
       label="Carbon capture and utilisation (CCU)(t)"
-      widthClass="govuk-!-width-one-quarter"></div>
+      widthClass="govuk-!-width-one-third"></div>
   }
 
   @if (ship()?.derogations?.smallIslandFerryOperatorReduction) {

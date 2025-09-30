@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { catchError, EMPTY, map, of } from 'rxjs';
@@ -11,13 +12,14 @@ import { PendingButtonDirective } from '@netz/common/directives';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
 
+import { TaskItemStatus } from '@requests/common';
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerEmissionsWizardStep } from '@requests/common/aer/subtasks/aer-emissions/aer-emissions.helpers';
 import { aerEmissionsMap } from '@requests/common/aer/subtasks/aer-subtasks-list.map';
 import { ListOfShipsTableComponent } from '@requests/common/components/emissions';
-import { TaskItemStatus } from '@requests/common/task-item-status';
 import { MultiSelectedItem, NotificationBannerComponent } from '@shared/components';
 import { DropdownButtonGroupComponent, DropdownButtonItemComponent } from '@shared/components/dropdown-button-group';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { ShipEmissionTableListItem } from '@shared/types';
 
 @Component({
@@ -37,6 +39,8 @@ import { ShipEmissionTableListItem } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerListOfShipsComponent {
+  private readonly formGroup: UntypedFormGroup = new UntypedFormGroup({});
+  private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
   private readonly store = inject(RequestTaskStore);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -53,9 +57,12 @@ export class AerListOfShipsComponent {
   readonly canFetchFromEMP = computed(() => this.accountStatus() === 'LIVE');
   readonly map = aerEmissionsMap;
   readonly listOfShips = this.store.select(aerCommonQuery.selectListOfShips);
-  readonly canContinue = computed(
-    () => this.listOfShips()?.length && this.listOfShips()?.every((ship) => ship.status === TaskItemStatus.COMPLETED),
-  );
+  readonly canContinue = computed(() => this.listOfShips()?.length);
+
+  readonly notCompletedMessage = computed<string>(() => {
+    const notCompleted: boolean = this.listOfShips()?.some((ship) => ship.status !== TaskItemStatus.COMPLETED);
+    return notCompleted ? 'Enter the missing details for all entries with the status ‘Incomplete’' : undefined;
+  });
 
   constructor() {
     if (this.activatedRoute.snapshot.queryParams?.['change'] === 'true') {
@@ -64,6 +71,15 @@ export class AerListOfShipsComponent {
   }
 
   onContinue() {
+    if (this.notCompletedMessage()) {
+      this.formGroup.setErrors({ NOT_COMPLETED: this.notCompletedMessage() });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+      return;
+    }
+
+    this.formGroup.reset();
+    this.notificationBannerStore.reset();
+
     this.router.navigate(['../'], { relativeTo: this.activatedRoute });
   }
 
@@ -80,11 +96,19 @@ export class AerListOfShipsComponent {
   }
 
   onDeleteShips(ships: MultiSelectedItem<ShipEmissionTableListItem>[]) {
-    this.router.navigate(['../', AerEmissionsWizardStep.DELETE_SHIPS], {
-      relativeTo: this.activatedRoute,
-      state: { ships: ships.map((ship) => ship.uniqueIdentifier) },
-      skipLocationChange: true,
-      queryParamsHandling: 'merge',
-    });
+    if (ships.length) {
+      this.formGroup.reset();
+      this.notificationBannerStore.reset();
+
+      this.router.navigate(['../', AerEmissionsWizardStep.DELETE_SHIPS], {
+        relativeTo: this.activatedRoute,
+        state: { ships: ships.map((ship) => ship.uniqueIdentifier) },
+        skipLocationChange: true,
+        queryParamsHandling: 'merge',
+      });
+    } else {
+      this.formGroup.setErrors({ NONE_SELECTED: 'Select the ships to delete' });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+    }
   }
 }

@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain;
 
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +19,16 @@ import java.util.UUID;
 @SuperBuilder
 @AllArgsConstructor
 public class NonComplianceRequestPayload extends RequestPayload {
+
+    @NotNull
+    private NonComplianceReason reason;
+
+    private LocalDate nonComplianceDate;
+
+    private LocalDate complianceDate;
+
+    @Size(max = 10000)
+    private String nonComplianceComments;
 
     private NonComplianceCloseJustification closeJustification;
     

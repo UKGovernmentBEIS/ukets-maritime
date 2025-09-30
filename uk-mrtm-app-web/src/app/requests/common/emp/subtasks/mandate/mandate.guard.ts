@@ -10,10 +10,11 @@ export const canActivateMandateSummary: CanActivateFn = (activatedRoute: Activat
   const store = inject(RequestTaskStore);
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
   const mandate = store.select(empCommonQuery.selectExtendedMandate)();
+  const ismShips = store.select(empCommonQuery.selectIsmShipImoNumbers)();
 
   return (
     !isEditable ||
-    (isEditable && isWizardCompleted(mandate)) ||
+    (isEditable && isWizardCompleted(mandate, ismShips)) ||
     createUrlTreeFromSnapshot(activatedRoute, [MandateWizardStep.RESPONSIBILITY])
   );
 };

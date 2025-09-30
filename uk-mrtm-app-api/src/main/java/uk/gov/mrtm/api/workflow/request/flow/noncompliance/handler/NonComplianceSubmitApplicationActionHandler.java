@@ -12,6 +12,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceA
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.mapper.NonComplianceMapper;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.WorkflowService;
@@ -38,6 +39,7 @@ public class NonComplianceSubmitApplicationActionHandler implements RequestTaskA
     private final NonComplianceApplicationValidator validator;
     private final WorkflowService workflowService;
     private final RequestService requestService;
+    private final NonComplianceApplyService nonComplianceApplyService;
 
     @Override
     public RequestTaskPayload process(final Long requestTaskId,
@@ -62,6 +64,8 @@ public class NonComplianceSubmitApplicationActionHandler implements RequestTaskA
         request.setSubmissionDate(LocalDateTime.now());
         final NonComplianceRequestPayload requestPayload = (NonComplianceRequestPayload) request.getPayload();
         requestPayload.setIssueNoticeOfIntent(Boolean.TRUE.equals(noticeOfIntent));
+
+        nonComplianceApplyService.submitDetails(request, taskPayload);
 
         requestService.addActionToRequest(
             request,

@@ -21,6 +21,7 @@ import {
 } from '@shared/constants';
 import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
+import { WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emission-sources-and-fuel-types-used-summary-template',
@@ -46,7 +47,7 @@ export class EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent {
   public readonly monitoringMethodMap = monitoringMethodMap;
 
   public readonly index = input.required<number>();
-  public readonly data = input.required<EmpEmissionsSources>();
+  public readonly data = input.required<WithNeedsReview<EmpEmissionsSources>>();
   public readonly changeLink = input<string>('../');
   public readonly isEditable = input<boolean>(false);
   public readonly isDeletable = input<boolean>(false);

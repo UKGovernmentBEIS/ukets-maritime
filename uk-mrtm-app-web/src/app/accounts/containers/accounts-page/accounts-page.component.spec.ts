@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 
-import { firstValueFrom, map, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { MaritimeAccountsService } from '@mrtm/api';
 
@@ -251,11 +251,6 @@ describe('AccountsPageComponent', () => {
 
     it('should create', () => {
       expect(component).toBeTruthy();
-    });
-
-    it('should render the appropriate heading', async () => {
-      await expect(firstValueFrom(component.vm$.pipe(map((vm) => vm.userRoleType)))).resolves.toEqual('VERIFIER');
-      expect(page.heading.textContent.trim()).toEqual('There are no accounts to view.');
     });
   });
 });

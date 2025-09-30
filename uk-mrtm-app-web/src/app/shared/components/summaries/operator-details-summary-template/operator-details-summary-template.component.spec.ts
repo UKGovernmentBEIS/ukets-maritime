@@ -45,25 +45,12 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
         },
         registrationNumber: '111111',
       } as OrganisationStructure,
-      declarationDocuments: {
-        exist: true,
-        documents: [
-          '041d0e61-ef94-45ea-8dba-2caea1d54771',
-          '061f417c-6e6a-40d2-8203-422389579a03',
-          '36a5cdcc-563e-4ec5-be73-33e312a3926e',
-        ],
-      },
       activityDescription: 'some activities',
     };
     component.files = [];
-    component.declarationFiles = [
-      { downloadUrl: '/tasks/1/file-download/11111111-1111-4111-a111-111111111111', fileName: '1.png' },
-      { downloadUrl: '/tasks/1/file-download/22222222-2222-4222-a222-222222222222', fileName: '2.png' },
-    ];
     component.wizardStep = {
       OPERATOR_DETAILS_OPERATOR_FORM: 'operator',
       OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES: 'undertaken-activities',
-      OPERATOR_DETAILS_DECLARATION_DOCUMENTS: 'declaration-documents',
       OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION: 'legal-status-of-organisation',
       OPERATOR_DETAILS_ORGANISATION_DETAILS: 'organisation-details',
     };
@@ -89,12 +76,6 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
       'Change',
       'Description',
       'some activities',
-      'Change',
-      'Do you want to provide documents relating to Mandates or Declarations',
-      'Yes',
-      'Change',
-      'Uploaded files',
-      '1.png2.png',
       'Change',
       'Organisation legal status',
       'Company',

@@ -30,6 +30,10 @@ public class NonComplianceCivilPenaltyInitializer implements InitializeRequestTa
         final RequestTaskPayload taskPayload = reIssueCivilPenalty ?
             NonComplianceCivilPenaltyRequestTaskPayload.builder()
                 .payloadType(MrtmRequestTaskPayloadType.NON_COMPLIANCE_CIVIL_PENALTY_PAYLOAD)
+                .reason(requestPayload.getReason())
+                .nonComplianceComments(requestPayload.getNonComplianceComments())
+                .complianceDate(requestPayload.getComplianceDate())
+                .nonComplianceDate(requestPayload.getNonComplianceDate())
                 .build() :
             NON_COMPLIANCE_MAPPER.toNonComplianceCivilPenaltyRequestTaskPayload(
                 requestPayload,

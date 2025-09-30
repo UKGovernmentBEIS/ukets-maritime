@@ -5,6 +5,7 @@ import { PayloadMutator } from '@netz/common/forms';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AerEmissionsWizardStep } from '@requests/common/aer/subtasks/aer-emissions/aer-emissions.helpers';
+import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 
 export class AerEmissionSourcesAndFuelTypesUsedListPayloadMutator extends PayloadMutator {
@@ -20,6 +21,8 @@ export class AerEmissionSourcesAndFuelTypesUsedListPayloadMutator extends Payloa
             emissionsSources: ship.emissionsSources.filter((source) => source.uniqueIdentifier !== userInput),
           })),
         ];
+
+        delete payload.aerSectionsCompleted[`${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${userInput}`];
       }),
     );
   }

@@ -6,7 +6,10 @@ import {
   StateSelector,
 } from '@netz/common/store';
 
-import { NonComplianceUnionPayload } from '@requests/common/non-compliance/non-compliance.types';
+import {
+  NonComplianceDetailsBase,
+  NonComplianceUnionPayload,
+} from '@requests/common/non-compliance/non-compliance.types';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AttachedFile } from '@shared/types';
 
@@ -14,9 +17,6 @@ const selectPayload: StateSelector<RequestTaskState, NonComplianceUnionPayload> 
   requestTaskQuery.selectRequestTaskPayload,
   (payload) => payload as NonComplianceUnionPayload,
 );
-
-const selectCloseJustification: StateSelector<RequestTaskState, NonComplianceUnionPayload['closeJustification']> =
-  createDescendingSelector(selectPayload, (payload) => payload?.closeJustification);
 
 const selectNonComplianceAttachments: StateSelector<
   RequestTaskState,
@@ -40,11 +40,19 @@ const selectStatusForSubtask = (subtask: string): StateSelector<RequestTaskState
   });
 };
 
+const selectNonComplianceDetailsBase: StateSelector<RequestTaskState, NonComplianceDetailsBase> =
+  createDescendingSelector(selectPayload, (payload) => ({
+    reason: payload?.reason,
+    nonComplianceDate: payload?.nonComplianceDate,
+    complianceDate: payload?.complianceDate,
+    nonComplianceComments: payload?.nonComplianceComments,
+  }));
+
 export const nonComplianceCommonQuery = {
   selectPayload,
-  selectCloseJustification,
   selectNonComplianceAttachments,
   selectAttachedFiles,
   selectSectionsCompleted,
   selectStatusForSubtask,
+  selectNonComplianceDetailsBase,
 };

@@ -6,3 +6,4 @@ export * from './non-compliance-notice-of-intent';
 export * from './non-compliance-civil-penalty';
 export * from './non-compliance-final-determination';
 export * from './non-compliance-close';
+export * from './non-compliance-amend-details';

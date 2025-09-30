@@ -33,7 +33,7 @@ const selectNonComplianceDetails: StateSelector<RequestTaskState, NonComplianceD
     reason: payload?.reason,
     nonComplianceDate: payload?.nonComplianceDate,
     complianceDate: payload?.complianceDate,
-    comments: payload?.comments,
+    nonComplianceComments: payload?.nonComplianceComments,
     availableRequests: payload?.availableRequests,
     selectedRequests: payload?.selectedRequests,
     civilPenalty: payload?.civilPenalty,
@@ -48,7 +48,7 @@ const selectNonComplianceDetailsSummary: StateSelector<RequestTaskState, NonComp
     reason: payload?.reason,
     nonComplianceDate: payload?.nonComplianceDate,
     complianceDate: payload?.complianceDate,
-    comments: payload?.comments,
+    nonComplianceComments: payload?.nonComplianceComments,
     selectedRequestsMapped: payload?.selectedRequests?.map((selectedId) =>
       payload?.availableRequests.find(({ id }) => id === selectedId),
     ),

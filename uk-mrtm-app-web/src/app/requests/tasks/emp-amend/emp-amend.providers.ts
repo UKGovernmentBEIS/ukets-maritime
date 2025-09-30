@@ -64,7 +64,6 @@ import {
   provideMandateSideEffects,
 } from '@requests/common/emp/subtasks/mandate';
 import {
-  DeclarationDocumentsPayloadMutator,
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsFlowManager,
   OperatorDetailsStepPayloadMutator,
@@ -96,7 +95,6 @@ export function provideEmpAmendPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresRiskAssessmentPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsStepPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: UndertakenActivitiesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DeclarationDocumentsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: LegalStatusOfOrganisationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OrganisationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesQualityAssurancePayloadMutator },

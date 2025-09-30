@@ -61,8 +61,7 @@ describe('AerAggregatedDataListComponent', () => {
       'Return to: Complete annual emissions report',
     );
     expect(screen.getAllByRole('columnheader').map((column) => column.textContent.trim())).toEqual([
-      'IMO number',
-      'Ship name',
+      'Ship name and IMO number',
       'Total ship emissions (tCO2e)',
       'Emissions figure for surrender  (tCO2e)',
       'Status',

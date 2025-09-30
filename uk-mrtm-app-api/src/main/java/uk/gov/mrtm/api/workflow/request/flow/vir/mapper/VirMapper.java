@@ -31,7 +31,6 @@ public interface VirMapper {
 
     @Mapping(target = "payloadType", source = "payloadType")
     @Mapping(target = "attachments", ignore = true)
-    @Mapping(target = "virAttachments", ignore = true)
     VirApplicationSubmittedRequestActionPayload toVirApplicationSubmittedRequestActionPayload(
         VirApplicationSubmitRequestTaskPayload taskPayload,
         Year reportingYear, String payloadType);

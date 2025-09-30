@@ -30,6 +30,7 @@ import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApp
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceApplicationClosedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceDetailsAmendedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload;
@@ -148,6 +149,8 @@ public class RequestActionPayloadSchemasProvider extends SwaggerSchemasAbstractP
 			NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.class);
 		addResolvedShemas(NonComplianceApplicationClosedRequestActionPayload.class.getSimpleName(),
 			NonComplianceApplicationClosedRequestActionPayload.class);
+		addResolvedShemas(NonComplianceDetailsAmendedRequestActionPayload.class.getSimpleName(),
+			NonComplianceDetailsAmendedRequestActionPayload.class);
     }
     
 }

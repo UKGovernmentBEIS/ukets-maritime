@@ -5,6 +5,7 @@ import {
   AER_VERIFICATION_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/aer/aer.consts';
 import { isCancelActionAvailable } from '@requests/common/is-cancel-action-available';
+import { NON_COMPLIANCE_AMEND_DETAILS_ROUTE_PREFIX } from '@requests/common/non-compliance/non-compliance-amend-details';
 import { NON_COMPLIANCE_CLOSE_ROUTE_PREFIX } from '@requests/common/non-compliance/non-compliance-close';
 import { PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX } from '@requests/common/provide-note-redirect';
 import { CREATE_ACTION_TYPE } from '@requests/common/types';
@@ -39,5 +40,9 @@ export const relatedActionsMap: RelatedActionsMap = {
   NON_COMPLIANCE_FINAL_DETERMINATION_SAVE_APPLICATION: {
     text: 'Provide note on appeal',
     path: [PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX],
+  },
+  NON_COMPLIANCE_AMEND_DETAILS: {
+    text: 'Change the details of non-compliance',
+    path: [NON_COMPLIANCE_AMEND_DETAILS_ROUTE_PREFIX],
   },
 };

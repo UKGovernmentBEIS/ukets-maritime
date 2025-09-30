@@ -63,7 +63,7 @@ export const emissionsSourcesValidator = (
   );
 };
 
-const emissionsSourcesItemValidator = (emissionsSources: EmpEmissionsSources): boolean =>
+export const emissionsSourcesItemValidator = (emissionsSources: EmpEmissionsSources): boolean =>
   !isNil(emissionsSources?.name) &&
   !isNil(emissionsSources?.type) &&
   !isNil(emissionsSources?.sourceClass) &&

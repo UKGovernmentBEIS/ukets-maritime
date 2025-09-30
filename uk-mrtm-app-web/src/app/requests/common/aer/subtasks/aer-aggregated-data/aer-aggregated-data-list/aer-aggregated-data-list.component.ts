@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal, WritableSignal } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
+import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
@@ -11,16 +11,16 @@ import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/c
 import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { ButtonDirective, GovukSelectOption, WarningTextComponent } from '@netz/govuk-components';
+import { ButtonDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import { AerFilterByShipComponent } from '@requests/common/aer/components';
 import {
   AER_AGGREGATED_DATA_SUB_TASK,
   AerAggregatedDataWizardStep,
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
+import { FilterByShip, FilterByShipComponent } from '@requests/common/components';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AggregatedDataListSummaryTemplateComponent, NotificationBannerComponent } from '@shared/components';
 import { DropdownButtonGroupComponent, DropdownButtonItemComponent } from '@shared/components/dropdown-button-group';
@@ -37,7 +37,7 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
     DropdownButtonItemComponent,
     RouterLink,
     ReturnToTaskOrActionPageComponent,
-    AerFilterByShipComponent,
+    FilterByShipComponent,
     AggregatedDataListSummaryTemplateComponent,
     PendingButtonDirective,
     WarningTextComponent,
@@ -47,113 +47,126 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataListComponent {
-  private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
-  private readonly currentFilter: WritableSignal<AerShipAggregatedData['imoNumber'] | null> = signal(null);
-  private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private readonly router: Router = inject(Router);
-  private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
-  private readonly form: UntypedFormGroup = new UntypedFormGroup({});
+  private readonly store = inject(RequestTaskStore);
+  private readonly service = inject(TaskService<AerSubmitTaskPayload>);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly router = inject(Router);
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
+  private readonly formGroup = new UntypedFormGroup({});
 
-  public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-  public readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;
-  public readonly wizardStep: typeof AerAggregatedDataWizardStep = AerAggregatedDataWizardStep;
-  public readonly allAggregatedData = this.store.select(aerCommonQuery.selectAggregatedDataList);
+  private readonly shipsWithoutAggregatedData = computed(() =>
+    this.store
+      .select(aerCommonQuery.selectListOfShipsWithoutAggregatedData(null))()
+      .filter((ship) => ship.status === TaskItemStatus.COMPLETED),
+  );
+  private readonly aggregatedDataList = this.store.select(aerCommonQuery.selectAggregatedDataList);
+  readonly filter = signal<FilterByShip | null>(null);
+  readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly shipsWithAggregatedData = this.store.select(aerCommonQuery.selectListOfShipsWithAggregatedData);
+  readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;
+  readonly wizardStep = AerAggregatedDataWizardStep;
 
-  public readonly canFetchFromPortsAndVoyages: Signal<boolean> = computed(() =>
+  readonly canFetchFromPortsAndVoyages = computed<boolean>(() =>
     [
       this.store.select(aerCommonQuery.selectStatusForVoyagesSubtask)(),
       this.store.select(aerCommonQuery.selectStatusForPortsSubtask)(),
     ].includes(TaskItemStatus.COMPLETED),
   );
 
-  public data: Signal<Array<AerAggregatedDataSummaryItemDto>> = computed(() => {
-    const currentFilter = this.currentFilter();
-    const allItems = this.allAggregatedData();
+  readonly filteredAggregatedDataList = computed<AerAggregatedDataSummaryItemDto[]>(() => {
+    const imoNumber = this.filter()?.imoNumber;
+    const allItems = this.aggregatedDataList();
 
-    return isNil(currentFilter) ? allItems : allItems.filter((item) => item.imoNumber === currentFilter);
+    return isNil(imoNumber) ? allItems : allItems.filter((item) => item.imoNumber === imoNumber);
   });
 
-  public readonly filterAggregatedDataSelectItems: Signal<Array<GovukSelectOption>> = computed(() => {
-    const allShips = this.allAggregatedData().map((data) => ({
-      value: data.imoNumber,
-      text: `${data?.shipName} (IMO: ${data.imoNumber})`,
-    }));
+  readonly aggregatedDataListHeader = computed<string>(() =>
+    this.filter()?.shipName ? `Aggregated data of ${this.filter()?.shipName}` : 'Aggregated data of all ships',
+  );
 
-    const uniqueImoNumbers = Array.from(new Set(allShips.map((x) => x.value)));
+  readonly needsReviewMessage = computed<string>(() => {
+    const needsReviewAggregatedData = this.aggregatedDataList().filter(
+      (aggregatedDataItem) => aggregatedDataItem.status === TaskItemStatus.NEEDS_REVIEW,
+    );
 
-    return [
-      { value: null, text: 'All ships' },
-      ...uniqueImoNumbers.map((imoNumber) => allShips.find((x) => x.value === imoNumber)),
-    ];
-  });
-
-  public readonly aggregatedDataListHeader = computed(() => {
-    const selectedShip = this.currentFilter();
-    const allShips = this.filterAggregatedDataSelectItems();
-
-    return isNil(selectedShip)
-      ? 'Aggregated data of all ships'
-      : `Aggregated data of ${allShips.find((x) => x.value === selectedShip)?.text}`;
-  });
-
-  public readonly warningMessage: Signal<string> = computed(() => {
-    const aggregatedData = this.allAggregatedData().filter((data) => data.status === 'NEEDS_REVIEW');
-
-    if (aggregatedData.length === 0) {
+    if (needsReviewAggregatedData.length === 0) {
       return undefined;
     }
 
-    return aggregatedData.find((data) => !data.canViewDetails)
-      ? 'You must go back to the "Ships and emission details list" task and complete the ship details for any records with the status "Needs review".'
-      : 'The aggregated data has been updated. Select the IMO numbers for any records that have the status ‘Needs review’ to review and confirm the information.';
+    return needsReviewAggregatedData.find((data) => !data.canViewDetails)
+      ? 'You must go back to the ‘Ships and emission details list’ task and complete the ship details for any entries with the status ‘Needs review’.'
+      : 'The aggregated data has been updated. Select the Ship name for any entries that have the status ‘Needs review’ to review and confirm the information.';
   });
 
-  public readonly canContinue: Signal<boolean> = computed(() => {
-    const statuses = this.allAggregatedData().map((data) => data.status);
-
-    return this.editable() && statuses.length && statuses.every((task) => task === TaskItemStatus.COMPLETED);
+  readonly notCompletedMessage = computed<string>(() => {
+    const hasIncompleteAggregatedData: boolean = this.aggregatedDataList().some(
+      (aggregatedDataItem) => aggregatedDataItem.status === TaskItemStatus.IN_PROGRESS,
+    );
+    return hasIncompleteAggregatedData
+      ? 'Enter the missing details for all entries with the status ‘Incomplete’'
+      : undefined;
   });
 
-  public onFilterChanged(current: AerAggregatedDataSummaryItemDto['imoNumber']): void {
-    this.currentFilter.set(current);
+  readonly canContinue = computed<boolean>(() => this.editable() && this.aggregatedDataList()?.length > 0);
+
+  onFilterChanged({ imoNumber, shipName }: FilterByShip): void {
+    this.filter.set({ imoNumber, shipName });
   }
 
-  public onDelete(aggregatedData: Array<AerAggregatedDataSummaryItemDto>): void {
-    this.service
-      .saveSubtask(
-        AER_AGGREGATED_DATA_SUB_TASK,
-        AerAggregatedDataWizardStep.DELETE_AGGREGATED_DATA,
-        this.activatedRoute,
-        aggregatedData,
-      )
-      .pipe(take(1))
-      .subscribe();
+  onDelete(aggregatedDataItems: Array<AerAggregatedDataSummaryItemDto>): void {
+    if (aggregatedDataItems.length) {
+      this.formGroup.reset();
+      this.notificationBannerStore.reset();
+
+      this.service
+        .saveSubtask(
+          AER_AGGREGATED_DATA_SUB_TASK,
+          AerAggregatedDataWizardStep.DELETE_AGGREGATED_DATA,
+          this.activatedRoute,
+          aggregatedDataItems,
+        )
+        .pipe(take(1))
+        .subscribe();
+    } else {
+      this.formGroup.setErrors({ NONE_SELECTED: 'Select the aggregated data to delete' });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+    }
   }
 
-  public async onContinue(): Promise<void> {
-    await this.router.navigate(['../'], { relativeTo: this.activatedRoute });
-  }
+  async onContinue(): Promise<void> {
+    const errors: ValidationErrors = {};
+    let isValid = true;
 
-  public onAddAggregatedData(event: MouseEvent): void {
-    event.preventDefault();
-    event.stopPropagation();
+    if (this.notCompletedMessage()) {
+      errors['NOT_COMPLETED'] = this.notCompletedMessage();
+      isValid = false;
+    }
 
-    const aggregatedDataImoNumbers = (this.allAggregatedData() ?? []).map((aggregatedData) => aggregatedData.imoNumber);
-    const shipsImoNumbers = (this.store.select(aerCommonQuery.selectListOfShips)() ?? [])
-      .filter((ship) => ship.status === TaskItemStatus.COMPLETED)
-      .map((ship) => ship?.imoNumber);
+    if (this.needsReviewMessage()) {
+      errors['NEEDS_REVIEW'] = this.needsReviewMessage();
+      isValid = false;
+    }
 
-    if (shipsImoNumbers.every((shipImoNumber) => aggregatedDataImoNumbers.includes(shipImoNumber))) {
-      this.form.setErrors({
-        notAllowed: 'All ships already have aggregated data recorded',
-      });
-
-      this.notificationBannerStore.setInvalidForm(this.form);
+    if (!isValid) {
+      this.formGroup.setErrors(errors);
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
       return;
     }
 
-    this.form.reset();
+    this.formGroup.reset();
+    this.notificationBannerStore.reset();
+
+    await this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+  }
+
+  onAddAggregatedData(): void {
+    if (this.shipsWithoutAggregatedData().length === 0) {
+      this.formGroup.setErrors({ notAllowed: 'All ships already have aggregated data recorded' });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+      return;
+    }
+
+    this.formGroup.reset();
     this.notificationBannerStore.reset();
 
     this.router.navigate([this.wizardStep.SELECT_SHIP], { relativeTo: this.activatedRoute });

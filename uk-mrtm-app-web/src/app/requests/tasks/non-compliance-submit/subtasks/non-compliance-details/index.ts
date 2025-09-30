@@ -1,7 +1,6 @@
 export * from './non-compliance-details.routes';
 export * from './non-compliance-details.flow-manager';
 export * from './non-compliance-details-in-progress.side-effect';
-export * from './non-compliance-details-form';
 export * from './non-compliance-details-selected-requests';
 export * from './non-compliance-details-civil-penalty';
 export * from './non-compliance-details-notice-of-intent';

@@ -10,3 +10,4 @@ export * from './is-doe';
 export * from './is-lng';
 export * from './dates.utils';
 export * from './is-vir';
+export * from './values-are-equal.util';

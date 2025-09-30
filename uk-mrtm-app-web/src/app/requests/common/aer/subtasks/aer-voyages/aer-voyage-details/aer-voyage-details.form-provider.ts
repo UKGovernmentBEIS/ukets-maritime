@@ -19,7 +19,7 @@ import {
   AerVoyageDetailsFormGroup,
   AerVoyageDetailsFormModel,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyage-details/aer-voyage-details.types';
-import { sameReportingYearValidator, voyageArrivalDepartureDateValidator } from '@requests/common/aer/subtasks/utils';
+import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { mergeDatesToDate } from '@shared/utils';
 
@@ -188,7 +188,7 @@ export const aerVoyageDetailsFormProvider: Provider = {
       },
       {
         validators: [
-          voyageArrivalDepartureDateValidator,
+          arrivalDepartureDateValidator('voyages'),
           arrivalDepartureDateTimeOverlapOtherVoyage(uniqueIdentifier, imoNumber, store),
         ],
       },

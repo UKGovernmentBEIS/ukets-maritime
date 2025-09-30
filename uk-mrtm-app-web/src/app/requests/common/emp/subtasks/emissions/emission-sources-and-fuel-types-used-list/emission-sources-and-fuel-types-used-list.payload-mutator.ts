@@ -5,6 +5,7 @@ import { EmpEmissionsSources, EmpShipEmissions } from '@mrtm/api';
 
 import { PayloadMutator } from '@netz/common/forms';
 
+import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
@@ -24,6 +25,8 @@ export class EmissionSourcesAndFuelTypesUsedListPayloadMutator extends PayloadMu
             ),
           })),
         ];
+
+        delete payload.empSectionsCompleted[`${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${userInput}`];
       }),
     );
   }

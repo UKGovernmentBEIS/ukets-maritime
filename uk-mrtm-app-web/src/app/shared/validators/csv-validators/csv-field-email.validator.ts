@@ -8,7 +8,7 @@ export function csvFieldEmailValidator<T>(
   field: keyof T,
   csvMap: Record<keyof T, string>,
   message: string,
-  optional = true,
+  hiddenIfNull = true,
 ): ValidatorFn {
   return (control: FormArray): { [key: string]: any } | null => {
     if (!control.length) {
@@ -20,7 +20,7 @@ export function csvFieldEmailValidator<T>(
     control?.controls?.forEach((dataRow, index) => {
       const currentField = dataRow.get(field.toString());
 
-      if (optional && (currentField === null || currentField === undefined)) {
+      if (hiddenIfNull && (currentField === null || currentField === undefined)) {
         return null;
       }
 

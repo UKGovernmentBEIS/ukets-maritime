@@ -26,7 +26,6 @@ export const nonComplianceCivilPenaltyUploadFormProvider: Provider = {
     const isEditable = store.select(nonComplianceCivilPenaltyCommonQuery.selectIsFormEditable)();
     const requestTaskId = store.select(requestTaskQuery.selectRequestTaskId)();
     const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
-    const commonPenaltyAmountMessage = 'Enter a positive number up to 2 decimal places';
 
     return formBuilder.group({
       civilPenalty: fileService.buildFormControl(
@@ -41,13 +40,9 @@ export const nonComplianceCivilPenaltyUploadFormProvider: Provider = {
         nonComplianceCivilPenaltyUpload?.penaltyAmount ?? null,
         [
           GovukValidators.required('Enter the final penalty amount'),
-          GovukValidators.maxLength(255, 'Enter up to 255 characters'),
-          GovukValidators.min(0, commonPenaltyAmountMessage),
-          GovukValidators.pattern(
-            /^(?!0\.0{1,2}$)([1-9][0-9]*(\.[0-9]{1,2})?|0\.[0-9]{1,2})$/,
-            commonPenaltyAmountMessage,
-          ),
-          GovukValidators.notNaN(commonPenaltyAmountMessage),
+          GovukValidators.min(0, 'Enter a positive number up to 2 decimal places'),
+          GovukValidators.notNaN('Enter a numerical value'),
+          GovukValidators.maxDecimalsValidator(2),
         ],
       ),
       dueDate: formBuilder.control<Date>(

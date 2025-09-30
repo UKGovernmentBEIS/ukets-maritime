@@ -85,41 +85,6 @@
   </dl>
 }
 
-@if ($any(operatorDetails)?.declarationDocuments) {
-  <h2 class="govuk-heading-m">Documents relating to Mandates or Declarations</h2>
-  <dl govuk-summary-list>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Do you want to provide documents relating to Mandates or Declarations</dt>
-      <dd
-        govukSummaryListRowValue
-        htmlDiff
-        [current]="$any(operatorDetails)?.declarationDocuments?.exist | booleanToText"
-        [previous]="$any(originalOperatorDetails)?.declarationDocuments?.exist | booleanToText"></dd>
-      @if (isEditable) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_DECLARATION_DOCUMENTS]" [queryParams]="queryParams">
-            Change
-          </a>
-        </dd>
-      }
-    </div>
-    @if ($any(operatorDetails)?.declarationDocuments?.documents?.length > 0) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Uploaded files</dt>
-        <dd govukSummaryListRowValue>
-          <mrtm-summary-download-files [files]="declarationFiles" [originalFiles]="originalDeclarationFiles" />
-        </dd>
-        @if (isEditable) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_DECLARATION_DOCUMENTS]" [queryParams]="queryParams">
-              Change
-            </a>
-          </dd>
-        }
-      </div>
-    }
-  </dl>
-}
 @if (operatorDetails?.organisationStructure) {
   <h2 class="govuk-heading-m">Organisation details</h2>
   <dl govuk-summary-list>

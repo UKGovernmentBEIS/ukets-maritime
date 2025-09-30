@@ -58,7 +58,7 @@ class NonComplianceMapperTest {
                 .reason(NonComplianceReason.FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN)
                 .nonComplianceDate(nonComplianceDate)
                 .complianceDate(complianceDate)
-                .comments(comments)
+                .nonComplianceComments(comments)
                 .nonCompliancePenalties(nonCompliancePenalties)
                 .sectionsCompleted(sectionsCompleted)
                 .selectedRequests(Set.of("id1", "id2"))
@@ -70,7 +70,7 @@ class NonComplianceMapperTest {
                 .reason(NonComplianceReason.FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN)
                 .nonComplianceDate(nonComplianceDate)
                 .complianceDate(complianceDate)
-                .comments(comments)
+                .nonComplianceComments(comments)
                 .selectedRequests(Set.of(
                     RequestInfoDTO.builder().id("id1").type(MrtmRequestType.EMP_ISSUANCE).build(),
                     RequestInfoDTO.builder().id("id2").type(MrtmRequestType.AER).build()))
@@ -211,79 +211,6 @@ class NonComplianceMapperTest {
     }
 
     @Test
-    void toInitialPenaltyNoticeSubmittedRequestActionIgnoreComments() {
-        String payloadType = "payloadType";
-        UUID initialPenaltyNotice = UUID.randomUUID();
-        Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "filename.txt");
-        NonComplianceDecisionNotification decisionNotification =  mock(NonComplianceDecisionNotification.class);
-        Map<String, RequestActionUserInfo> usersInfo = Map.of("userId", mock(RequestActionUserInfo.class));
-        Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
-
-        NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload requestActionPayload =
-            NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload.builder()
-                .initialPenaltyNotice(initialPenaltyNotice)
-                .decisionNotification(decisionNotification)
-                .nonComplianceAttachments(attachments)
-                .comments("comments")
-                .payloadType(payloadType)
-                .sectionsCompleted(sectionsCompleted)
-                .usersInfo(usersInfo)
-                .build();
-
-        NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload expectedRequestActionPayload =
-            NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload.builder()
-                .initialPenaltyNotice(initialPenaltyNotice)
-                .decisionNotification(decisionNotification)
-                .nonComplianceAttachments(attachments)
-                .payloadType(payloadType)
-                .sectionsCompleted(sectionsCompleted)
-                .usersInfo(usersInfo)
-                .build();
-
-        final NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload actualRequestActionPayload =
-            nonComplianceMapper.toInitialPenaltyNoticeSubmittedRequestActionIgnoreComments(requestActionPayload);
-
-        assertEquals(expectedRequestActionPayload, actualRequestActionPayload);
-    }
-
-    @Test
-    void toNoticeOfIntentSubmittedRequestActionIgnoreComments() {
-        String payloadType = "payloadType";
-        UUID noticeOfIntent = UUID.randomUUID();
-        Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "filename.txt");
-        NonComplianceDecisionNotification decisionNotification =  mock(NonComplianceDecisionNotification.class);
-        Map<String, RequestActionUserInfo> usersInfo = Map.of("userId", mock(RequestActionUserInfo.class));
-        Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
-
-        NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload requestActionPayload =
-            NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload.builder()
-                .noticeOfIntent(noticeOfIntent)
-                .decisionNotification(decisionNotification)
-                .nonComplianceAttachments(attachments)
-                .comments("comments")
-                .payloadType(payloadType)
-                .sectionsCompleted(sectionsCompleted)
-                .usersInfo(usersInfo)
-                .build();
-
-        NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload expectedRequestActionPayload =
-            NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload.builder()
-                .noticeOfIntent(noticeOfIntent)
-                .decisionNotification(decisionNotification)
-                .nonComplianceAttachments(attachments)
-                .payloadType(payloadType)
-                .sectionsCompleted(sectionsCompleted)
-                .usersInfo(usersInfo)
-                .build();
-
-        final NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload actualRequestActionPayload =
-            nonComplianceMapper.toNoticeOfIntentSubmittedRequestActionIgnoreComments(requestActionPayload);
-
-        assertEquals(expectedRequestActionPayload, actualRequestActionPayload);
-    }
-
-
-    @Test
     void toNoticeOfIntentSubmittedRequestAction() {
         String payloadType = "payloadType";
         NonComplianceCloseJustification closeJustification = mock(NonComplianceCloseJustification.class);
@@ -413,49 +340,6 @@ class NonComplianceMapperTest {
     }
 
     @Test
-    void toCivilPenaltySubmittedRequestActionIgnoreComments() {
-        String payloadType = "payloadType";
-        UUID civilPenalty = UUID.randomUUID();
-        Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "filename.txt");
-        NonComplianceDecisionNotification decisionNotification =  mock(NonComplianceDecisionNotification.class);
-        Map<String, RequestActionUserInfo> usersInfo = Map.of("userId", mock(RequestActionUserInfo.class));
-        Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
-        String penaltyAmount = "1";
-        LocalDate civilPenaltyDueDate = LocalDate.now();
-        String comments = "comments";
-
-        NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload requestActionPayload =
-            NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload.builder()
-                .civilPenalty(civilPenalty)
-                .decisionNotification(decisionNotification)
-                .nonComplianceAttachments(attachments)
-                .comments(comments)
-                .payloadType(payloadType)
-                .dueDate(civilPenaltyDueDate)
-                .penaltyAmount(penaltyAmount)
-                .sectionsCompleted(sectionsCompleted)
-                .usersInfo(usersInfo)
-                .build();
-
-        NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload expectedRequestActionPayload =
-            NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload.builder()
-                .civilPenalty(civilPenalty)
-                .decisionNotification(decisionNotification)
-                .nonComplianceAttachments(attachments)
-                .payloadType(payloadType)
-                .dueDate(civilPenaltyDueDate)
-                .penaltyAmount(penaltyAmount)
-                .sectionsCompleted(sectionsCompleted)
-                .usersInfo(usersInfo)
-                .build();
-
-        final NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload actualRequestActionPayload =
-            nonComplianceMapper.toCivilPenaltySubmittedRequestActionIgnoreComments(requestActionPayload);
-
-        assertEquals(expectedRequestActionPayload, actualRequestActionPayload);
-    }
-
-    @Test
     void toFinalDeterminationSubmittedRequestAction() {
         String payloadType = "payloadType";
         Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
@@ -497,53 +381,6 @@ class NonComplianceMapperTest {
 
         final NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload actualRequestActionPayload =
             nonComplianceMapper.toFinalDeterminationSubmittedRequestAction(requestTaskPayload, payloadType);
-
-        assertEquals(expectedRequestActionPayload, actualRequestActionPayload);
-    }
-
-
-    @Test
-    void toFinalDeterminationSubmittedRequestActionIgnoreComments() {
-        String payloadType = "payloadType";
-        Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
-        LocalDate operatorPaidDate = LocalDate.now();
-        LocalDate complianceRestoredDate = LocalDate.now().minusMonths(1);
-        String comments = "comments";
-        boolean reissuePenalty = true;
-        boolean operatorPaid = true;
-        ComplianceRestored complianceRestored = ComplianceRestored.NOT_APPLICABLE;
-
-        NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload requestActionPayload =
-            NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.builder()
-                .sectionsCompleted(sectionsCompleted)
-                .payloadType(payloadType)
-                .finalDetermination(
-                    NonComplianceFinalDetermination.builder()
-                        .complianceRestored(complianceRestored)
-                        .complianceRestoredDate(complianceRestoredDate)
-                        .comments(comments)
-                        .reissuePenalty(reissuePenalty)
-                        .operatorPaid(operatorPaid)
-                        .operatorPaidDate(operatorPaidDate)
-                        .build())
-                .build();
-
-        NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload expectedRequestActionPayload =
-            NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload.builder()
-                .sectionsCompleted(sectionsCompleted)
-                .payloadType(payloadType)
-                .finalDetermination(
-                    NonComplianceFinalDetermination.builder()
-                        .complianceRestored(complianceRestored)
-                        .complianceRestoredDate(complianceRestoredDate)
-                        .reissuePenalty(reissuePenalty)
-                        .operatorPaid(operatorPaid)
-                        .operatorPaidDate(operatorPaidDate)
-                        .build())
-                .build();
-
-        final NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload actualRequestActionPayload =
-            nonComplianceMapper.toFinalDeterminationSubmittedRequestActionIgnoreComments(requestActionPayload);
 
         assertEquals(expectedRequestActionPayload, actualRequestActionPayload);
     }

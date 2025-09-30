@@ -3,7 +3,8 @@
     [columns]="columns()"
     [data]="data()"
     description="Emissions sources and fuel types used"
-    emptyTableText="No items to display">
+    emptyTableText="No items to display"
+    [rowCssClasses]="onDefineRowAdditionalStyle">
     <ng-template let-column="column" let-row="row">
       @switch (column.field) {
         @case ('name') {

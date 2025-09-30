@@ -1,6 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-import { EmpMandate, EmpRegisteredOwner } from '@mrtm/api';
+import { EmpMandate, EmpRegisteredOwner, ShipDetails } from '@mrtm/api';
 
 export const MANDATE_SUB_TASK = 'mandate';
 export const MANDATE_REGISTERED_OWNER_PARAM = 'registeredOwnerId';
@@ -13,6 +13,7 @@ export enum MandateWizardStep {
   REGISTERED_OWNERS_FORM_EDIT = 'edit',
   DELETE_REGISTERED_OWNER = 'delete-registered-owner',
   DECISION = 'decision',
+  UPLOAD_OWNERS = 'upload-owners',
   SUMMARY = '../',
 }
 
@@ -26,12 +27,16 @@ export const isWizardCompleted = (
   mandate: Omit<EmpMandate, 'registeredOwners'> & {
     registeredOwners: Array<EmpRegisteredOwner & { needsReview: boolean }>;
   },
+  ismEmissionShipImoNumbers: Set<ShipDetails['imoNumber']>,
 ): boolean => {
+  const usedImoNumbers = new Set(mandate.registeredOwners.flatMap((ro) => ro.ships.flatMap((ship) => ship?.imoNumber)));
+
   return (
     mandate?.exist === false ||
     (mandate.exist &&
       mandate?.registeredOwners?.length > 0 &&
       mandate?.registeredOwners?.every((ro) => !ro.needsReview) &&
-      mandate?.responsibilityDeclaration)
+      mandate?.responsibilityDeclaration &&
+      ismEmissionShipImoNumbers.size === usedImoNumbers.size)
   );
 };

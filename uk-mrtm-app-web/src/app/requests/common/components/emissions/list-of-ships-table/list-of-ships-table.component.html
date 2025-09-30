@@ -1,20 +1,32 @@
-@if (data(); as tableData) {
+@if (rows(); as tableData) {
   <section>
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-two-thirds">
+        <mrtm-filter-by-ship
+          [ships]="dataSource()"
+          filterByShipLabel="Find a ship"
+          (filterChanged)="onFilterChanged($event)" />
+      </div>
+    </div>
+
     <h2 class="govuk-heading-m">List of ships</h2>
-    @if (tableData.length) {
-      <button
-        govukSecondaryButton
-        type="button"
-        (click)="handleRemoveShips(tableData)"
-        [disabled]="tableData.every(checkIsSelected)">
-        Delete
-      </button>
+    @if (notCompletedWarningMessage(); as warningMessage) {
+      <govuk-warning-text [assistiveText]="warningMessage" />
     }
-    <mrtm-multi-select-table [columns]="columns" [data]="tableData" emptyTableText="No items to display">
+    @if (tableData.length) {
+      <button govukSecondaryButton type="button" (click)="handleRemoveShips(tableData)">Delete</button>
+    }
+    <mrtm-multi-select-table
+      [columns]="columns"
+      [data]="tableData"
+      emptyTableText="No items to display"
+      (sort)="sort.set($event)">
       <ng-template let-column="column" let-row="row">
         @switch (column.field) {
-          @case ('imoNumber') {
-            <a govukLink [routerLink]="[editUrl, row.uniqueIdentifier]">{{ row[column.field] }}</a>
+          @case ('name') {
+            <a govukLink [routerLink]="[editUrl(), row.uniqueIdentifier]">{{ row[column.field] }}</a>
+            <br />
+            <span class="govuk-hint">{{ row.imoNumber }}</span>
           }
           @case ('type') {
             {{ row[column.field] | shipType }}
@@ -28,5 +40,11 @@
         }
       </ng-template>
     </mrtm-multi-select-table>
+    @if (totalItems() > pageSize()) {
+      <govuk-pagination
+        [count]="this.totalItems()"
+        [pageSize]="pageSize()"
+        (currentPageChange)="onPageChange($event)" />
+    }
   </section>
 }

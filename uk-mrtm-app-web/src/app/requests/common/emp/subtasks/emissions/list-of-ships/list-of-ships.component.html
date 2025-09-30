@@ -1,4 +1,4 @@
-<mrtm-notification-banner />
+<mrtm-notification-banner [preventResetOnNavigation]="true" />
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
     <netz-page-heading [caption]="taskMap.title">{{ taskMap.ships.title }}</netz-page-heading>
@@ -10,10 +10,14 @@
     </div>
   </div>
 </div>
-<p class="govuk-body govuk-!-margin-bottom-7">You can manually add or upload the details for ships and emissions.</p>
+<p class="govuk-body govuk-!-margin-bottom-7">You can upload or manually add the details for ships and emissions.</p>
 
 <div class="govuk-!-margin-bottom-9">
-  <mrtm-list-of-ships-table editUrl="../ships" [dataSource]="listOfShips()" (removeShips)="onDeleteShips($event)" />
+  <mrtm-list-of-ships-table
+    editUrl="../ships"
+    [dataSource]="listOfShips()"
+    [notCompletedWarningMessage]="notCompletedMessage()"
+    (removeShips)="onDeleteShips($event)" />
 </div>
 
 @if (canContinue()) {

@@ -26,7 +26,7 @@ public class VerifierUserAuthorityQueryOrchestrator {
 
     public UsersAuthoritiesInfoDTO getVerifierUsersAuthoritiesInfo(AppUser authUser) {
         UserAuthoritiesDTO verifierAuthorities  = verifierAuthorityQueryService.getVerifierAuthorities(authUser);
-        List<String> userIds = verifierAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
+        List<String> userIds = verifierAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).toList();
         List<UserInfoDTO> verifierUserInfoList = verifierUserInfoService
             .getVerifierUsersInfo(userIds);
 
@@ -36,7 +36,7 @@ public class VerifierUserAuthorityQueryOrchestrator {
     public UsersAuthoritiesInfoDTO getVerifierAuthoritiesByVerificationBodyId(Long verificationBodyId) {
         UserAuthoritiesDTO verifierAuthorities  = verifierAuthorityQueryService
             .getVerificationBodyAuthorities(verificationBodyId, true);
-        List<String> userIds = verifierAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
+        List<String> userIds = verifierAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).toList();
         List<UserInfoDTO> verifierUserInfoList = verifierUserInfoService.getVerifierUsersInfo(userIds);
         return getVerifierUsersAuthoritiesInfo(verifierAuthorities, verifierUserInfoList);
     }
@@ -53,7 +53,7 @@ public class VerifierUserAuthorityQueryOrchestrator {
                             .filter(info -> info.getUserId().equals(authority.getUserId()))
                             .findFirst()
                             .orElse(new UserInfoDTO())))
-                .collect(Collectors.toList());
+                .toList();
 
         return UsersAuthoritiesInfoDTO.builder()
             .authorities(verifierUserAuthorities)

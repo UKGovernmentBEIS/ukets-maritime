@@ -8,7 +8,6 @@
  * Do not edit the class manually.
  */
 import { AddressStateDTO } from './addressStateDTO';
-import { DeclarationDocuments } from './declarationDocuments';
 import { OrganisationStructure } from './organisationStructure';
 
 export interface EmpOperatorDetails {
@@ -16,6 +15,5 @@ export interface EmpOperatorDetails {
   imoNumber: string;
   contactAddress: AddressStateDTO;
   organisationStructure: OrganisationStructure;
-  declarationDocuments: DeclarationDocuments;
   activityDescription: string;
 }

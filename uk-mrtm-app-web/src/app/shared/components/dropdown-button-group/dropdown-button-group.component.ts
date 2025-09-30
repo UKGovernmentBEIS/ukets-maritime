@@ -1,11 +1,14 @@
 import { ChangeDetectionStrategy, Component, ElementRef, HostListener, input, signal, viewChild } from '@angular/core';
 
+import { DROPDOWN_BUTTON_GROUP_COMPONENT } from '@shared/components/dropdown-button-group/dropdown-button-group.token';
+
 @Component({
   selector: 'mrtm-dropdown-button-group',
   standalone: true,
   templateUrl: './dropdown-button-group.component.html',
   styleUrl: './dropdown-button-group.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [{ provide: DROPDOWN_BUTTON_GROUP_COMPONENT, useExisting: DropdownButtonGroupComponent }],
 })
 export class DropdownButtonGroupComponent {
   private static instanceCounter = 0;
@@ -19,7 +22,7 @@ export class DropdownButtonGroupComponent {
 
   @HostListener('window:resize')
   onResize() {
-    this.popoverRef()?.nativeElement?.hidePopover();
+    this.hidePopover();
   }
 
   onToggle(event: Event) {
@@ -29,6 +32,10 @@ export class DropdownButtonGroupComponent {
     } else {
       this.isPopoverOpen.set(false);
     }
+  }
+
+  hidePopover() {
+    this.popoverRef()?.nativeElement?.hidePopover();
   }
 
   private positionPopover() {

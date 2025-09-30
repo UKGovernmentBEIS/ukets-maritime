@@ -30,7 +30,7 @@ public class AccountOperatorUserAuthorityQueryOrchestrator {
     public AccountOperatorsUsersAuthoritiesInfoDTO getAccountOperatorsUsersAuthoritiesInfo(AppUser authUser, Long accountId) {
         UserAuthoritiesDTO accountAuthorities = operatorAuthorityQueryService.getAccountAuthorities(authUser, accountId);
         Map<String, String> contactTypes = accountContactQueryService.findOperatorContactTypesByAccount(accountId);
-        List<String> userIds = accountAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).collect(Collectors.toList());
+        List<String> userIds = accountAuthorities.getAuthorities().stream().map(UserAuthorityDTO::getUserId).toList();
         List<UserInfoDTO> operatorUserInfo = operatorUserInfoService.getOperatorUsersInfo(userIds);
 
         return getAccountOperatorUserAuthoritiesInfoDTO(accountAuthorities, contactTypes, operatorUserInfo);
@@ -50,7 +50,7 @@ public class AccountOperatorUserAuthorityQueryOrchestrator {
                                                 .filter(info -> info.getUserId().equals(authority.getUserId()))
                                                 .findFirst()
                                                 .orElse(new UserInfoDTO())))
-                        .collect(Collectors.toList());
+                        .toList();
 
         return AccountOperatorsUsersAuthoritiesInfoDTO.builder()
                 .authorities(accountUserAuthorities)

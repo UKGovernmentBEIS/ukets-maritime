@@ -18,8 +18,9 @@ import { distinctUntilChanged, takeUntil, tap } from 'rxjs';
 import { LabelDirective } from '../directives';
 import { ErrorMessageComponent, GovukValidators } from '../error-message';
 import { FormInput, FormService } from '../form';
+import { GovukWidthClass } from '../types';
 import { LabelSizeType } from './label-size.type';
-import { GovukTextWidthClass, HTMLInputType } from './text-input.type';
+import { HTMLInputType } from './text-input.type';
 
 /*
  eslint-disable
@@ -44,7 +45,7 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   @Input() inputMode: string;
   @Input() spellCheck: boolean;
   @Input() numberFormat: string;
-  @Input() widthClass: GovukTextWidthClass = 'govuk-!-width-full';
+  @Input() widthClass: GovukWidthClass = 'govuk-!-width-full';
   @Input() prefix?: string;
   @Input() suffix?: string;
   @ContentChild(LabelDirective) templateLabel: LabelDirective;

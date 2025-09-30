@@ -49,12 +49,16 @@ export class BasicShipDetailPayloadMutator extends PayloadMutator {
           };
         }
 
-        if (
-          payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED &&
+        const usedShipsInMandates =
           payload?.emissionsMonitoringPlan?.mandate?.registeredOwners
             ?.map((ro) => ro.ships.map((ship) => ship.imoNumber))
-            ?.flat()
-            ?.includes(editedShip?.details?.imoNumber)
+            ?.flat() ?? [];
+
+        if (
+          payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED &&
+          (usedShipsInMandates.includes(editedShip?.details?.imoNumber) ||
+            (userInput?.natureOfReportingResponsibility === 'ISM_COMPANY' &&
+              !usedShipsInMandates.includes(userInput.imoNumber)))
         ) {
           payload.empSectionsCompleted['mandate'] = TaskItemStatus.NEEDS_REVIEW;
         }

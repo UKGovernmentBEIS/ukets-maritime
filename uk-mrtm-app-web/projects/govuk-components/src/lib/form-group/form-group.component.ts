@@ -21,6 +21,7 @@ export class FormGroupComponent implements OnInit {
 
   readonly legend = input<string>();
   readonly legendSize = input<LegendSizeType>('medium');
+  readonly hint = input<string>();
 
   @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
   @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;

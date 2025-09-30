@@ -1,13 +1,15 @@
 import { I18nSelectPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+
+import { isNil } from 'lodash-es';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
 
+import { PAYMENT_ROUTE_PREFIX } from '@requests/common/payment';
 import { paymentQuery } from '@requests/tasks/payment/+state';
 import { PAYMENT_HINT_MAP } from '@requests/tasks/payment/components/payment-details/payment-details.constants';
-import { PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/payment.constants';
 import { CANCEL_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/cancel';
 import { MAKE_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/make';
 import { MARK_AS_RECEIVED_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/mark-as-received';
@@ -20,8 +22,11 @@ import { PaymentDetailsSummaryTemplateComponent } from '@shared/components';
   templateUrl: './payment-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PaymentDetailsComponent {
+export class PaymentDetailsComponent implements OnInit {
   private readonly store = inject(RequestTaskStore);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+
   public readonly routePrefix = PAYMENT_ROUTE_PREFIX;
   public readonly makePaymentRoute = MAKE_PAYMENT_ROUTE_PREFIX;
   public readonly markAsReceivedPaymentRoute = MARK_AS_RECEIVED_PAYMENT_ROUTE_PREFIX;
@@ -33,4 +38,16 @@ export class PaymentDetailsComponent {
   public readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
 
   public readonly allowedActions = this.store.select(requestTaskQuery.selectAllowedRequestTaskActions);
+
+  ngOnInit(): void {
+    if (
+      !isNil(this.store.select(paymentQuery.selectExternalPaymentId)()) &&
+      this.isEditable() &&
+      this.allowedActions().includes('PAYMENT_MARK_AS_PAID')
+    ) {
+      this.router.navigate(['./', this.routePrefix, this.makePaymentRoute], {
+        relativeTo: this.activatedRoute,
+      });
+    }
+  }
 }

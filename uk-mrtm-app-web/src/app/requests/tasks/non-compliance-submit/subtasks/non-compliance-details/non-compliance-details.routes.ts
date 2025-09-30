@@ -28,8 +28,8 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceDetailsStep.SUMMARY, '../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-form').then(
-        (c) => c.NonComplianceDetailsFormComponent,
+      import('@requests/common/non-compliance/components/non-compliance-details-base').then(
+        (c) => c.NonComplianceDetailsBaseComponent,
       ),
   },
   {

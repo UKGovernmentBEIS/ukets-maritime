@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { LinkDirective } from '@netz/govuk-components';
+import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
+import { TaskItemStatus } from '@requests/common';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { empCommonQuery, empVariationReviewQuery } from '@requests/common/emp/+state';
 import { EmpVariationReviewTaskPayload } from '@requests/common/emp/emp.types';
@@ -20,7 +21,8 @@ import {
   VARIATION_REVIEW_DECISION_FORM,
 } from '@requests/tasks/emp-variation-review/components/review-decision';
 import { EmpVariationReviewService } from '@requests/tasks/emp-variation-review/services';
-import { WizardStepComponent } from '@shared/components';
+import { NotificationBannerComponent, WizardStepComponent } from '@shared/components';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summaries';
 
 @Component({
@@ -33,6 +35,9 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
     ReactiveFormsModule,
     WizardStepComponent,
     ReviewDecisionComponent,
+    NotificationBannerComponent,
+    ButtonDirective,
+    WarningTextComponent,
   ],
   templateUrl: './list-of-ships-variation-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,17 +45,34 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
 })
 export class ListOfShipsVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
+  private readonly formGroup = new UntypedFormGroup({});
+  private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<EmpVariationReviewTaskPayload> = inject(
     TaskService<EmpVariationReviewTaskPayload>,
   );
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  wizardStep = transformWizardStepDecision(EmissionsWizardStep);
-  emissionsSubTasksMap = emissionsSubTasksMap;
-  ships = this.store.select(empCommonQuery.selectListOfShips)();
-  originalShips = this.store.select(empVariationReviewQuery.selectOriginalListOfShips)();
-  isEditable = this.store.select(requestTaskQuery.selectIsEditable)();
+  readonly wizardStep = transformWizardStepDecision(EmissionsWizardStep);
+  readonly emissionsSubTasksMap = emissionsSubTasksMap;
+  readonly ships = this.store.select(empCommonQuery.selectListOfShips);
+  readonly originalShips = this.store.select(empVariationReviewQuery.selectOriginalListOfShips);
+  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+
+  readonly notCompletedMessage = computed<string>(() => {
+    const notCompleted: boolean = this.ships()?.some((ship) => ship.status !== TaskItemStatus.COMPLETED);
+    return notCompleted ? 'Enter the missing details for all entries with the status ‘Incomplete’' : undefined;
+  });
+
+  onContinueAttempt() {
+    if (this.notCompletedMessage()) {
+      this.formGroup.setErrors({ NOT_COMPLETED: this.notCompletedMessage() });
+      this.notificationBannerStore.setInvalidForm(this.formGroup);
+    } else {
+      this.formGroup.reset();
+      this.notificationBannerStore.reset();
+    }
+  }
 
   onSubmit() {
     (this.service as EmpVariationReviewService)

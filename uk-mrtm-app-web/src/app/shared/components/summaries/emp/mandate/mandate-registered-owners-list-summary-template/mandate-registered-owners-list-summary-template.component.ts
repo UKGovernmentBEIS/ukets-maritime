@@ -51,7 +51,9 @@ export class MandateRegisteredOwnersListSummaryTemplateComponent {
   public readonly totalItems: Signal<number> = computed(() => this.data()?.length ?? 0);
   public readonly currentPage: WritableSignal<number> = signal<number>(1);
   public readonly page: Signal<Array<MandateRegisteredOwnerRowItem>> = computed(() => {
-    const tableData = this.data();
+    const tableData = [...(this.data() ?? [])].sort((a, b) =>
+      a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }),
+    );
     const currentPage = this.currentPage();
 
     const firstIndex = (currentPage - 1) * this.pageSize;

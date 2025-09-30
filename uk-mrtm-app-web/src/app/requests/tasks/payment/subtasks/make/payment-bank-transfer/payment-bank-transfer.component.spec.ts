@@ -5,6 +5,7 @@ import { TaskService } from '@netz/common/forms';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { PaymentBankTransferComponent } from '@requests//tasks/payment/subtasks/make/payment-bank-transfer/payment-bank-transfer.component';
+import { taskProviders } from '@requests/common/task.providers';
 
 describe('PaymentBankTransferComponent', () => {
   let component: PaymentBankTransferComponent;
@@ -17,6 +18,7 @@ describe('PaymentBankTransferComponent', () => {
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+        ...taskProviders,
       ],
     }).compileComponents();
 

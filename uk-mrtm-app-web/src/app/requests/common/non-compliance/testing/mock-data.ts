@@ -39,7 +39,7 @@ export const mockNonComplianceDetails: NonComplianceDetails = {
   initialPenalty: true,
   nonComplianceDate: '2025-05-03',
   complianceDate: '2025-07-03',
-  comments: 'Lorem ipsum',
+  nonComplianceComments: 'Lorem ipsum',
 };
 
 export const mockNonComplianceDetailsSummary: NonComplianceDetailsSummary = {
@@ -49,7 +49,7 @@ export const mockNonComplianceDetailsSummary: NonComplianceDetailsSummary = {
   initialPenalty: true,
   nonComplianceDate: '2025-05-03',
   complianceDate: '2025-07-03',
-  comments: 'Lorem ipsum',
+  nonComplianceComments: 'Lorem ipsum',
   selectedRequestsMapped: [
     { id: 'MAMP00010', type: 'EMP_ISSUANCE' },
     { id: 'MAV00010-2', type: 'EMP_VARIATION' },
@@ -130,6 +130,7 @@ export const mockNonComplianceInitialPenaltyNoticeRequestTask = {
       type: 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE',
       payload: {
         payloadType: 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_PAYLOAD',
+        reason: 'FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN',
         ...mockNonComplianceInitialPenaltyNoticeUpload,
         sendEmailNotification: true,
         issueNoticeOfIntent: true,
@@ -156,6 +157,7 @@ export const mockNonComplianceNoticeOfIntentRequestTask = {
       type: 'NON_COMPLIANCE_NOTICE_OF_INTENT',
       payload: {
         payloadType: 'NON_COMPLIANCE_NOTICE_OF_INTENT_PAYLOAD',
+        reason: 'FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN',
         noticeOfIntent: '66b0ddb3-dc64-4ea3-8a68-0afa59128e99',
         comments: 'GG',
         nonComplianceAttachments: {
@@ -186,6 +188,7 @@ export const mockNonComplianceCivilPenaltyRequestTask = {
       type: 'NON_COMPLIANCE_CIVIL_PENALTY',
       payload: {
         payloadType: 'NON_COMPLIANCE_CIVIL_PENALTY_PAYLOAD',
+        reason: 'FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN',
         ...mockNonComplianceCivilPenaltyUpload,
         sendEmailNotification: true,
         sectionsCompleted: {
@@ -211,6 +214,7 @@ export const mockNonComplianceFinalDeterminationRequestTask = {
       type: 'NON_COMPLIANCE_FINAL_DETERMINATION',
       payload: {
         payloadType: 'NON_COMPLIANCE_FINAL_DETERMINATION_PAYLOAD',
+        reason: 'FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN',
         ...mockNonComplianceFinalDetermination,
         sendEmailNotification: true,
         sectionsCompleted: {

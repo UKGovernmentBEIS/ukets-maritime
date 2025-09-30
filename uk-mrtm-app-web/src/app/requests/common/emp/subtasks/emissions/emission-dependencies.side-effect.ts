@@ -8,25 +8,47 @@ import { EmpShipEmissions } from '@mrtm/api';
 
 import { SIDE_EFFECTS } from '@netz/common/forms';
 
+import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { EFuels } from '@shared/types';
+import { AllFuels } from '@shared/types';
 
-const sourcesDependencyCheck = (currentPayload: EmpShipEmissions, modifiedShips: Set<string>): EmpShipEmissions => {
+const sourcesDependencyCheck = (
+  currentPayload: EmpShipEmissions,
+  modifiedShips: Set<string>,
+  sectionsCompleted?: EmpTaskPayload['empSectionsCompleted'],
+): EmpShipEmissions => {
   return produce(currentPayload, (payload) => {
     const fuelOrigin = (payload.fuelsAndEmissionsFactors ?? []).map(
-      (fuel) => `${fuel?.origin}-${(fuel as EFuels)?.type}-${fuel.name ?? ''}`,
+      (fuel) => `${fuel?.origin}-${(fuel as AllFuels)?.type}-${fuel.name ?? ''}`,
     );
 
     const currentEmissionSourcesCount = payload?.emissionsSources?.length ?? 0;
+    const incompletedEmissionSources: Set<EmpShipEmissions['uniqueIdentifier']> = new Set();
 
-    payload.emissionsSources = (payload?.emissionsSources ?? []).filter((emissionSource) =>
-      emissionSource.fuelDetails.every((fuel: EFuels) =>
+    payload.emissionsSources = (payload?.emissionsSources ?? []).map((emissionSource) => {
+      const currentFuelCount = emissionSource?.fuelDetails?.length ?? 0;
+
+      const fuelDetails = emissionSource.fuelDetails.filter((fuel: AllFuels) =>
         fuelOrigin.includes(`${fuel.origin}-${fuel.type}-${fuel.name ?? ''}`),
-      ),
-    );
+      );
+
+      if (fuelDetails.length !== currentFuelCount) {
+        incompletedEmissionSources.add(emissionSource.uniqueIdentifier);
+      }
+
+      return {
+        ...emissionSource,
+        fuelDetails,
+      };
+    });
+
+    for (const incompletedEmissionSource of incompletedEmissionSources) {
+      sectionsCompleted[`${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${incompletedEmissionSource}`] =
+        TaskItemStatus.NEEDS_REVIEW;
+    }
 
     if (currentEmissionSourcesCount !== (payload?.emissionsSources?.length ?? 0)) {
       modifiedShips.add(payload?.uniqueIdentifier);
@@ -90,13 +112,19 @@ const carbonCaptureCheck = (currentPayload: EmpShipEmissions, modifiedShips: Set
   });
 };
 
-const dependenciesMap: Record<string, (payload: EmpShipEmissions, modifiedShipsMap: Set<string>) => EmpShipEmissions> =
-  {
-    [EmissionsWizardStep.EMISSION_SOURCES_FORM]: sourcesDependencyCheck,
-    [EmissionsWizardStep.UNCERTAINTY_LEVEL]: uncertaintyLevelCheck,
-    [EmissionsWizardStep.MEASUREMENTS]: measurementsCheck,
-    [EmissionsWizardStep.CARBON_CAPTURE]: carbonCaptureCheck,
-  };
+const dependenciesMap: Record<
+  string,
+  (
+    payload: EmpShipEmissions,
+    modifiedShipsMap: Set<string>,
+    sectionsCompleted?: EmpTaskPayload['empSectionsCompleted'],
+  ) => EmpShipEmissions
+> = {
+  [EmissionsWizardStep.EMISSION_SOURCES_FORM]: sourcesDependencyCheck,
+  [EmissionsWizardStep.UNCERTAINTY_LEVEL]: uncertaintyLevelCheck,
+  [EmissionsWizardStep.MEASUREMENTS]: measurementsCheck,
+  [EmissionsWizardStep.CARBON_CAPTURE]: carbonCaptureCheck,
+};
 
 const subtaskDependencies: Record<string, Array<EmissionsWizardStep>> = {
   [EmissionsWizardStep.FUELS_AND_EMISSIONS_FORM]: [EmissionsWizardStep.EMISSION_SOURCES_FORM],
@@ -135,7 +163,7 @@ export const provideEmissionDependenciesSideEffect = (step: EmissionsWizardStep)
               while (currentDependencies) {
                 for (const dependency of currentDependencies) {
                   if (dependenciesMap?.[dependency]) {
-                    ship = dependenciesMap?.[dependency]?.(ship, modifiedShipsIds);
+                    ship = dependenciesMap?.[dependency]?.(ship, modifiedShipsIds, payload.empSectionsCompleted);
                   }
                   currentDependencies = subtaskDependencies[dependency];
                 }

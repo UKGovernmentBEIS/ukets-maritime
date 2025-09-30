@@ -15,6 +15,7 @@ import {
   EmpRegisteredOwner,
   EmpShipEmissions,
   RegisteredOwnerShipDetails,
+  ShipDetails,
 } from '@mrtm/api';
 
 import {
@@ -362,6 +363,25 @@ export const selectMandateRegisteredOwnerAvailableShips = (
     }));
   });
 
+const selectRegisteredOwnerShipDetailByImoNumber = (
+  shipImoNumber: ShipDetails['imoNumber'],
+): StateSelector<RequestTaskState, RegisteredOwnerShipDetails | null> =>
+  createDescendingSelector(selectShips, (ships) => {
+    const matchingShip = ships?.find((ship) => ship.details.imoNumber === shipImoNumber);
+
+    return matchingShip
+      ? {
+          name: matchingShip?.details?.name,
+          imoNumber: matchingShip?.details?.imoNumber,
+        }
+      : null;
+  });
+
+const selectIsmShipImoNumbers: StateSelector<
+  RequestTaskState,
+  Set<ShipDetails['imoNumber']>
+> = createDescendingSelector(selectShips, (ships) => new Set(ships.map((ship) => ship?.details?.imoNumber)));
+
 export const empCommonQuery = {
   selectPayload,
   selectEmpAttachments,
@@ -405,4 +425,6 @@ export const empCommonQuery = {
   selectMandateRegisteredOwnerByUniqueIdentifier,
   selectMandateRegisteredOwnerAvailableShips,
   selectMandateRegisteredOwnersList,
+  selectRegisteredOwnerShipDetailByImoNumber,
+  selectIsmShipImoNumbers,
 };

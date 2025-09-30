@@ -7,13 +7,11 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { NonComplianceCloseJustification } from './nonComplianceCloseJustification';
 import { RequestInfoDTO } from './requestInfoDTO';
 
 export interface NonComplianceApplicationSubmitRequestTaskPayload {
   payloadType?: string;
   sendEmailNotification?: boolean;
-  availableRequests?: Array<RequestInfoDTO>;
   reason:
     | 'FAILURE_TO_APPLY_FOR_AN_EMISSIONS_MONITORING_PLAN'
     | 'FAILURE_TO_COMPLY_WITH_A_CONDITION_OF_AN_EMISSIONS_MONITORING_PLAN'
@@ -28,13 +26,13 @@ export interface NonComplianceApplicationSubmitRequestTaskPayload {
     | 'FAILURE_TO_SURRENDER_ALLOWANCE_20';
   nonComplianceDate?: string;
   complianceDate?: string;
-  comments?: string;
+  nonComplianceComments?: string;
+  availableRequests?: Array<RequestInfoDTO>;
   selectedRequests?: Array<string>;
   civilPenalty: boolean;
   noCivilPenaltyJustification?: string;
   noticeOfIntent?: boolean;
   initialPenalty?: boolean;
-  closeJustification?: NonComplianceCloseJustification;
   nonComplianceAttachments?: { [key: string]: string };
   sectionsCompleted?: { [key: string]: string };
 }

@@ -1,0 +1,20 @@
+@if (nonComplianceDetailsBase(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type of non-compliance</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.reason | nonComplianceReason"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.nonComplianceDate.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.nonComplianceDate | govukDate"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ map.complianceDate.title }}</dt>
+      <dd govukSummaryListRowValue [notProvided]="data.complianceDate | govukDate"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Comments</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.nonComplianceComments"></dd>
+    </div>
+  </dl>
+}

@@ -22,6 +22,8 @@ export class MandateFlowManager extends WizardFlowManager {
         return of('../../');
       case MandateWizardStep.DELETE_REGISTERED_OWNER:
         return of('.');
+      case MandateWizardStep.UPLOAD_OWNERS:
+        return of(`../${MandateWizardStep.REGISTERED_OWNERS}`);
       case MandateWizardStep.RESPONSIBILITY_DECLARATION:
       case MandateWizardStep.DECISION:
         return of('../');

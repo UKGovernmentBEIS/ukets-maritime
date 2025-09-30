@@ -9,9 +9,10 @@ import { isWizardCompleted, MANDATE_SUB_TASK, MandateWizardStep } from '@request
 export const canActivateMandateSummary: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);
   const mandate = store.select(empCommonQuery.selectExtendedMandate)();
+  const ismShips = store.select(empCommonQuery.selectIsmShipImoNumbers)();
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
   const isSubtaskCompleted =
-    isWizardCompleted(mandate) && store.select(empReviewQuery.selectSubtaskHasDecision(MANDATE_SUB_TASK))();
+    isWizardCompleted(mandate, ismShips) && store.select(empReviewQuery.selectSubtaskHasDecision(MANDATE_SUB_TASK))();
 
   return (
     !isEditable ||

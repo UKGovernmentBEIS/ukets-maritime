@@ -1,4 +1,3 @@
-export * from './declaration-documents';
 export * from './undertaken-activities';
 export * from './payload-mutators';
 export * from './operator-details.flow-manager';

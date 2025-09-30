@@ -18723,4 +18723,552 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_non_compliance_details_authorization_rules_1" author="dimitrios.topalidis@trasys.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION', 'NON_COMPLIANCE_DETAILS_AMENDED','requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getRequestActionById')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_DETAILS_AMENDED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope IS NULL;
+        </sql>
+        <rollback>
+            delete from au_service_rule sr
+            using
+            au_rule r,
+            au_service s
+            where r.id = sr.rule_id
+            and s.id = sr.service_id
+            AND s.name in ('getRequestActionById')
+            and r.resource_type = 'REQUEST_ACTION'
+            and r.resource_sub_type = 'NON_COMPLIANCE_DETAILS_AMENDED'
+            and r.handler = 'requestActionViewHandler'
+            and r.role_type = 'REGULATOR'
+            and r.scope IS NULL;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+            and resource_sub_type = 'NON_COMPLIANCE_DETAILS_AMENDED'
+            and handler = 'requestActionViewHandler'
+            and role_type = 'REGULATOR'
+            and scope IS NULL;
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_disassociate_services_with_request_action_type_NON_COMPLIANCE_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope is null;
+
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_rule_for_request_action_type_NON_COMPLIANCE_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+              and handler = 'requestActionViewHandler'
+              and role_type = 'OPERATOR'
+              and scope is null;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_APPLICATION_SUBMITTED'
+              and handler = 'requestActionAccountBasedViewHandler'
+              and role_type = 'VERIFIER'
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_APPLICATION_SUBMITTED', 'requestActionViewHandler', 'OPERATOR');
+
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_APPLICATION_SUBMITTED', 'requestActionAccountBasedViewHandler', 'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_disassociate_services_with_request_action_type_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope is null;
+
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_rule_for_request_action_type_NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED'
+              and handler = 'requestActionViewHandler'
+              and role_type = 'OPERATOR'
+              and scope is null;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED'
+              and handler = 'requestActionAccountBasedViewHandler'
+              and role_type = 'VERIFIER'
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED', 'requestActionViewHandler', 'OPERATOR');
+
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_APPLICATION_SUBMITTED', 'requestActionAccountBasedViewHandler', 'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_disassociate_services_with_request_action_type_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.role_type = 'OPERATOR'
+              and r.resource_sub_type = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.scope is null;
+
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.role_type = 'VERIFIER'
+              and r.resource_sub_type = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_rule_for_request_action_type_NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'
+              and handler = 'requestActionViewHandler'
+              and role_type = 'OPERATOR'
+              and scope is null;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED'
+              and handler = 'requestActionAccountBasedViewHandler'
+              and role_type = 'VERIFIER'
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED', 'requestActionViewHandler', 'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED', 'requestActionAccountBasedViewHandler', 'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_disassociate_services_with_request_action_type_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.role_type = 'OPERATOR'
+              and r.resource_sub_type = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.scope is null;
+
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.role_type = 'VERIFIER'
+              and r.resource_sub_type = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_rule_for_request_action_type_NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'
+              and handler = 'requestActionViewHandler'
+              and role_type = 'OPERATOR'
+              and scope is null;
+
+            delete
+            from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED'
+              and handler = 'requestActionAccountBasedViewHandler'
+              and role_type = 'VERIFIER'
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED', 'requestActionViewHandler', 'OPERATOR');
+
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_CIVIL_PENALTY_APPLICATION_SUBMITTED', 'requestActionAccountBasedViewHandler', 'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_disassociate_getRequestActionById_service_with_request_action_type_NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete
+            from au_service_rule sr using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope is null;
+
+            delete
+            from au_service_rule sr using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select aus.id, aur.id
+                from au_service aus
+                cross join au_rule aur
+                where aus.name = 'getRequestActionById'
+                and aur.resource_type = 'REQUEST_ACTION'
+                and aur.resource_sub_type = 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
+                and aur.handler = 'requestActionViewHandler'
+                and aur.role_type = 'OPERATOR'
+                and scope is null;
+
+                insert into au_service_rule(service_id, rule_id)
+                select aus.id, aur.id
+                from au_service aus
+                cross join au_rule aur
+                where aus.name = 'getRequestActionById'
+                and aur.resource_type = 'REQUEST_ACTION'
+                and aur.resource_sub_type = 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
+                and aur.handler = 'requestActionAccountBasedViewHandler'
+                and aur.role_type = 'VERIFIER'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_rule_for_request_action_type_NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
+              and handler = 'requestActionViewHandler'
+              and role_type = 'OPERATOR'
+              and scope is null;
+
+            delete from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED'
+              and handler = 'requestActionAccountBasedViewHandler'
+              and role_type = 'VERIFIER'
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'),
+                'REQUEST_ACTION' ,
+                'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED',
+                'requestActionViewHandler',
+                'OPERATOR');
+
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'),
+                'REQUEST_ACTION' ,
+                'NON_COMPLIANCE_FINAL_DETERMINATION_APPLICATION_SUBMITTED',
+                'requestActionAccountBasedViewHandler',
+                'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_disassociate_services_with_request_action_type_NON_COMPLIANCE_APPLICATION_CLOSED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.role_type = 'OPERATOR'
+              and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_CLOSED'
+              and r.handler = 'requestActionViewHandler'
+              and r.scope is null;
+
+            delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.role_type = 'VERIFIER'
+              and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_CLOSED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_CLOSED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                insert into au_service_rule(service_id, rule_id)
+                select s.id, r.id
+                from au_service s
+                cross join au_rule r
+                where s.name in ('getRequestActionById', 'generateRequestActionGetFileAttachmentToken')
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'NON_COMPLIANCE_APPLICATION_CLOSED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_remove_rule_for_request_action_type_NON_COMPLIANCE_APPLICATION_CLOSED_for_OPERATOR_AND_VERIFIER" author="P44065">
+        <sql>
+            delete from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_APPLICATION_CLOSED'
+              and handler = 'requestActionViewHandler'
+              and role_type = 'OPERATOR'
+              and scope is null;
+
+            delete from au_rule
+            where resource_type = 'REQUEST_ACTION'
+              and resource_sub_type = 'NON_COMPLIANCE_APPLICATION_CLOSED'
+              and handler = 'requestActionAccountBasedViewHandler'
+              and role_type = 'VERIFIER'
+              and scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_APPLICATION_CLOSED', 'requestActionViewHandler', 'OPERATOR');
+
+                insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+                values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'NON_COMPLIANCE_APPLICATION_CLOSED', 'requestActionAccountBasedViewHandler', 'VERIFIER');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

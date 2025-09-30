@@ -32,7 +32,6 @@ import {
 } from '@netz/common/store';
 import { getYearFromRequestId } from '@netz/common/utils';
 
-import { RequestTaskCommonSubtaskStepsQuery } from '@requests/+state';
 import { AerCommonTaskPayload, AerVoyageItem } from '@requests/common/aer/aer.types';
 import { AER_AGGREGATED_DATA_SUB_TASK } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
@@ -158,7 +157,6 @@ const selectShips: StateSelector<
       status: (sectionsCompleted?.[`${EMISSIONS_SUB_TASK}-ship-${ship.uniqueIdentifier}`] ??
         TaskItemStatus.COMPLETED) as TaskItemStatus,
     }))
-    .slice()
     .sort((a, b) => a?.details?.name?.localeCompare(b?.details?.name)),
 );
 
@@ -287,6 +285,11 @@ const selectPortsList: StateSelector<RequestTaskState, Array<AerPortSummaryItemD
     ),
 );
 
+const selectListOfShipsWithPortCalls: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> =
+  createAggregateSelector(selectListOfShips, selectPortsList, (ships, portsList) =>
+    (ships ?? []).filter((ship) => portsList.find((portCall) => portCall.imoNumber === ship.imoNumber)),
+  );
+
 const selectHasCompletedMinOneShip: StateSelector<RequestTaskState, boolean> = createAggregateSelector(
   selectShips,
   selectAerSectionsCompleted,
@@ -396,7 +399,9 @@ const selectVoyagesList: StateSelector<RequestTaskState, Array<AerVoyageSummaryI
           imoNumber,
           ...voyageDetails,
           arrivalPort: voyageDetails?.arrivalPort?.port,
+          arrivalCountry: voyageDetails?.arrivalPort?.country,
           departurePort: voyageDetails?.departurePort?.port,
+          departureCountry: voyageDetails?.departurePort?.country,
           surrenderEmissions: surrenderEmissions?.total,
           totalEmissions: totalEmissions?.total,
           status:
@@ -410,6 +415,11 @@ const selectVoyagesList: StateSelector<RequestTaskState, Array<AerVoyageSummaryI
       },
     ),
 );
+
+const selectListOfShipsWithVoyages: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> =
+  createAggregateSelector(selectListOfShips, selectVoyagesList, (ships, voyagesList) =>
+    (ships ?? []).filter((ship) => voyagesList.find((voyage) => voyage.imoNumber === ship.imoNumber)),
+  );
 
 const selectIsVoyageStatusCompleted = (
   voyageId: AerVoyage['uniqueIdentifier'],
@@ -494,16 +504,23 @@ const selectRelatedShipForAggregatedData = (
     ships.find((x) => x?.details?.imoNumber === aggregatedData?.imoNumber),
   );
 
-const selectAggregatedDataListOfShips = (objectId: string) =>
+const selectListOfShipsWithAggregatedData: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> =
+  createAggregateSelector(selectListOfShips, selectAllAggregatedData, (ships, allAggregatedData) =>
+    (ships ?? []).filter((ship) => allAggregatedData.find((dataItem) => dataItem.imoNumber === ship.imoNumber)),
+  );
+
+const selectListOfShipsWithoutAggregatedData = (
+  objectId: string,
+): StateSelector<RequestTaskState, ShipEmissionTableListItem[]> =>
   createAggregateSelector(
+    selectListOfShips,
     selectAllAggregatedData,
     selectAggregatedDataItem(objectId),
-    selectListOfShips,
-    (aggregatedData, currentAggregatedData, ships) =>
+    (ships, allAggregatedData, currentAggregatedDataItem) =>
       (ships ?? []).filter(
         (ship) =>
-          !aggregatedData.find((data) => data.imoNumber === ship.imoNumber) ||
-          ship.imoNumber === currentAggregatedData?.imoNumber,
+          ship.imoNumber === currentAggregatedDataItem?.imoNumber ||
+          !allAggregatedData.find((dataItem) => dataItem.imoNumber === ship.imoNumber),
       ),
   );
 
@@ -717,10 +734,12 @@ export const aerCommonQuery = {
   selectPortFuelConsumption,
   selectRelatedShipForPort,
   selectPortsList,
+  selectListOfShipsWithPortCalls,
   selectIsPortStatusCompleted,
   selectStatusForVoyagesSubtask,
   selectVoyages,
   selectVoyagesList,
+  selectListOfShipsWithVoyages,
   selectVoyage,
   selectVoyageDirectEmissions,
   selectVoyageFuelConsumption,
@@ -731,7 +750,8 @@ export const aerCommonQuery = {
   selectAggregatedDataList,
   selectAggregatedDataItem,
   selectRelatedShipForAggregatedData,
-  selectAggregatedDataListOfShips,
+  selectListOfShipsWithAggregatedData,
+  selectListOfShipsWithoutAggregatedData,
   selectStatusForReductionClaim,
   selectReductionClaim,
   selectReductionClaimFuelPurchases,
@@ -746,19 +766,4 @@ export const aerCommonQuery = {
   selectShipFuelOriginMethaneCombination,
   selectShipFuelOriginTypeCombination,
   selectShipFuelOriginTypeNameCombination,
-};
-
-export const aerCommonSubtaskStepsQuery: RequestTaskCommonSubtaskStepsQuery = {
-  selectAttachments: selectAerAttachments,
-  selectOperatorDetails: selectAerOperatorDetails,
-  selectAttachedFiles: selectAttachedFiles,
-  selectIsSubtaskCompleted: selectIsSubtaskCompleted,
-  selectShips: selectShips,
-  selectShip: selectShip,
-  selectShipName: selectShipName,
-  selectShipFuelsAndEmissionsFactors: selectShipFuelsAndEmissionsFactors,
-  selectShipFuelsAndEmissionsFactorsItem: selectShipFuelsAndEmissionsFactorsItem,
-  selectShipEmissionSources: selectShipEmissionSources,
-  selectShipMonitoringMethods: selectShipMonitoringMethods,
-  selectListOfShips: selectListOfShips,
 };

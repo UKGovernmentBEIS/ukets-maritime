@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.empvariation.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
@@ -10,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayload
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
+import uk.gov.netz.api.account.service.AccountContactQueryService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
@@ -22,7 +24,10 @@ import uk.gov.netz.api.workflow.request.flow.common.constants.BpmnProcessConstan
 import uk.gov.netz.api.workflow.request.flow.common.domain.RequestCreateActionEmptyPayload;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestParams;
 
+import java.util.HashMap;
 import java.util.Map;
+
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor
@@ -30,8 +35,12 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
 
 	private final StartProcessRequestService startProcessRequestService;
 	private final EmissionsMonitoringPlanQueryService empQueryService;
+	private final AccountContactQueryService accountContactQueryService;
 
-    @Override
+	@Value("${govuk-pay.empVariationPaymentIsActive}")
+	private boolean empVariationPaymentIsActive;
+
+	@Override
     public String process(Long accountId, RequestCreateActionEmptyPayload payload, AppUser appUser) {
     	final String currentUserRoleType = appUser.getRoleType();
 
@@ -44,11 +53,22 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
 	        .payloadType(MrtmRequestPayloadType.EMP_VARIATION_REQUEST_PAYLOAD)
 	        .originalEmpContainer(empContainer)
 	        .build();
-    	
+
+		Map<String, Object> processVars =  new HashMap<>();
+		processVars.put(BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, currentUserRoleType);
+
     	if(RoleTypeConstants.OPERATOR.equals(currentUserRoleType)) {
     		requestPayload.setOperatorAssignee(appUser.getUserId());
     	} else if (RoleTypeConstants.REGULATOR.equals(currentUserRoleType)) {
-    		requestPayload.setRegulatorAssignee(appUser.getUserId());
+
+			String accountPrimaryContactOptional = this.accountContactQueryService.findPrimaryContactByAccount(accountId)
+				.orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+
+			requestPayload.setOperatorAssignee(accountPrimaryContactOptional);
+			requestPayload.setRegulatorAssignee(appUser.getUserId());
+
+			processVars.put(BpmnProcessConstants.SKIP_PAYMENT, !empVariationPaymentIsActive);
+
     	} else {
     		throw new BusinessException(ErrorCode.REQUEST_CREATE_ACTION_NOT_ALLOWED, currentUserRoleType);
     	}
@@ -57,9 +77,7 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
                 .type(MrtmRequestType.EMP_VARIATION)
 				.requestResources(Map.of(ResourceType.ACCOUNT, accountId.toString()))
                 .requestPayload(requestPayload)
-                .processVars(Map.of(
-                		BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, currentUserRoleType
-                		))
+                .processVars(processVars)
                 .requestMetadata(EmpVariationRequestMetadata.builder()
 						.type(MrtmRequestMetadataType.EMP_VARIATION)
 						.initiatorRoleType(currentUserRoleType)

@@ -1,14 +1,20 @@
 <govuk-table [columns]="columns" [data]="combinedShips()">
   <ng-template let-column="column" let-row="row">
     @switch (column?.field) {
-      @case ('imoNumber') {
+      @case ('name') {
         @if (editUrl && row?.current?.uniqueIdentifier) {
           <a govukLink [routerLink]="[editUrl, row?.current?.uniqueIdentifier]" [queryParams]="queryParams">
-            <span htmlDiff [current]="row?.current?.imoNumber" [previous]="row?.previous?.imoNumber"></span>
+            <span htmlDiff [current]="row?.current?.name" [previous]="row?.previous?.name"></span>
           </a>
         } @else {
-          <span htmlDiff [current]="row?.current?.imoNumber" [previous]="row?.previous?.imoNumber"></span>
+          <span htmlDiff [current]="row?.current?.name" [previous]="row?.previous?.name"></span>
         }
+        <br />
+        <span
+          class="govuk-hint"
+          htmlDiff
+          [current]="row?.current?.imoNumber"
+          [previous]="row?.previous?.imoNumber"></span>
       }
       @case ('type') {
         <span htmlDiff [current]="row?.current?.type | shipType" [previous]="row?.previous?.type | shipType"></span>

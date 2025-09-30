@@ -4,26 +4,22 @@ import { AerPortSummaryItemDto } from '@shared/types';
 
 export const PORTS_SUMMARY_COLUMNS: Array<GovukTableColumn<AerPortSummaryItemDto>> = [
   {
-    field: 'imoNumber',
-    header: 'IMO Number',
-    isSortable: true,
-    widthClass: 'app-column-width-15-per',
-  },
-  {
-    field: 'country',
-    header: 'Country code and name',
-  },
-  {
-    field: 'port',
-    header: 'Port code and name ',
+    field: 'shipName',
+    header: 'Ship name and IMO number',
+    widthClass: 'app-column-width-20-per',
   },
   {
     field: 'arrivalTime',
-    header: 'Date and time of arrival',
+    header: 'Arrival details (port, country, date)',
   },
   {
     field: 'departureTime',
-    header: 'Date and time of departure ',
+    header: 'Departure details (port, country, date)',
+  },
+  {
+    field: 'totalEmissions',
+    header: 'Emissions while in port (tCO2e)',
+    isNumeric: true,
   },
   {
     field: 'surrenderEmissions',

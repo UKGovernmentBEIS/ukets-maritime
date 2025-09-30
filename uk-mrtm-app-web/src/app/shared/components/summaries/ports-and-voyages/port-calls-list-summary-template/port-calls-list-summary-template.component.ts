@@ -1,15 +1,14 @@
-import { DatePipe, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, output, Signal, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { AerPortVisit } from '@mrtm/api';
 
 import { PendingButtonDirective } from '@netz/common/directives';
-import { StatusTagColorPipe, StatusTagTextPipe } from '@netz/common/pipes';
+import { GovukDatePipe, StatusTagColorPipe } from '@netz/common/pipes';
 import {
   ButtonDirective,
   GovukSelectOption,
-  GovukTableColumn,
   LinkDirective,
   PaginationComponent,
   SortEvent,
@@ -19,12 +18,14 @@ import {
   SummaryListRowValueDirective,
   TableComponent,
   TagComponent,
+  WarningTextComponent,
 } from '@netz/govuk-components';
 
+import { sortAndPaginateListWithShipNameAndStatus } from '@requests/common/utils/sort-and-paginate-list-with-ship-name-and-status';
 import { MultiSelectedItem, MultiSelectTableComponent } from '@shared/components';
 import { PORTS_SUMMARY_COLUMNS } from '@shared/components/summaries/ports-and-voyages/port-calls-list-summary-template/port-calls-list-summary-template.consts';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
-import { BigNumberPipe, SelectOptionToTitlePipe } from '@shared/pipes';
+import { AerPortVoyageAggregatedStatusPipe, BigNumberPipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { AerPortSummaryItemDto } from '@shared/types';
 import BigNumber from 'bignumber.js';
 
@@ -38,7 +39,6 @@ import BigNumber from 'bignumber.js';
     SelectOptionToTitlePipe,
     TagComponent,
     StatusTagColorPipe,
-    StatusTagTextPipe,
     ButtonDirective,
     MultiSelectTableComponent,
     PendingButtonDirective,
@@ -49,7 +49,9 @@ import BigNumber from 'bignumber.js';
     BigNumberPipe,
     TableComponent,
     NgTemplateOutlet,
-    DatePipe,
+    GovukDatePipe,
+    AerPortVoyageAggregatedStatusPipe,
+    WarningTextComponent,
   ],
   templateUrl: './port-calls-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,15 +63,15 @@ export class PortCallsListSummaryTemplateComponent {
   readonly editable = input<boolean>(false);
   readonly pageSize = input<number>(10);
   readonly editPath = input<string>();
-  readonly columns: Signal<Array<GovukTableColumn>> = computed(() =>
-    this.data()?.length ? PORTS_SUMMARY_COLUMNS : PORTS_SUMMARY_COLUMNS.map((col) => ({ ...col, isSortable: false })),
-  );
+  readonly emptyTableText = input<string>('No items to display');
+  readonly warningMessages = input<string[]>([]);
+  readonly columns = PORTS_SUMMARY_COLUMNS;
   readonly countrySelectItems: Array<GovukSelectOption<AerPortVisit['country']>> = AER_PORT_COUNTRY_SELECT_ITEMS;
   readonly portSelectItems: Array<GovukSelectOption<AerPortVisit['port']>> = AER_PORT_CODE_SELECT_ITEMS;
 
   readonly totalItems: Signal<number> = computed(() => this.data()?.length ?? 0);
   readonly currentPage = signal<number>(1);
-  readonly sort = signal<SortEvent>(undefined);
+  readonly sort = signal<SortEvent>({ column: 'status', direction: 'descending' });
   readonly totalEmissionsSummary: Signal<Pick<AerPortSummaryItemDto, 'totalEmissions' | 'surrenderEmissions'>> =
     computed(() => {
       const allItems = this.data() ?? [];
@@ -86,33 +88,15 @@ export class PortCallsListSummaryTemplateComponent {
             }));
     });
 
-  readonly rows = computed(() => {
-    const sorting = this.sort();
-    const tableData = (this.data() ?? []).sort((a, b) => {
-      if (!sorting) return 0;
-
-      const diff = a[sorting.column].localeCompare(b[sorting.column], 'en-GB', { sensitivity: 'base' });
-      return diff * (sorting.direction === 'ascending' ? 1 : -1);
-    });
-
-    const currentPage = this.currentPage();
-    const pageSize = this.pageSize();
-
-    const firstIndex = (currentPage - 1) * pageSize;
-    const lastIndex = Math.min(firstIndex + pageSize, tableData?.length);
-
-    return tableData?.length > firstIndex ? tableData.slice(firstIndex, lastIndex) : [];
-  });
+  readonly rows = computed<Array<MultiSelectedItem<AerPortSummaryItemDto>>>(() =>
+    sortAndPaginateListWithShipNameAndStatus(this.sort(), this.data() ?? [], this.currentPage(), this.pageSize()),
+  );
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
   }
 
   onDelete(rows: Array<MultiSelectedItem<AerPortSummaryItemDto>>): void {
-    this.deleteItems.emit(rows.filter((x) => x.isSelected));
-  }
-
-  checkIsSelected(item: MultiSelectedItem<AerPortSummaryItemDto>): boolean {
-    return !item.isSelected;
+    this.deleteItems.emit(rows.filter((row) => row.isSelected));
   }
 }

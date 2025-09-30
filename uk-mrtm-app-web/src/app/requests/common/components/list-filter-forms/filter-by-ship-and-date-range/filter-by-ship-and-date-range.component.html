@@ -1,0 +1,74 @@
+<ng-container #outletContainer></ng-container>
+
+<ng-template #contentTemplate>
+  <form [formGroup]="formGroup" (submit)="onSubmit()" #formElement>
+    <govuk-details
+      summary="Filters"
+      class="filter-by-ship-and-date-range__details"
+      [bottomSpacing]="4"
+      [bottomContentPadding]="0"
+      [openOnInit]="openDetailsOnRerender()"
+      #details>
+      <div
+        mrtm-autocomplete-select
+        inputFieldType="search"
+        [label]="filterByShipLabel()"
+        labelSize="small"
+        hint="Start typing and select from suggestions"
+        noOptionsFoundText="No matching results"
+        formControlName="filterByShip"
+        [options]="shipOptions()"
+        widthClass="govuk-!-width-full"></div>
+
+      <div class="govuk-grid-row">
+        <div class="govuk-grid-column-three-quarters">
+          <div
+            govuk-form-group
+            formGroupName="dates"
+            legend="Search a specific period"
+            legendSize="small"
+            hint="For example, 17/5/2024">
+            <div class="govuk-grid-row row-container">
+              @if (type() === 'ports') {
+                <div class="govuk-grid-column-one-half">
+                  <div
+                    mrtm-date-picker
+                    formControlName="arrivalDate"
+                    label="Arrival"
+                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+                </div>
+                <div class="govuk-grid-column-one-half">
+                  <div
+                    mrtm-date-picker
+                    formControlName="departureDate"
+                    label="Departure"
+                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+                </div>
+              } @else if (type() === 'voyages') {
+                <div class="govuk-grid-column-one-half">
+                  <div
+                    mrtm-date-picker
+                    formControlName="departureDate"
+                    label="Departure"
+                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+                </div>
+                <div class="govuk-grid-column-one-half">
+                  <div
+                    mrtm-date-picker
+                    formControlName="arrivalDate"
+                    label="Arrival"
+                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button #applyButton type="submit" govukSecondaryButton>Apply filters</button>
+    </govuk-details>
+    @if (hasAppliedFilters()) {
+      <a govukLink class="govuk-!-font-size-19" [routerLink]="[]" (click)="onClearFiltersClick()">Clear all filters</a>
+    }
+  </form>
+</ng-template>

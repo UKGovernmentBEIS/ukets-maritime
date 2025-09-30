@@ -2,6 +2,11 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
+import { provideNonComplianceDetailsBasePayloadMutator } from '@requests/common/non-compliance/components/non-compliance-details-base';
+import {
+  NON_COMPLIANCE_DETAILS_SUB_TASK,
+  NonComplianceDetailsStep,
+} from '@requests/common/non-compliance/non-compliance-details';
 import {
   NonComplianceSubmitApiService,
   NonComplianceSubmitService,
@@ -9,7 +14,6 @@ import {
 import {
   NonComplianceDetailsCivilPenaltyPayloadMutator,
   NonComplianceDetailsFlowManager,
-  NonComplianceDetailsFormPayloadMutator,
   NonComplianceDetailsInitialPenaltyPayloadMutator,
   NonComplianceDetailsInProgressSideEffect,
   NonComplianceDetailsNoticeOfIntentPayloadMutator,
@@ -19,7 +23,10 @@ import {
 
 export function provideNonComplianceSubmitPayloadMutators(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: NonComplianceDetailsFormPayloadMutator },
+    provideNonComplianceDetailsBasePayloadMutator(
+      NON_COMPLIANCE_DETAILS_SUB_TASK,
+      NonComplianceDetailsStep.DETAILS_FORM,
+    ),
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: NonComplianceDetailsSelectedRequestsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: NonComplianceDetailsCivilPenaltyPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: NonComplianceDetailsNoticeOfIntentPayloadMutator },

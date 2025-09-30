@@ -27,69 +27,103 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
     @Override
     public AerValidationResult validate(AerContainer aerContainer, Long accountId) {
         List<AerViolation> aerViolations = new ArrayList<>();
+
         Set<String> portShips = aerContainer.getAer().getPortEmissions().getPorts().stream()
-            .map(AerPort::getImoNumber)
-            .collect(Collectors.toSet());
+                .map(AerPort::getImoNumber)
+                .collect(Collectors.toSet());
 
         Set<String> voyageShips = aerContainer.getAer().getVoyageEmissions().getVoyages().stream()
-            .map(AerVoyage::getImoNumber)
-            .collect(Collectors.toSet());
+                .map(AerVoyage::getImoNumber)
+                .collect(Collectors.toSet());
 
         for (AerShipAggregatedData aggregatedData : aerContainer.getAer().getAggregatedData().getEmissions()) {
-
-            if (!aggregatedData.isFromFetch()) {
-                validateInputEmissionsArePositiveOrZero(aggregatedData, aerViolations);
-            }
-            AerShipEmissions ship = aerContainer.getAer().getEmissions().getShips()
-                .stream()
-                .filter(aerShipEmissions -> aerShipEmissions.getDetails().getImoNumber().equals(aggregatedData.getImoNumber()))
-                .findFirst()
-                .orElse(null);
-
-            AerValidatorHelper.validateShipExistsInListOfShips(ship, aggregatedData.getImoNumber(),
-                aerViolations, AerShipAggregatedData.class);
-
-            boolean fetchedShipNotIncludedInPortsOrVoyages = aggregatedData.isFromFetch()
-                && !portShips.contains(aggregatedData.getImoNumber())
-                && !voyageShips.contains(aggregatedData.getImoNumber());
-
-            if (fetchedShipNotIncludedInPortsOrVoyages) {
-                aerViolations.add(new AerViolation(AerShipAggregatedData.class.getSimpleName(),
-                    AerViolation.ViolationMessage.AGGREGATED_DATA_FETCHED_SHIP_NOT_FOUND_IN_PORTS_OR_VOYAGES, aggregatedData.getImoNumber()));
-            }
-
-            if (ship != null) {
-                boolean isSmallIslandFerryOperatorReduction = Boolean.TRUE.equals(ship.getDerogations().getSmallIslandFerryOperatorReduction());
-
-                boolean isSmallIslandReductionInvalid =
-                    (isSmallIslandFerryOperatorReduction && aggregatedData.getSmallIslandSurrenderReduction() == null)
-                    || (!isSmallIslandFerryOperatorReduction && aggregatedData.getSmallIslandSurrenderReduction() != null);
-
-                if (isSmallIslandReductionInvalid) {
-                    aerViolations.add(new AerViolation(AerShipAggregatedData.class.getSimpleName(),
-                        AerViolation.ViolationMessage.AGGREGATED_DATA_INVALID_SMALL_ISLAND_FERRY_EMISSIONS, aggregatedData.getImoNumber()));
-                }
-
-                final Set<FuelOriginTypeName> invalidFuelOriginTypeNames =
-                    getInvalidFuelConsumptions(ship.getFuelsAndEmissionsFactors(), aggregatedData.getFuelConsumptions());
-                if (!invalidFuelOriginTypeNames.isEmpty()) {
-                    aerViolations.add(new AerViolation(AerShipAggregatedData.class.getSimpleName(),
-                        AerViolation.ViolationMessage.INVALID_FUEL_CONSUMPTION,
-                        invalidFuelOriginTypeNames.toArray()));
-                }
-
-                boolean hasDuplicateFuelOriginTypeNames = hasDuplicateFuelConsumptions(aggregatedData.getFuelConsumptions());
-                if (hasDuplicateFuelOriginTypeNames) {
-                    aerViolations.add(new AerViolation(AerShipAggregatedData.class.getSimpleName(),
-                        AerViolation.ViolationMessage.DUPLICATE_FUEL_ENTRIES));
-                }
-            }
+            validateAggregatedData(aerContainer, aggregatedData, portShips, voyageShips, aerViolations);
         }
 
         return AerValidationResult.builder()
-        .valid(aerViolations.isEmpty())
-        .aerViolations(aerViolations)
-        .build();
+                .valid(aerViolations.isEmpty())
+                .aerViolations(aerViolations)
+                .build();
+    }
+
+    private void validateAggregatedData(AerContainer aerContainer,
+                                        AerShipAggregatedData aggregatedData,
+                                        Set<String> portShips,
+                                        Set<String> voyageShips,
+                                        List<AerViolation> aerViolations) {
+
+        if (!aggregatedData.isFromFetch()) {
+            validateInputEmissionsArePositiveOrZero(aggregatedData, aerViolations);
+        }
+
+        AerShipEmissions ship = aerContainer.getAer().getEmissions().getShips().stream()
+                .filter(s -> s.getDetails().getImoNumber().equals(aggregatedData.getImoNumber()))
+                .findFirst()
+                .orElse(null);
+
+        AerValidatorHelper.validateShipExistsInListOfShips(ship, aggregatedData.getImoNumber(),
+                aerViolations, AerShipAggregatedData.class);
+
+        validateFetchedShipInPortsOrVoyages(aggregatedData, portShips, voyageShips, aerViolations);
+
+        if (ship != null) {
+            validateSmallIslandReduction(ship, aggregatedData, aerViolations);
+            validateFuelConsumptions(ship, aggregatedData, aerViolations);
+        }
+    }
+
+    private void validateFetchedShipInPortsOrVoyages(AerShipAggregatedData aggregatedData,
+                                                     Set<String> portShips,
+                                                     Set<String> voyageShips,
+                                                     List<AerViolation> aerViolations) {
+        boolean fetchedShipNotIncludedInPortsOrVoyages = aggregatedData.isFromFetch()
+                && !portShips.contains(aggregatedData.getImoNumber())
+                && !voyageShips.contains(aggregatedData.getImoNumber());
+
+        if (fetchedShipNotIncludedInPortsOrVoyages) {
+            aerViolations.add(new AerViolation(
+                    AerShipAggregatedData.class.getSimpleName(),
+                    AerViolation.ViolationMessage.AGGREGATED_DATA_FETCHED_SHIP_NOT_FOUND_IN_PORTS_OR_VOYAGES,
+                    aggregatedData.getImoNumber()));
+        }
+    }
+
+    private void validateSmallIslandReduction(AerShipEmissions ship,
+                                              AerShipAggregatedData aggregatedData,
+                                              List<AerViolation> aerViolations) {
+        boolean isSmallIslandFerryOperatorReduction =
+                Boolean.TRUE.equals(ship.getDerogations().getSmallIslandFerryOperatorReduction());
+
+        boolean isSmallIslandReductionInvalid =
+                (isSmallIslandFerryOperatorReduction && aggregatedData.getSmallIslandSurrenderReduction() == null)
+                || (!isSmallIslandFerryOperatorReduction && aggregatedData.getSmallIslandSurrenderReduction() != null);
+
+        if (isSmallIslandReductionInvalid) {
+            aerViolations.add(new AerViolation(
+                    AerShipAggregatedData.class.getSimpleName(),
+                    AerViolation.ViolationMessage.AGGREGATED_DATA_INVALID_SMALL_ISLAND_FERRY_EMISSIONS,
+                    aggregatedData.getImoNumber()));
+        }
+    }
+
+    private void validateFuelConsumptions(AerShipEmissions ship,
+                                          AerShipAggregatedData aggregatedData,
+                                          List<AerViolation> aerViolations) {
+        Set<FuelOriginTypeName> invalidFuelOriginTypeNames =
+                getInvalidFuelConsumptions(ship.getFuelsAndEmissionsFactors(), aggregatedData.getFuelConsumptions());
+
+        if (!invalidFuelOriginTypeNames.isEmpty()) {
+            aerViolations.add(new AerViolation(
+                    AerShipAggregatedData.class.getSimpleName(),
+                    AerViolation.ViolationMessage.INVALID_FUEL_CONSUMPTION,
+                    invalidFuelOriginTypeNames.toArray()));
+        }
+
+        if (hasDuplicateFuelConsumptions(aggregatedData.getFuelConsumptions())) {
+            aerViolations.add(new AerViolation(
+                    AerShipAggregatedData.class.getSimpleName(),
+                    AerViolation.ViolationMessage.DUPLICATE_FUEL_ENTRIES));
+        }
     }
 
     private Set<FuelOriginTypeName> getInvalidFuelConsumptions(Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors,

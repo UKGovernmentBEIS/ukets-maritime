@@ -13,6 +13,7 @@ import {
 import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { MethaneSlipValuePipe } from '@shared/pipes/methane-slip-value.pipe';
+import { WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-emission-sources-and-fuel-types-used-summary-template',
@@ -34,7 +35,7 @@ export class AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent {
   readonly sourceClassOptions = EMISSION_SOURCES_SOURCE_CLASS_SELECT_ITEMS;
   readonly monitoringMethodMap = monitoringMethodMap;
 
-  readonly data = input.required<EmissionsSources[]>();
+  readonly data = input.required<WithNeedsReview<EmissionsSources>[]>();
   readonly changeLink = input<string>('../');
   readonly isEditable = input<boolean>(false);
   readonly isDeletable = input<boolean>(false);
@@ -62,5 +63,9 @@ export class AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent {
   handleRemove(event: Event, item: EmissionsSources): void {
     event.preventDefault();
     this.delete.emit(item);
+  }
+
+  public onDefineRowAdditionalStyle(item: WithNeedsReview<EmissionsSources>): string | string[] | undefined {
+    return item?.needsReview ? 'needs-review' : undefined;
   }
 }

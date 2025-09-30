@@ -19,7 +19,6 @@ import { AerShipEmissions } from '@mrtm/api';
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
 import {
-  DateInputComponent,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -36,7 +35,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-subtask-list.map';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { TimeInputComponent, WizardStepComponent } from '@shared/components';
+import { DatePickerComponent, DatePickerConfig, TimeInputComponent, WizardStepComponent } from '@shared/components';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
 
 @Component({
@@ -46,62 +45,53 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     WizardStepComponent,
     ReactiveFormsModule,
     SelectComponent,
-    DateInputComponent,
     TimeInputComponent,
     TextInputComponent,
     RadioOptionComponent,
     RadioComponent,
     RouterLink,
     LinkDirective,
+    DatePickerComponent,
   ],
   providers: [aerVoyageDetailsFormProvider],
   templateUrl: './aer-voyage-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVoyageDetailsComponent {
+  protected readonly form: FormGroup = inject(TASK_FORM);
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
-  public readonly form: FormGroup = inject(TASK_FORM);
-  public readonly wizardMap = aerVoyagesMap;
   public readonly voyageId: InputSignal<string> = input<string>();
-  public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS;
 
-  private get arrivalCountryCtrl(): AbstractControl {
-    return this.form.get('arrivalCountry');
-  }
-  private get departureCountryCtrl(): AbstractControl {
-    return this.form.get('departureCountry');
-  }
+  public readonly wizardMap = aerVoyagesMap;
+  public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS;
   private currentArrivalCountry = toSignal(this.arrivalCountryCtrl.valueChanges.pipe(), {
     initialValue: this.arrivalCountryCtrl.value,
   });
   private departureArrivalCountry = toSignal(this.departureCountryCtrl.valueChanges.pipe(), {
     initialValue: this.departureCountryCtrl.value,
   });
-
-  public readonly ship: Signal<AerShipEmissions> = computed(() => {
+  ship: Signal<AerShipEmissions> = computed(() => {
     const port = this.store.select(aerCommonQuery.selectVoyage(this.voyageId()))();
 
     return this.store.select(aerCommonQuery.selectShipByImoNumber(port?.imoNumber))();
   });
-
-  public portArrivalSelectItems = computed(() => {
+  portArrivalSelectItems = computed(() => {
     const country = this.currentArrivalCountry();
     return !country
       ? []
       : AER_PORT_CODE_SELECT_ITEMS.filter((item) => item.countryCode === country || item.value === 'NOT_APPLICABLE');
   });
-
-  public portDepartureSelectItems = computed(() => {
+  portDepartureSelectItems = computed(() => {
     const country = this.departureArrivalCountry();
     return !country
       ? []
       : AER_PORT_CODE_SELECT_ITEMS.filter((item) => item.countryCode === country || item.value === 'NOT_APPLICABLE');
   });
 
-  public constructor() {
+  constructor() {
     effect(() => {
       const arrivalPortValue =
         this.portArrivalSelectItems()?.length === 1 ? 'NOT_APPLICABLE' : this.form?.value?.arrivalPort;
@@ -114,7 +104,25 @@ export class AerVoyageDetailsComponent {
     });
   }
 
-  public onSubmit(): void {
+  private get arrivalCountryCtrl(): AbstractControl {
+    return this.form.get('arrivalCountry');
+  }
+
+  private get departureCountryCtrl(): AbstractControl {
+    return this.form.get('departureCountry');
+  }
+
+  get datepickerConfig(): DatePickerConfig {
+    const reportingYear = this.store.select(aerCommonQuery.selectReportingYear)();
+    return {
+      minDate: `01/01/${reportingYear}`,
+      maxDate: `31/12/${reportingYear}`,
+      weekStartDay: 'Monday',
+      leadingZeros: false,
+    };
+  }
+
+  onSubmit(): void {
     this.taskService
       .saveSubtask(AER_VOYAGES_SUB_TASK, AerVoyagesWizardStep.VOYAGE_DETAILS, this.activatedRoute, this.form.value)
       .pipe(take(1))

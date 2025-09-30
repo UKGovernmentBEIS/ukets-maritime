@@ -19,16 +19,15 @@
 }
 
 <div class="moj-datepicker__wrapper">
-  <div class="govuk-input__wrapper">
+  <div class="govuk-input__wrapper" [ngClass]="widthClass()">
     <input
       #input
       (change)="onChange(getInputValue($event))"
-      (blur)="onTouched()"
+      (blur)="onChange(getInputValue($event))"
       [attr.aria-describedby]="hint() ? identifier + '-hint' : null"
       type="text"
       [id]="identifier"
       [name]="identifier"
-      [ngClass]="widthClass()"
       [formControl]="control"
       autocomplete="off"
       [class.govuk-input--error]="shouldDisplayErrors"
@@ -153,7 +152,7 @@
           @for (dayLabel of datePickerService.dayLabels(); track $index) {
             <th scope="col">
               <span aria-hidden="true">{{ dayLabel | slice: 0 : 3 }}</span>
-              <span class="govuk-visually-hidden">{{dayLabel}{</span>
+              <span class="govuk-visually-hidden">{{ dayLabel }}</span>
             </th>
           }
         </tr>

@@ -14,7 +14,7 @@ import {
   ConditionalContentDirective,
   FormErrorDirective,
   FormService,
-  GovukTextWidthClass,
+  GovukSelectWidthClass,
 } from '@netz/govuk-components';
 
 @Component({
@@ -31,7 +31,7 @@ export class SelectOtherComponent implements ControlValueAccessor, AfterContentI
 
   @Input() hint: string;
   @Input() label: string;
-  @Input() widthClass: GovukTextWidthClass;
+  @Input() widthClass: GovukSelectWidthClass;
   currentValue: string;
   onChange: (event: Event) => any;
   onBlur: () => any;

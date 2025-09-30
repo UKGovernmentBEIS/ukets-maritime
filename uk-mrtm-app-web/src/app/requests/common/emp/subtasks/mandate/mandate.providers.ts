@@ -7,6 +7,7 @@ import { provideMandateRegisteredOwnersFormPayloadMutator } from '@requests/comm
 import { MandateResponsibilityPayloadMutator } from '@requests/common/emp/subtasks/mandate/mandate-responsibility/mandate-responsibility.payload-mutator';
 import { MandateResponsibilityDeclarationPayloadMutator } from '@requests/common/emp/subtasks/mandate/mandate-responsibility-declaration';
 import { MandateSummarySideEffect } from '@requests/common/emp/subtasks/mandate/mandate-summary';
+import { MandateUploadPayloadMutator } from '@requests/common/emp/subtasks/mandate/mandate-upload';
 import { DeleteRegisteredOwnerPayloadMutator } from '@requests/common/emp/subtasks/mandate/payload-mutators';
 import { MandateSaveSideEffect } from '@requests/common/emp/subtasks/mandate/side-effects';
 
@@ -20,5 +21,6 @@ export const provideMandatePayloadMutators = (): Array<Provider> => [
   provideMandateRegisteredOwnersFormPayloadMutator(MandateWizardStep.REGISTERED_OWNERS_FORM_ADD),
   provideMandateRegisteredOwnersFormPayloadMutator(MandateWizardStep.REGISTERED_OWNERS_FORM_EDIT),
   { provide: PAYLOAD_MUTATORS, multi: true, useClass: DeleteRegisteredOwnerPayloadMutator },
+  { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateUploadPayloadMutator },
   { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateResponsibilityDeclarationPayloadMutator },
 ];

@@ -52,7 +52,7 @@ public class EmpNotificationOfficialNoticeService {
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getFollowUpReviewDecisionNotification())
         	.stream()
             .filter(email -> !email.equals(accountPrimaryContact.getEmail()))
-            .collect(Collectors.toList());
+            .toList();
 
         // notify 
         notificationEmailService.notifyRecipients(

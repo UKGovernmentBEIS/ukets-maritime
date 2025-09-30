@@ -15,7 +15,7 @@ import {
   AerPortDetailsFormGroupModel,
   AerPortDetailsModel,
 } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
-import { portArrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
+import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { mergeDatesToDate } from '@shared/utils';
 
@@ -166,7 +166,7 @@ export const aerPortDetailsFormProvider: Provider = {
       },
       {
         validators: [
-          portArrivalDepartureDateValidator,
+          arrivalDepartureDateValidator('ports'),
           arrivalDepartureDateTimeOverlapOtherPortCall(port?.uniqueIdentifier, port?.imoNumber, store),
         ],
       },

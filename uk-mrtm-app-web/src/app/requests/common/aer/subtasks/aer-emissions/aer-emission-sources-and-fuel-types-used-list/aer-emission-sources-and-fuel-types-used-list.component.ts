@@ -1,8 +1,8 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, computed, inject, input, signal, WritableSignal } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { takeUntil } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { EmissionsSources } from '@mrtm/api';
 
@@ -10,21 +10,26 @@ import { PageHeadingComponent } from '@netz/common/components';
 import { TaskService } from '@netz/common/forms';
 import { DestroySubject } from '@netz/common/services';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { ButtonDirective } from '@netz/govuk-components';
+import { ButtonDirective, WarningTextComponent } from '@netz/govuk-components';
 
+import { TaskItemStatus } from '@requests/common';
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import {
   aerEmissionsSourcesValidator,
   AerEmissionsWizardStep,
+  emissionsSourcesItemValidator,
 } from '@requests/common/aer/subtasks/aer-emissions/aer-emissions.helpers';
 import { emissionsShipSubtaskMap, emissionsSubtaskMap } from '@requests/common/components/emissions';
+import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { ReturnToShipsListTableComponent } from '@requests/common/components/emissions/return-to-ships-list-table';
+import { findNotAssociatedFuelFactors } from '@requests/common/utils/emissions';
 import {
   AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent,
-  NotificationBannerComponent,
+  XmlErrorSummaryComponent,
 } from '@shared/components';
-import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { FuelOriginTitlePipe } from '@shared/pipes';
+import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-emission-sources-and-fuel-types-used-list',
@@ -34,35 +39,51 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
     PageHeadingComponent,
     ButtonDirective,
     ReturnToShipsListTableComponent,
-    NotificationBannerComponent,
+    XmlErrorSummaryComponent,
+    WarningTextComponent,
   ],
   templateUrl: './aer-emission-sources-and-fuel-types-used-list.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerEmissionSourcesAndFuelTypesUsedListComponent {
+  private readonly fuelTitlePipe: FuelOriginTitlePipe = new FuelOriginTitlePipe();
   private readonly taskService = inject(TaskService);
   private readonly store = inject(RequestTaskStore);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
-  private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
   private readonly destroy$ = inject(DestroySubject);
 
   readonly shipId = input<string>();
-  readonly emissionSources = computed(() =>
-    this.store.select(aerCommonQuery.selectShipEmissionSources(this.shipId()))(),
-  );
+  readonly emissionSources = computed(() => {
+    const sectionsCompleted = this.store.select(aerCommonQuery.selectAerSectionsCompleted)();
+
+    return this.store
+      .select(aerCommonQuery.selectShipEmissionSources(this.shipId()))()
+      .map((emission) => ({
+        ...emission,
+        needsReview:
+          !emissionsSourcesItemValidator(emission) ||
+          sectionsCompleted?.[`${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${emission.uniqueIdentifier}`] ===
+            TaskItemStatus.NEEDS_REVIEW,
+      }));
+  });
   readonly fuelsAndEmissionsFactors = computed(() =>
     this.store.select(aerCommonQuery.selectShipFuelsAndEmissionsFactors(this.shipId()))(),
   );
-  readonly canContinue = computed(() =>
-    aerEmissionsSourcesValidator(this.emissionSources(), this.fuelsAndEmissionsFactors()),
+  readonly canContinue = computed(
+    () =>
+      aerEmissionsSourcesValidator(this.emissionSources(), this.fuelsAndEmissionsFactors()) &&
+      !this.hasNeedsReviewItems(),
   );
   readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable)();
   readonly taskMap = emissionsShipSubtaskMap;
   readonly shipName = computed(() => this.store.select(aerCommonQuery.selectShipName(this.shipId()))());
   readonly returnToLabel = emissionsSubtaskMap.ships.title;
-  readonly form = new UntypedFormGroup({});
+  readonly validationErrors: WritableSignal<Array<XmlValidationError>> = signal(undefined);
+  readonly hasNeedsReviewItems = computed(
+    () => !isNil(this.emissionSources().find((emissionSource) => emissionSource.needsReview)),
+  );
 
   onAddItem(): void {
     this.router.navigate(['../../' + AerEmissionsWizardStep.EMISSION_SOURCES_FORM, crypto.randomUUID()], {
@@ -78,13 +99,37 @@ export class AerEmissionSourcesAndFuelTypesUsedListComponent {
   }
 
   onContinue(): void {
-    if (this.canContinue()) {
+    const errors: Array<XmlValidationError> = [];
+    let isValid = true;
+
+    if (!aerEmissionsSourcesValidator(this.emissionSources(), this.fuelsAndEmissionsFactors())) {
+      for (const fuel of findNotAssociatedFuelFactors(this.emissionSources(), this.fuelsAndEmissionsFactors())) {
+        errors.push({
+          column: 'NO_FIELD',
+          row: this.fuelTitlePipe.transform(fuel, false),
+          message: 'All fuel types should be associated with at least one emission source',
+        });
+        isValid = false;
+      }
+    }
+
+    if (this.hasNeedsReviewItems()) {
+      errors.push({
+        column: null,
+        row: -1,
+        message: 'The Potential fuel types used is missing for one or more emission sources',
+      });
+      isValid = false;
+    }
+
+    if (isValid) {
       this.router.navigate([`../../${AerEmissionsWizardStep.UNCERTAINTY_LEVEL}`], { relativeTo: this.route });
     } else {
-      this.form.setErrors({
-        emissionSourcesFuelTypesCombination: 'All fuel types should be associated with at least one emission source',
-      });
-      this.notificationBannerStore.setInvalidForm(this.form);
+      this.validationErrors.set(errors);
     }
+  }
+
+  formatValidationErrorDetails(error: NestedMessageValidationError): string {
+    return `Check the following fuel types: ${error.rows.map((row) => `<strong>${row}</strong>`).join(', ')}`;
   }
 }

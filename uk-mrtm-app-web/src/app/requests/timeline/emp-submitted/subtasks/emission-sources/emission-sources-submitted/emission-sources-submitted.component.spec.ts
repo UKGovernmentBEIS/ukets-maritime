@@ -68,7 +68,7 @@ describe('EmissionSourcesSubmittedComponent', () => {
       'Location where records are kept',
       'Name of IT system used',
       'Are you using default values for all emissions factors?',
-      'Will you be making an emissions reduction claim as a result of the purchase and delivery of sustainable fuel?',
+      'Will you be making an emissions reduction claim as a result of the purchase and delivery of eligible fuel?',
     ]);
   });
 });

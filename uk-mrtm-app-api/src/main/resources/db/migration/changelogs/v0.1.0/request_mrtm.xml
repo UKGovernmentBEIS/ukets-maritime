@@ -3358,4 +3358,81 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_AER_FETCH_EMP_LIST_OF_SHIPS_FOR_AER_AMENDS_REQUEST_TASK" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_FETCH_EMP_LIST_OF_SHIPS')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_FETCH_EMP_LIST_OF_SHIPS');
+
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_SET_UP_NON_COMPLIANCE_AMEND_DETAILS_AND_UPLOAD_ATTACHMENT" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'NON_COMPLIANCE_AMEND_DETAILS', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS')
+                  );
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_INITIAL_PENALTY_NOTICE')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_NOTICE_OF_INTENT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_CIVIL_PENALTY')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS');
+
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'NON_COMPLIANCE_FINAL_DETERMINATION')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'NON_COMPLIANCE_AMEND_DETAILS');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'NON_COMPLIANCE_AMEND_DETAILS';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

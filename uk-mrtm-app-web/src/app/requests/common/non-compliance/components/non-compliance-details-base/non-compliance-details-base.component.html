@@ -1,0 +1,39 @@
+<mrtm-wizard-step
+  (formSubmit)="onSubmit()"
+  [caption]="map.caption"
+  [formGroup]="formGroup"
+  [heading]="map.details.title"
+  [showReturnLink]="true"
+  [isTwoThirds]="true"
+  [submitText]="isAmend() ? 'Save and continue' : 'Continue'"
+  [showCancelLink]="isAmend()"
+  cancelLinkPath="../">
+  <div
+    govuk-select
+    [options]="reasonOptions"
+    formControlName="reason"
+    label="Choose type of non-compliance"
+    labelSize="small"
+    widthClass="govuk-!-width-full"></div>
+
+  <div
+    govuk-date-input
+    formControlName="nonComplianceDate"
+    label="{{ map.nonComplianceDate.title }} (optional)"
+    legendSize="small"
+    hint="This should be the date that the deadline was breached"></div>
+
+  <div
+    govuk-date-input
+    formControlName="complianceDate"
+    label="{{ map.complianceDate.title }} (optional)"
+    legendSize="small"
+    hint="Leave blank if the operator is still non-compliant"></div>
+
+  <div
+    formControlName="nonComplianceComments"
+    govuk-textarea
+    label="Your comments (optional)"
+    labelSize="small"
+    [maxLength]="10000"></div>
+</mrtm-wizard-step>

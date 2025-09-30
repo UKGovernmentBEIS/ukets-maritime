@@ -14,6 +14,7 @@ import {
   AER_VERIFICATION_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/aer/aer.consts';
 import {
+  NON_COMPLIANCE_AMEND_DETAILS_ROUTE_PREFIX,
   NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_ROUTE_PREFIX,
   NON_COMPLIANCE_CIVIL_PENALTY_ROUTE_PREFIX,
   NON_COMPLIANCE_CLOSE_ROUTE_PREFIX,
@@ -24,13 +25,13 @@ import {
   NON_COMPLIANCE_NOTICE_OF_INTENT_ROUTE_PREFIX,
   NON_COMPLIANCE_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/non-compliance';
+import { PAYMENT_ROUTE_PREFIX } from '@requests/common/payment';
 import {
   canActivateProvideNoteRedirect,
   PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX,
 } from '@requests/common/provide-note-redirect';
 import { taskProviders } from '@requests/common/task.providers';
 import { AER_REVIEW_ROUTE_PREFIX } from '@requests/tasks/aer-review';
-import { PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment';
 import { tasksContent } from '@requests/tasks/tasks-content';
 import { VIR_RESPOND_TO_REGULATOR_COMMENTS_PREFIX } from '@requests/tasks/vir-respond-to-regulator-comments';
 import { VIR_REVIEW_PREFIX } from '@requests/tasks/vir-review';
@@ -324,6 +325,13 @@ export const TASKS_ROUTES: Routes = [
         path: NON_COMPLIANCE_CLOSE_ROUTE_PREFIX,
         loadChildren: () =>
           import('@requests/common/non-compliance/non-compliance-close').then((r) => r.NON_COMPLIANCE_CLOSE_ROUTES),
+      },
+      {
+        path: NON_COMPLIANCE_AMEND_DETAILS_ROUTE_PREFIX,
+        loadChildren: () =>
+          import('@requests/common/non-compliance/non-compliance-amend-details').then(
+            (r) => r.NON_COMPLIANCE_AMEND_DETAILS_ROUTES,
+          ),
       },
     ],
   },

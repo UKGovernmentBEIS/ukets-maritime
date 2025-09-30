@@ -1,4 +1,4 @@
-import { isBefore, isSameDay } from 'date-fns';
+import { isAfter, isBefore, isSameDay } from 'date-fns';
 
 export const dateFormatPattern = /(\d{1,2})([-/,. ])(\d{1,2})\2(\d{4})/;
 
@@ -68,6 +68,10 @@ export const formatDateTimeFromString = (dateString: string, timeString: string,
   return null;
 };
 
-export const isSameOrBefore = (date1: Date, date2: Date): boolean => {
-  return isBefore(date1, date2) || isSameDay(date1, date2);
+export const isSameDayOrBefore = (shouldBeSameOrBeforeDate: Date, comparisonDate: Date): boolean => {
+  return isBefore(shouldBeSameOrBeforeDate, comparisonDate) || isSameDay(shouldBeSameOrBeforeDate, comparisonDate);
+};
+
+export const isSameDayOrAfter = (shouldBeSameOrAfterDate: Date, comparisonDate: Date): boolean => {
+  return isAfter(shouldBeSameOrAfterDate, comparisonDate) || isSameDay(shouldBeSameOrAfterDate, comparisonDate);
 };

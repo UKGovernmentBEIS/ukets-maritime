@@ -28,8 +28,8 @@ import {
   ErrorMessageComponent,
   FormInput,
   FormService,
-  GovukTextWidthClass,
   GovukValidators,
+  GovukWidthClass,
   LabelDirective,
   LabelSizeType,
 } from '@netz/govuk-components';
@@ -78,7 +78,8 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
   private dateFormat = 'dd/MM/yyyy';
 
   readonly hint = input<string>();
-  readonly widthClass = input<GovukTextWidthClass>('govuk-!-width-full');
+  readonly invalidDateFormatMessage = input<string>('Enter a valid date');
+  readonly widthClass = input<GovukWidthClass>('govuk-!-width-full');
   readonly datePickerConfig = input<DatePickerConfig>(datePickerConfigDefaults);
   readonly templateLabel = contentChild(LabelDirective);
   readonly input = viewChild<ElementRef<HTMLInputElement>>('input');
@@ -144,7 +145,7 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
   }
 
   initValidators() {
-    this.control.addValidators(GovukValidators.builder('Enter a valid date', this.initialValidator()));
+    this.control.addValidators(GovukValidators.builder(this.invalidDateFormatMessage(), this.initialValidator()));
 
     if (this.datePickerConfig()?.minDate) {
       this.control.addValidators(
@@ -259,14 +260,17 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
   }
 
   /**
-   * Select current date but if none is selected choose the first tabbable
+   * Select current date but if none is selected, choose the first tabbable
+   * Prevent selection when currentDate is not found, this covers cases where a selected date is excluded
    */
   onOkButtonClick(event: Event) {
     let currentDate = this.datePickerService.calendarDates().find((calendarDate) => calendarDate.isSelected);
     if (!currentDate) {
       currentDate = this.datePickerService.calendarDates().find((calendarDate) => calendarDate.isTabbable);
     }
-    this.onSelectDate(currentDate, event);
+    if (currentDate) {
+      this.onSelectDate(currentDate, event);
+    }
   }
 
   onCancelButtonClick(event: Event) {

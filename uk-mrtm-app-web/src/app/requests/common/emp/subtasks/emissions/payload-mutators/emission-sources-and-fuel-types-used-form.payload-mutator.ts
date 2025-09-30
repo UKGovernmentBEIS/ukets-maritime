@@ -6,7 +6,10 @@ import { EmpEmissionsSources, EmpShipEmissions, FuelOriginFossilTypeName } from 
 
 import { PayloadMutator } from '@netz/common/forms';
 
-import { getMethaneSlipFromUserInput } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
+import {
+  EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP,
+  getMethaneSlipFromUserInput,
+} from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EmissionSourcesAndFuelTypesUsedFormType } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.types';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
@@ -84,6 +87,9 @@ export class EmissionSourcesAndFuelTypesUsedPayloadMutator extends PayloadMutato
           ];
         }
 
+        delete payload.empSectionsCompleted[
+          `${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${userInput.uniqueIdentifier}`
+        ];
         payload.empSectionsCompleted[`${this.subtask}-ship-${userInput.shipId}`] = TaskItemStatus.IN_PROGRESS;
         payload.empSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
       }),

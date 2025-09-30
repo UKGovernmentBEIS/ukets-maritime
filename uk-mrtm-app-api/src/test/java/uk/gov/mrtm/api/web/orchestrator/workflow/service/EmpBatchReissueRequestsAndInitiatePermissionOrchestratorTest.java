@@ -6,6 +6,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.web.orchestrator.workflow.dto.EmpBatchReissuesResponseDTO;
+import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestHistoryCategory;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpBatchReissueRequestMetadata;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
@@ -28,7 +29,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static uk.gov.mrtm.api.workflow.request.core.domain.constants.RequestHistoryCategory.CA;
 import static uk.gov.netz.api.workflow.request.core.domain.constants.RequestStatuses.COMPLETED;
 
 @ExtendWith(MockitoExtension.class)
@@ -61,7 +61,7 @@ public class EmpBatchReissueRequestsAndInitiatePermissionOrchestratorTest {
         RequestSearchCriteria requestSearchCriteria = RequestSearchCriteria.builder()
         		.resourceType(ResourceType.CA)
                 .resourceId(authUser.getCompetentAuthority().name())
-                .historyCategory(CA)
+                .historyCategory(MrtmRequestHistoryCategory.CA.name())
                 .requestTypes(Set.of(MrtmRequestType.EMP_BATCH_REISSUE))
                 .paging(pagingRequestInfo).build();
 

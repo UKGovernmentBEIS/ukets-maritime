@@ -1,8 +1,15 @@
-<mrtm-notification-banner />
+<mrtm-xml-error-summary [xmlErrors]="validationErrors()" [formatNestedErrorDetails]="formatValidationErrorDetails" />
 <netz-page-heading [caption]="shipName()">
   {{ taskMap.emissionsSources.title }}
 </netz-page-heading>
-
+@if (hasNeedsReviewItems()) {
+  <div class="govuk-!-width-three-quarters">
+    <govuk-warning-text assistiveText="">
+      The highlighted emission sources have been updated due to changes made to the ‘Fuels and emissions factors’
+      question. Review the details for each source, then select Continue.
+    </govuk-warning-text>
+  </div>
+}
 <mrtm-aer-emission-sources-and-fuel-types-used-summary-template
   [data]="emissionSources()"
   (delete)="onDelete($event)"

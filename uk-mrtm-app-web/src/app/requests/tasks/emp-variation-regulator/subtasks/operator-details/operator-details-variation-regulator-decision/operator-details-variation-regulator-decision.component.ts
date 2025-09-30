@@ -36,8 +36,6 @@ interface ViewModel {
   }>;
   files: AttachedFile[];
   originalFiles: AttachedFile[];
-  declarationFiles: AttachedFile[];
-  originalDeclarationFiles: AttachedFile[];
   isEditable: boolean;
   wizardStep: { [s: string]: string };
 }
@@ -79,14 +77,6 @@ export class OperatorDetailsVariationRegulatorDecisionComponent {
       originalFiles: this.store.select(
         empVariationRegulatorQuery.selectOriginalAttachedFiles(
           (originalOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
-        ),
-      )(),
-      declarationFiles: this.store.select(
-        empCommonQuery.selectAttachedFiles(empOperatorDetails?.declarationDocuments?.documents),
-      )(),
-      originalDeclarationFiles: this.store.select(
-        empVariationRegulatorQuery.selectOriginalAttachedFiles(
-          originalOperatorDetails?.declarationDocuments?.documents,
         ),
       )(),
       isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),

@@ -5,6 +5,7 @@ import {
   DestroyRef,
   ElementRef,
   inject,
+  input,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -36,11 +37,13 @@ import {
 })
 export class NotificationBannerComponent implements OnInit, OnDestroy {
   @ViewChild('bannerContainer', { static: false }) private readonly bannerContEl: ElementRef<HTMLDivElement>;
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private store = inject(NotificationBannerStore);
-  private destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly store = inject(NotificationBannerStore);
+  private readonly destroyRef = inject(DestroyRef);
   private readonly title = inject(Title);
+
+  readonly preventResetOnNavigation = input<boolean>(false);
 
   /** Auxiliary property to avoid resetting the store at each navigation change. */
   private storeToReset = false;
@@ -82,7 +85,7 @@ export class NotificationBannerComponent implements OnInit, OnDestroy {
     const fragmentChange$ = this.activatedRoute.fragment;
     merge(navigationEnd$, fragmentChange$)
       .pipe(
-        tap(() => this.resetStore()),
+        tap(() => this.preventResetOnNavigation() || this.resetStore()),
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();

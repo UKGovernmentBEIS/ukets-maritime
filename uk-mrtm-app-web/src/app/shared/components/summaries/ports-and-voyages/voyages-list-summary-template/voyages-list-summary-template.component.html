@@ -1,7 +1,7 @@
 @if (rows(); as rows) {
   @if (totalItems() > 0) {
     @if (totalEmissionsSummary(); as totalEmissionsSummary) {
-      <dl govuk-summary-list [hasBorders]="true">
+      <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="!warningMessages()?.length">
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions from voyages (tCO2e)</dt>
           <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
@@ -13,23 +13,21 @@
       </dl>
     }
 
+    @for (warningMessage of warningMessages(); track i; let i = $index) {
+      <govuk-warning-text
+        [assistiveText]="warningMessage"
+        [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
+    }
     @if (editable()) {
-      <button
-        type="button"
-        govukSecondaryButton
-        netzPendingButton
-        (click)="onDelete(rows)"
-        [disabled]="rows.every(checkIsSelected)">
-        Delete
-      </button>
+      <button type="button" govukSecondaryButton netzPendingButton (click)="onDelete(rows)">Delete</button>
     }
   }
   @if (editable()) {
     <mrtm-multi-select-table
-      [columns]="columns()"
+      [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
-      emptyTableText="No items to display"
+      [emptyTableText]="emptyTableText()"
       description="Voyages and emission details list">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
@@ -37,10 +35,10 @@
     </mrtm-multi-select-table>
   } @else {
     <govuk-table
-      [columns]="columns()"
+      [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
-      emptyTableText="No items to display"
+      [emptyTableText]="emptyTableText()"
       description="Voyages and emission details list">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
@@ -54,7 +52,7 @@
 
   <ng-template let-column="column" let-row="row" #tableContent>
     @switch (column?.field) {
-      @case ('imoNumber') {
+      @case ('shipName') {
         @if (row?.['shipName'] && row.canViewDetails) {
           <a
             govukLink
@@ -64,25 +62,34 @@
         } @else {
           {{ row?.[column?.field] }}
         }
-      }
-      @case ('arrivalTime') {
-        {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+        <br />
+        <span class="govuk-hint">{{ row?.imoNumber }}</span>
       }
       @case ('departureTime') {
-        {{ row?.[column?.field] | date: 'dd-MM-yyyy HH:mm:ss' : 'UTC' }}
+        @if (row?.[column?.field]) {
+          {{ row?.['departurePort'] | selectOptionToTitle: portSelectItems }},
+          <br />
+          <span class="govuk-hint">
+            {{ row?.['departureCountry'] | selectOptionToTitle: countrySelectItems }},
+            <br />
+            {{ row?.[column?.field] | govukDate: 'date' }}
+          </span>
+        }
       }
-      @case ('country') {
-        {{ row?.[column?.field] | selectOptionToTitle: countrySelectItems }}
-      }
-      @case ('arrivalPort') {
-        {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
-      }
-      @case ('departurePort') {
-        {{ row?.[column?.field] | selectOptionToTitle: portSelectItems }}
+      @case ('arrivalTime') {
+        @if (row?.[column?.field]) {
+          {{ row?.['arrivalPort'] | selectOptionToTitle: portSelectItems }},
+          <br />
+          <span class="govuk-hint">
+            {{ row?.['arrivalCountry'] | selectOptionToTitle: countrySelectItems }},
+            <br />
+            {{ row?.[column?.field] | govukDate: 'date' }}
+          </span>
+        }
       }
       @case ('status') {
         <govuk-tag [color]="row[column.field] | statusTagColor">
-          {{ row?.[column?.field] | portVoyageStatus }}
+          {{ row?.[column?.field] | portVoyageAggregatedStatus }}
         </govuk-tag>
       }
       @default {

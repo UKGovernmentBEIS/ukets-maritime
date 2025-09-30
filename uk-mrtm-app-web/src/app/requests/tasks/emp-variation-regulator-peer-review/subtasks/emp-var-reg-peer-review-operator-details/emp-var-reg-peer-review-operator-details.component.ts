@@ -15,11 +15,9 @@ interface ViewModel {
   operatorDetails: EmpOperatorDetails;
   title: string;
   files: AttachedFile[];
-  declarationFiles: AttachedFile[];
   variationDecisionDetails: EmpAcceptedVariationDecisionDetails;
   originalOperatorDetails: EmpOperatorDetails;
   originalFiles: AttachedFile[];
-  originalDeclarationFiles: AttachedFile[];
 }
 
 @Component({
@@ -50,9 +48,6 @@ export class EmpVarRegPeerReviewOperatorDetailsComponent {
           (empOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
         ),
       )(),
-      declarationFiles: this.store.select(
-        empCommonQuery.selectAttachedFiles(empOperatorDetails?.declarationDocuments?.documents),
-      )(),
       variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
         'MARITIME_OPERATOR_DETAILS'
       ],
@@ -60,11 +55,6 @@ export class EmpVarRegPeerReviewOperatorDetailsComponent {
       originalFiles: this.store.select(
         empVariationRegulatorPeerReviewQuery.selectOriginalAttachedFiles(
           (originalOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
-        ),
-      )(),
-      originalDeclarationFiles: this.store.select(
-        empVariationRegulatorPeerReviewQuery.selectOriginalAttachedFiles(
-          originalOperatorDetails?.declarationDocuments?.documents,
         ),
       )(),
     };

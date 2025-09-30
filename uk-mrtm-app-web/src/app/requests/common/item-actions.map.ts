@@ -448,4 +448,9 @@ export const itemActionsMap: Record<MrtmRequestActionType, { text: string; trans
       transformed: true,
       linkable: true,
     },
+    NON_COMPLIANCE_DETAILS_AMENDED: {
+      text: 'Non-compliance details updated',
+      transformed: true,
+      linkable: true,
+    },
   };

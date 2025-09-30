@@ -30,12 +30,12 @@ const selectIsDetailsSubtaskCompleted: StateSelector<RequestTaskState, boolean> 
 
 const selectNonComplianceFinalDetermination: StateSelector<RequestTaskState, NonComplianceFinalDetermination> =
   createDescendingSelector(selectPayload, (payload) => ({
-    complianceRestored: payload.complianceRestored,
-    complianceRestoredDate: payload.complianceRestoredDate,
-    comments: payload.comments,
-    reissuePenalty: payload.reissuePenalty,
-    operatorPaid: payload.operatorPaid,
-    operatorPaidDate: payload.operatorPaidDate,
+    complianceRestored: payload?.complianceRestored,
+    complianceRestoredDate: payload?.complianceRestoredDate,
+    comments: payload?.comments,
+    reissuePenalty: payload?.reissuePenalty,
+    operatorPaid: payload?.operatorPaid,
+    operatorPaidDate: payload?.operatorPaidDate,
   }));
 
 export const nonComplianceFinalDeterminationQuery = {

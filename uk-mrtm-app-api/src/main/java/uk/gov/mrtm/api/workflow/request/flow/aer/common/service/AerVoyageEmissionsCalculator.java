@@ -2,6 +2,7 @@ package uk.gov.mrtm.api.workflow.request.flow.aer.common.service;
 
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.BooleanUtils;
+import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.reporting.domain.Aer;
@@ -18,6 +19,7 @@ import java.util.Optional;
 
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils.FIFTY_PERCENT;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils.filterFuelAndEmissionsFactors;
+import static uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils.sumAndScale;
 
 @Service
 @RequiredArgsConstructor
@@ -31,130 +33,161 @@ public class AerVoyageEmissionsCalculator {
         }
 
         for (AerVoyage voyage : aer.getVoyageEmissions().getVoyages()) {
-            BigDecimal co2Total = BigDecimal.ZERO;
-            BigDecimal ch4Total = BigDecimal.ZERO;
-            BigDecimal n2oTotal = BigDecimal.ZERO;
-            BigDecimal totalDirectEmissions = BigDecimal.ZERO;
-            BigDecimal total;
-
-            BigDecimal co2Surrender = BigDecimal.ZERO;
-            BigDecimal ch4Surrender = BigDecimal.ZERO;
-            BigDecimal n2oSurrender = BigDecimal.ZERO;
-            BigDecimal totalSurrender;
-
-            Optional<AerShipEmissions> shipEmissionsOptional = AerEmissionsCalculatorUtils
-                .findShipEmissions(aer.getEmissions().getShips(), voyage.getImoNumber());
+            Optional<AerShipEmissions> shipEmissionsOptional =
+                    AerEmissionsCalculatorUtils.findShipEmissions(aer.getEmissions().getShips(), voyage.getImoNumber());
 
             if (shipEmissionsOptional.isPresent()) {
-                AerShipEmissions shipEmissions = shipEmissionsOptional.get();
+                processVoyageEmissions(voyage, shipEmissionsOptional.get());
+            }
+        }
+    }
 
-                if (voyage.getDirectEmissions() != null) {
-                    co2Total = co2Total.add(voyage.getDirectEmissions().getCo2());
-                    ch4Total = ch4Total.add(voyage.getDirectEmissions().getCh4());
-                    n2oTotal = n2oTotal.add(voyage.getDirectEmissions().getN2o());
-                    totalDirectEmissions = co2Total.add(ch4Total).add(n2oTotal);
-                    totalDirectEmissions = totalDirectEmissions.setScale(7, RoundingMode.HALF_UP);
-                }
+    private void processVoyageEmissions(AerVoyage voyage, AerShipEmissions shipEmissions) {
+        BigDecimal co2Total = BigDecimal.ZERO;
+        BigDecimal ch4Total = BigDecimal.ZERO;
+        BigDecimal n2oTotal = BigDecimal.ZERO;
+        BigDecimal totalDirectEmissions = BigDecimal.ZERO;
+        BigDecimal total;
 
-                for (AerFuelConsumption fuelConsumption : voyage.getFuelConsumptions()) {
-                    BigDecimal totalFuelConsumption;
+        BigDecimal co2Surrender = BigDecimal.ZERO;
+        BigDecimal ch4Surrender = BigDecimal.ZERO;
+        BigDecimal n2oSurrender = BigDecimal.ZERO;
+        BigDecimal totalSurrender;
 
-                    Optional<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactorsOptional = shipEmissions.getFuelsAndEmissionsFactors()
-                            .stream()
-                            .filter(emissions -> filterFuelAndEmissionsFactors(emissions, fuelConsumption.getFuelOriginTypeName()))
-                            .findFirst();
+        if (voyage.getDirectEmissions() != null) {
+            co2Total = co2Total.add(voyage.getDirectEmissions().getCo2());
+            ch4Total = ch4Total.add(voyage.getDirectEmissions().getCh4());
+            n2oTotal = n2oTotal.add(voyage.getDirectEmissions().getN2o());
+            totalDirectEmissions = co2Total.add(ch4Total).add(n2oTotal);
+            totalDirectEmissions = totalDirectEmissions.setScale(7, RoundingMode.HALF_UP);
+        }
 
-                    totalFuelConsumption = AerEmissionsCalculatorUtils.getTotalFuelConsumption(fuelConsumption);
-                    fuelConsumption.setTotalConsumption(totalFuelConsumption);
+        for (AerFuelConsumption fuelConsumption : voyage.getFuelConsumptions()) {
 
-                    if (fuelsAndEmissionsFactorsOptional.isPresent()){
-                        AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors = fuelsAndEmissionsFactorsOptional.get();
+            Triple<BigDecimal, BigDecimal, BigDecimal> totals =
+                    calculateEmissionTotals(shipEmissions, fuelConsumption, co2Total, ch4Total, n2oTotal);
+            co2Total = totals.getLeft();
+            ch4Total = totals.getMiddle();
+            n2oTotal = totals.getRight();
+        }
 
-                        BigDecimal methaneSlip = AerEmissionsCalculatorUtils
-                                .getOrDefaultBigDecimal(fuelConsumption.getFuelOriginTypeName().getMethaneSlip());
-                        BigDecimal methaneSlipFraction = methaneSlip.divide(ONE_HUNDRED);
-                        BigDecimal methaneUtilization = BigDecimal.ONE.subtract(methaneSlipFraction);
+        total = sumAndScale(co2Total, ch4Total, n2oTotal);
 
-                        BigDecimal co2 = AerEmissionsCalculatorUtils.calculateCo2(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors);
-                        BigDecimal n2o = AerEmissionsCalculatorUtils.calculateN2o(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors);
-                        BigDecimal ch4 = AerEmissionsCalculatorUtils.calculateCh4(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors, methaneSlipFraction);
+        PortType journeyType = voyage.getVoyageDetails() != null ? AerPortCodesUtils.getJourneyType(
+                voyage.getVoyageDetails().getDeparturePort().getCountry(),
+                voyage.getVoyageDetails().getArrivalPort().getCountry()) : null;
 
-                        co2Total = co2Total.add(co2);
-                        ch4Total = ch4Total.add(ch4);
-                        n2oTotal = n2oTotal.add(n2o);
+        if (journeyType != null
+                && !PortType.INTERNATIONAL.equals(journeyType)
+                && (BooleanUtils.isNotTrue(voyage.getVoyageDetails().getSmallIslandFerryReduction()))) {
 
-                        co2Total = co2Total.setScale(7, RoundingMode.HALF_UP);
-                        ch4Total = ch4Total.setScale(7, RoundingMode.HALF_UP);
-                        n2oTotal = n2oTotal.setScale(7, RoundingMode.HALF_UP);
-                    }
-                }
+            Triple<BigDecimal, BigDecimal, BigDecimal> surrenderEmissions =
+                    calculateSurrenderEmissions(shipEmissions, voyage, journeyType, co2Total, ch4Total, n2oTotal);
 
-                total = co2Total.add(ch4Total).add(n2oTotal);
-                total = total.setScale(7, RoundingMode.HALF_UP);
+            co2Surrender = surrenderEmissions.getLeft();
+            ch4Surrender = surrenderEmissions.getMiddle();
+            n2oSurrender = surrenderEmissions.getRight();
+        }
 
-                PortType journeyType = voyage.getVoyageDetails() != null ? AerPortCodesUtils.getJourneyType(
-                    voyage.getVoyageDetails().getDeparturePort().getCountry(),
-                    voyage.getVoyageDetails().getArrivalPort().getCountry()) : null;
+        co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
+        ch4Surrender = ch4Surrender.setScale(7, RoundingMode.HALF_UP);
+        n2oSurrender = n2oSurrender.setScale(7, RoundingMode.HALF_UP);
 
-                if (journeyType != null
-                        && !PortType.INTERNATIONAL.equals(journeyType)
-                        && (BooleanUtils.isNotTrue(voyage.getVoyageDetails().getSmallIslandFerryReduction()))) {
+        totalSurrender = sumAndScale(co2Surrender, ch4Surrender, n2oSurrender);
 
+        if (voyage.getDirectEmissions() != null) {
+            voyage.getDirectEmissions().setTotal(totalDirectEmissions);
+        }
 
-                        BigDecimal ccsAndCcu = voyage.getVoyageDetails().getCcs() != null && voyage.getVoyageDetails().getCcu() != null
-                            ? voyage.getVoyageDetails().getCcs().add(voyage.getVoyageDetails().getCcu())
-                            : BigDecimal.ZERO;
-
-                        co2Surrender = co2Total.subtract(ccsAndCcu);
-                        ch4Surrender = ch4Total;
-                        n2oSurrender = n2oTotal;
-
-                        co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
-
-                        if (PortType.EU.equals(journeyType)) {
-                            co2Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(co2Surrender, FIFTY_PERCENT);
-                            ch4Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(ch4Surrender, FIFTY_PERCENT);
-                            n2oSurrender = AerEmissionsCalculatorUtils.applyEmissionReduction(n2oSurrender, FIFTY_PERCENT);
-                        }
-
-                        co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
-                        ch4Surrender = ch4Surrender.setScale(7, RoundingMode.HALF_UP);
-                        n2oSurrender = n2oSurrender.setScale(7, RoundingMode.HALF_UP);
-
-                        if (Boolean.TRUE.equals(shipEmissions.getDetails().getHasIceClassDerogation())) {
-                            co2Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(co2Surrender, FIVE_PERCENT);
-                            ch4Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(ch4Surrender, FIVE_PERCENT);
-                            n2oSurrender = AerEmissionsCalculatorUtils.applyEmissionReduction(n2oSurrender, FIVE_PERCENT);
-                        }
-                    }
-
-                co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
-                ch4Surrender = ch4Surrender.setScale(7, RoundingMode.HALF_UP);
-                n2oSurrender = n2oSurrender.setScale(7, RoundingMode.HALF_UP);
-
-                totalSurrender = co2Surrender.add(ch4Surrender).add(n2oSurrender);
-                totalSurrender = totalSurrender.setScale(7, RoundingMode.HALF_UP);
-
-                if (voyage.getDirectEmissions() != null) {
-                    voyage.getDirectEmissions().setTotal(totalDirectEmissions);
-                }
-                voyage.setTotalEmissions(
-                    AerPortEmissionsMeasurement.builder()
+        voyage.setTotalEmissions(
+                AerPortEmissionsMeasurement.builder()
                         .co2(co2Total)
                         .ch4(ch4Total)
                         .n2o(n2oTotal)
                         .total(total)
                         .build()
-                );
-                voyage.setSurrenderEmissions(
-                    AerPortEmissionsMeasurement.builder()
+        );
+        voyage.setSurrenderEmissions(
+                AerPortEmissionsMeasurement.builder()
                         .co2(co2Surrender)
                         .ch4(ch4Surrender)
                         .n2o(n2oSurrender)
                         .total(totalSurrender)
                         .build()
-                );
-            }
-        }
+        );
     }
+
+    private Triple<BigDecimal, BigDecimal, BigDecimal> calculateSurrenderEmissions(AerShipEmissions shipEmissions,
+                                                                                   AerVoyage voyage,
+                                                                                   PortType journeyType,
+                                                                                   BigDecimal co2Total,
+                                                                                   BigDecimal ch4Total,
+                                                                                   BigDecimal n2oTotal) {
+        BigDecimal ccsAndCcu = voyage.getVoyageDetails().getCcs() != null && voyage.getVoyageDetails().getCcu() != null
+                ? voyage.getVoyageDetails().getCcs().add(voyage.getVoyageDetails().getCcu())
+                : BigDecimal.ZERO;
+
+        BigDecimal co2Surrender = co2Total.subtract(ccsAndCcu);
+        BigDecimal ch4Surrender = ch4Total;
+        BigDecimal n2oSurrender = n2oTotal;
+
+        co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
+
+        if (PortType.EU.equals(journeyType)) {
+            co2Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(co2Surrender, FIFTY_PERCENT);
+            ch4Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(ch4Surrender, FIFTY_PERCENT);
+            n2oSurrender = AerEmissionsCalculatorUtils.applyEmissionReduction(n2oSurrender, FIFTY_PERCENT);
+        }
+
+        co2Surrender = co2Surrender.setScale(7, RoundingMode.HALF_UP);
+        ch4Surrender = ch4Surrender.setScale(7, RoundingMode.HALF_UP);
+        n2oSurrender = n2oSurrender.setScale(7, RoundingMode.HALF_UP);
+
+        if (Boolean.TRUE.equals(shipEmissions.getDetails().getHasIceClassDerogation())) {
+            co2Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(co2Surrender, FIVE_PERCENT);
+            ch4Surrender = AerEmissionsCalculatorUtils.applyEmissionReduction(ch4Surrender, FIVE_PERCENT);
+            n2oSurrender = AerEmissionsCalculatorUtils.applyEmissionReduction(n2oSurrender, FIVE_PERCENT);
+        }
+
+        return Triple.of(co2Surrender, ch4Surrender, n2oSurrender);
+    }
+
+    private Triple<BigDecimal, BigDecimal, BigDecimal> calculateEmissionTotals(AerShipEmissions shipEmissions,
+                                                                               AerFuelConsumption fuelConsumption,
+                                                                               BigDecimal co2Total,
+                                                                               BigDecimal ch4Total,
+                                                                               BigDecimal n2oTotal) {
+        BigDecimal totalFuelConsumption;
+
+        Optional<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactorsOptional = shipEmissions.getFuelsAndEmissionsFactors()
+                .stream()
+                .filter(emissions -> filterFuelAndEmissionsFactors(emissions, fuelConsumption.getFuelOriginTypeName()))
+                .findFirst();
+
+        totalFuelConsumption = AerEmissionsCalculatorUtils.getTotalFuelConsumption(fuelConsumption);
+        fuelConsumption.setTotalConsumption(totalFuelConsumption);
+
+        if (fuelsAndEmissionsFactorsOptional.isPresent()){
+            AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors = fuelsAndEmissionsFactorsOptional.get();
+
+            BigDecimal methaneSlip = AerEmissionsCalculatorUtils
+                    .getOrDefaultBigDecimal(fuelConsumption.getFuelOriginTypeName().getMethaneSlip());
+            BigDecimal methaneSlipFraction = methaneSlip.divide(ONE_HUNDRED);
+            BigDecimal methaneUtilization = BigDecimal.ONE.subtract(methaneSlipFraction);
+
+            BigDecimal co2 = AerEmissionsCalculatorUtils.calculateCo2(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors);
+            BigDecimal n2o = AerEmissionsCalculatorUtils.calculateN2o(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors);
+            BigDecimal ch4 = AerEmissionsCalculatorUtils.calculateCh4(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors, methaneSlipFraction);
+
+            co2Total = co2Total.add(co2);
+            ch4Total = ch4Total.add(ch4);
+            n2oTotal = n2oTotal.add(n2o);
+
+            co2Total = co2Total.setScale(7, RoundingMode.HALF_UP);
+            ch4Total = ch4Total.setScale(7, RoundingMode.HALF_UP);
+            n2oTotal = n2oTotal.setScale(7, RoundingMode.HALF_UP);
+        }
+        return Triple.of(co2Total, ch4Total, n2oTotal);
+    }
+
 }

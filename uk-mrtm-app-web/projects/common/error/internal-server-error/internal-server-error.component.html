@@ -9,6 +9,14 @@
       for assistance.
     </p>
   }
+  @case (genericServiceErrorCode.INTREGACCOUNTCREATIONMRTM1008) {
+    <netz-page-heading size="xl">
+      The Maritime operator account is already associated with a Registry operator ID.
+    </netz-page-heading>
+    <p class="govuk-body">
+      <a govukLink [routerLink]="['/dashboard']">Return to: Dashboard</a>
+    </p>
+  }
   @default {
     <netz-page-heading size="xl">Sorry, there is a problem with the service</netz-page-heading>
     <p class="govuk-body">Try again later.</p>

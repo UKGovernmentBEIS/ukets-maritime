@@ -12,6 +12,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceF
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.mapper.NonComplianceMapper;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.WorkflowService;
@@ -37,6 +38,7 @@ public class NonComplianceFinalDeterminationSubmitApplicationActionHandler
     private final NonComplianceApplicationValidator validator;
     private final WorkflowService workflowService;
     private final RequestService requestService;
+    private final NonComplianceApplyService nonComplianceApplyService;
 
     @Override
     public RequestTaskPayload process(final Long requestTaskId,
@@ -66,6 +68,8 @@ public class NonComplianceFinalDeterminationSubmitApplicationActionHandler
 
         final NonComplianceRequestPayload requestPayload = (NonComplianceRequestPayload) request.getPayload();
         requestPayload.setReIssueCivilPenalty(reissuePenalty);
+
+        nonComplianceApplyService.submitDetails(request, taskPayload);
 
         final NonComplianceOutcome
             outcome = reissuePenalty ? NonComplianceOutcome.REISSUE_CIVIL_PENALTY : NonComplianceOutcome.SUBMITTED; 

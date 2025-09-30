@@ -21,4 +21,5 @@ export const statusTagMap: MrtmTaskStatusTagMap = {
   OPTIONAL: { text: 'Optional', color: 'grey' },
   NEEDS_REVIEW: { text: 'Needs review', color: 'yellow' },
   EXEMPT: { text: 'Exempt', color: 'red' },
+  CLOSED: { text: 'Closed', color: 'grey' },
 };

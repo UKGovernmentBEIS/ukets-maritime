@@ -14,7 +14,6 @@ interface ViewModel {
   operatorDetails: EmpOperatorDetails;
   operatorDetailsMap: SubTaskListMap<{ operatorDetails: string }>;
   files: AttachedFile[];
-  declarationFiles: AttachedFile[];
 }
 
 @Component({
@@ -37,9 +36,6 @@ export class OperatorDetailsSubmittedComponent {
         empSubmittedQuery.selectAttachedFiles(
           (empOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
         ),
-      )(),
-      declarationFiles: this.store.select(
-        empSubmittedQuery.selectAttachedFiles(empOperatorDetails?.declarationDocuments?.documents),
       )(),
     };
   });

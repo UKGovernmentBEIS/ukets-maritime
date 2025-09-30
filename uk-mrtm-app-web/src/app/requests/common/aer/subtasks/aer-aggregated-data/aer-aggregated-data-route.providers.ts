@@ -20,5 +20,5 @@ export const aerAggregatedDataRouteProviders: Array<Provider> = [
   { provide: AER_SUBTASK_LIST_MAP, useValue: aerAggregatedDataSubtasksListMap },
   { provide: AER_SELECT_SHIP_QUERY_SELECTOR, useValue: aerCommonQuery.selectAggregatedDataItem },
   { provide: AER_SELECT_SHIP_SUBMIT_NEXT_STEP, useValue: AerAggregatedDataWizardStep.FUEL_CONSUMPTION },
-  { provide: AER_SELECT_SHIPS_ITEMS_SELECTOR, useValue: aerCommonQuery.selectAggregatedDataListOfShips },
+  { provide: AER_SELECT_SHIPS_ITEMS_SELECTOR, useValue: aerCommonQuery.selectListOfShipsWithoutAggregatedData },
 ];

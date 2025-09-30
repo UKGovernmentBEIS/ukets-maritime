@@ -13,6 +13,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceD
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.mapper.NonComplianceMapper;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -47,6 +48,7 @@ public class NonComplianceCivilPenaltyNotifyOperatorActionHandler
     private final WorkflowService workflowService;
     private final RequestAccountContactQueryService requestAccountContactQueryService;
     private final NonComplianceSendOfficialNoticeService officialNoticeService;
+    private final NonComplianceApplyService nonComplianceApplyService;
 
     @Override
     public RequestTaskPayload process(final Long requestTaskId,
@@ -65,6 +67,8 @@ public class NonComplianceCivilPenaltyNotifyOperatorActionHandler
         // validate
         validator.validateCivilPenalty(taskPayload);
         validator.validateUsers(requestTask, operators, externalContacts, appUser);
+
+        nonComplianceApplyService.submitDetails(request, taskPayload);
 
         // add timeline action
         Optional<UserInfoDTO> requestAccountPrimaryContact = requestAccountContactQueryService.getRequestAccountPrimaryContact(request);

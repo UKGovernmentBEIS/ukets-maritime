@@ -8,7 +8,7 @@ import { FormService } from '../form';
 import { FormInput } from '../form/form-input';
 import { LabelSizeType } from '../text-input/label-size.type';
 import { GovukSelectOption } from './select.interface';
-import { GovukTextWidthClass } from './select.type';
+import { GovukSelectWidthClass } from './select.type';
 
 /*
   eslint-disable
@@ -25,7 +25,7 @@ import { GovukTextWidthClass } from './select.type';
 export class SelectComponent extends FormInput implements ControlValueAccessor {
   @Input() hint: string;
   @Input() options: GovukSelectOption[];
-  @Input() widthClass: GovukTextWidthClass;
+  @Input() widthClass: GovukSelectWidthClass;
   @Input() isLabelHidden = true;
   currentLabel = 'Select';
   currentLabelSize = 'govuk-label';

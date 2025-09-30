@@ -60,7 +60,11 @@ import {
   ManagementProceduresSummarySideEffect,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
-  DeclarationDocumentsPayloadMutator,
+  MandateFlowManager,
+  provideMandatePayloadMutators,
+  provideMandateSideEffects,
+} from '@requests/common/emp/subtasks/mandate';
+import {
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsFlowManager,
   OperatorDetailsStepPayloadMutator,
@@ -87,7 +91,6 @@ export function provideEmpVariationPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresRiskAssessmentPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsStepPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: UndertakenActivitiesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DeclarationDocumentsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: LegalStatusOfOrganisationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OrganisationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesQualityAssurancePayloadMutator },
@@ -106,6 +109,7 @@ export function provideEmpVariationPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
     ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: VariationDetailsPayloadMutator },
+    ...provideMandatePayloadMutators(),
   ]);
 }
 
@@ -143,6 +147,7 @@ export function provideEmpVariationSideEffects(): EnvironmentProviders {
     provideEmpAmendResetReviewDecisionSubtaskSideEffect('controlActivities'),
     provideEmpAmendResetReviewDecisionSubtaskSideEffect('managementProcedures'),
     provideEmpAmendResetReviewDecisionSubtaskSideEffect('greenhouseGas'),
+    ...provideMandateSideEffects(),
   ]);
 }
 
@@ -158,5 +163,6 @@ export function provideEmpVariationStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourceFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: VariationDetailsFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
   ]);
 }

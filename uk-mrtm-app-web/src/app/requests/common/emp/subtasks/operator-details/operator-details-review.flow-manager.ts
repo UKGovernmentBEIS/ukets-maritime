@@ -14,8 +14,6 @@ export class OperatorDetailsReviewFlowManager extends WizardFlowManager {
       case OperatorDetailsWizardStep.OPERATOR_DETAILS_OPERATOR_FORM:
         return of(`../${OperatorDetailsWizardStep.OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES}`);
       case OperatorDetailsWizardStep.OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES:
-        return of(`../${OperatorDetailsWizardStep.OPERATOR_DETAILS_DECLARATION_DOCUMENTS}`);
-      case OperatorDetailsWizardStep.OPERATOR_DETAILS_DECLARATION_DOCUMENTS:
         return of(`../${OperatorDetailsWizardStep.OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION}`);
       case OperatorDetailsWizardStep.OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION:
         return of(`../${OperatorDetailsWizardStep.OPERATOR_DETAILS_ORGANISATION_DETAILS}`);

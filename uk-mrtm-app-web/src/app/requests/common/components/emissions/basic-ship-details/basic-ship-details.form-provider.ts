@@ -24,7 +24,7 @@ import { TASK_FORM } from '@requests/common/task-form.token';
 import { isAer } from '@shared/utils';
 
 const uniqueImoNumberValidation =
-  (ships: (AerShipEmissions | EmpShipEmissions)[], shipId: string): ValidatorFn =>
+  (ships: AerShipEmissions[] | EmpShipEmissions[], shipId: string): ValidatorFn =>
   (control: AbstractControl): ValidationErrors => {
     if (ships.filter((x) => x.uniqueIdentifier !== shipId && x.details?.imoNumber === control.value).length > 0) {
       return { imoNumber: 'This IMO number already exists. Enter a new IMO number' };

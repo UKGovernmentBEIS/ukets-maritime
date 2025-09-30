@@ -7,6 +7,11 @@ import uk.gov.netz.api.common.exception.NetzErrorCode;
 @Getter
 public enum MrtmErrorCode implements NetzErrorCode {
 
+    /**
+     * Request error codes
+     */
+    ROLE_NOT_ALLOWED_FOR_HISTORY_CATEGORY("HIST1001", HttpStatus.FORBIDDEN, "The specified role does not have permission to access this history category"),
+
     /** Codes for Account errors. */
     IMO_NUMBER_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT("ACCOUNT1011", HttpStatus.BAD_REQUEST, "Enter a different company IMO number. This one is already in use."),
     ACCOUNT_REPORTING_STATUS_NOT_CHANGED("ACCOUNT1012", HttpStatus.BAD_REQUEST, "Enter a different reporting status."),

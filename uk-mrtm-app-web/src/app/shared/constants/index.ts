@@ -4,6 +4,6 @@ export * from './file-type.constant';
 export * from './emp-variation.constants';
 export * from './task-action-type-to-title.map';
 export * from './emp-subtask-to-title.map';
-export * from './aer-port.constans';
+export * from './aer-port.constants';
 export * from './payment.constants';
 export * from './request-types-whitelist-for-item-link-pipe.constants';

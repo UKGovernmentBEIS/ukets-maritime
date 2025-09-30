@@ -14,6 +14,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceI
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceInitialPenaltyNoticeRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNotifyOperatorRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceOutcome;
+import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceApplyService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.service.NonComplianceSendOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.validation.NonComplianceApplicationValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -65,6 +66,9 @@ class NonComplianceInitialPenaltyNoticeNotifyOperatorActionHandlerTest {
     @Mock
     private RequestAccountContactQueryService requestAccountContactQueryService;
 
+    @Mock
+    private NonComplianceApplyService nonComplianceApplyService;
+
     @Test
     void process() {
 
@@ -110,6 +114,7 @@ class NonComplianceInitialPenaltyNoticeNotifyOperatorActionHandlerTest {
 
         verify(validator, times(1)).validateInitialPenalty(taskPayload);
         verify(validator, times(1)).validateUsers(requestTask, operators, Set.of(), appUser);
+        verify(nonComplianceApplyService).submitDetails(request, taskPayload);
         verify(requestService, times(1)).addActionToRequest(
             request,
             actionPayload,
@@ -124,7 +129,7 @@ class NonComplianceInitialPenaltyNoticeNotifyOperatorActionHandlerTest {
         );
 
         verifyNoMoreInteractions(requestTaskService, validator, requestService, requestActionUserInfoResolver,
-            workflowService, sendOfficialNoticeService, requestAccountContactQueryService);
+            workflowService, sendOfficialNoticeService, requestAccountContactQueryService, nonComplianceApplyService);
     }
 
     @Test

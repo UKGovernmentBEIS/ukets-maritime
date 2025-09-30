@@ -24,5 +24,6 @@ public class EmpEmissionSources implements EmissionMonitoringPlanSection {
     private EmpEmissionFactors emissionFactors;
     
     @Valid
+    @NotNull
     private EmpEmissionCompliance emissionCompliance;
 }

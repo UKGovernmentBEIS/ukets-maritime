@@ -10,13 +10,16 @@ import { SIDE_EFFECTS } from '@netz/common/forms';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AerEmissionsWizardStep } from '@requests/common/aer/subtasks/aer-emissions/aer-emissions.helpers';
+import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { FuelsAndEmissionsFactorsExtended } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { AllFuels } from '@shared/types';
 
 const emissionSourcesDependencyCheck = (
   currentPayload: AerShipEmissions,
   modifiedShipIds: Set<string>,
+  sectionsCompleted: AerSubmitTaskPayload['aerSectionsCompleted'],
 ): AerShipEmissions => {
   return produce(currentPayload, (payload) => {
     const fuelOriginTypeNameList = (payload.fuelsAndEmissionsFactors ?? []).map(
@@ -24,12 +27,30 @@ const emissionSourcesDependencyCheck = (
     );
 
     const currentEmissionSourcesCount = payload?.emissionsSources?.length ?? 0;
+    const incompletedEmissionSources: Set<AerShipEmissions['uniqueIdentifier']> = new Set();
 
-    payload.emissionsSources = (payload?.emissionsSources ?? []).filter((emissionSource) =>
-      emissionSource.fuelDetails.every((fuel: FuelsAndEmissionsFactorsExtended) =>
-        fuelOriginTypeNameList.includes(getFuelOriginTypeNameString(fuel)),
-      ),
-    );
+    payload.emissionsSources = (payload?.emissionsSources ?? []).map((emissionSource) => {
+      const currentFuelCount = emissionSource?.fuelDetails?.length ?? 0;
+      const fuelDetails = emissionSource.fuelDetails.filter((fuel: AllFuels) =>
+        fuelOriginTypeNameList.includes(`${fuel.origin}-${fuel.type}-${fuel.name ?? ''}`),
+      );
+
+      if (fuelDetails.length !== currentFuelCount) {
+        incompletedEmissionSources.add(emissionSource.uniqueIdentifier);
+      }
+
+      return {
+        ...emissionSource,
+        fuelDetails: emissionSource.fuelDetails.filter((fuel: AllFuels) =>
+          fuelOriginTypeNameList.includes(`${fuel.origin}-${fuel.type}-${fuel.name ?? ''}`),
+        ),
+      };
+    });
+
+    for (const incompletedEmissionSource of incompletedEmissionSources) {
+      sectionsCompleted[`${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${incompletedEmissionSource}`] =
+        TaskItemStatus.NEEDS_REVIEW;
+    }
 
     if (currentEmissionSourcesCount !== (payload?.emissionsSources?.length ?? 0)) {
       modifiedShipIds.add(payload?.uniqueIdentifier);
@@ -55,7 +76,14 @@ const uncertaintyLevelCheck = (currentPayload: AerShipEmissions, modifiedShipIds
   });
 };
 
-const dependenciesMap: Record<string, (payload: AerShipEmissions, modifiedShipIds: Set<string>) => AerShipEmissions> = {
+const dependenciesMap: Record<
+  string,
+  (
+    payload: AerShipEmissions,
+    modifiedShipIds: Set<string>,
+    sectionsCompleted?: AerSubmitTaskPayload['aerSectionsCompleted'],
+  ) => AerShipEmissions
+> = {
   [AerEmissionsWizardStep.EMISSION_SOURCES_FORM]: emissionSourcesDependencyCheck,
   [AerEmissionsWizardStep.UNCERTAINTY_LEVEL]: uncertaintyLevelCheck,
 };
@@ -91,7 +119,7 @@ export const provideAerEmissionDependenciesSideEffect = (step: AerEmissionsWizar
               while (currentDependencies) {
                 for (const dependency of currentDependencies) {
                   if (dependenciesMap?.[dependency]) {
-                    ship = dependenciesMap?.[dependency]?.(ship, modifiedShipIds);
+                    ship = dependenciesMap?.[dependency]?.(ship, modifiedShipIds, payload.aerSectionsCompleted);
                   }
                   currentDependencies = subtaskStepDependencies[dependency];
                 }

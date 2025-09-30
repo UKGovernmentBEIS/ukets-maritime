@@ -55,20 +55,6 @@ export const OPERATOR_DETAILS_ROUTES: Routes = [
       import('@requests/common/emp/subtasks/operator-details').then((c) => c.UndertakenActivitiesComponent),
   },
   {
-    path: OperatorDetailsWizardStep.OPERATOR_DETAILS_DECLARATION_DOCUMENTS,
-    title: identifyMaritimeOperatorMap.declarationDocuments.title,
-    canActivate: [canActivateOperatorDetailsStep(OperatorDetailsWizardStep.DECISION)],
-    data: { breadcrumb: false },
-    resolve: {
-      backlink: backlinkResolver(
-        OperatorDetailsWizardStep.SUMMARY,
-        OperatorDetailsWizardStep.OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES,
-      ),
-    },
-    loadComponent: () =>
-      import('@requests/common/emp/subtasks/operator-details').then((c) => c.DeclarationDocumentsComponent),
-  },
-  {
     path: OperatorDetailsWizardStep.OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION,
     title: identifyMaritimeOperatorMap.legalStatusOfOrganisation.title,
     canActivate: [canActivateOperatorDetailsStep(OperatorDetailsWizardStep.DECISION)],
@@ -76,7 +62,7 @@ export const OPERATOR_DETAILS_ROUTES: Routes = [
     resolve: {
       backlink: backlinkResolver(
         OperatorDetailsWizardStep.SUMMARY,
-        OperatorDetailsWizardStep.OPERATOR_DETAILS_DECLARATION_DOCUMENTS,
+        OperatorDetailsWizardStep.OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES,
       ),
     },
     loadComponent: () =>

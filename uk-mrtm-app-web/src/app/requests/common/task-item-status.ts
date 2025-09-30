@@ -15,4 +15,5 @@ export enum TaskItemStatus {
   OPTIONAL = 'OPTIONAL',
   NEEDS_REVIEW = 'NEEDS_REVIEW',
   EXEMPT = 'EXEMPT',
+  CLOSED = 'CLOSED',
 }
