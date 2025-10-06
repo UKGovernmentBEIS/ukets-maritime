@@ -12,15 +12,13 @@ import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
+import { TaskItemStatus } from '@requests/common';
+import { MandateRegisteredOwnersTableComponent } from '@requests/common/components/mandate';
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
-import { mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate/mandate-subtask-list.map';
-import {
-  MandateRegisteredOwnersListSummaryTemplateComponent,
-  NotificationBannerComponent,
-  XmlErrorSummaryComponent,
-} from '@shared/components';
+import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
+import { NotificationBannerComponent, XmlErrorSummaryComponent } from '@shared/components';
 import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
 
 @Component({
@@ -30,13 +28,13 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
     PageHeadingComponent,
     RouterLink,
     ButtonDirective,
-    MandateRegisteredOwnersListSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     ReactiveFormsModule,
     XmlErrorSummaryComponent,
     WarningTextComponent,
-    LinkDirective,
+    MandateRegisteredOwnersTableComponent,
     NotificationBannerComponent,
+    LinkDirective,
   ],
   templateUrl: './mandate-registered-owners-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -48,7 +46,7 @@ export class MandateRegisteredOwnersListComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly taskService: TaskService<EmpTaskPayload> = inject(TaskService);
 
-  public readonly wizardMap = mandateSubtaskMap;
+  public readonly wizardMap = mandateMap;
   public readonly wizardStep = MandateWizardStep;
 
   public readonly isEditable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
@@ -64,9 +62,11 @@ export class MandateRegisteredOwnersListComponent {
   public allShipsAssociated: Signal<boolean> = computed(() => {
     const allIsmShips = new Set<ShipDetails['imoNumber']>(
       this.store
-        .select(empCommonQuery.selectShips)()
-        .filter((ship) => ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY')
-        .map((ship) => ship?.details?.imoNumber),
+        .select(empCommonQuery.selectListOfShips)()
+        .filter(
+          (ship) => ship.status === TaskItemStatus.COMPLETED && ship?.natureOfReportingResponsibility === 'ISM_COMPANY',
+        )
+        .map((ship) => ship?.imoNumber),
     );
 
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(

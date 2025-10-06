@@ -1,5 +1,3 @@
-import { EmissionsMonitoringPlan } from '@mrtm/api';
-
 import {
   createAggregateSelector,
   createDescendingSelector,
@@ -8,6 +6,7 @@ import {
 } from '@netz/common/store';
 
 import { timelineCommonQuery, timelineUtils } from '@requests/common';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { ReviewAmendDecisionDTO } from '@requests/common/emp/return-for-amends';
 import { VARIATION_DETAILS_SUB_TASK } from '@requests/common/emp/subtasks/variation-details/variation-details.helper';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
@@ -38,18 +37,6 @@ const selectAmendsDecisionsDTO: StateSelector<
   timelineCommonQuery.selectDownloadUrl,
   selectPayload,
   (attachments, downloadUrl, payload) => {
-    const sections: Array<keyof EmissionsMonitoringPlan> = [
-      'operatorDetails',
-      'emissions',
-      'sources',
-      'greenhouseGas',
-      'dataGaps',
-      'managementProcedures',
-      'controlActivities',
-      'abbreviations',
-      'additionalDocuments',
-    ];
-
     const decisions = payload?.reviewGroupDecisions as { [key: string]: EmpVariationReviewDecisionUnion };
     const variationDetailsDecision = payload?.empVariationDetailsReviewDecision as EmpVariationReviewDecisionUnion;
 
@@ -74,7 +61,7 @@ const selectAmendsDecisionsDTO: StateSelector<
       });
     }
 
-    for (const section of sections) {
+    for (const section of EMP_SUBTASKS) {
       const group = subtaskReviewGroupMap[section];
       const reviewGroupDecision = decisions?.[group];
 

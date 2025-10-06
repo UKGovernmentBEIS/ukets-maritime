@@ -42,28 +42,9 @@ export const EMP_VARIATION_REVIEW_ROUTES: Routes = [
           ),
       },
       {
-        path: 'abbreviations',
+        path: 'emissions',
         loadChildren: () =>
-          import('@requests/tasks/emp-variation-review/subtasks/abbreviations').then((r) => r.ABBREVIATIONS_ROUTES),
-      },
-      {
-        path: 'additional-documents',
-        loadChildren: () =>
-          import('@requests/tasks/emp-variation-review/subtasks/additional-documents').then(
-            (r) => r.ADDITIONAL_DOCUMENTS_ROUTES,
-          ),
-      },
-      {
-        path: 'control-activities',
-        loadChildren: () =>
-          import('@requests/tasks/emp-variation-review/subtasks/control-activities').then(
-            (r) => r.CONTROL_ACTIVITY_ROUTES,
-          ),
-      },
-      {
-        path: 'data-gaps',
-        loadChildren: () =>
-          import('@requests/tasks/emp-variation-review/subtasks/data-gaps').then((r) => r.DATA_GAPS_ROUTES),
+          import('@requests/tasks/emp-variation-review/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
       },
       {
         path: 'emission-sources',
@@ -78,6 +59,16 @@ export const EMP_VARIATION_REVIEW_ROUTES: Routes = [
           import('@requests/tasks/emp-variation-review/subtasks/greenhouse-gas').then((r) => r.GREENHOUSE_GAS_ROUTES),
       },
       {
+        path: 'data-gaps',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-review/subtasks/data-gaps').then((r) => r.DATA_GAPS_ROUTES),
+      },
+      {
+        path: 'mandate',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-review/subtasks/mandate').then((r) => r.MANDATE_ROUTES),
+      },
+      {
         path: 'management-procedures',
         loadChildren: () =>
           import('@requests/tasks/emp-variation-review/subtasks/management-procedures').then(
@@ -85,9 +76,23 @@ export const EMP_VARIATION_REVIEW_ROUTES: Routes = [
           ),
       },
       {
-        path: 'emissions',
+        path: 'control-activities',
         loadChildren: () =>
-          import('@requests/tasks/emp-variation-review/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
+          import('@requests/tasks/emp-variation-review/subtasks/control-activities').then(
+            (r) => r.CONTROL_ACTIVITY_ROUTES,
+          ),
+      },
+      {
+        path: 'abbreviations',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-review/subtasks/abbreviations').then((r) => r.ABBREVIATIONS_ROUTES),
+      },
+      {
+        path: 'additional-documents',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-review/subtasks/additional-documents').then(
+            (r) => r.ADDITIONAL_DOCUMENTS_ROUTES,
+          ),
       },
       {
         path: 'overall-decision',
@@ -98,7 +103,7 @@ export const EMP_VARIATION_REVIEW_ROUTES: Routes = [
       },
       {
         path: 'peer-review',
-        canActivate: [canActivateEmpVariationReviewActions],
+        canActivate: [canActivateEmpVariationReviewActions, isPaymentCompleted],
         loadChildren: () =>
           import('@requests/common/components/peer-review').then((r) => r.SEND_FOR_PEER_REVIEW_ROUTES),
       },

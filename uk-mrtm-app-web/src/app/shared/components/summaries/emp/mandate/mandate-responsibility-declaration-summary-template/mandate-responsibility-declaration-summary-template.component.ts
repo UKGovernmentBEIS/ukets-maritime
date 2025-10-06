@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { EmpMandate } from '@mrtm/api';
+import { EmpMandate, EmpOperatorDetails } from '@mrtm/api';
 
 import {
   LinkDirective,
@@ -12,8 +12,8 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { NotProvidedDirective } from '@shared/directives';
-import { BooleanToTextPipe } from '@shared/pipes';
+import { HtmlDiffDirective } from '@shared/directives';
+import { ResponsibilityDeclarationPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-mandate-responsibility-declaration-summary-template',
@@ -25,18 +25,19 @@ import { BooleanToTextPipe } from '@shared/pipes';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
     LinkDirective,
-    NotProvidedDirective,
-    BooleanToTextPipe,
     RouterLink,
+    HtmlDiffDirective,
+    ResponsibilityDeclarationPipe,
   ],
   templateUrl: './mandate-responsibility-declaration-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateResponsibilityDeclarationSummaryTemplateComponent {
-  public readonly wizardStepPrefix: InputSignal<string> = input<string>('.');
-  public readonly data: InputSignal<Pick<EmpMandate, 'responsibilityDeclaration'>> =
-    input<Pick<EmpMandate, 'responsibilityDeclaration'>>();
-  public readonly isEditable: InputSignal<boolean> = input<boolean>(false);
-  public readonly queryParams: InputSignal<Params> = input<Params>();
-  public readonly wizardStep: InputSignal<Record<string, string>> = input<Record<string, string>>();
+  readonly mandate: InputSignal<EmpMandate> = input<EmpMandate>();
+  readonly originalMandate: InputSignal<EmpMandate> = input<EmpMandate>();
+  operatorName = input<EmpOperatorDetails['operatorName']>();
+  originalOperatorName = input<EmpOperatorDetails['operatorName']>();
+  readonly isEditable: InputSignal<boolean> = input<boolean>(false);
+  readonly queryParams: InputSignal<Params> = input<Params>();
+  readonly wizardStep: InputSignal<Record<string, string>> = input<Record<string, string>>();
 }

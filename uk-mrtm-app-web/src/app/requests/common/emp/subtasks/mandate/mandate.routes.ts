@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
 
 import {
+  canActivateMandateStep,
   canActivateMandateSummary,
-  canActivateMandateWizardStep,
   canActivateRegisteredOwners,
 } from '@requests/common/emp/subtasks/mandate/mandate.guard';
 import {
@@ -10,95 +10,82 @@ import {
   MANDATE_REGISTERED_OWNER_PARAM,
   MandateWizardStep,
 } from '@requests/common/emp/subtasks/mandate/mandate.helper';
-import { mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate/mandate-subtask-list.map';
+import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { backlinkResolver } from '@requests/common/task-navigation';
 
 export const MANDATE_ROUTES: Routes = [
   {
     path: '',
-    title: mandateSubtaskMap.title,
+    title: mandateMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     canActivate: [canActivateMandateSummary],
-    loadComponent: () =>
-      import('@requests/common/emp/subtasks/mandate/mandate-summary').then((c) => c.MandateSummaryComponent),
+    loadComponent: () => import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateSummaryComponent),
   },
   {
     path: MandateWizardStep.RESPONSIBILITY,
-    title: mandateSubtaskMap.title,
+    title: mandateMap.title,
     data: { breadcrumb: false },
-    canActivate: [canActivateMandateWizardStep],
+    canActivate: [canActivateMandateStep()],
     resolve: {
       backlink: backlinkResolver(MandateWizardStep.SUMMARY, '../../'),
     },
-    loadComponent: () =>
-      import('@requests/common/emp/subtasks/mandate/mandate-responsibility').then(
-        (c) => c.MandateResponsibilityComponent,
-      ),
+    loadComponent: () => import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateResponsibilityComponent),
   },
   {
     path: MandateWizardStep.RESPONSIBILITY_DECLARATION,
-    title: mandateSubtaskMap.title,
+    title: mandateMap.title,
     data: { breadcrumb: false },
-    canActivate: [canActivateMandateWizardStep],
+    canActivate: [canActivateMandateStep()],
     resolve: {
       backlink: backlinkResolver(MandateWizardStep.SUMMARY, MandateWizardStep.REGISTERED_OWNERS),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/mandate/mandate-responsibility-declaration').then(
-        (c) => c.MandateResponsibilityDeclarationComponent,
-      ),
+      import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateResponsibilityDeclarationComponent),
   },
   {
     path: MandateWizardStep.REGISTERED_OWNERS,
-    canActivate: [canActivateMandateWizardStep, canActivateRegisteredOwners],
+    canActivate: [canActivateMandateStep(), canActivateRegisteredOwners],
     children: [
       {
         path: '',
-        title: mandateSubtaskMap.registeredOwners.title,
+        title: mandateMap.registeredOwners.title,
         data: { breadcrumb: false },
         resolve: {
           backlink: backlinkResolver(MandateWizardStep.SUMMARY, MandateWizardStep.RESPONSIBILITY),
         },
         loadComponent: () =>
-          import('@requests/common/emp/subtasks/mandate/mandate-registered-owners-list').then(
-            (c) => c.MandateRegisteredOwnersListComponent,
-          ),
+          import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateRegisteredOwnersListComponent),
       },
       {
         path: MandateWizardStep.REGISTERED_OWNERS_FORM_ADD,
-        title: mandateSubtaskMap.registeredOwnersAddForm.caption,
+        title: mandateMap.registeredOwnersAddForm.caption,
         data: { breadcrumb: false, backlink: '../' },
         providers: [
           { provide: MANDATE_REGISTERED_OWNER_FORM_MODE, useValue: MandateWizardStep.REGISTERED_OWNERS_FORM_ADD },
         ],
         loadComponent: () =>
-          import('@requests/common/emp/subtasks/mandate/mandate-registered-owners-form').then(
-            (c) => c.MandateRegisteredOwnersFormComponent,
-          ),
+          import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateRegisteredOwnersFormComponent),
       },
       {
         path: `${MandateWizardStep.REGISTERED_OWNERS_FORM_EDIT}/:${MANDATE_REGISTERED_OWNER_PARAM}`,
-        title: mandateSubtaskMap.registeredOwnersEditForm.caption,
+        title: mandateMap.registeredOwnersEditForm.caption,
         data: { breadcrumb: false, backlink: '../../' },
         providers: [
           { provide: MANDATE_REGISTERED_OWNER_FORM_MODE, useValue: MandateWizardStep.REGISTERED_OWNERS_FORM_EDIT },
         ],
         loadComponent: () =>
-          import('@requests/common/emp/subtasks/mandate/mandate-registered-owners-form').then(
-            (c) => c.MandateRegisteredOwnersFormComponent,
-          ),
+          import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateRegisteredOwnersFormComponent),
       },
     ],
   },
   {
     path: MandateWizardStep.UPLOAD_OWNERS,
-    title: mandateSubtaskMap.uploadOwners.title,
+    title: mandateMap.uploadOwners.title,
     data: { breadcrumb: false },
-    canActivate: [canActivateMandateWizardStep, canActivateRegisteredOwners],
+    canActivate: [canActivateRegisteredOwners],
     resolve: {
       backlink: backlinkResolver(MandateWizardStep.SUMMARY, MandateWizardStep.REGISTERED_OWNERS),
     },
-    loadComponent: () =>
-      import('@requests/common/emp/subtasks/mandate/mandate-upload').then((c) => c.MandateUploadComponent),
+    loadComponent: () => import('@requests/common/emp/subtasks/mandate').then((c) => c.MandateUploadComponent),
   },
 ];

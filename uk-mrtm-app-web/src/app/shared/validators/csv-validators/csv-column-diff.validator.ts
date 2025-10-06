@@ -8,6 +8,10 @@ export function csvColumnDiffValidator<T>(csvMap: Record<keyof T, string>): Vali
   return (control: FormControl): { [key: string]: any } | null => {
     const data = control.value;
 
+    if (!Array.isArray(data)) {
+      return null;
+    }
+
     const error = {
       ['csvColumnDiff']: {
         rows: null,
@@ -15,10 +19,6 @@ export function csvColumnDiffValidator<T>(csvMap: Record<keyof T, string>): Vali
         message: 'The header names cannot be different than the ones included in the template',
       },
     };
-
-    if (!Array.isArray(data)) {
-      return error;
-    }
 
     const mapKeys = Object.keys(csvMap);
     for (const key of mapKeys) {

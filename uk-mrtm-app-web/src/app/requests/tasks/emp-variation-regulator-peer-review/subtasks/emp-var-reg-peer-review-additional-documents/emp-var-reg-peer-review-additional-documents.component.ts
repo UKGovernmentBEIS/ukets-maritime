@@ -21,7 +21,7 @@ interface ViewModel {
 }
 
 @Component({
-  selector: 'mrtm-emp-var-reg-peer-review--additional-documents',
+  selector: 'mrtm-emp-var-reg-peer-review-additional-documents',
   standalone: true,
   imports: [
     PageHeadingComponent,

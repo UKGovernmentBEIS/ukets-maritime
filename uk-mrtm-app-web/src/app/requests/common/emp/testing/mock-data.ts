@@ -6,7 +6,9 @@ import {
   EmpControlActivities,
   EmpDataGaps,
   EmpEmissionSources,
+  EmpMandate,
   EmpMonitoringGreenhouseGas,
+  EmpOperatorDetails,
   EmpProcedureForm,
 } from '@mrtm/api';
 
@@ -79,6 +81,41 @@ export const mockGreenhouseGas: EmpMonitoringGreenhouseGas = {
   crossChecks: { ...mockEmpProcedureForm },
 };
 
+export const mockEmpMandate: EmpMandate = {
+  exist: true,
+  registeredOwners: [
+    {
+      uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
+      name: 'RegisteredOwner1',
+      imoNumber: '1000000',
+      contactName: 'RegisteredOwner1',
+      email: 'RegisteredOwner1@o.com',
+      effectiveDate: '2025-03-01',
+      ships: [
+        {
+          imoNumber: '1111111',
+          name: 'EVER GREEN',
+        },
+      ],
+    },
+    {
+      uniqueIdentifier: '22222222-2222-4222-a222-222222222222',
+      name: 'RegisteredOwner2',
+      imoNumber: '2000000',
+      contactName: 'RegisteredOwner2',
+      email: 'RegisteredOwner2@o.com',
+      effectiveDate: '2025-03-01',
+      ships: [
+        {
+          imoNumber: '2222222',
+          name: 'Thon Green',
+        },
+      ],
+    },
+  ],
+  responsibilityDeclaration: true,
+};
+
 export const mockEmpControlActivities: EmpControlActivities = {
   documentation: { ...mockEmpProcedureForm },
   outsourcedActivities: {
@@ -88,6 +125,30 @@ export const mockEmpControlActivities: EmpControlActivities = {
   corrections: { ...mockEmpProcedureForm },
   internalReviews: { ...mockEmpProcedureForm },
   qualityAssurance: { ...mockEmpProcedureForm },
+};
+
+export const mockEmpOperatorDetails: EmpOperatorDetails = {
+  operatorName: 'Test Maritime Operator Ltd',
+  imoNumber: '9876543',
+  contactAddress: {
+    line1: '123 Harbor Street',
+    line2: 'Suite 456',
+    city: 'Southampton',
+    country: 'GB',
+    postcode: 'SO14 3AA',
+  },
+  organisationStructure: {
+    legalStatusType: 'LIMITED_COMPANY',
+    registeredAddress: {
+      line1: '456 Business Park',
+      line2: 'Floor 3',
+      city: 'London',
+      country: 'GB',
+      postcode: 'EC1A 1BB',
+    },
+    sameAsContactAddress: false,
+  },
+  activityDescription: 'Maritime transport services including cargo and container shipping operations',
 };
 
 export const mockEmpIssuanceSubmitRequestTask = {

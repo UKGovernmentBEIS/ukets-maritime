@@ -23,6 +23,7 @@ import { distinctUntilChanged, map, tap } from 'rxjs';
 export class PaginationComponent implements OnChanges {
   readonly route = inject(ActivatedRoute);
 
+  @Input() fragment: string;
   @Input({ required: true }) pageSize: number;
   @Input({ required: true }) count: number;
   @Input() hideResultCount = false;

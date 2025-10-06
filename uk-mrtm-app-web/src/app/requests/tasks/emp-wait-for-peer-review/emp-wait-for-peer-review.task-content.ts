@@ -12,6 +12,7 @@ import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps';
 import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources';
 import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas';
 import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures';
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import { OVERALL_DECISION_SUB_TASK, overallDecisionMap } from '@requests/common/emp/subtasks/overall-decision';
 import {
   abbreviationsMap,
@@ -23,6 +24,7 @@ import {
   greenhouseGasMap,
   identifyMaritimeOperatorMap,
   managementProceduresMap,
+  mandateMap,
 } from '@requests/common/emp/subtasks/subtask-list.map';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import { taskActionTypeToTitleMap } from '@shared/constants';
@@ -73,6 +75,17 @@ export const empWaitForPeerReviewTaskContent: RequestTaskPageContentFactory = ()
             status: store.select(empReviewQuery.selectStatusForSubtask(DATA_GAPS_SUB_TASK))(),
             linkText: dataGapsMap.title,
             link: `${routePrefix}/data-gaps`,
+          },
+        ],
+      },
+      {
+        title: 'Delegated UK ETS responsibility',
+        tasks: [
+          {
+            name: MANDATE_SUB_TASK,
+            status: store.select(empReviewQuery.selectStatusForSubtask(MANDATE_SUB_TASK))(),
+            linkText: mandateMap.title,
+            link: `${routePrefix}/mandate`,
           },
         ],
       },

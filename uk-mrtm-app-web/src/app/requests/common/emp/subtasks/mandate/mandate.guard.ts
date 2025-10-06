@@ -19,20 +19,30 @@ export const canActivateMandateSummary: CanActivateFn = (activatedRoute: Activat
   );
 };
 
-export const canActivateMandateWizardStep: CanActivateFn = (
-  activatedRoute: ActivatedRouteSnapshot,
-): boolean | UrlTree => {
-  const store = inject(RequestTaskStore);
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+export const canActivateMandateStep =
+  (fallbackStep: MandateWizardStep = MandateWizardStep.SUMMARY): CanActivateFn =>
+  (route): boolean | UrlTree => {
+    const store = inject(RequestTaskStore);
+    const change = route.queryParamMap.get('change') === 'true';
+    const mandate = store.select(empCommonQuery.selectExtendedMandate)();
+    const ismShips = store.select(empCommonQuery.selectIsmShipImoNumbers)();
+    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
 
-  return isEditable || createUrlTreeFromSnapshot(activatedRoute, [MandateWizardStep.SUMMARY]);
-};
+    if (!isEditable) return createUrlTreeFromSnapshot(route, [MandateWizardStep.SUMMARY]);
+
+    const fallbackRedirect = fallbackStep === MandateWizardStep.SUMMARY ? [fallbackStep] : ['../', fallbackStep];
+
+    return !isWizardCompleted(mandate, ismShips) || change || createUrlTreeFromSnapshot(route, fallbackRedirect);
+  };
 
 export const canActivateRegisteredOwners: CanActivateFn = (
   activatedRoute: ActivatedRouteSnapshot,
 ): boolean | UrlTree => {
   const store = inject(RequestTaskStore);
   const mandate = store.select(empCommonQuery.selectMandate)();
+  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+
+  if (!isEditable) return createUrlTreeFromSnapshot(activatedRoute, [MandateWizardStep.SUMMARY]);
 
   return mandate.exist || createUrlTreeFromSnapshot(activatedRoute, ['../', MandateWizardStep.RESPONSIBILITY]);
 };

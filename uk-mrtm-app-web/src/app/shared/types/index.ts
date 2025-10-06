@@ -50,6 +50,7 @@ export * from './fuel-type.type';
 export * from './fuels-and-emissions-factors.type';
 export * from './aer-port-summary-item-dto.interface';
 export * from './aer-port-calculations-summary-item-dto.interface';
+export * from './mandate-registered-owner-table-list-item.interface';
 export * from './maritime-emissions.types';
 export * from './aer-voyage-summary-item-dto.interface';
 export * from './aer-port-upload-csv-dto.interface';

@@ -62,6 +62,15 @@ import {
   ManagementProceduresRolesPayloadMutator,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
+  DeleteRegisteredOwnerPayloadMutator,
+  MANDATE_SUB_TASK,
+  MandateResponsibilityDeclarationPayloadMutator,
+  MandateResponsibilityPayloadMutator,
+  MandateReviewFlowManager,
+  MandateWizardStep,
+  provideMandateRegisteredOwnersFormPayloadMutator,
+} from '@requests/common/emp/subtasks/mandate';
+import {
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsReviewFlowManager,
   OperatorDetailsStepPayloadMutator,
@@ -81,6 +90,7 @@ import { EmissionSourcesVariationReviewDecisionPayloadMutator } from '@requests/
 import { ListOfShipsVariationReviewDecisionPayloadMutator } from '@requests/tasks/emp-variation-review/subtasks/emissions';
 import { GreenhouseGasVariationReviewDecisionPayloadMutator } from '@requests/tasks/emp-variation-review/subtasks/greenhouse-gas';
 import { ManagementProceduresVariationReviewDecisionPayloadMutator } from '@requests/tasks/emp-variation-review/subtasks/management-procedures';
+import { MandateVariationReviewDecisionPayloadMutator } from '@requests/tasks/emp-variation-review/subtasks/mandate';
 import { OperatorDetailsVariationReviewDecisionPayloadMutator } from '@requests/tasks/emp-variation-review/subtasks/operator-details';
 import {
   OverallDecisionActionsPayloadMutator,
@@ -120,6 +130,13 @@ export function provideEmpVariationReviewPayloadMutators(): EnvironmentProviders
     // Data Gaps
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsMethodPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsVariationReviewDecisionPayloadMutator },
+    // Mandate
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateResponsibilityPayloadMutator },
+    provideMandateRegisteredOwnersFormPayloadMutator(MandateWizardStep.REGISTERED_OWNERS_FORM_ADD),
+    provideMandateRegisteredOwnersFormPayloadMutator(MandateWizardStep.REGISTERED_OWNERS_FORM_EDIT),
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DeleteRegisteredOwnerPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateResponsibilityDeclarationPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateVariationReviewDecisionPayloadMutator },
     // Emission Sources
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
@@ -173,6 +190,7 @@ export function provideEmpVariationReviewSideEffects(): EnvironmentProviders {
     provideEmpReviewSideEffect(ADDITIONAL_DOCUMENTS_SUB_TASK),
     provideEmpReviewSideEffect(CONTROL_ACTIVITIES_SUB_TASK),
     provideEmpReviewSideEffect(DATA_GAPS_SUB_TASK),
+    provideEmpReviewSideEffect(MANDATE_SUB_TASK),
     provideEmpReviewSideEffect(EMISSION_SOURCES_SUB_TASK),
     provideEmpReviewSideEffect(EMISSIONS_SUB_TASK),
     provideEmpReviewSideEffect(GREENHOUSE_GAS_SUB_TASK),
@@ -191,6 +209,7 @@ export function provideEmpVariationReviewStepFlowManagers(): EnvironmentProvider
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OperatorDetailsReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ControlActivitiesReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: DataGapsReviewFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: GreenhouseGasReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourcesReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsReviewFlowManager },

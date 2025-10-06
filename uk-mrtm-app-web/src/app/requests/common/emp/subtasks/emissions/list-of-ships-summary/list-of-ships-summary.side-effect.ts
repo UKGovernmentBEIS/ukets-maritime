@@ -22,6 +22,10 @@ export class ListOfShipsSummarySideEffect extends SideEffect {
       produce(currentPayload, (payload) => {
         payload.empSectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
           TaskItemStatus.COMPLETED;
+
+        if (payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED) {
+          payload.empSectionsCompleted['mandate'] = TaskItemStatus.NEEDS_REVIEW;
+        }
       }),
     );
   }

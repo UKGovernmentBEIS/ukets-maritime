@@ -21,6 +21,7 @@ import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestMetadat
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestMetadata;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
@@ -177,12 +178,13 @@ class RequestCustomRepositoryIT extends AbstractContainerBaseTest {
                                   RequestType requestType, String status, LocalDateTime creationDate,
                                   RequestMetadata metadata) {
         Request request = Request.builder()
-                .id(RandomStringUtils.insecure().next(5))
-                .type(requestType)
-                .status(status)
-                .creationDate(creationDate)
-                .metadata(metadata)
-                .build();
+            .id(RandomStringUtils.insecure().next(5))
+            .type(requestType)
+            .engine(WorkflowEngineType.FLOWABLE)
+            .status(status)
+            .creationDate(creationDate)
+            .metadata(metadata)
+            .build();
         addResourcesToRequest(accountId, ca, vbId, request);
 
         entityManager.persist(request);

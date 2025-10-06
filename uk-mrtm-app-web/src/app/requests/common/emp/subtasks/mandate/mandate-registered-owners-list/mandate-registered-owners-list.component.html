@@ -26,9 +26,9 @@
   </govuk-warning-text>
 }
 
-<mrtm-mandate-registered-owners-list-summary-template
+<mrtm-mandate-registered-owners-table
   [isEditable]="isEditable()"
-  [data]="data()"
+  [registeredOwnerItems]="data()"
   (edit)="onEdit($event)"
   (delete)="onDelete($event)" />
 

@@ -7,6 +7,7 @@ import {
   EmpEmissionSources,
   EmpIssuanceApplicationSubmittedRequestActionPayload,
   EmpManagementProcedures,
+  EmpMandate,
   EmpMonitoringGreenhouseGas,
   EmpOperatorDetails,
   EmpShipEmissions,
@@ -68,6 +69,11 @@ const selectDataGaps: StateSelector<RequestActionState, EmpDataGaps> = createDes
   (payload) => payload?.emissionsMonitoringPlan?.dataGaps,
 );
 
+const selectMandate: StateSelector<RequestActionState, EmpMandate> = createDescendingSelector(
+  selectPayload,
+  (payload) => payload?.emissionsMonitoringPlan?.mandate,
+);
+
 const selectGreenhouseGas: StateSelector<RequestActionState, EmpMonitoringGreenhouseGas> = createDescendingSelector(
   selectPayload,
   (payload) => payload?.emissionsMonitoringPlan?.greenhouseGas,
@@ -115,6 +121,7 @@ export const empVariationSubmittedQuery = {
   selectAttachedFiles,
   selectOperatorDetails,
   selectDataGaps,
+  selectMandate,
   selectAdditionalDocuments,
   selectAbbreviations,
   selectManagementProcedures,

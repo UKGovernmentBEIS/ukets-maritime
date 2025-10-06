@@ -83,6 +83,10 @@ export class BasePage<C> {
     return this.queryAll<HTMLDListElement>('table th, table td').map((cell) => cell.textContent.trim());
   }
 
+  get listContents(): string[] {
+    return this.queryAll<HTMLLIElement>('ul > li').map((li) => li.textContent.trim());
+  }
+
   get errorSummary(): HTMLDivElement {
     return this.query<HTMLDivElement>('.govuk-error-summary');
   }

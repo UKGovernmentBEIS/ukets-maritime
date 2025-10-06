@@ -1,26 +1,27 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { take } from 'rxjs';
 
-import { EmpMandate } from '@mrtm/api';
+import { EmpMandate, EmpOperatorDetails } from '@mrtm/api';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
+import { ButtonDirective } from '@netz/govuk-components';
 
-import { empCommonQuery, empReviewQuery, empVariationReviewQuery } from '@requests/common/emp/+state';
+import {
+  empCommonQuery,
+  empReviewQuery,
+  empVariationRegulatorQuery,
+  empVariationReviewQuery,
+} from '@requests/common/emp/+state';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate/mandate.helper';
-import { mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate/mandate-subtask-list.map';
-import {
-  MandateRegisteredOwnersListSummaryTemplateComponent,
-  MandateResponsibilityDeclarationSummaryTemplateComponent,
-  MandateResponsibilitySummaryTemplateComponent,
-  ReviewDecisionSummaryTemplateComponent,
-} from '@shared/components';
+import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
+import { MandateSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shared/components/summaries/variation-regulator-decision-partial-summary-template';
 import { EmpVariationReviewDecisionDto } from '@shared/types';
 
 @Component({
@@ -28,15 +29,12 @@ import { EmpVariationReviewDecisionDto } from '@shared/types';
   standalone: true,
   imports: [
     PageHeadingComponent,
-    MandateResponsibilitySummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     PendingButtonDirective,
     ButtonDirective,
-    MandateRegisteredOwnersListSummaryTemplateComponent,
-    RouterLink,
-    LinkDirective,
-    MandateResponsibilityDeclarationSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
+    VariationRegulatorDecisionPartialSummaryTemplateComponent,
+    MandateSummaryTemplateComponent,
   ],
   templateUrl: './mandate-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -46,21 +44,32 @@ export class MandateSummaryComponent {
   private readonly service: TaskService<EmpTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
-  public readonly wizardStep = MandateWizardStep;
-  public readonly wizardMap = mandateSubtaskMap;
-  public readonly mandate: Signal<EmpMandate> = this.store.select(empCommonQuery.selectMandate);
-  public readonly isEditable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-  public readonly hasReview: Signal<boolean> = this.store.select(empCommonQuery.selectHasReview);
-  public readonly isSubtaskCompleted: Signal<boolean> = computed(() =>
+  readonly wizardStep = MandateWizardStep;
+  readonly wizardMap = mandateMap;
+  readonly mandate: Signal<EmpMandate> = this.store.select(empCommonQuery.selectMandate);
+  readonly originalMandate: Signal<EmpMandate> = this.store.select(empVariationRegulatorQuery.selectOriginalMandate);
+  readonly operatorName: Signal<EmpOperatorDetails['operatorName']> = computed(
+    () => this.store.select(empCommonQuery.selectOperatorDetails)()?.operatorName,
+  );
+  readonly originalOperatorName: Signal<EmpOperatorDetails['operatorName']> = computed(
+    () => this.store.select(empVariationRegulatorQuery.selectOriginalOperatorDetails)()?.operatorName,
+  );
+  readonly isEditable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly hasReview: Signal<boolean> = this.store.select(empCommonQuery.selectHasReview);
+  readonly isSubtaskCompleted: Signal<boolean> = computed(() =>
     this.hasReview()
       ? this.store.select(empReviewQuery.selectIsSubtaskCompleted(MANDATE_SUB_TASK))()
       : this.store.select(empCommonQuery.selectIsSubtaskCompleted(MANDATE_SUB_TASK))(),
   );
-  public readonly reviewDecision: Signal<EmpVariationReviewDecisionDto> = this.store.select(
+  readonly reviewDecision: Signal<EmpVariationReviewDecisionDto> = this.store.select(
     empVariationReviewQuery.selectEmpReviewDecisionDTO(MANDATE_SUB_TASK),
   );
+  readonly variationDecisionDetails = this.store.select(
+    empVariationRegulatorQuery.selectSubtaskVariationDecisionDetails(MANDATE_SUB_TASK),
+  );
+  readonly isVariationRegulatorDecision = this.store.select(empCommonQuery.selectIsVariationRegulator);
 
-  public onSubmit(): void {
+  onSubmit(): void {
     this.service
       .submitSubtask(MANDATE_SUB_TASK, this.wizardStep.SUMMARY, this.activatedRoute)
       .pipe(take(1))

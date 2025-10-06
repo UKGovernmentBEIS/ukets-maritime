@@ -9,6 +9,7 @@ import {
   EmpEmissions,
   EmpEmissionSources,
   EmpManagementProcedures,
+  EmpMandate,
   EmpMonitoringGreenhouseGas,
   EmpOperatorDetails,
   EmpVariationDetails,
@@ -17,19 +18,11 @@ import {
 
 import { createAggregateSelector, createDescendingSelector, RequestTaskState, StateSelector } from '@netz/common/store';
 
-import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmpVariationRegulatorTaskPayload } from '@requests/common/emp/emp.types';
-import { ABBREVIATIONS_SUB_TASK } from '@requests/common/emp/subtasks/abbreviations';
-import { CONTROL_ACTIVITIES_SUB_TASK } from '@requests/common/emp/subtasks/control-activities';
-import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps';
-import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources';
-import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas';
-import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import { AttachedFile, ShipEmissionTableListItem } from '@shared/types';
 
 const selectStatusForSubtask = (
@@ -71,6 +64,11 @@ const selectOriginalControlActivities: StateSelector<RequestTaskState, EmpContro
 const selectOriginalDataGaps: StateSelector<RequestTaskState, EmpDataGaps> = createDescendingSelector(
   selectOriginalEmissionsMonitoringPlan,
   (originalEmp) => originalEmp?.dataGaps,
+);
+
+const selectOriginalMandate: StateSelector<RequestTaskState, EmpMandate> = createDescendingSelector(
+  selectOriginalEmissionsMonitoringPlan,
+  (originalEmp) => originalEmp?.mandate,
 );
 
 const selectOriginalGreenhouseGas: StateSelector<RequestTaskState, EmpMonitoringGreenhouseGas> =
@@ -154,18 +152,7 @@ const selectAreAllSectionsAccepted: StateSelector<RequestTaskState, boolean> = c
   empCommonQuery.selectEmpSectionsCompleted,
   selectEmpVariationDetailsCompleted,
   (completed, empVariationDetailsCompleted) => {
-    const allTasks = [
-      ABBREVIATIONS_SUB_TASK,
-      ADDITIONAL_DOCUMENTS_SUB_TASK,
-      CONTROL_ACTIVITIES_SUB_TASK,
-      DATA_GAPS_SUB_TASK,
-      EMISSION_SOURCES_SUB_TASK,
-      EMISSIONS_SUB_TASK,
-      GREENHOUSE_GAS_SUB_TASK,
-      MANAGEMENT_PROCEDURES_SUB_TASK,
-      OPERATOR_DETAILS_SUB_TASK,
-    ];
-    const allTaskCompleted = allTasks.every(
+    const allTaskCompleted = EMP_SUBTASKS.every(
       (task) => (completed?.[task] as TaskItemStatus) === TaskItemStatus.COMPLETED || completed?.[task] === undefined,
     );
     return allTaskCompleted && empVariationDetailsCompleted === TaskItemStatus.COMPLETED;
@@ -180,6 +167,7 @@ export const empVariationRegulatorQuery = {
   selectOriginalManagementProcedures,
   selectOriginalControlActivities,
   selectOriginalDataGaps,
+  selectOriginalMandate,
   selectOriginalGreenhouseGas,
   selectOriginalEmissionSources,
   selectVariationRegulatorReviewGroupDecisions,

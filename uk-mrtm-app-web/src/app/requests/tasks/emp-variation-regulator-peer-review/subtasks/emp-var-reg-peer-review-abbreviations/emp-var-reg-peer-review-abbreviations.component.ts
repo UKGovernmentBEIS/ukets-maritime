@@ -19,7 +19,7 @@ interface ViewModel {
 }
 
 @Component({
-  selector: 'mrtm-emp-var-reg-peer-review--abbreviations',
+  selector: 'mrtm-emp-var-reg-peer-review-abbreviations',
   standalone: true,
   imports: [
     PageHeadingComponent,

@@ -7,7 +7,7 @@
             <div class="govuk-pagination__prev">
               <a
                 class="govuk-link govuk-pagination__link"
-                [fragment]="route.fragment | async"
+                [fragment]="(route.fragment | async) || fragment"
                 [queryParams]="{ page: page > 2 ? page - 1 : 1 }"
                 [state]="{ scrollSkip: true }"
                 queryParamsHandling="merge"
@@ -38,7 +38,7 @@
                   <li class="govuk-pagination__item" [class.govuk-pagination__item--current]="page === pageNumber">
                     <a
                       class="govuk-link govuk-pagination__link"
-                      [fragment]="route.fragment | async"
+                      [fragment]="(route.fragment | async) || fragment"
                       [queryParams]="{ page: pageNumber }"
                       [state]="{ scrollSkip: true }"
                       queryParamsHandling="merge"
@@ -59,7 +59,7 @@
             <div class="govuk-pagination__next">
               <a
                 class="govuk-link govuk-pagination__link"
-                [fragment]="route.fragment | async"
+                [fragment]="(route.fragment | async) || fragment"
                 [queryParams]="{ page: page < totalPages ? page + 1 : totalPages }"
                 [state]="{ scrollSkip: true }"
                 queryParamsHandling="merge"

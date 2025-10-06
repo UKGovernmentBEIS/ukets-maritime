@@ -27,7 +27,7 @@ import {
 import { mandateRegisteredOwnersFormProvider } from '@requests/common/emp/subtasks/mandate/mandate-registered-owners-form/mandate-registered-owners.form-provider';
 import { MANDATE_AVAILABLE_SHIPS_COLUMNS } from '@requests/common/emp/subtasks/mandate/mandate-registered-owners-form/mandate-registered-owners-form.constans';
 import { MandateShipSelectItem } from '@requests/common/emp/subtasks/mandate/mandate-registered-owners-form/mandate-registered-owners-form.types';
-import { mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate/mandate-subtask-list.map';
+import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { DatePickerComponent, MultiSelectTableComponent, WizardStepComponent } from '@shared/components';
 import { SubTaskListMap } from '@shared/types';
@@ -59,8 +59,8 @@ export class MandateRegisteredOwnersFormComponent {
   public readonly form = inject(TASK_FORM);
   public readonly wizardMap: SubTaskListMap<unknown> =
     this.step === MandateWizardStep.REGISTERED_OWNERS_FORM_ADD
-      ? mandateSubtaskMap.registeredOwnersAddForm
-      : mandateSubtaskMap.registeredOwnersEditForm;
+      ? mandateMap.registeredOwnersAddForm
+      : mandateMap.registeredOwnersEditForm;
 
   public readonly columns = MANDATE_AVAILABLE_SHIPS_COLUMNS;
 
@@ -114,7 +114,7 @@ export class MandateRegisteredOwnersFormComponent {
       .subscribe();
   }
 
-  readonly returnToLabel = mandateSubtaskMap.registeredOwners.title;
+  readonly returnToLabel = mandateMap.registeredOwners.title;
 
   readonly isEdit = this.step === 'edit';
 }

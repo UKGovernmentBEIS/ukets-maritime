@@ -1,0 +1,44 @@
+<govuk-table
+  id="registeredOwners"
+  [columns]="columns()"
+  [data]="page()"
+  emptyTableText="No items to display"
+  [rowCssClasses]="onDefineRowAdditionalStyle">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) {
+      @case ('name') {
+        <p class="govuk-!-margin-0" [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] }}</p>
+        <span class="govuk-hint">{{ row['imoNumber'] }}</span>
+      }
+      @case ('contactName') {
+        <p class="govuk-!-margin-0" [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] }}</p>
+        <span class="govuk-hint">{{ row['email'] }}</span>
+      }
+      @case ('ships') {
+        <mrtm-summary-registered-owner-ship-details
+          [registeredOwnerUniqueIdentifier]="row?.uniqueIdentifier"
+          [shipDetails]="row?.ships"
+          [needsReview]="row?.needsReview" />
+      }
+      @case ('effectiveDate') {
+        <span [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] | govukDate }}</span>
+      }
+      @case ('actions') {
+        <div class="control-row justify-content-end">
+          <a class="govuk-link--no-visited-state" (click)="onEdit(row)" routerLink="." govukLink>Change</a>
+          <a class="govuk-link--no-visited-state" (click)="onDelete(row)" routerLink="." govukLink>Remove</a>
+        </div>
+      }
+      @default {
+        {{ row[column.field] }}
+      }
+    }
+  </ng-template>
+</govuk-table>
+@if (totalItems() > pageSize) {
+  <govuk-pagination
+    fragment="registeredOwners"
+    [count]="totalItems()"
+    [pageSize]="pageSize"
+    (currentPageChange)="onPageChange($event)" />
+}

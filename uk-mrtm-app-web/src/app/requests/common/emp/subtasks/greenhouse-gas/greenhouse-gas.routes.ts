@@ -26,9 +26,7 @@ export const GREENHOUSE_GAS_ROUTES: Route[] = [
       backlink: backlinkResolver(GreenhouseGasWizardStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas-fuel').then(
-        (c) => c.GreenhouseGasFuelComponent,
-      ),
+      import('@requests/common/emp/subtasks/greenhouse-gas').then((c) => c.GreenhouseGasFuelComponent),
   },
   {
     path: GreenhouseGasWizardStep.CROSS_CHECK,
@@ -39,9 +37,7 @@ export const GREENHOUSE_GAS_ROUTES: Route[] = [
       backlink: backlinkResolver(GreenhouseGasWizardStep.SUMMARY, GreenhouseGasWizardStep.FUEL),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas-cross-checks').then(
-        (c) => c.GreenhouseGasCrossChecksComponent,
-      ),
+      import('@requests/common/emp/subtasks/greenhouse-gas').then((c) => c.GreenhouseGasCrossChecksComponent),
   },
   {
     path: GreenhouseGasWizardStep.INFORMATION,
@@ -52,9 +48,7 @@ export const GREENHOUSE_GAS_ROUTES: Route[] = [
       backlink: backlinkResolver(GreenhouseGasWizardStep.SUMMARY, GreenhouseGasWizardStep.CROSS_CHECK),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas-information').then(
-        (c) => c.GreenhouseGasInformationComponent,
-      ),
+      import('@requests/common/emp/subtasks/greenhouse-gas').then((c) => c.GreenhouseGasInformationComponent),
   },
   {
     path: GreenhouseGasWizardStep.QA_EQUIPMENT,
@@ -65,9 +59,7 @@ export const GREENHOUSE_GAS_ROUTES: Route[] = [
       backlink: backlinkResolver(GreenhouseGasWizardStep.SUMMARY, GreenhouseGasWizardStep.INFORMATION),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas-qa-equipment').then(
-        (c) => c.GreenhouseGasQaEquipmentComponent,
-      ),
+      import('@requests/common/emp/subtasks/greenhouse-gas').then((c) => c.GreenhouseGasQaEquipmentComponent),
   },
   {
     path: GreenhouseGasWizardStep.VOYAGES,
@@ -78,8 +70,6 @@ export const GREENHOUSE_GAS_ROUTES: Route[] = [
       backlink: backlinkResolver(GreenhouseGasWizardStep.SUMMARY, GreenhouseGasWizardStep.QA_EQUIPMENT),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas-voyages').then(
-        (c) => c.GreenhouseGasVoyagesComponent,
-      ),
+      import('@requests/common/emp/subtasks/greenhouse-gas').then((c) => c.GreenhouseGasVoyagesComponent),
   },
 ];

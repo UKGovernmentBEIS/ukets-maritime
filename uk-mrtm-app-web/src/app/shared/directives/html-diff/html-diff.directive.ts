@@ -18,7 +18,7 @@ export class HtmlDiffDirective {
 
   previous = input<string | null>(null);
   current = input.required<string>();
-  isFiles = input<boolean | null>(false);
+  isFiles = input<boolean>(false);
 
   constructor() {
     effect(() => {

@@ -1,17 +1,6 @@
-@if (mandate(); as mandate) {
-  <netz-page-heading [caption]="subtaskMap.caption">{{ subtaskMap.title }}</netz-page-heading>
-  <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-    <mrtm-mandate-responsibility-summary-template [data]="mandate" />
-    @if (mandate.exist) {
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <h3 class="govuk-heading-m">{{ wizardMap.registeredOwners.title }}</h3>
-        </div>
-      </div>
-      <mrtm-mandate-registered-owners-list-summary-template [data]="mandate.registeredOwners" />
-      <mrtm-mandate-responsibility-declaration-summary-template [data]="mandate" />
-    }
-    <netz-return-to-task-or-action-page />
-  </div>
-}
+<netz-page-heading caption="Delegated UK ETS responsibility">{{ mandateMap.title }}</netz-page-heading>
+<mrtm-mandate-summary-template [mandate]="mandate()" [operatorName]="operatorName" [mandateMap]="mandateMap" />
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <netz-return-to-task-or-action-page />
+</div>

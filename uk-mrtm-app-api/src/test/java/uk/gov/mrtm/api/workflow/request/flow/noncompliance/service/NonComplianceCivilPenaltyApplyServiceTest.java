@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceR
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
@@ -33,7 +34,7 @@ class NonComplianceCivilPenaltyApplyServiceTest {
         final Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
         final UUID civilPenalty = UUID.randomUUID();
         final String comments = "comments";
-        final String penaltyAmount = "penaltyAmount";
+        final BigDecimal penaltyAmount = BigDecimal.ONE;
         LocalDate dueDate = LocalDate.now();
         final NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload taskActionPayload =
             NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload.builder()
@@ -66,7 +67,7 @@ class NonComplianceCivilPenaltyApplyServiceTest {
         final UUID civilPenalty = UUID.randomUUID();
         final Map<String, String> sectionsCompleted = Map.of("A", "COMPLETED");
         final String comments = "comments";
-        String penaltyAmount = "1";
+        BigDecimal penaltyAmount = BigDecimal.ONE;
         LocalDate civilPenaltyDueDate = LocalDate.now();
 
         final NonComplianceCivilPenaltyRequestTaskPayload taskPayload =

@@ -12,6 +12,7 @@ import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps';
 import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources';
 import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas';
 import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures';
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import {
   abbreviationsMap,
   additionalDocumentsMap,
@@ -22,6 +23,7 @@ import {
   greenhouseGasMap,
   identifyMaritimeOperatorMap,
   managementProceduresMap,
+  mandateMap,
   variationDetailsSubtaskMap,
 } from '@requests/common/emp/subtasks/subtask-list.map';
 import { VARIATION_DETAILS_SUB_TASK } from '@requests/common/emp/subtasks/variation-details/variation-details.helper';
@@ -85,6 +87,17 @@ export const empVariationWaitForReviewTaskContent: RequestTaskPageContentFactory
             status: TaskItemStatus.COMPLETED,
             linkText: dataGapsMap.title,
             link: `${routePrefix}/data-gaps`,
+          },
+        ],
+      },
+      {
+        title: 'Delegated UK ETS responsibility',
+        tasks: [
+          {
+            name: MANDATE_SUB_TASK,
+            status: TaskItemStatus.COMPLETED,
+            linkText: mandateMap.title,
+            link: `${routePrefix}/mandate`,
           },
         ],
       },

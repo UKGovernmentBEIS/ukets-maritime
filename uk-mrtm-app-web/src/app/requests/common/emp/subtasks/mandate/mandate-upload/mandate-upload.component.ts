@@ -4,12 +4,14 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { EmpRegisteredOwner } from '@mrtm/api';
 
+import { PageHeadingComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { empCommonQuery, TASK_FORM } from '@requests/common';
-import { MANDATE_SUB_TASK, mandateSubtaskMap, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
+import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import {
   addMandateFormGroup,
   mandateUploadFormProvider,
@@ -19,8 +21,10 @@ import {
   mandateCSVMapper,
   MandateUploadCSVFormModel,
 } from '@requests/common/emp/subtasks/mandate/mandate-upload/mandate-upload.map';
-import { DataParserWizardStepComponent, MandateRegisteredOwnersListSummaryTemplateComponent } from '@shared/components';
+import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
+import { DataParserWizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { MandateRegisteredOwnersListSummaryTemplateComponent } from '@shared/components/summaries/emp/mandate/mandate-registered-owners-list-summary-template';
 import { formatDateFromString } from '@shared/utils';
 import Papa from 'papaparse';
 
@@ -34,6 +38,8 @@ import Papa from 'papaparse';
     RouterLink,
     WarningTextComponent,
     MandateRegisteredOwnersListSummaryTemplateComponent,
+    PageHeadingComponent,
+    PendingButtonDirective,
   ],
   templateUrl: './mandate-upload.component.html',
   providers: [mandateUploadFormProvider],
@@ -49,13 +55,13 @@ export class MandateUploadComponent {
   private readonly dataParserWizardStep = viewChild.required(DataParserWizardStepComponent);
 
   wizardStep = MandateWizardStep;
-  wizardMap = mandateSubtaskMap;
+  wizardMap = mandateMap;
+  showConfirmation = false;
+  existingOwners = this.store.select(empCommonQuery.selectMandateRegisteredOwnersList);
+  owners: WritableSignal<EmpRegisteredOwner[] | null> = signal(null);
   ownersCtrl = this.form.controls.owners;
   columnsCtrl = this.form.controls.columns;
   fileCtrl = this.form.controls.file;
-  insertedRows = 0;
-  existingOwners = this.store.select(empCommonQuery.selectMandateRegisteredOwnersList);
-  owners: WritableSignal<EmpRegisteredOwner[] | null> = signal(null);
   uploadedFile: File;
 
   onFileSelect(event: any) {
@@ -135,7 +141,6 @@ export class MandateUploadComponent {
           effectiveDate: formatDateFromString(fro.effectiveDate, null, true)?.toISOString(),
           ships: [shipOwnerDetails],
         };
-        this.insertedRows++;
       }
 
       processedOwnersMap.set(fro.imoNumber, currentOwner);
@@ -164,13 +169,23 @@ export class MandateUploadComponent {
     this.owners.update(() => null);
   }
 
+  toggleConfirmation(value: boolean) {
+    this.showConfirmation = value;
+  }
+
   onSubmit() {
-    this.taskService
-      .saveSubtask(MANDATE_SUB_TASK, MandateWizardStep.UPLOAD_OWNERS, this.activatedRoute, this.owners())
-      .subscribe(() => {
-        if (this.insertedRows > 0) {
-          this.notificationBannerStore.setSuccessMessages([`${this.insertedRows} row(s) added successfully`]);
-        }
-      });
+    if (this.existingOwners()?.length && !this.showConfirmation) {
+      this.toggleConfirmation(true);
+    } else {
+      this.taskService
+        .saveSubtask(MANDATE_SUB_TASK, MandateWizardStep.UPLOAD_OWNERS, this.activatedRoute, this.owners())
+        .subscribe(() => {
+          this.notificationBannerStore.setSuccessMessages([
+            this.showConfirmation
+              ? 'The registered owners file has been replaced successfully'
+              : 'The registered owners file has been uploaded successfully',
+          ]);
+        });
+    }
   }
 }

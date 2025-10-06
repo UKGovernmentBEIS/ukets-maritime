@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/changelog_migrate_from_camunda_to_flowable.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_remove_camunda_aer_initiate_job" author="P44065">
+        <sql>
+            delete from public.act_ru_job where process_def_key_ = 'PROCESS_AER_INITIATE';
+        </sql>
+        <rollback />
+    </changeSet>
+    
+</databaseChangeLog>

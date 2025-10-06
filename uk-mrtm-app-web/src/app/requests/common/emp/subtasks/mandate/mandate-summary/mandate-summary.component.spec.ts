@@ -1,36 +1,86 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { TaskService } from '@netz/common/forms';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { of } from 'rxjs';
 
+import { TaskService } from '@netz/common/forms';
+import { RequestTaskStore } from '@netz/common/store';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+
+import { TaskItemStatus } from '@requests/common';
+import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { MandateSummaryComponent } from '@requests/common/emp/subtasks/mandate/mandate-summary';
+import { mockStateBuild } from '@requests/common/emp/testing/mock-data';
 import { taskProviders } from '@requests/common/task.providers';
 
 describe('MandateSummaryComponent', () => {
   let component: MandateSummaryComponent;
   let fixture: ComponentFixture<MandateSummaryComponent>;
-  const taskServiceMock: MockType<TaskService<any>> = {};
+  let page: Page;
+  let store: RequestTaskStore;
+
+  const route = new ActivatedRouteStub();
+  const taskService: MockType<TaskService<unknown>> = {
+    submitSubtask: jest.fn().mockReturnValue(of({})),
+  };
+  const taskServiceSpy = jest.spyOn(taskService, 'submitSubtask');
+
+  class Page extends BasePage<MandateSummaryComponent> {
+    get submitButton(): HTMLButtonElement {
+      return this.query<HTMLButtonElement>('button[type="button"]');
+    }
+  }
+
+  const createComponent = () => {
+    fixture = TestBed.createComponent(MandateSummaryComponent);
+    component = fixture.componentInstance;
+    page = new Page(fixture);
+    fixture.detectChanges();
+    jest.clearAllMocks();
+  };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [MandateSummaryComponent],
       providers: [
-        {
-          provide: ActivatedRoute,
-          useValue: new ActivatedRouteStub(),
-        },
-        { provide: TaskService, useValue: taskServiceMock },
+        { provide: ActivatedRoute, useValue: route },
+        { provide: TaskService, useValue: taskService },
         ...taskProviders,
       ],
     }).compileComponents();
+  });
 
-    fixture = TestBed.createComponent(MandateSummaryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
+  beforeEach(() => {
+    store = TestBed.inject(RequestTaskStore);
+    store.setState(
+      mockStateBuild(
+        {
+          mandate: {
+            exist: false,
+          },
+        },
+        { mandate: TaskItemStatus.IN_PROGRESS },
+      ),
+    );
+    createComponent();
   });
 
   it('should create', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should display all HTMLElements', () => {
+    expect(page.summariesContents).toEqual([
+      'Has the responsibility for compliance with UK ETS been delegated to you by one or more registered owners for one or more ships?',
+      'No',
+      'Change',
+    ]);
+  });
+
+  it('should submit subtask', () => {
+    page.submitButton.click();
+    fixture.detectChanges();
+
+    expect(taskServiceSpy).toHaveBeenCalledWith(MANDATE_SUB_TASK, MandateWizardStep.SUMMARY, route);
   });
 });

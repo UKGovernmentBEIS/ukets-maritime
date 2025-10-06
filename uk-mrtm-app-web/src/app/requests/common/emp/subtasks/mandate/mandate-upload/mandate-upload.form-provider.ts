@@ -49,7 +49,7 @@ export const mandateUploadFormProvider: Provider = {
         validators: [
           fileExtensionValidator(['csv'], FileType.CSV, 'The selected file must be a CSV'),
           maxFileSizeValidator(20, 'The selected file must be smaller than 20MB'),
-          fileNameLengthValidator(100, 'The selected file must must have a file name length less than 100 characters'),
+          fileNameLengthValidator(100, 'The selected file must have a file name length less than 100 characters'),
           emptyFileValidator('The selected file cannot be empty'),
         ],
       }),
@@ -70,7 +70,7 @@ export const addMandateFormGroup = (owner: FlattenedRegisteredOwner): FormGroup<
 
 const mandateUploadCSVFormValidators = (store: RequestTaskStore) => {
   return [
-    csvRowsEmptyValidator('The uploaded file is empty. Complete and reupload the file'),
+    csvRowsEmptyValidator('Upload the registered owners file'),
     csvRowsLengthValidator(1000, 'The maximum number of entries allowed in the file is 1000'),
 
     // name
@@ -98,12 +98,6 @@ const mandateUploadCSVFormValidators = (store: RequestTaskStore) => {
       new RegExp(/^\d{7}$/),
       `The IMO number must be 7 digits long. Enter the IMO number and reupload the file`,
     ),
-    // csvFieldDuplicateValidator<FlattenedRegisteredOwner>(
-    //   'imoNumber',
-    //   mandateCsvMap,
-    //   'The IMO number is already in use. Enter a unique IMO number and reupload the file',
-    //   true,
-    // ),
 
     // contactName
     csvFieldRequiredValidator<FlattenedRegisteredOwner>(

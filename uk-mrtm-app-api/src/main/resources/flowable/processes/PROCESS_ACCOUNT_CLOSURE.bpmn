@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Flowable Open Source Modeler" exporterVersion="6.8.0">
+  <process id="PROCESS_ACCOUNT_CLOSURE" name="Account closure process" isExecutable="true">
+    <startEvent id="ACCOUNT_CLOSURE_START_EVENT" name="Start Event" flowable:formFieldValidation="true"></startEvent>
+    <userTask id="ACCOUNT_CLOSURE_SUBMIT" name="Regulator: Submit account closure" flowable:formFieldValidation="true"></userTask>
+    <endEvent id="ACCOUNT_CLOSURE_END_EVENT" name="End Event"></endEvent>
+    <sequenceFlow id="Flow_0oue52q" sourceRef="ACCOUNT_CLOSURE_START_EVENT" targetRef="ACCOUNT_CLOSURE_SUBMIT"></sequenceFlow>
+    <sequenceFlow id="Flow_1oj2lq6" sourceRef="ACCOUNT_CLOSURE_SUBMIT" targetRef="ACCOUNT_CLOSURE_END_EVENT"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_ACCOUNT_CLOSURE">
+    <bpmndi:BPMNPlane bpmnElement="PROCESS_ACCOUNT_CLOSURE" id="BPMNPlane_PROCESS_ACCOUNT_CLOSURE">
+      <bpmndi:BPMNShape bpmnElement="ACCOUNT_CLOSURE_START_EVENT" id="BPMNShape_ACCOUNT_CLOSURE_START_EVENT">
+        <omgdc:Bounds height="30.0" width="30.0" x="179.0" y="102.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ACCOUNT_CLOSURE_SUBMIT" id="BPMNShape_ACCOUNT_CLOSURE_SUBMIT">
+        <omgdc:Bounds height="80.0" width="100.0" x="290.0" y="77.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="ACCOUNT_CLOSURE_END_EVENT" id="BPMNShape_ACCOUNT_CLOSURE_END_EVENT">
+        <omgdc:Bounds height="28.0" width="28.0" x="472.0" y="103.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="Flow_1oj2lq6" id="BPMNEdge_Flow_1oj2lq6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="389.95000000000005" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="472.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="Flow_0oue52q" id="BPMNEdge_Flow_0oue52q" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="208.9499991426304" y="117.0"></omgdi:waypoint>
+        <omgdi:waypoint x="290.0" y="117.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

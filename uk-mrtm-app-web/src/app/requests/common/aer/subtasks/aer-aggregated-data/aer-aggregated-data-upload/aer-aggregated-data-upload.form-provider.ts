@@ -23,7 +23,7 @@ export const aerAggregatedDataUploadFormProvider: Provider = {
         validators: [
           fileExtensionValidator(['xml'], FileType.XML, 'The selected file must be an XML'),
           maxFileSizeValidator(20, 'The selected file must be smaller than 20MB'),
-          fileNameLengthValidator(100, 'The selected file must must have a file name length less than 100 characters'),
+          fileNameLengthValidator(100, 'The selected file must have a file name length less than 100 characters'),
           emptyFileValidator('The selected file cannot be empty'),
         ],
       }),

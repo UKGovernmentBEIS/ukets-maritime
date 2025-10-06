@@ -6874,4 +6874,49 @@ Emissions Trading Operations'
         </customChange>
     </changeSet>
 
+    <changeSet id="0_1_0_update_emp_document_add_measurement_technical_description_ENGLAND" author="dimopoulosc@unisystems.gr">
+        <comment>Update EMP document</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="EMP"/>
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="fileDocumentName" value="UK monitoring plan_template_maritime_v7.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emp_document_add_measurement_technical_description_SCOTLAND" author="dimopoulosc@unisystems.gr">
+        <comment>Update EMP document</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="EMP"/>
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="fileDocumentName" value="UK monitoring plan_template_maritime_v7.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emp_document_add_measurement_technical_description_WALES" author="dimopoulosc@unisystems.gr">
+        <comment>Update EMP document</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="EMP"/>
+            <param name="competentAuthority" value="WALES" />
+            <param name="fileDocumentName" value="UK monitoring plan_template_maritime_v7.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emp_document_add_measurement_technical_description_NORTHERN_IRELAND" author="dimopoulosc@unisystems.gr">
+        <comment>Update EMP document</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="EMP"/>
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="fileDocumentName" value="UK monitoring plan_template_maritime_v7.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_emp_document_add_measurement_technical_description_OPRED" author="dimopoulosc@unisystems.gr">
+        <comment>Update EMP document</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="EMP"/>
+            <param name="competentAuthority" value="OPRED" />
+            <param name="fileDocumentName" value="UK monitoring plan_template_maritime_v7.docx" />
+        </customChange>
+    </changeSet>
+
 </databaseChangeLog>

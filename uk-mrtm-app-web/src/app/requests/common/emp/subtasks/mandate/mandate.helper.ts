@@ -12,8 +12,9 @@ export enum MandateWizardStep {
   REGISTERED_OWNERS_FORM_ADD = 'add',
   REGISTERED_OWNERS_FORM_EDIT = 'edit',
   DELETE_REGISTERED_OWNER = 'delete-registered-owner',
-  DECISION = 'decision',
   UPLOAD_OWNERS = 'upload-owners',
+  VARIATION_REGULATOR_DECISION = 'variation-regulator-decision',
+  DECISION = 'decision',
   SUMMARY = '../',
 }
 

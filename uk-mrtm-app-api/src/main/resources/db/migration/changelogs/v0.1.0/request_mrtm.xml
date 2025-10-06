@@ -3435,4 +3435,17 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_UPDATE_EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED_TO_BE_BLOCKED_BY_PAYMENT" author="P44065">
+        <sql>
+            UPDATE public.request_task_action_type set blocked_by_payment = true
+            WHERE code = 'EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE public.request_task_action_type set blocked_by_payment = false
+                WHERE code = 'EMP_VARIATION_REQUEST_PEER_REVIEW_REGULATOR_LED';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

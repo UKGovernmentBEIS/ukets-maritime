@@ -9,7 +9,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import {
   ButtonDirective,
   ConditionalContentDirective,
-  LegendDirective,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -21,7 +20,7 @@ import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { mandateResponsibilityFormProvider } from '@requests/common/emp/subtasks/mandate/mandate-responsibility/mandate-responsibility.form-provider';
 import { MandateResponsibilityFormGroupModel } from '@requests/common/emp/subtasks/mandate/mandate-responsibility/mandate-responsibility.types';
-import { mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate/mandate-subtask-list.map';
+import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { WizardStepComponent } from '@shared/components';
 
@@ -34,7 +33,6 @@ import { WizardStepComponent } from '@shared/components';
     ReactiveFormsModule,
     RadioComponent,
     RadioOptionComponent,
-    LegendDirective,
     ConditionalContentDirective,
     WarningTextComponent,
     RouterLink,
@@ -51,7 +49,7 @@ export class MandateResponsibilityComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
   public readonly form: FormGroup<MandateResponsibilityFormGroupModel> = inject(TASK_FORM);
-  public readonly wizardMap = mandateSubtaskMap;
+  public readonly wizardMap = mandateMap;
 
   public readonly showDeleteQuestion: WritableSignal<boolean> = signal<boolean>(false);
   public readonly hasAlreadyRegisteredOwners: Signal<boolean> = computed(

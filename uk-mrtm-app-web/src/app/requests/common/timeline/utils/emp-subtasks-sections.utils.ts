@@ -12,7 +12,7 @@ import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps';
 import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources';
 import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas';
 import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures';
-import { MANDATE_SUB_TASK, mandateSubtaskMap } from '@requests/common/emp/subtasks/mandate';
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import {
   abbreviationsMap,
   additionalDocumentsMap,
@@ -23,6 +23,7 @@ import {
   greenhouseGasMap,
   identifyMaritimeOperatorMap,
   managementProceduresMap,
+  mandateMap,
   variationDetailsSubtaskMap,
 } from '@requests/common/emp/subtasks/subtask-list.map';
 import { VARIATION_DETAILS_SUB_TASK } from '@requests/common/emp/subtasks/variation-details/variation-details.helper';
@@ -90,8 +91,8 @@ export const getEmpSubtaskSections = (routePrefix: string, isVariation: boolean 
         {
           name: MANDATE_SUB_TASK,
           status: '',
-          linkText: mandateSubtaskMap.title,
-          link: `${routePrefix}/${MANDATE_SUB_TASK}`,
+          linkText: mandateMap.title,
+          link: `${routePrefix}/mandate`,
         },
       ],
     },

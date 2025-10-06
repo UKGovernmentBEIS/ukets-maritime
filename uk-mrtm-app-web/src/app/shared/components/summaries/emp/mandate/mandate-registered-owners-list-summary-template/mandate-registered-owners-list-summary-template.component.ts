@@ -2,57 +2,54 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  inject,
   input,
-  output,
   Signal,
   signal,
   WritableSignal,
 } from '@angular/core';
-import { RouterLink } from '@angular/router';
-
-import { EmpRegisteredOwner } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
-import { GovukTableColumn, LinkDirective, PaginationComponent, TableComponent } from '@netz/govuk-components';
+import { GovukTableColumn, PaginationComponent, TableComponent } from '@netz/govuk-components';
 
-import { MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS } from '@shared/components/summaries/emp/mandate/mandate-registered-owners-list-summary-template/mandate-registered-owners-list-summary-template.constans';
-
-type MandateRegisteredOwnerRowItem = EmpRegisteredOwner & { actions?: boolean; needsReview?: boolean };
+import { MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS } from '@requests/common/components/mandate';
+import { SummaryRegisteredOwnerShipDetailsComponent } from '@shared/components';
+import { HTML_DIFF, HtmlDiffDirective } from '@shared/directives';
+import { DiffItem, MandateRegisteredOwnerTableListItem } from '@shared/types';
+import { mergeDiffRegisteredOwners } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-list-summary-template',
   standalone: true,
-  imports: [TableComponent, GovukDatePipe, RouterLink, LinkDirective, PaginationComponent],
+  imports: [
+    TableComponent,
+    GovukDatePipe,
+    PaginationComponent,
+    HtmlDiffDirective,
+    SummaryRegisteredOwnerShipDetailsComponent,
+  ],
   templateUrl: './mandate-registered-owners-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateRegisteredOwnersListSummaryTemplateComponent {
-  public readonly delete = output<EmpRegisteredOwner>();
-  public readonly edit = output<EmpRegisteredOwner>();
+  private readonly hasHtmlDiff = inject(HTML_DIFF, { optional: true });
 
-  public readonly data = input<Array<MandateRegisteredOwnerRowItem>>([]);
-  public readonly isEditable = input<boolean>(false);
-  public readonly columns: Signal<Array<GovukTableColumn<MandateRegisteredOwnerRowItem>>> = computed(() =>
-    this.isEditable()
-      ? [
-          ...MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS,
-          {
-            field: 'actions',
-            widthClass: 'app-column-width-10-per',
-            header: null,
-          },
-        ]
-      : MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS,
+  readonly registeredOwnerItems = input.required<Array<MandateRegisteredOwnerTableListItem>>();
+  readonly originalRegisteredOwnerItems = input<Array<MandateRegisteredOwnerTableListItem>>([]);
+  readonly isEditable = input<boolean>(false);
+
+  readonly columns = MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS as GovukTableColumn<
+    DiffItem<MandateRegisteredOwnerTableListItem>
+  >[];
+  readonly combinedOwners: Signal<DiffItem<MandateRegisteredOwnerTableListItem>[]> = computed(() =>
+    mergeDiffRegisteredOwners(this.registeredOwnerItems(), this.hasHtmlDiff ? this.originalRegisteredOwnerItems() : []),
   );
-
-  public readonly expandedAssociatedShips: Set<EmpRegisteredOwner['uniqueIdentifier']> = new Set();
-
-  public readonly pageSize: number = 10;
-  public readonly totalItems: Signal<number> = computed(() => this.data()?.length ?? 0);
-  public readonly currentPage: WritableSignal<number> = signal<number>(1);
-  public readonly page: Signal<Array<MandateRegisteredOwnerRowItem>> = computed(() => {
-    const tableData = [...(this.data() ?? [])].sort((a, b) =>
-      a.name.localeCompare(b.name, 'en', { sensitivity: 'base' }),
+  readonly pageSize: number = 10;
+  readonly totalItems: Signal<number> = computed(() => this.combinedOwners()?.length ?? 0);
+  readonly currentPage: WritableSignal<number> = signal<number>(1);
+  readonly page: Signal<DiffItem<MandateRegisteredOwnerTableListItem>[]> = computed(() => {
+    const tableData = [...(this.combinedOwners() ?? [])].sort((a, b) =>
+      a?.current?.name?.localeCompare(b?.current?.name, 'en', { sensitivity: 'base' }),
     );
     const currentPage = this.currentPage();
 
@@ -62,30 +59,7 @@ export class MandateRegisteredOwnersListSummaryTemplateComponent {
     return tableData?.length > firstIndex ? tableData.slice(firstIndex, lastIndex) : [];
   });
 
-  public onEdit(item: EmpRegisteredOwner): void {
-    this.edit.emit(item);
-  }
-
-  public onDelete(item: EmpRegisteredOwner): void {
-    this.delete.emit(item);
-  }
-
-  public onPageChange(page: number): void {
+  onPageChange(page: number): void {
     this.currentPage.set(page);
-  }
-
-  public onToggleAssociatedShips(event: MouseEvent, registeredOwnerId: EmpRegisteredOwner['uniqueIdentifier']): void {
-    event.preventDefault();
-    event.stopPropagation();
-
-    if (this.expandedAssociatedShips.has(registeredOwnerId)) {
-      this.expandedAssociatedShips.delete(registeredOwnerId);
-    } else {
-      this.expandedAssociatedShips.add(registeredOwnerId);
-    }
-  }
-
-  public onDefineRowAdditionalStyle(item: MandateRegisteredOwnerRowItem): string | string[] | undefined {
-    return item?.needsReview ? 'needs-review' : undefined;
   }
 }

@@ -27,7 +27,7 @@ export const mockEmpVariationSaveApplicationRequestTask = {
 
 export const mockEmpVariationDetails: EmpVariationDetails = {
   reason: 'Test reason',
-  changes: ['CHANGE_COMPANY_NAME_OR_REGISTERED_ADDRESS', 'ADD_NEW_FUELS_OR_EMISSION_SOURCES', 'REMOVING_SHIP'],
+  changes: ['CHANGE_EMP_HOLDER_NAME_OR_ADDRESS', 'ADD_NEW_FUELS_OR_EMISSION_SOURCES', 'REMOVING_SHIP'],
 };
 
 export const mockStateBuild = (

@@ -60,6 +60,11 @@ import {
   ManagementProceduresVariationRegulatorFlowManager,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
+  MandateVariationRegulatorFlowManager,
+  provideMandatePayloadMutators,
+  provideMandateSideEffects,
+} from '@requests/common/emp/subtasks/mandate';
+import {
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsStepPayloadMutator,
   OperatorDetailsSummarySideEffect,
@@ -86,25 +91,11 @@ import { EmissionSourcesVariationRegulatorDecisionPayloadMutator } from '@reques
 import { ListOfShipsVariationRegulatorDecisionPayloadMutator } from '@requests/tasks/emp-variation-regulator/subtasks/emissions';
 import { GreenhouseGasVariationRegulatorDecisionPayloadMutator } from '@requests/tasks/emp-variation-regulator/subtasks/greenhouse-gas';
 import { ManagementProceduresVariationRegulatorDecisionPayloadMutator } from '@requests/tasks/emp-variation-regulator/subtasks/management-procedures';
+import { MandateVariationRegulatorDecisionPayloadMutator } from '@requests/tasks/emp-variation-regulator/subtasks/mandate';
 import { OperatorDetailsVariationRegulatorDecisionPayloadMutator } from '@requests/tasks/emp-variation-regulator/subtasks/operator-details';
 
 export function provideEmpVariationRegulatorPayloadMutators(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    // Abbreviations
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AbbreviationsQuestionPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AbbreviationsVariationRegulatorDecisionPayloadMutator },
-
-    // Additional documents
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AdditionalDocumentsUploadPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AdditionalDocumentsVariationRegulatorDecisionPayloadMutator },
-
-    // Management procedures
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresRolesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresAdequacyPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresDataFlowPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresRiskAssessmentPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresVariationRegulatorDecisionPayloadMutator },
-
     // Operator details
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsStepPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: UndertakenActivitiesPayloadMutator },
@@ -112,17 +103,14 @@ export function provideEmpVariationRegulatorPayloadMutators(): EnvironmentProvid
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OrganisationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OperatorDetailsVariationRegulatorDecisionPayloadMutator },
 
-    // Control activities
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesQualityAssurancePayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesInternalReviewsPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesCorrectionsAndCorrectivesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesDocumentationPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesOutsourcedActivitiesPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesVariationRegulatorDecisionPayloadMutator },
+    // Emissions
+    ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ListOfShipsVariationRegulatorDecisionPayloadMutator },
 
-    // Data gaps
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsMethodPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsVariationRegulatorDecisionPayloadMutator },
+    // Emission sources
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesVariationRegulatorDecisionPayloadMutator },
 
     // Greenhouse gas
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasCrossChecksPayloadMutator },
@@ -132,14 +120,36 @@ export function provideEmpVariationRegulatorPayloadMutators(): EnvironmentProvid
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasInformationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasVariationRegulatorDecisionPayloadMutator },
 
-    // Emission sources
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesVariationRegulatorDecisionPayloadMutator },
+    // Data gaps
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsMethodPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsVariationRegulatorDecisionPayloadMutator },
 
-    // Emissions
-    ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
-    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ListOfShipsVariationRegulatorDecisionPayloadMutator },
+    // Mandate
+    ...provideMandatePayloadMutators(),
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: MandateVariationRegulatorDecisionPayloadMutator },
+
+    // Management procedures
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresRolesPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresAdequacyPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresDataFlowPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresRiskAssessmentPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ManagementProceduresVariationRegulatorDecisionPayloadMutator },
+
+    // Control activities
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesQualityAssurancePayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesInternalReviewsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesCorrectionsAndCorrectivesPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesDocumentationPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesOutsourcedActivitiesPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ControlActivitiesVariationRegulatorDecisionPayloadMutator },
+
+    // Abbreviations
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AbbreviationsQuestionPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AbbreviationsVariationRegulatorDecisionPayloadMutator },
+
+    // Additional documents
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AdditionalDocumentsUploadPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AdditionalDocumentsVariationRegulatorDecisionPayloadMutator },
 
     // Variation details
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: VariationDetailsPayloadMutator },
@@ -159,34 +169,36 @@ export function provideEmpVariationRegulatorTaskServices(): EnvironmentProviders
 
 export function provideEmpVariationRegulatorSideEffects(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    { provide: SIDE_EFFECTS, multi: true, useClass: AbbreviationsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: AdditionalDocumentsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: ManagementProceduresSummarySideEffect },
     { provide: SIDE_EFFECTS, multi: true, useClass: OperatorDetailsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: ControlActivitiesSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: DataGapsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: GreenhouseGasSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionSourcesSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: ListOfShipsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: VariationDetailsSummarySideEffect },
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.FUELS_AND_EMISSIONS_FORM),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_FORM),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_LIST),
+    { provide: SIDE_EFFECTS, multi: true, useClass: ListOfShipsSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionSourcesSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: GreenhouseGasSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: DataGapsSummarySideEffect },
+    ...provideMandateSideEffects(),
+    { provide: SIDE_EFFECTS, multi: true, useClass: ManagementProceduresSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: ControlActivitiesSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: AbbreviationsSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: AdditionalDocumentsSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: VariationDetailsSummarySideEffect },
   ]);
 }
 
 export function provideEmpVariationRegulatorStepFlowManagers(): EnvironmentProviders {
   return makeEnvironmentProviders([
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OperatorDetailsVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourcesVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: GreenhouseGasVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: DataGapsVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ManagementProceduresVariationRegulatorFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ControlActivitiesVariationRegulatorFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: AbbreviationsVariationRegulatorFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: AdditionalDocumentsVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ManagementProceduresVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OperatorDetailsVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ControlActivitiesVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: DataGapsVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: GreenhouseGasVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourcesVariationRegulatorFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsVariationRegulatorFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: VariationRegulatorDetailsFlowManager },
   ]);
 }

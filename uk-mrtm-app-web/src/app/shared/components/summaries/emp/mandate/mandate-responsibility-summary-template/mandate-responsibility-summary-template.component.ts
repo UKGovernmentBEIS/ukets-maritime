@@ -12,7 +12,7 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { NotProvidedDirective } from '@shared/directives';
+import { HtmlDiffDirective } from '@shared/directives';
 import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
@@ -25,17 +25,17 @@ import { BooleanToTextPipe } from '@shared/pipes';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
     LinkDirective,
-    NotProvidedDirective,
     BooleanToTextPipe,
     RouterLink,
+    HtmlDiffDirective,
   ],
   templateUrl: './mandate-responsibility-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateResponsibilitySummaryTemplateComponent {
-  public readonly wizardStepPrefix: InputSignal<string> = input<string>('.');
-  public readonly data: InputSignal<Pick<EmpMandate, 'exist'>> = input<Pick<EmpMandate, 'exist'>>();
-  public readonly isEditable: InputSignal<boolean> = input<boolean>(false);
-  public readonly queryParams: InputSignal<Params> = input<Params>();
-  public readonly wizardStep: InputSignal<Record<string, string>> = input<Record<string, string>>();
+  mandate: InputSignal<EmpMandate> = input.required<EmpMandate>();
+  originalMandate: InputSignal<EmpMandate> = input<EmpMandate>();
+  isEditable: InputSignal<boolean> = input<boolean>(false);
+  queryParams: InputSignal<Params> = input<Params>();
+  wizardStep: InputSignal<Record<string, string>> = input<Record<string, string>>();
 }

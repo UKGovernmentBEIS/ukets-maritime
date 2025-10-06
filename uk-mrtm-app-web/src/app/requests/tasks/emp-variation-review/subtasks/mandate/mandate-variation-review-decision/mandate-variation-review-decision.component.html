@@ -1,0 +1,18 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  [heading]="mandateMap.decision.title"
+  [caption]="mandateMap.title"
+  (formSubmit)="onSubmit()"
+  [hideSubmit]="!isEditable"
+  [showReturnLink]="true">
+  <mrtm-mandate-summary-template
+    [mandate]="mandate"
+    [originalMandate]="originalMandate"
+    [operatorName]="operatorName"
+    [originalOperatorName]="originalOperatorName"
+    [mandateMap]="mandateMap"
+    [wizardStep]="wizardStep"
+    [isEditable]="isEditable"
+    [queryParams]="{ change: true }" />
+  <mrtm-review-decision />
+</mrtm-wizard-step>

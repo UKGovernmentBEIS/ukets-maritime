@@ -1,57 +1,45 @@
-<govuk-table
-  [columns]="columns()"
-  [data]="page()"
-  emptyTableText="No items to display"
-  [rowCssClasses]="onDefineRowAdditionalStyle">
+<govuk-table id="registeredOwners" [columns]="columns" [data]="page()" emptyTableText="No items to display">
   <ng-template let-column="column" let-row="row">
     @switch (column.field) {
       @case ('name') {
-        <p class="govuk-!-margin-0" [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] }}</p>
-        <span class="govuk-hint">{{ row['imoNumber'] }}</span>
+        <p class="govuk-!-margin-0" htmlDiff [current]="row?.current?.name" [previous]="row?.previous?.name"></p>
+        <span
+          class="govuk-hint"
+          htmlDiff
+          [current]="row?.current?.imoNumber"
+          [previous]="row?.previous?.imoNumber"></span>
       }
       @case ('contactName') {
-        <p class="govuk-!-margin-0" [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] }}</p>
-        <span class="govuk-hint">{{ row['email'] }}</span>
+        <p
+          class="govuk-!-margin-0"
+          htmlDiff
+          [current]="row?.current?.contactName"
+          [previous]="row?.previous?.contactName"></p>
+        <span class="govuk-hint" htmlDiff [current]="row?.current?.email" [previous]="row?.previous?.email"></span>
       }
       @case ('ships') {
-        @if (row[column.field]; as ships) {
-          <ul class="govuk-list govuk-list--number">
-            @for (
-              ship of ships.slice(
-                0,
-                ships.length > 2 && !this.expandedAssociatedShips.has(row?.uniqueIdentifier) ? 2 : this.ships.length
-              );
-              track ship.imoNumber
-            ) {
-              <li [class.govuk-!-font-weight-bold]="row.needsReview">{{ ship.name }} (IMO: {{ ship.imoNumber }})</li>
-            }
-          </ul>
-          @if (ships.length > 2) {
-            <a
-              class="govuk-link--no-visited-state"
-              routerLink="."
-              govukLink
-              (click)="onToggleAssociatedShips($event, row?.uniqueIdentifier)">
-              {{ expandedAssociatedShips.has(row?.uniqueIdentifier) ? 'View less' : 'View more' }}
-            </a>
-          }
-        }
+        <mrtm-summary-registered-owner-ship-details
+          [registeredOwnerUniqueIdentifier]="row?.current?.uniqueIdentifier"
+          [showDiff]="true"
+          [shipDetails]="row?.current?.ships"
+          [originalShipDetails]="row?.previous?.ships" />
       }
       @case ('effectiveDate') {
-        <span [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] | govukDate }}</span>
-      }
-      @case ('actions') {
-        <div class="control-row justify-content-end">
-          <a class="govuk-link--no-visited-state" (click)="onEdit(row)" routerLink="." govukLink>Change</a>
-          <a class="govuk-link--no-visited-state" (click)="onDelete(row)" routerLink="." govukLink>Remove</a>
-        </div>
+        <span
+          htmlDiff
+          [current]="row?.current?.effectiveDate | govukDate"
+          [previous]="row?.previous?.effectiveDate | govukDate"></span>
       }
       @default {
-        {{ row[column.field] }}
+        <span htmlDiff [current]="row?.current?.[column.field]" [previous]="row?.previous?.[column.field]"></span>
       }
     }
   </ng-template>
 </govuk-table>
 @if (totalItems() > pageSize) {
-  <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize" (currentPageChange)="onPageChange($event)" />
+  <govuk-pagination
+    fragment="registeredOwners"
+    [count]="totalItems()"
+    [pageSize]="pageSize"
+    (currentPageChange)="onPageChange($event)" />
 }

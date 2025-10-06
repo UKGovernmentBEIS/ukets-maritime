@@ -22,6 +22,9 @@ public class MeasurementDescription {
     @Size(max = 250)
     private String name;
 
+    @Size(max = 10000)
+    private String technicalDescription;
+
     @Builder.Default
     @NotEmpty
     @JsonDeserialize(as = LinkedHashSet.class)

@@ -135,7 +135,9 @@ export class UploadShipsComponent {
         .saveSubtask(EMISSIONS_SUB_TASK, UPLOAD_SHIPS_STEP, this.activatedRoute, this.listOfShips())
         .subscribe(() => {
           this.notificationBannerStore.setSuccessMessages([
-            'The ships and emission details file has been replaced successfully.',
+            this.showConfirmation
+              ? 'The ships and emission details file has been replaced successfully.'
+              : 'The ships and emission details file has been uploaded successfully.',
           ]);
         });
     }

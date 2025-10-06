@@ -4,33 +4,53 @@
   [heading]="wizardMap.responsibilityDeclaration.title"
   (formSubmit)="onSubmit()"
   submitText="Confirm and continue">
-  <p class="govuk-body govuk-!-width-three-quarters">
-    I declare that the information I have provided is accurate and complete.
+  <p class="govuk-body">
+    {{ operatorName() }} declares that, in relation to each ship included in the list of ships subject to delegated
+    responsibility:
   </p>
-  <p class="govuk-body govuk-!-width-three-quarters">
-    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's
-    standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a
-    type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-    remaining essentially unchanged.
-  </p>
-  <p class="govuk-body govuk-!-width-three-quarters">
-    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more
-    recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-  </p>
+  <ol class="declaration-info-list govuk-!-margin-0" type="a">
+    <li class="govuk-body govuk-!-margin-0">
+      it is the ISM Company which has assumed the responsibility for the operation of the ship from its registered owner
+      and who, on assuming such responsibility, has agreed to take over all duties and responsibility imposed by the ISM
+      Code;
+    </li>
+    <li class="govuk-body govuk-!-margin-0">
+      it has entered into a legally binding written agreement with the registered owner of the ship to comply with the
+      obligations of the maritime operator under the Greenhouse Gas Emissions Trading Scheme Order 2020 Order (the
+      Order) in respect of the ship;
+    </li>
+    <li class="govuk-body govuk-!-margin-0">
+      it will notify the regulator in writing of any change to the agreement referred to in paragraph (b) that affects
+      its responsibility for compliance with the obligations under the Order in respect of the ship within 14 days of
+      the change;
+    </li>
+    <li class="govuk-body govuk-!-margin-0">
+      it accepts full legal liability under the Order arising from any failure to comply with the obligations of the
+      maritime operator under the Order in respect of the ship;
+    </li>
+    <li class="govuk-body">
+      following a written request, it will provide to the regulator a copy of the agreement referred to in paragraph (b)
+      together with any related documents required to satisfy the regulator of the existence and nature of the
+      agreement.
+    </li>
+  </ol>
 
   <details class="govuk-details" data-module="govuk-details">
     <summary class="govuk-details__summary">
-      <span class="govuk-details__summary-text">View the provided Registered owners</span>
+      <span class="govuk-details__summary-text">List of ships subject to delegated responsibility</span>
     </summary>
-    <h3 class="govuk-heading-m">Registered owners</h3>
-    <mrtm-mandate-registered-owners-list-summary-template [data]="registeredOwners()" />
+    <p class="govuk-body govuk-!-margin-2">The ships subject to this declaration are:</p>
+    <mrtm-mandate-registered-owners-list-summary-template
+      class="govuk-!-margin-2 govuk-!-display-block"
+      [registeredOwnerItems]="registeredOwners()" />
   </details>
 
   <div formControlName="responsibilityDeclaration" govuk-checkboxes>
     <govuk-checkbox [value]="true">
       <ng-container govukLabel>
         <strong>
-          I confirm that all submitted details are true and correct, and I take full responsibility for their accuracy
+          I certify that I am authorised by {{ operatorName() }} to make this declaration on its behalf and believe that
+          the information provided is true.
         </strong>
       </ng-container>
     </govuk-checkbox>

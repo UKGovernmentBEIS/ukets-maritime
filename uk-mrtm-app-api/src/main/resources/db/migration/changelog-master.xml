@@ -46,6 +46,9 @@
     
     <include file="db/migration/changelogs/camunda_schema.xml" />
 
+    <include file="db/migration/changelogs/flowable_create_schema.xml" />
+    <include file="db/migration/changelogs/flowable_ddl.xml" />
+
     <include file="db/migration/changelogs/mi_reports_ddl.xml" />
     <include file="db/migration/changelogs/mi_reports_views_ddl.xml" />
 

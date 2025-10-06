@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceR
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Map;
 import java.util.UUID;
@@ -31,7 +32,7 @@ class NonComplianceCivilPenaltyPeerReviewInitializerTest {
         UUID civilPenalty = UUID.randomUUID();
         Map<UUID, String> attachments = Map.of(UUID.randomUUID(), "filename.txt");
         Map<String, String> sectionsCompleted = Map.of("B", "COMPLETED");
-        String penaltyAmount = "1";
+        BigDecimal penaltyAmount = BigDecimal.ONE;
         LocalDate civilPenaltyDueDate = LocalDate.now();
 
         final Request request = Request.builder()

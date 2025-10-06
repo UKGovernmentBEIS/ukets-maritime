@@ -1,26 +1,15 @@
-@if (data(); as data) {
-  <dl govuk-summary-list>
-    <div govukSummaryListRow>
-      <dt class="govuk-!-width-one-quarter" govukSummaryListRowKey>
-        Declaration of delegation of UK ETS responsibility
-      </dt>
-      <dd
-        govukSummaryListRowValue
-        [notProvided]="
-          data.responsibilityDeclaration
-            ? 'I confirm that all submitted details are true and correct, and I take full responsibility for their accuracy'
-            : undefined
-        "></dd>
-      @if (isEditable()) {
-        <dd govukSummaryListRowActions>
-          <a
-            govukLink
-            [routerLink]="[wizardStepPrefix(), wizardStep()?.RESPONSIBILITY_DECLARATION]"
-            [queryParams]="queryParams()">
-            Change
-          </a>
-        </dd>
-      }
-    </div>
-  </dl>
-}
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Declaration of delegation of UK ETS responsibility</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="mandate() | responsibilityDeclaration: operatorName()"
+      [previous]="originalMandate() | responsibilityDeclaration: originalOperatorName()"></dd>
+    @if (isEditable()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep()?.RESPONSIBILITY_DECLARATION]" [queryParams]="queryParams()">Change</a>
+      </dd>
+    }
+  </div>
+</dl>

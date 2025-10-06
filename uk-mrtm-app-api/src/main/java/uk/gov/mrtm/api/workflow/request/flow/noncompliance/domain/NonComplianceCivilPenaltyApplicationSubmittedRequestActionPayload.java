@@ -3,7 +3,9 @@ package uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,6 +16,7 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,9 +31,11 @@ public class NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload e
 
     @NotNull
     private UUID civilPenalty;
-    
-    @Size(max = 255)
-    private String penaltyAmount;
+
+    @NotNull
+    @Positive
+    @Digits(integer = Integer.MAX_VALUE, fraction = 2)
+    private BigDecimal penaltyAmount;
     
     private LocalDate dueDate;
     

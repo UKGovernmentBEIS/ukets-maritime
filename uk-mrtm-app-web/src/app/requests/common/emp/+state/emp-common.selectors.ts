@@ -380,7 +380,15 @@ const selectRegisteredOwnerShipDetailByImoNumber = (
 const selectIsmShipImoNumbers: StateSelector<
   RequestTaskState,
   Set<ShipDetails['imoNumber']>
-> = createDescendingSelector(selectShips, (ships) => new Set(ships.map((ship) => ship?.details?.imoNumber)));
+> = createDescendingSelector(
+  selectShips,
+  (ships) =>
+    new Set(
+      ships
+        .filter((ship) => ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY')
+        .map((ship) => ship?.details?.imoNumber),
+    ),
+);
 
 export const empCommonQuery = {
   selectPayload,

@@ -23,4 +23,5 @@
     <include file="mi_reports.xml" relativeToChangelogFile="true" />
     <include file="changelog_payload_modifications.xml" relativeToChangelogFile="true"/>
     <include file="changelog_request_payment_model.xml" relativeToChangelogFile="true"/>
+    <include file="changelog_migrate_from_camunda_to_flowable.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

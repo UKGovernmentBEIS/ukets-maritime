@@ -4,36 +4,14 @@ import { EmissionsMonitoringPlan } from '@mrtm/api';
 
 import { createAggregateSelector, createDescendingSelector, RequestTaskState, StateSelector } from '@netz/common/store';
 
-import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
 import { empCommonQuery } from '@requests/common/emp/+state/emp-common.selectors';
 import { EmpReviewTaskPayload } from '@requests/common/emp/emp.types';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { ReviewAmendDecisionDTO } from '@requests/common/emp/return-for-amends';
-import { ABBREVIATIONS_SUB_TASK } from '@requests/common/emp/subtasks/abbreviations/abbreviations.helper';
-import { CONTROL_ACTIVITIES_SUB_TASK } from '@requests/common/emp/subtasks/control-activities/control-activities.helpers';
-import { DATA_GAPS_SUB_TASK } from '@requests/common/emp/subtasks/data-gaps/data-gaps.helper';
-import { EMISSION_SOURCES_SUB_TASK } from '@requests/common/emp/subtasks/emission-sources/emission-sources.helper';
-import { GREENHOUSE_GAS_SUB_TASK } from '@requests/common/emp/subtasks/greenhouse-gas/greenhouse-gas.helper';
-import { MANAGEMENT_PROCEDURES_SUB_TASK } from '@requests/common/emp/subtasks/management-procedures/management-procedures.helper';
-import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate/mandate.helper';
 import { OVERALL_DECISION_SUB_TASK } from '@requests/common/emp/subtasks/overall-decision/overall-decision.helpers';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils/subtask-review-group.map';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents/additional-documents.helper';
 import { EmpVariationReviewDecisionDto, ReviewDecisionDto, ReviewDecisionUnion } from '@shared/types';
-
-const allTasks = [
-  ABBREVIATIONS_SUB_TASK,
-  ADDITIONAL_DOCUMENTS_SUB_TASK,
-  CONTROL_ACTIVITIES_SUB_TASK,
-  DATA_GAPS_SUB_TASK,
-  EMISSION_SOURCES_SUB_TASK,
-  EMISSIONS_SUB_TASK,
-  GREENHOUSE_GAS_SUB_TASK,
-  MANAGEMENT_PROCEDURES_SUB_TASK,
-  OPERATOR_DETAILS_SUB_TASK,
-  MANDATE_SUB_TASK,
-];
 
 const selectReviewGroupDecisions: StateSelector<RequestTaskState, { [key: string]: ReviewDecisionUnion }> =
   createDescendingSelector(
@@ -94,7 +72,7 @@ const selectReviewAttachments: StateSelector<RequestTaskState, EmpReviewTaskPayl
 const selectIsEmpReviewSectionCompleted: StateSelector<RequestTaskState, boolean> = createDescendingSelector(
   empCommonQuery.selectEmpSectionsCompleted,
   (completed) => {
-    return allTasks.every((task) =>
+    return EMP_SUBTASKS.every((task) =>
       [TaskItemStatus.OPERATOR_AMENDS_NEEDED, TaskItemStatus.ACCEPTED].includes(completed?.[task] as TaskItemStatus),
     );
   },
@@ -104,7 +82,7 @@ const selectAreAllSectionsAccepted: StateSelector<RequestTaskState, boolean> = c
   empCommonQuery.selectEmpSectionsCompleted,
   selectReviewGroupDecisions,
   (completed, reviewGroups) =>
-    allTasks.every((task) => {
+    EMP_SUBTASKS.every((task) => {
       const status = completed?.[task] ?? reviewGroups?.[subtaskReviewGroupMap[task]]?.type;
       return (status as TaskItemStatus) === TaskItemStatus.ACCEPTED;
     }),
@@ -220,10 +198,10 @@ const selectEmpReviewDecisionForAmendsDTO: StateSelector<
 
 const selectSubtaskToCompletedMap: StateSelector<RequestTaskState, { [subtask: string]: boolean }> =
   createAggregateSelector(
-    allTasks.map((subtask) => selectIsSubtaskCompleted(subtask as keyof EmissionsMonitoringPlan)),
+    EMP_SUBTASKS.map((subtask) => selectIsSubtaskCompleted(subtask as keyof EmissionsMonitoringPlan)),
     (...completedResults) => {
       const subtaskToCompletedMap = {};
-      allTasks.forEach((subtask, index) => (subtaskToCompletedMap[subtask] = completedResults[index]));
+      EMP_SUBTASKS.forEach((subtask, index) => (subtaskToCompletedMap[subtask] = completedResults[index]));
       return subtaskToCompletedMap;
     },
   );
@@ -232,7 +210,7 @@ const selectAnySubtaskNeedsAmend: StateSelector<RequestTaskState, boolean> = cre
   selectReviewGroupDecisions,
   selectSubtaskToCompletedMap,
   (decisions, subtaskToCompletedMap) => {
-    for (const subtask of allTasks) {
+    for (const subtask of EMP_SUBTASKS) {
       if (
         (subtaskToCompletedMap?.[subtask] && decisions?.[subtaskReviewGroupMap[subtask]]?.type) ===
         TaskItemStatus.OPERATOR_AMENDS_NEEDED

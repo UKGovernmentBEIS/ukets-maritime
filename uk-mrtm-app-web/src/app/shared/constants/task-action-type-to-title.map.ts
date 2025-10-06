@@ -124,7 +124,7 @@ export const taskActionTypeToTitleMap: Record<
   AER_WAIT_FOR_REVIEW: 'Annual emissions report sent to regulator for review',
   AER_APPLICATION_AMENDS_SUBMIT: 'Amend annual emissions report',
   AER_AMEND_WAIT_FOR_VERIFICATION: 'Annual emissions report sent to verifier',
-  AER_AMEND_APPLICATION_VERIFICATION_SUBMIT: 'Verify amend annual emissions report',
+  AER_AMEND_APPLICATION_VERIFICATION_SUBMIT: 'Verify annual emissions report',
   AER_APPLICATION_REVIEW_SKIPPED: 'Complete annual emissions report completed without review',
   AER_APPLICATION_COMPLETED: 'Complete annual emissions report reviewed',
   AER_APPLICATION_AMENDS_SUBMITTED: 'Complete annual emissions report amends submitted to regulator',

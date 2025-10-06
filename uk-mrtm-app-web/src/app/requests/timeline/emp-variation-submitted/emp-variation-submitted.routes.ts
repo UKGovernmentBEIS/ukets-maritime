@@ -10,6 +10,7 @@ import {
   greenhouseGasMap,
   identifyMaritimeOperatorMap,
   managementProceduresMap,
+  mandateMap,
 } from '@requests/common/emp/subtasks/subtask-list.map';
 
 export const EMP_VARIATION_SUBMITTED_ROUTES: Routes = [
@@ -41,6 +42,15 @@ export const EMP_VARIATION_SUBMITTED_ROUTES: Routes = [
         loadComponent: () =>
           import('@requests/timeline/emp-variation-submitted/subtasks/emp-var-submitted-data-gaps').then(
             (c) => c.EmpVarSubmittedDataGapsComponent,
+          ),
+      },
+      {
+        path: 'mandate',
+        title: mandateMap.title,
+        data: { breadcrumb: false, backlink: '../../' },
+        loadComponent: () =>
+          import('@requests/timeline/emp-variation-submitted/subtasks/emp-var-submitted-mandate').then(
+            (c) => c.EmpVarSubmittedMandateComponent,
           ),
       },
       {

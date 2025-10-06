@@ -24,7 +24,7 @@ describe('VariationDetailsSummaryTemplateComponent', () => {
       reason: 'Test reason',
       changes: [
         'ADD_NEW_FUELS_OR_EMISSION_SOURCES',
-        'CHANGE_COMPANY_NAME_OR_REGISTERED_ADDRESS',
+        'CHANGE_EMP_HOLDER_NAME_OR_ADDRESS',
         'OTHER_NON_SIGNIFICANT',
         'OTHER_NON_SIGNIFICANT',
       ],
@@ -43,7 +43,7 @@ describe('VariationDetailsSummaryTemplateComponent', () => {
   it('should display all HTML elements', () => {
     expect(page.summariesContents).toEqual([
       'Significant changes',
-      'Addition of new fuels or emissions sources, including sustainable fuels  Changing the company name or registered office address',
+      'Addition of new fuels or emissions sources, including sustainable fuels  Changing the EMP holder name or address',
       'Non significant changes',
       'Other  : Test otherNonSignificantChangeReason',
       'Explain what you are changing and the reasons for the changes',

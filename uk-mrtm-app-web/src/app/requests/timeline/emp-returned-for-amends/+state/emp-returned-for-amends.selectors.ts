@@ -8,6 +8,7 @@ import {
 } from '@netz/common/store';
 
 import { timelineCommonQuery, timelineUtils } from '@requests/common';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { EmpReturnedForAmendsPayload } from '@requests/timeline/emp-returned-for-amends/emp-returned-for-amends.types';
 import { ReviewDecisionDto, ReviewDecisionUnion } from '@shared/types';
@@ -35,24 +36,12 @@ const selectAmendsDecisionsDTO: StateSelector<
   timelineCommonQuery.selectDownloadUrl,
   selectReviewGroupDecisions,
   (attachments, downloadUrl, decisions) => {
-    const sections: Array<keyof EmissionsMonitoringPlan> = [
-      'operatorDetails',
-      'emissions',
-      'sources',
-      'greenhouseGas',
-      'dataGaps',
-      'managementProcedures',
-      'controlActivities',
-      'abbreviations',
-      'additionalDocuments',
-    ];
-
     const result: Array<{
       subtask: keyof EmissionsMonitoringPlan;
       decision: ReviewDecisionDto;
     }> = [];
 
-    for (const section of sections) {
+    for (const section of EMP_SUBTASKS) {
       const group = subtaskReviewGroupMap[section];
       const reviewGroupDecision = decisions?.[group];
 

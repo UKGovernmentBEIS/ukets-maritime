@@ -75,7 +75,7 @@ const selectIsChangesRequestedForSection = (
 ): StateSelector<RequestTaskState, boolean> =>
   createDescendingSelector(selectEmpVariationDetails, (details) => {
     const empSectionChangesMap: Partial<Record<keyof EmissionsMonitoringPlan, Array<string>>> = {
-      operatorDetails: ['CHANGE_COMPANY_NAME_OR_REGISTERED_ADDRESS'],
+      operatorDetails: ['CHANGE_EMP_HOLDER_NAME_OR_ADDRESS'],
       emissions: [
         'ADD_NEW_SHIP',
         'REMOVING_SHIP',
@@ -84,6 +84,7 @@ const selectIsChangesRequestedForSection = (
         'USE_OF_CARBON',
         'CHANGE_MONITORING_METHOD',
       ],
+      mandate: ['UPDATE_DELEGATED_RESPONSIBILITY'],
       sources: ['CHANGE_EMISSION_FACTOR_VALUES'],
     };
 

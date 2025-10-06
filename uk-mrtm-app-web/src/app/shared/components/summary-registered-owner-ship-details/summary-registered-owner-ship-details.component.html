@@ -1,0 +1,21 @@
+@if (combinedShipDetails(); as ships) {
+  <ul class="govuk-list govuk-list--number">
+    @for (ship of ships.slice(0, ships.length > 2 && !isExpanded ? 2 : this.ships.length); track $index) {
+      @if (hasHtmlDiff && showDiff()) {
+        <li
+          htmlDiff
+          [current]="ship?.current | registeredOwnerShipDetails"
+          [previous]="ship?.previous | registeredOwnerShipDetails"></li>
+      } @else {
+        <li [class.govuk-!-font-weight-bold]="needsReview()">
+          {{ ship?.current | registeredOwnerShipDetails }}
+        </li>
+      }
+    }
+  </ul>
+  @if (ships.length > 2) {
+    <a govukLink class="govuk-link--no-visited-state" href="#" (click)="onToggleAssociatedShips($event)">
+      {{ isExpanded ? 'View less' : 'View more' }}
+    </a>
+  }
+}

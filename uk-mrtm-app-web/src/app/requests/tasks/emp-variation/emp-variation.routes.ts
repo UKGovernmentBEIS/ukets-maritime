@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
-import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import { SEND_VARIATION_SUCCESS_COMPONENT } from '@requests/common/emp/subtasks/send-variation';
 import { SubmitSendVariationSuccessComponent } from '@requests/tasks/emp-variation/components/submit-send-variation-success';
 import {
@@ -35,17 +34,25 @@ export const EMP_VARIATION_ROUTES: Routes = [
           import('@requests/common/emp/subtasks/operator-details').then((r) => r.OPERATOR_DETAILS_ROUTES),
       },
       {
+        path: 'emissions',
+        loadChildren: () => import('@requests/common/emp/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
+      },
+      {
+        path: 'emission-sources',
+        loadChildren: () =>
+          import('@requests/common/emp/subtasks/emission-sources').then((r) => r.EMISSION_SOURCE_ROUTES),
+      },
+      {
+        path: 'greenhouse-gas',
+        loadChildren: () => import('@requests/common/emp/subtasks/greenhouse-gas').then((r) => r.GREENHOUSE_GAS_ROUTES),
+      },
+      {
         path: 'data-gaps',
         loadChildren: () => import('@requests/common/emp/subtasks/data-gaps').then((r) => r.DATA_GAPS_ROUTES),
       },
       {
-        path: 'abbreviations',
-        loadChildren: () => import('@requests/common/emp/subtasks/abbreviations').then((r) => r.ABBREVIATIONS_ROUTES),
-      },
-      {
-        path: 'additional-documents',
-        loadChildren: () =>
-          import('@requests/common/emp/subtasks/additional-documents').then((r) => r.ADDITIONAL_DOCUMENTS_ROUTES),
+        path: 'mandate',
+        loadChildren: () => import('@requests/common/emp/subtasks/mandate').then((r) => r.MANDATE_ROUTES),
       },
       {
         path: 'management-procedures',
@@ -58,21 +65,13 @@ export const EMP_VARIATION_ROUTES: Routes = [
           import('@requests/common/emp/subtasks/control-activities').then((r) => r.CONTROL_ACTIVITY_ROUTES),
       },
       {
-        path: 'greenhouse-gas',
-        loadChildren: () => import('@requests/common/emp/subtasks/greenhouse-gas').then((r) => r.GREENHOUSE_GAS_ROUTES),
+        path: 'abbreviations',
+        loadChildren: () => import('@requests/common/emp/subtasks/abbreviations').then((r) => r.ABBREVIATIONS_ROUTES),
       },
       {
-        path: 'emission-sources',
+        path: 'additional-documents',
         loadChildren: () =>
-          import('@requests/common/emp/subtasks/emission-sources').then((r) => r.EMISSION_SOURCE_ROUTES),
-      },
-      {
-        path: 'emissions',
-        loadChildren: () => import('@requests/common/emp/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
-      },
-      {
-        path: MANDATE_SUB_TASK,
-        loadChildren: () => import('@requests/common/emp/subtasks/mandate').then((r) => r.MANDATE_ROUTES),
+          import('@requests/common/emp/subtasks/additional-documents').then((r) => r.ADDITIONAL_DOCUMENTS_ROUTES),
       },
       {
         path: 'send-variation',

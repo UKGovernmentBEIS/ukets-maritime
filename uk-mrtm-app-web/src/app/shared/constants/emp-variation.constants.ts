@@ -18,8 +18,8 @@ export const EMP_VARIATION_SIGNIFICANT_CHANGES_SELECT_OPTIONS: GovukSelectOption
     text: 'Changing the emission factor values',
   },
   {
-    value: 'CHANGE_COMPANY_NAME_OR_REGISTERED_ADDRESS',
-    text: 'Changing the company name or registered office address',
+    value: 'CHANGE_EMP_HOLDER_NAME_OR_ADDRESS',
+    text: 'Changing the EMP holder name or address',
   },
   {
     value: 'USE_OF_EXEMPTION',
@@ -28,6 +28,10 @@ export const EMP_VARIATION_SIGNIFICANT_CHANGES_SELECT_OPTIONS: GovukSelectOption
   {
     value: 'USE_OF_CARBON',
     text: 'Use of Carbon Capture and Storage',
+  },
+  {
+    value: 'UPDATE_DELEGATED_RESPONSIBILITY',
+    text: 'Updating the Delegated responsibility details',
   },
   {
     value: 'OTHER_SIGNIFICANT',

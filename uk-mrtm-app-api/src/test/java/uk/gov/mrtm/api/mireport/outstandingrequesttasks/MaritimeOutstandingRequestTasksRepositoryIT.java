@@ -11,7 +11,6 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
 import uk.gov.mrtm.api.account.domain.MrtmEmissionTradingScheme;
-import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
 import uk.gov.mrtm.api.common.domain.AddressState;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
@@ -21,6 +20,7 @@ import uk.gov.netz.api.common.AbstractContainerBaseTest;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.mireport.outstandingrequesttasks.OutstandingRegulatorRequestTasksMiReportParams;
 import uk.gov.netz.api.mireport.outstandingrequesttasks.OutstandingRequestTask;
+import uk.gov.netz.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
@@ -179,10 +179,11 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
     private Request createRequest(Account account, String requestId, String status, RequestType requestType) {
 
         Request request = Request.builder()
-                .id(requestId)
-                .type(requestType)
-                .status(status)
-                .build();
+            .id(requestId)
+            .type(requestType)
+            .engine(WorkflowEngineType.FLOWABLE)
+            .status(status)
+            .build();
         RequestResource accountRequestResource = RequestResource.builder().request(request).resourceId(String.valueOf(account.getId())).resourceType(ResourceType.ACCOUNT).build();
         RequestResource caRequestResource = RequestResource.builder().request(request).resourceId(account.getCompetentAuthority().name()).resourceType(ResourceType.CA).build();
         request.getRequestResources().add(accountRequestResource);

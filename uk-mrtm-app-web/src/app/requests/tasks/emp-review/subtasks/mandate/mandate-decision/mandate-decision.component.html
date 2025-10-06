@@ -5,41 +5,12 @@
   (formSubmit)="onSubmit()"
   [hideSubmit]="!isEditable()"
   [showReturnLink]="true">
-  @if (mandate(); as mandate) {
-    <mrtm-mandate-responsibility-summary-template
-      wizardStepPrefix="../"
-      [wizardStep]="wizardStep"
-      [data]="mandate"
-      [queryParams]="{ change: true }"
-      [isEditable]="isEditable()" />
-
-    @if (mandate.exist) {
-      <div class="govuk-grid-row">
-        <div class="govuk-grid-column-two-thirds">
-          <h3 class="govuk-heading-m">{{ wizardMap.registeredOwners.title }}</h3>
-        </div>
-        @if (isEditable()) {
-          <div class="govuk-grid-column-one-third">
-            <div class="govuk-body float-right">
-              <a
-                class="govuk-link--no-visited-state"
-                [routerLink]="['../', wizardStep.REGISTERED_OWNERS]"
-                [queryParams]="{ change: true }"
-                govukLink>
-                Change
-              </a>
-            </div>
-          </div>
-        }
-      </div>
-      <mrtm-mandate-registered-owners-list-summary-template [data]="mandate.registeredOwners" />
-      <mrtm-mandate-responsibility-declaration-summary-template
-        wizardStepPrefix="../"
-        [wizardStep]="wizardStep"
-        [data]="mandate"
-        [queryParams]="{ change: true }"
-        [isEditable]="isEditable()" />
-    }
-  }
+  <mrtm-mandate-summary-template
+    [mandate]="mandate()"
+    [mandateMap]="mandateMap"
+    [operatorName]="operatorName()"
+    [wizardStep]="wizardStep"
+    [queryParams]="{ change: true }"
+    [isEditable]="isEditable()" />
   <mrtm-review-decision />
 </mrtm-wizard-step>

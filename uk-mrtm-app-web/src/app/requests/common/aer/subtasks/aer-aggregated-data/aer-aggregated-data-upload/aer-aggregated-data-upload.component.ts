@@ -129,7 +129,11 @@ export class AerAggregatedDataUploadComponent {
           this.shipEmissionsList(),
         )
         .subscribe(() => {
-          this.notificationBannerStore.setSuccessMessages(['The aggregated data file has been replaced successfully.']);
+          this.notificationBannerStore.setSuccessMessages([
+            this.showConfirmation
+              ? 'The aggregated data file has been replaced successfully.'
+              : 'The aggregated data file has been uploaded successfully.',
+          ]);
         });
     }
   }

@@ -63,7 +63,7 @@ import {
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
   MANDATE_SUB_TASK,
-  MandateFlowManager,
+  MandateReviewFlowManager,
   provideMandatePayloadMutators,
 } from '@requests/common/emp/subtasks/mandate';
 import { MandateSaveSideEffect } from '@requests/common/emp/subtasks/mandate/side-effects';
@@ -193,6 +193,6 @@ export function provideEmpReviewStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourcesReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsReviewFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OverallDecisionFlowManager },
-    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateReviewFlowManager },
   ]);
 }

@@ -42,21 +42,33 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
           ),
       },
       {
+        path: 'emissions',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-regulator/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
+      },
+      {
+        path: 'emission-sources',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-regulator/subtasks/emission-sources').then(
+            (r) => r.EMISSION_SOURCE_ROUTES,
+          ),
+      },
+      {
+        path: 'greenhouse-gas',
+        loadChildren: () =>
+          import('@requests/tasks/emp-variation-regulator/subtasks/greenhouse-gas').then(
+            (r) => r.GREENHOUSE_GAS_ROUTES,
+          ),
+      },
+      {
         path: 'data-gaps',
         loadChildren: () =>
           import('@requests/tasks/emp-variation-regulator/subtasks/data-gaps').then((r) => r.DATA_GAPS_ROUTES),
       },
       {
-        path: 'abbreviations',
+        path: 'mandate',
         loadChildren: () =>
-          import('@requests/tasks/emp-variation-regulator/subtasks/abbreviations').then((r) => r.ABBREVIATIONS_ROUTES),
-      },
-      {
-        path: 'additional-documents',
-        loadChildren: () =>
-          import('@requests/tasks/emp-variation-regulator/subtasks/additional-documents').then(
-            (r) => r.ADDITIONAL_DOCUMENTS_ROUTES,
-          ),
+          import('@requests/tasks/emp-variation-regulator/subtasks/mandate').then((r) => r.MANDATE_ROUTES),
       },
       {
         path: 'management-procedures',
@@ -73,23 +85,16 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
           ),
       },
       {
-        path: 'greenhouse-gas',
+        path: 'abbreviations',
         loadChildren: () =>
-          import('@requests/tasks/emp-variation-regulator/subtasks/greenhouse-gas').then(
-            (r) => r.GREENHOUSE_GAS_ROUTES,
-          ),
+          import('@requests/tasks/emp-variation-regulator/subtasks/abbreviations').then((r) => r.ABBREVIATIONS_ROUTES),
       },
       {
-        path: 'emission-sources',
+        path: 'additional-documents',
         loadChildren: () =>
-          import('@requests/tasks/emp-variation-regulator/subtasks/emission-sources').then(
-            (r) => r.EMISSION_SOURCE_ROUTES,
+          import('@requests/tasks/emp-variation-regulator/subtasks/additional-documents').then(
+            (r) => r.ADDITIONAL_DOCUMENTS_ROUTES,
           ),
-      },
-      {
-        path: 'emissions',
-        loadChildren: () =>
-          import('@requests/tasks/emp-variation-regulator/subtasks/emissions').then((r) => r.EMISSIONS_ROUTES),
       },
       {
         path: 'notify-operator',
@@ -98,10 +103,9 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
         providers: [{ provide: NOTIFY_OPERATOR_SUCCESS_COMPONENT, useValue: EmpVariationRegulatorSuccessComponent }],
         loadChildren: () => import('@requests/common/components/notify-operator').then((r) => r.NOTIFY_OPERATOR_ROUTES),
       },
-
       {
         path: 'peer-review',
-        canActivate: [canActivateEmpVariationRegulatorActions],
+        canActivate: [canActivateEmpVariationRegulatorActions, isPaymentCompleted],
         loadChildren: () =>
           import('@requests/common/components/peer-review').then((r) => r.SEND_FOR_PEER_REVIEW_ROUTES),
       },

@@ -22,6 +22,7 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.mireport.MiReportType;
 import uk.gov.netz.api.mireport.executedactions.ExecutedRequestAction;
 import uk.gov.netz.api.mireport.executedactions.ExecutedRequestActionsMiReportParams;
+import uk.gov.netz.api.workflow.bpmn.WorkflowEngineType;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestAction;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
@@ -184,10 +185,11 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
     private Request createRequest(Account account, String requestId, String status, RequestType requestType) {
 
         Request request = Request.builder()
-                .id(requestId)
-                .type(requestType)
-                .status(status)
-                .build();
+            .id(requestId)
+            .type(requestType)
+            .engine(WorkflowEngineType.FLOWABLE)
+            .status(status)
+            .build();
         RequestResource accountRequestResource = RequestResource.builder().request(request).resourceId(String.valueOf(account.getId())).resourceType(ResourceType.ACCOUNT).build();
         RequestResource caRequestResource = RequestResource.builder().request(request).resourceId(account.getCompetentAuthority().name()).resourceType(ResourceType.CA).build();
         request.getRequestResources().add(accountRequestResource);

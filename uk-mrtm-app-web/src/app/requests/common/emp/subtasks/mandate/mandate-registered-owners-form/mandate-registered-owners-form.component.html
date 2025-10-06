@@ -20,8 +20,11 @@
       mrtm-date-picker
       formControlName="effectiveDate"></div>
   </div>
-  <h3 class="govuk-heading-m">Select ships to associate</h3>
-  <p class="govuk-body">The displayed ships can be selected for this registered owner.</p>
+  <h3 class="govuk-heading-m" id="ismShipsTable">Select ships to associate</h3>
+  <p class="govuk-body">
+    The displayed list of ships includes ships where the nature of responsibility lies with the ISM company, and no
+    registered owner has been added yet.
+  </p>
   <mrtm-multi-select-table
     [columns]="columns"
     [data]="page()"
@@ -33,7 +36,11 @@
     </ng-template>
   </mrtm-multi-select-table>
   @if (totalItems() > pageSize) {
-    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize" (currentPageChange)="onPageChange($event)" />
+    <govuk-pagination
+      fragment="ismShipsTable"
+      [count]="this.totalItems()"
+      [pageSize]="pageSize"
+      (currentPageChange)="onPageChange($event)" />
   }
 </mrtm-wizard-step>
 <div>

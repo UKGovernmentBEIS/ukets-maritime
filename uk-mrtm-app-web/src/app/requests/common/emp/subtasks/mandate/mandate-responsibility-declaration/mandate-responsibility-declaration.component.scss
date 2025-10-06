@@ -1,0 +1,9 @@
+@counter-style declaration-info-list-style {
+  system: extends lower-alpha;
+  suffix: ') ';
+  prefix: '(';
+}
+
+ol.declaration-info-list{
+  list-style: declaration-info-list-style;
+}

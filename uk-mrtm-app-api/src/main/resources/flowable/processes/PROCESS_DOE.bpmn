@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0">
+  <process id="PROCESS_DOE" name="PROCESS_DOE" isExecutable="true">
+    <startEvent id="StartEvent_1" flowable:formFieldValidation="true" />
+    <userTask id="DOE_APPLICATION_SUBMIT" name="Regulator:&#10;Submit Permit DOE Application" flowable:formFieldValidation="true" />
+    <exclusiveGateway id="Gateway_0nfd7yw" name="what is the submit outcome?" />
+    <endEvent id="Event_10ghcxq" />
+    <callActivity id="Activity_199eo9u" name="Peer Review" calledElement="PEER_REVIEW" flowable:calledElementType="key" flowable:businessKey="#{businessKey}" flowable:fallbackToDefaultTenant="false">
+      <extensionElements>
+        <flowable:in source="requestId" target="requestId" />
+        <flowable:in source="requestType" target="requestType" />
+        <flowable:out source="doeSubmitOutcome" target="doeSubmitOutcome" />
+      </extensionElements>
+    </callActivity>
+    <serviceTask id="Activity_0mmb5z3" name="Update Workflow status to CANCELLED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus">
+          <flowable:string>CANCELLED</flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="Activity_039hw1i" name="Update Workflow status to COMPLETED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
+      <extensionElements>
+        <flowable:field name="requestStatus">
+          <flowable:string>COMPLETED</flowable:string>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <sequenceFlow id="Flow_16s9mxb" sourceRef="DOE_APPLICATION_SUBMIT" targetRef="Gateway_0nfd7yw" />
+    <sequenceFlow id="Flow_0fzu2t6" name="cancelled" sourceRef="Gateway_0nfd7yw" targetRef="Activity_0qwbuqc">
+      <conditionExpression xsi:type="tFormalExpression">${doeSubmitOutcome=='CANCELLED'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1cpwl67" sourceRef="Activity_0mmb5z3" targetRef="Event_10ghcxq" />
+    <sequenceFlow id="Flow_118bkvt" sourceRef="Activity_039hw1i" targetRef="Event_10ghcxq" />
+    <sequenceFlow id="Flow_11ui35k" sourceRef="StartEvent_1" targetRef="DOE_APPLICATION_SUBMIT" />
+    <callActivity id="Activity_17ycuan" name="Payment" calledElement="PAYMENT" flowable:calledElementType="key" flowable:businessKey="#{businessKey}" flowable:fallbackToDefaultTenant="false">
+      <extensionElements>
+        <flowable:in source="requestId" target="requestId" />
+        <flowable:in source="requestType" target="requestType" />
+        <flowable:in source="paymentExpirationDate" target="paymentExpirationDate" />
+        <flowable:in sourceExpression="${true}" target="expires" />
+      </extensionElements>
+    </callActivity>
+    <sequenceFlow id="Flow_1d6drom" sourceRef="Activity_17ycuan" targetRef="Activity_039hw1i" />
+    <exclusiveGateway id="Gateway_1m6gng8" name="is Payment needed?" default="Flow_198i208" />
+    <sequenceFlow id="Flow_0cvhoiu" name="yes" sourceRef="Gateway_1m6gng8" targetRef="Activity_17ycuan">
+      <conditionExpression xsi:type="tFormalExpression">${paymentRequired == true}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_198i208" name="no" sourceRef="Gateway_1m6gng8" targetRef="Activity_039hw1i" />
+    <sequenceFlow id="Flow_0kgeva2" name="submitted" sourceRef="Gateway_0nfd7yw" targetRef="Activity_158aud9">
+      <conditionExpression xsi:type="tFormalExpression">${doeSubmitOutcome=='SUBMITTED'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1srddi3" name="peer review" sourceRef="Gateway_0nfd7yw" targetRef="Activity_199eo9u">
+      <conditionExpression xsi:type="tFormalExpression">${doeSubmitOutcome=='PEER_REVIEW_REQUIRED'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0uq4dk6" sourceRef="Activity_158aud9" targetRef="Activity_09krhe4" />
+    <serviceTask id="Activity_158aud9" name="Update reportable emissions" flowable:delegateExpression="#{doeUpdateReportableEmissionsHandlerFlowable}" />
+    <sequenceFlow id="Flow_0kb3w6z" sourceRef="Activity_09krhe4" targetRef="Activity_1opk2i2" />
+    <serviceTask id="Activity_09krhe4" name="Update request metadata" flowable:delegateExpression="#{doePopulateRequestMetadataWithReportableEmissionsHandlerFlowable}" />
+    <sequenceFlow id="Flow_0a4uqr7" sourceRef="Activity_1xna560" targetRef="Gateway_1m6gng8" />
+    <serviceTask id="Activity_1xna560" name="Add submitted request action" flowable:delegateExpression="#{doeAddSubmittedRequestActionHandlerFlowable}" />
+    <sequenceFlow id="Flow_0wkzwjm" sourceRef="Activity_1opk2i2" targetRef="Activity_0xpnecr" />
+    <serviceTask id="Activity_1opk2i2" name="Generate official notice" flowable:delegateExpression="#{doeSubmittedGenerateOfficialNoticeHandlerFlowable}" />
+    <sequenceFlow id="Flow_0tw7jir" sourceRef="Activity_0xpnecr" targetRef="Activity_1xna560" />
+    <serviceTask id="Activity_0xpnecr" name="Send official notice" flowable:delegateExpression="#{doeSubmittedSendOfficialNoticeHandlerFlowable}" />
+    <sequenceFlow id="Flow_08ekpf9" sourceRef="Activity_0qwbuqc" targetRef="Activity_0mmb5z3" />
+    <serviceTask id="Activity_0qwbuqc" name="Add cancelled request action" flowable:delegateExpression="#{doeAddCancelledRequestActionHandlerFlowable}" />
+    <exclusiveGateway id="Gateway_0hplyzt" name="what is the peer review outcome?" />
+    <sequenceFlow id="Flow_0e6h0eq" sourceRef="Activity_199eo9u" targetRef="Gateway_0hplyzt" />
+    <sequenceFlow id="Flow_0agh9wp" name="cancelled" sourceRef="Gateway_0hplyzt" targetRef="Activity_0qwbuqc">
+      <conditionExpression xsi:type="tFormalExpression">${doeSubmitOutcome=='CANCELLED'}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_1obnrsx" name="submitted" sourceRef="Gateway_0hplyzt" targetRef="DOE_APPLICATION_SUBMIT">
+      <conditionExpression xsi:type="tFormalExpression">${doeSubmitOutcome=='SUBMITTED'}</conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_DOE">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROCESS_DOE" bpmnElement="PROCESS_DOE">
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_0nfd7yw" bpmnElement="Gateway_0nfd7yw" isMarkerVisible="true">
+        <omgdc:Bounds x="705" y="202" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="638" y="236" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_199eo9u" bpmnElement="Activity_199eo9u">
+        <omgdc:Bounds x="490" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_0mmb5z3" bpmnElement="Activity_0mmb5z3">
+        <omgdc:Bounds x="1990" y="317" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_1m6gng8" bpmnElement="Gateway_1m6gng8" isMarkerVisible="true">
+        <omgdc:Bounds x="1695" y="202" width="40" height="40" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_0qwbuqc" bpmnElement="Activity_0qwbuqc">
+        <omgdc:Bounds x="1520" y="317" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_0hplyzt" bpmnElement="Gateway_0hplyzt" isMarkerVisible="true">
+        <omgdc:Bounds x="520" y="337" width="40" height="40" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="498" y="377" width="84" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_158aud9" bpmnElement="Activity_158aud9">
+        <omgdc:Bounds x="840" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_09krhe4" bpmnElement="Activity_09krhe4">
+        <omgdc:Bounds x="1020" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_1opk2i2" bpmnElement="Activity_1opk2i2">
+        <omgdc:Bounds x="1190" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_0xpnecr" bpmnElement="Activity_0xpnecr">
+        <omgdc:Bounds x="1350" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_1xna560" bpmnElement="Activity_1xna560">
+        <omgdc:Bounds x="1520" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_17ycuan" bpmnElement="Activity_17ycuan">
+        <omgdc:Bounds x="1820" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_039hw1i" bpmnElement="Activity_039hw1i">
+        <omgdc:Bounds x="1990" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Event_10ghcxq" bpmnElement="Event_10ghcxq">
+        <omgdc:Bounds x="2206" y="208" width="28" height="28" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_DOE_APPLICATION_SUBMIT" bpmnElement="DOE_APPLICATION_SUBMIT">
+        <omgdc:Bounds x="280" y="182" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent_1" bpmnElement="StartEvent_1">
+        <omgdc:Bounds x="179" y="207" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_16s9mxb" bpmnElement="Flow_16s9mxb" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="380" y="222" />
+        <omgdi:waypoint x="705" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0fzu2t6" bpmnElement="Flow_0fzu2t6" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="725" y="242" />
+        <omgdi:waypoint x="725" y="357" />
+        <omgdi:waypoint x="1520" y="357" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="736" y="293" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1cpwl67" bpmnElement="Flow_1cpwl67" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2090" y="357" />
+        <omgdi:waypoint x="2220" y="357" />
+        <omgdi:waypoint x="2220" y="236" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_118bkvt" bpmnElement="Flow_118bkvt" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="2090" y="222" />
+        <omgdi:waypoint x="2206" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_11ui35k" bpmnElement="Flow_11ui35k" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="209" y="222" />
+        <omgdi:waypoint x="280" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1d6drom" bpmnElement="Flow_1d6drom" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1920" y="222" />
+        <omgdi:waypoint x="1990" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0cvhoiu" bpmnElement="Flow_0cvhoiu" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1735" y="222" />
+        <omgdi:waypoint x="1820" y="222" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1769" y="197" width="17" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_198i208" bpmnElement="Flow_198i208" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1715" y="202" />
+        <omgdi:waypoint x="1715" y="120" />
+        <omgdi:waypoint x="2040" y="120" />
+        <omgdi:waypoint x="2040" y="182" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1872" y="95" width="13" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0kgeva2" bpmnElement="Flow_0kgeva2" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="745" y="222" />
+        <omgdi:waypoint x="840" y="222" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="767" y="197" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1srddi3" bpmnElement="Flow_1srddi3" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="725" y="202" />
+        <omgdi:waypoint x="725" y="120" />
+        <omgdi:waypoint x="590" y="120" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="731" y="143" width="58" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0uq4dk6" bpmnElement="Flow_0uq4dk6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="940" y="222" />
+        <omgdi:waypoint x="1020" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0kb3w6z" bpmnElement="Flow_0kb3w6z" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1120" y="222" />
+        <omgdi:waypoint x="1190" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0a4uqr7" bpmnElement="Flow_0a4uqr7" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="1620" y="222" />
+        <omgdi:waypoint x="1695" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0wkzwjm" bpmnElement="Flow_0wkzwjm" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1290" y="222" />
+        <omgdi:waypoint x="1350" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0tw7jir" bpmnElement="Flow_0tw7jir" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1450" y="222" />
+        <omgdi:waypoint x="1520" y="222" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_08ekpf9" bpmnElement="Flow_08ekpf9" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="1619.9499999999105" y="357" />
+        <omgdi:waypoint x="1989.9999999999893" y="357" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0e6h0eq" bpmnElement="Flow_0e6h0eq" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
+        <omgdi:waypoint x="540" y="160" />
+        <omgdi:waypoint x="540" y="337" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0agh9wp" bpmnElement="Flow_0agh9wp" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="560" y="357" />
+        <omgdi:waypoint x="1520" y="357" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="1016" y="332" width="47" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1obnrsx" bpmnElement="Flow_1obnrsx" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="520" y="357" />
+        <omgdi:waypoint x="330" y="357" />
+        <omgdi:waypoint x="330" y="262" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="402" y="332" width="48" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
