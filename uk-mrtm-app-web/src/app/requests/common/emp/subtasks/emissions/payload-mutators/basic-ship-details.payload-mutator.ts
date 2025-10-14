@@ -55,7 +55,9 @@ export class BasicShipDetailPayloadMutator extends PayloadMutator {
             ?.flat() ?? [];
 
         if (
-          payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED &&
+          [TaskItemStatus.COMPLETED, TaskItemStatus.ACCEPTED].includes(
+            payload.empSectionsCompleted['mandate'] as TaskItemStatus,
+          ) &&
           (usedShipsInMandates.includes(editedShip?.details?.imoNumber) ||
             (userInput?.natureOfReportingResponsibility === 'ISM_COMPANY' &&
               !usedShipsInMandates.includes(userInput.imoNumber)))

@@ -1,0 +1,46 @@
+@if (data(); as data) {
+  <netz-page-heading caption="Manage sections">Check your answers</netz-page-heading>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type of section update</dt>
+      <dd govukSummaryListColumnValue>{{ data.type | manageGuidanceSectionType }}</dd>
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="data.type === 'UPDATE' ? '../../../' : '../../'">Change</a>
+      </dd>
+    </div>
+    @if (data.type !== 'CREATE') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ data.type === 'DELETE' ? 'Section to delete' : 'Section to update' }}</dt>
+        <dd govukSummaryListColumnValue>{{ originalSection()?.name }}</dd>
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="data.type === 'DELETE' ? '../../' : '../../../'">Change</a>
+        </dd>
+      </div>
+    }
+    @if (data.type !== 'DELETE') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Name of section</dt>
+        <dd govukSummaryListColumnValue>{{ $any(data?.object)?.name }}</dd>
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="../">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Display order</dt>
+        <dd govukSummaryListColumnValue>{{ $any(data?.object)?.displayOrderNo }}</dd>
+        <dd govukSummaryListRowActions>
+          <a govukLink routerLink="../">Change</a>
+        </dd>
+      </div>
+    }
+  </dl>
+
+  <div class="govuk-button-group">
+    <button govukButton netzPendingButton type="button" role="button" (click)="onSubmit()">Confirm and continue</button>
+  </div>
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink routerLink="/guidance">Return to: Guidance</a>
+  </div>
+}

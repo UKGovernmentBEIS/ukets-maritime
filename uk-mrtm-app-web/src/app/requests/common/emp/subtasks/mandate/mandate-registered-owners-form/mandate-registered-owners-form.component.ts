@@ -85,8 +85,8 @@ export class MandateRegisteredOwnersFormComponent {
     return ships?.length > firstIndex ? ships.slice(firstIndex, lastIndex) : [];
   });
 
-  public onShipsSelectionChanged(data: MandateShipSelectItem[]) {
-    const selectedShips = data
+  public onShipsSelectionChanged() {
+    const selectedShips = this.availableShips()
       .filter((ship) => ship.isSelected)
       .map((ship) => ({
         imoNumber: ship.imoNumber,

@@ -1,6 +1,5 @@
 import { AerComplianceMonitoringReporting } from '@mrtm/api';
 
-import { ComplianceMonitoringReportingStep } from '@requests/common/aer';
 import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types';
 
 export const isWizardCompleted = (payload: AerVerificationSubmitTaskPayload): boolean => {
@@ -11,21 +10,6 @@ export const isWizardCompleted = (payload: AerVerificationSubmitTaskPayload): bo
     isCctStepCompleted(complianceMonitoringReporting) &&
     isIntegrityStepCompleted(complianceMonitoringReporting)
   );
-};
-
-export const getNextIncompleteStep = (
-  complianceMonitoringReporting: AerComplianceMonitoringReporting,
-): ComplianceMonitoringReportingStep => {
-  if (!isAccuracyStepCompleted(complianceMonitoringReporting)) {
-    return ComplianceMonitoringReportingStep.ACCURACY;
-  } else if (!isCompletenessStepCompleted(complianceMonitoringReporting)) {
-    return ComplianceMonitoringReportingStep.COMPLETENESS;
-  } else if (!isCctStepCompleted(complianceMonitoringReporting)) {
-    return ComplianceMonitoringReportingStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY;
-  } else if (!isIntegrityStepCompleted(complianceMonitoringReporting)) {
-    return ComplianceMonitoringReportingStep.INTEGRITY;
-  }
-  return ComplianceMonitoringReportingStep.ACCURACY;
 };
 
 const isAccuracyStepCompleted = (complianceMonitoringReporting: AerComplianceMonitoringReporting): boolean => {

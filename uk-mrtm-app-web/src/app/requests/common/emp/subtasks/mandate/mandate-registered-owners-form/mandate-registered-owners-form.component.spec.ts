@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { TaskService } from '@netz/common/forms';
-import { ActivatedRouteStub } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { MANDATE_REGISTERED_OWNER_FORM_MODE, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { MandateRegisteredOwnersFormComponent } from '@requests/common/emp/subtasks/mandate/mandate-registered-owners-form/mandate-registered-owners-form.component';

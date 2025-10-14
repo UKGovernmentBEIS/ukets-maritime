@@ -5,6 +5,20 @@
   (formSubmit)="onSubmit()"
   [hideSubmit]="!isEditable"
   [showReturnLink]="true">
+  @if (!allShipsAssociated()) {
+    <govuk-warning-text assistiveText="">
+      The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered
+      owner has been added. All relevant ships must be associated with a registered owner.
+    </govuk-warning-text>
+  }
+
+  @if (hasNeedsReviewItems()) {
+    <govuk-warning-text assistiveText="">
+      The highlighted registered owners have been updated due to changes to the list of ships. Review the information
+      for each highlighted registered owner, then select Continue.
+    </govuk-warning-text>
+  }
+
   <mrtm-mandate-summary-template
     [mandate]="mandate"
     [originalMandate]="originalMandate"

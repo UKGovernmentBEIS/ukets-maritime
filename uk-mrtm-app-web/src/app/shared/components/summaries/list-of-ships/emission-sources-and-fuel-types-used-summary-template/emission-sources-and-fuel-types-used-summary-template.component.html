@@ -31,7 +31,7 @@
         <dt govukSummaryListRowKey>Potential fuel types used</dt>
         <dd govukSummaryListRowValue class="pre-wrap">
           @if (data?.fuelDetails?.length) {
-            <ul class="govuk-list--bullet">
+            <ul class="govuk-list govuk-list--bullet">
               @for (fuel of data.fuelDetails; track fuel) {
                 <li [innerHTML]="fuel | fuelOriginTitle"></li>
               }
@@ -45,7 +45,7 @@
         <dt govukSummaryListRowKey>Monitoring method</dt>
         <dd govukSummaryListRowValue>
           @if (data?.monitoringMethod?.length) {
-            <ul class="govuk-list--bullet">
+            <ul class="govuk-list govuk-list--bullet">
               @for (monitoringMethod of sortedMonitoringMethods(); track monitoringMethod) {
                 <li>{{ monitoringMethodMap[monitoringMethod].text }}</li>
               }

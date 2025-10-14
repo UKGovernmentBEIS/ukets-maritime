@@ -27,7 +27,7 @@ export interface NonComplianceCivilPenaltyRequestTaskPayload {
   complianceDate?: string;
   nonComplianceComments?: string;
   civilPenalty: string;
-  penaltyAmount?: string;
+  penaltyAmount: string;
   dueDate?: string;
   comments?: string;
   nonComplianceAttachments?: { [key: string]: string };

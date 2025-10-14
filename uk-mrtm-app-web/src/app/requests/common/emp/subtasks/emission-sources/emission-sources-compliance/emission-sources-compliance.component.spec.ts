@@ -79,7 +79,7 @@ describe('EmissionSourcesComplianceComponent', () => {
       const summaryErrors = within(summaryBox).getAllByRole('link');
       expect(summaryErrors).toHaveLength(1);
       expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
-        'Select if you will be making an emissions reduction claim as a result of the purchase and delivery of eligible fuel',
+        'Select yes if you will be making an emissions reduction claim relating to eligible fuels',
       ]);
     });
   });

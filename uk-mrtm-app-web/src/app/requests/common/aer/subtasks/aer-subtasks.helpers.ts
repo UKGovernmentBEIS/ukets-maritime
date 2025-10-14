@@ -51,7 +51,7 @@ export const getGuardedSections = (routePrefix: string, subtaskWarnings?: Record
         {
           name: OPERATOR_DETAILS_SUB_TASK,
           status: store.select(
-            aerCommonQuery.selectStatusForAerSubtask(OPERATOR_DETAILS_SUB_TASK, TaskItemStatus.NOT_STARTED),
+            aerCommonQuery.selectStatusForSubtask(OPERATOR_DETAILS_SUB_TASK, TaskItemStatus.NOT_STARTED),
           )(),
           linkText: operatorDetailsMap.title,
           warningHint: subtaskWarnings?.[OPERATOR_DETAILS_SUB_TASK],
@@ -65,7 +65,7 @@ export const getGuardedSections = (routePrefix: string, subtaskWarnings?: Record
         {
           name: MONITORING_PLAN_CHANGES_SUB_TASK,
           status: store.select(
-            aerCommonQuery.selectStatusForAerSubtask(MONITORING_PLAN_CHANGES_SUB_TASK, TaskItemStatus.NOT_STARTED),
+            aerCommonQuery.selectStatusForSubtask(MONITORING_PLAN_CHANGES_SUB_TASK, TaskItemStatus.NOT_STARTED),
           )(),
           linkText: monitoringPlanChangesMap.title,
           warningHint: subtaskWarnings?.[MONITORING_PLAN_CHANGES_SUB_TASK],
@@ -73,9 +73,7 @@ export const getGuardedSections = (routePrefix: string, subtaskWarnings?: Record
         },
         {
           name: EMISSIONS_SUB_TASK,
-          status: store.select(
-            aerCommonQuery.selectStatusForAerSubtask(EMISSIONS_SUB_TASK, TaskItemStatus.NOT_STARTED),
-          )(),
+          status: store.select(aerCommonQuery.selectStatusForSubtask(EMISSIONS_SUB_TASK, TaskItemStatus.NOT_STARTED))(),
           linkText: aerEmissionsMap.title,
           warningHint: subtaskWarnings?.[EMISSIONS_SUB_TASK],
           link: `${routePrefix}/${EMISSIONS_SUB_TASK_PATH}`,
@@ -128,7 +126,7 @@ export const getGuardedSections = (routePrefix: string, subtaskWarnings?: Record
         {
           name: ADDITIONAL_DOCUMENTS_SUB_TASK,
           status: store.select(
-            aerCommonQuery.selectStatusForAerSubtask(ADDITIONAL_DOCUMENTS_SUB_TASK, TaskItemStatus.NOT_STARTED),
+            aerCommonQuery.selectStatusForSubtask(ADDITIONAL_DOCUMENTS_SUB_TASK, TaskItemStatus.NOT_STARTED),
           )(),
           linkText: aerAdditionalDocumentsMap.title,
           warningHint: subtaskWarnings?.[ADDITIONAL_DOCUMENTS_SUB_TASK],

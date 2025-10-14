@@ -3,9 +3,9 @@ import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
+import { MaterialityLevelStep } from '@requests/common/aer/subtasks/materiality-level/materiality-level.helpers';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
 import {
-  getNextIncompleteStep,
   isMaterialityDetailsStepCompleted,
   isWizardCompleted,
 } from '@requests/tasks/aer-verification-submit/subtasks/materiality-level/materiality-level.wizard';
@@ -18,7 +18,7 @@ export const canActivateMaterialityLevelSummary: CanActivateFn = (route) => {
   return (
     !isEditable ||
     (isEditable && isWizardCompleted(materialityLevel)) ||
-    createUrlTreeFromSnapshot(route, [`./${getNextIncompleteStep(materialityLevel)}`])
+    createUrlTreeFromSnapshot(route, [`./${MaterialityLevelStep.DETAILS}`])
   );
 };
 

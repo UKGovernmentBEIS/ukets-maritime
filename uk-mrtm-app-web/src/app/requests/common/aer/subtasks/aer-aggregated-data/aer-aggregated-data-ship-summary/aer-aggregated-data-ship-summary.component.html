@@ -9,9 +9,12 @@
     Check your answers
   }
 </netz-page-heading>
-@if (showWarningMessage()) {
-  <govuk-warning-text
-    assistiveText="No relevant data can be retrieved from the voyages or ports subtasks. Review the aggregated data and ensure that is correct." />
+@if (warningMessages()?.length) {
+  <div class="govuk-!-width-two-thirds">
+    @for (warningMessage of warningMessages(); track warningMessage) {
+      <govuk-warning-text [assistiveText]="warningMessage" />
+    }
+  </div>
 }
 <mrtm-aer-aggregated-data-ship-summary-template
   [editable]="editable()"

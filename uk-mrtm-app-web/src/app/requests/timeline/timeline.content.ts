@@ -91,7 +91,7 @@ export const timelineContent: RequestActionPageContentFactoryMap = {
   PAYMENT_CANCELLED: paymentTaskContent,
   PAYMENT_MARKED_AS_RECEIVED: paymentTaskContent,
   PAYMENT_COMPLETED: paymentTaskContent,
-  VIR_APPLICATION_SUBMITTED: virSubmittedTaskContent,
+  VIR_APPLICATION_SUBMITTED: virSubmittedTaskContent(),
   VIR_APPLICATION_REVIEWED: virReviewedTaskContent,
   VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS: virFollowUpTaskContent,
   NON_COMPLIANCE_APPLICATION_SUBMITTED: nonComplianceSubmittedTaskContent,

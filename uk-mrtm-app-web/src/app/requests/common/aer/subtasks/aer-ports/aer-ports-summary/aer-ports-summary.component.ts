@@ -49,7 +49,7 @@ export class AerPortsSummaryComponent {
       this.editable() &&
       statuses?.length &&
       statuses?.every((task) => task === TaskItemStatus.COMPLETED) &&
-      this.store.select(aerCommonQuery.selectStatusForAerSubtask(AER_PORTS_SUB_TASK))() !== TaskItemStatus.COMPLETED
+      this.store.select(aerCommonQuery.selectStatusForSubtask(AER_PORTS_SUB_TASK))() !== TaskItemStatus.COMPLETED
     );
   });
 

@@ -25,11 +25,15 @@ export class SummaryRegisteredOwnerShipDetailsComponent {
   showDiff = input<boolean>(false);
 
   combinedShipDetails = computed(() => mergeDiffShipDetails(this.shipDetails(), this.originalShipDetails()));
-  isExpanded = false;
+  isExpandedStates = new Map<string, boolean>();
+
+  isExpanded() {
+    return this.isExpandedStates.get(this.registeredOwnerUniqueIdentifier()) ?? false;
+  }
 
   onToggleAssociatedShips(event: MouseEvent): void {
     event.preventDefault();
     event.stopPropagation();
-    this.isExpanded = !this.isExpanded;
+    this.isExpandedStates.set(this.registeredOwnerUniqueIdentifier(), !this.isExpanded());
   }
 }

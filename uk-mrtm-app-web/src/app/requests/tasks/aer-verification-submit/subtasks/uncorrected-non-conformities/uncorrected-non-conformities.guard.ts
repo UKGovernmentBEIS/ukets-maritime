@@ -6,7 +6,6 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { UncorrectedNonConformitiesStep } from '@requests/common/aer';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
 import {
-  getNextIncompleteStep,
   isUncorrectedNonConformitiesListCompleted,
   isWizardCompleted,
 } from '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities.wizard';
@@ -19,7 +18,7 @@ export const canActivateUncorrectedNonConformitiesSummary: CanActivateFn = (rout
   return (
     !isEditable ||
     (isEditable && isWizardCompleted(uncorrectedNonConformities)) ||
-    createUrlTreeFromSnapshot(route, [`./${getNextIncompleteStep(uncorrectedNonConformities)}`])
+    createUrlTreeFromSnapshot(route, [`./${UncorrectedNonConformitiesStep.EXIST_FORM}`])
   );
 };
 

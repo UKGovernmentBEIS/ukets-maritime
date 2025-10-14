@@ -4,7 +4,6 @@ import { FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';
 
-import { TaskItemStatus } from '@requests/common';
 import { empCommonQuery } from '@requests/common/emp/+state';
 import {
   MandateResponsibilityFormGroupModel,
@@ -15,19 +14,15 @@ import { TASK_FORM } from '@requests/common/task-form.token';
 const hasIsmShipsValidator = (): ValidatorFn => {
   const store = inject(RequestTaskStore);
 
-  const ismShips = store
-    .select(empCommonQuery.selectListOfShips)()
-    .filter(
-      (ship) => ship.status === TaskItemStatus.COMPLETED && ship.natureOfReportingResponsibility === 'ISM_COMPANY',
-    );
+  const ismShips = store.select(empCommonQuery.selectIsmShipImoNumbers)();
 
   return (control: FormGroup): { [key: string]: any } | null => {
     const exist = control.get('exist')?.value;
 
-    if (!exist && ismShips.length > 0) {
+    if (!exist && ismShips.size > 0) {
       return {
         ships:
-          'The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered owner has been added. All relevant ships must be associated with a registered owner.',
+          'The list of ships includes ships where the nature of responsibility lies only with the ISM company, and registered owners need to be added. Select Yes to add registered owners.',
       };
     }
     return null;

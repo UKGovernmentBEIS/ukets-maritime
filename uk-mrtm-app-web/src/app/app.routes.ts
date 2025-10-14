@@ -1,6 +1,7 @@
 import { ExtraOptions, Routes } from '@angular/router';
 
 import { AuthGuard, loggedInGuard, NonAuthGuard, PendingRequestGuard, TermsAndConditionsGuard } from '@core/guards';
+import { GUIDANCE_ROUTE_PREFIX } from '@guidance/guidance.constants';
 import { LandingPageComponent } from '@landing-page/landing-page.component';
 import { landingPageGuard } from '@landing-page/landing-page.guard';
 import { DashboardPageComponent } from '@shared/dashboard';
@@ -131,6 +132,10 @@ export const APP_ROUTES: Routes = [
       {
         path: 'batch-variations',
         loadChildren: () => import('@batch-variations/batch-variations.routes').then((r) => r.BATCH_VARIATIONS_ROUTES),
+      },
+      {
+        path: GUIDANCE_ROUTE_PREFIX,
+        loadChildren: () => import('@guidance/guidance.routes').then((r) => r.GUIDANCE_ROUTES),
       },
     ],
   },

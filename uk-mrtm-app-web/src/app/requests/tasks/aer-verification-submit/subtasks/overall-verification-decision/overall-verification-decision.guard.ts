@@ -5,10 +5,7 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { OverallVerificationDecisionStep } from '@requests/common/aer';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
-import {
-  getNextIncompleteStep,
-  isWizardCompleted,
-} from '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision.wizard';
+import { isWizardCompleted } from '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision.wizard';
 
 export const canActivateOverallVerificationDecisionSummary: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);
@@ -18,7 +15,7 @@ export const canActivateOverallVerificationDecisionSummary: CanActivateFn = (rou
   return (
     !isEditable ||
     (isEditable && isWizardCompleted(overallVerificationDecision)) ||
-    createUrlTreeFromSnapshot(route, [`./${getNextIncompleteStep(overallVerificationDecision)}`])
+    createUrlTreeFromSnapshot(route, [`./${OverallVerificationDecisionStep.ASSESSMENT}`])
   );
 };
 

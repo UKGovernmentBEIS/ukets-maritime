@@ -19271,4 +19271,569 @@
             </sql>
         </rollback>
     </changeSet>
+    
+    
+    
+    <changeSet id="0_1_0_create_auth_for_type_GUIDANCE_SECTION_and_role_REGULATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_SECTION',
+                    null,
+                    'guidanceSectionAccessHandler',
+                    'REGULATOR',
+                    null);
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_rule
+                where resource_type = 'GUIDANCE_SECTION'
+                and resource_sub_type is null
+                and handler = 'guidanceSectionAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_auth_for_type_GUIDANCE_SECTION_and_role_OPERATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_SECTION' ,
+                    null,
+                    'guidanceSectionAccessHandler',
+                    'OPERATOR',
+                    null);
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_rule
+                where resource_type = 'GUIDANCE_SECTION'
+                and resource_sub_type is null
+                and handler = 'guidanceSectionAccessHandler'
+                and role_type = 'OPERATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_auth_for_type_GUIDANCE_SECTION_and_role_VERIFIER" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_SECTION' ,
+                    null,
+                    'guidanceSectionAccessHandler',
+                    'VERIFIER',
+                    null);
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_rule
+                where resource_type = 'GUIDANCE_SECTION'
+                and resource_sub_type is null
+                and handler = 'guidanceSectionAccessHandler'
+                and role_type = 'VERIFIER'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_auth_for_type_GUIDANCE_SECTION_and_scope_MANAGE_GUIDANCE_and_role_REGULATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_SECTION' ,
+                    null,
+                    'guidanceSectionAccessHandler',
+                    'REGULATOR',
+                    'MANAGE_GUIDANCE');
+                    
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'GUIDANCE_SECTION',
+                        null,
+                        'MANAGE_GUIDANCE',
+                        'PERM_MANAGE_GUIDANCE',
+                        'REGULATOR');
+        </sql>
+        <rollback>
+            <sql>
+            	delete from au_resource_scope_permission
+                where resource_type = 'GUIDANCE_SECTION'
+                and resource_sub_type is null
+                and scope = 'MANAGE_GUIDANCE'
+                and permission = 'PERM_MANAGE_GUIDANCE'
+                and role_type = 'REGULATOR';
+            
+                delete from au_rule
+                where resource_type = 'GUIDANCE_SECTION'
+                and resource_sub_type is null
+                and handler = 'guidanceSectionAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'MANAGE_GUIDANCE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_auth_for_CA_and_MANAGE_GUIDANCE_scope_and_role_REGULATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+	        insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+	            values (nextval('au_rule_seq'),
+	                    'CA' ,
+	                    null,
+	                    'caAccessHandler',
+	                    'REGULATOR',
+	                    'MANAGE_GUIDANCE');
+	                    
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'CA',
+                        null,
+                        'MANAGE_GUIDANCE',
+                        'PERM_MANAGE_GUIDANCE',
+                        'REGULATOR');
+        </sql>
+        <rollback>
+            <sql>
+            	delete from au_resource_scope_permission
+                where resource_type = 'CA'
+                and resource_sub_type is null
+                and scope = 'MANAGE_GUIDANCE'
+                and permission = 'PERM_MANAGE_GUIDANCE'
+                and role_type = 'REGULATOR';
+                
+                delete from au_rule
+                where resource_type = 'CA'
+                and resource_sub_type is null
+                and handler = 'caAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'MANAGE_GUIDANCE';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_getGuidanceSectionById_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate getGuidanceSectionById service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getGuidanceSectionById');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'getGuidanceSectionById'
+              and aur.resource_type = 'GUIDANCE_SECTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceSectionAccessHandler'
+              and aur.scope is null
+              and aur.role_type in ('REGULATOR', 'OPERATOR', 'VERIFIER');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'getGuidanceSectionById');
+
+                delete
+                from au_service
+                where name = 'getGuidanceSectionById';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_createGuidanceSection_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate createGuidanceSection service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'createGuidanceSection');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'createGuidanceSection'
+              and aur.resource_type = 'CA'
+              and aur.resource_sub_type is null
+              and aur.handler = 'caAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'createGuidanceSection');
+
+                delete
+                from au_service
+                where name = 'createGuidanceSection';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_and_populate_updateGuidanceSection_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate updateGuidanceSection service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'updateGuidanceSection');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'updateGuidanceSection'
+              and aur.resource_type = 'GUIDANCE_SECTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceSectionAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'updateGuidanceSection');
+
+                delete
+                from au_service
+                where name = 'updateGuidanceSection';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_and_populate_deleteGuidanceSection_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate deleteGuidanceSection service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'deleteGuidanceSection');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'deleteGuidanceSection'
+              and aur.resource_type = 'GUIDANCE_SECTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceSectionAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'deleteGuidanceSection');
+
+                delete
+                from au_service
+                where name = 'deleteGuidanceSection';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    
+
+
+	<changeSet id="0_1_0_create_auth_for_type_GUIDANCE_DOCUMENT_and_role_REGULATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_DOCUMENT' ,
+                    null,
+                    'guidanceDocumentAccessHandler',
+                    'REGULATOR',
+                    null);
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_rule
+                where resource_type = 'GUIDANCE_DOCUMENT'
+                and resource_sub_type is null
+                and handler = 'guidanceDocumentAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_auth_for_type_GUIDANCE_DOCUMENT_and_role_OPERATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_DOCUMENT' ,
+                    null,
+                    'guidanceDocumentAccessHandler',
+                    'OPERATOR',
+                    null);
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_rule
+                where resource_type = 'GUIDANCE_DOCUMENT'
+                and resource_sub_type is null
+                and handler = 'guidanceDocumentAccessHandler'
+                and role_type = 'OPERATOR'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_auth_for_type_GUIDANCE_DOCUMENT_and_role_VERIFIER" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_DOCUMENT' ,
+                    null,
+                    'guidanceDocumentAccessHandler',
+                    'VERIFIER',
+                    null);
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_rule
+                where resource_type = 'GUIDANCE_DOCUMENT'
+                and resource_sub_type is null
+                and handler = 'guidanceDocumentAccessHandler'
+                and role_type = 'VERIFIER'
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+	<changeSet id="0_1_0_create_auth_for_type_GUIDANCE_DOCUMENT_and_scope_MANAGE_GUIDANCE_and_role_REGULATOR" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_DOCUMENT' ,
+                    null,
+                    'guidanceSectionAccessHandler',
+                    'REGULATOR',
+                    'MANAGE_GUIDANCE');
+                    
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'GUIDANCE_DOCUMENT' ,
+                    null,
+                    'guidanceDocumentAccessHandler',
+                    'REGULATOR',
+                    'MANAGE_GUIDANCE');
+
+            insert into au_resource_scope_permission(id, resource_type, resource_sub_type, scope, permission, role_type)
+                (select nextval('au_resource_scope_permission_seq'),
+                        'GUIDANCE_DOCUMENT',
+                        null,
+                        'MANAGE_GUIDANCE',
+                        'PERM_MANAGE_GUIDANCE',
+                        'REGULATOR');
+        </sql>
+        <rollback>
+            <sql>
+            	delete from au_resource_scope_permission
+                where resource_type = 'GUIDANCE_DOCUMENT'
+                and resource_sub_type is null
+                and scope = 'MANAGE_GUIDANCE'
+                and permission = 'PERM_MANAGE_GUIDANCE'
+                and role_type = 'REGULATOR';
+                
+                delete from au_rule
+                where resource_type = 'GUIDANCE_DOCUMENT'
+                and resource_sub_type is null
+                and handler = 'guidanceDocumentAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'MANAGE_GUIDANCE';
+            
+                delete from au_rule
+                where resource_type = 'GUIDANCE_DOCUMENT'
+                and resource_sub_type is null
+                and handler = 'guidanceSectionAccessHandler'
+                and role_type = 'REGULATOR'
+                and scope = 'MANAGE_GUIDANCE';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_getGuidanceDocumentById_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate getGuidanceDocumentById service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getGuidanceDocumentById');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'getGuidanceDocumentById'
+              and aur.resource_type = 'GUIDANCE_DOCUMENT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceDocumentAccessHandler'
+              and aur.scope is null
+              and aur.role_type in ('REGULATOR', 'OPERATOR', 'VERIFIER');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'getGuidanceDocumentById');
+
+                delete
+                from au_service
+                where name = 'getGuidanceDocumentById';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_createGuidanceDocument_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate createGuidanceDocument service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'createGuidanceDocument');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'createGuidanceDocument'
+              and aur.resource_type = 'GUIDANCE_SECTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceSectionAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'createGuidanceDocument');
+
+                delete
+                from au_service
+                where name = 'createGuidanceDocument';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_updateGuidanceDocument_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate updateGuidanceDocument service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'updateGuidanceDocument');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'updateGuidanceDocument'
+              and aur.resource_type = 'GUIDANCE_DOCUMENT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceDocumentAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'updateGuidanceDocument');
+
+                delete
+                from au_service
+                where name = 'updateGuidanceDocument';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_deleteGuidanceDocument_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate deleteGuidanceDocument service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'deleteGuidanceDocument');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'deleteGuidanceDocument'
+              and aur.resource_type = 'GUIDANCE_DOCUMENT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceDocumentAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'deleteGuidanceDocument');
+
+                delete
+                from au_service
+                where name = 'deleteGuidanceDocument';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_uploadGuidanceFile_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate uploadGuidanceFile service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'uploadGuidanceFile');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'uploadGuidanceFile'
+              and aur.resource_type = 'GUIDANCE_SECTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceSectionAccessHandler'
+              and aur.scope = 'MANAGE_GUIDANCE'
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'uploadGuidanceFile');
+
+                delete
+                from au_service
+                where name = 'uploadGuidanceFile';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_create_and_populate_generateGetGuidanceFileToken_authorization_service" author="dimopoulosc@unisystems.gr">
+        <comment>Create and Populate generateGetGuidanceFileToken service</comment>
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'generateGetGuidanceFileToken');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'generateGetGuidanceFileToken'
+              and aur.resource_type = 'GUIDANCE_SECTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'guidanceSectionAccessHandler'
+              and aur.scope is null
+              and aur.role_type in ('REGULATOR', 'OPERATOR', 'VERIFIER');
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule
+                where service_id = (select id from au_service where name = 'generateGetGuidanceFileToken');
+
+                delete
+                from au_service
+                where name = 'generateGetGuidanceFileToken';
+            </sql>
+        </rollback>
+    </changeSet>
+    
+
 </databaseChangeLog>

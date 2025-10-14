@@ -60,7 +60,7 @@ export const aerAmendsTaskContent: RequestTaskPageContentFactory = () => {
           {
             name: REPORTING_OBLIGATION_SUB_TASK,
             status: store.select(
-              aerCommonQuery.selectStatusForAerSubtask(REPORTING_OBLIGATION_SUB_TASK, TaskItemStatus.COMPLETED),
+              aerCommonQuery.selectStatusForSubtask(REPORTING_OBLIGATION_SUB_TASK, TaskItemStatus.COMPLETED),
             )(),
             linkText: reportingObligationMap.title,
             warningHint: warnings?.[REPORTING_OBLIGATION_SUB_TASK],

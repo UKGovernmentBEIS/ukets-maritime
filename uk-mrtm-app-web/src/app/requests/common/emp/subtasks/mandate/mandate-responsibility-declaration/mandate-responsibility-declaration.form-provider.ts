@@ -23,7 +23,9 @@ export const provideMandateResponsibilityDeclarationFormProvider: Provider = {
       responsibilityDeclaration: formBuilder.control<Array<
         MandateResponsibilityDeclarationFormType['responsibilityDeclaration']
       > | null>(mandate?.responsibilityDeclaration ? [mandate.responsibilityDeclaration] : null, {
-        validators: [GovukValidators.required('Select the declaration note')],
+        validators: [
+          GovukValidators.required('Select if you certify that you are authorised to make this declaration'),
+        ],
       }),
     });
   },

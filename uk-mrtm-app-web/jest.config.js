@@ -17,6 +17,7 @@ module.exports = {
     '^@error/(.*)': '<rootDir>/src/app/error/$1',
     '^@feedback/(.*)': '<rootDir>/src/app/feedback/$1',
     '^@forgot-password/(.*)': '<rootDir>/src/app/forgot-password/$1',
+    '^@guidance/(.*)': '<rootDir>/src/app/guidance/$1',
     '^@incorporate-header/(.*)': '<rootDir>/src/app/incorporate-header/$1',
     '^@invitation/(.*)': '<rootDir>/src/app/invitation/$1',
     '^@landing-page/(.*)': '<rootDir>/src/app/landing-page/$1',

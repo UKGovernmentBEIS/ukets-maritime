@@ -28,6 +28,14 @@ public class EmpMandateValidator implements EmpContextValidator {
         List<EmissionsMonitoringPlanViolation> empViolations = new ArrayList<>();
 
         final EmpMandate mandate = empContainer.getEmissionsMonitoringPlan().getMandate();
+
+        final Set<String> allIsmShips = getAllIsmShips(empContainer);
+        if (!allIsmShips.isEmpty() && Boolean.FALSE.equals(mandate.getExist())) {
+            empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
+                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS,
+                    allIsmShips.toArray()));
+        }
+
         if (Boolean.TRUE.equals(mandate.getExist()) && !mandate.getRegisteredOwners().isEmpty()) {
 
             final boolean imoNumberExists = validateImoNumberUniqueness(empContainer);
@@ -127,5 +135,13 @@ public class EmpMandateValidator implements EmpContextValidator {
                 .collect(Collectors.toSet());
 
         return allShipImoNumbers.size() == associatedShipImoNumbers.size();
+    }
+
+    private Set<String> getAllIsmShips(EmissionsMonitoringPlanContainer empContainer) {
+        return empContainer.getEmissionsMonitoringPlan().getEmissions().getShips().stream()
+                .map(EmpShipEmissions::getDetails)
+                .filter(shipDetails -> ReportingResponsibilityNature.ISM_COMPANY.equals(shipDetails.getNatureOfReportingResponsibility()))
+                .map(ShipDetails::getImoNumber)
+                .collect(Collectors.toSet());
     }
 }

@@ -18,6 +18,9 @@ export class MandateResponsibilityPayloadMutator extends PayloadMutator {
           ...payload?.emissionsMonitoringPlan?.mandate,
           ...userInput,
           registeredOwners: userInput.exist ? payload?.emissionsMonitoringPlan?.mandate?.registeredOwners : undefined,
+          responsibilityDeclaration: userInput?.exist
+            ? payload?.emissionsMonitoringPlan?.mandate?.responsibilityDeclaration
+            : undefined,
         };
       }),
     );

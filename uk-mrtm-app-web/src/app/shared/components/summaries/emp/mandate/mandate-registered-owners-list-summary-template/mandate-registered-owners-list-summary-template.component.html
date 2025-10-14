@@ -1,4 +1,9 @@
-<govuk-table id="registeredOwners" [columns]="columns" [data]="page()" emptyTableText="No items to display">
+<govuk-table
+  id="registeredOwners"
+  [columns]="columns"
+  [data]="page()"
+  emptyTableText="No items to display"
+  [rowCssClasses]="onDefineRowAdditionalStyle">
   <ng-template let-column="column" let-row="row">
     @switch (column.field) {
       @case ('name') {

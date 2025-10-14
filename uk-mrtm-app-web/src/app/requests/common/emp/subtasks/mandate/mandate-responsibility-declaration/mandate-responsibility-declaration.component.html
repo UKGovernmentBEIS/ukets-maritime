@@ -3,7 +3,8 @@
   [caption]="wizardMap.title"
   [heading]="wizardMap.responsibilityDeclaration.title"
   (formSubmit)="onSubmit()"
-  submitText="Confirm and continue">
+  [showReturnLink]="true"
+  submitText="Continue">
   <p class="govuk-body">
     {{ operatorName() }} declares that, in relation to each ship included in the list of ships subject to delegated
     responsibility:

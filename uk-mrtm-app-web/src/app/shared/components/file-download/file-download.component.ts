@@ -21,7 +21,9 @@ import {
   EmpsService,
   FileAttachmentsService,
   FileDocumentsService,
+  FileGuidanceService,
   FileToken,
+  GuidanceDocumentsService,
   RequestActionAttachmentsHandlingService,
   RequestActionFileDocumentsHandlingService,
   RequestTaskAttachmentsHandlingService,
@@ -34,7 +36,7 @@ import { LoadingSpinnerComponent } from '@shared/components';
 
 export interface FileDownloadInfo {
   request: Observable<Partial<FileToken> & { fileUrl?: string }>;
-  fileType: 'attachment' | 'document' | 'document-preview';
+  fileType: 'attachment' | 'document' | 'document-preview' | 'guidance';
 }
 
 @Component({
@@ -60,8 +62,10 @@ export class FileDownloadComponent implements OnInit {
   private readonly requestActionFileDocumentsHandlingService = inject(RequestActionFileDocumentsHandlingService);
   private readonly documentPreviewService = inject(DocumentPreviewService);
   private readonly empsService = inject(EmpsService);
+  private readonly guidanceDocumentsService = inject(GuidanceDocumentsService);
   private readonly fileAttachmentsService = inject(FileAttachmentsService);
   private readonly fileDocumentsService = inject(FileDocumentsService);
+  private readonly fileGuidanceService = inject(FileGuidanceService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
   downloadProcessing: WritableSignal<boolean> = signal(true);
   anchor = viewChild<ElementRef<HTMLAnchorElement>>('anchor');
@@ -69,6 +73,7 @@ export class FileDownloadComponent implements OnInit {
   private hasDownloadedOnce = false;
   private readonly fileDownloadAttachmentPath = `${this.fileAttachmentsService.configuration.basePath}/v1.0/file-attachments/`;
   private readonly fileDownloadDocumentPath = `${this.fileDocumentsService.configuration.basePath}/v1.0/file-documents/`;
+  private readonly fileDownloadGuidancePath = `${this.fileGuidanceService.configuration.basePath}/v1.0/file-guidance/`;
 
   url = toSignal(
     this.route.paramMap.pipe(
@@ -81,6 +86,9 @@ export class FileDownloadComponent implements OnInit {
         }
         if (params.has('empId')) {
           return this.empsDownloadInfo(params);
+        }
+        if (params.has('guidanceSectionId')) {
+          return this.guidanceDownloadInfo(params);
         }
         throw new Error('File download request not handled.');
       }),
@@ -98,6 +106,8 @@ export class FileDownloadComponent implements OnInit {
             return `${this.fileDownloadAttachmentPath}${encodeURIComponent(String(fileToken.token))}`;
           case 'document-preview':
             return fileToken.fileUrl;
+          case 'guidance':
+            return `${this.fileDownloadGuidancePath}${encodeURIComponent(String(fileToken.token))}`;
           default:
             return `${this.fileDownloadDocumentPath}${encodeURIComponent(String(fileToken.token))}`;
         }
@@ -203,5 +213,15 @@ export class FileDownloadComponent implements OnInit {
         fileType: 'attachment',
       };
     }
+  }
+
+  private guidanceDownloadInfo(params: ParamMap): FileDownloadInfo {
+    return {
+      request: this.guidanceDocumentsService.generateGetGuidanceFileToken(
+        Number(params.get('guidanceSectionId')),
+        params.get('uuid'),
+      ),
+      fileType: 'guidance',
+    };
   }
 }

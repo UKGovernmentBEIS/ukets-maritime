@@ -49,7 +49,7 @@ export class MandateRegisteredOwnersListSummaryTemplateComponent {
   readonly currentPage: WritableSignal<number> = signal<number>(1);
   readonly page: Signal<DiffItem<MandateRegisteredOwnerTableListItem>[]> = computed(() => {
     const tableData = [...(this.combinedOwners() ?? [])].sort((a, b) =>
-      a?.current?.name?.localeCompare(b?.current?.name, 'en', { sensitivity: 'base' }),
+      a?.current?.name?.localeCompare(b?.current?.name, 'en', { sensitivity: 'base', numeric: true }),
     );
     const currentPage = this.currentPage();
 
@@ -61,5 +61,9 @@ export class MandateRegisteredOwnersListSummaryTemplateComponent {
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
+  }
+
+  onDefineRowAdditionalStyle(item: DiffItem<MandateRegisteredOwnerTableListItem>): string | string[] | undefined {
+    return item?.current?.needsReview ? 'needs-review' : undefined;
   }
 }

@@ -12,7 +12,7 @@ import { RequestActionUserInfo } from './requestActionUserInfo';
 export interface NonComplianceCivilPenaltyApplicationSubmittedRequestActionPayload {
   payloadType?: string;
   civilPenalty: string;
-  penaltyAmount?: string;
+  penaltyAmount: string;
   dueDate?: string;
   comments?: string;
   operators?: Array<string>;

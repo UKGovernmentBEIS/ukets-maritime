@@ -57,7 +57,7 @@
     [class.autocomplete-select__input--focused]="focusedIndex() !== null"
     [formControl]="queryControl"
     (focus)="handleInputFocus()"
-    (blur)="handleInputBlur()"
+    (blur)="handleInputBlur($event)"
     (input)="handleInputFieldInput()"
     (click)="handleInputClick()" />
   <!-- 
@@ -66,6 +66,7 @@
     blur the autocomplete-select input field but it will not focus the next tabbable element.
    -->
   <ul
+    #listbox
     [id]="identifier + '__listbox'"
     role="listbox"
     tabindex="-1"
@@ -73,6 +74,7 @@
     [class.autocomplete-select__menu--visible]="isMenuOpen()"
     [class.autocomplete-select__menu--hidden]="!isMenuOpen()"
     [attr.aria-labelledby]="'l.' + identifier"
+    (blur)="handleListboxBlur($event)"
     (mouseleave)="handleListMouseLeave()">
     @for (option of filteredOptions(); track i; let i = $index) {
       <li

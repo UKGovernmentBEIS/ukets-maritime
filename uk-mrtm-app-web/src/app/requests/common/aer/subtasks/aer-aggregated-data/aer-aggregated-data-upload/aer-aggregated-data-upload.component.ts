@@ -5,7 +5,7 @@ import {
   inject,
   Signal,
   signal,
-  ViewChild,
+  viewChild,
   WritableSignal,
 } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
@@ -59,7 +59,7 @@ export class AerAggregatedDataUploadComponent {
   private readonly xmlService = inject(AerAggregatedDataXmlService);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
 
-  @ViewChild(DataParserWizardStepComponent) wizardStep: DataParserWizardStepComponent;
+  private readonly dataParserWizardStep = viewChild.required(DataParserWizardStepComponent);
 
   taskMap = aerAggregatedDataSubtasksListMap;
   showConfirmation = false;
@@ -78,7 +78,7 @@ export class AerAggregatedDataUploadComponent {
   uploadedFile: File;
 
   async onFileSelect(event: any) {
-    this.wizardStep.isSummaryDisplayedSubject.next(false);
+    this.dataParserWizardStep().isSummaryDisplayedSubject.next(false);
     this.xmlErrors.set([]);
     this.shipEmissionsList.set([]);
     this.uploadedFile = event.target.files[0];
@@ -93,7 +93,7 @@ export class AerAggregatedDataUploadComponent {
       }
     }
 
-    this.wizardStep.isSummaryDisplayedSubject.next(true);
+    this.dataParserWizardStep().isSummaryDisplayedSubject.next(true);
     event.target.value = '';
   }
 
@@ -108,7 +108,7 @@ export class AerAggregatedDataUploadComponent {
         message: 'Upload the ships and emission details file',
       },
     ]);
-    this.wizardStep.isSummaryDisplayedSubject.next(true);
+    this.dataParserWizardStep().isSummaryDisplayedSubject.next(true);
   }
 
   toggleConfirmation(value: boolean) {
@@ -129,10 +129,9 @@ export class AerAggregatedDataUploadComponent {
           this.shipEmissionsList(),
         )
         .subscribe(() => {
+          const actionMsg = this.showConfirmation ? 'replaced' : 'uploaded';
           this.notificationBannerStore.setSuccessMessages([
-            this.showConfirmation
-              ? 'The aggregated data file has been replaced successfully.'
-              : 'The aggregated data file has been uploaded successfully.',
+            `The aggregated data file has been ${actionMsg} successfully`,
           ]);
         });
     }

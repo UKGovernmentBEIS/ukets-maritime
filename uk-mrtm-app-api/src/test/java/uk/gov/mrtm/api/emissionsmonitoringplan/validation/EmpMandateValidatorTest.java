@@ -25,6 +25,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.DUPLICATE_SHIP_IMO_ACROSS_REGISTERED_OWNERS;
+import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP_NAME;
@@ -73,6 +74,9 @@ class EmpMandateValidatorTest {
 
         EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
                 .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
+                        .emissions(EmpEmissions.builder()
+                                .ships(Set.of(buildEmpShipEmissions("1111111", "Ship A", ReportingResponsibilityNature.SHIPOWNER)))
+                                .build())
                         .mandate(EmpMandate.builder()
                                 .exist(Boolean.FALSE)
                                 .build())
@@ -82,6 +86,53 @@ class EmpMandateValidatorTest {
         final EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, accountId);
         assertTrue(result.isValid());
         assertThat(result.getEmpViolations()).isEmpty();
+    }
+
+    @Test
+    void validate_mandate_exist_no_ism_ships_valid() {
+        Long accountId = 1L;
+
+        EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
+                .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
+                        .emissions(EmpEmissions.builder()
+                                .ships(Set.of(buildEmpShipEmissions("1111111", "Ship A", ReportingResponsibilityNature.SHIPOWNER)))
+                                .build())
+                        .mandate(EmpMandate.builder()
+                                .exist(Boolean.TRUE)
+                                .build())
+                        .build())
+                .build();
+
+        final EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, accountId);
+        assertTrue(result.isValid());
+        assertThat(result.getEmpViolations()).isEmpty();
+    }
+
+    @Test
+    void validate_mandate_not_exist_ISM_ship_exist_invalid() {
+        Long accountId = 1L;
+
+        final String shipImo1 = "1111111";
+        final String shipImo2 = "2222222";
+        EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
+                .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
+                        .emissions(EmpEmissions.builder()
+                                .ships(Set.of(buildEmpShipEmissions(shipImo1, "Ship A", ReportingResponsibilityNature.ISM_COMPANY),
+                                        buildEmpShipEmissions(shipImo2, "Ship B", ReportingResponsibilityNature.SHIPOWNER)
+                                        ))
+                                .build())
+                        .mandate(EmpMandate.builder()
+                                .exist(Boolean.FALSE)
+                                .build())
+                        .build())
+                .build();
+
+        final EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, accountId);
+        assertFalse(result.isValid());
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getMessage)
+                .containsExactly(INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS.getMessage());
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+                .containsExactly(Set.of(shipImo1).toArray());
     }
 
     @Test

@@ -13,6 +13,16 @@ export class MeasuringEquipmentEditDtoValidator {
     );
   }
 
+  private static isMeasuringEquipmentTechnicalDescriptionValid(
+    measuringEquipmentEditDTO?: MeasuringEquipmentEditDTO,
+  ): boolean {
+    return (
+      XmlValidator.isEmpty(measuringEquipmentEditDTO?.technicalDescription) ||
+      (XmlValidator.isString(measuringEquipmentEditDTO?.technicalDescription) &&
+        XmlValidator.maxLength(measuringEquipmentEditDTO?.technicalDescription, 10000))
+    );
+  }
+
   private static isMeasuringEquipmentAppliedToCodeValid(
     measuringEquipmentEditDTO?: MeasuringEquipmentEditDTO,
     empEmissionSources?: EmpEmissionsSources[],
@@ -33,12 +43,12 @@ export class MeasuringEquipmentEditDtoValidator {
     emissionSources?: EmpEmissionsSources[],
   ): boolean {
     const measuringEquipmentDTOsLengthValid = XmlValidator.minLength(measuringEquipmentDTOs, 1);
-    const measuringEquipmentDTOsValid = measuringEquipmentDTOs?.every((measuringEquipmentDTO) => {
-      return (
+    const measuringEquipmentDTOsValid = measuringEquipmentDTOs?.every(
+      (measuringEquipmentDTO) =>
         this.isMeasuringEquipmentNameValid(measuringEquipmentDTO) &&
-        this.isMeasuringEquipmentAppliedToCodeValid(measuringEquipmentDTO, emissionSources)
-      );
-    });
+        this.isMeasuringEquipmentTechnicalDescriptionValid(measuringEquipmentDTO) &&
+        this.isMeasuringEquipmentAppliedToCodeValid(measuringEquipmentDTO, emissionSources),
+    );
 
     return measuringEquipmentDTOsLengthValid && measuringEquipmentDTOsValid;
   }
@@ -70,6 +80,7 @@ export class MeasuringEquipmentEditDtoValidator {
   ): MeasurementDescription[] {
     return measuringEquipmentDTOs.map((measuringEquipmentDTO) => ({
       name: measuringEquipmentDTO.name,
+      technicalDescription: measuringEquipmentDTO?.technicalDescription,
       emissionSources: this.transformMeasuringEquipmentAppliedToCodes(measuringEquipmentDTO, empEmissionSources),
     }));
   }

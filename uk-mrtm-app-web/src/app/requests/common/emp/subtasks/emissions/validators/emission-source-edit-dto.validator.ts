@@ -22,7 +22,11 @@ import { XmlValidator } from '@shared/validators';
 
 export class EmissionSourceEditDtoValidator {
   private static isEmissionSourceIdentificationNumberValid(value?: EmissionSourceEditDTO['name']): boolean {
-    return XmlValidator.isEmpty(value) || (XmlValidator.isString(value) && XmlValidator.maxLength(value, 30));
+    return (
+      XmlValidator.isEmpty(value) ||
+      (XmlValidator.isString(value) && XmlValidator.maxLength(value, 30)) ||
+      (XmlValidator.isNumber(value) && XmlValidator.maxLength(value, 30))
+    );
   }
 
   private static isEmissionSourceNameValid(value?: EmissionSourceEditDTO['name']): boolean {
@@ -196,7 +200,7 @@ export class EmissionSourceEditDtoValidator {
       uniqueIdentifier: crypto.randomUUID(),
       referenceNumber: XmlValidator.isEmpty(emissionDTO?.identificationNumber)
         ? null
-        : emissionDTO.identificationNumber,
+        : emissionDTO.identificationNumber.toString(),
       name: emissionDTO.name,
       type: emissionDTO.emissionSourceTypeCode,
       sourceClass: emissionDTO.emissionSourceClassCode,

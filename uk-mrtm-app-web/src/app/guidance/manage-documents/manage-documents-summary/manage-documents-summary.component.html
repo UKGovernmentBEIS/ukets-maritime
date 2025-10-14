@@ -1,0 +1,83 @@
+@if (data(); as data) {
+  <netz-page-heading caption="Manage files">Check your answers</netz-page-heading>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type of section update</dt>
+      <dd govukSummaryListColumnValue>{{ data.type | manageGuidanceDocumentType }}</dd>
+      <dd govukSummaryListRowActions>
+        <a
+          class="govuk-link--no-visited-state"
+          govukLink
+          [routerLink]="data.type === 'UPDATE' ? '../../../' : '../../'">
+          Change
+        </a>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Section</dt>
+      <dd govukSummaryListColumnValue>{{ section()?.name }}</dd>
+      <dd govukSummaryListRowActions>
+        <a
+          class="govuk-link--no-visited-state"
+          govukLink
+          [routerLink]="data.type === 'UPDATE' ? '../../../' : '../../'">
+          Change
+        </a>
+      </dd>
+    </div>
+    @if (data.type !== 'CREATE') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>{{ data.type === 'DELETE' ? 'File name' : 'File to update' }}</dt>
+        <dd govukSummaryListColumnValue>{{ originalDocument()?.title }}</dd>
+        <dd govukSummaryListRowActions>
+          <a
+            class="govuk-link--no-visited-state"
+            govukLink
+            [routerLink]="data.type === 'DELETE' ? '../../' : '../../../'">
+            Change
+          </a>
+        </dd>
+      </div>
+    }
+    @if (data.type !== 'DELETE') {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>File name</dt>
+        <dd govukSummaryListColumnValue>{{ $any(data?.object)?.title }}</dd>
+        <dd govukSummaryListRowActions>
+          <a class="govuk-link--no-visited-state" govukLink routerLink="../">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>File</dt>
+        <dd govukSummaryListColumnValue>
+          <a
+            govukLink
+            class="govuk-link--no-visited-state"
+            target="_blank"
+            [routerLink]="['/guidance', section()?.id, 'download', $any(data.object)?.file?.uuid]">
+            {{ $any(data?.object)?.file?.file?.name }}
+          </a>
+        </dd>
+        <dd govukSummaryListRowActions>
+          <a class="govuk-link--no-visited-state" govukLink routerLink="../">Change</a>
+        </dd>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Display order</dt>
+        <dd govukSummaryListColumnValue>{{ $any(data?.object)?.displayOrderNo }}</dd>
+        <dd govukSummaryListRowActions>
+          <a class="govuk-link--no-visited-state" govukLink routerLink="../">Change</a>
+        </dd>
+      </div>
+    }
+  </dl>
+
+  <div class="govuk-button-group">
+    <button govukButton netzPendingButton type="button" role="button" (click)="onSubmit()">Confirm and continue</button>
+  </div>
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <a govukLink routerLink="/guidance">Return to: Guidance</a>
+  </div>
+}

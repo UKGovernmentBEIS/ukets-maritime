@@ -27,6 +27,7 @@
       "@error/*": ["src/app/error/*"],
       "@feedback/*": ["src/app/feedback/*"],
       "@forgot-password/*": ["src/app/forgot-password/*"],
+      "@guidance/*": ["src/app/guidance/*"],
       "@incorporate-header/*": ["src/app/incorporate-header/*"],
       "@invitation/*": ["src/app/invitation/*"],
       "@landing-page/*": ["src/app/landing-page/*"],

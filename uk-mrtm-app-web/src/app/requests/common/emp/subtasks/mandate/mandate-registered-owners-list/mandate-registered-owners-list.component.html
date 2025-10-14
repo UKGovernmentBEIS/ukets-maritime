@@ -1,10 +1,10 @@
 <mrtm-notification-banner />
 <mrtm-xml-error-summary [xmlErrors]="validationErrors()" [formatNestedErrorDetails]="formatValidationErrorDetails" />
 <div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-half">
+  <div class="govuk-grid-column-two-thirds">
     <netz-page-heading [caption]="wizardMap.title">{{ wizardMap.registeredOwners.title }}</netz-page-heading>
   </div>
-  <div class="govuk-grid-column-one-half">
+  <div class="govuk-grid-column-one-third">
     <div class="govuk-button-group float-right">
       <a [routerLink]="[wizardStep.REGISTERED_OWNERS_FORM_ADD]" govukButton>Add registered owner</a>
       <a govukLink govukSecondaryButton [routerLink]="['../', wizardStep.UPLOAD_OWNERS]">Upload file</a>
@@ -13,17 +13,14 @@
 </div>
 
 @if (!allShipsAssociated()) {
-  <govuk-warning-text assistiveText="">
-    The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered
-    owner has been added. All relevant ships must be associated with a registered owner.
-  </govuk-warning-text>
+  <govuk-warning-text [assistiveText]="notAllShipsAssociatedMessage" />
 }
 
 @if (hasNeedsReviewItems()) {
-  <govuk-warning-text assistiveText="">
-    The highlighted registered owners have been updated due to changes to the list of ships. Review the information for
-    each highlighted registered owner, then select Continue.
-  </govuk-warning-text>
+  <govuk-warning-text
+    [assistiveText]="
+      'The highlighted registered owners have been updated due to changes to the list of ships. Review the information for each highlighted registered owner, then select Continue.'
+    " />
 }
 
 <mrtm-mandate-registered-owners-table

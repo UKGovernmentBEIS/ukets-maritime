@@ -65,3 +65,4 @@ export * from './payment-bank-account-details-dto.type';
 export * from './non-compliance.types';
 export * from './peer-review-decision-timeline-map.type';
 export * from './with-needs-review.dto';
+export * from './aer-aggregated-data-ship-summary.interface';

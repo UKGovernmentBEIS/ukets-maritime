@@ -28,7 +28,7 @@
   <mrtm-multi-select-table
     [columns]="columns"
     [data]="page()"
-    (selectionChanged)="onShipsSelectionChanged($event)"
+    (selectionChanged)="onShipsSelectionChanged()"
     emptyTableText="No items to display"
     description="Select ships to associate">
     <ng-template let-column="column" let-row="row">

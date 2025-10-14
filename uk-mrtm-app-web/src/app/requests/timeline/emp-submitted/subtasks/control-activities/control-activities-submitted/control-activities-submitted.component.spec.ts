@@ -45,7 +45,7 @@ describe('ControlActivitiesSubmittedComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(screen.getAllByRole('heading')[0].textContent).toEqual('Control Activities');
+    expect(screen.getAllByRole('heading')[0].textContent).toEqual('Control activities');
 
     const summarySections = screen
       .getAllByRole('heading')

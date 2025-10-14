@@ -36,7 +36,7 @@ export const aerSubmitTaskContent: RequestTaskPageContentFactory = () => {
           {
             name: REPORTING_OBLIGATION_SUB_TASK,
             status: store.select(
-              aerCommonQuery.selectStatusForAerSubtask(REPORTING_OBLIGATION_SUB_TASK, TaskItemStatus.NOT_STARTED),
+              aerCommonQuery.selectStatusForSubtask(REPORTING_OBLIGATION_SUB_TASK, TaskItemStatus.NOT_STARTED),
             )(),
             linkText: reportingObligationMap.title,
             link: `${AER_ROUTE_PREFIX}/${REPORTING_OBLIGATION_SUB_TASK_PATH}`,

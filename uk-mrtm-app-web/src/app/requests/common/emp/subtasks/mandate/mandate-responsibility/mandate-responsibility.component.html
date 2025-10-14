@@ -16,6 +16,21 @@
       <a govukLink routerLink="." role="button" (click)="showDeleteQuestion.set(false)">Cancel</a>
     </div>
   } @else {
+    <div class="govuk-hint">
+      <p class="govuk-!-margin-bottom-0">In relation to one or more ships, have you both:</p>
+      <ol class="govuk-!-margin-top-0 govuk-!-padding-left-5">
+        <li>
+          taken on the responsibility from the registered owner for the operation of the ship and compliance with the
+          ISM code
+          <br />
+          and
+        </li>
+        <li>
+          entered into a legally binding written agreement with the registered owner to comply with the UK ETS maritime
+          operator obligations
+        </li>
+      </ol>
+    </div>
     <div formControlName="exist" govuk-radio legendSize="medium">
       <ng-container govukLegend>
         <span class="govuk-visually-hidden">{{ wizardMap.exist.title }}</span>

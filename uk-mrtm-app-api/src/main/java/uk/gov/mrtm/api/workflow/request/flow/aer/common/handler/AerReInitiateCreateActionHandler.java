@@ -24,7 +24,7 @@ public class AerReInitiateCreateActionHandler implements RequestAccountCreateAct
     public String process(Long accountId, ReportRelatedRequestCreateActionPayload payload, AppUser appUser) {
         Request request = requestService.findRequestById(payload.getRequestId());
         AerRequestPayload requestPayload = (AerRequestPayload) request.getPayload();
-        requestPayload.clearRegulatorData();
+        requestPayload.clearReinitiationObsoleteData();
 
         // Restart AER
         startProcessRequestService.reStartProcess(request);

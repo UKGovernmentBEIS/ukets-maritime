@@ -15,11 +15,7 @@ export const canActivateRecommendedImprovementsSummary: CanActivateFn = (route) 
   return (
     !isEditable ||
     (isEditable && isWizardCompleted(recommendedImprovements)) ||
-    createUrlTreeFromSnapshot(route, [
-      recommendedImprovements?.exist === true
-        ? `./${RecommendedImprovementsStep.ITEMS_LIST}`
-        : `./${RecommendedImprovementsStep.EXIST_FORM}`,
-    ])
+    createUrlTreeFromSnapshot(route, [`./${RecommendedImprovementsStep.EXIST_FORM}`])
   );
 };
 

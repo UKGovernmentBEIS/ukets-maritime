@@ -3,11 +3,9 @@ import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
+import { DataGapsMethodologiesStep } from '@requests/common/aer/subtasks/data-gaps-methodologies/data-gaps-methodologies.helpers';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
-import {
-  getNextIncompleteStep,
-  isWizardCompleted,
-} from '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies.wizard';
+import { isWizardCompleted } from '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies.wizard';
 
 export const canActivateDataGapsMethodologiesSummary: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);
@@ -17,7 +15,7 @@ export const canActivateDataGapsMethodologiesSummary: CanActivateFn = (route) =>
   return (
     !isEditable ||
     (isEditable && isWizardCompleted(dataGapsMethodologies)) ||
-    createUrlTreeFromSnapshot(route, [`./${getNextIncompleteStep(dataGapsMethodologies)}`])
+    createUrlTreeFromSnapshot(route, [`./${DataGapsMethodologiesStep.METHOD_REQUIRED}`])
   );
 };
 

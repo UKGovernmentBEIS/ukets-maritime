@@ -175,6 +175,7 @@ export class DetailsComponent implements OnInit {
     }),
     permissions: this.fb.group({
       MANAGE_USERS_AND_CONTACTS: ['NONE'],
+      MANAGE_GUIDANCE: ['NONE'],
       ADD_OPERATOR_ADMIN: ['NONE'],
       MANAGE_VERIFICATION_BODIES: ['NONE'],
       ASSIGN_REASSIGN_TASKS: ['NONE'],
@@ -209,6 +210,11 @@ export class DetailsComponent implements OnInit {
       permission: 'MANAGE_USERS_AND_CONTACTS',
       task: 'Manage users and contacts',
       type: 'Regulator users and contacts',
+    },
+    {
+      permission: 'MANAGE_GUIDANCE',
+      task: 'Manage guidance',
+      type: 'Guidance',
     },
     {
       permission: 'ADD_OPERATOR_ADMIN',

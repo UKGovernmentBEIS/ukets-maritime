@@ -5,20 +5,20 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { take } from 'rxjs';
 import { isNil } from 'lodash-es';
 
-import { EmpRegisteredOwner, RegisteredOwnerShipDetails, ShipDetails } from '@mrtm/api';
+import { EmpRegisteredOwner, RegisteredOwnerShipDetails } from '@mrtm/api';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
-import { TaskItemStatus } from '@requests/common';
 import { MandateRegisteredOwnersTableComponent } from '@requests/common/components/mandate';
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { NotificationBannerComponent, XmlErrorSummaryComponent } from '@shared/components';
+import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
 
 @Component({
@@ -44,6 +44,7 @@ export class MandateRegisteredOwnersListComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly router: Router = inject(Router);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
+  private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
   private readonly taskService: TaskService<EmpTaskPayload> = inject(TaskService);
 
   public readonly wizardMap = mandateMap;
@@ -60,23 +61,18 @@ export class MandateRegisteredOwnersListComponent {
   );
 
   public allShipsAssociated: Signal<boolean> = computed(() => {
-    const allIsmShips = new Set<ShipDetails['imoNumber']>(
-      this.store
-        .select(empCommonQuery.selectListOfShips)()
-        .filter(
-          (ship) => ship.status === TaskItemStatus.COMPLETED && ship?.natureOfReportingResponsibility === 'ISM_COMPANY',
-        )
-        .map((ship) => ship?.imoNumber),
-    );
-
+    const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
       this.data()
         .map((registeredOwner) => registeredOwner.ships.map((ship) => ship.imoNumber))
         .flat(),
     );
 
-    return registeredOwnersShips.size === allIsmShips.size;
+    return registeredOwnersShips.size === ismShips.size;
   });
+
+  readonly notAllShipsAssociatedMessage =
+    'The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered owner has been added. All relevant ships must be associated with a registered owner.';
 
   public onSubmit(): void {
     this.validationErrors.set(undefined);
@@ -86,8 +82,7 @@ export class MandateRegisteredOwnersListComponent {
       errors.push({
         column: null,
         row: null,
-        message:
-          'The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered owner has been added. All relevant ships must be associated with a registered owner.',
+        message: this.notAllShipsAssociatedMessage,
       });
     }
 
@@ -103,6 +98,7 @@ export class MandateRegisteredOwnersListComponent {
 
     if (errors.length > 0) {
       this.validationErrors.set(errors);
+      this.notificationBannerStore.reset();
       return;
     }
 

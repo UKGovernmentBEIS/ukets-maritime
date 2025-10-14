@@ -49,7 +49,7 @@ export class AerAggregatedDataListSummaryComponent {
       this.editable() &&
       statuses?.length &&
       statuses?.every((task) => task === TaskItemStatus.COMPLETED) &&
-      this.store.select(aerCommonQuery.selectStatusForAerSubtask(AER_AGGREGATED_DATA_SUB_TASK))() !==
+      this.store.select(aerCommonQuery.selectStatusForSubtask(AER_AGGREGATED_DATA_SUB_TASK))() !==
         TaskItemStatus.COMPLETED
     );
   });

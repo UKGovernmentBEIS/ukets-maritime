@@ -5,7 +5,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { take } from 'rxjs';
 import { isNil } from 'lodash-es';
 
-import { AerFuelConsumption, AerShipAggregatedData, AerShipEmissions } from '@mrtm/api';
+import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
@@ -24,7 +24,7 @@ import { validateIfUsedFuelsExistInEmissionsValidator } from '@requests/common/a
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataShipSummaryTemplateComponent } from '@shared/components/summaries';
-import { AerPortSummaryItemDto, AerVoyageSummaryItemDto } from '@shared/types';
+import { AerAggregatedDataShipSummary, AerPortSummaryItemDto, AerVoyageSummaryItemDto } from '@shared/types';
 import BigNumber from 'bignumber.js';
 
 @Component({
@@ -47,21 +47,34 @@ export class AerAggregatedDataShipSummaryComponent {
   readonly form = new UntypedFormGroup({});
   readonly dataId: InputSignal<string> = input<string>();
   readonly wizardMap = aerAggregatedDataSubtasksListMap;
-  readonly showWarningMessage: Signal<boolean> = computed(() => {
-    const { fromFetch, relatedPorts, relatedVoyages } = this.aggregatedData() ?? {};
+  readonly warningMessages: Signal<Array<string>> = computed(() => {
+    const warnings: Array<string> = [];
+    const { fromFetch, relatedPorts, relatedVoyages, fuelConsumptions } = this.aggregatedData() ?? {};
 
-    return fromFetch && !relatedPorts.length && !relatedVoyages.length;
+    if (fromFetch && !relatedPorts.length && !relatedVoyages.length) {
+      warnings.push(
+        'No relevant data can be retrieved from the voyages or ports subtasks. Review the aggregated data and ensure that is correct.',
+      );
+    }
+
+    if (!isNil(fuelConsumptions.find((fuel) => fuel.needsReview))) {
+      warnings.push(
+        'The highlighted fuel types have been updated due to changes made to the ‘Ships and emission details list’ subtask. Review the details for each fuel type, then select Confirm and continue.',
+      );
+    }
+
+    return warnings;
   });
   private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
   private readonly store = inject(RequestTaskStore);
   readonly aggregatedData: Signal<
-    AerShipAggregatedData & {
+    AerAggregatedDataShipSummary & {
       status: TaskItemStatus;
       relatedPorts?: AerPortSummaryItemDto[];
       relatedShip: AerShipEmissions & { status: TaskItemStatus };
       relatedVoyages?: AerVoyageSummaryItemDto[];
     }
-  > = computed(() => this.store.select(aerCommonQuery.selectAggregatedDataItem(this.dataId()))());
+  > = computed(() => this.store.select(aerCommonQuery.selectAggregatedDataSummaryItem(this.dataId()))());
   readonly editable: Signal<boolean> = computed(() => {
     return !this.aggregatedData()?.fromFetch && this.store.select(requestTaskQuery.selectIsEditable)();
   });
@@ -95,11 +108,11 @@ export class AerAggregatedDataShipSummaryComponent {
     let isValid = Object.keys(errors).length === 0;
 
     if (isNil(totalShipEmissions) || new BigNumber(totalShipEmissions).lte(0)) {
-      errors['totalEmissions'] = 'The total in port emissions should be greater than 0';
+      errors['totalEmissions'] = 'The total ship emissions should be greater than or equal to 0';
       isValid = false;
     }
 
-    if (!isNil(surrenderEmissions) && new BigNumber(surrenderEmissions).lt(0)) {
+    if (!isNil(surrenderEmissions) && new BigNumber(surrenderEmissions).lte(0)) {
       errors['surrenderEmissions'] = 'The emissions figure for surrender should be greater than or equal to 0';
       isValid = false;
     }

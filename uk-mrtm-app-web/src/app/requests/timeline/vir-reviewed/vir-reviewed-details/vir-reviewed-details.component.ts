@@ -5,7 +5,6 @@ import { RequestActionStore } from '@netz/common/store';
 import {
   LinkDirective,
   SummaryListComponent,
-  SummaryListRowActionsDirective,
   SummaryListRowDirective,
   SummaryListRowKeyDirective,
   SummaryListRowValueDirective,
@@ -26,7 +25,6 @@ import { AttachedFile } from '@shared/types';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
     LinkDirective,
-    SummaryListRowActionsDirective,
     RouterLink,
     NotProvidedDirective,
     UserInfoResolverPipe,

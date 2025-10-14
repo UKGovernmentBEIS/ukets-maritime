@@ -1,4 +1,17 @@
 -----------------------------------------------------------------------------------
+MARITIME XSD Files 	(17-09-2025)
+-----------------------------------------------------------------------------------
+
+1) Updates on ship-details-and-emissions-v1.4.xsd
+  1.1) new field added technicalDescription
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.4.xsd: Updates
+aer-ship-details-and-emissions-v1.3.xsd: No updates
+emissions-aggregated-data-v1.0.xsd: No updates
+
+-----------------------------------------------------------------------------------
 MARITIME XSD Files 	(01-08-2025)
 -----------------------------------------------------------------------------------
 

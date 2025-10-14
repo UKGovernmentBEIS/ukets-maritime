@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 import { EmissionsMonitoringPlan, ReviewDecisionRequiredChange } from '@mrtm/api';
 
@@ -24,26 +24,35 @@ const empReviewDecisionFormGroupBuilder = (
   reviewAttachments: EmpVariationReviewTaskPayload['reviewAttachments'],
   store: RequestTaskStore,
   requestTaskFileService: RequestTaskFileService,
+  extraFormGroupValidators?: Array<() => ValidatorFn>,
 ): ReviewDecisionFormModel =>
-  fb.group({
-    type: fb.control(reviewDecision?.type ?? null, {
-      validators: [GovukValidators.required('Select a decision for this review group')],
-      updateOn: 'change',
-    }),
-    notes: fb.control(reviewDecision?.details?.notes ?? null, [
-      GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
-    ]),
-    requiredChanges: fb.array(
-      reviewDecision?.details?.requiredChanges?.map((requiredChange) =>
-        createAnotherRequiredChange(store, requestTaskFileService, requiredChange, reviewAttachments),
-      ) ?? [createAnotherRequiredChange(store, requestTaskFileService)],
-    ),
-    variationScheduleItems: fb.array(
-      (reviewDecision?.details?.variationScheduleItems ?? []).map((item) => createAnotherVariationSchedule(item)),
-    ),
-  });
+  fb.group(
+    {
+      type: fb.control(reviewDecision?.type ?? null, {
+        validators: [GovukValidators.required('Select a decision for this review group')],
+        updateOn: 'change',
+      }),
+      notes: fb.control(reviewDecision?.details?.notes ?? null, [
+        GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
+      ]),
+      requiredChanges: fb.array(
+        reviewDecision?.details?.requiredChanges?.map((requiredChange) =>
+          createAnotherRequiredChange(store, requestTaskFileService, requiredChange, reviewAttachments),
+        ) ?? [createAnotherRequiredChange(store, requestTaskFileService)],
+      ),
+      variationScheduleItems: fb.array(
+        (reviewDecision?.details?.variationScheduleItems ?? []).map((item) => createAnotherVariationSchedule(item)),
+      ),
+    },
+    {
+      validators: (extraFormGroupValidators ?? []).map((validatorFn) => validatorFn()),
+    },
+  );
 
-export const reviewEmpSubtaskDecisionFormProvider = (subTask: keyof EmissionsMonitoringPlan): Provider => {
+export const reviewEmpSubtaskDecisionFormProvider = (
+  subTask: keyof EmissionsMonitoringPlan,
+  extraFormGroupValidators?: Array<() => ValidatorFn>,
+): Provider => {
   return {
     provide: VARIATION_REVIEW_DECISION_FORM,
     deps: [FormBuilder, RequestTaskStore, RequestTaskFileService],
@@ -56,7 +65,14 @@ export const reviewEmpSubtaskDecisionFormProvider = (subTask: keyof EmissionsMon
       const reviewDecision = store.select(empVariationReviewQuery.selectReviewGroupDecisions)()?.[reviewGroup];
       const reviewAttachments = store.select(empVariationReviewQuery.selectReviewAttachments)();
 
-      return empReviewDecisionFormGroupBuilder(fb, reviewDecision, reviewAttachments, store, requestTaskFileService);
+      return empReviewDecisionFormGroupBuilder(
+        fb,
+        reviewDecision,
+        reviewAttachments,
+        store,
+        requestTaskFileService,
+        extraFormGroupValidators,
+      );
     },
   };
 };

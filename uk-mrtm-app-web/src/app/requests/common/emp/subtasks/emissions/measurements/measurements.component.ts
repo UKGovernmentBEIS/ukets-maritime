@@ -11,9 +11,11 @@ import {
   DetailsComponent,
   FieldsetDirective,
   LegendDirective,
+  TextareaComponent,
   TextInputComponent,
 } from '@netz/govuk-components';
 
+import { opinionStatementMap } from '@requests/common/aer';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { ShipStepTitleCustomPipe } from '@requests/common/components/emissions/pipes';
 import { ReturnToShipsListTableComponent } from '@requests/common/components/emissions/return-to-ships-list-table';
@@ -49,6 +51,7 @@ import { AddAnotherDirective } from '@shared/directives';
     AddAnotherDirective,
     ButtonDirective,
     ReturnToShipsListTableComponent,
+    TextareaComponent,
   ],
   templateUrl: './measurements.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,4 +88,6 @@ export class MeasurementsComponent {
       })
       .subscribe();
   }
+
+  protected readonly map = opinionStatementMap;
 }

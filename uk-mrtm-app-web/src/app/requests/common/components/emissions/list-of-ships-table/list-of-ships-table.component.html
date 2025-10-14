@@ -17,6 +17,7 @@
       <button govukSecondaryButton type="button" (click)="handleRemoveShips(tableData)">Delete</button>
     }
     <mrtm-multi-select-table
+      id="listOfShips"
       [columns]="columns"
       [data]="tableData"
       emptyTableText="No items to display"
@@ -42,6 +43,7 @@
     </mrtm-multi-select-table>
     @if (totalItems() > pageSize()) {
       <govuk-pagination
+        fragment="listOfShips"
         [count]="this.totalItems()"
         [pageSize]="pageSize()"
         (currentPageChange)="onPageChange($event)" />

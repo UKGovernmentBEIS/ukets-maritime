@@ -45,17 +45,16 @@ export class NonComplianceDetailsSelectedRequestsComponent {
   readonly selectedRequests: Signal<string[]> = toSignal(this.selectedRequestsFormArray.valueChanges, {
     initialValue: this.selectedRequestsFormArray.value,
   });
-  readonly availableRequestsOptions: Signal<GovukSelectOption[]> = computed(() =>
-    [...(this.nonComplianceDetails()?.availableRequests ?? [])]
-      .sort((a, b) => (a.id > b.id ? 1 : -1))
-      .map(({ id, type }) => ({
-        value: id,
-        text: this.requestNamePipe.transform({ id, type }),
-        disabled: this.selectedRequests().includes(id),
-      })),
+  readonly availableRequestsOptions = computed<Array<GovukSelectOption[]>>(() =>
+    this.selectedRequests().map((selectedRequestId) =>
+      [...(this.nonComplianceDetails()?.availableRequests ?? [])]
+        .sort((a, b) => (a.id > b.id ? 1 : -1))
+        .filter(({ id }) => id === selectedRequestId || !this.selectedRequests().includes(id))
+        .map(({ id, type }) => ({ value: id, text: this.requestNamePipe.transform({ id, type }) })),
+    ),
   );
-  readonly isAddButtonDisabled: Signal<boolean> = computed(
-    () => this.nonComplianceDetails()?.availableRequests?.length <= this.selectedRequests().length,
+  readonly showAddButton = computed<boolean>(
+    () => this.nonComplianceDetails()?.availableRequests?.length > this.selectedRequests().length,
   );
 
   onAdd() {

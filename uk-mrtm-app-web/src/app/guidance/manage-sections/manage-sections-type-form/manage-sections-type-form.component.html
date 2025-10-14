@@ -1,0 +1,38 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Manage sections"
+  heading="Select type of section update"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true">
+  <ng-template #sectionsDropdown>
+    <div
+      govuk-select
+      widthClass="govuk-!-width-one-half"
+      [label]="formGroup.value?.type === 'UPDATE' ? 'Select section to update' : 'Select section to delete'"
+      formControlName="sectionId"
+      [options]="sections()"></div>
+  </ng-template>
+
+  <div formControlName="type" legend="Select type of section update" govuk-radio>
+    <govuk-radio-option value="CREATE" label="Add new section" />
+    @if (sections()?.length) {
+      <govuk-radio-option value="UPDATE" label="Update section details">
+        <ng-container govukConditionalContent>
+          <ng-container *ngTemplateOutlet="sectionsDropdown" />
+        </ng-container>
+      </govuk-radio-option>
+      <govuk-radio-option
+        value="DELETE"
+        hint="You can only delete sections that do not contain files."
+        label="Delete section">
+        <ng-container govukConditionalContent>
+          <ng-container *ngTemplateOutlet="sectionsDropdown" />
+        </ng-container>
+      </govuk-radio-option>
+    }
+  </div>
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink routerLink="/guidance">Return to: Guidance</a>
+</div>

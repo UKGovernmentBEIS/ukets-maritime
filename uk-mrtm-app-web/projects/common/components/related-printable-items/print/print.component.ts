@@ -49,6 +49,17 @@ export class PrintComponent {
             left: 0;
             top: 0;
           }
+          
+          a[govuklink], a[govuklink]:hover, a[govuklink]:visited, a[govuklink]:active {
+            pointer-events: none;
+            cursor: default;
+            text-decoration: none;
+            color: unset!important;
+          }
+          strong.govuk-tag {
+            color: unset!important;
+            background-color: none!important;
+          }
       }
     `;
 

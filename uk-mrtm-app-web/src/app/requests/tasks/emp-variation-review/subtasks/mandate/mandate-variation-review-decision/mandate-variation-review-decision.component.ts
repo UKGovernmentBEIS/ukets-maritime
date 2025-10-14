@@ -1,13 +1,23 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
+import { RegisteredOwnerShipDetails } from '@mrtm/api';
+
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { WarningTextComponent } from '@netz/govuk-components';
 
 import { empCommonQuery, empVariationReviewQuery } from '@requests/common/emp/+state';
 import { EmpVariationReviewTaskPayload } from '@requests/common/emp/emp.types';
-import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
+import {
+  hasNeedsReviewRegisteredOwners,
+  MANDATE_SUB_TASK,
+  MandateWizardStep,
+  validateAllIsmShipsHaveRegisteredOwner,
+} from '@requests/common/emp/subtasks/mandate';
 import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { transformWizardStepDecision } from '@requests/common/emp/utils/transform-wizard-step-decision';
@@ -23,10 +33,21 @@ import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/co
 @Component({
   selector: 'mrtm-mandate-variation-review-decision',
   standalone: true,
-  imports: [ReviewDecisionComponent, WizardStepComponent, MandateSummaryTemplateComponent, ReactiveFormsModule],
+  imports: [
+    ReviewDecisionComponent,
+    WizardStepComponent,
+    MandateSummaryTemplateComponent,
+    ReactiveFormsModule,
+    WarningTextComponent,
+  ],
   templateUrl: './mandate-variation-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [reviewEmpSubtaskDecisionFormProvider(MANDATE_SUB_TASK)],
+  providers: [
+    reviewEmpSubtaskDecisionFormProvider(MANDATE_SUB_TASK, [
+      validateAllIsmShipsHaveRegisteredOwner,
+      hasNeedsReviewRegisteredOwners,
+    ]),
+  ],
 })
 export class MandateVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -37,12 +58,27 @@ export class MandateVariationReviewDecisionComponent {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
   mandateMap = mandateMap;
-  mandate = this.store.select(empCommonQuery.selectMandate)();
+  mandate = this.store.select(empCommonQuery.selectExtendedMandate)();
   originalMandate = this.store.select(empVariationReviewQuery.selectOriginalMandate)();
   operatorName = this.store.select(empCommonQuery.selectOperatorDetails)()?.operatorName;
   originalOperatorName = this.store.select(empVariationReviewQuery.selectOriginalOperatorDetails)()?.operatorName;
   isEditable = this.store.select(requestTaskQuery.selectIsEditable)();
   wizardStep = transformWizardStepDecision(MandateWizardStep);
+
+  public readonly hasNeedsReviewItems: Signal<boolean> = computed(
+    () => !isNil(this.mandate?.registeredOwners.find((ro) => ro.needsReview === true)),
+  );
+
+  public allShipsAssociated: Signal<boolean> = computed(() => {
+    const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
+    const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
+      (this.mandate?.registeredOwners ?? [])
+        .map((registeredOwner) => registeredOwner.ships.map((ship) => ship.imoNumber))
+        .flat(),
+    );
+
+    return registeredOwnersShips.size === ismShips.size;
+  });
 
   onSubmit() {
     (this.service as EmpVariationReviewService)

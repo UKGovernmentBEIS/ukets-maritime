@@ -25,7 +25,7 @@ import {
   NON_COMPLIANCE_NOTICE_OF_INTENT_ROUTE_PREFIX,
   NON_COMPLIANCE_SUBMIT_ROUTE_PREFIX,
 } from '@requests/common/non-compliance';
-import { PAYMENT_ROUTE_PREFIX } from '@requests/common/payment';
+import { isPaymentCompleted, PAYMENT_ROUTE_PREFIX } from '@requests/common/payment';
 import {
   canActivateProvideNoteRedirect,
   PROVIDE_NOTE_REDIRECT_ROUTE_PREFIX,
@@ -211,11 +211,13 @@ export const TASKS_ROUTES: Routes = [
       },
       {
         path: 'rde',
+        canActivate: [isPaymentCompleted],
         loadChildren: () =>
           import('@requests/common/emp/request-deadline-extension').then((r) => r.REQUEST_DEADLINE_EXTENSION_ROUTES),
       },
       {
         path: 'rfi',
+        canActivate: [isPaymentCompleted],
         loadChildren: () =>
           import('@requests/common/emp/request-for-information').then((r) => r.REQUEST_FOR_INFORMATION_ROUTES),
       },

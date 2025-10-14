@@ -385,7 +385,11 @@ const selectIsmShipImoNumbers: StateSelector<
   (ships) =>
     new Set(
       ships
-        .filter((ship) => ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY')
+        .filter(
+          (ship) =>
+            ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY' &&
+            ship.status === TaskItemStatus.COMPLETED,
+        )
         .map((ship) => ship?.details?.imoNumber),
     ),
 );

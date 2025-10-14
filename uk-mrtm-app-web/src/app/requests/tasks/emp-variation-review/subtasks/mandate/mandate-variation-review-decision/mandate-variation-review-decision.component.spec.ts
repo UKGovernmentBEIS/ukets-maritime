@@ -79,7 +79,7 @@ describe('MandateVariationReviewDecisionComponent', () => {
 
   it('should display all HTMLElements', () => {
     expect(page.summariesContents).toEqual([
-      'Has the responsibility for compliance with UK ETS been delegated to you by one or more registered owners for one or more ships?',
+      'Has the responsibility for compliance with UK ETS been delegated to you by a registered owner for one or more ships?',
       'Yes',
       'Change',
       'Declaration of delegation of UK ETS responsibility',
@@ -91,13 +91,9 @@ describe('MandateVariationReviewDecisionComponent', () => {
       'Contact details',
       'Associated ships',
       'Date of written agreement',
-      'RegisteredOwner11000000',
+      'RegisteredOwner11111111',
       'RegisteredOwner1RegisteredOwner1@o.com',
       'EVER GREEN (IMO: 1111111)',
-      '1 Mar 2025',
-      'RegisteredOwner22000000',
-      'RegisteredOwner2RegisteredOwner2@o.com',
-      'Thon Green (IMO: 2222222)',
       '1 Mar 2025',
     ]);
   });

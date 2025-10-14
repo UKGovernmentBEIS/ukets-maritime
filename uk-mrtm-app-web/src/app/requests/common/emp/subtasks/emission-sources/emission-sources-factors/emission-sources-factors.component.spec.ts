@@ -77,7 +77,7 @@ describe('EmissionSourceFactorsComponent', () => {
       const summaryErrors = within(summaryBox).getAllByRole('link');
       expect(summaryErrors).toHaveLength(1);
       expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
-        'Select if you are using default values for all emissions factors',
+        'Select yes if you are using default values for all emissions factors',
       ]);
     });
   });

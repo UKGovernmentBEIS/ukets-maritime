@@ -5,12 +5,15 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.mrtm.api.account.domain.MrtmAccount;
+import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.common.config.RegistryConfig;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
@@ -90,6 +93,9 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
     @Mock
     private EmpIssuanceSendRegistryAccountOpeningAddRequestActionService requestActionService;
+
+    @Mock
+    private MrtmAccountQueryService accountQueryService;
 
     @Captor
     private ArgumentCaptor<EmpApprovedEvent> empApprovedEventArgumentCaptor;
@@ -243,7 +249,9 @@ class EmpIssuanceOfficialNoticeServiceTest {
                 .build();
 
         List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
+        MrtmAccount mrtmAccount = MrtmAccount.builder().registryId(null).build();
 
+        when(accountQueryService.getAccountById(accountId)).thenReturn(mrtmAccount);
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(registryConfig.getEmail()).thenReturn(registryEmail);
         OrganisationStructure organisationStructure = mock(OrganisationStructure.class);
@@ -277,17 +285,19 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
         verify(empQueryService).getEmissionsMonitoringPlanDTOByAccountId(accountId);
         verify(publisher, times(1)).publishEvent(empApprovedEventArgumentCaptor.capture());
+        verify(accountQueryService).getAccountById(accountId);
 
         verifyNoMoreInteractions(requestService, decisionNotificationUsersService,
-            officialNoticeSendService, empQueryService, publisher, requestActionService);
+            officialNoticeSendService, empQueryService, publisher, requestActionService, accountQueryService);
 
         assertEquals(accountId, empApprovedEventArgumentCaptor.getValue().getAccountId());
         assertEquals(id, empApprovedEventArgumentCaptor.getValue().getEmpId());
         assertEquals(emissionsMonitoringPlan, empApprovedEventArgumentCaptor.getValue().getEmissionsMonitoringPlan());
     }
 
-    @Test
-    void sendOfficialNotice_already_sent_to_registry() {
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void sendOfficialNotice_already_sent_to_registry(boolean accountOpeningEventSentToRegistry) {
         FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
         List<FileInfoDTO> attachments = List.of(officialDocFileInfoDTO);
         String requestId = "1";
@@ -310,12 +320,14 @@ class EmpIssuanceOfficialNoticeServiceTest {
             .payload(EmpIssuanceRequestPayload.builder()
                 .decisionNotification(decisionNotification)
                 .officialNotice(officialDocFileInfoDTO)
-                .accountOpeningEventSentToRegistry(true)
+                .accountOpeningEventSentToRegistry(accountOpeningEventSentToRegistry)
                 .build())
             .build();
 
         List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
+        MrtmAccount mrtmAccount = MrtmAccount.builder().registryId(accountOpeningEventSentToRegistry? null : 1234567).build();
 
+        when(accountQueryService.getAccountById(accountId)).thenReturn(mrtmAccount);
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(registryConfig.getEmail()).thenReturn(registryEmail);
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of(decisionNotificationUserEmail));
@@ -325,10 +337,11 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(requestService, times(1)).findRequestById(requestId);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
+        verify(accountQueryService).getAccountById(accountId);
         verifyNoInteractions(requestActionService);
 
         verifyNoMoreInteractions(requestService, decisionNotificationUsersService,
-            officialNoticeSendService);
+            officialNoticeSendService, accountQueryService);
         verifyNoInteractions(empQueryService, publisher);
     }
 

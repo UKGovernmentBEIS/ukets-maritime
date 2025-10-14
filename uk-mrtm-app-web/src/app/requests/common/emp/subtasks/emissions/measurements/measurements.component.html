@@ -31,6 +31,11 @@
           }
           <div formControlName="name" govuk-text-input label="Name of measurement device"></div>
           <div
+            formControlName="technicalDescription"
+            govuk-textarea
+            label="Technical description (optional)"
+            [maxLength]="10000"></div>
+          <div
             formControlName="emissionSources"
             govuk-checkboxes
             legend="Select the emission source this device is used for"

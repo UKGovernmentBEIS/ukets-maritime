@@ -14,6 +14,7 @@ import { AER_REVIEWED_ROUTE_PREFIX } from '@requests/timeline/aer-reviewed';
 import { AER_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/aer-submitted/aer-submitted.routes';
 import { AER_VERIFICATION_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/aer-verification-submitted/aer-verification-submitted.routes';
 import { timelineContent } from '@requests/timeline/timeline.content';
+import { VIR_REVIEWED_ROUTE_PREFIX } from '@requests/timeline/vir-reviewed';
 import { VIR_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/vir-submitted';
 import { taskActionTypeToTitleMap } from '@shared/constants';
 
@@ -89,6 +90,10 @@ export const TIMELINE_ROUTES: Routes = [
       {
         path: AER_REVIEWED_ROUTE_PREFIX,
         loadChildren: () => import('@requests/timeline/aer-reviewed').then((r) => r.AER_REVIEWED_ROUTES),
+      },
+      {
+        path: VIR_REVIEWED_ROUTE_PREFIX,
+        loadChildren: () => import('@requests/timeline/vir-reviewed').then((r) => r.VIR_REVIEWED_ROUTES),
       },
     ],
   },

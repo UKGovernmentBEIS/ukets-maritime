@@ -11,7 +11,7 @@
 export interface NonComplianceCivilPenaltySaveApplicationRequestTaskActionPayload {
   payloadType?: string;
   civilPenalty: string;
-  penaltyAmount?: string;
+  penaltyAmount: string;
   dueDate?: string;
   comments?: string;
   sectionsCompleted?: { [key: string]: string };

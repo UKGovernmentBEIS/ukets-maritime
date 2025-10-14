@@ -18,7 +18,7 @@ export const emissionSourcesComplianceFormProvider: Provider = {
       exist: formBuilder.control(emissionCompliance?.exist ?? null, {
         validators: [
           GovukValidators.required(
-            'Select if you will be making an emissions reduction claim as a result of the purchase and delivery of eligible fuel',
+            'Select yes if you will be making an emissions reduction claim relating to eligible fuels',
           ),
         ],
       }),

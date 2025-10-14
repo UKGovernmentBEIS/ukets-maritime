@@ -5,6 +5,9 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ObjectUtils;
+import uk.gov.mrtm.api.account.domain.MrtmAccount;
+import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.common.config.RegistryConfig;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.event.EmpApprovedEvent;
@@ -58,6 +61,8 @@ public class EmpIssuanceOfficialNoticeService {
 
     private final EmpIssuanceSendRegistryAccountOpeningAddRequestActionService addRequestActionService;
 
+    private final MrtmAccountQueryService accountQueryService;
+
     private static final String INTEGRATION_POINT_KEY = "Account Created";
 
     public void sendOfficialNotice(final String requestId, EmpIssuanceDeterminationType determinationType) {
@@ -72,7 +77,9 @@ public class EmpIssuanceOfficialNoticeService {
                 List.of(registryConfig.getEmail()));
 
         if (EmpIssuanceDeterminationType.APPROVED.equals(determinationType)) {
-            if (!requestPayload.isAccountOpeningEventSentToRegistry()) {
+            final MrtmAccount account = accountQueryService.getAccountById(request.getAccountId());
+
+            if (!requestPayload.isAccountOpeningEventSentToRegistry() && ObjectUtils.isEmpty(account.getRegistryId())) {
                 final EmissionsMonitoringPlanDTO emp = empQueryService
                     .getEmissionsMonitoringPlanDTOByAccountId(request.getAccountId())
                     .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));

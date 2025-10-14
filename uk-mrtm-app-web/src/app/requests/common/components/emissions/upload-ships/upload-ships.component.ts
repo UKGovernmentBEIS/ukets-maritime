@@ -134,10 +134,9 @@ export class UploadShipsComponent {
       this.service
         .saveSubtask(EMISSIONS_SUB_TASK, UPLOAD_SHIPS_STEP, this.activatedRoute, this.listOfShips())
         .subscribe(() => {
+          const actionMsg = this.showConfirmation ? 'replaced' : 'uploaded';
           this.notificationBannerStore.setSuccessMessages([
-            this.showConfirmation
-              ? 'The ships and emission details file has been replaced successfully.'
-              : 'The ships and emission details file has been uploaded successfully.',
+            `The ships and emission details file has been ${actionMsg} successfully`,
           ]);
         });
     }

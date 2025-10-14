@@ -15,6 +15,10 @@ export class XmlValidator {
     return typeof value === 'string';
   }
 
+  static isNumber(value: any) {
+    return typeof value === 'number';
+  }
+
   static isDate(value: any) {
     const date = new Date(value);
 
@@ -22,11 +26,15 @@ export class XmlValidator {
   }
 
   static minLength(value: any, length: number) {
-    return value?.length >= length;
+    const transformedValue = typeof value === 'number' ? value?.toString() : value;
+
+    return transformedValue?.length >= length;
   }
 
   static maxLength(value: any, length: number) {
-    return value?.length <= length;
+    const transformedValue = typeof value === 'number' ? value?.toString() : value;
+
+    return transformedValue?.length <= length;
   }
 
   static min(value: any, minimum: number) {

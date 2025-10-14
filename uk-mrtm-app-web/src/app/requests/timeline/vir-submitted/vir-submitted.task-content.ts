@@ -15,11 +15,12 @@ import { taskActionTypeToTitleTransformer } from '@shared/utils';
 const getTaskItem = (
   subtask: keyof VirVerificationData,
   verificationDataItem: UncorrectedItem | VerifierComment,
+  routePrefix: string,
 ): TaskItem => {
   return {
     name: subtask,
     linkText: 'Respond to recommendation',
-    link: `${VIR_SUBMITTED_ROUTE_PREFIX}/${verificationDataItem.reference}`,
+    link: `${routePrefix}/${verificationDataItem.reference}`,
     status: undefined,
     postContentComponent: VirSubmitTaskItemDetailsComponent,
     data: {
@@ -31,24 +32,35 @@ const getTaskItem = (
 const getSectionsByVerificationData = (
   section: keyof VirVerificationData,
   item: Record<string, UncorrectedItem | VerifierComment>,
+  routePrefix: string,
 ): Array<TaskSection> =>
   Object.keys(item ?? {}).map((key) => ({
     title: `${key}: ${virSubtaskList?.[section]?.title}`,
-    tasks: [getTaskItem(section, item[key])],
+    tasks: [getTaskItem(section, item[key], routePrefix)],
   }));
 
-export const virSubmittedTaskContent: RequestTaskPageContentFactory = () => {
-  const store = inject(RequestActionStore);
-  const actionType = store.select(requestActionQuery.selectActionType)();
-  const year = store.select(virSubmittedQuery.selectReportingYear)();
-  const verificationData = store.select(virSubmittedQuery.selectVerificationData)();
+export const virSubmittedTaskContent =
+  (routePrefix: string = VIR_SUBMITTED_ROUTE_PREFIX): RequestTaskPageContentFactory =>
+  () => {
+    const store = inject(RequestActionStore);
+    const actionType = store.select(requestActionQuery.selectActionType)();
+    const year = store.select(virSubmittedQuery.selectReportingYear)();
+    const verificationData = store.select(virSubmittedQuery.selectVerificationData)();
 
-  return {
-    header: taskActionTypeToTitleTransformer(actionType, year),
-    sections: [
-      ...getSectionsByVerificationData('uncorrectedNonConformities', verificationData?.uncorrectedNonConformities),
-      ...getSectionsByVerificationData('recommendedImprovements', verificationData?.recommendedImprovements),
-      ...getSectionsByVerificationData('priorYearIssues', verificationData?.priorYearIssues),
-    ],
+    return {
+      header: taskActionTypeToTitleTransformer(actionType, year),
+      sections: [
+        ...getSectionsByVerificationData(
+          'uncorrectedNonConformities',
+          verificationData?.uncorrectedNonConformities,
+          routePrefix,
+        ),
+        ...getSectionsByVerificationData(
+          'recommendedImprovements',
+          verificationData?.recommendedImprovements,
+          routePrefix,
+        ),
+        ...getSectionsByVerificationData('priorYearIssues', verificationData?.priorYearIssues, routePrefix),
+      ],
+    };
   };
-};

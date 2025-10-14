@@ -51,7 +51,7 @@ export class MandateRegisteredOwnersTableComponent {
   readonly currentPage: WritableSignal<number> = signal<number>(1);
   readonly page: Signal<Array<MandateRegisteredOwnerTableListItem>> = computed(() => {
     const tableData = [...(this.registeredOwnerItems() ?? [])].sort((a, b) =>
-      a?.name?.localeCompare(b?.name, 'en', { sensitivity: 'base' }),
+      a?.name?.localeCompare(b?.name, 'en', { sensitivity: 'base', numeric: true }),
     );
     const currentPage = this.currentPage();
 

@@ -37,7 +37,7 @@ describe('MandateSummaryTemplateComponent', () => {
 
   it('should display all HTML elements', () => {
     expect(page.summariesContents).toEqual([
-      'Has the responsibility for compliance with UK ETS been delegated to you by one or more registered owners for one or more ships?',
+      'Has the responsibility for compliance with UK ETS been delegated to you by a registered owner for one or more ships?',
       'No',
       'Change',
     ]);

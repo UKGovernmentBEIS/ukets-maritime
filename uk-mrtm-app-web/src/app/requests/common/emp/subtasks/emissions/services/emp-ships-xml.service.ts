@@ -38,7 +38,8 @@ export class EmpShipsXmlService implements ShipsXmlService {
 
   private readonly options: X2jOptions = {
     ignoreAttributes: false,
-    isArray: (_name, jpath) => this.arrayDefinitions.indexOf(jpath) !== -1,
+    numberParseOptions: { hex: true, leadingZeros: false, eNotation: true },
+    isArray: (_name, jPath) => this.arrayDefinitions.indexOf(jPath) !== -1,
   };
 
   /**

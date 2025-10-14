@@ -41,6 +41,9 @@ export const addMeasurementDescriptionGroup = (
         GovukValidators.maxLength(250, 'Enter up to 250 characters'),
       ],
     }),
+    technicalDescription: new FormControl(measurementDescription?.technicalDescription ?? null, {
+      validators: [GovukValidators.maxLength(10000, 'Enter up to 10000 characters')],
+    }),
     emissionSources: new FormControl(measurementDescription?.emissionSources ?? null, {
       validators: [GovukValidators.required('Select the emission source this device is used for')],
     }),

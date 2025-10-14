@@ -64,7 +64,7 @@ describe('ControlActivitiesSummaryTemplateComponent', () => {
       },
     };
     component.controlActivitiesMap = {
-      title: 'Control Activities',
+      title: 'Control activities',
       qualityAssurance: {
         title: 'Quality assurance and reliability of information technology',
       },

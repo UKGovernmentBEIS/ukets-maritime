@@ -36,6 +36,9 @@
         <a govukLink="header" [routerLink]="['/mi-reports']">MI Reports</a>
         <a govukLink="header" [routerLink]="['/batch-variations']">Batch variations</a>
       }
+      @if (permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers) {
+        <a govukLink="header" [routerLink]="['/guidance']">Guidance</a>
+      }
     </govuk-header-nav-list>
   }
 </govuk-header>

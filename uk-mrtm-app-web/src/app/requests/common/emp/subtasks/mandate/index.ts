@@ -11,3 +11,4 @@ export * from './mandate-responsibility-declaration';
 export * from './mandate-upload';
 export * from './mandate-summary';
 export * from './payload-mutators';
+export * from './mandate-common.validators';

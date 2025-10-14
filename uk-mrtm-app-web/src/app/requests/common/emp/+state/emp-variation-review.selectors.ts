@@ -161,7 +161,7 @@ const selectStatusForSubtask = (
     (completed, reviewDecision) => {
       const status = (completed?.[subtask] ?? reviewDecision) as TaskItemStatus;
 
-      if (allowedStatuses.includes(status)) {
+      if (allowedStatuses.includes(status) || status === TaskItemStatus.NEEDS_REVIEW) {
         return status;
       }
 

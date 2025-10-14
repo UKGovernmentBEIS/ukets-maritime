@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+<xs:schema version="1.4" xmlns:xs="http://www.w3.org/2001/XMLSchema">
     <xs:element name="shipParticularsList" type="shipParticularsListDTO"/>
     <xs:complexType name="shipParticularsListDTO">
         <xs:sequence>
@@ -159,6 +159,7 @@
     <xs:complexType name="measuringEquipmentEditDTO">
         <xs:sequence>
             <xs:element name="name" type="nonEmptyStringMax255" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="technicalDescription" type="nonEmptyStringMax10000" minOccurs="0" maxOccurs="1"/>
             <xs:element name="appliedToCode" type="nonEmptyStringMax255" minOccurs="1" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>

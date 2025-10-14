@@ -117,5 +117,6 @@ export interface MeasuringEquipmentSection {
 
 export interface MeasuringEquipmentEditDTO {
   name?: string;
+  technicalDescription?: string;
   appliedToCode?: string[];
 }

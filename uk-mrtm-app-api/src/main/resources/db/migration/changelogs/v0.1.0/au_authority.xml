@@ -813,4 +813,38 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_populate_ca_super_user_with_PERM_MANAGE_GUIDANCE_permission" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_MANAGE_GUIDANCE'
+            from au_role
+            where code = 'ca_super_user';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission
+                where role_id in (select id from au_role where code = 'ca_super_user')
+                and permission = 'PERM_MANAGE_GUIDANCE';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_populate_service_super_user_with_PERM_MANAGE_GUIDANCE_permission" author="dimopoulosc@unisystems.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_MANAGE_GUIDANCE'
+            from au_role
+            where code = 'service_super_user';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_role_permission
+                where role_id in (select id from au_role where code = 'service_super_user')
+                and permission = 'PERM_MANAGE_GUIDANCE';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

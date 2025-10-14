@@ -34,7 +34,9 @@ export class DeleteShipsPayloadMutator extends PayloadMutator {
         });
 
         if (
-          payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED &&
+          [TaskItemStatus.COMPLETED, TaskItemStatus.ACCEPTED].includes(
+            payload.empSectionsCompleted['mandate'] as TaskItemStatus,
+          ) &&
           payload?.emissionsMonitoringPlan?.mandate?.registeredOwners
             ?.map((ro) => ro.ships.map((ship) => deletedImoNumbers.includes(ship.imoNumber)))
             ?.flat()

@@ -117,7 +117,7 @@ export const validateIfUsedFuelsExistInEmissionsValidator = (
           shipFuel?.name === fuelOriginTypeName.name,
       )
     ) {
-      return { fuelConsumptions: 'The field “Fuel type” has an invalid value' };
+      return { fuelConsumptions: 'The highlighted entries have invalid values' };
     }
   }
 

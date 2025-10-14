@@ -7,14 +7,14 @@
   [isTwoThirds]="true">
   <p class="govuk-body">
     To make an emissions reduction claim through the annual emissions reporting process you must calculate the mass of
-    eligible fuel which meets the sustainability criteria as set out in legislation.
+    eligible fuel.
   </p>
   <div
     [isInline]="true"
     formControlName="exist"
     govuk-radio
     legendSize="medium"
-    legend="Will you be making an emissions reduction claim as a result of the purchase and delivery of eligible fuel?">
+    [legend]="emissionSourcesMap?.emissionCompliance?.caption">
     <govuk-radio-option [value]="true" label="Yes" />
     <govuk-radio-option [value]="false" label="No" />
   </div>

@@ -180,10 +180,9 @@ export class MandateUploadComponent {
       this.taskService
         .saveSubtask(MANDATE_SUB_TASK, MandateWizardStep.UPLOAD_OWNERS, this.activatedRoute, this.owners())
         .subscribe(() => {
+          const actionMsg = this.showConfirmation ? 'replaced' : 'uploaded';
           this.notificationBannerStore.setSuccessMessages([
-            this.showConfirmation
-              ? 'The registered owners file has been replaced successfully'
-              : 'The registered owners file has been uploaded successfully',
+            `The registered owners file has been ${actionMsg} successfully`,
           ]);
         });
     }

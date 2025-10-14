@@ -122,7 +122,8 @@ export const mockEmpShipsXml = `
         </monitoringPlan>
         <measuringEquipment>
             <measuringEquipmentEntry>
-                <name>string</name>
+                <name>device 1</name>
+                <technicalDescription>description 1</technicalDescription>
                 <appliedToCode>Main Engine 1</appliedToCode>
             </measuringEquipmentEntry>
         </measuringEquipment>

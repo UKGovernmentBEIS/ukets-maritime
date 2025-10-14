@@ -75,8 +75,9 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
   readonly noOptionsFoundText = input<string>('No results found');
 
   readonly queryInputRef = viewChild<ElementRef<HTMLInputElement>>('queryInput');
-  readonly optionsRef = viewChildren<ElementRef<HTMLElement>>('option');
   readonly templateLabel = contentChild(LabelDirective);
+  private readonly listboxRef = viewChild<ElementRef<HTMLElement>>('listbox');
+  private readonly optionsRef = viewChildren<ElementRef<HTMLElement>>('option');
 
   readonly labelSizeClasses = computed<string>(() => {
     switch (this.labelSize()) {
@@ -208,9 +209,18 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
     }
   }
 
-  handleInputBlur() {
+  handleInputBlur(event: FocusEvent) {
     const focusingAnOption = this.isIndexOnOption(this.focusedIndex());
-    if (!focusingAnOption) {
+    const focusingListbox = event.relatedTarget === this.listboxRef()?.nativeElement;
+    if (!(focusingAnOption || focusingListbox)) {
+      this.blurComponent();
+    }
+  }
+
+  handleListboxBlur(event: FocusEvent) {
+    const focusingAnOption = this.isIndexOnOption(this.focusedIndex());
+    const focusingQueryInput = event.relatedTarget === this.queryInputRef()?.nativeElement;
+    if (!(focusingAnOption || focusingQueryInput)) {
       this.blurComponent();
     }
   }
@@ -407,10 +417,6 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
     if (shouldFocusInput) {
       this.queryInputRef().nativeElement.focus();
     }
-  }
-
-  private findOptionFromData(value: AutocompleteSelectOption['data']): AutocompleteSelectOption | undefined {
-    return this.options().find((option) => option.data === value);
   }
 
   private findOptionFromText(text: AutocompleteSelectOption['text']): AutocompleteSelectOption | undefined {

@@ -157,5 +157,4 @@ class MrtmAccountRepositoryIT extends AbstractContainerBaseTest {
 
         return account;
     }
-
 }

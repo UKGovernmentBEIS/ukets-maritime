@@ -1,0 +1,32 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Manage files"
+  [heading]="manageType() === 'UPDATE' ? 'Update file details' : 'Add file details'"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">
+    Enter the file name, upload the file to add and select the order in which it should be displayed.
+  </p>
+  <div class="govuk-form-group">
+    <p class="govuk-label">Name of section</p>
+    <p class="govuk-body">{{ guidanceSection()?.name }}</p>
+  </div>
+  <div govuk-text-input formControlName="title" label="File name"></div>
+  <mrtm-file-input
+    formControlName="file"
+    listTitle="Uploaded file"
+    label="Upload file"
+    [showNoFilesHint]="false"
+    [downloadUrl]="getDownloadUrl()" />
+  <div
+    govuk-select
+    widthClass="govuk-!-width-one-quarter"
+    formControlName="displayOrderNo"
+    label="Display order"
+    [options]="displayOrderSelectItems()"></div>
+</mrtm-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink routerLink="/guidance">Return to: Guidance</a>
+</div>

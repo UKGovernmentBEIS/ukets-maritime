@@ -1,0 +1,47 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Manage files"
+  heading="Select type of file update"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true">
+  <ng-template #sectionsDropdown>
+    <div
+      govuk-select
+      widthClass="govuk-!-width-one-half"
+      label="Select section"
+      formControlName="sectionId"
+      [options]="sections()"></div>
+  </ng-template>
+  <ng-template #documentsDropdown>
+    <div
+      govuk-select
+      widthClass="govuk-!-width-one-half"
+      [label]="formGroup.value?.type === 'UPDATE' ? 'Select file to update' : 'Select file to delete'"
+      formControlName="documentId"
+      [options]="documents()"></div>
+  </ng-template>
+
+  <div formControlName="type" legend="Select type of section update" govuk-radio>
+    <govuk-radio-option value="CREATE" label="Add new file" hint="You can add a file to an existing section">
+      <ng-container govukConditionalContent>
+        <ng-container *ngTemplateOutlet="sectionsDropdown" />
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option value="UPDATE" label="Update file">
+      <ng-container govukConditionalContent>
+        <ng-container *ngTemplateOutlet="sectionsDropdown" />
+        <ng-container *ngTemplateOutlet="documentsDropdown" />
+      </ng-container>
+    </govuk-radio-option>
+    <govuk-radio-option value="DELETE" label="Delete file">
+      <ng-container govukConditionalContent>
+        <ng-container *ngTemplateOutlet="sectionsDropdown" />
+        <ng-container *ngTemplateOutlet="documentsDropdown" />
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink routerLink="/guidance">Return to: Guidance</a>
+</div>

@@ -19,4 +19,5 @@ public class MrtmRegulatorPermissionGroup {
     public static final String SUBMIT_EMP_BATCH_REISSUE = "SUBMIT_EMP_BATCH_REISSUE";
     public static final String ANNUAL_IMPROVEMENT_REPORT = "ANNUAL_IMPROVEMENT_REPORT";
     public static final String ACCOUNT_CLOSURE = "ACCOUNT_CLOSURE";
+    public static final String MANAGE_GUIDANCE = "MANAGE_GUIDANCE";
 }

@@ -31,7 +31,7 @@ public class MrtmAccountQueryService {
 
     public MrtmAccount getAccountByRegistryId(Integer registryId) {
         return accountRepository.findByRegistryId(registryId)
-            .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
     }
 
     public boolean isExistingAccountImoNumber(String imoNumber) {
@@ -40,8 +40,8 @@ public class MrtmAccountQueryService {
 
     public List<Long> getAccountIdsByStatuses(List<MrtmAccountStatus> accountStatuses) {
         return accountRepository.findAllByStatusIn(accountStatuses).stream()
-            .map(MrtmAccount::getId)
-            .toList();
+                .map(MrtmAccount::getId)
+                .toList();
     }
 
     public boolean existsAccountById(Long accountId) {

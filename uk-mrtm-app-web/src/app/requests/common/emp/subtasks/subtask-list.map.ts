@@ -82,7 +82,7 @@ export const controlActivitiesMap: SubTaskListMap<
     decision: string;
   }
 > = {
-  title: 'Control Activities',
+  title: 'Control activities',
   qualityAssurance: {
     title: 'Quality assurance and reliability of information technology',
   },
@@ -135,11 +135,11 @@ export const mandateMap: SubTaskListMap<
   title: 'Delegated responsibility',
   exist: {
     title:
-      'Has the responsibility for compliance with UK ETS been delegated to you by one or more registered owners for one or more ships?',
+      'Has the responsibility for compliance with UK ETS been delegated to you by a registered owner for one or more ships?',
     description: 'Are you sure that you do not have responsibility for the added ships?',
   },
   registeredOwners: {
-    title: 'Registered owners',
+    title: 'Ships subject to delegated responsibility',
   },
   registeredOwnersAddForm: {
     caption: 'Add registered owner',
@@ -205,6 +205,7 @@ export const emissionSourcesMap: SubTaskListMap<
   },
   emissionCompliance: {
     title: 'Emissions reduction claim',
+    caption: 'Will you be making an emissions reduction claim relating to eligible fuels?',
   },
   variationRegulatorDecision: {
     title: 'Update procedures related to emissions sources and emissions factors',

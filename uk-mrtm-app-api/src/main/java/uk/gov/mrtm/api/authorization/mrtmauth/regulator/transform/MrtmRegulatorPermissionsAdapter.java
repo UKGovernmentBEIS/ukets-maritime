@@ -13,6 +13,7 @@ import java.util.Map;
 
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.ACCOUNT_CLOSURE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.ANNUAL_IMPROVEMENT_REPORT;
+import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.MANAGE_GUIDANCE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_DOE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_EMP_APPLICATION;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_EMP_NOTIFICATION;
@@ -237,6 +238,13 @@ public class MrtmRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
                 .put(new RegulatorPermissionGroupLevel(ACCOUNT_CLOSURE, EXECUTE),
                         List.of(MrtmPermission.PERM_ACCOUNT_CLOSURE_SUBMIT_VIEW_TASK,
                                 MrtmPermission.PERM_ACCOUNT_CLOSURE_SUBMIT_EXECUTE_TASK));
+
+        //MANAGE_GUIDANCE
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(MANAGE_GUIDANCE, NONE), List.of());
+        permissionGroupLevelsConfig
+                .put(new RegulatorPermissionGroupLevel(MANAGE_GUIDANCE, EXECUTE),
+                        List.of(MrtmPermission.PERM_MANAGE_GUIDANCE));
     }
 
 

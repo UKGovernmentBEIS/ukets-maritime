@@ -43,11 +43,13 @@ import { EMISSIONS_SUB_TASK, EMISSIONS_SUB_TASK_PATH } from '@requests/common/co
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { monitoringMethodMap } from '@shared/constants';
 import {
+  AerAggregatedDataShipSummary,
   AerAggregatedDataSummaryItemDto,
   AerFuel,
   AerPortSummaryItemDto,
   AerVoyageSummaryItemDto,
   AllFuelOriginTypeName,
+  AllFuels,
   AttachedFile,
   FuelsAndEmissionsFactors,
   ReductionClaimDetailsListItemDto,
@@ -86,24 +88,26 @@ const selectVerificationSectionsCompleted: StateSelector<
   AerCommonTaskPayload['verificationSectionsCompleted']
 > = createDescendingSelector(selectPayload, (payload) => payload?.verificationSectionsCompleted);
 
-const selectStatusForAerSubtask = (
+const selectStatusForSubtask = (
   subtask: keyof Aer | keyof AerVerificationReport | string,
   defaultStatus: TaskItemStatus = TaskItemStatus.NOT_STARTED,
 ): StateSelector<RequestTaskState, TaskItemStatus> => {
   return createAggregateSelector(
-    requestTaskQuery.selectRequestTaskType,
     selectAerSectionsCompleted,
-    (requestTaskType, sectionsCompleted) => {
-      const taskStatus = sectionsCompleted?.[subtask] as TaskItemStatus;
-
+    selectVerificationSectionsCompleted,
+    (aerSectionsCompleted, verificationSectionsCompleted) => {
+      const taskStatus = (aerSectionsCompleted?.[subtask] ??
+        verificationSectionsCompleted?.[subtask]) as TaskItemStatus;
       return taskStatus ?? defaultStatus;
     },
   );
 };
 
-const selectIsSubtaskCompleted = (subtask: keyof Aer | string): StateSelector<RequestTaskState, boolean> => {
+const selectIsSubtaskCompleted = (
+  subtask: keyof Aer | keyof AerVerificationReport | string,
+): StateSelector<RequestTaskState, boolean> => {
   return createDescendingSelector(
-    selectStatusForAerSubtask(subtask),
+    selectStatusForSubtask(subtask),
     (status) => (status as TaskItemStatus) === TaskItemStatus.COMPLETED,
   );
 };
@@ -497,6 +501,34 @@ const selectAggregatedDataItem = (
     payload?.find((data) => data.uniqueIdentifier === dataId),
   );
 
+const selectAggregatedDataSummaryItem = (
+  dataId: AerShipAggregatedData['uniqueIdentifier'],
+): StateSelector<
+  RequestTaskState,
+  AerAggregatedDataShipSummary & {
+    status: TaskItemStatus;
+    relatedShip: AerShipEmissions & { status: TaskItemStatus };
+    relatedPorts?: AerPortSummaryItemDto[];
+    relatedVoyages?: AerVoyageSummaryItemDto[];
+  }
+> =>
+  createDescendingSelector(selectAggregatedDataItem(dataId), (aggregatedData) => {
+    const shipFuels = (aggregatedData.relatedShip.fuelsAndEmissionsFactors as AllFuels[]).map(
+      (fuel) => `${fuel.origin}-${fuel.type}-${fuel.name ?? ''}`,
+    );
+
+    return {
+      ...aggregatedData,
+      fuelConsumptions: (aggregatedData?.fuelConsumptions ?? []).map((fuelConsumption) => {
+        const fuel = fuelConsumption.fuelOriginTypeName as AllFuels;
+        return {
+          ...fuelConsumption,
+          needsReview: !shipFuels.includes(`${fuel.origin}-${fuel.type}-${fuel.name ?? ''}`),
+        };
+      }),
+    };
+  });
+
 const selectRelatedShipForAggregatedData = (
   dataId: AerShipAggregatedData['uniqueIdentifier'],
 ): StateSelector<RequestTaskState, AerShipEmissions> =>
@@ -538,7 +570,7 @@ const selectStatusForAerSubtaskWithEmissionsRelation = (
   initialStatus: TaskItemStatus = TaskItemStatus.OPTIONAL,
 ): StateSelector<RequestTaskState, TaskItemStatus> => {
   return createAggregateSelector(
-    selectStatusForAerSubtask(subtask, null),
+    selectStatusForSubtask(subtask, null),
     selectHasCompletedMinOneShip,
     itemsSelectorMap[subtask],
     (subtaskStatus, hasCompletedShips, list) => {
@@ -561,8 +593,8 @@ const selectStatusForAggregatedDataSubtask = selectStatusForAerSubtaskWithEmissi
 );
 
 const selectStatusForReductionClaim = createAggregateSelector(
-  selectStatusForAerSubtask(EMISSIONS_SUB_TASK_PATH),
-  selectStatusForAerSubtask(AER_REDUCTION_CLAIM_SUB_TASK),
+  selectStatusForSubtask(EMISSIONS_SUB_TASK_PATH),
+  selectStatusForSubtask(AER_REDUCTION_CLAIM_SUB_TASK),
   (emissionsSubtaskStatus, reductionClaimSubtaskStatus) =>
     emissionsSubtaskStatus === TaskItemStatus.COMPLETED ? reductionClaimSubtaskStatus : TaskItemStatus.CANNOT_START_YET,
 );
@@ -612,7 +644,7 @@ const selectReductionClaimDetailsListItems: StateSelector<
 const selectStatusForTotalEmissions: StateSelector<RequestTaskState, TaskItemStatus> = createAggregateSelector(
   selectStatusForAggregatedDataSubtask,
   selectStatusForReductionClaim,
-  selectStatusForAerSubtask(AER_TOTAL_EMISSIONS_SUB_TASK),
+  selectStatusForSubtask(AER_TOTAL_EMISSIONS_SUB_TASK),
   (aggregatedDataSubtaskStatus, reductionClaimSubtaskStatus, totalEmissionsSubtaskStatus) =>
     aggregatedDataSubtaskStatus === TaskItemStatus.COMPLETED && reductionClaimSubtaskStatus === TaskItemStatus.COMPLETED
       ? totalEmissionsSubtaskStatus
@@ -704,7 +736,7 @@ export const aerCommonQuery = {
   selectAttachedFiles,
   selectAerSectionsCompleted,
   selectVerificationSectionsCompleted,
-  selectStatusForAerSubtask,
+  selectStatusForSubtask,
   selectIsSubtaskCompleted,
   selectReportingRequired,
   selectReportingObligationDetails,
@@ -749,6 +781,7 @@ export const aerCommonQuery = {
   selectAllAggregatedData,
   selectAggregatedDataList,
   selectAggregatedDataItem,
+  selectAggregatedDataSummaryItem,
   selectRelatedShipForAggregatedData,
   selectListOfShipsWithAggregatedData,
   selectListOfShipsWithoutAggregatedData,

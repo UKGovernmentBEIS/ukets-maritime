@@ -38,6 +38,7 @@ public class EmissionsMonitoringPlanViolation {
         DUPLICATE_SHIP_IMO_ACROSS_REGISTERED_OWNERS("Duplicate imo ship number found across registered owners"),
         INVALID_REGISTERED_OWNER_SHIP_NAME("Registered owner ship name does not match the name in the list of ships."),
         SHIP_NOT_ASSOCIATED_WITH_REGISTERED_OWNER("Ship not associated with any registered owner."),
+        INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS("The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered owner has been added. All relevant ships must be associated with a registered owner."),
         //ADD more emp violation messages
         ;
 

@@ -142,6 +142,7 @@ describe('MeasurementsComponent', () => {
           {
             emissionSources: ['Main gas turbine'],
             name: 'Device 2',
+            technicalDescription: null,
           },
         ],
         shipId: mockEmissions.ships[0].uniqueIdentifier,

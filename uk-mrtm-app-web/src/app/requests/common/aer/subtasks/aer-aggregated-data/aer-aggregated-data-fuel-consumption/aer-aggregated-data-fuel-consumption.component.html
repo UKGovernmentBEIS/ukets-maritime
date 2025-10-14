@@ -4,6 +4,10 @@
   (formSubmit)="onSubmit()"
   [isTwoThirds]="true"
   caption="{{ wizardMap?.fuelConsumptions?.caption }} {{ ship()?.details?.name }}">
+  <p class="govuk-body">
+    Add each fuel type used in the annual total fuel consumption by this ship from domestic voyages, including Northern
+    Ireland, and within port. Do not include EU or international voyages.
+  </p>
   <ng-container formArrayName="fuelConsumptions">
     @for (consumption of fuelConsumptionsFormArray.controls; track consumption; let i = $index) {
       <fieldset govukFieldset [formGroupName]="i">

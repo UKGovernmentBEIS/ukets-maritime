@@ -10,7 +10,7 @@ export const mockEmissions: EmpEmissions = {
         grossTonnage: 5001,
         flagState: 'AI',
         iceClass: 'PC3',
-        natureOfReportingResponsibility: 'SHIPOWNER',
+        natureOfReportingResponsibility: 'ISM_COMPANY',
       },
       uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
       fuelsAndEmissionsFactors: [
@@ -85,10 +85,12 @@ export const mockEmissions: EmpEmissions = {
       measurements: [
         {
           name: 'Device 1',
+          technicalDescription: 'Technical description 1',
           emissionSources: ['Aux Boiler 1'],
         },
         {
           name: 'Device 2',
+          technicalDescription: 'Technical description 2',
           emissionSources: ['Aux Boiler 1', 'Main gas turbine'],
         },
       ],
@@ -166,6 +168,7 @@ export const mockEmissions: EmpEmissions = {
       measurements: [
         {
           name: 'Device 1',
+          technicalDescription: 'Technical description 1',
           emissionSources: ['Main fuel cell'],
         },
       ],

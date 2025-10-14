@@ -13,6 +13,8 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
+import { NotProvidedDirective } from '@shared/directives';
+
 @Component({
   selector: 'mrtm-measurements-summary-template',
   standalone: true,
@@ -25,6 +27,7 @@ import {
     LinkDirective,
     RouterLink,
     ButtonDirective,
+    NotProvidedDirective,
   ],
   templateUrl: './measurements-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

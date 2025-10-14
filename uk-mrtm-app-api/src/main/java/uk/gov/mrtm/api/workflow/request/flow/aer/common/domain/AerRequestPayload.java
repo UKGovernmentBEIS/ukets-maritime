@@ -71,9 +71,11 @@ public class AerRequestPayload extends RequestPayload {
 
     private AerSkipReviewDecision aerSkipReviewDecision;
 
-    public void clearRegulatorData() {
+    public void clearReinitiationObsoleteData() {
         this.reviewGroupDecisions.clear();
         this.reviewAttachments.clear();
+        this.aerReviewSectionsCompleted.clear();
+        this.verificationPerformed = false;
     }
 
     @JsonIgnore

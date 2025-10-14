@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { AerAggregatedDataFuelConsumption } from '@mrtm/api';
@@ -14,6 +14,7 @@ import {
 
 import { NotProvidedDirective } from '@shared/directives';
 import { BigNumberPipe, FuelOriginTitlePipe } from '@shared/pipes';
+import { WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-fuel-consumptions-summary-template',
@@ -34,9 +35,8 @@ import { BigNumberPipe, FuelOriginTitlePipe } from '@shared/pipes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataFuelConsumptionsSummaryTemplateComponent {
-  public readonly data: InputSignal<Array<AerAggregatedDataFuelConsumption>> =
-    input<Array<AerAggregatedDataFuelConsumption>>();
-  public readonly editable: InputSignal<boolean> = input<boolean>();
-  public readonly changeLink: InputSignal<string> = input<string>();
-  public readonly queryParams: InputSignal<Params> = input<Params>();
+  readonly data = input<Array<WithNeedsReview<AerAggregatedDataFuelConsumption>>>();
+  readonly editable = input<boolean>();
+  readonly changeLink = input<string>();
+  readonly queryParams = input<Params>();
 }

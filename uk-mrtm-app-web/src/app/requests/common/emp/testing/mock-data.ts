@@ -87,7 +87,7 @@ export const mockEmpMandate: EmpMandate = {
     {
       uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
       name: 'RegisteredOwner1',
-      imoNumber: '1000000',
+      imoNumber: '1111111',
       contactName: 'RegisteredOwner1',
       email: 'RegisteredOwner1@o.com',
       effectiveDate: '2025-03-01',
@@ -95,20 +95,6 @@ export const mockEmpMandate: EmpMandate = {
         {
           imoNumber: '1111111',
           name: 'EVER GREEN',
-        },
-      ],
-    },
-    {
-      uniqueIdentifier: '22222222-2222-4222-a222-222222222222',
-      name: 'RegisteredOwner2',
-      imoNumber: '2000000',
-      contactName: 'RegisteredOwner2',
-      email: 'RegisteredOwner2@o.com',
-      effectiveDate: '2025-03-01',
-      ships: [
-        {
-          imoNumber: '2222222',
-          name: 'Thon Green',
         },
       ],
     },

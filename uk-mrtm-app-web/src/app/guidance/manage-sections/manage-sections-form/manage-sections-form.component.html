@@ -1,0 +1,20 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Manage sections"
+  [heading]="manageType() === 'UPDATE' ? 'Update section details' : 'Add section details'"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">Enter the name of the section and select the order in which it should be displayed.</p>
+  <div govuk-text-input formControlName="name" label="Name of section"></div>
+  <div
+    govuk-select
+    widthClass="govuk-!-width-one-quarter"
+    formControlName="displayOrderNo"
+    label="Display order"
+    [options]="displayOrderSelectItems()"></div>
+</mrtm-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <a govukLink routerLink="/guidance">Return to: Guidance</a>
+</div>

@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { AerShipAggregatedData, AerShipEmissions } from '@mrtm/api';
+import { AerShipEmissions } from '@mrtm/api';
 
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
@@ -14,7 +14,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent } from '@shared/components/summaries/aggregated-data/aer-aggregated-data-emissions-calculations-summary-template';
 import { AerAggregatedDataFuelConsumptionsSummaryTemplateComponent } from '@shared/components/summaries/aggregated-data/aer-aggregated-data-ship-summary-template/aer-aggregated-data-fuel-consumptions-summary-template';
-import { AerAggregatedDataEmissionDto } from '@shared/types';
+import { AerAggregatedDataEmissionDto, AerAggregatedDataShipSummary } from '@shared/types';
 import BigNumber from 'bignumber.js';
 
 @Component({
@@ -32,7 +32,7 @@ import BigNumber from 'bignumber.js';
 })
 export class AerAggregatedDataShipSummaryTemplateComponent {
   readonly editable = input<boolean>(false);
-  readonly aggregatedData = input<AerShipAggregatedData>();
+  readonly aggregatedData = input<AerAggregatedDataShipSummary>();
   readonly ship = input<AerShipEmissions>();
 
   readonly wizardStep = AerAggregatedDataWizardStep;

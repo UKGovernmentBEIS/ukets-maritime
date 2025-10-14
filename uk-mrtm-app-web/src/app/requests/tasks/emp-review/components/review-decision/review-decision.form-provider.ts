@@ -1,5 +1,5 @@
 import { Provider } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
 import { EmissionsMonitoringPlan, ReviewDecisionRequiredChange } from '@mrtm/api';
 
@@ -17,7 +17,10 @@ import { RequestTaskFileService } from '@shared/services';
 import { requestTypeUploadActionMap } from '@shared/types';
 import { atLeastOneRequiredValidator } from '@shared/validators';
 
-export function reviewDecisionFormProvider(subTask: keyof EmissionsMonitoringPlan): Provider {
+export function reviewDecisionFormProvider(
+  subTask: keyof EmissionsMonitoringPlan,
+  extraFormGroupValidators?: Array<() => ValidatorFn>,
+): Provider {
   return {
     provide: REVIEW_DECISION_FORM,
     deps: [FormBuilder, RequestTaskStore, RequestTaskFileService],
@@ -30,20 +33,25 @@ export function reviewDecisionFormProvider(subTask: keyof EmissionsMonitoringPla
       const reviewDecision = store.select(empReviewQuery.selectReviewGroupDecisions)()?.[reviewGroup];
       const reviewAttachments = store.select(empReviewQuery.selectReviewAttachments)();
 
-      return fb.group({
-        type: fb.control(reviewDecision?.type ?? null, {
-          validators: [GovukValidators.required('Select a decision for this review group')],
-          updateOn: 'change',
-        }),
-        notes: fb.control(reviewDecision?.details?.notes ?? null, [
-          GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
-        ]),
-        requiredChanges: fb.array(
-          reviewDecision?.details?.requiredChanges?.map((requiredChange) =>
-            createAnotherRequiredChange(store, requestTaskFileService, requiredChange, reviewAttachments),
-          ) ?? [createAnotherRequiredChange(store, requestTaskFileService)],
-        ),
-      });
+      return fb.group(
+        {
+          type: fb.control(reviewDecision?.type ?? null, {
+            validators: [GovukValidators.required('Select a decision for this review group')],
+            updateOn: 'change',
+          }),
+          notes: fb.control(reviewDecision?.details?.notes ?? null, [
+            GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
+          ]),
+          requiredChanges: fb.array(
+            reviewDecision?.details?.requiredChanges?.map((requiredChange) =>
+              createAnotherRequiredChange(store, requestTaskFileService, requiredChange, reviewAttachments),
+            ) ?? [createAnotherRequiredChange(store, requestTaskFileService)],
+          ),
+        },
+        {
+          validators: (extraFormGroupValidators ?? []).map((fn) => fn()),
+        },
+      );
     },
   };
 }

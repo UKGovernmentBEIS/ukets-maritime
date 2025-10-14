@@ -1,0 +1,90 @@
+<mrtm-notification-banner />
+@if (filterCaSelectOptions()?.length > 1) {
+  <div class="govuk-!-margin-bottom-4">
+    <form [formGroup]="filtersFormGroup">
+      <div class="row-flex govuk-!-margin-0">
+        <label class="govuk-label govuk-!-margin-right-2 govuk-!-margin-top-1" for="selectedCa">
+          View guidance materials by:
+        </label>
+        <div
+          govuk-select
+          class="govuk-!-margin-0"
+          formControlName="selectedCa"
+          [options]="filterCaSelectOptions()"></div>
+      </div>
+    </form>
+    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-2" />
+  </div>
+}
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    @if (filterCaSelectOptions().length > 1) {
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">
+        Guidance for {{ selectedCompetentAuthority() | competentAuthority }}
+      </h1>
+    } @else {
+      <h1 class="govuk-heading-xl govuk-!-margin-bottom-2">Guidance</h1>
+    }
+    <p class="govuk-body guidance__description">Guidance and information about using the service.</p>
+  </div>
+  @if (isEditable()) {
+    <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+      <mrtm-dropdown-button-group label="Manage guidance">
+        <mrtm-dropdown-button-item [routerLink]="['manage', 'sections']">Manage sections</mrtm-dropdown-button-item>
+        <mrtm-dropdown-button-item [routerLink]="[]" (click)="onManageFiles()">Manage files</mrtm-dropdown-button-item>
+      </mrtm-dropdown-button-group>
+    </div>
+  }
+</div>
+<div class="govuk-!-width-two-thirds">
+  @if (sections(); as sections) {
+    @if (sections.length) {
+      @for (section of sections; track section) {
+        <div class="govuk-!-margin-bottom-3">
+          <h3 class="govuk-heading-m">{{ section.name }}</h3>
+          @if (section?.guidanceDocuments?.length) {
+            <ul class="govuk-list govuk-list--number">
+              @for (
+                document of section.guidanceDocuments.slice(
+                  0,
+                  section.guidanceDocuments.length > 5 && !this.expandedSections.has(section.id)
+                    ? 5
+                    : section.guidanceDocuments.length
+                );
+                track document
+              ) {
+                <li>
+                  <a
+                    govukLink
+                    target="_blank"
+                    class="govuk-link--no-visited-state"
+                    [routerLink]="['.', section.id, 'download', document.fileNameAndUuid?.uuid]">
+                    {{ document.title }}
+                  </a>
+                </li>
+              }
+            </ul>
+            @if (section.guidanceDocuments.length > 5) {
+              <div class="govuk-!-margin-bottom-3">
+                <a
+                  role="button"
+                  tabindex="0"
+                  class="govuk-link--no-visited-state"
+                  govukLink
+                  href="javascript:void(0)"
+                  (click)="onToggleSection(section.id)">
+                  {{ expandedSections.has(section.id) ? 'View less' : 'View more' }}
+                </a>
+              </div>
+            }
+          } @else {
+            <p class="govuk-body">No documents added</p>
+          }
+          <hr class="govuk-section-break govuk-section-break--visible" />
+        </div>
+      }
+    } @else {
+      <p class="govuk-body">No items to display</p>
+    }
+  }
+</div>

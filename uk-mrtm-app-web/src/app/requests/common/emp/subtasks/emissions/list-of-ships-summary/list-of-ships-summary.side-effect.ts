@@ -23,7 +23,11 @@ export class ListOfShipsSummarySideEffect extends SideEffect {
         payload.empSectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
           TaskItemStatus.COMPLETED;
 
-        if (payload.empSectionsCompleted['mandate'] === TaskItemStatus.COMPLETED) {
+        if (
+          [TaskItemStatus.COMPLETED, TaskItemStatus.ACCEPTED].includes(
+            payload.empSectionsCompleted['mandate'] as TaskItemStatus,
+          )
+        ) {
           payload.empSectionsCompleted['mandate'] = TaskItemStatus.NEEDS_REVIEW;
         }
       }),

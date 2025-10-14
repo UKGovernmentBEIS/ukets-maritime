@@ -6,6 +6,7 @@ import { EmpRegisteredOwner, RegisteredOwnerShipDetails } from '@mrtm/api';
 import { RequestTaskStore } from '@netz/common/store';
 
 import { TASK_FORM } from '@requests/common';
+import { csvFieldInconsistentRegisteredOwnersValidator } from '@requests/common/emp/subtasks/mandate/mandate-upload/csv-field-inconsistent-registered-owners.validator';
 import { csvFieldMandateShip } from '@requests/common/emp/subtasks/mandate/mandate-upload/csv-field-mandate-ship.validator';
 import {
   FlattenedRegisteredOwner,
@@ -72,6 +73,9 @@ const mandateUploadCSVFormValidators = (store: RequestTaskStore) => {
   return [
     csvRowsEmptyValidator('Upload the registered owners file'),
     csvRowsLengthValidator(1000, 'The maximum number of entries allowed in the file is 1000'),
+
+    // registered owner details
+    csvFieldInconsistentRegisteredOwnersValidator(),
 
     // name
     csvFieldRequiredValidator<FlattenedRegisteredOwner>(

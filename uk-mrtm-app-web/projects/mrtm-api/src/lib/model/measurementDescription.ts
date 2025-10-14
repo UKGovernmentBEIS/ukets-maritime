@@ -10,5 +10,6 @@
 
 export interface MeasurementDescription {
   name: string;
+  technicalDescription?: string;
   emissionSources: Array<string>;
 }

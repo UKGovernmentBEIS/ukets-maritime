@@ -3,7 +3,7 @@
   @for (fuelConsumption of data; track index; let index = $index) {
     <dl govuk-summary-list>
       <h4 class="govuk-heading-s">Fuel type {{ data?.length === 1 ? '' : index + 1 }}</h4>
-      <div govukSummaryListRow>
+      <div govukSummaryListRow [class.needs-review]="fuelConsumption.needsReview">
         <dt govukSummaryListRowKey>Fuel type</dt>
         <dd govukSummaryListRowValue [notProvided]="fuelConsumption?.fuelOriginTypeName | fuelOriginTitle"></dd>
         @if (editable()) {

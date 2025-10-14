@@ -5,10 +5,7 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { UncorrectedMisstatementsStep } from '@requests/common/aer';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
-import {
-  getNextIncompleteStep,
-  isWizardCompleted,
-} from '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements.wizard';
+import { isWizardCompleted } from '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements.wizard';
 
 export const canActivateUncorrectedMisstatementsSummary: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);
@@ -18,7 +15,7 @@ export const canActivateUncorrectedMisstatementsSummary: CanActivateFn = (route)
   return (
     !isEditable ||
     (isEditable && isWizardCompleted(uncorrectedMisstatements)) ||
-    createUrlTreeFromSnapshot(route, [`./${getNextIncompleteStep(uncorrectedMisstatements)}`])
+    createUrlTreeFromSnapshot(route, [`./${UncorrectedMisstatementsStep.EXIST_FORM}`])
   );
 };
 

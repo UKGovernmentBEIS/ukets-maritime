@@ -16,7 +16,7 @@ export const emissionSourcesFactorsFormProvider: Provider = {
 
     const formGroup = formBuilder.group({
       exist: formBuilder.control(emissionFactors?.exist ?? null, {
-        validators: [GovukValidators.required('Select if you are using default values for all emissions factors')],
+        validators: [GovukValidators.required('Select yes if you are using default values for all emissions factors')],
       }),
     });
 

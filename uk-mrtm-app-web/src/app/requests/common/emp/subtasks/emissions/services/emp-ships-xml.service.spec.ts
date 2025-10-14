@@ -122,8 +122,9 @@ describe('EmpShipsXmlService', () => {
           ],
           measurements: [
             {
+              name: 'device 1',
+              technicalDescription: 'description 1',
               emissionSources: ['Main Engine 1'],
-              name: 'string',
             },
           ],
           uncertaintyLevel: [
