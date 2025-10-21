@@ -17,7 +17,6 @@ import { guidanceQuery, GuidanceStore } from '@guidance/+state';
 import { ManageGuidanceDocumentDTO } from '@guidance/guidance.types';
 import { ManageGuidanceDocumentTypePipe } from '@guidance/pipes';
 import { GuidanceService } from '@guidance/services';
-import { FileDownloadComponent, SummaryDownloadFilesComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-manage-documents-summary',
@@ -34,8 +33,6 @@ import { FileDownloadComponent, SummaryDownloadFilesComponent } from '@shared/co
     ButtonDirective,
     PendingButtonDirective,
     ManageGuidanceDocumentTypePipe,
-    FileDownloadComponent,
-    SummaryDownloadFilesComponent,
   ],
   templateUrl: './manage-documents-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

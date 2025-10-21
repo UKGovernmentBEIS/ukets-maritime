@@ -1,8 +1,10 @@
-import { GuidanceSectionDTO } from '@mrtm/api';
+import { isNil } from 'lodash-es';
+
+import { GuidanceDocumentDTO, GuidanceSectionDTO } from '@mrtm/api';
 
 import { createDescendingSelector, createSelector, StateSelector } from '@netz/common/store';
 
-import { GuidanceState, ManageGuidanceDTO } from '@guidance/guidance.types';
+import { GuidanceState, ManageGuidanceDocumentDTO, ManageGuidanceDTO } from '@guidance/guidance.types';
 
 const selectIsEditable: StateSelector<GuidanceState, boolean> = createSelector(
   (state: GuidanceState) => state.editable,
@@ -36,6 +38,27 @@ const selectManageGuidanceType: StateSelector<GuidanceState, ManageGuidanceDTO['
   (payload) => payload?.type,
 );
 
+const selectManageGuidanceDocumentById = (
+  sectionId: GuidanceSectionDTO['id'],
+  documentId: GuidanceDocumentDTO['id'],
+): StateSelector<GuidanceState, ManageGuidanceDocumentDTO> =>
+  createDescendingSelector(selectGuidanceSectionById(sectionId), (payload) => {
+    const document = payload?.guidanceDocuments?.find((document) => document.id === documentId);
+
+    return !isNil(document)
+      ? ({
+          ...document,
+          sectionId,
+          file: {
+            uuid: document?.fileNameAndUuid?.uuid,
+            file: {
+              name: document?.fileNameAndUuid?.fileName,
+            },
+          },
+        } as ManageGuidanceDocumentDTO)
+      : undefined;
+  });
+
 export const guidanceQuery = {
   selectIsEditable,
   selectSectionsForCompetentAuthority,
@@ -43,4 +66,5 @@ export const guidanceQuery = {
   selectGuidanceSectionById,
   selectManageGuidance,
   selectManageGuidanceType,
+  selectManageGuidanceDocumentById,
 };

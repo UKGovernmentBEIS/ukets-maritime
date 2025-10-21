@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
@@ -9,8 +11,11 @@ import { PaymentService } from '@requests/tasks/payment/services';
 export const canActivatePayment: CanActivateFn = (activatedRouteSnapshot: ActivatedRouteSnapshot) => {
   const store = inject(RequestTaskStore);
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const paymentInProgress =
+    !isNil(store.select(requestTaskQuery.selectRequestInfo)()?.paymentCompleted) ||
+    !isNil(store.select(requestTaskQuery.selectRequestInfo)()?.paymentAmount);
 
-  return isEditable || createUrlTreeFromSnapshot(activatedRouteSnapshot, ['../']);
+  return isEditable || paymentInProgress || createUrlTreeFromSnapshot(activatedRouteSnapshot, ['../']);
 };
 
 const canActivatePaymentSubtask =

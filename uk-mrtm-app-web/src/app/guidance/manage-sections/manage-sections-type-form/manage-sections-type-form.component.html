@@ -13,7 +13,8 @@
       [options]="sections()"></div>
   </ng-template>
 
-  <div formControlName="type" legend="Select type of section update" govuk-radio>
+  <div formControlName="type" govuk-radio>
+    <ng-container govukLegend><span class="govuk-visually-hidden">Select type of section update</span></ng-container>
     <govuk-radio-option value="CREATE" label="Add new section" />
     @if (sections()?.length) {
       <govuk-radio-option value="UPDATE" label="Update section details">

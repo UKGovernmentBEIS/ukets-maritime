@@ -60,7 +60,7 @@ export const manageDocumentsTypeFormProvider: Provider = {
       }),
       sectionId: formBuilder.control<ManageDocumentsFromModel['sectionId'] | null>(manageGuidance?.sectionId),
       documentId: formBuilder.control<ManageDocumentsFromModel['documentId'] | null>({
-        value: manageGuidance?.sectionId,
+        value: manageGuidance?.documentId,
         disabled: isNil(manageGuidance?.type) || manageGuidance?.type === 'CREATE',
       }),
     });

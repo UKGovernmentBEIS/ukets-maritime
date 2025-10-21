@@ -12,6 +12,7 @@ import { AuthStore, selectUser } from '@netz/common/auth';
 import {
   ConditionalContentDirective,
   GovukSelectOption,
+  LegendDirective,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -36,6 +37,7 @@ import { WizardStepComponent } from '@shared/components';
     SelectComponent,
     LinkDirective,
     RouterLink,
+    LegendDirective,
   ],
   providers: [manageDocumentsTypeFormProvider],
   templateUrl: './manage-documents-type-form.component.html',
@@ -98,7 +100,12 @@ export class ManageDocumentsTypeFormComponent implements OnInit {
       type,
       sectionId: !isNil(sectionId) ? Number(sectionId) : null,
       documentId: !isNil(documentId) ? Number(documentId) : null,
-      object: currentManageGuidance?.type !== type ? null : currentManageGuidance?.object,
+      object:
+        type === 'DELETE'
+          ? this.guidanceStore.select(guidanceQuery.selectManageGuidanceDocumentById(sectionId, documentId))()
+          : currentManageGuidance?.type !== type
+            ? null
+            : currentManageGuidance?.object,
     });
 
     this.router.navigate([type.toLocaleLowerCase(), documentId].filter(Boolean), { relativeTo: this.activatedRoute });

@@ -20,7 +20,6 @@ export * from './phone-input/phone-input.component';
 export * from './radio-option/radio-option.component';
 export * from './related-content/related-content.component';
 export * from './request-action-heading/request-action-heading.component';
-export * from './select-other/select-other.component';
 export * from './service-banner/service-banner.component';
 export * from './summary-download-files/summary-download-files.component';
 export * from './summary-registered-owner-ship-details/summary-registered-owner-ship-details.component';

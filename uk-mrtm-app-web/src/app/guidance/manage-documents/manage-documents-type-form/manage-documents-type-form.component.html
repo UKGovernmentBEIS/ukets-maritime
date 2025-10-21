@@ -8,7 +8,7 @@
     <div
       govuk-select
       widthClass="govuk-!-width-one-half"
-      label="Select section"
+      [label]="formGroup.value?.type === 'CREATE' ? 'Select section to add file' : 'Select section'"
       formControlName="sectionId"
       [options]="sections()"></div>
   </ng-template>
@@ -21,7 +21,8 @@
       [options]="documents()"></div>
   </ng-template>
 
-  <div formControlName="type" legend="Select type of section update" govuk-radio>
+  <div formControlName="type" govuk-radio>
+    <ng-container govukLegend><span class="govuk-visually-hidden">Select type of file update</span></ng-container>
     <govuk-radio-option value="CREATE" label="Add new file" hint="You can add a file to an existing section">
       <ng-container govukConditionalContent>
         <ng-container *ngTemplateOutlet="sectionsDropdown" />

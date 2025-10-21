@@ -14,7 +14,7 @@
       </dd>
     </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Section</dt>
+      <dt govukSummaryListRowKey>{{ data.type !== 'CREATE' ? 'Section' : 'Section to add file' }}</dt>
       <dd govukSummaryListColumnValue>{{ section()?.name }}</dd>
       <dd govukSummaryListRowActions>
         <a
@@ -47,21 +47,25 @@
           <a class="govuk-link--no-visited-state" govukLink routerLink="../">Change</a>
         </dd>
       </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>File</dt>
-        <dd govukSummaryListColumnValue>
-          <a
-            govukLink
-            class="govuk-link--no-visited-state"
-            target="_blank"
-            [routerLink]="['/guidance', section()?.id, 'download', $any(data.object)?.file?.uuid]">
-            {{ $any(data?.object)?.file?.file?.name }}
-          </a>
-        </dd>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>File</dt>
+      <dd govukSummaryListColumnValue>
+        <a
+          govukLink
+          class="govuk-link--no-visited-state"
+          target="_blank"
+          [routerLink]="['/guidance', section()?.id, 'download', $any(data.object)?.file?.uuid]">
+          {{ $any(data?.object)?.file?.file?.name }}
+        </a>
+      </dd>
+      @if (data.type !== 'DELETE') {
         <dd govukSummaryListRowActions>
           <a class="govuk-link--no-visited-state" govukLink routerLink="../">Change</a>
         </dd>
-      </div>
+      }
+    </div>
+    @if (data.type !== 'DELETE') {
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Display order</dt>
         <dd govukSummaryListColumnValue>{{ $any(data?.object)?.displayOrderNo }}</dd>

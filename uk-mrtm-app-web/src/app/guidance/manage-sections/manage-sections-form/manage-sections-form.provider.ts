@@ -44,6 +44,7 @@ export const manageSectionsFormProvider: Provider = {
       name: formBuilder.control<SaveGuidanceSectionDTO['name'] | null>(section?.name, {
         validators: [
           GovukValidators.required('Enter the section name'),
+          GovukValidators.maxLength(255, 'Section name should not be more than 255 characters'),
           uniqueSectionNameValidator(availableSections, manageGuidance?.sectionId),
         ],
         updateOn: 'change',

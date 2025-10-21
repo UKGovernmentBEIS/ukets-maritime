@@ -8,6 +8,7 @@ import { EmpIssuanceApplicationSubmitRequestTaskPayload } from '@mrtm/api';
 import { SideEffect, SubtaskOperation } from '@netz/common/forms';
 
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
+import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
@@ -24,13 +25,23 @@ export class ListOfShipsSummarySideEffect extends SideEffect {
           TaskItemStatus.COMPLETED;
 
         if (
-          [TaskItemStatus.COMPLETED, TaskItemStatus.ACCEPTED].includes(
-            payload.empSectionsCompleted['mandate'] as TaskItemStatus,
-          )
+          payload.empSectionsCompleted[MANDATE_SUB_TASK] !== TaskItemStatus.IN_PROGRESS &&
+          !this.allShipsIncluded(payload)
         ) {
-          payload.empSectionsCompleted['mandate'] = TaskItemStatus.NEEDS_REVIEW;
+          payload.empSectionsCompleted[MANDATE_SUB_TASK] = TaskItemStatus.NEEDS_REVIEW;
         }
       }),
     );
+  }
+
+  private allShipsIncluded(payload: EmpIssuanceApplicationSubmitRequestTaskPayload) {
+    const roShips = payload?.emissionsMonitoringPlan?.mandate?.registeredOwners?.flatMap((ro) =>
+      ro.ships.map((ship) => ship.imoNumber),
+    );
+    const ismShips = payload?.emissionsMonitoringPlan?.emissions?.ships
+      ?.filter((ship) => ship?.details?.natureOfReportingResponsibility === 'ISM_COMPANY')
+      ?.map((ship) => ship?.details?.imoNumber);
+
+    return ismShips?.every((imoNumber) => roShips?.includes(imoNumber));
   }
 }

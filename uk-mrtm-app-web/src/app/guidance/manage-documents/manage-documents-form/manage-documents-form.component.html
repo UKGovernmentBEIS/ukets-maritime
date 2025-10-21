@@ -18,12 +18,7 @@
     label="Upload file"
     [showNoFilesHint]="false"
     [downloadUrl]="getDownloadUrl()" />
-  <div
-    govuk-select
-    widthClass="govuk-!-width-one-quarter"
-    formControlName="displayOrderNo"
-    label="Display order"
-    [options]="displayOrderSelectItems()"></div>
+  <div govuk-select formControlName="displayOrderNo" label="Display order" [options]="displayOrderSelectItems()"></div>
 </mrtm-wizard-step>
 
 <div>

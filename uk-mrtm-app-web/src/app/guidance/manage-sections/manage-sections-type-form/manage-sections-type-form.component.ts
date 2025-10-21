@@ -12,6 +12,7 @@ import { AuthStore, selectUser } from '@netz/common/auth';
 import {
   ConditionalContentDirective,
   GovukSelectOption,
+  LegendDirective,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -37,6 +38,7 @@ import { WizardStepComponent } from '@shared/components';
     SelectComponent,
     LinkDirective,
     RouterLink,
+    LegendDirective,
   ],
   providers: [manageSectionsTypeFormProvider],
   templateUrl: './manage-sections-type-form.component.html',

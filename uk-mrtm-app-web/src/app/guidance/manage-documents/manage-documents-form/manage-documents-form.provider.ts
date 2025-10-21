@@ -56,6 +56,7 @@ export const manageDocumentsFormProvider: Provider = {
       title: formBuilder.control<ManageGuidanceDocumentDTO['title'] | null>(document?.title, {
         validators: [
           GovukValidators.required('Enter the file name'),
+          GovukValidators.maxLength(255, 'File name should not be more than 255 characters'),
           uniqueDocumentNameValidator(section?.guidanceDocuments, manageGuidance?.documentId),
         ],
         updateOn: 'change',
