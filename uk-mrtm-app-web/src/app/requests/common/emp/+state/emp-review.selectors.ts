@@ -150,24 +150,11 @@ const selectEmpReviewDecisionForAmendsDTO: StateSelector<
   ),
   selectReviewGroupDecisions,
   ({ attachments, downloadUrl }, decisions) => {
-    const sections: Array<keyof EmissionsMonitoringPlan> = [
-      'operatorDetails',
-      'emissions',
-      'sources',
-      'greenhouseGas',
-      'dataGaps',
-      'managementProcedures',
-      'controlActivities',
-      'abbreviations',
-      'additionalDocuments',
-      'mandate',
-    ];
-
     const result: Array<{
       subtask: keyof EmissionsMonitoringPlan;
       decision: ReviewDecisionDto | EmpVariationReviewDecisionDto;
     }> = [];
-    for (const section of sections) {
+    for (const section of EMP_SUBTASKS) {
       const group = subtaskReviewGroupMap[section];
       const reviewGroupDecision = decisions?.[group];
 

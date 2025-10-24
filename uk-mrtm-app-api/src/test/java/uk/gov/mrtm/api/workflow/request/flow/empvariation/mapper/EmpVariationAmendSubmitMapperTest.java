@@ -111,6 +111,7 @@ public class EmpVariationAmendSubmitMapperTest {
                 .empAttachments(Map.of(attachment1, "att1"))
                 .empSectionsCompleted(Map.of("section1", "true"))
                 .reviewGroupDecisions(reviewGroupDecisions)
+                .updatedSubtasks(Set.of(EmpReviewGroup.ADDITIONAL_DOCUMENTS))
                 .empVariationDetails(EmpVariationDetails.builder().reason("reason").build())
                 .empVariationDetailsCompleted("true")
                 .reviewAttachments(Map.of(attachment1, "attachment1"))
@@ -144,6 +145,7 @@ public class EmpVariationAmendSubmitMapperTest {
         assertThat(result.getEmpAttachments()).isEqualTo(requestPayload.getEmpAttachments());
         assertThat(result.getEmpSectionsCompleted()).isEmpty();
         assertThat(result.getEmpVariationDetailsCompleted()).isEqualTo(requestPayload.getEmpVariationDetailsCompleted());
+        assertThat(result.getUpdatedSubtasks()).isEmpty();
         assertThat(result.getEmpVariationDetailsReviewDecision()).isEqualTo(EmpVariationReviewDecision.builder()
                 .type(empVariationDetailsReviewDecision.getType())
                 .details(ChangesRequiredDecisionDetails.builder()

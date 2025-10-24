@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { RequestTaskPageContentFactory } from '@netz/common/request-task';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
-import { empAmendQuery, empCommonQuery, TaskItemStatus } from '@requests/common';
+import { empAmendQuery, TaskItemStatus } from '@requests/common';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
 import { empVariationAmendsQuery } from '@requests/common/emp/+state/emp-variation-amends.selectors';
@@ -48,7 +48,7 @@ export const empVariationAmendTaskContent: RequestTaskPageContentFactory = () =>
         tasks: [
           {
             name: REQUESTED_CHANGES_SUB_TASK,
-            status: store.select(empCommonQuery.selectStatusForSubtask(REQUESTED_CHANGES_SUB_TASK))(),
+            status: store.select(empVariationAmendsQuery.selectStatusForRequestChanges)(),
             linkText: regulatorCommentsSubtaskMap.requestedChanges.title,
             link: `${routePrefix}/requested-changes`,
           },

@@ -16,5 +16,6 @@ export * from './emissions-backlink.resolver';
 export * from './emissions.routes';
 export * from './list-of-ships-summary';
 export * from './emission-dependencies.side-effect';
+export * from './emission-review-list-of-ships.side-effect';
 export * from './payload-mutators';
 export * from './emissions-common-providers';

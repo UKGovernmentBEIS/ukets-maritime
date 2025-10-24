@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionT
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationReviewDecisionType;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.mapper.EmpVariationReviewMapper;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -59,7 +60,11 @@ public class EmpVariationAmendService {
         requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
         requestPayload.setEmpVariationDetailsCompleted(taskPayload.getEmpVariationDetailsCompleted());
         requestPayload.setEmpVariationDetailsReviewCompleted(taskPayload.getEmpVariationDetailsReviewCompleted());
-        taskPayload.getUpdatedSubtasks().forEach(empReviewGroup -> requestPayload.getReviewGroupDecisions().remove(empReviewGroup));
+        taskPayload.getUpdatedSubtasks().forEach(empReviewGroup -> {
+            if (!requestPayload.getReviewGroupDecisions().get(empReviewGroup).getType().equals(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)) {
+                requestPayload.getReviewGroupDecisions().remove(empReviewGroup);
+            }
+        });
 
         // Add timeline
         addAmendsSubmittedRequestAction(request, appUser);

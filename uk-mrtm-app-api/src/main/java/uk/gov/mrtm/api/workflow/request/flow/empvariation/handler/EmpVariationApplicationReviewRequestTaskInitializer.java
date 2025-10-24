@@ -74,7 +74,6 @@ public class EmpVariationApplicationReviewRequestTaskInitializer implements Init
 
     private boolean reviewGroupDecisionsNotYetSet(EmpVariationRequestPayload requestPayload) {
         return requestPayload.getReviewGroupDecisions() == null ||
-                requestPayload.getReviewGroupDecisions().isEmpty() ||
-                requestPayload.getEmpVariationDetailsReviewDecision() == null;
+                requestPayload.getReviewGroupDecisions().isEmpty();
     }
 }

@@ -2,9 +2,12 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
+import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships';
+import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
 import { empCommonSubtaskStepsProvider } from '@requests/common/emp';
 import {
+  ABBREVIATIONS_SUB_TASK,
   AbbreviationsFlowManager,
   AbbreviationsQuestionPayloadMutator,
   AbbreviationsSummarySideEffect,
@@ -14,6 +17,7 @@ import {
   AdditionalDocumentsUploadPayloadMutator,
 } from '@requests/common/emp/subtasks/additional-documents';
 import {
+  CONTROL_ACTIVITIES_SUB_TASK,
   ControlActivitiesCorrectionsAndCorrectivesPayloadMutator,
   ControlActivitiesDocumentationPayloadMutator,
   ControlActivitiesFlowManager,
@@ -23,11 +27,13 @@ import {
   ControlActivitiesSummarySideEffect,
 } from '@requests/common/emp/subtasks/control-activities';
 import {
+  DATA_GAPS_SUB_TASK,
   DataGapsFlowManager,
   DataGapsMethodPayloadMutator,
   DataGapsSummarySideEffect,
 } from '@requests/common/emp/subtasks/data-gaps';
 import {
+  EMISSION_SOURCES_SUB_TASK,
   EmissionSourceFlowManager,
   EmissionSourcesCompletionPayloadMutator,
   EmissionSourcesFactorsPayloadMutator,
@@ -42,6 +48,7 @@ import {
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { EmpShipsXmlService } from '@requests/common/emp/subtasks/emissions/services';
 import {
+  GREENHOUSE_GAS_SUB_TASK,
   GreenhouseGasCrossChecksPayloadMutator,
   GreenhouseGasFlowManager,
   GreenhouseGasFuelPayloadMutator,
@@ -51,6 +58,7 @@ import {
   GreenhouseGasVoyagesPayloadMutator,
 } from '@requests/common/emp/subtasks/greenhouse-gas';
 import {
+  MANAGEMENT_PROCEDURES_SUB_TASK,
   ManagementProceduresAdequacyPayloadMutator,
   ManagementProceduresDataFlowPayloadMutator,
   ManagementProceduresFlowManager,
@@ -59,6 +67,7 @@ import {
   ManagementProceduresSummarySideEffect,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
+  MANDATE_SUB_TASK,
   MandateFlowManager,
   provideMandatePayloadMutators,
   provideMandateSideEffects,
@@ -81,7 +90,10 @@ import {
   VariationDetailsSummarySideEffect,
 } from '@requests/common/emp/subtasks/variation-details';
 import { provideEmpAmendResetReviewDecisionSubtaskSideEffect } from '@requests/common/emp/utils';
-import { AdditionalDocumentsFlowManager } from '@requests/common/utils/additional-documents';
+import {
+  ADDITIONAL_DOCUMENTS_SUB_TASK,
+  AdditionalDocumentsFlowManager,
+} from '@requests/common/utils/additional-documents';
 import { empVariationAmendsNeededGroupsProvider } from '@requests/tasks/emp-variation-amend/emp-variation-amend-needed-groups.provider';
 import { EmpAmendVariationApiService, EmpAmendVariationService } from '@requests/tasks/emp-variation-amend/services';
 
@@ -129,30 +141,31 @@ export function provideEmpVariationAmendTaskServices(): EnvironmentProviders {
 
 export function provideEmpVariationAmendSideEffects(): EnvironmentProviders {
   return makeEnvironmentProviders([
-    { provide: SIDE_EFFECTS, multi: true, useClass: AbbreviationsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: AdditionalDocumentsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: ManagementProceduresSummarySideEffect },
     { provide: SIDE_EFFECTS, multi: true, useClass: OperatorDetailsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: ControlActivitiesSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: DataGapsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: GreenhouseGasSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionSourcesSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: ListOfShipsSummarySideEffect },
-    { provide: SIDE_EFFECTS, multi: true, useClass: VariationDetailsSummarySideEffect },
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.FUELS_AND_EMISSIONS_FORM),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_FORM),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_LIST),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('operatorDetails'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('abbreviations'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('dataGaps'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('emissions'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('sources'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('additionalDocuments'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('controlActivities'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('managementProcedures'),
-    provideEmpAmendResetReviewDecisionSubtaskSideEffect('greenhouseGas'),
+    { provide: SIDE_EFFECTS, multi: true, useClass: ListOfShipsSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionSourcesSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: GreenhouseGasSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: DataGapsSummarySideEffect },
     ...provideMandateSideEffects(),
+    { provide: SIDE_EFFECTS, multi: true, useClass: ManagementProceduresSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: ControlActivitiesSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: AbbreviationsSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: AdditionalDocumentsSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: VariationDetailsSummarySideEffect },
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(OPERATOR_DETAILS_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(EMISSIONS_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(EMISSION_SOURCES_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(GREENHOUSE_GAS_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(DATA_GAPS_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(MANDATE_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(MANAGEMENT_PROCEDURES_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(CONTROL_ACTIVITIES_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(ABBREVIATIONS_SUB_TASK),
+    provideEmpAmendResetReviewDecisionSubtaskSideEffect(ADDITIONAL_DOCUMENTS_SUB_TASK),
   ]);
 }
 

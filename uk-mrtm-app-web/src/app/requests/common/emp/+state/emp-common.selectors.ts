@@ -28,6 +28,7 @@ import {
 
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { EmpCommonTaskPayload } from '@requests/common/emp/emp.types';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { empTaskSectionsCompletedDefaultStatusMap, empTaskSectionsCompletedMap } from '@requests/common/emp/utils';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { monitoringMethodMap } from '@shared/constants';
@@ -71,18 +72,7 @@ const selectIsEmpSectionCompleted: StateSelector<RequestTaskState, boolean> = cr
     const defaultState = empTaskSectionsCompletedDefaultStatusMap[taskType] ?? TaskItemStatus.NOT_STARTED;
     const sectionKeys = empTaskSectionsCompletedMap?.[taskType]
       ? Object.values(empTaskSectionsCompletedMap[taskType])
-      : [
-          'dataGaps',
-          'emissions',
-          'sources',
-          'managementProcedures',
-          'greenhouseGas',
-          'controlActivities',
-          'additionalDocuments',
-          'abbreviations',
-          'operatorDetails',
-          'mandate',
-        ];
+      : EMP_SUBTASKS;
 
     for (const key of sectionKeys) {
       if ((completed?.[key] ?? defaultState) !== TaskItemStatus.COMPLETED) {

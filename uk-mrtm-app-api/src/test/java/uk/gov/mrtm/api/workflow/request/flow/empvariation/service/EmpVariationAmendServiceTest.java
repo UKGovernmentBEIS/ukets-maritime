@@ -148,6 +148,11 @@ public class EmpVariationAmendServiceTest {
             EmpReviewGroup.EMISSION_SOURCES,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.ACCEPTED)
+                .details(ReviewDecisionDetails.builder().notes("notes").build()).build(),
+
+            EmpReviewGroup.ADDITIONAL_DOCUMENTS,
+            EmpVariationReviewDecision.builder()
+                .type(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)
                 .details(ReviewDecisionDetails.builder().notes("notes").build()).build()
         );
 

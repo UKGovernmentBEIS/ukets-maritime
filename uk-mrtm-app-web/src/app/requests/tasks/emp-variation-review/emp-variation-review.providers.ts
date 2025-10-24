@@ -38,6 +38,7 @@ import {
   EmissionSourcesReviewFlowManager,
 } from '@requests/common/emp/subtasks/emission-sources';
 import {
+  EmissionReviewListOfShipsSideEffect,
   EmissionsReviewFlowManager,
   provideEmissionDependenciesSideEffect,
   provideEmpEmissionsSubtaskCommonPayloadMutators,
@@ -70,6 +71,7 @@ import {
   MandateWizardStep,
   provideMandateRegisteredOwnersFormPayloadMutator,
 } from '@requests/common/emp/subtasks/mandate';
+import { MandateSaveSideEffect } from '@requests/common/emp/subtasks/mandate/side-effects';
 import {
   LegalStatusOfOrganisationPayloadMutator,
   OperatorDetailsReviewFlowManager,
@@ -186,6 +188,8 @@ export function provideEmpVariationReviewSideEffects(): EnvironmentProviders {
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_FORM),
     provideEmissionDependenciesSideEffect(EmissionsWizardStep.EMISSION_SOURCES_LIST),
+    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionReviewListOfShipsSideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: MandateSaveSideEffect },
     provideEmpReviewSideEffect(ABBREVIATIONS_SUB_TASK),
     provideEmpReviewSideEffect(ADDITIONAL_DOCUMENTS_SUB_TASK),
     provideEmpReviewSideEffect(CONTROL_ACTIVITIES_SUB_TASK),

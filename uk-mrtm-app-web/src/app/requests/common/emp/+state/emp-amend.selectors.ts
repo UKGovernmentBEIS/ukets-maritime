@@ -4,6 +4,7 @@ import { createAggregateSelector, createDescendingSelector, RequestTaskState, St
 
 import { empCommonQuery } from '@requests/common/emp/+state/emp-common.selectors';
 import { empReviewQuery } from '@requests/common/emp/+state/emp-review.selectors';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { REQUESTED_CHANGES_SUB_TASK } from '@requests/common/emp/subtasks/requested-changes';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { TaskItemStatus } from '@requests/common/task-item-status';
@@ -39,20 +40,7 @@ export const selectIsEmpSectionCompleted: StateSelector<RequestTaskState, boolea
       return false;
     }
 
-    const sections: Array<keyof EmissionsMonitoringPlan> = [
-      'operatorDetails',
-      'emissions',
-      'sources',
-      'greenhouseGas',
-      'dataGaps',
-      'managementProcedures',
-      'controlActivities',
-      'abbreviations',
-      'additionalDocuments',
-      'mandate',
-    ];
-
-    for (const key of sections) {
+    for (const key of EMP_SUBTASKS) {
       const subtaskStatus = completed[key] as TaskItemStatus;
 
       if (

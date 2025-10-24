@@ -47,6 +47,7 @@ public interface EmpVariationAmendSubmitMapper {
     @Mapping(target = "empSectionsCompleted", ignore = true)
     @Mapping(target = "originalEmpContainer", ignore = true)
     @Mapping(target = "reviewGroupDecisions", source = "payload.reviewGroupDecisions", qualifiedByName = "reviewGroupDecisionsForOperatorAmend")
+    @Mapping(target = "updatedSubtasks", ignore = true)
     @Mapping(target = "empVariationDetailsReviewDecision", source = "payload.empVariationDetailsReviewDecision", qualifiedByName = "variationDetailsReviewDecisionForOperatorAmend")
     EmpVariationApplicationAmendsSubmitRequestTaskPayload toEmpVariationApplicationAmendsSubmitRequestTaskPayload(
             EmpVariationRequestPayload payload, String payloadType);

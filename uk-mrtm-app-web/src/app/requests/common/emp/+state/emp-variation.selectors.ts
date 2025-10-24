@@ -10,6 +10,7 @@ import {
 
 import { empCommonQuery } from '@requests/common/emp/+state/emp-common.selectors';
 import { EmpVariationTaskPayload } from '@requests/common/emp/emp.types';
+import { EMP_SUBTASKS } from '@requests/common/emp/emp-subtasks.constant';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 const selectPayload: StateSelector<RequestTaskState, EmpVariationTaskPayload> = createDescendingSelector(
@@ -50,17 +51,7 @@ const selectIsEmpSectionCompleted: StateSelector<RequestTaskState, boolean> = cr
       return false;
     }
 
-    for (const key of [
-      'dataGaps',
-      'emissions',
-      'sources',
-      'managementProcedures',
-      'greenhouseGas',
-      'controlActivities',
-      'additionalDocuments',
-      'abbreviations',
-      'operatorDetails',
-    ]) {
+    for (const key of EMP_SUBTASKS) {
       if ((empCompleted?.[key] ?? TaskItemStatus.COMPLETED) !== TaskItemStatus.COMPLETED) {
         return false;
       }
