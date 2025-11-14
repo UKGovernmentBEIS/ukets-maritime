@@ -75,22 +75,19 @@ describe('AerAggregatedDataUploadComponent', () => {
 
   const expectedValidAggregatedData = [
     {
-      emissionsBetweenUKAndEEAVoyages: {
+      emissionsBetweenUKAndNIVoyages: {
         ch4: '12.87654',
         co2: '500.12345',
-        co2Captured: '45.125',
         n2o: '3.45678',
       },
       emissionsBetweenUKPorts: {
         ch4: '6.54321',
         co2: '250.98765',
-        co2Captured: '30.75',
         n2o: '1.78901',
       },
       emissionsWithinUKPorts: {
         ch4: '3.21',
         co2: '125.54321',
-        co2Captured: '15.25',
         n2o: '0.87654',
       },
       fromFetch: false,
@@ -113,31 +110,22 @@ describe('AerAggregatedDataUploadComponent', () => {
         },
       ],
       imoNumber: '1111111',
-      smallIslandSurrenderReduction: {
-        ch4: '0.98765',
-        co2: '25.76543',
-        co2Captured: '5.5',
-        n2o: '0.23456',
-      },
       uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
     },
     {
-      emissionsBetweenUKAndEEAVoyages: {
+      emissionsBetweenUKAndNIVoyages: {
         ch4: '8.76543',
         co2: '340.987',
-        co2Captured: '31.5',
         n2o: '2.34567',
       },
       emissionsBetweenUKPorts: {
         ch4: '4.321',
         co2: '170.654',
-        co2Captured: '21',
         n2o: '1.09876',
       },
       emissionsWithinUKPorts: {
         ch4: '2.1',
         co2: '85.321',
-        co2Captured: '10.5',
         n2o: '0.54321',
       },
       fromFetch: false,
@@ -152,12 +140,6 @@ describe('AerAggregatedDataUploadComponent', () => {
         },
       ],
       imoNumber: '2222222',
-      smallIslandSurrenderReduction: {
-        ch4: '0.98765',
-        co2: '25.76543',
-        co2Captured: '5.5',
-        n2o: '0.23456',
-      },
       uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
     },
   ];

@@ -88,12 +88,10 @@ public class DoeSubmitOfficialLetterPreviewHandler extends PreviewDocumentAbstra
                 retrieveDeterminationReasonDescription(doe.getMaritimeEmissions().getDeterminationReason().getType(), reportingYear));
         vars.put("emissionsCalculationApproachDescription",
                 doe.getMaritimeEmissions().getTotalMaritimeEmissions().getCalculationApproach());
-        vars.put("smallIslandFerryDeduction",
-                doe.getMaritimeEmissions().getTotalMaritimeEmissions().getSmallIslandFerryDeduction());
         vars.put("surrenderEmissions",
-                doe.getMaritimeEmissions().getTotalMaritimeEmissions().getSurrenderEmissions());
-        vars.put("iceClassDeduction",
-                doe.getMaritimeEmissions().getTotalMaritimeEmissions().getIceClassDeduction());
+            doe.getMaritimeEmissions().getTotalMaritimeEmissions().getSurrenderEmissions());
+        vars.put("lessVoyagesInNorthernIrelandDeduction",
+                doe.getMaritimeEmissions().getTotalMaritimeEmissions().getLessVoyagesInNorthernIrelandDeduction());
 
         return vars;
     }

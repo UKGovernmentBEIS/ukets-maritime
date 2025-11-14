@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { isNil } from 'lodash-es';
 
-import { AerAggregatedEmissionsMeasurement } from '@mrtm/api';
+import { AerPortEmissionsMeasurement } from '@mrtm/api';
 
 import { BigNumberPipe } from '@shared/pipes';
 
@@ -15,6 +15,6 @@ import { BigNumberPipe } from '@shared/pipes';
 })
 export class AerAggregatedDataAnnualEmissionsTotalsComponent {
   public readonly header = input<string>();
-  public readonly data = input<AerAggregatedEmissionsMeasurement>();
+  public readonly data = input<AerPortEmissionsMeasurement>();
   protected readonly isNil = isNil;
 }

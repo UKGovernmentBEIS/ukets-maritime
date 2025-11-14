@@ -13,9 +13,20 @@ import {
   AerVerifiedSatisfactoryWithCommentsDecision,
 } from '@mrtm/api';
 
-import { createDescendingSelector, requestTaskQuery, RequestTaskState, StateSelector } from '@netz/common/store';
+import {
+  createAggregateSelector,
+  createDescendingSelector,
+  requestTaskQuery,
+  RequestTaskState,
+  StateSelector,
+} from '@netz/common/store';
 
+import { TaskItemStatus } from '@requests/common';
+import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerVerificationSubmitTaskPayload, AerVerifierDetails } from '@requests/common/aer/aer.types';
+import { AER_AGGREGATED_DATA_SUB_TASK } from '@requests/common/aer/subtasks/aer-aggregated-data';
+import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages';
+import { AerAggregatedDataSummaryItemDto, AerPortSummaryItemDto, AerVoyageSummaryItemDto } from '@shared/types';
 
 const selectPayload: StateSelector<RequestTaskState, AerVerificationSubmitTaskPayload> = createDescendingSelector(
   requestTaskQuery.selectRequestTaskPayload,
@@ -99,6 +110,41 @@ const selectMaterialityLevel: StateSelector<RequestTaskState, AerMaterialityLeve
   (verificationReport) => verificationReport?.materialityLevel,
 );
 
+const selectVoyagesList: StateSelector<RequestTaskState, Array<AerVoyageSummaryItemDto>> = createAggregateSelector(
+  aerCommonQuery.selectVoyagesList,
+  aerCommonQuery.selectAerSectionsCompleted,
+  (voyages, completed) =>
+    voyages.map((voyage) => ({
+      ...voyage,
+      status: (completed?.[`${AER_VOYAGES_SUB_TASK}-voyage-${voyage.uniqueIdentifier}`] ??
+        TaskItemStatus.COMPLETED) as TaskItemStatus,
+    })),
+);
+
+const selectPortsList: StateSelector<RequestTaskState, Array<AerPortSummaryItemDto>> = createAggregateSelector(
+  aerCommonQuery.selectPortsList,
+  aerCommonQuery.selectAerSectionsCompleted,
+  (ports, completed) =>
+    ports.map((port) => ({
+      ...port,
+      status: (completed?.[`ports-port-call-${port.uniqueIdentifier}`] ?? TaskItemStatus.COMPLETED) as TaskItemStatus,
+    })),
+);
+
+const selectAggregatedDataList: StateSelector<
+  RequestTaskState,
+  Array<AerAggregatedDataSummaryItemDto>
+> = createAggregateSelector(
+  aerCommonQuery.selectAggregatedDataList,
+  aerCommonQuery.selectAerSectionsCompleted,
+  (aggregatedDataList, completed) =>
+    aggregatedDataList.map((aggregatedData) => ({
+      ...aggregatedData,
+      status: (completed?.[`${AER_AGGREGATED_DATA_SUB_TASK}-aggregated-data-${aggregatedData.uniqueIdentifier}`] ??
+        TaskItemStatus.COMPLETED) as TaskItemStatus,
+    })),
+);
+
 export const aerVerificationSubmitQuery = {
   selectPayload,
   selectVerificationReport,
@@ -114,4 +160,7 @@ export const aerVerificationSubmitQuery = {
   selectRecommendedImprovements,
   selectDataGapsMethodologies,
   selectMaterialityLevel,
+  selectVoyagesList,
+  selectPortsList,
+  selectAggregatedDataList,
 };

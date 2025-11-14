@@ -13,10 +13,19 @@ import { AuthService } from '@core/services/auth.service';
 import { GlobalErrorHandlingService } from '@core/services/global-error-handling.service';
 
 describe(`GlobalErrorHandlingService`, () => {
+  const originalConsole = console;
   let service: GlobalErrorHandlingService;
   let router: Router;
   let authStore: AuthStore;
   const authService = mockClass(AuthService);
+
+  beforeAll(() => {
+    console.error = jest.fn();
+  });
+
+  afterAll(() => {
+    console = originalConsole;
+  });
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -26,7 +35,6 @@ describe(`GlobalErrorHandlingService`, () => {
         { provide: ErrorHandler, useClass: GlobalErrorHandlingService },
       ],
     });
-
     authStore = TestBed.inject(AuthStore);
     authStore.setUserState({ status: 'ENABLED' });
     service = TestBed.inject(GlobalErrorHandlingService);

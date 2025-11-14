@@ -9,14 +9,10 @@ public class PayloadFieldsUtils {
 
     //Account details
     public static final String EMITTER_ID = "AccountDetails.EmitterID";
-    public static final String INSTALLATION_ACTIVITY_TYPE = "AccountDetails.InstallationActivityType";
-    public static final String INSTALLATION_NAME = "AccountDetails.InstallationName";
     public static final String ACCOUNT_NAME = "AccountDetails.Account Name";
-    public static final String PERMIT_ID = "AccountDetails.PermitID";
     public static final String EMP_ID = "AccountDetails.MonitoringPlanID";
     public static final String IMO_NUMBER = "AccountDetails.CompanyImoNumber";
     public static final String REGULATOR = "AccountDetails.Regulator";
-    public static final String DATE_OF_ISSUANCE = "AccountDetails.DateOfEmpIssuance";
     public static final String FIRST_YEAR_OF_VERIFIED_EMISSIONS = "AccountDetails.FirstYearOfVerifiedEmission";
 
     //Account Holder

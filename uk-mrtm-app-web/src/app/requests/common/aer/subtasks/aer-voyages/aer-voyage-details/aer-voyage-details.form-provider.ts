@@ -95,7 +95,6 @@ export const aerVoyageDetailsFormProvider: Provider = {
     const voyageId = route?.snapshot?.params?.voyageId;
     const { imoNumber, voyageDetails, uniqueIdentifier } = store.select(aerCommonQuery.selectVoyage(voyageId))() ?? {};
     const reportingYear = store.select(aerCommonQuery.selectReportingYear)();
-    const derogations = store.select(aerCommonQuery.selectShipByImoNumber(imoNumber))()?.derogations;
 
     return formBuilder.group<AerVoyageDetailsFormGroup>(
       {
@@ -149,40 +148,6 @@ export const aerVoyageDetailsFormProvider: Provider = {
           !isNil(voyageDetails?.departureTime) ? new Date(voyageDetails?.departureTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of departure')],
-          },
-        ),
-        ccu: formBuilder.control<AerVoyageDetailsFormModel['ccu'] | null>(
-          derogations?.carbonCaptureAndStorageReduction ? voyageDetails?.ccu : null,
-          {
-            validators: derogations?.carbonCaptureAndStorageReduction
-              ? [
-                  GovukValidators.required('Enter Carbon capture and utilisation (CCU)(t)'),
-                  GovukValidators.notNaN('Enter a numerical value'),
-                  GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
-                  GovukValidators.maxDecimalsValidator(2),
-                ]
-              : [],
-          },
-        ),
-        ccs: formBuilder.control<AerVoyageDetailsFormModel['ccs'] | null>(
-          derogations?.carbonCaptureAndStorageReduction ? voyageDetails?.ccs : null,
-          {
-            validators: derogations?.carbonCaptureAndStorageReduction
-              ? [
-                  GovukValidators.required('Enter Carbon capture and storage (CCS)(t)'),
-                  GovukValidators.notNaN('Enter a numerical value'),
-                  GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
-                  GovukValidators.maxDecimalsValidator(2),
-                ]
-              : [],
-          },
-        ),
-        smallIslandFerryReduction: formBuilder.control<AerVoyageDetailsFormModel['smallIslandFerryReduction'] | null>(
-          derogations?.smallIslandFerryOperatorReduction ? voyageDetails?.smallIslandFerryReduction : null,
-          {
-            validators: derogations?.smallIslandFerryOperatorReduction
-              ? [GovukValidators.required('Select claiming a small island ferry operator surrender reduction')]
-              : [],
           },
         ),
       },

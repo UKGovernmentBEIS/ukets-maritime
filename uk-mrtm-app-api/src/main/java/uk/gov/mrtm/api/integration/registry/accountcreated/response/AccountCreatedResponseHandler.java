@@ -116,14 +116,10 @@ public class AccountCreatedResponseHandler {
 
         // account details
         fields.put(PayloadFieldsUtils.EMITTER_ID, asStringOrEmpty(event.getAccountDetails().getEmitterId()));
-        fields.put(PayloadFieldsUtils.INSTALLATION_ACTIVITY_TYPE, asStringOrEmpty(event.getAccountDetails().getInstallationActivityType()));
-        fields.put(PayloadFieldsUtils.INSTALLATION_NAME, asStringOrEmpty(event.getAccountDetails().getInstallationName()));
         fields.put(PayloadFieldsUtils.ACCOUNT_NAME, asStringOrEmpty(event.getAccountDetails().getAccountName()));
-        fields.put(PayloadFieldsUtils.PERMIT_ID, asStringOrEmpty(event.getAccountDetails().getPermitId()));
         fields.put(PayloadFieldsUtils.EMP_ID, asStringOrEmpty(event.getAccountDetails().getMonitoringPlanId()));
         fields.put(PayloadFieldsUtils.IMO_NUMBER, asStringOrEmpty(event.getAccountDetails().getCompanyImoNumber()));
         fields.put(PayloadFieldsUtils.REGULATOR, asStringOrEmpty(event.getAccountDetails().getRegulator()));
-        fields.put(PayloadFieldsUtils.DATE_OF_ISSUANCE, asStringOrEmpty(event.getAccountDetails().getEmpPermitIssuanceDate()));
         fields.put(PayloadFieldsUtils.FIRST_YEAR_OF_VERIFIED_EMISSIONS, asStringOrEmpty(event.getAccountDetails().getFirstYearOfVerifiedEmissions()));
         //account holder
         fields.put(PayloadFieldsUtils.ACCOUNT_HOLDER_NAME, asStringOrEmpty(event.getAccountHolder().getName()));

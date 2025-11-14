@@ -77,8 +77,7 @@ class DoeSubmitOfficialLetterPreviewHandlerTest {
                                 .totalReportableEmissions(BigDecimal.TEN)
                                 .calculationApproach("someCalculationApproach")
                                 .determinationType(DoeDeterminationType.MARITIME_EMISSIONS)
-                                .iceClassDeduction(BigDecimal.ONE)
-                                .smallIslandFerryDeduction(BigDecimal.TEN)
+                                .lessVoyagesInNorthernIrelandDeduction(BigDecimal.ONE)
                                 .surrenderEmissions(BigDecimal.TWO)
                                 .build())
                         .build())
@@ -111,9 +110,8 @@ class DoeSubmitOfficialLetterPreviewHandlerTest {
                 "reportingYear", Year.of(2022),
                 "determinationReasonDescription", String.format(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT.getDescription(), Year.of(2022)),
                 "emissionsCalculationApproachDescription", "someCalculationApproach",
-                "smallIslandFerryDeduction", BigDecimal.TEN,
-                "surrenderEmissions", BigDecimal.TWO,
-                "iceClassDeduction", BigDecimal.ONE
+                "lessVoyagesInNorthernIrelandDeduction", BigDecimal.ONE,
+                "surrenderEmissions", BigDecimal.TWO
         );
         final TemplateParams templateParamsWithCustom = TemplateParams.builder()
                 .accountParams(MrtmAccountTemplateParams.builder().build())

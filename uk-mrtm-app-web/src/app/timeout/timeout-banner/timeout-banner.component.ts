@@ -6,7 +6,6 @@ import {
   ElementRef,
   inject,
   Input,
-  OnInit,
   Renderer2,
   ViewChild,
 } from '@angular/core';
@@ -30,7 +29,7 @@ import dialogPolyfill from 'dialog-polyfill';
   providers: [DestroySubject],
   imports: [PageHeadingComponent, AsyncPipe, SecondsToMinutesPipe, ButtonDirective],
 })
-export class TimeoutBannerComponent implements OnInit, AfterViewInit {
+export class TimeoutBannerComponent implements AfterViewInit {
   private readonly document = inject<Document>(DOCUMENT);
   readonly timeoutBannerService = inject(TimeoutBannerService);
   private readonly renderer = inject(Renderer2);
@@ -42,14 +41,14 @@ export class TimeoutBannerComponent implements OnInit, AfterViewInit {
   private overlayClass = 'govuk-timeout-warning-overlay';
   private lastFocusedElement = null;
 
-  ngOnInit(): void {
+  ngAfterViewInit(): void {
+    if (typeof HTMLDialogElement?.prototype?.showModal !== 'function') {
+      dialogPolyfill.registerDialog(this.modal.nativeElement);
+    }
+
     this.timeoutBannerService.isVisible$.pipe(takeUntil(this.destroy$)).subscribe((isVisible) => {
       isVisible ? this.showDialog() : this.hideDialog();
     });
-  }
-
-  ngAfterViewInit(): void {
-    dialogPolyfill.registerDialog(this.modal.nativeElement);
   }
 
   isDialogOpen(): boolean {

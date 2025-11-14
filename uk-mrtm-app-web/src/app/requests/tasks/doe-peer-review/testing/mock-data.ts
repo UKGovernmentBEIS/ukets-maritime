@@ -17,8 +17,7 @@ export const mockDoePeerReviewMaritimeEmissions: DoeMaritimeEmissions = {
   totalMaritimeEmissions: {
     determinationType: 'MARITIME_EMISSIONS',
     totalReportableEmissions: 1,
-    smallIslandFerryDeduction: 2,
-    iceClassDeduction: 3,
+    lessVoyagesInNorthernIrelandDeduction: 2,
     surrenderEmissions: 12,
     calculationApproach: 'test another data source',
     supportingDocuments: ['11111111-1111-4111-a111-111111111111'],

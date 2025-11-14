@@ -104,7 +104,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
   );
   isAccountClosed$ = this.operatorAccountsStore.pipe(
     selectAccount,
-    map((account) => account.status === MrtmAccountStatus.CLOSED),
+    map((account) => account?.status === MrtmAccountStatus.CLOSED),
   );
   isEditable = toSignal(this.operatorsManagement$.pipe(map((operators) => operators.editable)));
   verificationBody$ = this.accountVerificationBodyService.getVerificationBodyOfAccount(this.accountId).pipe(

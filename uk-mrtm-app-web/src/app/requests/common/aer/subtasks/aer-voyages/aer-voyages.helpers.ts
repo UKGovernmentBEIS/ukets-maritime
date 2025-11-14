@@ -12,7 +12,7 @@ import {
 } from '@requests/common/aer/aer.consts';
 import { AerVoyageItem } from '@requests/common/aer/aer.types';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { AER_PORT_COUNTRIES } from '@shared/constants';
+import { AER_PORT_COUNTRIES, AER_PORT_COUNTRY_PORTS } from '@shared/constants';
 import { AerJourneyTypeEnum } from '@shared/types';
 
 export const AER_VOYAGES_SUB_TASK = 'voyages';
@@ -41,12 +41,17 @@ export const getAerJourneyType = (voyageDetails: AerVoyageDetails): AerJourneyTy
 
   const departureCountryType = AER_PORT_COUNTRIES?.[departurePort.country]?.type;
   const arrivalCountryType = AER_PORT_COUNTRIES?.[arrivalPort.country]?.type;
+  const isDeparturePortNI = AER_PORT_COUNTRY_PORTS?.[departurePort.port]?.isNorthernIrelandPort;
+  const isArrivalPortNI = AER_PORT_COUNTRY_PORTS?.[arrivalPort.port]?.isNorthernIrelandPort;
 
   switch (true) {
     case departureCountryType === 'GB' && arrivalCountryType === 'GB':
-      return AerJourneyTypeEnum.Domestic;
-    case (departureCountryType === 'GB' || arrivalCountryType === 'GB') &&
-      (departureCountryType === 'EU' || arrivalCountryType === 'EU'):
+      return (isDeparturePortNI && !isArrivalPortNI) || (!isDeparturePortNI && isArrivalPortNI)
+        ? AerJourneyTypeEnum.NI
+        : AerJourneyTypeEnum.Domestic;
+    case ((departureCountryType === 'GB' || arrivalCountryType === 'GB') &&
+      (departureCountryType === 'EU' || arrivalCountryType === 'EU')) ||
+      (departureCountryType === 'EU' && arrivalCountryType === 'EU'):
       return AerJourneyTypeEnum.EU;
     default:
       return AerJourneyTypeEnum.International;
@@ -73,14 +78,7 @@ export const voyageDetailsCompleted = (voyage: AerVoyageItem): boolean =>
   !isNil(voyage?.voyageDetails?.arrivalPort?.country) &&
   !isNil(voyage?.voyageDetails?.arrivalPort?.port) &&
   !isNil(voyage?.voyageDetails?.arrivalTime) &&
-  !isNil(voyage?.voyageDetails?.departureTime) &&
-  ((voyage?.relatedShip?.derogations?.smallIslandFerryOperatorReduction === true &&
-    !isNil(voyage?.voyageDetails?.smallIslandFerryReduction)) ||
-    voyage?.relatedShip?.derogations?.smallIslandFerryOperatorReduction === false) &&
-  ((voyage?.relatedShip?.derogations?.carbonCaptureAndStorageReduction === true &&
-    !isNil(voyage?.voyageDetails?.ccs) &&
-    !isNil(voyage?.voyageDetails?.ccu)) ||
-    voyage?.relatedShip?.derogations?.carbonCaptureAndStorageReduction === false);
+  !isNil(voyage?.voyageDetails?.departureTime);
 
 /**
  * Validate totalEmissions/surrenderEmissions when voyages not uploaded via CSV

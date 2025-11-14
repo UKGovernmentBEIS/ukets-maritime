@@ -59,7 +59,6 @@ const mockAerEmissions: AerEmissions = {
         iceClass: 'PC1',
         natureOfReportingResponsibility: 'SHIPOWNER',
         allYear: true,
-        hasIceClassDerogation: true,
       },
       uniqueIdentifier: '84a503d5-20e9-47db-8867-287508d8fa2f',
       fuelsAndEmissionsFactors: [
@@ -166,8 +165,6 @@ const mockAerEmissions: AerEmissions = {
       ],
       derogations: {
         exceptionFromPerVoyageMonitoring: false,
-        carbonCaptureAndStorageReduction: false,
-        smallIslandFerryOperatorReduction: true,
       },
     },
   ],
@@ -184,7 +181,6 @@ const mockAerPortEmissions: AerPortEmissions = {
       uniqueIdentifier: '08ba9667-5e46-4fa8-aa17-2b6e1f3fa208',
       imoNumber: '1111111',
       portDetails: {
-        smallIslandFerryReduction: true,
         arrivalTime: '2022-01-15T16:00:00Z',
         departureTime: '2022-01-20T17:00:00Z',
         visit: {
@@ -236,7 +232,6 @@ const mockAerVoyageEmissions: AerVoyageEmissions = {
       uniqueIdentifier: 'be49b79b-675c-4a5e-aaa4-2af0ad3ff3f9',
       imoNumber: '1111111',
       voyageDetails: {
-        smallIslandFerryReduction: false,
         arrivalTime: '2022-02-04T22:00:00Z',
         departureTime: '2022-02-02T13:00:00Z',
         arrivalPort: {
@@ -313,35 +308,18 @@ const mockAerAggregatedData: AerAggregatedData = {
         ch4: '13.9332000',
         n2o: '1.4073870',
         total: '55.6470870',
-        co2Captured: '0.0000000',
       },
       emissionsBetweenUKPorts: {
         co2: '32.1400000',
         ch4: '1.0149000',
         n2o: '1.4914000',
         total: '34.6463000',
-        co2Captured: '0.0000000',
       },
-      emissionsBetweenUKAndEEAVoyages: {
+      emissionsBetweenUKAndNIVoyages: {
         co2: '0',
         ch4: '0',
         n2o: '0',
         total: '0.0000000',
-        co2Captured: '0.0000000',
-      },
-      totalAggregatedEmissions: {
-        co2: '72.4465000',
-        ch4: '14.9481000',
-        n2o: '2.8987870',
-        total: '90.2933870',
-        co2Captured: '0.0000000',
-      },
-      smallIslandSurrenderReduction: {
-        co2: '40.3065000',
-        ch4: '13.9332000',
-        n2o: '1.4073870',
-        total: '55.6470870',
-        co2Captured: '0.0000000',
       },
       totalEmissionsFromVoyagesAndPorts: {
         co2: '72.4465000',
@@ -349,29 +327,11 @@ const mockAerAggregatedData: AerAggregatedData = {
         n2o: '2.8987870',
         total: '90.2933870',
       },
-      lessCapturedCo2: {
+      lessVoyagesInNorthernIrelandDeduction: {
         co2: '72.4465000',
         ch4: '14.9481000',
         n2o: '2.8987870',
         total: '90.2933870',
-      },
-      lessVoyagesNotInScope: {
-        co2: '72.4465000',
-        ch4: '14.9481000',
-        n2o: '2.8987870',
-        total: '90.2933870',
-      },
-      lessIslandFerryDeduction: {
-        co2: '32.1400000',
-        ch4: '1.0149000',
-        n2o: '1.4914000',
-        total: '34.6463000',
-      },
-      less5PercentIceClassDeduction: {
-        co2: '30.5330000',
-        ch4: '0.9641550',
-        n2o: '1.4168300',
-        total: '32.9139850',
       },
       totalShipEmissions: '90.2933870',
       surrenderEmissions: '32.9139850',
@@ -385,6 +345,7 @@ const mockSmf: AerSmf = {
   smfDetails: {
     purchases: [
       {
+        uniqueIdentifier: 'c6c9ddaa-9c5a-425b-a674-56858ff8e671',
         fuelOriginTypeName: {
           origin: 'FOSSIL',
           uniqueIdentifier: 'c6c9ddaa-9c5a-425b-a674-56858ff8e676',
@@ -408,35 +369,17 @@ const mockAerTotalEmissions: AerTotalEmissions = {
     n2o: '2.8987870',
     total: '90.2933870',
   },
-  lessCapturedCo2: {
+  lessVoyagesInNorthernIrelandDeduction: {
     co2: '72.4465000',
     ch4: '14.9481000',
     n2o: '2.8987870',
     total: '90.2933870',
   },
-  lessVoyagesNotInScope: {
-    co2: '72.4465000',
-    ch4: '14.9481000',
-    n2o: '2.8987870',
-    total: '90.2933870',
-  },
-  lessAnyERC: {
+  lessEmissionsReductionClaim: {
     co2: '72.4265000',
     ch4: '14.9481000',
     n2o: '2.8987870',
     total: '90.2733870',
-  },
-  lessIslandFerryDeduction: {
-    co2: '32.1200000',
-    ch4: '1.0149000',
-    n2o: '1.4914000',
-    total: '34.6263000',
-  },
-  less5PercentIceClassDeduction: {
-    co2: '30.5140000',
-    ch4: '0.9641550',
-    n2o: '1.4168300',
-    total: '32.8949850',
   },
   totalShipEmissions: '90.2733870',
   surrenderEmissions: '32.8949850',

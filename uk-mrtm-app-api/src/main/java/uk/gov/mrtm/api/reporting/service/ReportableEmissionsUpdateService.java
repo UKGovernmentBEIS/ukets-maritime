@@ -36,8 +36,7 @@ public class ReportableEmissionsUpdateService {
                 emissionsEntity.setExempted(saveParams.isExempted());
                 emissionsEntity.setSurrenderEmissions(saveParams.getReportableEmissions().getSurrenderEmissions());
                 emissionsEntity.setTotalEmissions((saveParams.getReportableEmissions().getTotalEmissions()));
-                emissionsEntity.setLessIslandFerryDeduction((saveParams.getReportableEmissions().getLessIslandFerryDeduction()));
-                emissionsEntity.setLess5PercentIceClassDeduction((saveParams.getReportableEmissions().getLess5PercentIceClassDeduction()));
+                emissionsEntity.setLessVoyagesInNorthernIrelandDeduction((saveParams.getReportableEmissions().getLessVoyagesInNorthernIrelandDeduction()));
                 eventDetails = notifyRegistry(saveParams);
             }
         } else {
@@ -47,8 +46,7 @@ public class ReportableEmissionsUpdateService {
                     .year(saveParams.getYear())
                     .surrenderEmissions(saveParams.getReportableEmissions().getSurrenderEmissions())
                     .totalEmissions(saveParams.getReportableEmissions().getTotalEmissions())
-                    .lessIslandFerryDeduction(saveParams.getReportableEmissions().getLessIslandFerryDeduction())
-                    .less5PercentIceClassDeduction(saveParams.getReportableEmissions().getLess5PercentIceClassDeduction())
+                    .lessVoyagesInNorthernIrelandDeduction(saveParams.getReportableEmissions().getLessVoyagesInNorthernIrelandDeduction())
                     .isFromDoe(saveParams.isFromDoe())
                     .isExempted(saveParams.isExempted())
                     .build();

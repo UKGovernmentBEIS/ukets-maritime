@@ -8,18 +8,22 @@ export const mergeDatesToString = (dateDate: Date, timeDate: Date): string => {
   return mergeDatesToDate(dateDate, timeDate).toISOString();
 };
 
-export const mergeDatesToDate = (dateDate: Date, timeDate: Date): Date => {
-  const currentDate = new Date(
-    dateDate.getFullYear(),
-    dateDate.getMonth(),
-    dateDate.getDate(),
-    timeDate.getUTCHours(),
-    timeDate.getUTCMinutes(),
-    timeDate.getUTCSeconds(),
-  );
-  const tzoffset = currentDate.getTimezoneOffset() * 60000;
+export const mergeDatesToDate = (dateDate?: Date, timeDate?: Date): Date | null => {
+  if (dateDate instanceof Date && timeDate instanceof Date) {
+    const currentDate = new Date(
+      dateDate.getFullYear(),
+      dateDate.getMonth(),
+      dateDate.getDate(),
+      timeDate.getUTCHours(),
+      timeDate.getUTCMinutes(),
+      timeDate.getUTCSeconds(),
+    );
+    const tzoffset = currentDate.getTimezoneOffset() * 60000;
 
-  return new Date(currentDate.valueOf() - tzoffset);
+    return new Date(currentDate.valueOf() - tzoffset);
+  }
+
+  return null;
 };
 
 /**

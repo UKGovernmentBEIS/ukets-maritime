@@ -60,7 +60,7 @@ export function csvFieldFuelConsumptionValidator(store: RequestTaskStore, type: 
 
       if (isConsumptionFieldPresent && !isValidFuelConsumption(imoNumber, cfc, store)) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });
@@ -96,7 +96,7 @@ const isValidFuelConsumption = (imoNumber: string, cfc: CsvFuelConsumption, stor
   const isMeasuringUnitValid = ['M3', 'TONNES'].includes(cfc.measuringUnit);
 
   const isAmountDensityValid =
-    maxDecimals(cfc.fuelDensity, 3) && Number(cfc?.fuelDensity) > 0 && Number(cfc?.fuelDensity) <= 1;
+    maxDecimals(cfc.fuelDensity, 3) && Number(cfc?.fuelDensity) > 0 && Number(cfc?.fuelDensity) <= 2;
   const isDensityValid =
     (cfc.measuringUnit === 'M3' && isAmountDensityValid) || (cfc.measuringUnit !== 'M3' && !cfc.fuelDensity);
 

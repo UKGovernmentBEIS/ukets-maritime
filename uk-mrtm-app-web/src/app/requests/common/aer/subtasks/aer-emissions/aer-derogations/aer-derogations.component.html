@@ -4,28 +4,11 @@
   [formGroup]="formGroup"
   [heading]="map.derogations.title"
   [showReturnLink]="false"
-  [isTwoThirds]="true">
+  [isTwoThirds]="false">
   <div
     formControlName="exceptionFromPerVoyageMonitoring"
     govuk-radio
-    [legend]="map.exceptionFromPerVoyageMonitoring.title"
-    legendSize="medium">
-    <govuk-radio-option [value]="true" label="Yes" />
-    <govuk-radio-option [value]="false" label="No" />
-  </div>
-  <div
-    formControlName="carbonCaptureAndStorageReduction"
-    govuk-radio
-    [legend]="map.carbonCaptureAndStorageReduction.title"
-    legendSize="medium">
-    <govuk-radio-option [value]="true" label="Yes" />
-    <govuk-radio-option [value]="false" label="No" />
-  </div>
-  <div
-    formControlName="smallIslandFerryOperatorReduction"
-    govuk-radio
-    [legend]="map.smallIslandFerryOperatorReduction.title"
-    legendSize="medium">
+    hint="If all of a ship’s voyages during the reporting period either start from or end at a point in the UK and if the ship, according to its schedule, is planned to perform more than 300 voyages during the reporting period, you may be exempted from the obligation to monitor relevant information on a per-voyage basis.">
     <govuk-radio-option [value]="true" label="Yes" />
     <govuk-radio-option [value]="false" label="No" />
   </div>

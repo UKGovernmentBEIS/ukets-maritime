@@ -199,7 +199,9 @@ class NotificationTemplateControllerTest {
             		new DocumentTemplateInfoDTO(2L, "name2", null, "workflow2", LocalDateTime.now())
             		))
             .build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(notificationTemplateQueryOrchestratorService.getManagedNotificationTemplateById(notificationTemplateId)).thenReturn(notificationTemplateDTO);
 
         mockMvc.perform(MockMvcRequestBuilders
@@ -247,6 +249,9 @@ class NotificationTemplateControllerTest {
             .text("text")
             .build();
 
+        AppUser user = AppUser.builder().userId("userId").build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         mockMvc.perform(
             MockMvcRequestBuilders
                 .put("/v1.0/notification-templates/" + notificationTemplateId)

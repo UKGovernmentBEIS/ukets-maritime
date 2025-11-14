@@ -39,9 +39,6 @@ export class AerVoyageDetailsPayloadMutator extends PayloadMutator {
                     country: voyageDetails.arrivalCountry,
                     port: voyageDetails.arrivalPort,
                   },
-                  ccs: voyageDetails.ccs,
-                  ccu: voyageDetails.ccu,
-                  smallIslandFerryReduction: voyageDetails.smallIslandFerryReduction,
                 },
               }
             : voyageItem,

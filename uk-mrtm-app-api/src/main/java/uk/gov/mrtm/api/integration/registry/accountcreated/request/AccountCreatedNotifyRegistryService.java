@@ -20,10 +20,6 @@ import uk.gov.netz.integration.model.account.AccountHolderMessage;
 import uk.gov.netz.integration.model.account.AccountOpeningEvent;
 import uk.gov.netz.integration.model.account.AccountType;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.Date;
-
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapAccountHolderName;
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapAccountHolderType;
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapCompanyRegistrationNumber;
@@ -78,7 +74,6 @@ public class AccountCreatedNotifyRegistryService {
                 .emitterId(account.getBusinessId())
                 .accountName(account.getName())
                 .monitoringPlanId(empId)
-                .empPermitIssuanceDate(Date.from(LocalDate.now().atStartOfDay(ZoneId.systemDefault()).toInstant()))
                 .companyImoNumber(account.getImoNumber())
                 .regulator(RegistryCompetentAuthorityEnum.getCompetentAuthorityEnum(account.getCompetentAuthority()).name())
                 .firstYearOfVerifiedEmissions(account.getFirstMaritimeActivityDate().getYear())

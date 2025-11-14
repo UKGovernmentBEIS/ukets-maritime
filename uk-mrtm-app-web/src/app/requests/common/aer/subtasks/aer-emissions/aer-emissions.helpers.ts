@@ -9,10 +9,7 @@ import {
 } from '@mrtm/api';
 
 import { UNCERTAINTY_LEVEL_STEP } from '@requests/common/components/emissions';
-import {
-  BASIC_SHIP_DETAILS_STEP,
-  shouldShowHasIceClassDerogation,
-} from '@requests/common/components/emissions/basic-ship-details';
+import { BASIC_SHIP_DETAILS_STEP } from '@requests/common/components/emissions/basic-ship-details';
 import { LIST_OF_SHIPS_DELETE_STEP } from '@requests/common/components/emissions/delete-ships/delete-ships.helper';
 import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { LIST_OF_SHIPS_STEP, UPLOAD_SHIPS_STEP } from '@requests/common/components/emissions/emissions.helpers';
@@ -50,8 +47,6 @@ export const aerShipDetailsValidator = (details: AerShipDetails): boolean =>
   !isNil(details?.flagState) &&
   !isNil(details?.natureOfReportingResponsibility) &&
   !isNil(details?.iceClass) &&
-  (!shouldShowHasIceClassDerogation(details?.iceClass) ||
-    (shouldShowHasIceClassDerogation(details?.iceClass) && !isNil(details?.hasIceClassDerogation))) &&
   (details?.allYear || (details?.allYear === false && !isNil(details?.from) && !isNil(details?.to)));
 
 export const aerFuelsAndEmissionsFactorsValidator = (fuelsAndEmissionsFactors: FuelsAndEmissionsFactors[]): boolean =>
@@ -115,9 +110,7 @@ export const aerUncertaintyLevelValidator = (ship: AerShipEmissions): boolean =>
 };
 
 export const aerDerogationsValidator = (derogations: AerDerogations): boolean =>
-  !isNil(derogations?.exceptionFromPerVoyageMonitoring) &&
-  !isNil(derogations?.carbonCaptureAndStorageReduction) &&
-  !isNil(derogations?.smallIslandFerryOperatorReduction);
+  !isNil(derogations?.exceptionFromPerVoyageMonitoring);
 
 export const shipStepsCompletedMap: Record<
   keyof Omit<AerShipEmissions, 'uniqueIdentifier'>,

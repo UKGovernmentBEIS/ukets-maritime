@@ -26,7 +26,7 @@ export function csvFieldEmailValidator<T>(
 
       if (Validators.email(currentField)) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

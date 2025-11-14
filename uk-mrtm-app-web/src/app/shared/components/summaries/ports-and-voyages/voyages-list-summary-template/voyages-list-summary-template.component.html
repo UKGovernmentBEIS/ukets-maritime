@@ -92,6 +92,13 @@
           {{ row?.[column?.field] | portVoyageAggregatedStatus }}
         </govuk-tag>
       }
+      @case ('surrenderEmissions') {
+        @if (['International', 'EU'].includes(row?.['journeyType'])) {
+          Not applicable
+        } @else {
+          {{ row?.[column?.field] | bigNumber: 7 }}
+        }
+      }
       @default {
         {{ row?.[column?.field] | bigNumber: 7 }}
       }

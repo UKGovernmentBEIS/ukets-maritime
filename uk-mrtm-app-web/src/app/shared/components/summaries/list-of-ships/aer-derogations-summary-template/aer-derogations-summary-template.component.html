@@ -1,29 +1,9 @@
 @if (data(); as data) {
-  <h2 class="govuk-heading-m">Additional questions relating to this ship</h2>
+  <h2 class="govuk-heading-m">{{ map.derogations.title }}</h2>
   <dl govuk-summary-list [hasBorders]="true">
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Do you have an exemption from per voyage monitoring?</dt>
+      <dt govukSummaryListRowKey>{{ map.derogations.title }}</dt>
       <dd govukSummaryListRowValue>{{ data?.exceptionFromPerVoyageMonitoring | booleanToText }}</dd>
-      @if (isEditable()) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
-        </dd>
-      }
-    </div>
-
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Are you claiming an emissions reduction for carbon capture and storage?</dt>
-      <dd govukSummaryListRowValue>{{ data?.carbonCaptureAndStorageReduction | booleanToText }}</dd>
-      @if (isEditable()) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
-        </dd>
-      }
-    </div>
-
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Are you claiming a small island ferry operator surrender reduction?</dt>
-      <dd govukSummaryListRowValue>{{ data?.smallIslandFerryOperatorReduction | booleanToText }}</dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>

@@ -27,6 +27,7 @@ import {
   canActivateEditReportingStatusSummary,
   canActivateOperatorAccount,
   canDeactivateEditReportingStatus,
+  canDeactivateOperatorAccount,
   CreateOperatorAccountGuard,
   CreateOperatorAccountSuccessGuard,
   CreateOperatorAccountSummaryGuard,
@@ -81,6 +82,7 @@ export const ACCOUNTS_ROUTES: Routes = [
   {
     path: ':accountId',
     canActivate: [canActivateOperatorAccount],
+    canDeactivate: [canDeactivateOperatorAccount],
     title: 'Account',
     data: { breadcrumb: (data) => data.accountName },
     resolve: {

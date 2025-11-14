@@ -4,8 +4,7 @@ export const opinionStatementMap: SubTaskListMap<{
   emissionsCorrect: string;
   manuallyProvidedTotalEmissions: string;
   manuallyProvidedSurrenderEmissions: string;
-  manuallyProvidedLessIslandFerryDeduction: string;
-  manuallyProvidedLess5PercentIceClassDeduction: string;
+  manuallyProvidedLessVoyagesInNorthernIrelandDeduction: string;
   additionalChangesNotCovered: string;
   additionalChangesNotCoveredDetails: string;
   siteVisitType: string;
@@ -19,8 +18,7 @@ export const opinionStatementMap: SubTaskListMap<{
     caption: 'Are the reporting and surrender obligation emissions correct?',
   },
   manuallyProvidedTotalEmissions: { title: 'Total verified maritime emissions for the scheme year' },
-  manuallyProvidedLessIslandFerryDeduction: { title: 'Less verified small island ferry deduction' },
-  manuallyProvidedLess5PercentIceClassDeduction: { title: 'Less verified 5% ice class deduction' },
+  manuallyProvidedLessVoyagesInNorthernIrelandDeduction: { title: 'Less Northern Ireland surrender deduction' },
   manuallyProvidedSurrenderEmissions: { title: 'Emissions figure for surrender for the scheme year' },
   additionalChangesNotCovered: {
     title: 'Other changes not covered in the approved emissions monitoring plan',

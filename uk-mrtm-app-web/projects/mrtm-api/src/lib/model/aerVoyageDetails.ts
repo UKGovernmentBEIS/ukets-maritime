@@ -10,9 +10,6 @@
 import { AerPortVisit } from './aerPortVisit';
 
 export interface AerVoyageDetails {
-  ccu?: string;
-  ccs?: string;
-  smallIslandFerryReduction?: boolean;
   arrivalTime: string;
   departureTime: string;
   arrivalPort: AerPortVisit;

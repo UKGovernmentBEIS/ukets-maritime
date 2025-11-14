@@ -2,8 +2,8 @@ package uk.gov.mrtm.api.reporting.enumeration;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import uk.gov.mrtm.api.reporting.domain.ports.AerPortVisit;
 
-@Getter
 @AllArgsConstructor
 public enum PortCountries {
     AF("Afghanistan", PortType.INTERNATIONAL, false),
@@ -215,7 +215,20 @@ public enum PortCountries {
     ZM("Zambia", PortType.INTERNATIONAL, false),
     ZW("Zimbabwe", PortType.INTERNATIONAL, false);
 
+    @Getter
     private final String name;
     private final PortType type;
+    @Getter
     private final boolean hasPorts;
+
+    public PortType getType(AerPortVisit visit) {
+        PortCodesNorthernIreland portCodeNI = PortCodesNorthernIreland.fromString(visit.getPort());
+
+        if (portCodeNI != null) {
+            return PortType.NI;
+        }
+
+        return visit.getCountry().type;
+    }
+
 }

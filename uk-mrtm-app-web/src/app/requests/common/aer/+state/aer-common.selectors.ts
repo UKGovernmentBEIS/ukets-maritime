@@ -414,6 +414,7 @@ const selectVoyagesList: StateSelector<RequestTaskState, Array<AerVoyageSummaryI
               : ((sectionsCompleted?.[`${AER_VOYAGES_SUB_TASK}-voyage-${uniqueIdentifier}`] ??
                   TaskItemStatus.IN_PROGRESS) as TaskItemStatus),
           shipName: relatedShip?.details?.name,
+          journeyType: getAerJourneyType(voyageDetails),
           canViewDetails: relatedShip?.status === TaskItemStatus.COMPLETED,
         };
       },

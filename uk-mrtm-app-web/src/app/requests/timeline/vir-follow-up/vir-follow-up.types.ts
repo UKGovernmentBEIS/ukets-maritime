@@ -9,7 +9,8 @@ import {
 
 export interface VirFollowUpActionPayload
   extends Pick<VirApplicationSubmittedRequestActionPayload, 'reportingYear' | 'payloadType' | 'virAttachments'> {
-  verifierComment?: VerifierComment | UncorrectedItem;
+  verifierComment?: VerifierComment;
+  verifierUncorrectedItem?: UncorrectedItem;
   operatorImprovementResponse?: OperatorImprovementResponse;
   operatorImprovementFollowUpResponse: OperatorImprovementFollowUpResponse;
   regulatorImprovementResponse?: RegulatorImprovementResponse;

@@ -31,8 +31,6 @@ export * from './aerAggregatedData';
 export * from './aerAggregatedDataFuelConsumption';
 export * from './aerAggregatedDataFuelOriginTypeName';
 export * from './aerAggregatedDataSave';
-export * from './aerAggregatedEmissionsMeasurement';
-export * from './aerAggregatedEmissionsMeasurementSave';
 export * from './aerApplicationAmendsSubmitRequestTaskPayload';
 export * from './aerApplicationCompletedRequestActionPayload';
 export * from './aerApplicationReturnedForAmendsRequestActionPayload';

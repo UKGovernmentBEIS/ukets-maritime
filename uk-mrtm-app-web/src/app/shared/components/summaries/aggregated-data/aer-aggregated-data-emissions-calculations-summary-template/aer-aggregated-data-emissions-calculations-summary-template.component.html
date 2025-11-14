@@ -1,5 +1,8 @@
-<h4 class="govuk-heading-s">{{ header() }}</h4>
-<govuk-table [columns]="columns()" [data]="data()" emptyTableText="No emissions to display" [description]="header()">
+<govuk-table
+  [columns]="columns()"
+  [data]="data()"
+  emptyTableText="No emissions to display"
+  description="Emissions calculations">
   <ng-template let-row="row" let-column="column">
     @switch (column.field) {
       @case ('emission') {
@@ -13,7 +16,7 @@
             <strong>{{ row?.[column?.field] ?? 0 | bigNumber: 7 }}</strong>
           }
         } @else {
-          @if (boldedColumns().includes(column.field)) {
+          @if (boldColumns().includes(column.field)) {
             <strong>{{ row?.[column?.field] ?? 0 | bigNumber: 7 }}</strong>
           } @else {
             {{ row?.[column?.field] ?? 0 | bigNumber: 7 }}

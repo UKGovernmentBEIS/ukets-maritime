@@ -178,7 +178,10 @@ class RegulatorAuthorityPermissionControllerTest {
 
     @Test
     void getRegulatorPermissionGroupLevels() throws Exception {
+        AppUser user = AppUser.builder().userId("userId").build();
+
         when(regulatorPermissionsAdapter.getPermissionGroupLevels()).thenReturn(Map.of(MANAGE_USERS_AND_CONTACTS, List.of(NONE, EXECUTE)));
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders
             .get(BASE_PATH + "/group-levels")

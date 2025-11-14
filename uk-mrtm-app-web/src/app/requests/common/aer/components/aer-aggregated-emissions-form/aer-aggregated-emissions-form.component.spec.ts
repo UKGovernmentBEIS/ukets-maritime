@@ -43,10 +43,9 @@ describe('AerAggregatedEmissionsFormComponent', () => {
   });
 
   it('should show all applicable inputs', () => {
-    expect(page.queryAll('input')).toHaveLength(4);
+    expect(page.queryAll('input')).toHaveLength(3);
     expect(page.queryAll('label').map((x) => x.textContent?.trim())).toEqual([
       'CO2 emissions (t)',
-      'CO2 Captured (t)',
       'CH4 emissions (tCO2e)',
       'N2O emissions (tCO2e)',
     ]);

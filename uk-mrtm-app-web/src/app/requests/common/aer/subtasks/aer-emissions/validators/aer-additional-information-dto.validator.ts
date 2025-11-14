@@ -8,16 +8,6 @@ import { XmlResult } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
 
 export class AerAdditionalInformationDtoValidator {
-  private static isSmallIslandSurrenderReductionValid(
-    value?: AdditionalInformationDTO['smallIslandSurrenderReduction'],
-  ): boolean {
-    return XmlValidator.isBoolean(value);
-  }
-
-  private static isCarbonCaptureReductionValid(value?: AdditionalInformationDTO['carbonCaptureReduction']): boolean {
-    return XmlValidator.isBoolean(value);
-  }
-
   private static isExemptionPerVoyageMonitoringValid(
     value?: AdditionalInformationDTO['exemptionPerVoyageMonitoring'],
   ): boolean {
@@ -32,15 +22,9 @@ export class AerAdditionalInformationDtoValidator {
     emissionReportDetails?: EmissionReportDetailsDTO,
   ): XmlResult<AerDerogations> {
     const additionalInformationDTO = emissionReportDetails?.additionalInformation;
-    if (
-      this.isSmallIslandSurrenderReductionValid(additionalInformationDTO?.smallIslandSurrenderReduction) &&
-      this.isCarbonCaptureReductionValid(additionalInformationDTO?.carbonCaptureReduction) &&
-      this.isExemptionPerVoyageMonitoringValid(additionalInformationDTO?.exemptionPerVoyageMonitoring)
-    ) {
+    if (this.isExemptionPerVoyageMonitoringValid(additionalInformationDTO?.exemptionPerVoyageMonitoring)) {
       return {
         data: {
-          smallIslandFerryOperatorReduction: additionalInformationDTO.smallIslandSurrenderReduction,
-          carbonCaptureAndStorageReduction: additionalInformationDTO.carbonCaptureReduction,
           exceptionFromPerVoyageMonitoring: additionalInformationDTO.exemptionPerVoyageMonitoring,
         },
       };

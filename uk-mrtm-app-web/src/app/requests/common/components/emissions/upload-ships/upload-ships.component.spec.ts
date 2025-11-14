@@ -225,16 +225,13 @@ describe('UploadShipsComponent', () => {
   const expectedValidAerEmissions = [
     {
       derogations: {
-        carbonCaptureAndStorageReduction: true,
         exceptionFromPerVoyageMonitoring: false,
-        smallIslandFerryOperatorReduction: true,
       },
       details: {
         allYear: true,
         flagState: 'GR',
         from: null,
         grossTonnage: 10000,
-        hasIceClassDerogation: true,
         iceClass: 'PC1',
         imoNumber: '1111111',
         name: 'Ship A1',
@@ -322,16 +319,13 @@ describe('UploadShipsComponent', () => {
     },
     {
       derogations: {
-        carbonCaptureAndStorageReduction: false,
         exceptionFromPerVoyageMonitoring: true,
-        smallIslandFerryOperatorReduction: true,
       },
       details: {
         allYear: false,
         flagState: 'US',
         from: '2025-01-01',
         grossTonnage: 20000,
-        hasIceClassDerogation: null,
         iceClass: 'NA',
         imoNumber: '2222222',
         name: 'Ship B1',
@@ -513,7 +507,6 @@ describe('UploadShipsComponent', () => {
           flagState: 'GR',
           from: null,
           grossTonnage: 10000,
-          hasIceClassDerogation: true,
           iceClass: 'PC1',
           imoNumber: '1111111',
           name: 'Ship A1',
@@ -527,7 +520,6 @@ describe('UploadShipsComponent', () => {
           flagState: 'US',
           from: '2025-01-01',
           grossTonnage: 20000,
-          hasIceClassDerogation: null,
           iceClass: 'NA',
           imoNumber: '2222222',
           name: 'Ship B1',

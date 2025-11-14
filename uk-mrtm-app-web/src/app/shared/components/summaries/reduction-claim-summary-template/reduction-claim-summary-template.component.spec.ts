@@ -39,7 +39,7 @@ describe('ReductionClaimSummaryTemplateComponent', () => {
   it('should display all HTML elements', () => {
     expect(page.heading3.textContent).toEqual('Test heading');
     expect(page.summariesContents).toEqual([
-      'Will you be making an emissions reduction claims as a result of the purchase?',
+      'Will you be making an emissions reduction claim relating to eligible fuels?',
       'Not provided',
     ]);
 
@@ -47,7 +47,7 @@ describe('ReductionClaimSummaryTemplateComponent', () => {
     fixture.componentRef.setInput('editable', true);
     fixture.detectChanges();
     expect(page.summariesContents).toEqual([
-      'Will you be making an emissions reduction claims as a result of the purchase?',
+      'Will you be making an emissions reduction claim relating to eligible fuels?',
       'Yes',
       'Change',
     ]);

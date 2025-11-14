@@ -18,7 +18,7 @@
 
   <govuk-tabs (selectedTab)="handleSelectedTab($event)">
     <ng-template govukTabLazy id="details" label="Details">
-      @if (vm.accountInfo.status === 'LIVE' || vm.accountInfo.status === 'CLOSED') {
+      @if (vm.accountInfo?.status === 'LIVE' || vm.accountInfo?.status === 'CLOSED') {
         <mrtm-active-emissions-plan />
       }
       <mrtm-operator-account-details [editable]="vm.isAccountEditable" />

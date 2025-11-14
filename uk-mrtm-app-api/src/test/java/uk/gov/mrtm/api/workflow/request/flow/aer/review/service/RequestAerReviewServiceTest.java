@@ -224,8 +224,7 @@ class RequestAerReviewServiceTest {
         AerTotalEmissions totalEmissions = AerTotalEmissions.builder()
             .totalShipEmissionsSummary(new BigDecimal("1"))
             .surrenderEmissionsSummary(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
-            .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("4")).build())
+            .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
             .build();
 
         Aer aer = Aer.builder().totalEmissions(totalEmissions)
@@ -238,8 +237,7 @@ class RequestAerReviewServiceTest {
         AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(new BigDecimal("1"))
             .surrenderEmissions(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(new BigDecimal("3"))
-            .lessIslandFerryDeduction(new BigDecimal("4"))
+            .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
             .build();
 
         AerVerificationReport verificationReport = AerVerificationReport.builder().build();
@@ -344,8 +342,7 @@ class RequestAerReviewServiceTest {
         AerTotalEmissions totalEmissions = AerTotalEmissions.builder()
             .totalShipEmissionsSummary(new BigDecimal("1"))
             .surrenderEmissionsSummary(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
-            .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("4")).build())
+            .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
             .build();
 
         Aer aer = Aer.builder().totalEmissions(totalEmissions).build();
@@ -355,8 +352,7 @@ class RequestAerReviewServiceTest {
         AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(new BigDecimal("1"))
             .surrenderEmissions(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(new BigDecimal("3"))
-            .lessIslandFerryDeduction(new BigDecimal("4"))
+            .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
             .build();
 
         AerRequestPayload requestPayload = AerRequestPayload.builder()

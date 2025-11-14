@@ -23,6 +23,7 @@ describe('PaymentDetailsSummaryTemplateComponent', () => {
       paymentRefNum: 'MAMP00050',
       creationDate: '2025-06-12',
     });
+    fixture.componentRef.setInput('header', 'Payment details');
     page = new Page(fixture);
     fixture.detectChanges();
   });

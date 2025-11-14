@@ -6919,4 +6919,94 @@ Emissions Trading Operations'
         </customChange>
     </changeSet>
 
+    <changeSet id="0_1_0_update_DoE_Notice_Add_northern_ireland_deduction_ENGLAND" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_SUBMITTED"/>
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="fileDocumentName" value="DoE_and_EFSN_Notice_Maritime_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Notice_Add_northern_ireland_deduction_SCOTLAND" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_SUBMITTED"/>
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="fileDocumentName" value="DoE_and_EFSN_Notice_Maritime_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Notice_Add_northern_ireland_deduction_WALES" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_SUBMITTED"/>
+            <param name="competentAuthority" value="WALES" />
+            <param name="fileDocumentName" value="DoE_and_EFSN_Notice_Maritime_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Notice_Add_northern_ireland_deduction_NORTHERN_IRELAND" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_SUBMITTED"/>
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="fileDocumentName" value="DoE_and_EFSN_Notice_Maritime_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Notice_Add_northern_ireland_deduction_OPRED" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_SUBMITTED"/>
+            <param name="competentAuthority" value="OPRED" />
+            <param name="fileDocumentName" value="DoE_and_EFSN_Notice_Maritime_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Efsn_Add_northern_ireland_deduction_ENGLAND" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_EFSN_SUBMITTED"/>
+            <param name="competentAuthority" value="ENGLAND" />
+            <param name="fileDocumentName" value="Maritime_EFSN_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Efsn_Add_northern_ireland_deduction_SCOTLAND" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_EFSN_SUBMITTED"/>
+            <param name="competentAuthority" value="SCOTLAND" />
+            <param name="fileDocumentName" value="Maritime_EFSN_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Efsn_Add_northern_ireland_deduction_WALES" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_EFSN_SUBMITTED"/>
+            <param name="competentAuthority" value="WALES" />
+            <param name="fileDocumentName" value="Maritime_EFSN_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Efsn_Add_northern_ireland_deduction_NORTHERN_IRELAND" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_EFSN_SUBMITTED"/>
+            <param name="competentAuthority" value="NORTHERN_IRELAND" />
+            <param name="fileDocumentName" value="Maritime_EFSN_v3.docx" />
+        </customChange>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_DoE_Efsn_Add_northern_ireland_deduction_OPRED" author="P44065">
+        <comment>Update DoE and EFSN Notice Maritime</comment>
+        <customChange class="uk.gov.netz.api.documenttemplate.initialdata.UpdateDocumentTemplateFileTaskChange">
+            <param name="type" value="DOE_EFSN_SUBMITTED"/>
+            <param name="competentAuthority" value="OPRED" />
+            <param name="fileDocumentName" value="Maritime_EFSN_v3.docx" />
+        </customChange>
+    </changeSet>
+
 </databaseChangeLog>

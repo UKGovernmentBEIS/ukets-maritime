@@ -4,16 +4,7 @@
     {{ wizardMap.totalShipEmissions.title }}
   </netz-page-heading>
 
-  <mrtm-aer-aggregated-data-ship-emissions-calculated-totals [data]="data" />
-
-  <h3 class="govuk-heading-m">Emissions calculations</h3>
-  <mrtm-aer-aggregated-data-emissions-calculations-summary-template
-    class="govuk-!-display-block govuk-!-margin-bottom-9"
-    header="Total ship emissions"
-    [data]="totalShipEmissionsData()" />
-  <mrtm-aer-aggregated-data-emissions-calculations-summary-template
-    header="Emissions figure for surrender"
-    [data]="surrenderEmissions()" />
+  <mrtm-aer-aggregated-data-emissions-calculations-summary-template [data]="totalShipEmissionsData()" />
 
   <button type="button" govukButton (click)="onSubmit()">Continue</button>
 

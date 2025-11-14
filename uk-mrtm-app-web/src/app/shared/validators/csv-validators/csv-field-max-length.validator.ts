@@ -23,7 +23,7 @@ export function csvFieldMaxLengthValidator<T>(
       const currentField = dataRow[field];
       if (currentField && currentField?.length > length) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

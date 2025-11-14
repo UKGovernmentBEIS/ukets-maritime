@@ -41,6 +41,7 @@ export class AerPortsSummaryComponent {
   public readonly wizardStep = AerPortsWizardStep;
   public readonly wizardMap = aerPortsMap;
   public readonly ports = this.store.select(aerCommonQuery.selectPortsList);
+  public readonly subtaskStatus = this.store.select(aerCommonQuery.selectStatusForSubtask(AER_PORTS_SUB_TASK));
 
   public readonly canSubmit: Signal<boolean> = computed(() => {
     const statuses = this.ports().map((port) => port.status);
@@ -49,7 +50,7 @@ export class AerPortsSummaryComponent {
       this.editable() &&
       statuses?.length &&
       statuses?.every((task) => task === TaskItemStatus.COMPLETED) &&
-      this.store.select(aerCommonQuery.selectStatusForSubtask(AER_PORTS_SUB_TASK))() !== TaskItemStatus.COMPLETED
+      this.subtaskStatus() !== TaskItemStatus.COMPLETED
     );
   });
 

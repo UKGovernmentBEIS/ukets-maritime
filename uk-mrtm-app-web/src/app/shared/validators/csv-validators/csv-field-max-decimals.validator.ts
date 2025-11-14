@@ -30,7 +30,7 @@ export function csvFieldMaxDecimalsValidator<T>(
 
       if (!pattern.test(currentField) || (isPositiveOnly && currentField < 0)) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

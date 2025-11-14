@@ -22,20 +22,11 @@ export const mockAerAggregatedDataXml = `
                 <tch4eqTotal>6.5432100</tch4eqTotal>
                 <tn2oeqTotal>1.7890100</tn2oeqTotal>
             </etsEmissionsBetweenUkPort>
-            <etsEmissionsBetweenUkAndEeaPort>
+            <etsEmissionsBetweenUkAndNiPort>
                 <tco2Total>500.1234500</tco2Total>
                 <tch4eqTotal>12.8765400</tch4eqTotal>
                 <tn2oeqTotal>3.4567800</tn2oeqTotal>
-            </etsEmissionsBetweenUkAndEeaPort>
-            <etsEmissionsSmallIslands>
-                <tco2Total>25.7654300</tco2Total>
-                <tch4eqTotal>0.9876500</tch4eqTotal>
-                <tn2oeqTotal>0.2345600</tn2oeqTotal>
-            </etsEmissionsSmallIslands>
-            <etsCcWithinUkPort>15.2500000</etsCcWithinUkPort>
-            <etsCcBetweenUkPort>30.7500000</etsCcBetweenUkPort>
-            <etsCcBetweenUkAndEeaPort>45.1250000</etsCcBetweenUkAndEeaPort>
-            <etsCcSmallIslands>5.5000000</etsCcSmallIslands>
+            </etsEmissionsBetweenUkAndNiPort>
         </annualEmission>
     </shipEmissions>
     <shipEmissions shipImoNumber="2222222">
@@ -55,20 +46,11 @@ export const mockAerAggregatedDataXml = `
                 <tch4eqTotal>4.3210000</tch4eqTotal>
                 <tn2oeqTotal>1.0987600</tn2oeqTotal>
             </etsEmissionsBetweenUkPort>
-            <etsEmissionsBetweenUkAndEeaPort>
+            <etsEmissionsBetweenUkAndNiPort>
                 <tco2Total>340.9870000</tco2Total>
                 <tch4eqTotal>8.7654300</tch4eqTotal>
                 <tn2oeqTotal>2.3456700</tn2oeqTotal>
-            </etsEmissionsBetweenUkAndEeaPort>
-            <etsEmissionsSmallIslands>
-                <tco2Total>25.7654300</tco2Total>
-                <tch4eqTotal>0.9876500</tch4eqTotal>
-                <tn2oeqTotal>0.2345600</tn2oeqTotal>
-            </etsEmissionsSmallIslands>
-            <etsCcWithinUkPort>10.5000000</etsCcWithinUkPort>
-            <etsCcBetweenUkPort>21.0000000</etsCcBetweenUkPort>
-            <etsCcBetweenUkAndEeaPort>31.5000000</etsCcBetweenUkAndEeaPort>
-            <etsCcSmallIslands>5.5000000</etsCcSmallIslands>
+            </etsEmissionsBetweenUkAndNiPort>
         </annualEmission>
     </shipEmissions>
 </emissions>

@@ -8,15 +8,14 @@
  * Do not edit the class manually.
  */
 import { AerAggregatedDataFuelConsumption } from './aerAggregatedDataFuelConsumption';
-import { AerAggregatedEmissionsMeasurementSave } from './aerAggregatedEmissionsMeasurementSave';
+import { AerPortEmissionsMeasurementSave } from './aerPortEmissionsMeasurementSave';
 
 export interface AerShipAggregatedDataSave {
   uniqueIdentifier: string;
   imoNumber: string;
   fuelConsumptions?: Array<AerAggregatedDataFuelConsumption>;
-  emissionsWithinUKPorts?: AerAggregatedEmissionsMeasurementSave;
-  emissionsBetweenUKPorts?: AerAggregatedEmissionsMeasurementSave;
-  emissionsBetweenUKAndEEAVoyages?: AerAggregatedEmissionsMeasurementSave;
-  smallIslandSurrenderReduction?: AerAggregatedEmissionsMeasurementSave;
+  emissionsWithinUKPorts?: AerPortEmissionsMeasurementSave;
+  emissionsBetweenUKPorts?: AerPortEmissionsMeasurementSave;
+  emissionsBetweenUKAndNIVoyages?: AerPortEmissionsMeasurementSave;
   fromFetch?: boolean;
 }

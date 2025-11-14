@@ -1,5 +1,5 @@
 <netz-page-heading [caption]="map.caption">Voyage for {{ ship()?.details?.name }}</netz-page-heading>
 
-<mrtm-voyage-summary-template [data]="voyage()" [relatedShip]="ship()" />
+<mrtm-voyage-summary-template [data]="voyage()" />
 
 <a govukLink [routerLink]="['../']">Return to: {{ map.title }}</a>

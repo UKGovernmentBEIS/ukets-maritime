@@ -18,8 +18,7 @@ export class OpinionStatementEmissionsFormPayloadMutator extends PayloadMutator 
       AerOpinionStatement,
       | 'emissionsCorrect'
       | 'manuallyProvidedTotalEmissions'
-      | 'manuallyProvidedLessIslandFerryDeduction'
-      | 'manuallyProvidedLess5PercentIceClassDeduction'
+      | 'manuallyProvidedLessVoyagesInNorthernIrelandDeduction'
       | 'manuallyProvidedSurrenderEmissions'
     >,
   ): Observable<AerVerificationSubmitTaskPayload> {
@@ -36,8 +35,7 @@ export class OpinionStatementEmissionsFormPayloadMutator extends PayloadMutator 
 
         if (userInput.emissionsCorrect === true) {
           delete payload.verificationReport.opinionStatement.manuallyProvidedTotalEmissions;
-          delete payload.verificationReport.opinionStatement.manuallyProvidedLess5PercentIceClassDeduction;
-          delete payload.verificationReport.opinionStatement.manuallyProvidedLessIslandFerryDeduction;
+          delete payload.verificationReport.opinionStatement.manuallyProvidedLessVoyagesInNorthernIrelandDeduction;
           delete payload.verificationReport.opinionStatement.manuallyProvidedSurrenderEmissions;
         }
       }),

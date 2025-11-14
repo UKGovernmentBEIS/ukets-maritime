@@ -11,7 +11,7 @@ describe('VirVerifierRecommendationSummaryTemplateComponent', () => {
   let page: Page;
 
   const mockData = {
-    reference: 'B1: Uncorrected non-conformities',
+    reference: 'B1',
     explanation: 'Explanation B1',
     materialEffect: true,
   };
@@ -35,7 +35,7 @@ describe('VirVerifierRecommendationSummaryTemplateComponent', () => {
   it('should display all HTML elements for UncorrectedItem', () => {
     expect(page.summariesContents).toEqual([
       'Item code',
-      'B1: Uncorrected non-conformities',
+      'B1: Uncorrected non-conformities from the previous year',
       "Verifier's recommendation",
       'Explanation B1',
       'Does this have a material effect on the total emissions reported?',
@@ -51,7 +51,7 @@ describe('VirVerifierRecommendationSummaryTemplateComponent', () => {
 
     expect(page.summariesContents).toEqual([
       'Item code',
-      'B1: Uncorrected non-conformities',
+      'B1: Uncorrected non-conformities from the previous year',
       "Verifier's recommendation",
       'Explanation B1',
     ]);

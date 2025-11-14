@@ -12,7 +12,6 @@ export const mockAerEmissions: AerEmissions = {
         iceClass: 'PC1',
         natureOfReportingResponsibility: 'SHIPOWNER',
         allYear: true,
-        hasIceClassDerogation: true,
       },
       uniqueIdentifier: '79df5610-9b70-4e3e-8f09-5b1b351560bd',
       fuelsAndEmissionsFactors: [
@@ -104,8 +103,6 @@ export const mockAerEmissions: AerEmissions = {
       ],
       derogations: {
         exceptionFromPerVoyageMonitoring: false,
-        carbonCaptureAndStorageReduction: true,
-        smallIslandFerryOperatorReduction: true,
       },
     },
     {
@@ -118,7 +115,6 @@ export const mockAerEmissions: AerEmissions = {
         iceClass: 'PC1',
         natureOfReportingResponsibility: 'SHIPOWNER',
         allYear: true,
-        hasIceClassDerogation: true,
       },
       uniqueIdentifier: '7e985e22-343a-4283-a7ce-962efb9f9ff1',
       fuelsAndEmissionsFactors: [
@@ -198,8 +194,6 @@ export const mockAerEmissions: AerEmissions = {
       ],
       derogations: {
         exceptionFromPerVoyageMonitoring: false,
-        carbonCaptureAndStorageReduction: true,
-        smallIslandFerryOperatorReduction: true,
       },
     },
   ],

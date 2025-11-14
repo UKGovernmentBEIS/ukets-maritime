@@ -33,7 +33,7 @@ export function csvFieldTodayOrPastDateValidator<T>(
 
       if (isAfter(currentField, today)) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

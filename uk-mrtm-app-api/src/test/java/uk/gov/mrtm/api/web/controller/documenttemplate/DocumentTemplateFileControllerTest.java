@@ -80,7 +80,9 @@ class DocumentTemplateFileControllerTest {
         Long documentTemplateId = 1L;
         UUID fileUuid = UUID.randomUUID();
         FileToken fileToken = FileToken.builder().token("token").tokenExpirationMinutes(10L).build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(documentTemplateFileService.generateGetFileDocumentTemplateToken(documentTemplateId, fileUuid)).thenReturn(fileToken);
 
         mockMvc.perform(MockMvcRequestBuilders

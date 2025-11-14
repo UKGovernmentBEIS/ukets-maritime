@@ -70,6 +70,7 @@ public class ExtendFollowUpExpirationTimerService {
             .forEach(p -> {
                 EmpNotificationFollowUpReviewDecision reviewDecision = ((EmpNotificationFollowUpWaitForAmendsRequestTaskPayload) p).getReviewDecision();
                 ((EmpNotificationFollowupRequiredChangesDecisionDetails) reviewDecision.getDetails()).setDueDate(dueDate);
+                ((EmpNotificationFollowUpWaitForAmendsRequestTaskPayload) p).setFollowUpResponseExpirationDate(dueDate);
             });
 
         requestTasks.stream().map(RequestTask::getPayload)

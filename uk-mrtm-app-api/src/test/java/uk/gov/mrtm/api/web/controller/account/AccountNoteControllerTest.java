@@ -352,8 +352,12 @@ class AccountNoteControllerTest {
         final Long noteId = 1L;
         final UUID documentUuid = UUID.randomUUID();
         final FileToken expectedToken = FileToken.builder().token("token").build();
+        final AppUser user = AppUser.builder()
+            .roleType(RoleTypeConstants.REGULATOR)
+            .build();
 
         when(accountNoteService.generateGetFileNoteToken(noteId, documentUuid)).thenReturn(expectedToken);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .get(ACCOUNT_NOTE_CONTROLLER_PATH + "/" + noteId + "/files")

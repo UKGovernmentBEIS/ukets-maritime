@@ -17,8 +17,6 @@ export class AerAggregatedDataFlowManager extends WizardFlowManager {
       case AerAggregatedDataWizardStep.FUEL_CONSUMPTION:
         return of(`../${AerAggregatedDataWizardStep.ANNUAL_EMISSIONS}`);
       case AerAggregatedDataWizardStep.ANNUAL_EMISSIONS:
-        return of(`../${AerAggregatedDataWizardStep.SMALL_ISLAND_EMISSIONS}`);
-      case AerAggregatedDataWizardStep.SMALL_ISLAND_EMISSIONS:
         return of(`../${AerAggregatedDataWizardStep.SHIP_EMISSIONS}`);
       case AerAggregatedDataWizardStep.FETCH_FROM_VOYAGES_AND_PORTS:
       case AerAggregatedDataWizardStep.UPLOAD_AGGREGATED_DATA:

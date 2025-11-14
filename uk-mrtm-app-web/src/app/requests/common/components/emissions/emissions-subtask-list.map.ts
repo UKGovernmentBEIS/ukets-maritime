@@ -20,7 +20,6 @@ export const emissionsShipSubtaskMap: SubTaskListMap<{
   flagState: string;
   iceClass: string;
   natureOfReportingResponsibility: string;
-  hasIceClassDerogation: string;
   allYear: string;
   fuelsAndEmissionsFactors: string;
   fuelsAndEmissionsFactorsFormAdd: string;
@@ -41,7 +40,6 @@ export const emissionsShipSubtaskMap: SubTaskListMap<{
   flagState: { title: 'Flag state' },
   iceClass: { title: 'Ice class' },
   natureOfReportingResponsibility: { title: 'Nature of reporting responsibility' },
-  hasIceClassDerogation: { title: 'Are you claiming a surrender reduction for ice class ships?' },
   allYear: { title: 'Date' },
 
   fuelsAndEmissionsFactors: { title: 'Fuels and emissions factors' },

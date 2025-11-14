@@ -68,8 +68,7 @@ class RequestCustomRepositoryIT extends AbstractContainerBaseTest {
                 .emissions(AerTotalReportableEmissions.builder()
                         .totalEmissions(BigDecimal.TEN)
                         .surrenderEmissions(BigDecimal.TEN)
-                        .lessIslandFerryDeduction(BigDecimal.TEN)
-                        .less5PercentIceClassDeduction(BigDecimal.TEN)
+                        .lessVoyagesInNorthernIrelandDeduction(BigDecimal.TEN)
                         .build())
                 .year(year)
                 .build();
@@ -94,8 +93,7 @@ class RequestCustomRepositoryIT extends AbstractContainerBaseTest {
                 .emissions(AerTotalReportableEmissions.builder()
                         .totalEmissions(BigDecimal.TEN)
                         .surrenderEmissions(BigDecimal.TEN)
-                        .lessIslandFerryDeduction(BigDecimal.TEN)
-                        .less5PercentIceClassDeduction(BigDecimal.TEN)
+                        .lessVoyagesInNorthernIrelandDeduction(BigDecimal.TEN)
                         .build())
                 .year(year)
                 .build();
@@ -105,8 +103,7 @@ class RequestCustomRepositoryIT extends AbstractContainerBaseTest {
                 .emissions(AerTotalReportableEmissions.builder()
                         .totalEmissions(BigDecimal.TEN)
                         .surrenderEmissions(BigDecimal.TEN)
-                        .lessIslandFerryDeduction(BigDecimal.TEN)
-                        .less5PercentIceClassDeduction(BigDecimal.TEN)
+                        .lessVoyagesInNorthernIrelandDeduction(BigDecimal.TEN)
                         .build())
                 .year(Year.of(2024))
                 .build();
@@ -132,8 +129,7 @@ class RequestCustomRepositoryIT extends AbstractContainerBaseTest {
                 .emissions(AerTotalReportableEmissions.builder()
                         .totalEmissions(BigDecimal.TEN)
                         .surrenderEmissions(BigDecimal.TEN)
-                        .lessIslandFerryDeduction(BigDecimal.TEN)
-                        .less5PercentIceClassDeduction(BigDecimal.TEN)
+                        .lessVoyagesInNorthernIrelandDeduction(BigDecimal.TEN)
                         .build())
                 .year(year)
                 .build();

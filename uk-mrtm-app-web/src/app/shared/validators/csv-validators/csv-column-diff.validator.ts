@@ -21,6 +21,10 @@ export function csvColumnDiffValidator<T>(csvMap: Record<keyof T, string>): Vali
     };
 
     const mapKeys = Object.keys(csvMap);
+    if (mapKeys?.length !== data?.length) {
+      return error;
+    }
+
     for (const key of mapKeys) {
       if (!data.includes(csvMap?.[key])) {
         return error;

@@ -314,7 +314,9 @@ class RegulatorUserManagementControllerTest {
 	    String userId = "userId";
         UUID signatureUuid = UUID.randomUUID();
         FileToken fileToken = FileToken.builder().token("token").tokenExpirationMinutes(10L).build();
+		AppUser user = AppUser.builder().userId("userId").build();
 
+		when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(userSignatureService.generateSignatureFileToken(userId, signatureUuid)).thenReturn(fileToken);
 
         mockMvc.perform(MockMvcRequestBuilders

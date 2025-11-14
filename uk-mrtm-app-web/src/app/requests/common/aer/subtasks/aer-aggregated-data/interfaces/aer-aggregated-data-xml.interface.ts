@@ -17,12 +17,7 @@ export interface AnnualEmissionEditDTO {
   emissions: AnnualConsumptionEditDTO[];
   etsEmissionsWithinUkPort: EmissionsGroupDTO;
   etsEmissionsBetweenUkPort: EmissionsGroupDTO;
-  etsEmissionsBetweenUkAndEeaPort: EmissionsGroupDTO;
-  etsEmissionsSmallIslands?: EmissionsGroupDTO;
-  etsCcWithinUkPort: number;
-  etsCcBetweenUkPort: number;
-  etsCcBetweenUkAndEeaPort: number;
-  etsCcSmallIslands?: number;
+  etsEmissionsBetweenUkAndNiPort: EmissionsGroupDTO;
 }
 
 export interface AnnualConsumptionEditDTO {

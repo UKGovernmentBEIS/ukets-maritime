@@ -29,213 +29,122 @@ class AerTotalEmissionsCalculatorTest {
     @InjectMocks
     private AerTotalEmissionsCalculator calculator;
 
+    @ParameterizedTest
+    @MethodSource("validScenarios")
+    void calculate_emissions(AerTotalEmissions expectedEmissions, Set<AerShipAggregatedData> emissions,
+                             AerSmfDetails smfDetails) {
+
+        final AerAggregatedData aggregatedData = AerAggregatedData.builder()
+            .emissions(emissions)
+            .build();
+
+        final AerSmf smf = AerSmf.builder()
+            .smfDetails(smfDetails)
+            .build();
+
+        Aer aer = Aer.builder()
+            .aggregatedData(aggregatedData)
+            .smf(smf)
+            .build();
+
+        calculator.calculateEmissions(aer);
+
+        assertNotNull(aer.getTotalEmissions());
+        assertThat(aer.getTotalEmissions()).isEqualTo(expectedEmissions);
+    }
+
     public static Stream<Arguments> validScenarios() {
         return Stream.of(
                 Arguments.of(
-                        buildAerTotalEmissions(buildAerPortEmissionsMeasurement(new BigDecimal("800.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("2000.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("150.0000000"), new BigDecimal("30.0000000"), new BigDecimal("120.0000000"), new BigDecimal("300.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("700.0000000"), new BigDecimal("300.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1500.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("650.0000000"), new BigDecimal("300.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1450.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("200.0000000"), new BigDecimal("150.0000000"), new BigDecimal("450.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("150.0000000"), new BigDecimal("250.0000000"), new BigDecimal("150.0000000"), new BigDecimal("550.0000000")),
-                                new BigDecimal("1450.0000000"), new BigDecimal("550.0000000"), new BigDecimal("1450"), new BigDecimal("550")),
+                        buildAerTotalEmissions(
+                            buildAerPortEmissionsMeasurement(new BigDecimal("800.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("2000.0000000")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("679.6875000"), new BigDecimal("685.0000000"), new BigDecimal("440.0000000"), new BigDecimal("1804.6875000")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("750.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1950.0000000")),
+                            new BigDecimal("1950.0000000"), new BigDecimal("1804.6875000"), new BigDecimal("1950"), new BigDecimal("1805")),
                         Set.of(
-                                buildAerShipAggregatedData(buildAerPortEmissionsMeasurement(new BigDecimal("500.0000000"), new BigDecimal("300.0000000"), new BigDecimal("200.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("10.0000000"), new BigDecimal("40.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("300.0000000"), new BigDecimal("200.0000000"), new BigDecimal("300.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("50.0000000"), new BigDecimal("50.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("150.0000000"), new BigDecimal("100.0000000"), new BigDecimal("50.0000000"))),
-                                buildAerShipAggregatedData(buildAerPortEmissionsMeasurement(new BigDecimal("300.0000000"), new BigDecimal("400.0000000"), new BigDecimal("300.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("20.0000000"), new BigDecimal("80.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("400.0000000"), new BigDecimal("100.0000000"), new BigDecimal("200.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("150.0000000"), new BigDecimal("100.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("150.0000000"), new BigDecimal("100.0000000")))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("500.0000000"), new BigDecimal("300.0000000"), new BigDecimal("200.0000000")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("10.0000000"), new BigDecimal("40.0000000"))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("300.0000000"), new BigDecimal("400.0000000"), new BigDecimal("300.0000000")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("20.0000000"), new BigDecimal("80.0000000")))),
                         buildAerSmfDetails(new BigDecimal("50.0000000"))
                 ),
                 Arguments.of(
-                        buildAerTotalEmissions(buildAerPortEmissionsMeasurement(new BigDecimal("800.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("2000.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("150.0000000"), new BigDecimal("30.0000000"), new BigDecimal("120.0000000"), new BigDecimal("300.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("700.0000000"), new BigDecimal("300.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1500.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("700.0000000"), new BigDecimal("300.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1500.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("150.0000000"), new BigDecimal("200.0000000"), new BigDecimal("150.0000000"), new BigDecimal("500.0000000")),
-                                buildAerPortEmissionsMeasurement(new BigDecimal("200.0000000"), new BigDecimal("250.0000000"), new BigDecimal("150.0000000"), new BigDecimal("600.0000000")),
-                                new BigDecimal("1500.0000000"), new BigDecimal("600.0000000"), new BigDecimal("1500"), new BigDecimal("600")),
+                        buildAerTotalEmissions(
+                            buildAerPortEmissionsMeasurement(new BigDecimal("800.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("2000.0000000")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("725.0000000"), new BigDecimal("685.0000000"), new BigDecimal("440.0000000"), new BigDecimal("1850.0000000")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("800.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("2000.0000000")),
+                            new BigDecimal("2000.0000000"), new BigDecimal("1850.0000000"), new BigDecimal("2000"), new BigDecimal("1850")),
                         Set.of(
-                                buildAerShipAggregatedData(buildAerPortEmissionsMeasurement(new BigDecimal("500.0000000"), new BigDecimal("300.0000000"), new BigDecimal("200.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("10.0000000"), new BigDecimal("40.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("300.0000000"), new BigDecimal("200.0000000"), new BigDecimal("300.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("50.0000000"), new BigDecimal("50.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("150.0000000"), new BigDecimal("100.0000000"), new BigDecimal("50.0000000"))),
-                                buildAerShipAggregatedData(buildAerPortEmissionsMeasurement(new BigDecimal("300.0000000"), new BigDecimal("400.0000000"), new BigDecimal("300.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("20.0000000"), new BigDecimal("80.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("400.0000000"), new BigDecimal("100.0000000"), new BigDecimal("200.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("150.0000000"), new BigDecimal("100.0000000")),
-                                        buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("150.0000000"), new BigDecimal("100.0000000")))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("500.0000000"), new BigDecimal("300.0000000"), new BigDecimal("200.0000000")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("10.0000000"), new BigDecimal("40.0000000"))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("300.0000000"), new BigDecimal("400.0000000"), new BigDecimal("300.0000000")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("20.0000000"), new BigDecimal("80.0000000")))),
                         null
                 ),
                 Arguments.of(
                         buildAerTotalEmissions(
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("799.9876543"),
-                                        new BigDecimal("702.1234567"),
-                                        new BigDecimal("500.5432198"),
-                                        new BigDecimal("2002.6543308")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("149.8765432"),
-                                        new BigDecimal("29.9871234"),
-                                        new BigDecimal("120.3456789"),
-                                        new BigDecimal("300.2093455")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("702.5678901"),
-                                        new BigDecimal("300.9876543"),
-                                        new BigDecimal("499.8765432"),
-                                        new BigDecimal("1503.4320876")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("652.5678901"),
-                                        new BigDecimal("300.9876543"),
-                                        new BigDecimal("499.8765432"),
-                                        new BigDecimal("1453.4320876")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("100.3456789"),
-                                        new BigDecimal("200.8765432"),
-                                        new BigDecimal("150.9876543"),
-                                        new BigDecimal("452.2098764")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("150.4321098"),
-                                        new BigDecimal("250.8765432"),
-                                        new BigDecimal("150.9876543"),
-                                        new BigDecimal("552.2963073")),
-                                new BigDecimal("1453.4320876"),
-                                new BigDecimal("552.2963073"),
-                                new BigDecimal("1453"),
-                                new BigDecimal("552")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("799.9876543"), new BigDecimal("702.1234567"), new BigDecimal("500.5432198"), new BigDecimal("2002.6543308")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("679.7330977"), new BigDecimal("687.1298950"), new BigDecimal("440.3703804"), new BigDecimal("1807.2333731")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("749.9876543"), new BigDecimal("702.1234567"), new BigDecimal("500.5432198"), new BigDecimal("1952.6543308")),
+                            new BigDecimal("1952.6543308"), new BigDecimal("1807.2333731"), new BigDecimal("1953"), new BigDecimal("1807")),
                         Set.of(
-                                buildAerShipAggregatedData(
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("499.9876543"),
-                                                new BigDecimal("300.1234567"),
-                                                new BigDecimal("200.3456789")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("49.8765432"),
-                                                new BigDecimal("9.9876543"),
-                                                new BigDecimal("40.3456789")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("300.4567891"),
-                                                new BigDecimal("200.3456789"),
-                                                new BigDecimal("300.2345678")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("100.2345678"),
-                                                new BigDecimal("50.8765432"),
-                                                new BigDecimal("50.1234567")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("150.4321098"),
-                                                new BigDecimal("100.9876543"),
-                                                new BigDecimal("50.5678901"))),
-                                buildAerShipAggregatedData(
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("300"),
-                                                new BigDecimal("402"),
-                                                new BigDecimal("300.1975409")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("100"),
-                                                new BigDecimal("19.9994691"),
-                                                new BigDecimal("80")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("402.111101"),
-                                                new BigDecimal("100.6419754"),
-                                                new BigDecimal("199.6419754")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("50.1111111"),
-                                                new BigDecimal("150"),
-                                                new BigDecimal("100.8641976")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("50"),
-                                                new BigDecimal("149.8888889"),
-                                                new BigDecimal("100.4197642")))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("499.9876543"), new BigDecimal("300.1234567"), new BigDecimal("200.3456789")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("49.8765432"), new BigDecimal("9.9876543"), new BigDecimal("40.3456789"))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("300"), new BigDecimal("402"), new BigDecimal("300.1975409")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("100"), new BigDecimal("19.9994691"), new BigDecimal("80")))),
                         buildAerSmfDetails(new BigDecimal("50"))
                 ),
                 Arguments.of(
                         buildAerTotalEmissions(
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("800.7465123"),
-                                        new BigDecimal("702.7894561"),
-                                        new BigDecimal("500.0031245"),
-                                        new BigDecimal("2003.5390929")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("150.0067891"),
-                                        new BigDecimal("30.0042635"),
-                                        new BigDecimal("120.0084761"),
-                                        new BigDecimal("300.0195287")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("699.9989765"),
-                                        new BigDecimal("299.9998756"),
-                                        new BigDecimal("500.0001234"),
-                                        new BigDecimal("1499.9989755")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("699.9989765"),
-                                        new BigDecimal("299.9998756"),
-                                        new BigDecimal("500.0001234"),
-                                        new BigDecimal("1499.9989755")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("150.3333333"),
-                                        new BigDecimal("199.6666667"),
-                                        new BigDecimal("149.9999999"),
-                                        new BigDecimal("499.9999999")),
-                                buildAerPortEmissionsMeasurement(
-                                        new BigDecimal("200.0000001"),
-                                        new BigDecimal("249.9999998"),
-                                        new BigDecimal("149.9999999"),
-                                        new BigDecimal("599.9999998")),
-                                new BigDecimal("1499.9989755"),
-                                new BigDecimal("599.9999998"),
-                                new BigDecimal("1500"),
-                                new BigDecimal("600")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("800.7465123"), new BigDecimal("702.7894561"), new BigDecimal("500.0031245"), new BigDecimal("2003.5390929")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("725.7431178"), new BigDecimal("687.7873244"), new BigDecimal("439.9988865"), new BigDecimal("1853.5293287")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("800.7465123"), new BigDecimal("702.7894561"), new BigDecimal("500.0031245"), new BigDecimal("2003.5390929")),
+                            new BigDecimal("2003.5390929"), new BigDecimal("1853.5293287"), new BigDecimal("2004"), new BigDecimal("1854")),
                         Set.of(
-                                buildAerShipAggregatedData(
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("500.7465123"),
-                                                new BigDecimal("300.7894561"),
-                                                new BigDecimal("200.0031245")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("50.0067891"),
-                                                new BigDecimal("10.0042635"),
-                                                new BigDecimal("40.0084761")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("299.9989765"),
-                                                new BigDecimal("199.9998756"),
-                                                new BigDecimal("300.0001234")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("100.3333333"),
-                                                new BigDecimal("49.6666667"),
-                                                new BigDecimal("49.9999999")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("150.0000001"),
-                                                new BigDecimal("99.9999998"),
-                                                new BigDecimal("49.9999999"))),
-                                buildAerShipAggregatedData(
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("300"),
-                                                new BigDecimal("402"),
-                                                new BigDecimal("300")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("100"),
-                                                new BigDecimal("20"),
-                                                new BigDecimal("80")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("400"),
-                                                new BigDecimal("100"),
-                                                new BigDecimal("200")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("50"),
-                                                new BigDecimal("150"),
-                                                new BigDecimal("100")),
-                                        buildAerPortEmissionsMeasurement(
-                                                new BigDecimal("50"),
-                                                new BigDecimal("150"),
-                                                new BigDecimal("100")))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("500.7465123"), new BigDecimal("300.7894561"), new BigDecimal("200.0031245")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("50.0067891"), new BigDecimal("10.0042635"), new BigDecimal("40.0084761"))),
+                            buildAerShipAggregatedData(
+                                buildAerPortEmissionsMeasurement(new BigDecimal("300"), new BigDecimal("402"), new BigDecimal("300")),
+                                buildAerPortEmissionsMeasurement(new BigDecimal("100"), new BigDecimal("20"), new BigDecimal("80")))),
                         null
+                ),
+                Arguments.of(
+                    buildAerTotalEmissions(
+                        buildAerPortEmissionsMeasurement(new BigDecimal("0.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1200.0000000")),
+                        buildAerPortEmissionsMeasurement(new BigDecimal("-50.0000000"), new BigDecimal("685.0000000"), new BigDecimal("440.0000000"), new BigDecimal("1075.0000000")),
+                        buildAerPortEmissionsMeasurement(new BigDecimal("-50.0000000"), new BigDecimal("700.0000000"), new BigDecimal("500.0000000"), new BigDecimal("1150.0000000")),
+                        new BigDecimal("1150.0000000"), new BigDecimal("1075.0000000"), new BigDecimal("1150"), new BigDecimal("1075")),
+                    Set.of(
+                        buildAerShipAggregatedData(
+                            buildAerPortEmissionsMeasurement(new BigDecimal("0"), new BigDecimal("300.0000000"), new BigDecimal("200.0000000")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("50.0000000"), new BigDecimal("10.0000000"), new BigDecimal("40.0000000"))),
+                        buildAerShipAggregatedData(
+                            buildAerPortEmissionsMeasurement(new BigDecimal("0"), new BigDecimal("400.0000000"), new BigDecimal("300.0000000")),
+                            buildAerPortEmissionsMeasurement(new BigDecimal("100.0000000"), new BigDecimal("20.0000000"), new BigDecimal("80.0000000")))),
+                    buildAerSmfDetails(new BigDecimal("50.0000000"))
                 )
         );
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidScenarios")
+    void calculate_no_calculations(AerAggregatedData aggregatedData, AerSmf smf) {
+
+        Aer aer = Aer.builder()
+            .aggregatedData(aggregatedData)
+            .smf(smf)
+            .build();
+
+        calculator.calculateEmissions(aer);
+
+        assertNull(aer.getTotalEmissions());
     }
 
     public static Stream<Arguments> invalidScenarios() {
@@ -247,44 +156,6 @@ class AerTotalEmissionsCalculatorTest {
                         null, AerSmf.builder().build()
                 )
         );
-    }
-
-    @ParameterizedTest
-    @MethodSource("validScenarios")
-    void calculate_emissions(AerTotalEmissions expectedEmissions, Set<AerShipAggregatedData> emissions,
-                             AerSmfDetails smfDetails) {
-
-        final AerAggregatedData aggregatedData = AerAggregatedData.builder()
-                .emissions(emissions)
-                .build();
-
-        final AerSmf smf = AerSmf.builder()
-                .smfDetails(smfDetails)
-                .build();
-
-        Aer aer = Aer.builder()
-                .aggregatedData(aggregatedData)
-                .smf(smf)
-                .build();
-
-        calculator.calculateEmissions(aer);
-
-        assertNotNull(aer.getTotalEmissions());
-        assertThat(aer.getTotalEmissions()).isEqualTo(expectedEmissions);
-    }
-
-    @ParameterizedTest
-    @MethodSource("invalidScenarios")
-    void calculate_no_calculations(AerAggregatedData aggregatedData, AerSmf smf) {
-
-        Aer aer = Aer.builder()
-                .aggregatedData(aggregatedData)
-                .smf(smf)
-                .build();
-
-        calculator.calculateEmissions(aer);
-
-        assertNull(aer.getTotalEmissions());
     }
 
     private static AerPortEmissionsMeasurement buildAerPortEmissionsMeasurement(BigDecimal co2, BigDecimal ch4, BigDecimal no2) {
@@ -306,31 +177,20 @@ class AerTotalEmissionsCalculatorTest {
     }
 
     private static AerShipAggregatedData buildAerShipAggregatedData(AerPortEmissionsMeasurement totalEmissionsFromVoyagesAndPorts,
-                                                                    AerPortEmissionsMeasurement lessCapturedCo2,
-                                                                    AerPortEmissionsMeasurement lessVoyagesNotInScope,
-                                                                    AerPortEmissionsMeasurement lessIslandFerryDeduction,
-                                                                    AerPortEmissionsMeasurement less5PercentIceClassDeduction) {
+                                                                    AerPortEmissionsMeasurement emissionsBetweenUKAndNIVoyages) {
         return AerShipAggregatedData.builder()
                 .totalEmissionsFromVoyagesAndPorts(totalEmissionsFromVoyagesAndPorts)
-                .lessCapturedCo2(lessCapturedCo2)
-                .lessVoyagesNotInScope(lessVoyagesNotInScope)
-                .lessIslandFerryDeduction(lessIslandFerryDeduction)
-                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
+                .emissionsBetweenUKAndNIVoyages(emissionsBetweenUKAndNIVoyages)
                 .build();
     }
 
-    private static AerTotalEmissions buildAerTotalEmissions(AerPortEmissionsMeasurement totalEmissions, AerPortEmissionsMeasurement lessCapturedCo2,
-                                                            AerPortEmissionsMeasurement lessVoyagesNotInScope, AerPortEmissionsMeasurement lessAnyERC,
-                                                            AerPortEmissionsMeasurement lessIslandFerryDeduction, AerPortEmissionsMeasurement less5PercentIceClassDeduction,
-                                                            BigDecimal totalShipEmissions, BigDecimal surrenderEmissions,
+    private static AerTotalEmissions buildAerTotalEmissions(AerPortEmissionsMeasurement totalEmissions, AerPortEmissionsMeasurement lessVoyagesInNorthernIrelandDeduction,
+                                                            AerPortEmissionsMeasurement lessEmissionsReductionClaim, BigDecimal totalShipEmissions, BigDecimal surrenderEmissions,
                                                             BigDecimal totalShipEmissionsSummary, BigDecimal surrenderEmissionsSummary) {
         return AerTotalEmissions.builder()
                 .totalEmissions(totalEmissions)
-                .lessCapturedCo2(lessCapturedCo2)
-                .lessVoyagesNotInScope(lessVoyagesNotInScope)
-                .lessAnyERC(lessAnyERC)
-                .lessIslandFerryDeduction(lessIslandFerryDeduction)
-                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
+                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                .lessEmissionsReductionClaim(lessEmissionsReductionClaim)
                 .totalShipEmissions(totalShipEmissions)
                 .surrenderEmissions(surrenderEmissions)
                 .totalShipEmissionsSummary(totalShipEmissionsSummary)

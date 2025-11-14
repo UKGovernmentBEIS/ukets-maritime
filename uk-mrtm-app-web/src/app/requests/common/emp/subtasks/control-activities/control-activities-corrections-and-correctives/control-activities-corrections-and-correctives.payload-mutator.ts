@@ -1,5 +1,3 @@
-import { inject } from '@angular/core';
-
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
 
@@ -12,11 +10,9 @@ import {
   CONTROL_ACTIVITIES_SUB_TASK,
   ControlActivitiesWizardStep,
 } from '@requests/common/emp/subtasks/control-activities';
-import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 export class ControlActivitiesCorrectionsAndCorrectivesPayloadMutator extends PayloadMutator {
-  private readonly sectionsCompletedMap = inject(SECTIONS_COMPLETE_MAP, { optional: true });
   subtask = CONTROL_ACTIVITIES_SUB_TASK;
   step = ControlActivitiesWizardStep.CORRECTIONS;
 
@@ -29,8 +25,7 @@ export class ControlActivitiesCorrectionsAndCorrectivesPayloadMutator extends Pa
             ...userInput,
           },
         };
-        payload.empSectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
-          TaskItemStatus.IN_PROGRESS;
+        payload.empSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
       }),
     );
   }

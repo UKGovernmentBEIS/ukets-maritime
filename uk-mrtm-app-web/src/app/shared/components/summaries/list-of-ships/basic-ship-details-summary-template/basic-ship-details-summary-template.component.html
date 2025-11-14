@@ -68,20 +68,6 @@
       </div>
     }
 
-    @if (isAer() && !isNil($any(data)?.hasIceClassDerogation)) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Are you claiming a surrender reduction for ice class ships?</dt>
-        <dd govukSummaryListRowValue>
-          {{ $any(data)?.hasIceClassDerogation | booleanToText }}
-        </dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
-          </dd>
-        }
-      </div>
-    }
-
     @if (data?.natureOfReportingResponsibility) {
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Nature of reporting responsibility</dt>

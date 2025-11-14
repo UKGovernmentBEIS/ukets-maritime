@@ -10,7 +10,7 @@ import {
 } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
 
@@ -29,7 +29,7 @@ import { aerAggregatedDataAnnualEmissionsFormProvider } from '@requests/common/a
 import { AerAggregatedDataAnnualEmissionsFormModel } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions/aer-aggregated-data-annual-emissions.types';
 import { AerAggregatedDataAnnualEmissionsTotalsComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions/aer-aggregated-data-annual-emissions-totals';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
-import { calculateTotalAggregatedEmissionsMeasurement } from '@requests/common/aer/subtasks/utils';
+import { calculateTotalEmissionsFromVoyagesAndPortsMeasurement } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { WizardStepComponent } from '@shared/components';
 
@@ -51,7 +51,6 @@ import { WizardStepComponent } from '@shared/components';
 export class AerAggregatedDataAnnualEmissionsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
-  private readonly router: Router = inject(Router);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   public readonly form = inject(TASK_FORM);
   public readonly wizardMap = aerAggregatedDataSubtasksListMap;
@@ -62,22 +61,20 @@ export class AerAggregatedDataAnnualEmissionsComponent {
 
   public readonly currentValues: Signal<Partial<AerAggregatedDataAnnualEmissionsFormModel>> = toSignal(
     this.form.valueChanges,
-    {
-      initialValue: this.form.value,
-    },
+    { initialValue: this.form.value },
   );
 
   constructor() {
     effect(() => {
-      const { emissionsBetweenUKPorts, emissionsWithinUKPorts, emissionsBetweenUKAndEEAVoyages } = this.currentValues();
+      const { emissionsBetweenUKPorts, emissionsWithinUKPorts, emissionsBetweenUKAndNIVoyages } = this.currentValues();
 
-      const total = calculateTotalAggregatedEmissionsMeasurement(
+      const total = calculateTotalEmissionsFromVoyagesAndPortsMeasurement(
         emissionsBetweenUKPorts,
         emissionsWithinUKPorts,
-        emissionsBetweenUKAndEEAVoyages,
+        emissionsBetweenUKAndNIVoyages,
       );
 
-      this.form.get('totalAggregatedEmissions').setValue(total, { emitEvent: false });
+      this.form.get('totalEmissionsFromVoyagesAndPorts').setValue(total, { emitEvent: false });
     });
   }
 
@@ -90,12 +87,6 @@ export class AerAggregatedDataAnnualEmissionsComponent {
         this.form.value,
       )
       .pipe(take(1))
-      .subscribe(() => {
-        if (!this.ship().derogations.smallIslandFerryOperatorReduction) {
-          this.router.navigate(['../', AerAggregatedDataWizardStep.SHIP_EMISSIONS], {
-            relativeTo: this.activatedRoute,
-          });
-        }
-      });
+      .subscribe();
   }
 }

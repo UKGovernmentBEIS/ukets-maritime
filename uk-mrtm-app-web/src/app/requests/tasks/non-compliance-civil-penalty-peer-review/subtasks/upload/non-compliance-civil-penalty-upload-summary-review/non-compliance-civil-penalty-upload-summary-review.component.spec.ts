@@ -6,6 +6,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { mockNonComplianceCivilPenaltyRequestTask } from '@requests/common/non-compliance/testing';
+import { taskProviders } from '@requests/common/task.providers';
 import { NonComplianceCivilPenaltyUploadSummaryReviewComponent } from '@requests/tasks/non-compliance-civil-penalty-peer-review/subtasks/upload/non-compliance-civil-penalty-upload-summary-review';
 
 describe('NonComplianceCivilPenaltyUploadSummaryReviewComponent', () => {
@@ -21,6 +22,7 @@ describe('NonComplianceCivilPenaltyUploadSummaryReviewComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
+        ...taskProviders,
       ],
     }).compileComponents();
 

@@ -152,6 +152,7 @@ const selectVoyagesList: StateSelector<RequestActionState, Array<AerVoyageSummar
           totalEmissions: totalEmissions?.total,
           status: TaskItemStatus.COMPLETED,
           shipName: relatedShip?.details?.name,
+          journeyType: getAerJourneyType(voyageDetails),
           canViewDetails: true,
         };
       },
