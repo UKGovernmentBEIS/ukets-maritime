@@ -24,7 +24,7 @@ export function csvFieldDirectEmissionValidator(message: string): ValidatorFn {
         (!isValidDirectEmission(co2) || !isValidDirectEmission(ch4) || !isValidDirectEmission(n2o))
       ) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

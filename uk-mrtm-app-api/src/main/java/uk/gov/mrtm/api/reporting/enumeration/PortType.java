@@ -8,6 +8,5 @@ import lombok.Getter;
 public enum PortType {
     INTERNATIONAL,
     EU,
-    GB,
-    NI
+    GB
 }

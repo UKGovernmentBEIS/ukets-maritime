@@ -11,8 +11,11 @@ import { AerPortEmissionsMeasurement } from './aerPortEmissionsMeasurement';
 
 export interface AerTotalEmissions {
   totalEmissions: AerPortEmissionsMeasurement;
-  lessVoyagesInNorthernIrelandDeduction: AerPortEmissionsMeasurement;
-  lessEmissionsReductionClaim: AerPortEmissionsMeasurement;
+  lessCapturedCo2: AerPortEmissionsMeasurement;
+  lessVoyagesNotInScope: AerPortEmissionsMeasurement;
+  lessAnyERC: AerPortEmissionsMeasurement;
+  lessIslandFerryDeduction: AerPortEmissionsMeasurement;
+  less5PercentIceClassDeduction: AerPortEmissionsMeasurement;
   totalShipEmissions: string;
   surrenderEmissions: string;
   totalShipEmissionsSummary: string;

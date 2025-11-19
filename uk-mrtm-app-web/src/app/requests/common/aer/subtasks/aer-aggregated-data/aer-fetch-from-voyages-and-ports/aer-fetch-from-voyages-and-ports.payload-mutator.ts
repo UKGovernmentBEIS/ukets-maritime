@@ -53,7 +53,7 @@ export class AerFetchFromVoyagesAndPortsPayloadMutator extends PayloadMutator {
 
         for (const fetchData of fetchedAggregatedData) {
           payload.aerSectionsCompleted[`${this.subtask}-aggregated-data-${fetchData.uniqueIdentifier}`] =
-            TaskItemStatus.COMPLETED;
+            TaskItemStatus.IN_PROGRESS;
         }
       }),
     );

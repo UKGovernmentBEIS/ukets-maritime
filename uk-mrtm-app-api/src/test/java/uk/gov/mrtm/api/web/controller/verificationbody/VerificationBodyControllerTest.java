@@ -155,9 +155,7 @@ class VerificationBodyControllerTest {
     void getVerificationBodyById() throws Exception {
         Long verificationBodyId = 1L;
         VerificationBodyDTO verificationBodyDTO = VerificationBodyDTO.builder().id(verificationBodyId).name("name").build();
-        AppUser user = AppUser.builder().userId("userId").build();
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        
         when(verificationBodyQueryService.getVerificationBodyById(verificationBodyId))
             .thenReturn(verificationBodyDTO);
         
@@ -191,9 +189,6 @@ class VerificationBodyControllerTest {
     @Test
     void deleteVerificationBodyById() throws Exception {
         Long verificationBodyId = 1L;
-        AppUser user = AppUser.builder().userId("userId").build();
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .delete(CONTROLLER_PATH + "/" + verificationBodyId))
@@ -286,10 +281,7 @@ class VerificationBodyControllerTest {
                 .id(verificationBodyid)
                 .verificationBody(VerificationBodyEditDTO.builder().name("name").build())
                 .build();
-        AppUser user = AppUser.builder().userId("userId").build();
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-
+        
         mockMvc.perform(
                 MockMvcRequestBuilders
                     .put(CONTROLLER_PATH)
@@ -328,9 +320,6 @@ class VerificationBodyControllerTest {
     void updateVerificationBodiesStatus() throws Exception {
         VerificationBodyUpdateStatusDTO verificationBodyUpdateStatusDTO = VerificationBodyUpdateStatusDTO.builder()
                 .id(1L).status(VerificationBodyStatus.ACTIVE).build();
-        AppUser user = AppUser.builder().userId("userId").build();
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders
                 .patch(CONTROLLER_PATH)

@@ -28,6 +28,7 @@ export interface ShipUpdateDTO {
   grossTonnage?: number;
   flag?: FlagEnum;
   iceClassPolarCode?: IceClassPolarCodeEnum;
+  iceClassSurrenderReduction?: boolean;
   allYear?: boolean;
   partialPeriodFromDate?: string;
   partialPeriodToDate?: string;
@@ -92,4 +93,6 @@ export interface MonitoringMethodsSection {
 
 export interface AdditionalInformationDTO {
   exemptionPerVoyageMonitoring?: boolean;
+  carbonCaptureReduction?: boolean;
+  smallIslandSurrenderReduction?: boolean;
 }

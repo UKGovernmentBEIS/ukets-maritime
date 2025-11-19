@@ -84,10 +84,6 @@ export const canActivateAerVoyagesSummary: CanActivateFn = (route: ActivatedRout
   const voyages = store.select(aerCommonQuery.selectVoyages)();
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
 
-  if (route.fragment === AerVoyagesWizardStep.LIST_OF_VOYAGES && !isWizardCompleted(voyages)) {
-    return createUrlTreeFromSnapshot(route, ['../../']);
-  }
-
   return (
     !isEditable ||
     (isEditable && (subtaskStatus === TaskItemStatus.COMPLETED || isWizardCompleted(voyages))) ||

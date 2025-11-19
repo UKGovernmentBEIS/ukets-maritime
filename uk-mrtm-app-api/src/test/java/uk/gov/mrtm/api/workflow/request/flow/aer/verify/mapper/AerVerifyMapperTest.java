@@ -47,11 +47,13 @@ class AerVerifyMapperTest {
 
         final BigDecimal totalEmissionsProvided = BigDecimal.valueOf(12345.67);
         final BigDecimal surrenderEmissionsProvided = BigDecimal.valueOf(345.89);
-        final BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(122.78);
+        final BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(122.78);
+        final BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(45.75);
         final AerTotalReportableEmissions totalEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(totalEmissionsProvided)
             .surrenderEmissions(surrenderEmissionsProvided)
-            .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+            .lessIslandFerryDeduction(lessIslandFerryDeduction)
+            .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
             .build();
 
         final AerRequestPayload aerRequestPayload = AerRequestPayload.builder()
@@ -98,12 +100,14 @@ class AerVerifyMapperTest {
         Year reportingYear = Year.of(2022);
         BigDecimal totalEmissionsProvided = BigDecimal.valueOf(23670.80);
         final BigDecimal surrenderEmissionsProvided = BigDecimal.valueOf(345.89);
-        final BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(122.78);
+        final BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(122.78);
+        final BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(45.75);
 
         final AerTotalReportableEmissions totalEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissionsProvided)
                 .surrenderEmissions(surrenderEmissionsProvided)
-                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                 .build();
 
         AerApplicationVerificationSubmitRequestTaskPayload verificationSubmitRequestTaskPayload =

@@ -89,14 +89,16 @@ class ReportableEmissionsServiceTest {
     void calculateTotalReportableEmissions_incorrect() {
         BigDecimal totalEmissions = new BigDecimal("1");
         BigDecimal surrenderEmissions = new BigDecimal("2");
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = new BigDecimal("3");
+        BigDecimal lessIslandFerryDeduction = new BigDecimal("3");
+        BigDecimal less5PercentIceClassDeduction = new BigDecimal("4");
 
         AerContainer aerContainer = AerContainer.builder()
             .aer(Aer.builder()
                 .totalEmissions(AerTotalEmissions.builder()
                     .totalShipEmissionsSummary(new BigDecimal("123"))
                     .surrenderEmissionsSummary(new BigDecimal("123"))
-                    .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("123")).build())
+                    .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("123")).build())
+                    .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("123")).build())
                     .build())
                 .build())
             .verificationReport(AerVerificationReport.builder().verificationData(AerVerificationData.builder()
@@ -105,7 +107,8 @@ class ReportableEmissionsServiceTest {
                         .emissionsCorrect(false)
                         .manuallyProvidedTotalEmissions(totalEmissions)
                         .manuallyProvidedSurrenderEmissions(surrenderEmissions)
-                        .manuallyProvidedLessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                        .manuallyProvidedLessIslandFerryDeduction(lessIslandFerryDeduction)
+                        .manuallyProvidedLess5PercentIceClassDeduction(less5PercentIceClassDeduction)
                         .build())
                     .build())
                 .build())
@@ -114,7 +117,8 @@ class ReportableEmissionsServiceTest {
         AerTotalReportableEmissions expectedReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(totalEmissions)
             .surrenderEmissions(surrenderEmissions)
-            .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+            .lessIslandFerryDeduction(lessIslandFerryDeduction)
+            .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
             .build();
 
         AerTotalReportableEmissions actualReportableEmissions =
@@ -129,15 +133,18 @@ class ReportableEmissionsServiceTest {
     void calculateTotalReportableEmissions_correct() {
         BigDecimal totalEmissions = new BigDecimal("1");
         BigDecimal surrenderEmissions = new BigDecimal("2");
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = new BigDecimal("3");
+        BigDecimal lessIslandFerryDeduction = new BigDecimal("3");
         BigDecimal lessIslandFerryDeductionDecimal = new BigDecimal("3.1");
+        BigDecimal less5PercentIceClassDeduction = new BigDecimal("4");
+        BigDecimal less5PercentIceClassDeductionDecimal = new BigDecimal("3.9");
 
         AerContainer aerContainer = AerContainer.builder()
             .aer(Aer.builder()
                 .totalEmissions(AerTotalEmissions.builder()
                     .totalShipEmissionsSummary(totalEmissions)
                     .surrenderEmissionsSummary(surrenderEmissions)
-                    .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(lessIslandFerryDeductionDecimal).build())
+                    .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(lessIslandFerryDeductionDecimal).build())
+                    .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(less5PercentIceClassDeductionDecimal).build())
                     .build())
                 .build())
             .verificationReport(AerVerificationReport.builder().verificationData(AerVerificationData.builder()
@@ -146,7 +153,8 @@ class ReportableEmissionsServiceTest {
                             .emissionsCorrect(true)
                             .manuallyProvidedTotalEmissions(new BigDecimal("123"))
                             .manuallyProvidedSurrenderEmissions(new BigDecimal("123"))
-                            .manuallyProvidedLessVoyagesInNorthernIrelandDeduction(new BigDecimal("123"))
+                            .manuallyProvidedLessIslandFerryDeduction(new BigDecimal("123"))
+                            .manuallyProvidedLess5PercentIceClassDeduction(new BigDecimal("123"))
                             .build())
                     .build())
                 .build())
@@ -155,7 +163,8 @@ class ReportableEmissionsServiceTest {
         AerTotalReportableEmissions expectedReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(totalEmissions)
             .surrenderEmissions(surrenderEmissions)
-            .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+            .lessIslandFerryDeduction(lessIslandFerryDeduction)
+            .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
             .build();
 
         AerTotalReportableEmissions actualReportableEmissions =

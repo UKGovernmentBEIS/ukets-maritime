@@ -68,12 +68,14 @@ class RequestAerSubmitVerificationServiceTest {
         long verificationBodyId = 1L;
         BigDecimal totalEmissionsProvided = BigDecimal.valueOf(14500);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(4578);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(4567);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(4567);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(234);
         String notCoveredChangesProvided = "not covered changes";
         AerTotalReportableEmissions totalEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissionsProvided)
                 .surrenderEmissions(surrenderEmissions)
-                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                 .build();
 
         AerVerificationReport verificationReport = AerVerificationReport.builder()

@@ -66,12 +66,14 @@ class AerReviewMapperTest {
             .build();
         BigDecimal totalEmissions = BigDecimal.valueOf(14500);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(7500);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(3650);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(3650);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(2790);
 
         final AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(totalEmissions)
             .surrenderEmissions(surrenderEmissions)
-            .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+            .lessIslandFerryDeduction(lessIslandFerryDeduction)
+            .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
             .build();
 
         String notCoveredChangesProvided = "not covered changes";

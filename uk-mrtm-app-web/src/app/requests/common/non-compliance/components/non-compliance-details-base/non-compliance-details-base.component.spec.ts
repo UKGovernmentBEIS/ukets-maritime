@@ -7,7 +7,6 @@ import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { NonComplianceDetailsBaseComponent } from '@requests/common/non-compliance/components/non-compliance-details-base/non-compliance-details-base.component';
 import { mockNonComplianceSubmitRequestTask } from '@requests/common/non-compliance/testing';
-import { taskProviders } from '@requests/common/task.providers';
 
 describe('NonComplianceDetailsBaseComponent', () => {
   let component: NonComplianceDetailsBaseComponent;
@@ -22,7 +21,6 @@ describe('NonComplianceDetailsBaseComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
-        ...taskProviders,
       ],
     }).compileComponents();
 

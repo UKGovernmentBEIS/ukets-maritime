@@ -61,6 +61,33 @@
     formControlName="arrivalTime"
     label="Actual time of arrival (ATA)"
     hint="Enter the exact time in GMT, for example 17:06:22"></div>
+
+  @if (ship()?.derogations?.carbonCaptureAndStorageReduction) {
+    <h3 class="govuk-heading-m">Carbon Capture Utilisation and Storage</h3>
+
+    <div
+      govuk-text-input
+      formControlName="ccs"
+      label="Carbon capture and storage (CCS)(t)"
+      widthClass="govuk-!-width-one-third"></div>
+
+    <div
+      govuk-text-input
+      formControlName="ccu"
+      label="Carbon capture and utilisation (CCU)(t)"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+
+  @if (ship()?.derogations?.smallIslandFerryOperatorReduction) {
+    <div
+      formControlName="smallIslandFerryReduction"
+      govuk-radio
+      legend="Are you claiming a small island ferry operator surrender reduction?"
+      legendSize="medium">
+      <govuk-radio-option [value]="true" label="Yes" />
+      <govuk-radio-option [value]="false" label="No" />
+    </div>
+  }
 </mrtm-wizard-step>
 <div>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />

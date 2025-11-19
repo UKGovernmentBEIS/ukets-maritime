@@ -49,7 +49,7 @@ class DoeUpdateReportableEmissionsServiceTest {
         String regulatorAssignee = "userId";
         BigDecimal surrenderEmissions = new BigDecimal("1");
         BigDecimal totalReportableEmissions = new BigDecimal("2");
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = new BigDecimal("3");
+        BigDecimal iceClassDeduction = new BigDecimal("3");
         BigDecimal smallIslandFerryDeduction = new BigDecimal("4");
 
         Request request = Request.builder()
@@ -60,7 +60,8 @@ class DoeUpdateReportableEmissionsServiceTest {
                             .totalMaritimeEmissions(DoeTotalMaritimeEmissions.builder()
                                 .surrenderEmissions(surrenderEmissions)
                                 .totalReportableEmissions(totalReportableEmissions)
-                                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                                .iceClassDeduction(iceClassDeduction)
+                                .smallIslandFerryDeduction(smallIslandFerryDeduction)
                                 .calculationApproach("calculationApproach").build())
                             .chargeOperator(false)
                         .determinationReason(DoeDeterminationReason.builder()
@@ -80,7 +81,8 @@ class DoeUpdateReportableEmissionsServiceTest {
                 .reportableEmissions(AerTotalReportableEmissions.builder()
                     .surrenderEmissions(surrenderEmissions)
                     .totalEmissions(totalReportableEmissions)
-                    .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                    .less5PercentIceClassDeduction(iceClassDeduction)
+                    .lessIslandFerryDeduction(smallIslandFerryDeduction)
                     .build())
                 .isFromDoe(true)
                 .build();

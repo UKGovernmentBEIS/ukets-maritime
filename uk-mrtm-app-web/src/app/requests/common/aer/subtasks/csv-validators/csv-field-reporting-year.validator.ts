@@ -23,7 +23,7 @@ export function csvFieldReportingYearValidator<T>(
 
       if (currentYear && currentYear !== reportingYear) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

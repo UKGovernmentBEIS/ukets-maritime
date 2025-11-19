@@ -7,6 +7,7 @@ export const mockAerShipsXml = `
         <grossTonnage>10000</grossTonnage>
         <flag>GR</flag>
         <iceClassPolarCode>PC1</iceClassPolarCode>
+        <iceClassSurrenderReduction>true</iceClassSurrenderReduction>
         <allYear>true</allYear>
         <company>
             <nature>SHIPOWNER</nature>
@@ -85,6 +86,8 @@ export const mockAerShipsXml = `
         </monitoringMethods>
         <additionalInformation>
             <exemptionPerVoyageMonitoring>false</exemptionPerVoyageMonitoring>
+            <carbonCaptureReduction>true</carbonCaptureReduction>
+            <smallIslandSurrenderReduction>true</smallIslandSurrenderReduction>
         </additionalInformation>
     </emissionReport>
     <emissionReport>
@@ -138,6 +141,8 @@ export const mockAerShipsXml = `
         </monitoringMethods>
         <additionalInformation>
             <exemptionPerVoyageMonitoring>true</exemptionPerVoyageMonitoring>
+            <carbonCaptureReduction>false</carbonCaptureReduction>
+            <smallIslandSurrenderReduction>true</smallIslandSurrenderReduction>
         </additionalInformation>
     </emissionReport>
 </emissionReportsList>

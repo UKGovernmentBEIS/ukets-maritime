@@ -1,6 +1,6 @@
 import {
   AerAggregatedDataFuelConsumption,
-  AerPortEmissionsMeasurementSave,
+  AerAggregatedEmissionsMeasurementSave,
   AerShipAggregatedDataSave,
   AerShipEmissions,
 } from '@mrtm/api';
@@ -31,17 +31,25 @@ export class EmissionDetailsDtoValidator {
     return !allImoNumbers.includes(value?.toString());
   }
 
-  private static isEmissionsValid(emissions: AerPortEmissionsMeasurementSave[]) {
+  private static isEmissionsValid(emissions: AerAggregatedEmissionsMeasurementSave[]) {
     const allValuesValid = emissions.every(
       (emission) =>
         XmlValidator.maxDecimalValidator(emission?.co2, true, 12, 7) &&
         XmlValidator.maxDecimalValidator(emission?.ch4, true, 12, 7) &&
-        XmlValidator.maxDecimalValidator(emission?.n2o, true, 12, 7),
+        XmlValidator.maxDecimalValidator(emission?.n2o, true, 12, 7) &&
+        XmlValidator.maxDecimalValidator(emission?.co2Captured, true, 12, 7),
     );
     const allGreenHouseValues = emissions.flatMap((emission) => [emission.co2, emission.ch4, emission.n2o]);
     const total = bigNumberUtils.getSum(allGreenHouseValues, 7);
 
     return allValuesValid && BigNumber(total).gt(0);
+  }
+
+  private static isSmallIslandEmissionsValid(
+    hasSmallIslandOperation: boolean,
+    emission: AerAggregatedEmissionsMeasurementSave,
+  ) {
+    return hasSmallIslandOperation ? this.isEmissionsValid([emission]) : true;
   }
 
   private static allAnnualConsumptionsValid(
@@ -117,32 +125,46 @@ export class EmissionDetailsDtoValidator {
   ): AerShipAggregatedDataSave | null {
     const ship = store.select(aerCommonQuery.selectShipByImoNumber(emissionDetails?.shipImoNumber))();
 
+    const hasSmallIslandOperation = ship?.derogations?.smallIslandFerryOperatorReduction;
     const emissionsWithinUKPorts = {
       co2: emissionDetails?.annualEmission?.etsEmissionsWithinUkPort?.tco2Total?.toString(),
       ch4: emissionDetails?.annualEmission?.etsEmissionsWithinUkPort?.tch4eqTotal?.toString(),
       n2o: emissionDetails?.annualEmission?.etsEmissionsWithinUkPort?.tn2oeqTotal?.toString(),
+      co2Captured: emissionDetails?.annualEmission?.etsCcWithinUkPort?.toString(),
     };
     const emissionsBetweenUKPorts = {
       co2: emissionDetails?.annualEmission?.etsEmissionsBetweenUkPort?.tco2Total?.toString(),
       ch4: emissionDetails?.annualEmission?.etsEmissionsBetweenUkPort?.tch4eqTotal?.toString(),
       n2o: emissionDetails?.annualEmission?.etsEmissionsBetweenUkPort?.tn2oeqTotal?.toString(),
+      co2Captured: emissionDetails?.annualEmission?.etsCcBetweenUkPort?.toString(),
     };
-    const emissionsBetweenUKAndNIVoyages = {
-      co2: emissionDetails?.annualEmission?.etsEmissionsBetweenUkAndNiPort?.tco2Total?.toString(),
-      ch4: emissionDetails?.annualEmission?.etsEmissionsBetweenUkAndNiPort?.tch4eqTotal?.toString(),
-      n2o: emissionDetails?.annualEmission?.etsEmissionsBetweenUkAndNiPort?.tn2oeqTotal?.toString(),
+    const emissionsBetweenUKAndEEAVoyages = {
+      co2: emissionDetails?.annualEmission?.etsEmissionsBetweenUkAndEeaPort?.tco2Total?.toString(),
+      ch4: emissionDetails?.annualEmission?.etsEmissionsBetweenUkAndEeaPort?.tch4eqTotal?.toString(),
+      n2o: emissionDetails?.annualEmission?.etsEmissionsBetweenUkAndEeaPort?.tn2oeqTotal?.toString(),
+      co2Captured: emissionDetails?.annualEmission?.etsCcBetweenUkAndEeaPort?.toString(),
+    };
+    const smallIslandSurrenderReduction = {
+      co2: emissionDetails?.annualEmission?.etsEmissionsSmallIslands?.tco2Total?.toString(),
+      ch4: emissionDetails?.annualEmission?.etsEmissionsSmallIslands?.tch4eqTotal?.toString(),
+      n2o: emissionDetails?.annualEmission?.etsEmissionsSmallIslands?.tn2oeqTotal?.toString(),
+      co2Captured: emissionDetails?.annualEmission?.etsCcSmallIslands?.toString(),
     };
 
     if (
       this.allAnnualConsumptionsValid(store, ship, emissionDetails?.annualEmission?.emissions) &&
-      this.isEmissionsValid([emissionsWithinUKPorts, emissionsBetweenUKPorts, emissionsBetweenUKAndNIVoyages])
+      this.isEmissionsValid([emissionsWithinUKPorts, emissionsBetweenUKPorts, emissionsBetweenUKAndEEAVoyages]) &&
+      this.isSmallIslandEmissionsValid(hasSmallIslandOperation, smallIslandSurrenderReduction)
     ) {
       return {
         uniqueIdentifier: crypto.randomUUID(),
         imoNumber: emissionDetails.shipImoNumber?.toString(),
         emissionsWithinUKPorts: emissionsWithinUKPorts,
         emissionsBetweenUKPorts: emissionsBetweenUKPorts,
-        emissionsBetweenUKAndNIVoyages: emissionsBetweenUKAndNIVoyages,
+        emissionsBetweenUKAndEEAVoyages: emissionsBetweenUKAndEEAVoyages,
+        ...(hasSmallIslandOperation && {
+          smallIslandSurrenderReduction: smallIslandSurrenderReduction,
+        }),
         fuelConsumptions: this.transformAnnualConsumptionEditDTOs(
           store,
           ship,

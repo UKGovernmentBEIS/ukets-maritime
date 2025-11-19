@@ -8,6 +8,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.fossil.AerF
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.fossil.FuelOriginFossilTypeName;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOriginTypeName;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedDataFuelOriginTypeName;
+import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedEmissionsMeasurement;
 import uk.gov.mrtm.api.reporting.domain.common.AerFuelConsumption;
 import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
@@ -18,7 +19,6 @@ import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortVisit;
 import uk.gov.mrtm.api.reporting.enumeration.PortCodes1;
 import uk.gov.mrtm.api.reporting.enumeration.PortCodes2;
-import uk.gov.mrtm.api.reporting.enumeration.PortCodesNorthernIreland;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 
@@ -187,21 +187,42 @@ public class AerValidatorHelper {
     protected static void validateVisit(AerPortVisit visit, List<AerViolation> aerViolations, Class<?> className) {
         PortCodes1 portCode1 = PortCodes1.fromString(visit.getPort());
         PortCodes2 portCode2 = PortCodes2.fromString(visit.getPort());
-        PortCodesNorthernIreland portCodesNorthernIreland = PortCodesNorthernIreland.fromString(visit.getPort());
 
-        if (portCode1 == null && portCode2 == null && portCodesNorthernIreland == null) {
+        if (portCode1 == null && portCode2 == null) {
             aerViolations.add(new AerViolation(className.getSimpleName(),
                 AerViolation.ViolationMessage.PORT_VISIT_INVALID_PORT_CODE, visit.getPort()));
         }
 
         if ((portCode1 != null && portCode1 != PortCodes1.NOT_APPLICABLE && !Objects.equals(portCode1.getCountry(), visit.getCountry()))
             ||
-            (portCode2 != null && !Objects.equals(portCode2.getCountry(), visit.getCountry()))
-            ||
-            (portCodesNorthernIreland != null && !Objects.equals(portCodesNorthernIreland.getCountry(), visit.getCountry()))) {
+            (portCode2 != null && !Objects.equals(portCode2.getCountry(), visit.getCountry()))) {
 
             aerViolations.add(new AerViolation(className.getSimpleName(),
                 AerViolation.ViolationMessage.PORT_VISIT_INVALID_PORT_COUNTRY, visit.getCountry()));
+        }
+    }
+
+    protected static void validateCcsAndCcu(BigDecimal ccu, BigDecimal ccs,
+                                            Boolean carbonCaptureAndStorageReduction,
+                                            List<AerViolation> aerViolations, Class<?> className) {
+
+        boolean hasInvalidCarbonCaptureAndStorageValue = isCarbonCaptureAndStorageReductionInvalid(
+            ccu, ccs, carbonCaptureAndStorageReduction);
+        if (hasInvalidCarbonCaptureAndStorageValue) {
+            aerViolations.add(new AerViolation(className.getSimpleName(),
+                AerViolation.ViolationMessage.CCS_CCU_INVALID_VALUE));
+        }
+    }
+
+    protected static void validateSmallIslandFerryReduction(Boolean smallIslandFerryReduction,
+                                                            Boolean smallIslandFerryOperatorReduction,
+                                                            List<AerViolation> aerViolations, Class<?> className) {
+
+        boolean hasInvalidSmallIslandFerryReductionValue = isSmallIslandFerryReductionInvalid(
+            smallIslandFerryReduction, smallIslandFerryOperatorReduction);
+        if (hasInvalidSmallIslandFerryReductionValue) {
+            aerViolations.add(new AerViolation(className.getSimpleName(),
+                AerViolation.ViolationMessage.SMALL_ISLAND_FERRY_OPERATOR_INVALID_VALUE));
         }
     }
 
@@ -243,6 +264,21 @@ public class AerValidatorHelper {
         }
     }
 
+    protected static void validateEmissionsInputIsPositiveOrZero(AerAggregatedEmissionsMeasurement emissions,
+                                                                 List<AerViolation> aerViolations,
+                                                                 Class<?> className) {
+
+        if (emissions != null &&
+                (emissions.getCo2Captured().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getCo2().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getCh4().compareTo(BigDecimal.ZERO) < 0 ||
+                        emissions.getN2o().compareTo(BigDecimal.ZERO) < 0)) {
+
+                aerViolations.add(new AerViolation(className.getSimpleName(),
+                    AerViolation.ViolationMessage.NEGATIVE_EMISSIONS_INPUT));
+        }
+    }
+
     protected static void validateShipExistsInListOfShips(AerShipEmissions ship, String imoNumber,
                                                           List<AerViolation> aerViolations, Class<?> className) {
 
@@ -272,4 +308,15 @@ public class AerValidatorHelper {
         }
     }
 
+    private static boolean isCarbonCaptureAndStorageReductionInvalid(BigDecimal ccu, BigDecimal ccs,
+                                                                     Boolean carbonCaptureAndStorageReduction) {
+        return (Boolean.FALSE.equals(carbonCaptureAndStorageReduction) && (ccs != null || ccu != null))
+            || (Boolean.TRUE.equals(carbonCaptureAndStorageReduction) && (ccs == null || ccu == null));
+    }
+
+    private static boolean isSmallIslandFerryReductionInvalid(Boolean smallIslandFerryReduction,
+                                                              Boolean smallIslandFerryOperatorReduction) {
+        return ((Boolean.FALSE.equals(smallIslandFerryOperatorReduction) && smallIslandFerryReduction != null)
+            || (Boolean.TRUE.equals(smallIslandFerryOperatorReduction) && (smallIslandFerryReduction == null)));
+    }
 }

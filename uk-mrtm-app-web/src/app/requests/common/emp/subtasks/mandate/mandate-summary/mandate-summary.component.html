@@ -1,34 +1,36 @@
-<mrtm-notification-banner />
-<netz-page-heading [caption]="wizardMap.title">Check your answers</netz-page-heading>
-<mrtm-mandate-summary-template
-  [mandate]="mandate()"
-  [originalMandate]="originalMandate()"
-  [operatorName]="operatorName()"
-  [originalOperatorName]="originalOperatorName()"
-  [mandateMap]="wizardMap"
-  [wizardStep]="wizardStep"
-  [isEditable]="isEditable()"
-  [queryParams]="{ change: true }" />
-@if (isVariationRegulatorDecision()) {
-  <mrtm-variation-regulator-decision-partial-summary-template
-    [variationDecisionDetails]="variationDecisionDetails()"
+@if (mandate(); as mandate) {
+  <mrtm-notification-banner />
+  <netz-page-heading [caption]="wizardMap.title">Check your answers</netz-page-heading>
+  <mrtm-mandate-summary-template
+    [mandate]="mandate"
+    [originalMandate]="originalMandate()"
+    [operatorName]="operatorName()"
+    [originalOperatorName]="originalOperatorName()"
+    [mandateMap]="wizardMap"
     [wizardStep]="wizardStep"
-    [queryParams]="{ change: true }"
-    [isEditable]="isEditable()" />
-}
-@if (hasReview()) {
-  <mrtm-review-decision-summary-template
-    [reviewDecision]="reviewDecision()"
     [isEditable]="isEditable()"
-    [changeLink]="wizardStep.DECISION"
     [queryParams]="{ change: true }" />
-}
+  @if (isVariationRegulatorDecision()) {
+    <mrtm-variation-regulator-decision-partial-summary-template
+      [variationDecisionDetails]="variationDecisionDetails()"
+      [wizardStep]="wizardStep"
+      [queryParams]="{ change: true }"
+      [isEditable]="isEditable()" />
+  }
+  @if (hasReview()) {
+    <mrtm-review-decision-summary-template
+      [reviewDecision]="reviewDecision()"
+      [isEditable]="isEditable()"
+      [changeLink]="wizardStep.DECISION"
+      [queryParams]="{ change: true }" />
+  }
 
-@if (isEditable() && !isSubtaskCompleted()) {
-  <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
-}
+  @if (isEditable() && !isSubtaskCompleted()) {
+    <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
+  }
 
-<div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-  <netz-return-to-task-or-action-page />
-</div>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

@@ -3,12 +3,14 @@ import {
   AerApplicationVerificationSubmitRequestTaskPayload,
   AerFuelConsumption,
   AerPort,
+  AerPortDetails,
   AerPortEmissionsMeasurement,
   AerPortVisit,
   AerShipEmissions,
   AerVerificationTeamDetails,
   AerVerifierContact,
   AerVoyage,
+  AerVoyageDetails,
   FuelOriginTypeName,
   VerificationBodyDetails,
 } from '@mrtm/api';
@@ -57,6 +59,9 @@ export interface FlattenedVoyage {
   arrivalPort: AerPortVisit['port'];
   arrivalDate: string;
   arrivalActualTime: string;
+  ccs: AerVoyageDetails['ccs'];
+  ccu: AerVoyageDetails['ccu'];
+  smallIslandFerryReduction: boolean;
   fuelConsumptionOrigin: FuelOriginTypeName['origin'];
   fuelConsumptionType: AllFuelOriginTypeName;
   fuelConsumptionOtherName: FuelOriginTypeName['name'];
@@ -78,6 +83,9 @@ export interface FlattenedPort {
   departureActualTime: string;
   arrivalDate: string;
   arrivalActualTime: string;
+  ccs: AerPortDetails['ccs'];
+  ccu: AerPortDetails['ccu'];
+  smallIslandFerryReduction: boolean;
   fuelConsumptionOrigin: FuelOriginTypeName['origin'];
   fuelConsumptionType: AllFuelOriginTypeName;
   fuelConsumptionOtherName: FuelOriginTypeName['name'];

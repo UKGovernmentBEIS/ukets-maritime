@@ -11,7 +11,8 @@
 export interface DoeTotalMaritimeEmissions {
   determinationType: 'MARITIME_EMISSIONS' | 'SURRENDER_OBLIGATION';
   totalReportableEmissions: string;
-  lessVoyagesInNorthernIrelandDeduction: string;
+  smallIslandFerryDeduction: string;
+  iceClassDeduction: string;
   surrenderEmissions: string;
   calculationApproach: string;
   supportingDocuments?: Array<string>;

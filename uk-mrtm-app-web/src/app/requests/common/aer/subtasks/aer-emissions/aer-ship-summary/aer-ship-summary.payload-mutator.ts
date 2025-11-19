@@ -41,6 +41,8 @@ export class AerShipSummaryPayloadMutator extends PayloadMutator {
           .map((data) => `${AER_AGGREGATED_DATA_SUB_TASK}-aggregated-data-${data.uniqueIdentifier}`);
 
         for (const key of [
+          ...ports,
+          ...voyages,
           ...aggregatedData,
           ports?.length ? AER_PORTS_SUB_TASK : undefined,
           voyages?.length ? AER_VOYAGES_SUB_TASK : undefined,

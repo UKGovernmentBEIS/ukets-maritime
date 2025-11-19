@@ -63,7 +63,8 @@ public class ReportableEmissionsService {
                 AerTotalReportableEmissions.builder()
                         .totalEmissions(verificationReport.getVerificationData().getOpinionStatement().getManuallyProvidedTotalEmissions())
                         .surrenderEmissions(verificationReport.getVerificationData().getOpinionStatement().getManuallyProvidedSurrenderEmissions())
-                        .lessVoyagesInNorthernIrelandDeduction(verificationReport.getVerificationData().getOpinionStatement().getManuallyProvidedLessVoyagesInNorthernIrelandDeduction())
+                        .lessIslandFerryDeduction(verificationReport.getVerificationData().getOpinionStatement().getManuallyProvidedLessIslandFerryDeduction())
+                        .less5PercentIceClassDeduction(verificationReport.getVerificationData().getOpinionStatement().getManuallyProvidedLess5PercentIceClassDeduction())
                         .build() :
                 AerEmissionsUtils.getAerTotalReportableEmissions(aerContainer.getAer().getTotalEmissions());
     }

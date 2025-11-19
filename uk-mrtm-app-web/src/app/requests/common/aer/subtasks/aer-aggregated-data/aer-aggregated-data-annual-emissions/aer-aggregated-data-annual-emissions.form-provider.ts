@@ -21,8 +21,8 @@ import { TASK_FORM } from '@requests/common/task-form.token';
 const emissionsGroupValidator =
   (validationMessage: string): ValidatorFn =>
   (abstractControl: FormGroup<AerAggregatedEmissionsFormGroupModel>) => {
-    const { co2, n2o, ch4 } = abstractControl.value;
-    if (isNil(ch4) || isNil(n2o) || isNil(co2)) {
+    const { co2, n2o, ch4, co2Captured } = abstractControl.value;
+    if (isNil(ch4) || isNil(n2o) || isNil(co2) || isNil(co2Captured)) {
       return {
         invalidGroupValues: validationMessage,
       };
@@ -43,22 +43,18 @@ export const aerAggregatedDataAnnualEmissionsFormProvider: Provider = {
 
     return formBuilder.group<AerAggregatedDataAnnualEmissionsFormGroupModel>({
       uniqueIdentifier: formBuilder.control<AerShipAggregatedData['uniqueIdentifier'] | null>(dataId),
-      emissionsBetweenUKAndNIVoyages: provideAerAggregatedEmissionsFormGroup(
-        aggregatedData?.emissionsBetweenUKAndNIVoyages,
-        [
-          emissionsGroupValidator(
-            'Enter aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
-          ),
-        ],
+      emissionsBetweenUKAndEEAVoyages: provideAerAggregatedEmissionsFormGroup(
+        aggregatedData?.emissionsBetweenUKAndEEAVoyages,
+        [emissionsGroupValidator('Enter the aggregated greenhouse gas emissions from all voyages between UK ports')],
       ),
       emissionsBetweenUKPorts: provideAerAggregatedEmissionsFormGroup(aggregatedData?.emissionsBetweenUKPorts, [
-        emissionsGroupValidator('Enter the aggregated greenhouse gas emissions from all voyages between UK ports'),
+        emissionsGroupValidator('Enter aggregated greenhouse gas emissions from all voyages between the UK and EEA'),
       ]),
       emissionsWithinUKPorts: provideAerAggregatedEmissionsFormGroup(aggregatedData?.emissionsWithinUKPorts, [
         emissionsGroupValidator('Enter aggregated greenhouse gas emissions which occurred within UK ports'),
       ]),
-      totalEmissionsFromVoyagesAndPorts: provideAerAggregatedEmissionsFormGroup(
-        aggregatedData?.totalEmissionsFromVoyagesAndPorts,
+      totalAggregatedEmissions: provideAerAggregatedEmissionsFormGroup(
+        aggregatedData?.totalAggregatedEmissions,
         aerAggregatedDataValidators.totalEmissionsValidator('The total emissions should be greater than 0'),
         false,
       ),

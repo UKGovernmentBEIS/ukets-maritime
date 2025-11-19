@@ -29,7 +29,7 @@ export function csvFieldDateValidator<T>(
 
       if (!pattern.test(currentField) || !isRealDate(currentField)) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

@@ -108,7 +108,8 @@ class AerCompleteServiceTest {
         AerTotalReportableEmissions reportableEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(BigDecimal.valueOf(3456.10))
                 .surrenderEmissions(BigDecimal.valueOf(2476.67))
-                .lessVoyagesInNorthernIrelandDeduction(BigDecimal.valueOf(7564.67))
+                .lessIslandFerryDeduction(BigDecimal.valueOf(7564.67))
+                .less5PercentIceClassDeduction(BigDecimal.valueOf(3902.98))
                 .build();
 
         when(requestService.findRequestById(requestId)).thenReturn(request);

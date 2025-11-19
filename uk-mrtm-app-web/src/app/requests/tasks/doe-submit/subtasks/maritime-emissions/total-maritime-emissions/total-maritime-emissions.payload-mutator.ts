@@ -1,3 +1,5 @@
+import { inject } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
 
@@ -5,6 +7,7 @@ import { Doe, DoeTotalMaritimeEmissions } from '@mrtm/api';
 
 import { PayloadMutator } from '@netz/common/forms';
 
+import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { DoeTaskPayload } from '@requests/tasks/doe-submit/doe-submit.types';
 import {
@@ -15,6 +18,7 @@ import { UploadedFile } from '@shared/types';
 import { createFileUploadPayload, transformToTaskAttachments } from '@shared/utils';
 
 export class TotalMaritimeEmissionsPayloadMutator extends PayloadMutator {
+  private readonly sectionsCompletedMap = inject(SECTIONS_COMPLETE_MAP, { optional: true });
   subtask = MARITIME_EMISSIONS_SUB_TASK;
   step = MaritimeEmissionsWizardStep.TOTAL_MARITIME_EMISSIONS;
 
@@ -41,7 +45,8 @@ export class TotalMaritimeEmissionsPayloadMutator extends PayloadMutator {
           ...payload.doeAttachments,
           ...transformToTaskAttachments(userInput.supportingDocuments),
         };
-        payload.sectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
+        payload.sectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
+          TaskItemStatus.IN_PROGRESS;
       }),
     );
   }

@@ -31,7 +31,6 @@ import { uploadPortsCsvColumns } from '@requests/common/aer/subtasks/aer-ports/a
 import {
   addPortFormGroup,
   aerPortsUploadFormProvider,
-  uploadPortCSVFormValidators,
 } from '@requests/common/aer/subtasks/aer-ports/aer-ports-upload/aer-ports-upload.form-provider';
 import {
   formatIsoDateTimeNoMs,
@@ -98,8 +97,6 @@ export class AerPortsUploadComponent {
   uploadedFile: File;
 
   onFileSelect(event: any) {
-    this.insertedRows = 0;
-    this.updatedRows = 0;
     this.dataParserWizardStep().isSummaryDisplayedSubject.next(false);
     this.uploadedFile = event.target.files[0];
     this.fileCtrl.setValue(this.uploadedFile);
@@ -123,14 +120,11 @@ export class AerPortsUploadComponent {
 
     this.columnsCtrl.setValue(result.meta.fields);
     this.portsCtrl.clear();
-    this.portsCtrl.clearValidators();
 
     if (this.columnsCtrl.invalid) {
       this.displayColumnErrors();
     } else {
       processedData?.forEach((flattenedPort) => this.portsCtrl.push(addPortFormGroup(flattenedPort)));
-      this.portsCtrl.addValidators(uploadPortCSVFormValidators(this.store));
-      this.portsCtrl.updateValueAndValidity();
 
       if (this.portsCtrl.valid) {
         this.ports.update(() => this.getTransformedFormData(processedData));
@@ -152,6 +146,13 @@ export class AerPortsUploadComponent {
     switch (field) {
       case aerPortCsvMap.visitPort:
         return trimmedValue === 'NA' ? 'NOT_APPLICABLE' : trimmedValue;
+
+      case aerPortCsvMap.smallIslandFerryReduction:
+        return trimmedValue?.toUpperCase() === 'YES'
+          ? true
+          : trimmedValue?.toUpperCase() === 'NO'
+            ? false
+            : trimmedValue;
 
       case aerPortCsvMap.fuelConsumptionOrigin:
       case aerPortCsvMap.fuelConsumptionType:
@@ -239,6 +240,12 @@ export class AerPortsUploadComponent {
       if (currentPort) {
         currentPort = {
           ...currentPort,
+          portDetails: {
+            ...currentPort.portDetails,
+            ccu: fv.ccu,
+            ccs: fv.ccs,
+            smallIslandFerryReduction: fv.smallIslandFerryReduction,
+          },
           fuelConsumptions: [...currentPort.fuelConsumptions, ...this.getFuelConsumptions(fv)],
           ...(hasDirectEmission(fv) && { directEmissions: this.getDirectEmission(fv) }),
         };
@@ -254,6 +261,9 @@ export class AerPortsUploadComponent {
             },
             arrivalTime: formatIsoDateTimeNoMs(fv.arrivalDate, fv.arrivalActualTime),
             departureTime: formatIsoDateTimeNoMs(fv.departureDate, fv.departureActualTime),
+            ccu: fv.ccu,
+            ccs: fv.ccs,
+            smallIslandFerryReduction: fv.smallIslandFerryReduction,
           },
           fuelConsumptions: this.getFuelConsumptions(fv),
           ...(hasDirectEmission(fv) && { directEmissions: this.getDirectEmission(fv) }),

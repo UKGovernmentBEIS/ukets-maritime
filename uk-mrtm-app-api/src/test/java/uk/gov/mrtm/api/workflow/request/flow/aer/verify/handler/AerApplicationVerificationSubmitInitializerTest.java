@@ -56,13 +56,14 @@ class AerApplicationVerificationSubmitInitializerTest {
         Year reportingYear = Year.of(2022);
         BigDecimal totalEmissions = BigDecimal.valueOf(12345);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(234);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(10);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(10);
         BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(12);
 
         final AerTotalReportableEmissions aerTotalReportableEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissions)
                 .surrenderEmissions(surrenderEmissions)
-                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                 .build();
 
         Aer aer = Aer.builder()
@@ -72,7 +73,8 @@ class AerApplicationVerificationSubmitInitializerTest {
                 .totalEmissions(AerTotalEmissions.builder()
                         .totalShipEmissionsSummary(totalEmissions)
                         .surrenderEmissionsSummary(surrenderEmissions)
-                        .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(lessVoyagesInNorthernIrelandDeduction).build())
+                        .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(lessIslandFerryDeduction).build())
+                        .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(less5PercentIceClassDeduction).build())
                         .build())
                 .build();
 
@@ -137,13 +139,14 @@ class AerApplicationVerificationSubmitInitializerTest {
         Year reportingYear = Year.of(2022);
         BigDecimal totalEmissions = BigDecimal.valueOf(12345);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(234);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(10);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(10);
         BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(12);
 
         final AerTotalReportableEmissions aerTotalReportableEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissions)
                 .surrenderEmissions(surrenderEmissions)
-                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                 .build();
 
         Aer aer = Aer.builder()
@@ -153,7 +156,8 @@ class AerApplicationVerificationSubmitInitializerTest {
                 .totalEmissions(AerTotalEmissions.builder()
                         .totalShipEmissionsSummary(totalEmissions)
                         .surrenderEmissionsSummary(surrenderEmissions)
-                        .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(lessVoyagesInNorthernIrelandDeduction).build())
+                        .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(lessIslandFerryDeduction).build())
+                        .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(less5PercentIceClassDeduction).build())
                         .build())
                 .build();
 

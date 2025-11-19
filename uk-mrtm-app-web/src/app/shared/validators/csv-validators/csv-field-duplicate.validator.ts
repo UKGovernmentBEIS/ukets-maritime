@@ -28,9 +28,9 @@ export function csvFieldDuplicateValidator<T>(
 
       const existingRows = combinations.get(key);
       if (existingRows) {
-        existingRows.push(index + 2);
+        existingRows.push(index + 1);
       } else {
-        combinations.set(key, [index + 2]);
+        combinations.set(key, [index + 1]);
       }
     });
 

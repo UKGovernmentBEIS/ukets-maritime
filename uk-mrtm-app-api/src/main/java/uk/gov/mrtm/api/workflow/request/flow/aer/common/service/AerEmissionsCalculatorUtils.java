@@ -1,7 +1,6 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.common.service;
 
 import lombok.experimental.UtilityClass;
-import org.apache.commons.lang3.tuple.Triple;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOriginTypeName;
 import uk.gov.mrtm.api.reporting.domain.common.AerFuelConsumption;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
@@ -17,10 +16,10 @@ import java.util.Set;
 @UtilityClass
 public class AerEmissionsCalculatorUtils {
     private static final BigDecimal GWP_CO2 = new BigDecimal("1");
-    private static final BigDecimal GWP_CH4 = new BigDecimal("28");
-    private static final BigDecimal GWP_N2O = new BigDecimal("265");
+    private static final BigDecimal GWP_CH4 = new BigDecimal("29.8");
+    private static final BigDecimal GWP_N2O = new BigDecimal("273");
+    public static final BigDecimal NINETY_FIVE_PERCENT = new BigDecimal("0.95");
     public static final BigDecimal FIFTY_PERCENT = new BigDecimal("0.5");
-    private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
 
     public static BigDecimal calculateCh4(BigDecimal totalFuelConsumption,
                                     BigDecimal methaneUtilization,
@@ -94,36 +93,5 @@ public class AerEmissionsCalculatorUtils {
         return value1.add(value2)
                 .add(value3)
                 .setScale(7, RoundingMode.HALF_UP);
-    }
-
-    public static Triple<BigDecimal, BigDecimal, BigDecimal> calculateEmissionTotals(AerShipEmissions shipEmissions,
-                                                                              AerFuelConsumption fuelConsumption) {
-        BigDecimal totalFuelConsumption;
-        BigDecimal co2 = BigDecimal.ZERO;
-        BigDecimal n2o = BigDecimal.ZERO;
-        BigDecimal ch4 = BigDecimal.ZERO;
-
-        Optional<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactorsOptional = shipEmissions.getFuelsAndEmissionsFactors()
-            .stream()
-            .filter(emissions -> filterFuelAndEmissionsFactors(emissions, fuelConsumption.getFuelOriginTypeName()))
-            .findFirst();
-
-        totalFuelConsumption = AerEmissionsCalculatorUtils.getTotalFuelConsumption(fuelConsumption);
-        fuelConsumption.setTotalConsumption(totalFuelConsumption);
-
-        if (fuelsAndEmissionsFactorsOptional.isPresent()){
-            AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors = fuelsAndEmissionsFactorsOptional.get();
-
-            BigDecimal methaneSlip = AerEmissionsCalculatorUtils
-                .getOrDefaultBigDecimal(fuelConsumption.getFuelOriginTypeName().getMethaneSlip());
-            BigDecimal methaneSlipFraction = methaneSlip.divide(ONE_HUNDRED);
-            BigDecimal methaneUtilization = BigDecimal.ONE.subtract(methaneSlipFraction);
-
-            co2 = AerEmissionsCalculatorUtils.calculateCo2(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors);
-            n2o = AerEmissionsCalculatorUtils.calculateN2o(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors);
-            ch4 = AerEmissionsCalculatorUtils.calculateCh4(totalFuelConsumption, methaneUtilization, fuelsAndEmissionsFactors, methaneSlipFraction);
-        }
-
-        return Triple.of(co2, ch4, n2o);
     }
 }

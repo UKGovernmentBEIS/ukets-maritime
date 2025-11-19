@@ -10,8 +10,12 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.BioFue
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.EFuelType;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.FossilFuelType;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.FuelOrigin;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.biofuel.FuelOriginBiofuelTypeName;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.efuel.FuelOriginEFuelTypeName;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.fossil.FuelOriginFossilTypeName;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOriginTypeName;
 import uk.gov.mrtm.api.reporting.domain.Aer;
@@ -20,18 +24,11 @@ import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortVisit;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageDetails;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageEmissions;
 import uk.gov.mrtm.api.reporting.enumeration.MeasuringUnit;
-import uk.gov.mrtm.api.reporting.enumeration.PortCodes1;
-import uk.gov.mrtm.api.reporting.enumeration.PortCodes2;
-import uk.gov.mrtm.api.reporting.enumeration.PortCodesNorthernIreland;
 import uk.gov.mrtm.api.reporting.enumeration.PortCountries;
 
 import java.math.BigDecimal;
@@ -49,23 +46,27 @@ class AerVoyageEmissionsCalculatorTest {
 
     @ParameterizedTest
     @MethodSource("validScenarios")
-    void calculate_Emissions(MeasuringUnit measuringUnit,
+    void calculate_Emissions(boolean smallIslandFerryReduction, boolean hasIceClassDerogation, boolean hasCcsAndCcu,
+                             MeasuringUnit measuringUnit,
                              BigDecimal totalConsumption,
                              FuelOriginTypeName fuelOriginTypeName,
                              AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors,
                              AerPortEmissionsMeasurement surrenderEmissions,
                              AerPortEmissionsMeasurement totalEmissions,
-                             AerPortVisit fromPort, AerPortVisit toPort) {
-        AerVoyageEmissions voyageEmissions = getVoyageEmissions(false,
-            measuringUnit, totalConsumption, fuelOriginTypeName, surrenderEmissions, totalEmissions, fromPort, toPort);
+                             PortCountries fromPort, PortCountries toPort) {
+        AerVoyageEmissions voyageEmissions = getVoyageEmissions(false, smallIslandFerryReduction, hasCcsAndCcu,
+            measuringUnit, totalConsumption, fuelOriginTypeName, surrenderEmissions, totalEmissions,
+            fromPort, toPort);
 
-        AerVoyageEmissions expectedVoyageEmissions = getVoyageEmissions(true, measuringUnit,
-            totalConsumption, fuelOriginTypeName, surrenderEmissions, totalEmissions, fromPort, toPort);
+        AerVoyageEmissions expectedVoyageEmissions = getVoyageEmissions(true, smallIslandFerryReduction, hasCcsAndCcu,
+            measuringUnit, totalConsumption, fuelOriginTypeName, surrenderEmissions, totalEmissions,
+            fromPort, toPort);
 
         AerShipEmissions shipEmissions = AerShipEmissions.builder()
             .details(AerShipDetails
                 .builder()
                 .imoNumber(IMO_NUMBER)
+                .hasIceClassDerogation(hasIceClassDerogation)
                 .build()
             )
             .fuelsAndEmissionsFactors(Set.of(fuelsAndEmissionsFactors))
@@ -79,195 +80,22 @@ class AerVoyageEmissionsCalculatorTest {
         assertEquals(expectedAer, aer);
     }
 
-    public static Stream<Arguments> validScenarios() {
-        return Stream.of(
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.E_H2).methaneSlip(new BigDecimal("99.1")).build(),
-                AerEFuels.builder()
-                    .origin(FuelOrigin.RFNBO)
-                    .type(EFuelType.E_H2)
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("0.0000000"))
-                    .co2(new BigDecimal("0.0000000"))
-                    .n2o(new BigDecimal("0.0000000"))
-                    .total(new BigDecimal("0.0000000"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.GR).port(PortCodes2.GRKAK.name()).build(),
-                AerPortVisit.builder().country(PortCountries.GR).port(PortCodes2.GRPIR.name()).build()
-            ),
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginBiofuelTypeName.builder().origin(FuelOrigin.BIOFUEL).type(BioFuelType.BIO_LNG).methaneSlip(new BigDecimal("99.1")).build(),
-                AerBioFuels.builder()
-                    .origin(FuelOrigin.BIOFUEL)
-                    .type(BioFuelType.BIO_LNG)
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.GB).port(PortCodes1.GBABD.name()).build(),
-                AerPortVisit.builder().country(PortCountries.GB).port(PortCodes1.GBAGO.name()).build()
-            ),
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
-                AerEFuels.builder()
-                    .origin(FuelOrigin.RFNBO)
-                    .type(EFuelType.OTHER)
-                    .name("name")
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("0.0000000"))
-                    .co2(new BigDecimal("0.0000000"))
-                    .n2o(new BigDecimal("0.0000000"))
-                    .total(new BigDecimal("0.0000000"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.GB).port(PortCodes1.GBAMR.name()).build(),
-                AerPortVisit.builder().country(PortCountries.US).port(PortCodes2.USBAL.name()).build()
-            ),
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
-                AerEFuels.builder()
-                    .origin(FuelOrigin.RFNBO)
-                    .type(EFuelType.OTHER)
-                    .name("name")
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("0.0000000"))
-                    .co2(new BigDecimal("0.0000000"))
-                    .n2o(new BigDecimal("0.0000000"))
-                    .total(new BigDecimal("0.0000000"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.US).port(PortCodes2.USBAL.name()).build(),
-                AerPortVisit.builder().country(PortCountries.GR).port(PortCodes2.GRKAK.name()).build()
-            ),
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
-                AerEFuels.builder()
-                    .origin(FuelOrigin.RFNBO)
-                    .type(EFuelType.OTHER)
-                    .name("name")
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("0.0000000"))
-                    .co2(new BigDecimal("0.0000000"))
-                    .n2o(new BigDecimal("0.0000000"))
-                    .total(new BigDecimal("0.0000000"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.US).port(PortCodes2.USBAL.name()).build(),
-                AerPortVisit.builder().country(PortCountries.GB).port(PortCodes1.GBAMR.name()).build()
-            ),
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
-                AerEFuels.builder()
-                    .origin(FuelOrigin.RFNBO)
-                    .type(EFuelType.OTHER)
-                    .name("name")
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("0.0000000"))
-                    .co2(new BigDecimal("0.0000000"))
-                    .n2o(new BigDecimal("0.0000000"))
-                    .total(new BigDecimal("0.0000000"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.US).port(PortCodes2.USBAL.name()).build(),
-                AerPortVisit.builder().country(PortCountries.MA).port(PortCodes2.MAANZ.name()).build()
-            ),
-            Arguments.of(MeasuringUnit.M3, new BigDecimal("11.74679"),
-                FuelOriginFossilTypeName.builder().origin(FuelOrigin.FOSSIL).type(FossilFuelType.H2).methaneSlip(new BigDecimal("99.1")).build(),
-                AerFossilFuels.builder()
-                    .origin(FuelOrigin.FOSSIL)
-                    .type(FossilFuelType.H2)
-                    .carbonDioxide(new BigDecimal("5423523.45245"))
-                    .methane(new BigDecimal("8364.24"))
-                    .nitrousOxide(new BigDecimal("8.842145"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("12543.4109955"))
-                    .co2(new BigDecimal("286901.6714181"))
-                    .n2o(new BigDecimal("124.3538951"))
-                    .total(new BigDecimal("299569.4363087"))
-                    .build(),
-                AerPortEmissionsMeasurement.builder()
-                    .ch4(new BigDecimal("25086.8219910"))
-                    .co2(new BigDecimal("573803.3428361"))
-                    .n2o(new BigDecimal("248.7077901"))
-                    .total(new BigDecimal("599138.8726172"))
-                    .build(),
-                AerPortVisit.builder().country(PortCountries.GB).port(PortCodes1.GBAGO.name()).build(),
-                AerPortVisit.builder().country(PortCountries.GR).port(PortCodesNorthernIreland.GBBEL.name()).build()
-            )
-        );
-    }
-
     private AerVoyageEmissions getVoyageEmissions(boolean addCalculatedValues,
+                                                  boolean smallIslandFerryReduction, boolean hasCcsAndCcu,
                                                   MeasuringUnit measuringUnit,
                                                   BigDecimal totalConsumption,
                                                   FuelOriginTypeName fuelOriginTypeName,
                                                   AerPortEmissionsMeasurement surrenderEmissions,
                                                   AerPortEmissionsMeasurement totalEmissions,
-                                                  AerPortVisit fromPort, AerPortVisit toPort) {
+                                                  PortCountries fromPort, PortCountries toPort) {
 
         AerVoyageDetails voyageDetails = AerVoyageDetails
             .builder()
-            .arrivalPort(toPort)
-            .departurePort(fromPort)
+            .smallIslandFerryReduction(smallIslandFerryReduction)
+            .ccs(hasCcsAndCcu ? new BigDecimal("1.13") : null)
+            .ccu(hasCcsAndCcu ? new BigDecimal("2.55") : null)
+            .arrivalPort(AerPortVisit.builder().country(toPort).build())
+            .departurePort(AerPortVisit.builder().country(fromPort).build())
             .build();
 
         AerFuelConsumption fuelConsumption = AerFuelConsumption
@@ -310,5 +138,303 @@ class AerVoyageEmissionsCalculatorTest {
             .build();
 
         return AerVoyageEmissions.builder().voyages(Set.of(voyage)).build();
+    }
+
+    public static Stream<Arguments> validScenarios() {
+        return Stream.of(
+            Arguments.of(true, false, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.E_H2).methaneSlip(new BigDecimal("99.1")).build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .type(EFuelType.E_H2)
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("0.0000000"))
+                    .co2(new BigDecimal("0.0000000"))
+                    .n2o(new BigDecimal("0.0000000"))
+                    .total(new BigDecimal("0.0000000"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GR,
+                PortCountries.GR
+            ),
+            Arguments.of(true, true, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginBiofuelTypeName.builder().origin(FuelOrigin.BIOFUEL).type(BioFuelType.BIO_LNG).methaneSlip(new BigDecimal("99.1")).build(),
+                AerBioFuels.builder()
+                    .origin(FuelOrigin.BIOFUEL)
+                    .type(BioFuelType.BIO_LNG)
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("0.0000000"))
+                    .co2(new BigDecimal("0.0000000"))
+                    .n2o(new BigDecimal("0.0000000"))
+                    .total(new BigDecimal("0.0000000"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            ),
+            Arguments.of(true, true, true, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginFossilTypeName.builder().origin(FuelOrigin.FOSSIL).type(FossilFuelType.H2).methaneSlip(new BigDecimal("99.1")).build(),
+                AerFossilFuels.builder()
+                    .origin(FuelOrigin.FOSSIL)
+                    .type(FossilFuelType.H2)
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("0.0000000"))
+                    .co2(new BigDecimal("0.0000000"))
+                    .n2o(new BigDecimal("0.0000000"))
+                    .total(new BigDecimal("0.0000000"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            ),
+            Arguments.of(false, true, true, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginFossilTypeName.builder().origin(FuelOrigin.FOSSIL).type(FossilFuelType.H2).methaneSlip(new BigDecimal("99.1")).build(),
+                AerFossilFuels.builder()
+                    .origin(FuelOrigin.FOSSIL)
+                    .type(FossilFuelType.H2)
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("25364.5003397"))
+                    .co2(new BigDecimal("545109.6796943"))
+                    .n2o(new BigDecimal("243.3768911"))
+                    .total(new BigDecimal("570717.5569251"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            ),
+            Arguments.of(false, true, true, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginFossilTypeName.builder().origin(FuelOrigin.FOSSIL).type(FossilFuelType.H2).methaneSlip(new BigDecimal("99.1")).build(),
+                AerFossilFuels.builder()
+                    .origin(FuelOrigin.FOSSIL)
+                    .type(FossilFuelType.H2)
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("12682.2501699"))
+                    .co2(new BigDecimal("272554.8398472"))
+                    .n2o(new BigDecimal("121.6884456"))
+                    .total(new BigDecimal("285358.7784627"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GR
+            ),
+            Arguments.of(false, true, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginFossilTypeName.builder().origin(FuelOrigin.FOSSIL).type(FossilFuelType.H2).methaneSlip(new BigDecimal("99.1")).build(),
+                AerFossilFuels.builder()
+                    .origin(FuelOrigin.FOSSIL)
+                    .type(FossilFuelType.H2)
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("25364.5003397"))
+                    .co2(new BigDecimal("545113.1756943"))
+                    .n2o(new BigDecimal("243.3768911"))
+                    .total(new BigDecimal("570721.0529251"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            ),
+            Arguments.of(false, false, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .type(EFuelType.OTHER)
+                    .name("name")
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            ),
+            Arguments.of(false, false, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .type(EFuelType.OTHER)
+                    .name("name")
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("0.0000000"))
+                    .co2(new BigDecimal("0.0000000"))
+                    .n2o(new BigDecimal("0.0000000"))
+                    .total(new BigDecimal("0.0000000"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.US
+            ),
+            Arguments.of(false, false, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .type(EFuelType.OTHER)
+                    .name("name")
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("0.0000000"))
+                    .co2(new BigDecimal("0.0000000"))
+                    .n2o(new BigDecimal("0.0000000"))
+                    .total(new BigDecimal("0.0000000"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.US,
+                PortCountries.GB
+            ),
+            Arguments.of(false, false, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).methaneSlip(new BigDecimal("99.1")).name("name").build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .type(EFuelType.OTHER)
+                    .name("name")
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("0.0000000"))
+                    .co2(new BigDecimal("0.0000000"))
+                    .n2o(new BigDecimal("0.0000000"))
+                    .total(new BigDecimal("0.0000000"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("26699.4740418"))
+                    .co2(new BigDecimal("573803.3428361"))
+                    .n2o(new BigDecimal("256.1862012"))
+                    .total(new BigDecimal("600759.0030791"))
+                    .build(),
+                PortCountries.US,
+                PortCountries.MX
+            ),
+            Arguments.of(false, false, false, MeasuringUnit.TONNES, new BigDecimal("1.12345"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).name("name").methaneSlip(new BigDecimal("99.1")).build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .name("name")
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("2554.5241396"))
+                    .co2(new BigDecimal("55259.9401360"))
+                    .n2o(new BigDecimal("25.3925434"))
+                    .total(new BigDecimal("57839.8568190"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("2554.5241396"))
+                    .co2(new BigDecimal("55259.9401360"))
+                    .n2o(new BigDecimal("25.3925434"))
+                    .total(new BigDecimal("57839.8568190"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            ),
+            Arguments.of(false, false, false, MeasuringUnit.M3, new BigDecimal("11.74679"),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).name("name").build(),
+                AerEFuels.builder()
+                    .origin(FuelOrigin.RFNBO)
+                    .type(EFuelType.OTHER)
+                    .name("name")
+                    .carbonDioxide(new BigDecimal("5423523.45245"))
+                    .methane(new BigDecimal("8364.24"))
+                    .nitrousOxide(new BigDecimal("8.842145"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("2927939.6529532"))
+                    .co2(new BigDecimal("63709413.4793372"))
+                    .n2o(new BigDecimal("28356.6274101"))
+                    .total(new BigDecimal("66665709.7597005"))
+                    .build(),
+                AerPortEmissionsMeasurement.builder()
+                    .ch4(new BigDecimal("2927939.6529532"))
+                    .co2(new BigDecimal("63709413.4793372"))
+                    .n2o(new BigDecimal("28356.6274101"))
+                    .total(new BigDecimal("66665709.7597005"))
+                    .build(),
+                PortCountries.GB,
+                PortCountries.GB
+            )
+        );
     }
 }

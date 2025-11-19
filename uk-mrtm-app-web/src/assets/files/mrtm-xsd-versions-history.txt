@@ -1,28 +1,4 @@
 -----------------------------------------------------------------------------------
-MARITIME XSD Files 	(13-10-2025)
------------------------------------------------------------------------------------
-
-1) Updates on aer-ship-details-and-emissions-v1.4.xsd
-  1.1) removed field iceClassSurrenderReduction
-  1.2) removed field carbonCaptureReduction
-  1.3) removed field smallIslandSurrenderReduction
-
-2) Updates on emissions-aggregated-data-v1.1.xsd
-  2.1) removed field etsEmissionsSmallIslands
-  2.2) removed field etsCcWithinUkPort
-  2.3) removed field etsCcBetweenUkPort
-  2.4) removed field etsCcBetweenUkAndEeaPort
-  2.5) removed field etsCcSmallIslands
-  2.5) removed field etsEmissionsBetweenUkAndEeaPort
-  2.6) added field etsEmissionsBetweenUkAndNiPort
-
-XSD Schema Files:
-
-ship-details-and-emissions-v1.4.xsd: No updates
-aer-ship-details-and-emissions-v1.4.xsd: Updates
-emissions-aggregated-data-v1.1.xsd: Updates
-
------------------------------------------------------------------------------------
 MARITIME XSD Files 	(17-09-2025)
 -----------------------------------------------------------------------------------
 

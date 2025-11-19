@@ -43,8 +43,6 @@ export class AerVoyagesSummaryComponent {
   public readonly wizardMap = aerVoyagesMap;
   public readonly voyages = this.store.select(aerCommonQuery.selectVoyagesList);
 
-  public readonly subtaskStatus = this.store.select(aerCommonQuery.selectStatusForSubtask(AER_VOYAGES_SUB_TASK));
-
   public readonly canSubmit: Signal<boolean> = computed(() => {
     const statuses = this.voyages().map((voyage) => voyage.status);
 
@@ -52,7 +50,7 @@ export class AerVoyagesSummaryComponent {
       this.editable() &&
       statuses?.length &&
       statuses?.every((task) => task === TaskItemStatus.COMPLETED) &&
-      this.subtaskStatus() !== TaskItemStatus.COMPLETED
+      this.store.select(aerCommonQuery.selectStatusForSubtask(AER_VOYAGES_SUB_TASK))() !== TaskItemStatus.COMPLETED
     );
   });
 

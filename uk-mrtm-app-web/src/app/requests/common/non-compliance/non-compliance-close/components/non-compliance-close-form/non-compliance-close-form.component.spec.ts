@@ -9,7 +9,6 @@ import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 import { NonComplianceCloseFormComponent } from '@requests/common/non-compliance/non-compliance-close/components/non-compliance-close-form/non-compliance-close-form.component';
 import { NonComplianceCloseService } from '@requests/common/non-compliance/non-compliance-close/non-compliance-close.service';
 import { mockNonComplianceFinalDeterminationRequestTask } from '@requests/common/non-compliance/testing';
-import { taskProviders } from '@requests/common/task.providers';
 
 describe('NonComplianceCloseFormComponent', () => {
   let component: NonComplianceCloseFormComponent;
@@ -26,7 +25,6 @@ describe('NonComplianceCloseFormComponent', () => {
         provideHttpClientTesting(),
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: NonComplianceCloseService, useValue: closeServiceMock },
-        ...taskProviders,
       ],
     }).compileComponents();
 

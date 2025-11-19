@@ -13,16 +13,7 @@
   </div>
 </div>
 
-<mrtm-port-calls-list-summary-template
-  [warningMessages]="
-    subtaskStatus() === 'NEEDS_REVIEW'
-      ? [
-          'The port calls and emission details have been updated due to changes made to the ‘Ships and emission details list’ subtask. Review the information for each port call, then select Confirm and continue.',
-        ]
-      : []
-  "
-  [data]="ports()"
-  [editPath]="wizardStep.LIST_OF_PORTS" />
+<mrtm-port-calls-list-summary-template [data]="ports()" [editPath]="wizardStep.LIST_OF_PORTS" />
 
 @if (canSubmit()) {
   <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and continue</button>

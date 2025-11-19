@@ -67,9 +67,19 @@ export const aerEmissionsShipMap: SubTaskListMap<{
   fuelsAndEmissionsFactors: string;
   emissionsSources: string;
   derogations: string;
+  exceptionFromPerVoyageMonitoring: string;
+  carbonCaptureAndStorageReduction: string;
+  smallIslandFerryOperatorReduction: string;
 }> = {
   ...emissionsShipSubtaskMap,
-  derogations: { title: 'Do you have an exemption from per voyage monitoring?' },
+
+  // DEROGATIONS
+  derogations: { title: 'Additional questions relating to this ship' },
+  exceptionFromPerVoyageMonitoring: { title: 'Do you have an exemption from per voyage monitoring?' },
+  carbonCaptureAndStorageReduction: {
+    title: 'Are you claiming an emissions reduction for carbon capture and storage?',
+  },
+  smallIslandFerryOperatorReduction: { title: 'Are you claiming a small island ferry operator surrender reduction?' },
 };
 
 export const aerTotalEmissionsMap = {

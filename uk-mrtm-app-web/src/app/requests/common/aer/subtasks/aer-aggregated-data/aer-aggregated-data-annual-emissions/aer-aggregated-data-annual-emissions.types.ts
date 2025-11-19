@@ -4,10 +4,7 @@ import { AerShipAggregatedData } from '@mrtm/api';
 
 export type AerAggregatedDataAnnualEmissionsFormModel = Pick<
   AerShipAggregatedData,
-  | 'totalEmissionsFromVoyagesAndPorts'
-  | 'emissionsBetweenUKAndNIVoyages'
-  | 'emissionsBetweenUKPorts'
-  | 'emissionsWithinUKPorts'
+  'totalAggregatedEmissions' | 'emissionsBetweenUKAndEEAVoyages' | 'emissionsBetweenUKPorts' | 'emissionsWithinUKPorts'
 >;
 
 export type AerAggregatedDataAnnualEmissionsFormGroupModel = Record<

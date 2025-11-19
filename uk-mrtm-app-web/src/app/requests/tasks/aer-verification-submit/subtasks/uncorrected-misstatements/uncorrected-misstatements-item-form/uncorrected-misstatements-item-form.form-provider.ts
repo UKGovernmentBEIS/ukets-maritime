@@ -21,7 +21,7 @@ export const uncorrectedMisstatementsItemFormProvider: Provider = {
 
     return formBuilder.group({
       explanation: formBuilder.control<string>(item?.explanation, [
-        GovukValidators.required('Enter an explanation for the uncorrected misstatement'),
+        GovukValidators.required('Enter an explanation for the the uncorrected misstatement'),
         GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
       ]),
       materialEffect: formBuilder.control<boolean>(item?.materialEffect, [

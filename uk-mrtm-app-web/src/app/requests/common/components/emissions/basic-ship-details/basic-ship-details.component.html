@@ -35,6 +35,13 @@
     [label]="map.iceClass.title"
     widthClass="govuk-!-width-one-third"></div>
 
+  @if (isAer() && showHasIceClassDerogation()) {
+    <div formControlName="hasIceClassDerogation" govuk-radio [legend]="map.hasIceClassDerogation.title">
+      <govuk-radio-option [value]="true" label="Yes" />
+      <govuk-radio-option [value]="false" label="No" />
+    </div>
+  }
+
   <div
     formControlName="natureOfReportingResponsibility"
     govuk-radio

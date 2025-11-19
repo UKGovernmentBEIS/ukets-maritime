@@ -13,7 +13,6 @@ import lombok.experimental.SuperBuilder;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionRequiredChange;
 
-import java.time.LocalDate;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,9 +43,6 @@ public class EmpNotificationFollowUpWaitForAmendsRequestTaskPayload extends Requ
 
     @NotNull
     private EmpNotificationFollowUpReviewDecision reviewDecision;
-
-    @NotNull
-    private LocalDate followUpResponseExpirationDate;
 
     @Builder.Default
     private Map<UUID, String> followUpResponseAttachments = new HashMap<>();

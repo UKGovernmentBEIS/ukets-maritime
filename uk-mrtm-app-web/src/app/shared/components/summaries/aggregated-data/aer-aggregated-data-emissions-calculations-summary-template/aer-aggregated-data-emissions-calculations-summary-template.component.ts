@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, InputSignal, Signal } from '@angular/core';
 
 import { GovukTableColumn, TableComponent } from '@netz/govuk-components';
 
@@ -14,12 +14,14 @@ import { AerAggregatedDataEmissionDto } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent {
-  readonly data = input<Array<AerAggregatedDataEmissionDto>>();
-  readonly showSummaryComponents = input<boolean>(false);
-  readonly showEmissionsColumnHeader = input<boolean>(false);
-  readonly boldColumns = input<Array<string>>([]);
+  public readonly header: InputSignal<string> = input<string>();
+  public readonly data: InputSignal<Array<AerAggregatedDataEmissionDto>> = input<Array<AerAggregatedDataEmissionDto>>();
+  public readonly showSummaryComponents: InputSignal<boolean> = input<boolean>(false);
+  public readonly showEmissionsColumnHeader: InputSignal<boolean> = input<boolean>(false);
+  public readonly includeCo2Captured: InputSignal<boolean> = input<boolean>();
+  public readonly boldedColumns: InputSignal<Array<string>> = input<Array<string>>([]);
 
-  readonly columns = computed<Array<GovukTableColumn<AerAggregatedDataEmissionDto>>>(() => {
-    return provideAggregatedDataEmissionsSummaryColumns(this.showEmissionsColumnHeader());
+  public readonly columns: Signal<Array<GovukTableColumn<AerAggregatedDataEmissionDto>>> = computed(() => {
+    return provideAggregatedDataEmissionsSummaryColumns(this.showEmissionsColumnHeader(), this.includeCo2Captured());
   });
 }

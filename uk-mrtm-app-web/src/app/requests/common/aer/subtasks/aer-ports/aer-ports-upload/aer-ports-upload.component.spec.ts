@@ -82,26 +82,31 @@ describe('AerPortsUploadComponent', () => {
     expect(page.errorSummary).toBeTruthy();
     expect(page.errorTitles.map((item) => item.textContent.trim())).toEqual([
       "The field 'IMO Number' is required",
-      "Check the data in column 'IMO Number' on row(s) 2",
+      "Check the data in column 'IMO Number' on row(s) 1",
       "The field 'Country code of port' has invalid or missing values",
-      "Check the data in column 'Country code of port' on row(s) 2",
+      "Check the data in column 'Country code of port' on row(s) 1",
       "The field 'Port code' has invalid or missing values",
-      "Check the data in column 'Port code' on row(s) 2",
+      "Check the data in column 'Port code' on row(s) 1",
       "The field 'Date of arrival' has invalid or missing values",
-      "Check the data in column 'Date of arrival' on row(s) 2",
+      "Check the data in column 'Date of arrival' on row(s) 1",
       "The field 'Date of arrival' must be before the 'Date of departure'",
-      "Check the data in column 'Date of arrival' on row(s) 2",
+      "Check the data in column 'Date of arrival' on row(s) 1",
       "The field 'Actual time of arrival (ATA)' has invalid or missing values",
-      "Check the data in column 'Actual time of arrival (ATA)' on row(s) 2",
+      "Check the data in column 'Actual time of arrival (ATA)' on row(s) 1",
       "The field 'Date of departure' has invalid or missing values",
-      "Check the data in column 'Date of departure' on row(s) 2",
+      "Check the data in column 'Date of departure' on row(s) 1",
       "The field 'Date of departure' must be after the 'Date of arrival'",
-      "Check the data in column 'Date of departure' on row(s) 2",
+      "Check the data in column 'Date of departure' on row(s) 1",
       "The field 'Actual time of departure (ATD)' has invalid or missing values",
-      "Check the data in column 'Actual time of departure (ATD)' on row(s) 2",
+      "Check the data in column 'Actual time of departure (ATD)' on row(s) 1",
+      "The field 'Carbon capture and storage (CCS) (t)' has invalid or missing values",
+      "Check the data in column 'Carbon capture and storage (CCS) (t)' on row(s) 1",
+      "The field 'Carbon capture and utilisation (CCU) (t)' has invalid or missing values",
+      "Check the data in column 'Carbon capture and utilisation (CCU) (t)' on row(s) 1",
+      "The field 'Are you claiming a small island ferry operator surrender reduction?' has invalid or missing values",
+      "Check the data in column 'Are you claiming a small island ferry operator surrender reduction?' on row(s) 1",
       'The ship has not recorded any emissions for one or more ports',
-      'Check the data on row(s) 2',
-      'Upload the ports and emission details file',
+      'Check the data on row(s) 1',
     ]);
   });
 
@@ -114,7 +119,6 @@ describe('AerPortsUploadComponent', () => {
     expect(page.errorSummary).toBeFalsy();
 
     component['processCSVData'](mockAerPortsCsvSuccessPapaResult);
-    component.fileCtrl.setErrors(null);
     fixture.detectChanges();
     expect(page.errorSummary).toBeFalsy();
 
@@ -133,6 +137,9 @@ describe('AerPortsUploadComponent', () => {
           },
           arrivalTime: '2025-02-01T10:00:00Z',
           departureTime: '2025-02-02T16:00:00Z',
+          ccs: '11.11',
+          ccu: '22.22',
+          smallIslandFerryReduction: true,
         },
         fuelConsumptions: [
           {

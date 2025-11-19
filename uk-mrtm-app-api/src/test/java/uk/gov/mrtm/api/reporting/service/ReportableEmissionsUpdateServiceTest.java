@@ -44,14 +44,16 @@ class ReportableEmissionsUpdateServiceTest {
         Year year = Year.now();
         BigDecimal reportableEmissions = BigDecimal.valueOf(500);
         BigDecimal totalEmissions = BigDecimal.valueOf(250);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(100);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(100);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(50);
         ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(accountId)
                 .year(year)
                 .reportableEmissions(AerTotalReportableEmissions.builder()
                         .surrenderEmissions(reportableEmissions)
                         .totalEmissions(totalEmissions)
-                        .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                        .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                        .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                         .build())
                 .isFromDoe(false)
                 .build();
@@ -71,7 +73,8 @@ class ReportableEmissionsUpdateServiceTest {
         assertEquals(year, savedEntity.getYear());
         assertEquals(reportableEmissions, savedEntity.getSurrenderEmissions());
         assertEquals(totalEmissions, savedEntity.getTotalEmissions());
-        assertEquals(lessVoyagesInNorthernIrelandDeduction, savedEntity.getLessVoyagesInNorthernIrelandDeduction());
+        assertEquals(lessIslandFerryDeduction, savedEntity.getLessIslandFerryDeduction());
+        assertEquals(less5PercentIceClassDeduction, savedEntity.getLess5PercentIceClassDeduction());
         assertEquals(params.isFromDoe(), savedEntity.isFromDoe());
         verify(eventPublisher).onAccountCreatedEvent(ReportableEmissionsUpdatedEvent.builder()
         		.accountId(accountId)
@@ -88,14 +91,16 @@ class ReportableEmissionsUpdateServiceTest {
         Long reportableEmissionsEntityId = 10L;
         BigDecimal newReportableEmissions = BigDecimal.valueOf(500);
         BigDecimal totalEmissions = BigDecimal.valueOf(250);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(100);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(100);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(50);
         ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(accountId)
                 .year(year)
                 .reportableEmissions(AerTotalReportableEmissions.builder()
                         .surrenderEmissions(newReportableEmissions)
                         .totalEmissions(totalEmissions)
-                        .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                        .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                        .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                         .build())
                 .isFromDoe(false)
                 .build();
@@ -116,7 +121,8 @@ class ReportableEmissionsUpdateServiceTest {
         assertEquals(reportableEmissionsEntityId, reportableEmissionsEntity.getId());
         assertEquals(newReportableEmissions, reportableEmissionsEntity.getSurrenderEmissions());
         assertEquals(totalEmissions, reportableEmissionsEntity.getTotalEmissions());
-        assertEquals(lessVoyagesInNorthernIrelandDeduction, reportableEmissionsEntity.getLessVoyagesInNorthernIrelandDeduction());
+        assertEquals(lessIslandFerryDeduction, reportableEmissionsEntity.getLessIslandFerryDeduction());
+        assertEquals(less5PercentIceClassDeduction, reportableEmissionsEntity.getLess5PercentIceClassDeduction());
 
         verify(reportableEmissionsRepository, never()).save(any());
 
@@ -135,7 +141,8 @@ class ReportableEmissionsUpdateServiceTest {
         Long reportableEmissionsEntityId = 10L;
         BigDecimal newReportableEmissions = BigDecimal.valueOf(500);
         BigDecimal totalEmissions = BigDecimal.valueOf(250);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(100);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(100);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(50);
         ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(accountId)
                 .year(year)
@@ -150,7 +157,8 @@ class ReportableEmissionsUpdateServiceTest {
                 .year(year)
                 .surrenderEmissions(BigDecimal.valueOf(200))
                 .totalEmissions(totalEmissions)
-                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                 .isFromDoe(true)
                 .build();
 
@@ -164,7 +172,8 @@ class ReportableEmissionsUpdateServiceTest {
         assertEquals(reportableEmissionsEntityId, reportableEmissionsEntity.getId());
         assertEquals(BigDecimal.valueOf(200), reportableEmissionsEntity.getSurrenderEmissions());
         assertEquals(totalEmissions, reportableEmissionsEntity.getTotalEmissions());
-        assertEquals(lessVoyagesInNorthernIrelandDeduction, reportableEmissionsEntity.getLessVoyagesInNorthernIrelandDeduction());
+        assertEquals(lessIslandFerryDeduction, reportableEmissionsEntity.getLessIslandFerryDeduction());
+        assertEquals(less5PercentIceClassDeduction, reportableEmissionsEntity.getLess5PercentIceClassDeduction());
 
         verify(reportableEmissionsRepository, never()).save(any());
         verifyNoInteractions(eventPublisher);
@@ -177,14 +186,16 @@ class ReportableEmissionsUpdateServiceTest {
         Long reportableEmissionsEntityId = 10L;
         BigDecimal newReportableEmissions = BigDecimal.valueOf(500);
         BigDecimal totalEmissions = BigDecimal.valueOf(250);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(100);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(100);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(50);
         ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(accountId)
                 .year(year)
                 .reportableEmissions(AerTotalReportableEmissions.builder()
                         .surrenderEmissions(newReportableEmissions)
                         .totalEmissions(totalEmissions)
-                        .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                        .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                        .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                         .build())
                 .isFromDoe(true)
                 .build();
@@ -206,7 +217,8 @@ class ReportableEmissionsUpdateServiceTest {
         assertEquals(reportableEmissionsEntityId, reportableEmissionsEntity.getId());
         assertEquals(newReportableEmissions, reportableEmissionsEntity.getSurrenderEmissions());
         assertEquals(totalEmissions, reportableEmissionsEntity.getTotalEmissions());
-        assertEquals(lessVoyagesInNorthernIrelandDeduction, reportableEmissionsEntity.getLessVoyagesInNorthernIrelandDeduction());
+        assertEquals(lessIslandFerryDeduction, reportableEmissionsEntity.getLessIslandFerryDeduction());
+        assertEquals(less5PercentIceClassDeduction, reportableEmissionsEntity.getLess5PercentIceClassDeduction());
 
         verify(reportableEmissionsRepository, never()).save(any());
 
@@ -225,14 +237,16 @@ class ReportableEmissionsUpdateServiceTest {
         Long reportableEmissionsEntityId = 10L;
         BigDecimal newReportableEmissions = BigDecimal.valueOf(500);
         BigDecimal totalEmissions = BigDecimal.valueOf(250);
-        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(100);
+        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(100);
+        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(50);
         ReportableEmissionsSaveParams params = ReportableEmissionsSaveParams.builder()
                 .accountId(accountId)
                 .year(year)
                 .reportableEmissions(AerTotalReportableEmissions.builder()
                         .surrenderEmissions(newReportableEmissions)
                         .totalEmissions(totalEmissions)
-                        .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
+                        .lessIslandFerryDeduction(lessIslandFerryDeduction)
+                        .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
                         .build())
                 .isFromDoe(true)
                 .build();
@@ -254,7 +268,8 @@ class ReportableEmissionsUpdateServiceTest {
         assertEquals(reportableEmissionsEntityId, reportableEmissionsEntity.getId());
         assertEquals(newReportableEmissions, reportableEmissionsEntity.getSurrenderEmissions());
         assertEquals(totalEmissions, reportableEmissionsEntity.getTotalEmissions());
-        assertEquals(lessVoyagesInNorthernIrelandDeduction, reportableEmissionsEntity.getLessVoyagesInNorthernIrelandDeduction());
+        assertEquals(lessIslandFerryDeduction, reportableEmissionsEntity.getLessIslandFerryDeduction());
+        assertEquals(less5PercentIceClassDeduction, reportableEmissionsEntity.getLess5PercentIceClassDeduction());
 
         verify(reportableEmissionsRepository, never()).save(any());
 

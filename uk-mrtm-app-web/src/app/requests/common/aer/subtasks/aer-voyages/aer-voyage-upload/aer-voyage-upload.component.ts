@@ -29,7 +29,6 @@ import { uploadVoyagesCsvColumns } from '@requests/common/aer/subtasks/aer-voyag
 import {
   addVoyageFormGroup,
   aerVoyageUploadFormProvider,
-  uploadVoyageCSVFormValidators,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyage-upload/aer-voyage-upload.form-provider';
 import {
   AER_VOYAGES_SUB_TASK,
@@ -100,8 +99,6 @@ export class AerVoyageUploadComponent {
   uploadedFile: File;
 
   onFileSelect(event: any) {
-    this.insertedRows = 0;
-    this.updatedRows = 0;
     this.dataParserWizardStep().isSummaryDisplayedSubject.next(false);
     this.uploadedFile = event.target.files[0];
     this.fileCtrl.setValue(this.uploadedFile);
@@ -125,14 +122,11 @@ export class AerVoyageUploadComponent {
 
     this.columnsCtrl.setValue(result.meta.fields);
     this.voyagesCtrl.clear();
-    this.voyagesCtrl.clearValidators();
 
     if (this.columnsCtrl.invalid) {
       this.displayColumnErrors();
     } else {
       processedData?.forEach((flattenedVoyage) => this.voyagesCtrl.push(addVoyageFormGroup(flattenedVoyage)));
-      this.voyagesCtrl.addValidators(uploadVoyageCSVFormValidators(this.store));
-      this.voyagesCtrl.updateValueAndValidity();
 
       if (this.voyagesCtrl.valid) {
         this.voyages.update(() => this.getTransformedFormData(processedData));
@@ -155,6 +149,9 @@ export class AerVoyageUploadComponent {
       case aerVoyageCsvMap.departurePort:
       case aerVoyageCsvMap.arrivalPort:
         return trimmedValue === 'NA' ? 'NOT_APPLICABLE' : trimmedValue;
+
+      case aerVoyageCsvMap.smallIslandFerryReduction:
+        return trimmedValue?.toUpperCase() === 'YES' ? true : trimmedValue?.toUpperCase() === 'NO' ? false : null;
 
       case aerVoyageCsvMap.fuelConsumptionOrigin:
       case aerVoyageCsvMap.fuelConsumptionType:
@@ -244,6 +241,12 @@ export class AerVoyageUploadComponent {
       if (currentVoyage) {
         currentVoyage = {
           ...currentVoyage,
+          voyageDetails: {
+            ...currentVoyage.voyageDetails,
+            ccu: fv.ccu,
+            ccs: fv.ccs,
+            smallIslandFerryReduction: fv.smallIslandFerryReduction,
+          },
           fuelConsumptions: [...currentVoyage.fuelConsumptions, ...this.getFuelConsumptions(fv)],
           ...(hasDirectEmission(fv) && { directEmissions: this.getDirectEmission(fv) }),
         };
@@ -263,6 +266,9 @@ export class AerVoyageUploadComponent {
               port: fv.arrivalPort,
             },
             arrivalTime: formatIsoDateTimeNoMs(fv.arrivalDate, fv.arrivalActualTime),
+            ccu: fv.ccu,
+            ccs: fv.ccs,
+            smallIslandFerryReduction: fv.smallIslandFerryReduction,
           },
           fuelConsumptions: this.getFuelConsumptions(fv),
           ...(hasDirectEmission(fv) && { directEmissions: this.getDirectEmission(fv) }),

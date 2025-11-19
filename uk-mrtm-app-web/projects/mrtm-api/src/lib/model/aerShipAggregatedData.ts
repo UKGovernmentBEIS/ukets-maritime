@@ -8,17 +8,23 @@
  * Do not edit the class manually.
  */
 import { AerAggregatedDataFuelConsumption } from './aerAggregatedDataFuelConsumption';
+import { AerAggregatedEmissionsMeasurement } from './aerAggregatedEmissionsMeasurement';
 import { AerPortEmissionsMeasurement } from './aerPortEmissionsMeasurement';
 
 export interface AerShipAggregatedData {
   uniqueIdentifier: string;
   imoNumber: string;
   fuelConsumptions?: Array<AerAggregatedDataFuelConsumption>;
-  emissionsWithinUKPorts: AerPortEmissionsMeasurement;
-  emissionsBetweenUKPorts: AerPortEmissionsMeasurement;
-  emissionsBetweenUKAndNIVoyages: AerPortEmissionsMeasurement;
+  emissionsWithinUKPorts: AerAggregatedEmissionsMeasurement;
+  emissionsBetweenUKPorts: AerAggregatedEmissionsMeasurement;
+  emissionsBetweenUKAndEEAVoyages: AerAggregatedEmissionsMeasurement;
+  totalAggregatedEmissions: AerAggregatedEmissionsMeasurement;
+  smallIslandSurrenderReduction?: AerAggregatedEmissionsMeasurement;
   totalEmissionsFromVoyagesAndPorts: AerPortEmissionsMeasurement;
-  lessVoyagesInNorthernIrelandDeduction: AerPortEmissionsMeasurement;
+  lessCapturedCo2: AerPortEmissionsMeasurement;
+  lessVoyagesNotInScope: AerPortEmissionsMeasurement;
+  lessIslandFerryDeduction: AerPortEmissionsMeasurement;
+  less5PercentIceClassDeduction?: AerPortEmissionsMeasurement;
   totalShipEmissions: string;
   surrenderEmissions: string;
   fromFetch?: boolean;

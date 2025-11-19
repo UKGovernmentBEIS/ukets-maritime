@@ -17,7 +17,13 @@
             <xs:element name="emissions" type="annualConsumptionEditDTO" minOccurs="1" maxOccurs="unbounded"/>
             <xs:element name="etsEmissionsWithinUkPort" type="emissionsGroupDTO" minOccurs="1" maxOccurs="1"/>
             <xs:element name="etsEmissionsBetweenUkPort" type="emissionsGroupDTO" minOccurs="1" maxOccurs="1"/>
-            <xs:element name="etsEmissionsBetweenUkAndNiPort" type="emissionsGroupDTO" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="etsEmissionsBetweenUkAndEeaPort" type="emissionsGroupDTO" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="etsEmissionsSmallIslands" type="emissionsGroupDTO" minOccurs="0" maxOccurs="1"/>
+            <xs:element name="etsCcWithinUkPort" type="decimalWithSevenFractionDigits" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="etsCcBetweenUkPort" type="decimalWithSevenFractionDigits" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="etsCcBetweenUkAndEeaPort" type="decimalWithSevenFractionDigits" minOccurs="1"
+                        maxOccurs="1"/>
+            <xs:element name="etsCcSmallIslands" type="decimalWithSevenFractionDigits" minOccurs="0" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
     <xs:complexType name="annualConsumptionEditDTO">

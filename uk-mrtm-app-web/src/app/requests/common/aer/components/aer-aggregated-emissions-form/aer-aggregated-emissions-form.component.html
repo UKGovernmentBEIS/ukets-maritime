@@ -1,9 +1,17 @@
 <fieldset govukFieldset>
   <legend govukLegend legendSize="medium">{{ header() }}</legend>
-  @if (hint(); as hint) {
-    <div class="govuk-hint">{{ hint }}</div>
-  }
-  <div govuk-text-input formControlName="co2" label="CO2 emissions (t)" widthClass="govuk-!-width-one-third"></div>
+  <div class="govuk-grid-row">
+    <div
+      govuk-text-input
+      formControlName="co2"
+      label="CO2 emissions (t)"
+      class="govuk-grid-column-one-third govuk-!-margin-right-0 govuk-!-padding-right-0"></div>
+    <div
+      govuk-text-input
+      formControlName="co2Captured"
+      label="CO2 Captured (t)"
+      class="govuk-grid-column-one-third govuk-!-margin-right-0 govuk-!-padding-right-0"></div>
+  </div>
   <div govuk-text-input formControlName="ch4" label="CH4 emissions (tCO2e)" widthClass="govuk-!-width-one-third"></div>
   <div govuk-text-input formControlName="n2o" label="N2O emissions (tCO2e)" widthClass="govuk-!-width-one-third"></div>
 
@@ -17,6 +25,18 @@
           Not calculated yet.
         }
       </p>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      @if (showSummaryForCo2Captured()) {
+        <h4 class="govuk-heading-s govuk-!-margin-bottom-1">CO2 Captured (t)</h4>
+        <p class="govuk-body">
+          @if (!isNil(controlContainer.control.get('co2Captured').value)) {
+            <strong>{{ controlContainer.control.get('co2Captured').value | bigNumber: 7 }}</strong>
+          } @else {
+            Not calculated yet.
+          }
+        </p>
+      }
     </div>
   </div>
 </fieldset>

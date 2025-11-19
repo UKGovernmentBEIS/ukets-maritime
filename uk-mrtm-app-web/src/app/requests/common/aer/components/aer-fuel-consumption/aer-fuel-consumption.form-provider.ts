@@ -43,10 +43,10 @@ export const aerFuelConsumptionFormProvider: Provider = {
         fuelConsumption?.fuelDensity,
         {
           validators: [
-            GovukValidators.required('Enter the fuel density'),
+            GovukValidators.required('Enter the fuel Density'),
             GovukValidators.notNaN('Enter a numerical value'),
-            GovukValidators.positiveNumber('Must accept only positive numbers'),
-            GovukValidators.minMaxRangeNumberValidator(0, 2),
+            GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
+            GovukValidators.minMaxRangeNumberValidator(0, 1),
             GovukValidators.maxDecimalsValidator(3),
           ],
         },

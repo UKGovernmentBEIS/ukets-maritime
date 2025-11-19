@@ -17,10 +17,6 @@ export const canActivateAggregatedDataListSummary: CanActivateFn = (route: Activ
   const aggregatedData = store.select(aerCommonQuery.selectAllAggregatedData)();
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
 
-  if (route.fragment === AerAggregatedDataWizardStep.LIST_OF_AGGREGATED_DATA && !isWizardCompleted(aggregatedData)) {
-    return createUrlTreeFromSnapshot(route, ['../../']);
-  }
-
   return (
     !isEditable ||
     (isEditable && (subtaskStatus === TaskItemStatus.COMPLETED || isWizardCompleted(aggregatedData))) ||

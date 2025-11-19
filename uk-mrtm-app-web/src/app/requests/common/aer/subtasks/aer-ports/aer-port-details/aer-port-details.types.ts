@@ -1,8 +1,9 @@
 import { FormControl } from '@angular/forms';
 
-import { AerPort, AerPortVisit } from '@mrtm/api';
+import { AerPort, AerPortDetails, AerPortVisit } from '@mrtm/api';
 
-export type AerPortDetailsModel = AerPortVisit &
+export type AerPortDetailsModel = Omit<AerPortDetails, 'visit' | 'arrivalTime' | 'departureTime'> &
+  AerPortVisit &
   Pick<AerPort, 'uniqueIdentifier'> & {
     arrivalDate: Date;
     arrivalTime: Date;

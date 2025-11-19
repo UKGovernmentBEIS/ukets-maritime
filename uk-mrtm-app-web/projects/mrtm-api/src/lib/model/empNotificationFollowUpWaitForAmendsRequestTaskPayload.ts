@@ -16,6 +16,5 @@ export interface EmpNotificationFollowUpWaitForAmendsRequestTaskPayload {
   followUpResponse: string;
   followUpFiles?: Array<string>;
   reviewDecision: EmpNotificationFollowUpReviewDecision;
-  followUpResponseExpirationDate: string;
   followUpResponseAttachments?: { [key: string]: string };
 }

@@ -160,15 +160,13 @@ export class AerFuelConsumptionComponent {
         })),
     );
 
-    const uniqueMethaneSlipOptions = Array.from(
-      new Map(
-        (methaneSlipList ?? []).flatMap((item) =>
-          !selectedEmission || item.name.trim() === selectedEmission.trim() ? [[item.methaneSlip, item]] : [],
+    return [
+      ...new Set(
+        (methaneSlipList ?? []).filter((methaneSlipItem) =>
+          selectedEmission ? methaneSlipItem.name.trim() === selectedEmission.trim() : true,
         ),
-      ).values(),
-    );
-
-    return uniqueMethaneSlipOptions
+      ),
+    ]
       .map((emission) => ({
         value: emission.methaneSlip,
         text: emission.methaneSlip,

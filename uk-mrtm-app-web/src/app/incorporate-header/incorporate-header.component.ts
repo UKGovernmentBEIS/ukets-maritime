@@ -10,7 +10,6 @@ import { requestActionQuery, RequestActionStore, requestTaskQuery, RequestTaskSt
 import { LinkDirective, TagComponent } from '@netz/govuk-components';
 
 import { OperatorAccountsStatusColorPipe } from '@accounts/pipes';
-import { OperatorAccountsStore, selectCurrentAccount } from '@accounts/store';
 
 @Component({
   selector: 'mrtm-incorporate-header',
@@ -23,19 +22,14 @@ export class IncorporateHeaderComponent {
   private readonly requestTaskStore = inject(RequestTaskStore);
   private readonly requestActionStore = inject(RequestActionStore);
   private readonly maritimeAccountsService = inject(MaritimeAccountsService);
-  private readonly operatorAccountsStore = inject(OperatorAccountsStore);
 
   accountDetails$: Observable<MrtmAccountEmpDTO> = combineLatest([
     this.requestTaskStore
       .rxSelect(requestTaskQuery.selectRequestInfo)
       .pipe(map((requestInfo) => requestInfo?.accountId)),
     this.requestActionStore.rxSelect(requestActionQuery.selectAction).pipe(map((action) => action?.requestAccountId)),
-    this.operatorAccountsStore.pipe(selectCurrentAccount),
   ]).pipe(
-    map(
-      ([requestTaskAccountId, requestActionAccountId, currentAccount]) =>
-        requestTaskAccountId ?? requestActionAccountId ?? currentAccount?.account?.id,
-    ),
+    map(([requestTaskAccountId, requestActionAccountId]) => requestTaskAccountId ?? requestActionAccountId),
     switchMap((accountId) => {
       return (accountId ? this.maritimeAccountsService.getMaritimeAccount(accountId) : of(null)).pipe(
         catchError(() => EMPTY),

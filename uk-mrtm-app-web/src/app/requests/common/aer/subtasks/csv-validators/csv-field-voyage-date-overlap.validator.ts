@@ -109,12 +109,12 @@ export function csvFieldVoyageDateOverlapValidator<T>(
             },
           )
         ) {
-          overlappingIndices.push(index + 2);
+          overlappingIndices.push(index + 1);
         }
       });
 
       combinations.push({
-        index: index + 2,
+        index: index + 1,
         entityUuid: entityUuid,
         imoNumber: imoNumber,
         earlierDateTime: earlierDateTime,

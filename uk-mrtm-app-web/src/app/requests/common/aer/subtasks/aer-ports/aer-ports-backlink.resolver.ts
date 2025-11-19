@@ -8,7 +8,8 @@ import { AerPort } from '@mrtm/api';
 import { RequestTaskStore } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AerPortsWizardStep } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
+import { AerPortsWizardStep, isWizardCompleted } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
+import { TaskItemStatus } from '@requests/common/task-item-status';
 
 const selectShipBacklinkResolver = (
   returnToSummary: boolean,
@@ -19,6 +20,13 @@ const selectShipBacklinkResolver = (
   return returnToSummary ? '../' : !isNil(portId) ? '../../' : '../';
 };
 
+const listOfPortsBacklinkResolver = (
+  returnToSummary: boolean,
+  ports: Array<AerPort & { status: TaskItemStatus }>,
+): string => {
+  return returnToSummary || isWizardCompleted(ports) ? '../' : '../../../';
+};
+
 const stepBacklinkResolvers: Partial<
   Record<
     AerPortsWizardStep,
@@ -26,6 +34,7 @@ const stepBacklinkResolvers: Partial<
   >
 > = {
   [AerPortsWizardStep.SELECT_SHIP]: selectShipBacklinkResolver,
+  [AerPortsWizardStep.LIST_OF_PORTS]: listOfPortsBacklinkResolver,
 };
 
 export const aerPortsBacklinkResolver =

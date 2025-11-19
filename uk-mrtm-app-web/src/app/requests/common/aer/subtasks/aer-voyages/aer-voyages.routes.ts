@@ -27,7 +27,10 @@ export const AER_VOYAGES_ROUTES: Routes = [
       {
         path: '',
         title: aerVoyagesMap.title,
-        data: { breadcrumb: false, backlink: '../', backlinkFragment: AerVoyagesWizardStep.LIST_OF_VOYAGES },
+        data: { breadcrumb: false },
+        resolve: {
+          backlink: aerVoyagesBacklinkResolver(AerVoyagesWizardStep.LIST_OF_VOYAGES),
+        },
         canActivate: [canActivateListOfVoyages],
         loadComponent: () =>
           import('@requests/common/aer/subtasks/aer-voyages/aer-voyages-list').then((c) => c.AerVoyagesListComponent),

@@ -13,7 +13,6 @@ import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
-  const originalConsole = console;
   let component: AppComponent;
   let fixture: ComponentFixture<AppComponent>;
   let page: Page;
@@ -45,6 +44,14 @@ describe('AppComponent', () => {
       return this.query<HTMLAnchorElement>('a[href="/maritime/user/regulators"]');
     }
 
+    get accountsLink() {
+      return this.query<HTMLAnchorElement>('a[href="/maritime/accounts"]');
+    }
+
+    get templatesLink() {
+      return this.query<HTMLAnchorElement>('a[href="/maritime/templates"]');
+    }
+
     get verificationBodiesLink() {
       return this.query<HTMLAnchorElement>('a[href="/maritime/verification-bodies"]');
     }
@@ -57,14 +64,6 @@ describe('AppComponent', () => {
       return this.queryAll<HTMLLIElement>('.govuk-breadcrumbs__list-item');
     }
   }
-
-  beforeAll(() => {
-    console.warn = jest.fn();
-  });
-
-  afterAll(() => {
-    console = originalConsole;
-  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

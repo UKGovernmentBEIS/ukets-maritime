@@ -2,33 +2,18 @@ import { VirVerificationData } from '@mrtm/api';
 
 import { SubTaskListMap } from '@shared/types';
 
-const uncorrectedNonConformitiesFromThePreviousYearTitle = 'Uncorrected non-conformities from the previous year';
-const recommendedImprovementTitle = 'Recommended improvement';
-const uncorrectedNonConformitiesTitle = 'Uncorrected non-conformities';
-
-export const virSubtaskList: SubTaskListMap<
-  VirVerificationData & { sendReport: unknown; B1: string; D1: string; E1: string }
-> = {
+export const virSubtaskList: SubTaskListMap<VirVerificationData & { sendReport: unknown }> = {
   title: 'Annual verifier improvement report',
   priorYearIssues: {
-    title: uncorrectedNonConformitiesFromThePreviousYearTitle,
+    title: 'Uncorrected non-conformities from the previous year',
   },
   recommendedImprovements: {
-    title: recommendedImprovementTitle,
+    title: 'Recommended improvement',
   },
   uncorrectedNonConformities: {
-    title: uncorrectedNonConformitiesTitle,
+    title: 'Uncorrected non-conformities',
   },
   sendReport: {
     title: 'Send report',
-  },
-  B1: {
-    title: uncorrectedNonConformitiesFromThePreviousYearTitle,
-  },
-  D1: {
-    title: recommendedImprovementTitle,
-  },
-  E1: {
-    title: uncorrectedNonConformitiesTitle,
   },
 };

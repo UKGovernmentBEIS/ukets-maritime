@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { AerVoyage } from '@mrtm/api';
+import { AerShipEmissions, AerVoyage } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
 import {
@@ -18,7 +18,8 @@ import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/
 import { FuelConsumptionAndDirectEmissionsSummaryTemplateComponent } from '@shared/components/summaries/ports-and-voyages/fuel-consumption-and-direct-emissions-summary-template';
 import { VoyageOrPortCallEmissionsSummaryTemplateComponent } from '@shared/components/summaries/ports-and-voyages/voyage-or-port-call-emissions-summary-template';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
-import { SelectOptionToTitlePipe } from '@shared/pipes';
+import { NotProvidedDirective } from '@shared/directives';
+import { BooleanToTextPipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { AerJourneyTypeEnum } from '@shared/types';
 
 @Component({
@@ -34,6 +35,8 @@ import { AerJourneyTypeEnum } from '@shared/types';
     SelectOptionToTitlePipe,
     RouterLink,
     GovukDatePipe,
+    BooleanToTextPipe,
+    NotProvidedDirective,
     DatePipe,
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
     VoyageOrPortCallEmissionsSummaryTemplateComponent,
@@ -43,6 +46,7 @@ import { AerJourneyTypeEnum } from '@shared/types';
 })
 export class VoyageSummaryTemplateComponent {
   readonly data = input<AerVoyage & { journeyType?: AerJourneyTypeEnum }>();
+  readonly relatedShip = input<AerShipEmissions>();
   readonly editable = input<boolean>(false);
 
   readonly wizardStep = AerVoyagesWizardStep;

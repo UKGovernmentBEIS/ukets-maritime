@@ -44,7 +44,7 @@ class EmpBatchEmpReissueCompletedHandlerTest {
         verify(execution, times(1)).getVariable(MrtmBpmnProcessConstants.EMP_REISSUE_REQUEST_SUCCEEDED);
         verify(execution, times(1)).getVariable(MrtmBpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED);
         verify(execution, times(1)).setVariable(MrtmBpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED, 1);
-        verify(service, times(1)).reissueCompleted(requestId, accountId, reissueSucceeded, false);
+        verify(service, times(1)).reissueCompleted(requestId, accountId, reissueSucceeded);
     }
     
 }

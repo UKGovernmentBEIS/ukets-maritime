@@ -29,7 +29,7 @@ export function csvFieldArrayIncludesValidator<T>(
 
       if (!keysArray.includes(currentField)) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

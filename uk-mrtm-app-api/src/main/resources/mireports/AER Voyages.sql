@@ -209,16 +209,16 @@ WITH port_countries AS (
     SELECT 'ZM', 'Zambia', 'INTERNATIONAL' UNION ALL
     SELECT 'ZW', 'Zimbabwe', 'INTERNATIONAL'
 ),
-     allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data FROM rpt_aer aer
-                 UNION ALL
-                 SELECT  CAST(rr.resource_id AS BIGINT) account_id, (rt.payload ->> 'reportingYear')::int reporting_year, rt.payload aer_data FROM request r JOIN request_type reqType on reqType.id = r.type_id
-                                                                                                                                                             JOIN request_task rt on r.id = rt.request_id JOIN request_task_type rtt on rtt.id = rt.type_id JOIN request_resource rr on (r.id = rr.request_id AND rr.resource_type = 'ACCOUNT')
-                 WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
-     ), sectionOperatorDetails
-         AS (
-        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID", aer.reporting_year "Reporting year",
-               CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
-    WHEN 'LIMITED_COMPANY' THEN 'Limited Company' WHEN 'INDIVIDUAL' THEN 'Individual' WHEN 'PARTNERSHIP' THEN 'Partnership' ELSE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
+allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data FROM rpt_aer aer
+UNION ALL
+SELECT  CAST(rr.resource_id AS BIGINT) account_id, (rt.payload ->> 'reportingYear')::int reporting_year, rt.payload aer_data FROM request r JOIN request_type reqType on reqType.id = r.type_id
+JOIN request_task rt on r.id = rt.request_id JOIN request_task_type rtt on rtt.id = rt.type_id JOIN request_resource rr on (r.id = rr.request_id AND rr.resource_type = 'ACCOUNT')
+WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
+), sectionOperatorDetails
+AS (
+SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID", aer.reporting_year "Reporting year",
+CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
+WHEN 'LIMITED_COMPANY' THEN 'Limited Company' WHEN 'INDIVIDUAL' THEN 'Individual' WHEN 'PARTNERSHIP' THEN 'Partnership' ELSE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
 END legalStatus, p.data
 FROM account a
 JOIN account_mrtm am
@@ -242,7 +242,8 @@ ships AS (
     CROSS JOIN jsonb_to_recordset(aer_data -> 'aer' -> 'emissions' -> 'ships') AS s(details jsonb)
 ),voyages
 AS (
-SELECT account_id, reporting_year, "imoNumber" imoShip,
+SELECT account_id, reporting_year, "imoNumber" imoShip, "voyageDetails"->> 'ccs' ccs, "voyageDetails"->> 'ccu' ccu,
+CASE "voyageDetails"->> 'smallIslandFerryReduction' WHEN 'true' THEN 'Yes' ELSE 'No' END ferryDeduction,
 split_part("voyageDetails"->>'arrivalTime', 'T', 1) as arrival_date, replace(split_part("voyageDetails"->>'arrivalTime', 'T', 2), 'Z', '') as arrival_time,
 split_part("voyageDetails"->>'departureTime', 'T', 1) as departure_date, replace(split_part("voyageDetails"->>'departureTime', 'T', 2), 'Z', '') as departure_time,
 "voyageDetails"->'arrivalPort'->>'country' arrivalCountry, "voyageDetails"->'arrivalPort'->>'port' arrivalPort,"voyageDetails"->'departurePort'->>'country' departureCountry, "voyageDetails"->'departurePort'->>'port' departurePort,
@@ -250,35 +251,30 @@ split_part("voyageDetails"->>'departureTime', 'T', 1) as departure_date, replace
 FROM allAERs, jsonb_to_recordset(aer_data -> 'aer' -> 'voyageEmissions' -> 'voyages')
 AS v("imoNumber" varchar, "voyageDetails" jsonb, "totalEmissions" jsonb, "surrenderEmissions" jsonb))
 SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMP ID", o.legalStatus "Legal status",
-       s.ship_name "Ship name", imoShip "Ship IMO Number",
-       CASE
-           WHEN (d.departurePort IN ('GBBEL', 'GBCLR', 'GBKLR', 'GBLAR', 'GBLDY', 'GBWPT')
-               AND apt.port_type = 'GB') THEN 'Northern Ireland'
-           WHEN (dpt.port_type = 'GB'
-               AND d.arrivalPort IN ('GBBEL', 'GBCLR', 'GBKLR', 'GBLAR', 'GBLDY', 'GBWPT')) THEN 'Northern Ireland'
-           WHEN (d.departurePort IN ('GBBEL', 'GBCLR', 'GBKLR', 'GBLAR', 'GBLDY', 'GBWPT')
-               AND d.arrivalPort IN ('GBBEL', 'GBCLR', 'GBKLR', 'GBLAR', 'GBLDY', 'GBWPT')) THEN 'Domestic'
-           WHEN dpt.port_type = 'INTERNATIONAL' AND apt.port_type = 'GB' THEN 'International'
-           WHEN dpt.port_type = 'GB' AND apt.port_type = 'INTERNATIONAL' THEN 'International'
-           WHEN dpt.port_type = 'EU' AND apt.port_type = 'GB' THEN 'EU'
-           WHEN dpt.port_type = 'GB' AND apt.port_type = 'EU' THEN 'EU'
-           WHEN dpt.port_type = 'GB' AND apt.port_type = 'GB' THEN 'Domestic'
-           WHEN dpt.port_type = 'EU' AND apt.port_type = 'EU' THEN 'EU'
-           WHEN dpt.port_type = 'INTERNATIONAL' AND apt.port_type = 'EU' THEN 'International'
-           WHEN dpt.port_type = 'EU' AND apt.port_type = 'INTERNATIONAL' THEN 'International'
-           WHEN dpt.port_type = 'INTERNATIONAL' AND apt.port_type = 'INTERNATIONAL' THEN 'International'
-           ELSE 'Unknown' END AS "Journey Type",
-       departureCountry "Country code of departure", departurePort "Port code of departure",
-       departure_date "Date of departure", departure_time "Actual time of departure (ATD)", arrivalCountry "Country code of arrival", arrivalPort "Port code of arrival", arrival_date "Date of arrival", arrival_time "Actual time of arrival (ATA)",
-       totalEmissions "Total emissions from voyage", surrenderEmissions "Emissions figure for surrender from voyage"
+s.ship_name "Ship name", imoShip "Ship IMO Number",
+CASE
+WHEN dpt.port_type = 'INTERNATIONAL' AND apt.port_type = 'GB' THEN 'International'
+WHEN dpt.port_type = 'GB' AND apt.port_type = 'INTERNATIONAL' THEN 'International'
+WHEN dpt.port_type = 'EU' AND apt.port_type = 'GB' THEN 'EU'
+WHEN dpt.port_type = 'GB' AND apt.port_type = 'EU' THEN 'EU'
+WHEN dpt.port_type = 'GB' AND apt.port_type = 'GB' THEN 'Domestic'
+WHEN dpt.port_type = 'EU' AND apt.port_type = 'EU' THEN 'International'
+WHEN dpt.port_type = 'INTERNATIONAL' AND apt.port_type = 'EU' THEN 'International'
+WHEN dpt.port_type = 'EU' AND apt.port_type = 'INTERNATIONAL' THEN 'International'
+WHEN dpt.port_type = 'INTERNATIONAL' AND apt.port_type = 'INTERNATIONAL' THEN 'International'
+ELSE 'Unknown' END AS "Journey Type",
+departureCountry "Country code of departure", departurePort "Port code of departure",
+departure_date "Date of departure", departure_time "Actual time of departure (ATD)", arrivalCountry "Country code of arrival", arrivalPort "Port code of arrival", arrival_date "Date of arrival", arrival_time "Actual time of arrival (ATA)",
+ccs "Carbon capture and storage (CCS)", ccu "Carbon capture and utilisation (CCU)", ferryDeduction "Claiming a small island ferry operator surrender reduction?",
+totalEmissions "Total emissions from voyage", surrenderEmissions "Emissions figure for surrender from voyage"
 FROM sectionOperatorDetails o
-         JOIN voyages d
-              ON o.account_id = d.account_id AND o."Reporting year" = d.reporting_year
-         LEFT JOIN port_countries dpt
-                   ON d.departureCountry = dpt.country_code
-         LEFT JOIN port_countries apt
-                   ON d.arrivalCountry = apt.country_code
-         JOIN ships s ON   s.account_id = d.account_id AND s.reporting_year = d.reporting_year AND s.imo_number = d.imoShip
+JOIN voyages d
+ON o.account_id = d.account_id AND o."Reporting year" = d.reporting_year
+LEFT JOIN port_countries dpt
+    ON d.departureCountry = dpt.country_code
+LEFT JOIN port_countries apt
+    ON d.arrivalCountry = apt.country_code
+JOIN ships s ON   s.account_id = d.account_id AND s.reporting_year = d.reporting_year AND s.imo_number = d.imoShip
 -- Uncomment the line below for filtering by reporting year and IMO number
 -- WHERE o."Reporting year" = 2024 AND o."IMO" = '0000001'
 ;

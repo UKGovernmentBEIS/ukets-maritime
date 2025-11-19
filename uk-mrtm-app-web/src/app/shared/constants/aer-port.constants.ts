@@ -218,7 +218,7 @@ export const AER_PORT_COUNTRIES: Record<
 
 export const AER_PORT_COUNTRY_PORTS: Record<
   AerPortVisit['port'] | string,
-  { name: string; hasCountry: boolean; countryCode?: AerPortVisit['country'] | string; isNorthernIrelandPort?: boolean }
+  { name: string; hasCountry: boolean; countryCode?: AerPortVisit['country'] | string }
 > = {
   BE888: { name: 'Andere', hasCountry: true, countryCode: 'BE' },
   BEAAB: { name: 'Aalst', hasCountry: true, countryCode: 'BE' },
@@ -1472,7 +1472,7 @@ export const AER_PORT_COUNTRY_PORTS: Record<
   GBBAN: { name: 'Bangor', hasCountry: true, countryCode: 'GB' },
   GBBAW: { name: 'Baltic Wharf', hasCountry: true, countryCode: 'GB' },
   GBBDI: { name: 'Brodick', hasCountry: true, countryCode: 'GB' },
-  GBBEL: { name: 'Belfast', hasCountry: true, countryCode: 'GB', isNorthernIrelandPort: true },
+  GBBEL: { name: 'Belfast', hasCountry: true, countryCode: 'GB' },
   GBBFB: { name: 'Braefoot', hasCountry: true, countryCode: 'GB' },
   GBBHK: { name: 'Bromborough dock', hasCountry: true, countryCode: 'GB' },
   GBBHR: { name: 'Barrow Haven', hasCountry: true, countryCode: 'GB' },
@@ -1500,7 +1500,7 @@ export const AER_PORT_COUNTRY_PORTS: Record<
   GBCEI: { name: 'Newquay (Dyfed)', hasCountry: true, countryCode: 'GB' },
   GBCHE: { name: 'Mostyn', hasCountry: true, countryCode: 'GB' },
   GBCLJ: { name: 'Claonaig', hasCountry: true, countryCode: 'GB' },
-  GBCLR: { name: 'Coleraine', hasCountry: true, countryCode: 'GB', isNorthernIrelandPort: true },
+  GBCLR: { name: 'Coleraine', hasCountry: true, countryCode: 'GB' },
   GBCLY: { name: 'Clydebank', hasCountry: true, countryCode: 'GB' },
   GBCMP: { name: 'Crombie Pier', hasCountry: true, countryCode: 'GB' },
   GBCNA: { name: 'Canna', hasCountry: true, countryCode: 'GB' },
@@ -1592,14 +1592,14 @@ export const AER_PORT_COUNTRY_PORTS: Record<
   GBKIS: { name: 'Kishorn', hasCountry: true, countryCode: 'GB' },
   GBKKD: { name: 'Kirkcaldy', hasCountry: true, countryCode: 'GB' },
   GBKLN: { name: "King's Lynn", hasCountry: true, countryCode: 'GB' },
-  GBKLR: { name: 'Kilroot', hasCountry: true, countryCode: 'GB', isNorthernIrelandPort: true },
+  GBKLR: { name: 'Kilroot', hasCountry: true, countryCode: 'GB' },
   GBKOH: { name: 'Kinloch', hasCountry: true, countryCode: 'GB' },
   GBKWL: { name: 'Kirkwall', hasCountry: true, countryCode: 'GB' },
   GBKYL: { name: 'Kyle of Lochalsh', hasCountry: true, countryCode: 'GB' },
-  GBLAR: { name: 'Larne', hasCountry: true, countryCode: 'GB', isNorthernIrelandPort: true },
+  GBLAR: { name: 'Larne', hasCountry: true, countryCode: 'GB' },
   GBLAX: { name: 'Laxo', hasCountry: true, countryCode: 'GB' },
   GBLBD: { name: 'Lochboisdale', hasCountry: true, countryCode: 'GB' },
-  GBLDY: { name: 'Londonderry', hasCountry: true, countryCode: 'GB', isNorthernIrelandPort: true },
+  GBLDY: { name: 'Londonderry', hasCountry: true, countryCode: 'GB' },
   GBLEI: { name: 'Leith', hasCountry: true, countryCode: 'GB' },
   GBLER: { name: 'Lerwick', hasCountry: true, countryCode: 'GB' },
   GBLGP: { name: 'London Gateway Port', hasCountry: true, countryCode: 'GB' },
@@ -1742,7 +1742,7 @@ export const AER_PORT_COUNTRY_PORTS: Record<
   GBWMB: { name: 'Wemyss Bay', hasCountry: true, countryCode: 'GB' },
   GBWNS: { name: 'Wells Next the Sea', hasCountry: true, countryCode: 'GB' },
   GBWOR: { name: 'Workington', hasCountry: true, countryCode: 'GB' },
-  GBWPT: { name: 'Warrenpoint', hasCountry: true, countryCode: 'GB', isNorthernIrelandPort: true },
+  GBWPT: { name: 'Warrenpoint', hasCountry: true, countryCode: 'GB' },
   GBWTB: { name: 'Whitby', hasCountry: true, countryCode: 'GB' },
   GBWTS: { name: 'Whitstable', hasCountry: true, countryCode: 'GB' },
   GBXSS: { name: 'Seal Sands', hasCountry: true, countryCode: 'GB' },

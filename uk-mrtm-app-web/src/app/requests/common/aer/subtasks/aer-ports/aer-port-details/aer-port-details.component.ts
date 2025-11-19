@@ -18,7 +18,13 @@ import { AerShipEmissions } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { LinkDirective, SelectComponent } from '@netz/govuk-components';
+import {
+  LinkDirective,
+  RadioComponent,
+  RadioOptionComponent,
+  SelectComponent,
+  TextInputComponent,
+} from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
@@ -39,6 +45,9 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     WizardStepComponent,
     SelectComponent,
     ReactiveFormsModule,
+    TextInputComponent,
+    RadioComponent,
+    RadioOptionComponent,
     LinkDirective,
     RouterLink,
     TimeInputComponent,

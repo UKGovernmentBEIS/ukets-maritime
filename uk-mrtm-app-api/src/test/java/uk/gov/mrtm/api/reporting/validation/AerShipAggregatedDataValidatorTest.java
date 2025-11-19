@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.FossilFuelType;
@@ -14,8 +15,9 @@ import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.reporting.domain.AerContainer;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedData;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedDataFuelConsumption;
+import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedEmissionsMeasurement;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerShipAggregatedData;
-import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
+import uk.gov.mrtm.api.reporting.domain.emissions.AerDerogations;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
@@ -37,6 +39,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.AGGREGATED_DATA_FETCHED_SHIP_NOT_FOUND_IN_PORTS_OR_VOYAGES;
+import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.AGGREGATED_DATA_INVALID_SMALL_ISLAND_FERRY_EMISSIONS;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.DUPLICATE_FUEL_ENTRIES;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.INVALID_FUEL_CONSUMPTION;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.NEGATIVE_EMISSIONS_INPUT;
@@ -54,9 +57,9 @@ class AerShipAggregatedDataValidatorTest {
     @MethodSource("validScenarios")
     void validate_is_valid(boolean isFromFetch, boolean hasPorts, boolean hasVoyages) {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
-        AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerAggregatedEmissionsMeasurement emissionsMeasurement = getAerAggregatedEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), hasPorts, hasVoyages, isFromFetch, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), false, false, hasPorts, hasVoyages, isFromFetch, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -79,9 +82,9 @@ class AerShipAggregatedDataValidatorTest {
     @Test
     void validate_ship_not_found_in_list_of_ships() {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
-        AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerAggregatedEmissionsMeasurement emissionsMeasurement = getAerAggregatedEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer("7654321",
-            fuelsAndEmissionsFactors, new HashSet<>(), true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), false, false, true, true, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -92,44 +95,55 @@ class AerShipAggregatedDataValidatorTest {
 
     @ParameterizedTest
     @MethodSource("negativeEmissionsMeasurementScenarios")
-    void validate_negative_emissions_input(AerPortEmissionsMeasurement emissionsMeasurement) {
+    void validate_negative_emissions_input(AerAggregatedEmissionsMeasurement emissionsMeasurement) {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), true, true, true, true, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
         assertFalse(result.isValid());
-        assertThat(result.getAerViolations()).hasSize(3);
+        assertThat(result.getAerViolations()).hasSize(4);
         assertThat(result.getAerViolations()).allMatch(aerViolation ->
             aerViolation.getMessage().equals(NEGATIVE_EMISSIONS_INPUT.getMessage()));
     }
 
-    public static Stream<AerPortEmissionsMeasurement> negativeEmissionsMeasurementScenarios() {
+    public static Stream<AerAggregatedEmissionsMeasurement> negativeEmissionsMeasurementScenarios() {
         return Stream.of(
-            AerPortEmissionsMeasurement.builder()
+            AerAggregatedEmissionsMeasurement.builder()
                 .co2(new BigDecimal("-1"))
                 .ch4(new BigDecimal("2"))
                 .n2o(new BigDecimal("3"))
-                .total(new BigDecimal("4"))
+                .co2Captured(new BigDecimal("4"))
+                .total(new BigDecimal("8"))
                 .build(),
-            AerPortEmissionsMeasurement.builder()
+            AerAggregatedEmissionsMeasurement.builder()
                 .co2(new BigDecimal("1"))
                 .ch4(new BigDecimal("-2"))
                 .n2o(new BigDecimal("3"))
-                .total(new BigDecimal("2"))
+                .co2Captured(new BigDecimal("4"))
+                .total(new BigDecimal("6"))
                 .build(),
-            AerPortEmissionsMeasurement.builder()
-                .co2(new BigDecimal("4"))
+            AerAggregatedEmissionsMeasurement.builder()
+                .co2(new BigDecimal("1"))
                 .ch4(new BigDecimal("2"))
                 .n2o(new BigDecimal("-3"))
-                .total(new BigDecimal("3"))
+                .co2Captured(new BigDecimal("4"))
+                .total(new BigDecimal("4"))
                 .build(),
-            AerPortEmissionsMeasurement.builder()
+            AerAggregatedEmissionsMeasurement.builder()
+                .co2(new BigDecimal("1"))
+                .ch4(new BigDecimal("2"))
+                .n2o(new BigDecimal("3"))
+                .co2Captured(new BigDecimal("-4"))
+                .total(new BigDecimal("2"))
+                .build(),
+            AerAggregatedEmissionsMeasurement.builder()
                 .co2(new BigDecimal("-1"))
                 .ch4(new BigDecimal("-2"))
                 .n2o(new BigDecimal("-3"))
-                .total(new BigDecimal("-6"))
+                .co2Captured(new BigDecimal("-4"))
+                .total(new BigDecimal("-10"))
                 .build()
         );
     }
@@ -137,9 +151,9 @@ class AerShipAggregatedDataValidatorTest {
     @Test
     void validate_aggregated_data_fetched_ship_not_found_in_ports_or_voyages() {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
-        AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerAggregatedEmissionsMeasurement emissionsMeasurement = getAerAggregatedEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), false, false, true, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), false, false, false, false, true, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -149,12 +163,27 @@ class AerShipAggregatedDataValidatorTest {
     }
 
     @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void validate_aggregated_data_invalid_small_island_ferry_emissions(boolean hasSmallIslandSurrenderReduction) {
+        Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
+        AerAggregatedEmissionsMeasurement emissionsMeasurement = getAerAggregatedEmissionsMeasurement();
+        AerContainer aerContainer = getAerContainer(IMO_NUMBER, fuelsAndEmissionsFactors,
+            new HashSet<>(), !hasSmallIslandSurrenderReduction, hasSmallIslandSurrenderReduction, true, true, false, emissionsMeasurement);
+
+        AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
+
+        assertFalse(result.isValid());
+        assertThat(result.getAerViolations()).allMatch(aerViolation ->
+            aerViolation.getMessage().equals(AGGREGATED_DATA_INVALID_SMALL_ISLAND_FERRY_EMISSIONS.getMessage()));
+    }
+
+    @ParameterizedTest
     @MethodSource("invalidFuelConsumptionScenarios")
     void validate_invalid_fuel_consumption(Set<AerAggregatedDataFuelConsumption> fuelConsumptions,
                                            Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors) {
-        AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerAggregatedEmissionsMeasurement emissionsMeasurement = getAerAggregatedEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, fuelConsumptions, true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, fuelConsumptions, true, true, true, true, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -229,9 +258,9 @@ class AerShipAggregatedDataValidatorTest {
             aerAggregatedDataFuelConsumption1, aerAggregatedDataFuelConsumption2
         );
 
-        AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerAggregatedEmissionsMeasurement emissionsMeasurement = getAerAggregatedEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, fuelConsumptions, true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, fuelConsumptions, true, true, true, true, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -243,10 +272,12 @@ class AerShipAggregatedDataValidatorTest {
     private AerContainer getAerContainer(String emissionsImoNumber,
                                          Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors,
                                          Set<AerAggregatedDataFuelConsumption> fuelConsumptions,
+                                         Boolean smallIslandFerryOperatorReduction,
+                                         boolean hasSmallIslandSurrenderReduction,
                                          boolean hasPorts,
                                          boolean hasVoyages,
                                          boolean isFromFetch,
-                                         AerPortEmissionsMeasurement emissionsMeasurement) {
+                                         AerAggregatedEmissionsMeasurement emissionsMeasurement) {
         return AerContainer
             .builder()
             .aer(
@@ -259,9 +290,12 @@ class AerShipAggregatedDataValidatorTest {
                                         .imoNumber(IMO_NUMBER)
                                         .isFromFetch(isFromFetch)
                                         .fuelConsumptions(fuelConsumptions)
-                                        .emissionsBetweenUKAndNIVoyages(emissionsMeasurement)
+                                        .emissionsBetweenUKAndEEAVoyages(emissionsMeasurement)
                                         .emissionsBetweenUKPorts(emissionsMeasurement)
                                         .emissionsWithinUKPorts(emissionsMeasurement)
+                                        .smallIslandSurrenderReduction(hasSmallIslandSurrenderReduction
+                                            ? emissionsMeasurement
+                                            : null)
                                         .build()
                                 )
                             )
@@ -287,6 +321,10 @@ class AerShipAggregatedDataValidatorTest {
                                             AerShipDetails.builder()
                                                 .imoNumber(emissionsImoNumber)
                                                 .build()
+                                        )
+                                        .derogations(AerDerogations.builder()
+                                            .smallIslandFerryOperatorReduction(smallIslandFerryOperatorReduction)
+                                            .build()
                                         )
                                         .fuelsAndEmissionsFactors(fuelsAndEmissionsFactors)
                                         .build()
@@ -315,12 +353,13 @@ class AerShipAggregatedDataValidatorTest {
     }
 
 
-    private AerPortEmissionsMeasurement getAerPortEmissionsMeasurement() {
-        return AerPortEmissionsMeasurement.builder()
+    private AerAggregatedEmissionsMeasurement getAerAggregatedEmissionsMeasurement() {
+        return AerAggregatedEmissionsMeasurement.builder()
             .co2(new BigDecimal("1"))
             .ch4(new BigDecimal("2"))
             .n2o(new BigDecimal("3"))
-            .total(new BigDecimal("6"))
+            .co2Captured(new BigDecimal("4"))
+            .total(new BigDecimal("10"))
             .build();
     }
 }

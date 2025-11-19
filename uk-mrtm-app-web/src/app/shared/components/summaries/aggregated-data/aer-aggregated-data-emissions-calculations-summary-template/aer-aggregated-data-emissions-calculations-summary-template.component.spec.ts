@@ -6,6 +6,10 @@ import { AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent } from '
 
 describe('AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent', () => {
   class Page extends BasePage<AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent> {
+    get heading4(): HTMLHeadingElement {
+      return this.query<HTMLHeadingElement>('h4');
+    }
+
     get tableColumnContents(): string[] {
       return this.queryAll<HTMLDListElement>('thead th').map((th) => th.textContent.trim());
     }
@@ -20,6 +24,7 @@ describe('AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent', () =>
     }).compileComponents();
 
     fixture = TestBed.createComponent(AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent);
+    fixture.componentRef.setInput('header', 'Test header');
     component = fixture.componentInstance;
     page = new Page(fixture);
     fixture.detectChanges();
@@ -30,6 +35,7 @@ describe('AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent', () =>
   });
 
   it('should display all HTMLElements', () => {
+    expect(page.heading4.textContent).toEqual('Test header');
     expect(page.tableColumnContents).toEqual([
       '',
       'CO2 emissions (t)',

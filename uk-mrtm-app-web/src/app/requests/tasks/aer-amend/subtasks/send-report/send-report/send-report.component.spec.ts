@@ -11,9 +11,9 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import { AerCommonService } from '@requests/common/aer/services';
 import { taskProviders } from '@requests/common/task.providers';
-import { SendReportComponent } from '@requests/tasks/aer-amend/subtasks/send-report/send-report/send-report.component';
+import { AerSubmitService } from '@requests/tasks/aer-submit/services';
+import { SendReportComponent } from '@requests/tasks/aer-submit/subtasks/send-report/send-report/send-report.component';
 import { screen } from '@testing-library/angular';
 
 describe('SendReportComponent', () => {
@@ -25,7 +25,7 @@ describe('SendReportComponent', () => {
   let router: Router;
 
   const activatedRouteStub = new ActivatedRouteStub();
-  const taskServiceMock: MockType<AerCommonService> = {
+  const taskServiceMock: MockType<AerSubmitService> = {
     submit: jest.fn().mockReturnValue(of({})),
     submitForVerification: jest.fn().mockReturnValue(of({})),
   };
@@ -152,7 +152,7 @@ describe('SendReportComponent', () => {
 
     it('should display correct header and content', async () => {
       await createComponent(payload);
-      expect(screen.getByRole('heading', { name: 'Send report for verification' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Send report to verifier' })).toBeInTheDocument();
       expect(screen.getByRole('heading', { name: 'Current verifier' })).toBeInTheDocument();
       expect(screen.getAllByRole('paragraph').map((paragraph) => paragraph.textContent.trim())).toEqual([
         'test verification body 123',

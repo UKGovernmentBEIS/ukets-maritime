@@ -2,9 +2,6 @@ package uk.gov.mrtm.api.workflow.request.flow.empnotification.handler;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPayloadType;
@@ -28,7 +25,6 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,9 +34,8 @@ class EmpNotificationFollowUpWaitForAmendsInitializerTest {
     @InjectMocks
     private EmpNotificationFollowUpWaitForAmendsInitializer initializer;
 
-    @ParameterizedTest
-    @MethodSource("initializePayloadScenarios")
-    void initializePayload(LocalDate amendsFollowUpDate, LocalDate followUpDate, LocalDate expectedFollowUpResponseExpirationDate) {
+    @Test
+    void initializePayload() {
 
         final UUID amendFile = UUID.randomUUID();
         final UUID responseFile = UUID.randomUUID();
@@ -50,7 +45,7 @@ class EmpNotificationFollowUpWaitForAmendsInitializerTest {
             .details(
                 EmpNotificationFollowupRequiredChangesDecisionDetails.builder()
                     .notes("the notes")
-                    .dueDate(amendsFollowUpDate)
+                    .dueDate(LocalDate.of(2023, 1, 1))
                     .requiredChanges(Collections.singletonList(
                         new ReviewDecisionRequiredChange("the changes required", Set.of(amendFile))))
                     .build()
@@ -68,7 +63,7 @@ class EmpNotificationFollowUpWaitForAmendsInitializerTest {
                                 .officialNotice("officialNotice")
                                 .followUp(FollowUp.builder()
                                     .followUpRequest("follow up request")
-                                    .followUpResponseExpirationDate(followUpDate)
+                                    .followUpResponseExpirationDate(LocalDate.of(2023, 1, 1))
                                     .build())
                                 .build()
                         )
@@ -88,21 +83,12 @@ class EmpNotificationFollowUpWaitForAmendsInitializerTest {
                 .followUpResponse("follow up response")
                 .followUpFiles(Set.of(responseFile))
                 .reviewDecision(reviewDecision)
-                .followUpResponseExpirationDate(expectedFollowUpResponseExpirationDate)
                 .followUpResponseAttachments(Map.of(amendFile, "amendFile", responseFile, "responseFile"))
                 .build();
 
         final RequestTaskPayload actual = initializer.initializePayload(request);
 
         assertThat(actual).isEqualTo(expected);
-    }
-
-    private static Stream<Arguments> initializePayloadScenarios() {
-        LocalDate now =  LocalDate.now();
-        return Stream.of(
-            Arguments.of(now, now.minusMonths(1), now),
-            Arguments.of(null, now.minusMonths(1), now.minusMonths(1))
-        );
     }
 
     @Test

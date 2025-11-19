@@ -15,7 +15,6 @@ import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtas
 import {
   addMandateFormGroup,
   mandateUploadFormProvider,
-  uploadMandateCSVFormValidators,
 } from '@requests/common/emp/subtasks/mandate/mandate-upload/mandate-upload.form-provider';
 import {
   FlattenedRegisteredOwner,
@@ -89,7 +88,6 @@ export class MandateUploadComponent {
 
     this.columnsCtrl.setValue(result.meta.fields);
     this.ownersCtrl.clear();
-    this.ownersCtrl.clearValidators();
 
     if (this.columnsCtrl.invalid) {
       this.displayColumnErrors();
@@ -97,8 +95,6 @@ export class MandateUploadComponent {
       processedData?.forEach((flattenedRegisteredOwner) =>
         this.ownersCtrl.push(addMandateFormGroup(flattenedRegisteredOwner)),
       );
-      this.ownersCtrl.addValidators(uploadMandateCSVFormValidators(this.store));
-      this.ownersCtrl.updateValueAndValidity();
 
       if (this.ownersCtrl.valid) {
         this.owners.update(() => this.getTransformedFormData(processedData));

@@ -9,7 +9,6 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { virSubtaskList } from '@requests/common/vir';
 import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
@@ -27,5 +26,4 @@ import { BooleanToTextPipe } from '@shared/pipes';
 })
 export class VirVerifierRecommendationSummaryTemplateComponent {
   public readonly data = input<VerifierComment | UncorrectedItem>();
-  protected readonly virSubtaskList = virSubtaskList;
 }

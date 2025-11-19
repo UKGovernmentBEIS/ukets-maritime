@@ -16,4 +16,10 @@ public class AerDerogations {
     @Valid
     @NotNull
     private Boolean exceptionFromPerVoyageMonitoring;
+
+    @NotNull
+    private Boolean carbonCaptureAndStorageReduction;
+
+    @NotNull
+    private Boolean smallIslandFerryOperatorReduction;
 }

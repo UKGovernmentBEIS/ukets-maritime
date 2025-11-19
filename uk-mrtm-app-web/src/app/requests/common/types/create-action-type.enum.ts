@@ -1,4 +1,4 @@
 export enum CREATE_ACTION_TYPE {
-  DOE = 'DOE',
-  AER = 'AER',
+  DOE = <any>'doe',
+  AER_REINITIATE = <any>'re-initiate',
 }

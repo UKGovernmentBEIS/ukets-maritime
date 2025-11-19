@@ -1,8 +1,7 @@
-import { isAfter } from 'date-fns';
-
 import { AerShipDetails } from '@mrtm/api';
 
 import { EmissionReportDetailsDTO } from '@requests/common/aer/subtasks/aer-emissions/interfaces';
+import { shouldShowHasIceClassDerogation } from '@requests/common/components/emissions';
 import { FlagEnum, IceClassPolarCodeEnum, NatureEnum, ShipTypeEnum } from '@requests/common/types';
 import { XmlResult, XmlValidationError } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
@@ -44,21 +43,10 @@ export class AerEmissionReportDetailsDtoValidator {
     return XmlValidator.isEnum(value, NatureEnum);
   }
 
-  private static isPartialPeriodDateValid(
-    reportingYear: string,
-    value?: EmissionReportDetailsDTO['partialPeriodFromDate'] | EmissionReportDetailsDTO['partialPeriodToDate'],
-  ) {
-    const year = value?.split('-')?.[0];
-    return XmlValidator.isDate(value) && year === reportingYear;
-  }
-
-  private static fromDateLaterThanToDateValid(
-    partialPeriodFromDate?: EmissionReportDetailsDTO['partialPeriodFromDate'],
-    partialPeriodToDate?: EmissionReportDetailsDTO['partialPeriodToDate'],
-  ) {
-    const fromDate = new Date(partialPeriodFromDate);
-    const toDate = new Date(partialPeriodToDate);
-    return !isAfter(fromDate, toDate);
+  private static isIceClassSurrenderReductionValid(emissionReportDetailsDTO?: EmissionReportDetailsDTO) {
+    return shouldShowHasIceClassDerogation(emissionReportDetailsDTO?.iceClassPolarCode)
+      ? XmlValidator.isBoolean(emissionReportDetailsDTO?.iceClassSurrenderReduction)
+      : XmlValidator.isEmpty(emissionReportDetailsDTO?.iceClassSurrenderReduction);
   }
 
   private static isAllYearValid(reportingYear: string, emissionReportDetailsDTO?: EmissionReportDetailsDTO) {
@@ -69,13 +57,17 @@ export class AerEmissionReportDetailsDtoValidator {
     const allYearValidOnFalse =
       emissionReportDetailsDTO?.allYear === false &&
       this.isPartialPeriodDateValid(reportingYear, emissionReportDetailsDTO?.partialPeriodFromDate) &&
-      this.isPartialPeriodDateValid(reportingYear, emissionReportDetailsDTO?.partialPeriodToDate) &&
-      this.fromDateLaterThanToDateValid(
-        emissionReportDetailsDTO?.partialPeriodFromDate,
-        emissionReportDetailsDTO?.partialPeriodToDate,
-      );
+      this.isPartialPeriodDateValid(reportingYear, emissionReportDetailsDTO?.partialPeriodToDate);
 
     return XmlValidator.isBoolean(emissionReportDetailsDTO?.allYear) && (allYearValidOnTrue || allYearValidOnFalse);
+  }
+
+  private static isPartialPeriodDateValid(
+    reportingYear: string,
+    value?: EmissionReportDetailsDTO['partialPeriodFromDate'] | EmissionReportDetailsDTO['partialPeriodToDate'],
+  ) {
+    const year = value?.split('-')?.[0];
+    return XmlValidator.isDate(value) && year === reportingYear;
   }
 
   /**
@@ -144,6 +136,7 @@ export class AerEmissionReportDetailsDtoValidator {
       this.isFlagValid(emissionReportDetails?.flag) &&
       this.isIceClassPolarCodeValid(emissionReportDetails?.iceClassPolarCode) &&
       this.isNatureValid(emissionReportDetails?.company?.nature) &&
+      this.isIceClassSurrenderReductionValid(emissionReportDetails) &&
       this.isAllYearValid(reportingYear, emissionReportDetails)
     ) {
       return {
@@ -155,6 +148,9 @@ export class AerEmissionReportDetailsDtoValidator {
           flagState: emissionReportDetails.flag,
           iceClass: emissionReportDetails.iceClassPolarCode,
           natureOfReportingResponsibility: emissionReportDetails.company.nature,
+          hasIceClassDerogation: shouldShowHasIceClassDerogation(emissionReportDetails.iceClassPolarCode)
+            ? emissionReportDetails.iceClassSurrenderReduction
+            : null,
           allYear: emissionReportDetails.allYear,
           from: !emissionReportDetails.allYear ? emissionReportDetails.partialPeriodFromDate : null,
           to: !emissionReportDetails.allYear ? emissionReportDetails.partialPeriodToDate : null,

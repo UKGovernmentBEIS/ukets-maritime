@@ -3,6 +3,7 @@ package uk.gov.mrtm.api.reporting.domain.totalemissions;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -24,11 +25,23 @@ public class AerTotalEmissions {
 
     @NotNull
     @Valid
-    private AerPortEmissionsMeasurement lessVoyagesInNorthernIrelandDeduction;
+    private AerPortEmissionsMeasurement lessCapturedCo2;
 
     @NotNull
     @Valid
-    private AerPortEmissionsMeasurement lessEmissionsReductionClaim;
+    private AerPortEmissionsMeasurement lessVoyagesNotInScope;
+
+    @NotNull
+    @Valid
+    private AerPortEmissionsMeasurement lessAnyERC;
+
+    @NotNull
+    @Valid
+    private AerPortEmissionsMeasurement lessIslandFerryDeduction;
+
+    @NotNull
+    @Valid
+    private AerPortEmissionsMeasurement less5PercentIceClassDeduction;
 
     @NotNull
     @Valid

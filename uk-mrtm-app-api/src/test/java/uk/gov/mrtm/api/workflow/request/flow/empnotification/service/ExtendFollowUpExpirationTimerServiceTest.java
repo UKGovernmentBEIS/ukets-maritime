@@ -163,7 +163,7 @@ class ExtendFollowUpExpirationTimerServiceTest {
         assertThat(
             ((EmpNotificationFollowupRequiredChangesDecisionDetails) ((EmpNotificationFollowUpWaitForAmendsRequestTaskPayload) waitTask.getPayload()).getReviewDecision()
                 .getDetails()).getDueDate()).isEqualTo(dueDate);
-        assertThat(((EmpNotificationFollowUpWaitForAmendsRequestTaskPayload) waitTask.getPayload()).getFollowUpResponseExpirationDate()).isEqualTo(dueDate);
+
         verify(requestService, times(1)).addActionToRequest(
             request,
             null,

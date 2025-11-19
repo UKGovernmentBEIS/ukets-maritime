@@ -15,7 +15,6 @@ import {
   FuelTypeCodeEnum,
   MonitoringMethodCodeEnum,
 } from '@requests/common/types';
-import { getFuelKey } from '@requests/common/utils/emissions';
 import { EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS } from '@shared/constants';
 import { AllFuelOriginTypeName, AllFuels, XmlResult } from '@shared/types';
 import { isLNG } from '@shared/utils';
@@ -40,6 +39,10 @@ export class AerEmissionSourceEditDtoValidator {
 
   private static isSlipPercentageValid(fuel: AllFuels, value?: number): boolean {
     return isLNG(fuel) ? XmlValidator.min(value, 0) && XmlValidator.max(value, 1) : XmlValidator.isEmpty(value);
+  }
+
+  private static getFuelKey(fuel: FuelTypeCodeDTO | FuelTypeEmissionFactorEditDTO): string {
+    return fuel?.otherFuelType ? `${fuel?.fuelTypeCode}-${fuel?.otherFuelType.toUpperCase()}` : fuel?.fuelTypeCode;
   }
 
   private static getExistingEmissionFactor(
@@ -70,7 +73,7 @@ export class AerEmissionSourceEditDtoValidator {
     fuelTypeCodes?: FuelTypeCodeDTO[],
     fuelsEmissionsFactors?: AerFuelsAndEmissionsFactorsExtended[],
   ) {
-    const uniqueIds = fuelTypeCodes?.map((fuelTypeCode) => getFuelKey(fuelTypeCode));
+    const uniqueIds = fuelTypeCodes?.map((fuelTypeCode) => this.getFuelKey(fuelTypeCode));
     const noDuplicatesValid = new Set(uniqueIds).size === uniqueIds?.length;
     const fuelTypeCodesLengthValid = fuelTypeCodes?.length > 0;
     const allFuelTypeCodesValid = fuelTypeCodes?.every((fuelTypeCode) => {
@@ -100,8 +103,8 @@ export class AerEmissionSourceEditDtoValidator {
     const monitoringMethodCodesLengthValid =
       XmlValidator.minLength(monitoringMethodCodes, 1) && XmlValidator.maxLength(monitoringMethodCodes, 4);
     const allMonitoringMethodCodes = monitoringMethodCodes?.map((monitoringMethodCode) => monitoringMethodCode);
-    const hasNoDuplicateMethodCode = new Set(allMonitoringMethodCodes).size === allMonitoringMethodCodes?.length;
-    const allMonitoringMethodCodesValid = monitoringMethodCodes?.every((monitoringMethodCode) =>
+    const hasNoDuplicateMethodCode = new Set(allMonitoringMethodCodes).size === allMonitoringMethodCodes.length;
+    const allMonitoringMethodCodesValid = monitoringMethodCodes.every((monitoringMethodCode) =>
       this.isMonitoringMethodCodeValid(monitoringMethodCode),
     );
     return monitoringMethodCodesLengthValid && allMonitoringMethodCodesValid && hasNoDuplicateMethodCode;
@@ -116,14 +119,12 @@ export class AerEmissionSourceEditDtoValidator {
     fuelDTOs?: FuelTypeEmissionFactorEditDTO[],
     aerFuelsAndEmissionsFactors?: AerFuelsAndEmissionsFactors[],
   ): boolean {
-    const uniqueIds = emissionDTOs?.map((emissionDTO) =>
-      Array.isArray(emissionDTO?.name) ? emissionDTO?.name[0]?.toUpperCase() : emissionDTO?.name?.toUpperCase(),
-    );
+    const uniqueIds = emissionDTOs?.map((emissionDTO) => emissionDTO?.name?.toUpperCase());
     const noDuplicatesValid = new Set(uniqueIds).size === uniqueIds?.length;
     const emissionsLengthValid = XmlValidator.minLength(emissionDTOs, 1);
-    const allFuelsTypeCodes = fuelDTOs?.map((fuelDTO) => getFuelKey(fuelDTO));
+    const allFuelsTypeCodes = fuelDTOs?.map((fuelDTO) => this.getFuelKey(fuelDTO));
     const allEmissionFuelTypeCodes = emissionDTOs?.flatMap((emissionDTO) =>
-      emissionDTO?.fuelTypeCodes?.map((fuelTypeCode) => getFuelKey(fuelTypeCode)),
+      emissionDTO?.fuelTypeCodes?.map((fuelTypeCode) => this.getFuelKey(fuelTypeCode)),
     );
     const fuelsExistInEmissionsValid = allFuelsTypeCodes?.every((fuelTypeCode) =>
       allEmissionFuelTypeCodes?.includes(fuelTypeCode),

@@ -225,7 +225,8 @@ class AerReportingObligationServiceTest {
             .emissions(AerTotalReportableEmissions.builder()
                     .totalEmissions(BigDecimal.TEN)
                     .surrenderEmissions(BigDecimal.TEN)
-                    .lessVoyagesInNorthernIrelandDeduction(BigDecimal.TEN)
+                    .lessIslandFerryDeduction(BigDecimal.TEN)
+                    .less5PercentIceClassDeduction(BigDecimal.TEN)
                     .build())
             .isExempted(true)
             .build();
@@ -289,7 +290,8 @@ class AerReportingObligationServiceTest {
             .emissions(AerTotalReportableEmissions.builder()
                     .totalEmissions(BigDecimal.TEN)
                     .surrenderEmissions(BigDecimal.TEN)
-                    .lessVoyagesInNorthernIrelandDeduction(BigDecimal.TEN)
+                    .lessIslandFerryDeduction(BigDecimal.TEN)
+                    .less5PercentIceClassDeduction(BigDecimal.TEN)
                     .build())
             .isExempted(true)
             .build();

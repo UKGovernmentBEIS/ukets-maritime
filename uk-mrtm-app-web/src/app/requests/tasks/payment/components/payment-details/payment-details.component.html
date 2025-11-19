@@ -1,5 +1,5 @@
 <p class="govuk-body">{{ requestTaskType() | i18nSelect: hintMap }}</p>
-<mrtm-payment-details-summary-template header="Payment details" [data]="paymentDetails()" />
+<mrtm-payment-details-summary-template [data]="paymentDetails()" />
 
 <div class="govuk-button-group">
   @if (isEditable() && allowedActions(); as allowedActions) {

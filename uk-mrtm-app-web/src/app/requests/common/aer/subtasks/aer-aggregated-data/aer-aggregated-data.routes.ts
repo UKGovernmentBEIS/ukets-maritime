@@ -30,10 +30,9 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
       {
         path: '',
         title: aerAggregatedDataSubtasksListMap.title,
-        data: {
-          breadcrumb: false,
-          backlink: '../',
-          backlinkFragment: AerAggregatedDataWizardStep.LIST_OF_AGGREGATED_DATA,
+        data: { breadcrumb: false },
+        resolve: {
+          backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.LIST_OF_AGGREGATED_DATA),
         },
         loadComponent: () =>
           import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-list').then(
@@ -98,6 +97,19 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
               import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions').then(
                 (c) => c.AerAggregatedDataAnnualEmissionsComponent,
               ),
+          },
+          {
+            path: AerAggregatedDataWizardStep.SMALL_ISLAND_EMISSIONS,
+            data: { breadcrumb: false },
+            title: aerAggregatedDataSubtasksListMap.smallIslandSurrenderReduction.title,
+            resolve: {
+              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.SMALL_ISLAND_EMISSIONS),
+            },
+            canActivate: [canActivateAggregatedDataEdit],
+            loadComponent: () =>
+              import(
+                '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-emissions-for-small-island'
+              ).then((c) => c.AerAggregatedDataEmissionsForSmallIslandComponent),
           },
           {
             path: AerAggregatedDataWizardStep.SHIP_EMISSIONS,

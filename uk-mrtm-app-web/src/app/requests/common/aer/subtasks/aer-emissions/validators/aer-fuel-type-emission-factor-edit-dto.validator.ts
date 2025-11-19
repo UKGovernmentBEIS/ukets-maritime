@@ -9,7 +9,6 @@ import {
 import { AerEmissionFactorDtoValidator } from '@requests/common/aer/subtasks/aer-emissions/validators/aer-emission-factor-dto.validator';
 import { fuelsAndEmissionsFormFlowMap } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.helper';
 import { FuelOriginCodeEnum, FuelTypeCodeEnum } from '@requests/common/types';
-import { getUniqueFuelEmissionFactorId } from '@requests/common/utils/emissions';
 import { AerFuel, XmlResult } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
 
@@ -29,10 +28,20 @@ export class AerFuelTypeEmissionFactorEditDtoValidator {
     return (
       (value?.fuelTypeCode === FuelTypeCodeEnum.OTHER &&
         XmlValidator.isRequired(value?.otherFuelType) &&
-        XmlValidator.maxLength(value?.otherFuelType, 30) &&
-        XmlValidator.isString(value?.otherFuelType)) ||
+        XmlValidator.maxLength(value?.otherFuelType, 30)) ||
       value?.fuelTypeCode !== FuelTypeCodeEnum.OTHER
     );
+  }
+
+  /**
+   * Creates a unique ID that serves as a key to check for duplication of fuels
+   */
+  private static getUniqueFuelEmissionFactorId(fuelTypeEmissionFactorEditDTO: FuelTypeEmissionFactorEditDTO): string {
+    if (fuelTypeEmissionFactorEditDTO.fuelTypeCode === FuelTypeCodeEnum.OTHER) {
+      return `${fuelTypeEmissionFactorEditDTO.fuelOriginCode}-${fuelTypeEmissionFactorEditDTO.fuelTypeCode}-${fuelTypeEmissionFactorEditDTO.otherFuelType?.toUpperCase()}`;
+    }
+
+    return `${fuelTypeEmissionFactorEditDTO.fuelOriginCode}-${fuelTypeEmissionFactorEditDTO.fuelTypeCode}`;
   }
 
   /**
@@ -45,7 +54,7 @@ export class AerFuelTypeEmissionFactorEditDtoValidator {
 
     const fuelsLengthValid = fuelTypeEmissionFactorEditDTOs?.length > 0;
     const allFuelsValid = fuelTypeEmissionFactorEditDTOs?.every((fuelTypeEmissionFactorEditDTO) => {
-      const existingFactorId = getUniqueFuelEmissionFactorId(fuelTypeEmissionFactorEditDTO);
+      const existingFactorId = this.getUniqueFuelEmissionFactorId(fuelTypeEmissionFactorEditDTO);
       const duplicateFuelExists = existingFactors.includes(existingFactorId);
       existingFactors.push(existingFactorId);
 

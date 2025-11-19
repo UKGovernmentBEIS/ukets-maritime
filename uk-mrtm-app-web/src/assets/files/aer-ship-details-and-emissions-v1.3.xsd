@@ -29,6 +29,7 @@
             </xs:element>
             <xs:element name="flag" type="flagEnum" minOccurs="1" maxOccurs="1"/>
             <xs:element name="iceClassPolarCode" type="iceClassPolarCodeEnum" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="iceClassSurrenderReduction" type="xs:boolean" minOccurs="0" maxOccurs="1"/>
             <xs:element name="allYear" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
             <xs:element name="partialPeriodFromDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
             <xs:element name="partialPeriodToDate" type="xs:date" minOccurs="0" maxOccurs="1"/>
@@ -140,6 +141,8 @@
     <xs:complexType name="additionalInformationDTO">
         <xs:sequence>
             <xs:element name="exemptionPerVoyageMonitoring" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="carbonCaptureReduction" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="smallIslandSurrenderReduction" type="xs:boolean" minOccurs="1" maxOccurs="1"/>
         </xs:sequence>
     </xs:complexType>
 

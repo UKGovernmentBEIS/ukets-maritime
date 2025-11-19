@@ -7,7 +7,11 @@ import { AerTotalEmissionsSummaryTemplateComponent } from '@shared/components/su
 describe('AerTotalEmissionsSummaryTemplateComponent', () => {
   class Page extends BasePage<AerTotalEmissionsSummaryTemplateComponent> {
     get totalEmissionsTableElement() {
-      return this.query<HTMLTableElement>('table[aria-label="Emission calculations"]');
+      return this.query<HTMLTableElement>('table[aria-label="Total maritime emissions"]');
+    }
+
+    get emissionsFigureForSurrenderTableElement() {
+      return this.query<HTMLTableElement>('table[aria-label="Emissions figure for surrender"]');
     }
   }
 
@@ -31,17 +35,35 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
         n2o: '300.0000000',
         total: '900.0000000',
       },
-      lessVoyagesInNorthernIrelandDeduction: {
+      lessCapturedCo2: {
+        co2: '0.0000000',
+        ch4: '300.0000000',
+        n2o: '300.0000000',
+        total: '600.0000000',
+      },
+      lessVoyagesNotInScope: {
         co2: '0.0000000',
         ch4: '250.0000000',
         n2o: '250.0000000',
         total: '500.0000000',
       },
-      lessEmissionsReductionClaim: {
+      lessAnyERC: {
         co2: '0.0000000',
         ch4: '250.0000000',
         n2o: '250.0000000',
         total: '500.0000000',
+      },
+      lessIslandFerryDeduction: {
+        co2: '0.0000000',
+        ch4: '150.0000000',
+        n2o: '150.0000000',
+        total: '300.0000000',
+      },
+      less5PercentIceClassDeduction: {
+        co2: '0.0000000',
+        ch4: '150.0000000',
+        n2o: '150.0000000',
+        total: '300.0000000',
       },
       totalShipEmissions: '500.0000000',
       surrenderEmissions: '300.0000000',
@@ -62,17 +84,24 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
       'Emission calculations',
     ]);
 
-    const tableElements = page.queryAll('table');
-    expect(tableElements.length).toEqual(1);
+    expect(page.queryAll('h4').map((heading) => heading.textContent)).toEqual([
+      'Total maritime emissions',
+      'Emissions figure for surrender',
+    ]);
 
-    const totalEmissionsTable = page.query('table[aria-label="Emission calculations"]');
+    const tableElements = page.queryAll('table');
+    expect(tableElements.length).toEqual(2);
+
+    const totalEmissionsTable = page.query('table[aria-label="Total maritime emissions"]');
     expect(totalEmissionsTable).toBeInTheDocument();
 
-    expect(
-      Array.from(totalEmissionsTable.querySelectorAll('thead th').values())
-        .map((el) => el.textContent.trim())
-        .filter(Boolean),
-    ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+    for (const tableElement of page.queryAll('table')) {
+      expect(
+        Array.from(tableElement.querySelectorAll('thead th').values())
+          .map((el) => el.textContent.trim())
+          .filter(Boolean),
+      ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+    }
   });
 
   it('should display total emissions table', () => {
@@ -84,15 +113,30 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
     ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
 
     expect(
-      Array.from(page.totalEmissionsTableElement.querySelectorAll('tbody tr td:first-child')).map((col) =>
-        col.textContent.trim(),
+      Array.from(page.totalEmissionsTableElement.querySelectorAll('tbody tr td:first-child')).map(
+        (col) => col.textContent,
       ),
     ).toEqual([
       'Total emissions from all ships',
+      'Less captured CO2',
+      'Less voyages not in scope',
       'Less emissions reduction claim',
       'Total maritime emissions',
-      'Less Northern Ireland surrender deduction',
-      'Emissions figure for surrender',
     ]);
+  });
+
+  it('should display emissions figure for surrender table', () => {
+    expect(page.emissionsFigureForSurrenderTableElement).toBeInTheDocument();
+    expect(
+      Array.from(page.emissionsFigureForSurrenderTableElement.querySelectorAll('thead th'))
+        .map((col) => col.textContent.trim())
+        .filter(Boolean),
+    ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+
+    expect(
+      Array.from(page.emissionsFigureForSurrenderTableElement.querySelectorAll('tbody tr td:first-child')).map(
+        (col) => col.textContent,
+      ),
+    ).toEqual(['Less small island ferry deduction', 'Less 5% ice class deduction', 'Emissions figure for surrender']);
   });
 });

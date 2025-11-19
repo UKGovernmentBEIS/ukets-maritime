@@ -30,7 +30,7 @@ export function csvFieldTimeValidator<T>(
 
       if (!pattern.test(currentField)) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

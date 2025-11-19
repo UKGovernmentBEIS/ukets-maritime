@@ -28,7 +28,7 @@ export function csvFieldBooleanValidator<T>(
 
       if (currentField !== true && currentField !== false) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

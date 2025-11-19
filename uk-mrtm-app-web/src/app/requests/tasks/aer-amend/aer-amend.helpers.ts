@@ -5,7 +5,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { TaskItemStatus } from '@requests/common';
 import {
   aerAdditionalDocumentsMap,
-  aerEmissionsMap,
   aerPortsMap,
   aerTotalEmissionsMap,
   monitoringPlanChangesMap,
@@ -23,6 +22,7 @@ import { AER_REDUCTION_CLAIM_SUB_TASK, reductionClaimMap } from '@requests/commo
 import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation/reporting-obligation.helpers';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { OPERATOR_DETAILS_SUB_TASK, operatorDetailsMap } from '@requests/common/components/operator-details';
+import { emissionsSubTasksMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import { aerAmendQuery } from '@requests/tasks/aer-amend/+state';
 import { REQUESTED_CHANGES_SUB_TASK } from '@requests/tasks/aer-amend/subtasks/requested-changes';
@@ -32,7 +32,7 @@ export const AER_SUBTASK_TITLES_MAP = {
   [REPORTING_OBLIGATION_SUB_TASK]: reportingObligationMap.title,
   [OPERATOR_DETAILS_SUB_TASK]: operatorDetailsMap.title,
   [MONITORING_PLAN_CHANGES_SUB_TASK]: monitoringPlanChangesMap.title,
-  [EMISSIONS_SUB_TASK]: aerEmissionsMap.title,
+  [EMISSIONS_SUB_TASK]: emissionsSubTasksMap.title,
   [AER_VOYAGES_SUB_TASK]: aerVoyagesMap.caption,
   [AER_PORTS_SUB_TASK]: aerPortsMap.caption,
   [AER_AGGREGATED_DATA_SUB_TASK]: aerAggregatedDataSubtasksListMap.caption,

@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { AerPort } from '@mrtm/api';
+import { AerPort, AerShipEmissions } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
 import {
@@ -18,7 +18,8 @@ import { AerPortsWizardStep } from '@requests/common/aer/subtasks/aer-ports/aer-
 import { FuelConsumptionAndDirectEmissionsSummaryTemplateComponent } from '@shared/components/summaries/ports-and-voyages/fuel-consumption-and-direct-emissions-summary-template';
 import { VoyageOrPortCallEmissionsSummaryTemplateComponent } from '@shared/components/summaries/ports-and-voyages/voyage-or-port-call-emissions-summary-template';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
-import { SelectOptionToTitlePipe } from '@shared/pipes';
+import { NotProvidedDirective } from '@shared/directives';
+import { BooleanToTextPipe, SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-port-call-summary-template',
@@ -33,6 +34,8 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
     SelectOptionToTitlePipe,
     RouterLink,
     GovukDatePipe,
+    BooleanToTextPipe,
+    NotProvidedDirective,
     DatePipe,
     VoyageOrPortCallEmissionsSummaryTemplateComponent,
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
@@ -42,6 +45,7 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
 })
 export class PortCallSummaryTemplateComponent {
   readonly data = input<AerPort>();
+  readonly relatedShip = input<AerShipEmissions>();
   readonly editable = input<boolean>(false);
   readonly editQueryParams = input<Params>({ change: true });
   readonly countries = AER_PORT_COUNTRY_SELECT_ITEMS;

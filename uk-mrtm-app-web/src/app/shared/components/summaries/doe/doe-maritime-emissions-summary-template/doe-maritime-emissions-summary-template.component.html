@@ -64,13 +64,30 @@
       }
     </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().lessVoyagesInNorthernIrelandDeduction.title }}</dt>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().smallIslandFerryDeduction.title }}</dt>
       <dd
         govukSummaryListRowValue
         [notProvided]="
-          maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction
-            ? maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction + ' tCO2e'
-            : maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction
+          maritimeEmissions?.totalMaritimeEmissions?.smallIslandFerryDeduction
+            ? maritimeEmissions?.totalMaritimeEmissions?.smallIslandFerryDeduction + ' tCO2e'
+            : maritimeEmissions?.totalMaritimeEmissions?.smallIslandFerryDeduction
+        "></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
+            Change
+          </a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().iceClassDeduction.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.iceClassDeduction
+            ? maritimeEmissions?.totalMaritimeEmissions?.iceClassDeduction + ' tCO2e'
+            : maritimeEmissions?.totalMaritimeEmissions?.iceClassDeduction
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>

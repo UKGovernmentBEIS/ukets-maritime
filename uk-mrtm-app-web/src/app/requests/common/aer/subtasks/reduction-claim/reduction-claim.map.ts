@@ -11,20 +11,20 @@ export const reductionClaimMap: SubTaskListMap<{
     title: 'Emissions reduction claim',
     caption: 'Reduction claim',
     description:
-      'To make an emissions reduction claim through the annual emissions reporting process, you must calculate the mass of eligible fuel as defined in the regulations.',
+      'To make an emissions reduction claim through the annual emissions reporting process, you must calculate the mass of Sustainable Maritime Fuel (SMF) which meets the sustainability criteria defined in the regulations.',
   },
   smfDetails: {
     caption: 'Reduction claim',
-    title: 'Eligible fuel purchase list',
+    title: 'Sustainable fuel purchase list',
   },
   purchaseAdd: {
     caption: 'Reduction claim',
-    title: 'Add an eligible fuel purchase',
-    description: 'Provide information for each batch of eligible fuel included in your claim.',
+    title: 'Add a sustainable fuel purchase',
+    description: 'Provide information for each batch of sustainable fuel included in your claim.',
   },
   purchaseEdit: {
     caption: 'Reduction claim',
-    title: 'Edit an eligible fuel purchase',
-    description: 'Provide information for each batch of eligible fuel included in your claim.',
+    title: 'Edit a sustainable fuel purchase',
+    description: 'Provide information for each batch of sustainable fuel included in your claim.',
   },
 };

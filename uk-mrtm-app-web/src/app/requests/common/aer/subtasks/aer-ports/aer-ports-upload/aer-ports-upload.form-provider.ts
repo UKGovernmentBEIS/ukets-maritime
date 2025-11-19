@@ -30,6 +30,7 @@ import {
   csvColumnDiffValidator,
   csvFieldArrayIncludesValidator,
   csvFieldDateValidator,
+  csvFieldMaxDecimalsValidator,
   csvFieldPatternValidator,
   csvFieldRequiredValidator,
   csvFieldTimeValidator,
@@ -38,16 +39,18 @@ import {
   emptyFileValidator,
   fileExtensionValidator,
   fileNameLengthValidator,
-  fileRequiredValidator,
   maxFileSizeValidator,
 } from '@shared/validators';
 
 export const aerPortsUploadFormProvider: Provider = {
   provide: TASK_FORM,
-  deps: [FormBuilder],
-  useFactory: (fb: FormBuilder) => {
+  deps: [RequestTaskStore, FormBuilder],
+  useFactory: (store: RequestTaskStore, fb: FormBuilder) => {
     return fb.group<AerPortUploadCSVFormModel>({
-      ports: fb.array([] as FormGroup<PortFormModel>[]),
+      ports: fb.array([] as FormGroup<PortFormModel>[], {
+        updateOn: 'change',
+        validators: uploadCSVFormValidators(store),
+      }),
       columns: fb.control(null, {
         updateOn: 'change',
         validators: [csvColumnDiffValidator(aerPortCsvMap)],
@@ -59,7 +62,6 @@ export const aerPortsUploadFormProvider: Provider = {
           maxFileSizeValidator(20, 'The selected file must be smaller than 20MB'),
           fileNameLengthValidator(100, 'The selected file must have a file name length less than 100 characters'),
           emptyFileValidator('The selected file cannot be empty'),
-          fileRequiredValidator('Upload the ports and emission details file'),
         ],
       }),
     });
@@ -75,6 +77,9 @@ export const addPortFormGroup = (port: FlattenedPort): FormGroup<PortFormModel> 
     arrivalActualTime: new FormControl<string>(port?.arrivalActualTime),
     departureDate: new FormControl<string>(port?.departureDate),
     departureActualTime: new FormControl<string>(port?.departureActualTime),
+    ccs: new FormControl<string>(port?.ccs),
+    ccu: new FormControl<string>(port?.ccu),
+    smallIslandFerryReduction: new FormControl<boolean>(port?.smallIslandFerryReduction),
     fuelConsumptionOrigin: new FormControl<FuelOriginTypeName['origin']>(port?.fuelConsumptionOrigin),
     fuelConsumptionType: new FormControl<AllFuelOriginTypeName>(port?.fuelConsumptionType),
     fuelConsumptionOtherName: new FormControl<FuelOriginTypeName['name']>(port?.fuelConsumptionOtherName),
@@ -93,7 +98,7 @@ export const addPortFormGroup = (port: FlattenedPort): FormGroup<PortFormModel> 
   });
 };
 
-export const uploadPortCSVFormValidators = (store: RequestTaskStore) => {
+const uploadCSVFormValidators = (store: RequestTaskStore) => {
   const ships = store.select(aerCommonQuery.selectListOfShips)();
   const shipImoNumberKeys = ships.map((ship) => ship.imoNumber);
   const reportingYear = store.select(aerCommonQuery.selectReportingYear)();
@@ -177,6 +182,17 @@ export const uploadPortCSVFormValidators = (store: RequestTaskStore) => {
 
     // Overlap of dates
     csvFieldPortDateOverlapValidator<FlattenedPort>('arrivalDate', 'departureDate', aerPortCsvMap, store),
+
+    // ccs
+    csvFieldRequiredValidator<FlattenedPort>('ccs', aerPortCsvMap),
+    csvFieldMaxDecimalsValidator<FlattenedPort>('ccs', aerPortCsvMap, 2, true),
+
+    // ccu
+    csvFieldRequiredValidator<FlattenedPort>('ccu', aerPortCsvMap),
+    csvFieldMaxDecimalsValidator<FlattenedPort>('ccu', aerPortCsvMap, 2, true),
+
+    // smallIslandFerryReduction
+    csvFieldRequiredValidator<FlattenedPort>('smallIslandFerryReduction', aerPortCsvMap),
 
     // fuelConsumptions / directEmissions
     csvFieldNoEmissionsValidator('The ship has not recorded any emissions for one or more ports'),

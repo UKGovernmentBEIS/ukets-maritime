@@ -29,7 +29,7 @@ export function csvFieldPortValidator<T>(
 
       if (currentField && !portCountryExists) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

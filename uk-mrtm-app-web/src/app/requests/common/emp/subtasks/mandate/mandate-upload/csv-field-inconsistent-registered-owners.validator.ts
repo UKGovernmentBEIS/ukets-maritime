@@ -39,7 +39,7 @@ export function csvFieldInconsistentRegisteredOwnersValidator(): ValidatorFn {
       const currentUUID = combinations.get(entry?.imoNumber);
       if (currentUUID && currentUUID !== entityUUID) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       } else {
         combinations.set(entry?.imoNumber, entityUUID);

@@ -11,13 +11,9 @@ import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmpAccountDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpAccountDTOImpl;
-import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpBatchReissueRequestMetadata;
-import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpEmpReissueAccountReport;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueAccountDetails;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.MrtmAccountIdAndNameDTOImpl;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.netz.api.workflow.request.core.domain.Request;
-import uk.gov.netz.api.workflow.request.core.service.RequestService;
 
 import java.util.Map;
 import java.util.Set;
@@ -38,9 +34,6 @@ class EmpBatchReissueQueryServiceTest {
 	
 	@Mock
 	private EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
-	
-	@Mock
-	private RequestService requestService;
 	
 	@Test
 	void existAccountsByCA() {
@@ -87,28 +80,5 @@ class EmpBatchReissueQueryServiceTest {
 				));
 				verify(mrtmAccountQueryService, times(1)).getAllByCAAndStatuses(ca, Set.of(MrtmAccountStatus.LIVE));
 		verify(emissionsMonitoringPlanQueryService, times(1)).getEmpAccountsByAccountIds(Set.of(1L, 2L));
-	}
-	
-	@Test
-	void getNumberOfAccountsCompleted() {
-		String batchRequestId = "1";
-		Request batchRequest = Request.builder()
-				.id(batchRequestId)
-				.metadata(EmpBatchReissueRequestMetadata.builder()
-						.accountsReports(Map.of(
-								1L, EmpEmpReissueAccountReport.builder().succeeded(true).build(),
-								2L, EmpEmpReissueAccountReport.builder().succeeded(false).build(),
-								3L, EmpEmpReissueAccountReport.builder().succeeded(null).build()
-								))
-						.build())
-				.build();
-		
-		when(requestService.findRequestById(batchRequestId)).thenReturn(batchRequest);
-		
-		long result = cut.getNumberOfAccountsCompleted(batchRequestId);
-		
-		assertThat(result).isEqualTo(2);
-		
-		verify(requestService, times(1)).findRequestById(batchRequestId);
 	}
 }

@@ -3,12 +3,12 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RequestActionStore } from '@netz/common/store';
 
 import { paymentActionQuery } from '@requests/timeline/payment/+state';
-import { PaymentCancelledSummaryTemplateComponent, PaymentDetailsSummaryTemplateComponent } from '@shared/components';
+import { PaymentDetailsSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-payment-status-details',
   standalone: true,
-  imports: [PaymentDetailsSummaryTemplateComponent, PaymentCancelledSummaryTemplateComponent],
+  imports: [PaymentDetailsSummaryTemplateComponent],
   templateUrl: './payment-status-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

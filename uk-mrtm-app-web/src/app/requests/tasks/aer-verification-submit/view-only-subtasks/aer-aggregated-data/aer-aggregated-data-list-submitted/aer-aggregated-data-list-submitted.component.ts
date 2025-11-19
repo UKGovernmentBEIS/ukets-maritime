@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { RequestTaskStore } from '@netz/common/store';
 
+import { aerCommonQuery } from '@requests/common/aer/+state';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data';
-import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
 import { AggregatedDataListSummaryTemplateComponent } from '@shared/components/summaries';
 
 @Component({
@@ -16,6 +16,6 @@ import { AggregatedDataListSummaryTemplateComponent } from '@shared/components/s
 })
 export class AerAggregatedDataListSubmittedComponent {
   private readonly store = inject(RequestTaskStore);
-  readonly aggregatedData = this.store.select(aerVerificationSubmitQuery.selectAggregatedDataList);
+  readonly aggregatedData = this.store.select(aerCommonQuery.selectAggregatedDataList);
   readonly map = aerAggregatedDataSubtasksListMap;
 }

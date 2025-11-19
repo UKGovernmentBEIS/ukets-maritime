@@ -15,7 +15,7 @@
   <div govuk-text-input label="Batch number" formControlName="batchNumber" widthClass="govuk-!-width-one-third"></div>
   <div
     govuk-text-input
-    label="Total mass of eligible fuel claimed from the batch"
+    label="Total mass of sustainable fuel claimed from the batch"
     formControlName="smfMass"
     suffix="tonnes"
     widthClass="govuk-!-width-one-quarter"></div>
@@ -29,21 +29,11 @@
     {{ isNil(form.get('co2Emissions').value) ? 'Not calculated yet' : form.get('co2Emissions').value }}
   </p>
 
-  <h3 class="govuk-heading-m">Evidence of eligible fuel</h3>
-  <p class="govuk-body govuk-!-margin-bottom-1">The batch must:</p>
+  <h3 class="govuk-heading-m">Evidence of proof of sustainability, and proof of purchase and delivery</h3>
+  <p class="govuk-body govuk-!-margin-bottom-1">The batch must be:</p>
   <ul class="govuk-list govuk-list--bullet">
-    <li>be purchased in the scheme year, or up to three months beforehand</li>
-    <li>have been delivered no later than 31 March of the year after the scheme year</li>
-    <li>be identified as an eligible fuel in the guidance</li>
-    <li>
-      have been delivered to a point of no return before 31st March in the year following the scheme year to which the
-      emissions reduction claim relates
-    </li>
-    <li>
-      have not been used by the person making the emissions reduction claim to obtain an emissions reduction or
-      financial benefit in any scheme other than the UK ETS
-    </li>
-    <li>have not been sold to a third party</li>
+    <li>purchased in the scheme year, or up to three months beforehand</li>
+    <li>delivered no later than 31 March of the year after the scheme year</li>
   </ul>
 
   <mrtm-multiple-file-input

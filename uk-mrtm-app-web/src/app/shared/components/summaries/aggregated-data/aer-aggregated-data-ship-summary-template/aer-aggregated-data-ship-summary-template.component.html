@@ -29,11 +29,41 @@
 <mrtm-aer-aggregated-data-emissions-calculations-summary-template
   class="govuk-!-display-block govuk-!-margin-bottom-8"
   [data]="annualEmissions()"
-  [boldColumns]="['total']"
+  [boldedColumns]="['total']"
   [showSummaryComponents]="true"
-  [showEmissionsColumnHeader]="true" />
+  [showEmissionsColumnHeader]="true"
+  [includeCo2Captured]="true" />
+
+@if (ship()?.derogations?.smallIslandFerryOperatorReduction) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <h3 class="govuk-heading-m">Emissions eligible for small island ferry operator surrender reduction</h3>
+    </div>
+    @if (editable()) {
+      <div class="govuk-grid-column-one-third">
+        <div class="govuk-body float-right">
+          <a govukLink [routerLink]="[wizardStep.SMALL_ISLAND_EMISSIONS]" [queryParams]="{ change: true }">Change</a>
+        </div>
+      </div>
+    }
+  </div>
+  <mrtm-aer-aggregated-data-emissions-calculations-summary-template
+    class="govuk-!-display-block govuk-!-margin-bottom-8"
+    [data]="smallIslandReduction()"
+    [boldedColumns]="['total']"
+    [showSummaryComponents]="true"
+    [showEmissionsColumnHeader]="true"
+    [includeCo2Captured]="true" />
+}
 
 <h3 class="govuk-heading-m">Emissions calculations</h3>
 <mrtm-aer-aggregated-data-emissions-calculations-summary-template
   class="govuk-!-display-block govuk-!-margin-bottom-8"
-  [data]="totalShipEmissionsData()" />
+  [data]="totalShipEmissionsData()"
+  header="Total ship emissions" />
+@if (shouldDisplaySurrenderEmissions()) {
+  <mrtm-aer-aggregated-data-emissions-calculations-summary-template
+    class="govuk-!-display-block govuk-!-margin-bottom-8"
+    [data]="surrenderEmissions()"
+    header="Emissions figure for surrender" />
+}

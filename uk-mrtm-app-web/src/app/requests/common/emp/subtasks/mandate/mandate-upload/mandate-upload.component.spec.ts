@@ -82,18 +82,17 @@ describe('MandateUploadComponent', () => {
     expect(page.errorSummary).toBeTruthy();
     expect(page.errorTitles.map((item) => item.textContent.trim())).toEqual([
       'The registered owner name is missing. Enter the registered owner name and reupload the file',
-      "Check the data in column 'Registered owner name' on row(s) 2",
+      "Check the data in column 'Registered owner name' on row(s) 1",
       'The IMO number is missing. Enter the IMO number and reupload the file',
-      "Check the data in column 'IMO unique company and registered owner identification number' on row(s) 2",
+      "Check the data in column 'IMO unique company and registered owner identification number' on row(s) 1",
       "The registered owner's contact name is missing. Enter the contact name and reupload the file",
-      "Check the data in column 'Contact Name' on row(s) 2",
+      "Check the data in column 'Contact Name' on row(s) 1",
       'The contact email is missing. Enter the contact email and reupload the file',
-      "Check the data in column 'Contact Email' on row(s) 2",
+      "Check the data in column 'Contact Email' on row(s) 1",
       'The date of written agreement is missing. Enter the date of written agreement and reupload the file',
-      "Check the data in column 'Date of written agreement' on row(s) 2",
+      "Check the data in column 'Date of written agreement' on row(s) 1",
       'The ship IMO number is missing. Enter the ship IMO number and reupload the file',
-      "Check the data in column 'Associated ship IMO number' on row(s) 2",
-      'Upload the registered owners file',
+      "Check the data in column 'Associated ship IMO number' on row(s) 1",
     ]);
   });
 
@@ -106,7 +105,6 @@ describe('MandateUploadComponent', () => {
     expect(page.errorSummary).toBeFalsy();
 
     component['processCSVData'](mockMandateCsvSuccessPapaResult);
-    component.fileCtrl.setErrors(null);
     fixture.detectChanges();
     expect(page.errorSummary).toBeFalsy();
 

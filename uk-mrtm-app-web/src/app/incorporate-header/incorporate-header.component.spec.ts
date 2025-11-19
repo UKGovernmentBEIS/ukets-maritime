@@ -1,5 +1,3 @@
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -41,8 +39,6 @@ describe('IncorporateHeaderComponent', () => {
     await TestBed.configureTestingModule({
       imports: [IncorporateHeaderComponent],
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
         { provide: MaritimeAccountsService, useValue: maritimeAccountsService },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],

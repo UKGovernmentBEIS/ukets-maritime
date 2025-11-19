@@ -2,14 +2,13 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
+  effect,
   inject,
   input,
   InputSignal,
-  OnInit,
   Signal,
 } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -19,7 +18,13 @@ import { AerShipEmissions } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { LinkDirective, SelectComponent } from '@netz/govuk-components';
+import {
+  LinkDirective,
+  RadioComponent,
+  RadioOptionComponent,
+  SelectComponent,
+  TextInputComponent,
+} from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
@@ -41,6 +46,9 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     ReactiveFormsModule,
     SelectComponent,
     TimeInputComponent,
+    TextInputComponent,
+    RadioOptionComponent,
+    RadioComponent,
     RouterLink,
     LinkDirective,
     DatePickerComponent,
@@ -49,12 +57,11 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
   templateUrl: './aer-voyage-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AerVoyageDetailsComponent implements OnInit {
+export class AerVoyageDetailsComponent {
   protected readonly form: FormGroup = inject(TASK_FORM);
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  private readonly destroyRef = inject(DestroyRef);
 
   public readonly voyageId: InputSignal<string> = input<string>();
 
@@ -84,20 +91,25 @@ export class AerVoyageDetailsComponent implements OnInit {
       : AER_PORT_CODE_SELECT_ITEMS.filter((item) => item.countryCode === country || item.value === 'NOT_APPLICABLE');
   });
 
+  constructor() {
+    effect(() => {
+      const arrivalPortValue =
+        this.portArrivalSelectItems()?.length === 1 ? 'NOT_APPLICABLE' : this.form?.value?.arrivalPort;
+
+      const departurePortValue =
+        this.portDepartureSelectItems()?.length === 1 ? 'NOT_APPLICABLE' : this.form?.value?.departurePort;
+
+      this.form.get('arrivalPort').setValue(arrivalPortValue, false);
+      this.form.get('departurePort').setValue(departurePortValue, false);
+    });
+  }
+
   private get arrivalCountryCtrl(): AbstractControl {
     return this.form.get('arrivalCountry');
   }
 
   private get departureCountryCtrl(): AbstractControl {
     return this.form.get('departureCountry');
-  }
-
-  private get arrivalPortCtrl(): AbstractControl {
-    return this.form.get('arrivalPort');
-  }
-
-  private get departurePortCtrl(): AbstractControl {
-    return this.form.get('departurePort');
   }
 
   get datepickerConfig(): DatePickerConfig {
@@ -108,15 +120,6 @@ export class AerVoyageDetailsComponent implements OnInit {
       weekStartDay: 'Monday',
       leadingZeros: false,
     };
-  }
-
-  ngOnInit(): void {
-    this.arrivalCountryCtrl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.arrivalPortCtrl.setValue(null);
-    });
-    this.departureCountryCtrl.valueChanges.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(() => {
-      this.departurePortCtrl.setValue(null);
-    });
   }
 
   onSubmit(): void {

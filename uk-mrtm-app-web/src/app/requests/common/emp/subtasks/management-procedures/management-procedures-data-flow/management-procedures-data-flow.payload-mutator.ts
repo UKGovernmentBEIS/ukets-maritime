@@ -1,3 +1,5 @@
+import { inject } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
 
@@ -10,11 +12,13 @@ import {
   MANAGEMENT_PROCEDURES_SUB_TASK,
   ManagementProceduresWizardStep,
 } from '@requests/common/emp/subtasks/management-procedures';
+import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { UploadedFile } from '@shared/types';
 import { createFileUploadPayload, transformToTaskAttachments } from '@shared/utils';
 
 export class ManagementProceduresDataFlowPayloadMutator extends PayloadMutator {
+  private readonly sectionsCompletedMap = inject(SECTIONS_COMPLETE_MAP, { optional: true });
   subtask = MANAGEMENT_PROCEDURES_SUB_TASK;
   step = ManagementProceduresWizardStep.DATA_FLOW_ACTIVITIES;
 
@@ -39,7 +43,8 @@ export class ManagementProceduresDataFlowPayloadMutator extends PayloadMutator {
           ...payload.empAttachments,
           ...transformToTaskAttachments(userInput.files),
         };
-        payload.empSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
+        payload.empSectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
+          TaskItemStatus.IN_PROGRESS;
       }),
     );
   }

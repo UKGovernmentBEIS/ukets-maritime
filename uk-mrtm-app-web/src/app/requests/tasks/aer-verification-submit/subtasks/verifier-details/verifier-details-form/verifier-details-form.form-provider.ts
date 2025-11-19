@@ -19,14 +19,14 @@ export const verifierDetailsFormProvider: Provider = {
       name: formBuilder.control<AerVerifierDetails['verifierContact']['name']>(
         verifierDetails?.verifierContact?.name ?? null,
         [
-          GovukValidators.required("Enter the verifier's name"),
+          GovukValidators.required("Enter the verifer's name"),
           GovukValidators.maxLength(500, 'Enter up to 500 characters'),
         ],
       ),
       email: formBuilder.control<AerVerifierDetails['verifierContact']['email']>(
         verifierDetails?.verifierContact?.email ?? null,
         [
-          GovukValidators.required("Enter the verifier's email address"),
+          GovukValidators.required("Enter the verifer's email address"),
           GovukValidators.email('Enter an email address in the correct format, like name@example.com'),
           GovukValidators.maxLength(256, 'Enter up to 256 characters'),
         ],
@@ -34,7 +34,7 @@ export const verifierDetailsFormProvider: Provider = {
       phoneNumber: formBuilder.control<AerVerifierDetails['verifierContact']['phoneNumber']>(
         verifierDetails?.verifierContact?.phoneNumber ?? null,
         [
-          GovukValidators.required("Enter the verifier's telephone number"),
+          GovukValidators.required("Enter the verifer's telephone number"),
           ...phoneInputValidators,
           GovukValidators.maxLength(256, 'Enter up to 256 characters'),
         ],

@@ -85,30 +85,35 @@ describe('AerVoyageUploadComponent', () => {
     expect(page.errorSummary).toBeTruthy();
     expect(page.errorTitles.map((item) => item.textContent.trim())).toEqual([
       "The field 'IMO Number' is required",
-      "Check the data in column 'IMO Number' on row(s) 2",
+      "Check the data in column 'IMO Number' on row(s) 1",
       "The field 'Country code of departure' has invalid or missing values",
-      "Check the data in column 'Country code of departure' on row(s) 2",
+      "Check the data in column 'Country code of departure' on row(s) 1",
       "The field 'Port code of departure' has invalid or missing values",
-      "Check the data in column 'Port code of departure' on row(s) 2",
+      "Check the data in column 'Port code of departure' on row(s) 1",
       "The field 'Date of departure' has invalid or missing values",
-      "Check the data in column 'Date of departure' on row(s) 2",
+      "Check the data in column 'Date of departure' on row(s) 1",
       "The field 'Date of departure' must be before the 'Date of arrival'",
-      "Check the data in column 'Date of departure' on row(s) 2",
+      "Check the data in column 'Date of departure' on row(s) 1",
       "The field 'Actual time of departure (ATD)' has invalid or missing values",
-      "Check the data in column 'Actual time of departure (ATD)' on row(s) 2",
+      "Check the data in column 'Actual time of departure (ATD)' on row(s) 1",
       "The field 'Country code of arrival' has invalid or missing values",
-      "Check the data in column 'Country code of arrival' on row(s) 2",
+      "Check the data in column 'Country code of arrival' on row(s) 1",
       "The field 'Port code of arrival' has invalid or missing values",
-      "Check the data in column 'Port code of arrival' on row(s) 2",
+      "Check the data in column 'Port code of arrival' on row(s) 1",
       "The field 'Date of arrival' has invalid or missing values",
-      "Check the data in column 'Date of arrival' on row(s) 2",
+      "Check the data in column 'Date of arrival' on row(s) 1",
       "The field 'Date of arrival' must be after the 'Date of departure'",
-      "Check the data in column 'Date of arrival' on row(s) 2",
+      "Check the data in column 'Date of arrival' on row(s) 1",
       "The field 'Actual time of arrival (ATA)' has invalid or missing values",
-      "Check the data in column 'Actual time of arrival (ATA)' on row(s) 2",
+      "Check the data in column 'Actual time of arrival (ATA)' on row(s) 1",
+      "The field 'Carbon capture and storage (CCS) (t)' has invalid or missing values",
+      "Check the data in column 'Carbon capture and storage (CCS) (t)' on row(s) 1",
+      "The field 'Carbon capture and utilisation (CCU) (t)' has invalid or missing values",
+      "Check the data in column 'Carbon capture and utilisation (CCU) (t)' on row(s) 1",
+      "The field 'Are you claiming a small island ferry operator surrender reduction?' has invalid or missing values",
+      "Check the data in column 'Are you claiming a small island ferry operator surrender reduction?' on row(s) 1",
       'The ship has not recorded any emissions for one or more voyages',
-      'Check the data on row(s) 2',
-      'Upload the voyages and emission details file',
+      'Check the data on row(s) 1',
     ]);
   });
 
@@ -121,7 +126,6 @@ describe('AerVoyageUploadComponent', () => {
     expect(page.errorSummary).toBeFalsy();
 
     component['processCSVData'](mockAerVoyagesCsvSuccessPapaResult);
-    component.fileCtrl.setErrors(null);
     fixture.detectChanges();
     expect(page.errorSummary).toBeFalsy();
 
@@ -153,8 +157,11 @@ describe('AerVoyageUploadComponent', () => {
         voyageDetails: {
           arrivalPort: { country: 'GB', port: 'GBARD' },
           arrivalTime: '2025-01-03T16:04:00Z',
+          ccs: '11.11',
+          ccu: '22.22',
           departurePort: { country: 'GB', port: 'GBABD' },
           departureTime: '2025-01-01T01:04:00Z',
+          smallIslandFerryReduction: true,
         },
       },
     ]);

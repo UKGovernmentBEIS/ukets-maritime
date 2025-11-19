@@ -9,7 +9,10 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { mapAggregatedDataToTotalShipEmissionsItems } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
+import {
+  mapAggregatedDataToSurrenderEmissionsItems,
+  mapAggregatedDataToTotalShipEmissionsItems,
+} from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { AerAggregatedDataShipEmissionsCalculatedTotalsComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-ship-emissions-calculated/aer-aggregated-data-ship-emissions-calculated-totals';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
 import {
@@ -51,8 +54,12 @@ export class AerAggregatedDataShipEmissionsCalculatedComponent {
     this.store.select(aerCommonQuery.selectRelatedShipForAggregatedData(this.dataId()))(),
   );
 
-  public readonly totalShipEmissionsData = computed<Array<AerAggregatedDataEmissionDto>>(() =>
+  public readonly totalShipEmissionsData: Signal<Array<AerAggregatedDataEmissionDto>> = computed(() =>
     mapAggregatedDataToTotalShipEmissionsItems(this.data()),
+  );
+
+  public readonly surrenderEmissions: Signal<Array<AerAggregatedDataEmissionDto>> = computed(() =>
+    mapAggregatedDataToSurrenderEmissionsItems(this.data()),
   );
 
   public onSubmit(): void {

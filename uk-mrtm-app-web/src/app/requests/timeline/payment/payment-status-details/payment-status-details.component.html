@@ -1,7 +1,1 @@
-@if (data(); as data) {
-  @if (data.status === 'CANCELLED') {
-    <mrtm-payment-cancelled-summary-template [data]="data" />
-  } @else {
-    <mrtm-payment-details-summary-template [data]="data" />
-  }
-}
+<mrtm-payment-details-summary-template [data]="data()" />

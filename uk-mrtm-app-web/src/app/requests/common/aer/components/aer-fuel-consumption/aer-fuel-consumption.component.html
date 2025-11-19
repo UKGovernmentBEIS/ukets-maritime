@@ -34,11 +34,7 @@
     label="Measuring unit"
     widthClass="govuk-!-width-one-third"></div>
   @if (formGroup?.value?.measuringUnit === 'M3') {
-    <div
-      govuk-text-input
-      formControlName="fuelDensity"
-      label="Density (tonnes/m3)"
-      widthClass="govuk-!-width-one-third"></div>
+    <div govuk-text-input formControlName="fuelDensity" label="Density" widthClass="govuk-!-width-one-third"></div>
   }
 
   <h4 class="govuk-heading-s">Consumption (tonnes)</h4>

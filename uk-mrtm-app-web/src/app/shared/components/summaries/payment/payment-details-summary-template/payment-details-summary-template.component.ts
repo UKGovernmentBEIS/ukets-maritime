@@ -1,5 +1,5 @@
 import { CurrencyPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, input, InputSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, InputSignal } from '@angular/core';
 
 import { GovukDatePipe } from '@netz/common/pipes';
 import {
@@ -31,13 +31,7 @@ import { PaymentDetailsDto } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentDetailsSummaryTemplateComponent {
-  public readonly header: InputSignal<string> = input<string>(undefined);
+  public readonly header: InputSignal<string> = input<string>('Payment details');
   public readonly data: InputSignal<PaymentDetailsDto> = input<PaymentDetailsDto>();
   protected readonly PAYMENT_METHOD_SELECT_OPTIONS = PAYMENT_METHOD_SELECT_OPTIONS;
-
-  constructor() {
-    effect(() => {
-      console.log(this.data());
-    });
-  }
 }

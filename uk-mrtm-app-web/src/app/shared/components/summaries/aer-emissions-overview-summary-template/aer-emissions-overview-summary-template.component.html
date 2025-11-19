@@ -5,8 +5,12 @@
       <dd govukSummaryListRowValue>{{ data?.totalShipEmissionsSummary }} tCO2e</dd>
     </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Less Northern Ireland surrender deduction</dt>
-      <dd govukSummaryListRowValue>{{ data?.lessVoyagesInNorthernIrelandDeduction?.total | bigNumber: 0 }} tCO2e</dd>
+      <dt govukSummaryListRowKey>Less small island ferry deduction</dt>
+      <dd govukSummaryListRowValue>{{ data?.lessIslandFerryDeduction?.total | bigNumber: 0 }} tCO2e</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Less 5% ice class deduction</dt>
+      <dd govukSummaryListRowValue>{{ data?.less5PercentIceClassDeduction?.total | bigNumber: 0 }} tCO2e</dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Emissions figure for surrender</dt>

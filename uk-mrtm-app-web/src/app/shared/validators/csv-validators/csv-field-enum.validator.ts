@@ -28,7 +28,7 @@ export function csvFieldEnumValidator<T>(
 
       if (!Object.values(enumType).includes(currentField)) {
         errorMessageRows.push({
-          rowIndex: index + 2,
+          rowIndex: index + 1,
         });
       }
     });

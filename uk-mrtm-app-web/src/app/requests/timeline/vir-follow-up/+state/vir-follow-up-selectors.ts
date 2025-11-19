@@ -24,7 +24,7 @@ const selectVirAttachments: StateSelector<RequestActionState, Record<string, str
 
 const selectReference: StateSelector<RequestActionState, string> = createDescendingSelector(
   selectPayload,
-  (payload) => payload?.verifierComment?.reference ?? payload?.verifierUncorrectedItem?.reference,
+  (payload) => payload?.verifierComment?.reference,
 );
 
 const selectOperatorResponseSummaryData: StateSelector<

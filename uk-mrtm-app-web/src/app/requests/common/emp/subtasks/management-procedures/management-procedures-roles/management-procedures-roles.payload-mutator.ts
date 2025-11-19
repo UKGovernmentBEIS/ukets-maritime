@@ -1,3 +1,5 @@
+import { inject } from '@angular/core';
+
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
 
@@ -10,9 +12,11 @@ import {
   MANAGEMENT_PROCEDURES_SUB_TASK,
   ManagementProceduresWizardStep,
 } from '@requests/common/emp/subtasks/management-procedures';
+import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 export class ManagementProceduresRolesPayloadMutator extends PayloadMutator {
+  private readonly sectionsCompletedMap = inject(SECTIONS_COMPLETE_MAP, { optional: true });
   subtask = MANAGEMENT_PROCEDURES_SUB_TASK;
   step = ManagementProceduresWizardStep.MONITORING_REPORTING_ROLES;
 
@@ -30,7 +34,8 @@ export class ManagementProceduresRolesPayloadMutator extends PayloadMutator {
           ...payload.emissionsMonitoringPlan[this.subtask],
           ...userInput,
         };
-        payload.empSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
+        payload.empSectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
+          TaskItemStatus.IN_PROGRESS;
       }),
     );
   }

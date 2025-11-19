@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVPrinter;
-import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,7 +51,7 @@ public class EmpBatchReissueGenerateReportService {
 						accountReport.getIssueDate() != null
 								? CSV_DATE_ISSUE_FORMATTER.format(accountReport.getIssueDate())
 								: "N/A",
-						BooleanUtils.isTrue(accountReport.getSucceeded()) ? "Pass" : "Fail");
+						accountReport.isSucceeded() ? "Pass" : "Fail");
 			}
 			
 			final byte[] generatedFile = sw.toString().getBytes(StandardCharsets.UTF_8);

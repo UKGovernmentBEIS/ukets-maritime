@@ -21,7 +21,7 @@ import {
   SHIP_ICE_CLASS_SELECT_ITEMS,
   SHIP_TYPE_SELECT_ITEMS,
 } from '@shared/constants';
-import { SelectOptionToTitlePipe } from '@shared/pipes';
+import { BooleanToTextPipe, SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-basic-ship-details-summary-template',
@@ -36,6 +36,7 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
     RouterLink,
     SelectOptionToTitlePipe,
     GovukDatePipe,
+    BooleanToTextPipe,
   ],
   templateUrl: './basic-ship-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

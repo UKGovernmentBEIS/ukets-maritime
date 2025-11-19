@@ -6,7 +6,7 @@
       <ng-container *ngTemplateOutlet="commonConfirmationContent" />
     } @else {
       @if (hasVerificationBody()) {
-        <netz-page-heading>Send report for verification</netz-page-heading>
+        <netz-page-heading>Send report to verifier</netz-page-heading>
         <h4 class="govuk-heading-s govuk-!-margin-bottom-1">Current verifier</h4>
         <p class="govuk-body">{{ verificationBody()?.name }}</p>
         <ng-container *ngTemplateOutlet="commonConfirmationContent" />
@@ -27,8 +27,7 @@
 
 <ng-template #commonConfirmationContent>
   <p class="govuk-body govuk-!-margin-bottom-9">
-    By selecting ‘Confirm and send’ you confirm that the information in your report is correct to the best of your
-    knowledge.
+    By selecting ‘Confirm and send’ you confirm that the information is correct to the best of your knowledge.
   </p>
   <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and send</button>
 </ng-template>

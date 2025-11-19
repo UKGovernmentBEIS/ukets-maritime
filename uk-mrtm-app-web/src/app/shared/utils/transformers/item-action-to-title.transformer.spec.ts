@@ -5,7 +5,7 @@ describe('itemActionToTitleTransformer', () => {
   it('should return mapped title for valid action type', () => {
     Object.keys(itemActionsMap).forEach((actionType) => {
       const result = itemActionToTitleTransformer(actionType);
-      expect(result).toBe(`${itemActionsMap[actionType].text} ${itemActionsMap[actionType].suffix ?? ''}`.trim());
+      expect(result).toBe(itemActionsMap[actionType].text);
     });
   });
 
@@ -13,11 +13,9 @@ describe('itemActionToTitleTransformer', () => {
     Object.keys(itemActionsMap).forEach((actionType) => {
       const result = itemActionToTitleTransformer(actionType, undefined, 'John Doe');
       if (itemActionsMap[actionType].transformed) {
-        expect(result).toBe(
-          `${itemActionsMap[actionType].text} by John Doe ${itemActionsMap[actionType].suffix ?? ''}`.trim(),
-        );
+        expect(result).toBe(`${itemActionsMap[actionType].text} by John Doe`);
       } else {
-        expect(result).toBe(`${itemActionsMap[actionType].text} ${itemActionsMap[actionType].suffix ?? ''}`.trim());
+        expect(result).toBe(itemActionsMap[actionType].text);
       }
     });
   });
@@ -50,7 +48,6 @@ describe('itemActionToTitleTransformer', () => {
   it('should return null for unknown task type', () => {
     const actionType = 'UNKNOWN_TASK';
     const result = itemActionToTitleTransformer(actionType);
-    console.log('Unknown task type', result);
     expect(result).toBeNull();
   });
 });

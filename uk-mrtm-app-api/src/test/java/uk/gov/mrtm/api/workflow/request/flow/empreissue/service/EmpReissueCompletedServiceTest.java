@@ -34,7 +34,7 @@ class EmpReissueCompletedServiceTest {
 	private CamundaWorkflowService camundaWorkflowService;
 	
 	@Test
-	void reissueCompleted_not_locked_not_suceeded() {
+	void reissueCompleted_not_suceeded() {
 		String requestId = "1";
 		Long accountId = 2L;
 		boolean succeeded = false;
@@ -49,17 +49,17 @@ class EmpReissueCompletedServiceTest {
 		when(requestService.findRequestById(requestId))
 				.thenReturn(request);
 		
-		cut.reissueCompleted(requestId, accountId, succeeded, false);
+		cut.reissueCompleted(requestId, accountId, succeeded);
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		assertThat(metadata.getAccountsReports()).hasSize(1);
 		EmpEmpReissueAccountReport report = metadata.getAccountsReports().get(accountId);
 		assertThat(report.getIssueDate()).isNull();
-		assertThat(report.getSucceeded().booleanValue()).isFalse();
+		assertThat(report.isSucceeded()).isFalse();
 	}
 	
 	@Test
-	void reissueCompleted_not_locked_suceeded() {
+	void reissueCompleted_suceeded() {
 		String requestId = "1";
 		Long accountId = 2L;
 		boolean succeeded = true;
@@ -73,7 +73,7 @@ class EmpReissueCompletedServiceTest {
 		
 		when(requestService.findRequestById(requestId)).thenReturn(request);
 		
-		cut.reissueCompleted(requestId, accountId, succeeded, false);
+		cut.reissueCompleted(requestId, accountId, succeeded);
 		
 		verify(requestService, times(1)).findRequestById(requestId);
 		verifyNoMoreInteractions(requestService);
@@ -81,31 +81,6 @@ class EmpReissueCompletedServiceTest {
 		assertThat(metadata.getAccountsReports()).hasSize(1);
 		EmpEmpReissueAccountReport report = metadata.getAccountsReports().get(accountId);
 		assertThat(report.getIssueDate()).isNotNull();
-		assertThat(report.getSucceeded().booleanValue()).isTrue();
-	}
-	
-	@Test
-	void reissueCompleted_locked_not_suceeded() {
-		String requestId = "1";
-		Long accountId = 2L;
-		boolean succeeded = false;
-		
-		EmpBatchReissueRequestMetadata metadata = EmpBatchReissueRequestMetadata.builder()
-			.type(MrtmRequestMetadataType.EMP_BATCH_REISSUE)
-			.accountsReports(Map.of(2L, EmpEmpReissueAccountReport.builder().build()))
-			.build();
-		
-		Request request = Request.builder().metadata(metadata).build();
-		
-		when(requestService.findRequestByIdForUpdate(requestId))
-				.thenReturn(request);
-		
-		cut.reissueCompleted(requestId, accountId, succeeded, true);
-		
-		verify(requestService, times(1)).findRequestByIdForUpdate(requestId);
-		assertThat(metadata.getAccountsReports()).hasSize(1);
-		EmpEmpReissueAccountReport report = metadata.getAccountsReports().get(accountId);
-		assertThat(report.getIssueDate()).isNull();
-		assertThat(report.getSucceeded().booleanValue()).isFalse();
+		assertThat(report.isSucceeded()).isTrue();
 	}
 }

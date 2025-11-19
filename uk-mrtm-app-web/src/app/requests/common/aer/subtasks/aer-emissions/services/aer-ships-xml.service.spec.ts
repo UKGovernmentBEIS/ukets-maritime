@@ -26,13 +26,16 @@ describe('AerShipsXmlService', () => {
       data: [
         {
           derogations: {
+            carbonCaptureAndStorageReduction: true,
             exceptionFromPerVoyageMonitoring: false,
+            smallIslandFerryOperatorReduction: true,
           },
           details: {
             allYear: true,
             flagState: 'GR',
             from: null,
             grossTonnage: 10000,
+            hasIceClassDerogation: true,
             iceClass: 'PC1',
             imoNumber: '1111111',
             name: 'Ship A1',
@@ -120,13 +123,16 @@ describe('AerShipsXmlService', () => {
         },
         {
           derogations: {
+            carbonCaptureAndStorageReduction: false,
             exceptionFromPerVoyageMonitoring: true,
+            smallIslandFerryOperatorReduction: true,
           },
           details: {
             allYear: false,
             flagState: 'US',
             from: '2025-01-01',
             grossTonnage: 20000,
+            hasIceClassDerogation: null,
             iceClass: 'NA',
             imoNumber: '2222222',
             name: 'Ship B1',

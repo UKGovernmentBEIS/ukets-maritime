@@ -11,7 +11,6 @@ import {
   MethodDensityBunkerCodeEnum,
   MethodDensityTankCodeEnum,
 } from '@requests/common/types';
-import { getUniqueFuelEmissionFactorId } from '@requests/common/utils/emissions';
 import { XmlResult } from '@shared/types';
 import { XmlValidator } from '@shared/validators';
 
@@ -31,8 +30,7 @@ export class FuelTypeEmissionFactorEditDtoValidator {
     return (
       (value?.fuelTypeCode === FuelTypeCodeEnum.OTHER &&
         XmlValidator.isRequired(value?.otherFuelType) &&
-        XmlValidator.maxLength(value?.otherFuelType, 30) &&
-        XmlValidator.isString(value?.otherFuelType)) ||
+        XmlValidator.maxLength(value?.otherFuelType, 30)) ||
       value?.fuelTypeCode !== FuelTypeCodeEnum.OTHER
     );
   }
@@ -46,6 +44,17 @@ export class FuelTypeEmissionFactorEditDtoValidator {
   }
 
   /**
+   * Creates a unique ID that serves as a key to check for duplication of fuels
+   */
+  private static getUniqueFuelEmissionFactorId(fuelTypeEmissionFactorEditDTO: FuelTypeEmissionFactorEditDTO): string {
+    if (fuelTypeEmissionFactorEditDTO.fuelTypeCode === FuelTypeCodeEnum.OTHER) {
+      return `${fuelTypeEmissionFactorEditDTO.fuelOriginCode}-${fuelTypeEmissionFactorEditDTO.fuelTypeCode}-${fuelTypeEmissionFactorEditDTO.otherFuelType?.toUpperCase()}`;
+    }
+
+    return `${fuelTypeEmissionFactorEditDTO.fuelOriginCode}-${fuelTypeEmissionFactorEditDTO.fuelTypeCode}`;
+  }
+
+  /**
    * Validates that all FuelTypeEmissionFactorEditDTO[] are valid and no duplicates exist
    */
   private static areFuelTypeEmissionFactorEditDTOsValid(
@@ -55,7 +64,7 @@ export class FuelTypeEmissionFactorEditDtoValidator {
 
     const fuelsLengthValid = fuelTypeEmissionFactorEditDTOs?.length > 0;
     const allFuelsValid = fuelTypeEmissionFactorEditDTOs?.every((fuelTypeEmissionFactorEditDTO) => {
-      const existingFactorId = getUniqueFuelEmissionFactorId(fuelTypeEmissionFactorEditDTO);
+      const existingFactorId = this.getUniqueFuelEmissionFactorId(fuelTypeEmissionFactorEditDTO);
       const duplicateFuelExists = existingFactors.includes(existingFactorId);
       existingFactors.push(existingFactorId);
 

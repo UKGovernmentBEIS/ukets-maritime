@@ -1,6 +1,6 @@
 import { FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
-import { AerPortEmissionsMeasurement } from '@mrtm/api';
+import { AerAggregatedEmissionsMeasurement } from '@mrtm/api';
 
 import { GovukValidators } from '@netz/govuk-components';
 
@@ -14,22 +14,25 @@ const fieldValidators: Array<ValidatorFn> = [
 ];
 
 export const provideAerAggregatedEmissionsFormGroup = (
-  data?: AerPortEmissionsMeasurement,
+  data?: AerAggregatedEmissionsMeasurement,
   validators?: ValidatorFn | Array<ValidatorFn>,
   useFieldValidators: boolean = true,
 ): FormGroup<AerAggregatedEmissionsFormGroupModel> =>
   new FormGroup<AerAggregatedEmissionsFormGroupModel>(
     {
-      co2: new FormControl<AerPortEmissionsMeasurement['co2'] | null>(data?.co2, {
+      co2: new FormControl<AerAggregatedEmissionsMeasurement['co2'] | null>(data?.co2, {
         validators: useFieldValidators ? fieldValidators : undefined,
       }),
-      ch4: new FormControl<AerPortEmissionsMeasurement['ch4'] | null>(data?.ch4, {
+      ch4: new FormControl<AerAggregatedEmissionsMeasurement['ch4'] | null>(data?.ch4, {
         validators: useFieldValidators ? fieldValidators : undefined,
       }),
-      n2o: new FormControl<AerPortEmissionsMeasurement['n2o'] | null>(data?.n2o, {
+      n2o: new FormControl<AerAggregatedEmissionsMeasurement['n2o'] | null>(data?.n2o, {
         validators: useFieldValidators ? fieldValidators : undefined,
       }),
-      total: new FormControl<AerPortEmissionsMeasurement['total'] | null>(data?.total, {
+      co2Captured: new FormControl<AerAggregatedEmissionsMeasurement['co2Captured'] | null>(data?.co2Captured, {
+        validators: useFieldValidators ? fieldValidators : undefined,
+      }),
+      total: new FormControl<AerAggregatedEmissionsMeasurement['total'] | null>(data?.total, {
         validators: fieldValidators,
       }),
     },

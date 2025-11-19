@@ -3,7 +3,7 @@
   Check your answers
 </netz-page-heading>
 
-<mrtm-voyage-summary-template [data]="voyage()" [editable]="editable()" />
+<mrtm-voyage-summary-template [data]="voyage()" [relatedShip]="ship()" [editable]="editable()" />
 
 @if (editable() && !isVoyageCompleted()) {
   <button (click)="onSubmit()" govukButton netzPendingButton type="button">Continue</button>

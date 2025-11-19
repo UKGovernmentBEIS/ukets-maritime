@@ -144,9 +144,7 @@ class RoleControllerTest {
     void getRegulatorRoles() throws Exception {
         RegulatorRolePermissionsDTO regulatorRolePermissionsDTO =
             buildRolePermissionsDTO("code1", Map.of(MANAGE_USERS_AND_CONTACTS, NONE));
-        AppUser user = AppUser.builder().userId("userId").build();
 
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(regulatorRoleService.getRegulatorRoles()).thenReturn(List.of(regulatorRolePermissionsDTO));
 
         // Invoke
@@ -162,9 +160,7 @@ class RoleControllerTest {
     @Test
     void getVerifierRoleCodes() throws Exception {
         List<RoleDTO> verifierRoles = List.of(buildRole("verifier_code1"), buildRole("verifier_code2"));
-        AppUser user = AppUser.builder().userId("userId").build();
 
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(roleService.getVerifierRoleCodes()).thenReturn(verifierRoles);
 
         mockMvc.perform(MockMvcRequestBuilders

@@ -67,6 +67,7 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
         validateFetchedShipInPortsOrVoyages(aggregatedData, portShips, voyageShips, aerViolations);
 
         if (ship != null) {
+            validateSmallIslandReduction(ship, aggregatedData, aerViolations);
             validateFuelConsumptions(ship, aggregatedData, aerViolations);
         }
     }
@@ -83,6 +84,24 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
             aerViolations.add(new AerViolation(
                     AerShipAggregatedData.class.getSimpleName(),
                     AerViolation.ViolationMessage.AGGREGATED_DATA_FETCHED_SHIP_NOT_FOUND_IN_PORTS_OR_VOYAGES,
+                    aggregatedData.getImoNumber()));
+        }
+    }
+
+    private void validateSmallIslandReduction(AerShipEmissions ship,
+                                              AerShipAggregatedData aggregatedData,
+                                              List<AerViolation> aerViolations) {
+        boolean isSmallIslandFerryOperatorReduction =
+                Boolean.TRUE.equals(ship.getDerogations().getSmallIslandFerryOperatorReduction());
+
+        boolean isSmallIslandReductionInvalid =
+                (isSmallIslandFerryOperatorReduction && aggregatedData.getSmallIslandSurrenderReduction() == null)
+                || (!isSmallIslandFerryOperatorReduction && aggregatedData.getSmallIslandSurrenderReduction() != null);
+
+        if (isSmallIslandReductionInvalid) {
+            aerViolations.add(new AerViolation(
+                    AerShipAggregatedData.class.getSimpleName(),
+                    AerViolation.ViolationMessage.AGGREGATED_DATA_INVALID_SMALL_ISLAND_FERRY_EMISSIONS,
                     aggregatedData.getImoNumber()));
         }
     }
@@ -147,7 +166,13 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
         );
 
         AerValidatorHelper.validateEmissionsInputIsPositiveOrZero(
-            aggregatedData.getEmissionsBetweenUKAndNIVoyages(),
+            aggregatedData.getEmissionsBetweenUKAndEEAVoyages(),
+            aerViolations,
+            AerShipAggregatedData.class
+        );
+
+        AerValidatorHelper.validateEmissionsInputIsPositiveOrZero(
+            aggregatedData.getSmallIslandSurrenderReduction(),
             aerViolations,
             AerShipAggregatedData.class
         );

@@ -78,9 +78,7 @@ class RequestActionFileDocumentControllerTest {
         Long requestActionId = 1L;
         UUID fileDocumentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
-        AppUser user = AppUser.builder().userId("userId").build();
 
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(requestActionFileDocumentService.generateGetFileDocumentToken(requestActionId, fileDocumentUuid)).thenReturn(expectedToken);
 
         mockMvc.perform(MockMvcRequestBuilders

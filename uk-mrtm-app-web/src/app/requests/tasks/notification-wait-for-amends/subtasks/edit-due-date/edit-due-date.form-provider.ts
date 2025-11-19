@@ -12,7 +12,7 @@ export const editDueDateFormProvider = {
   provide: TASK_FORM,
   deps: [UntypedFormBuilder, RequestTaskStore],
   useFactory: (fb: UntypedFormBuilder, store: RequestTaskStore) => {
-    const currentDueDate = new Date(store.select(waitForAmendsQuery.selectPayload)().followUpResponseExpirationDate);
+    const currentDueDate = new Date(store.select(waitForAmendsQuery.selectFollowUpReviewDecisionDTO)().dueDate);
 
     return fb.group(
       {

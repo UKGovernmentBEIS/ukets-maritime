@@ -92,13 +92,15 @@ class RequestAerSubmitServiceTest {
         AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(new BigDecimal("1"))
             .surrenderEmissions(new BigDecimal("2"))
-            .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
+            .less5PercentIceClassDeduction(new BigDecimal("3"))
+            .lessIslandFerryDeduction(new BigDecimal("4"))
             .build();
 
         AerTotalEmissions totalEmissions = AerTotalEmissions.builder()
             .totalShipEmissionsSummary(new BigDecimal("1"))
             .surrenderEmissionsSummary(new BigDecimal("2"))
-            .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
+            .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
+            .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("4")).build())
             .build();
 
         AerRequestPayload aerRequestPayload = AerRequestPayload.builder()
@@ -183,13 +185,15 @@ class RequestAerSubmitServiceTest {
         AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(new BigDecimal("1"))
             .surrenderEmissions(new BigDecimal("2"))
-            .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
+            .less5PercentIceClassDeduction(new BigDecimal("3"))
+            .lessIslandFerryDeduction(new BigDecimal("4"))
             .build();
 
         AerTotalEmissions totalEmissions = AerTotalEmissions.builder()
             .totalShipEmissionsSummary(new BigDecimal("1"))
             .surrenderEmissionsSummary(new BigDecimal("2"))
-            .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
+            .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
+            .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("4")).build())
             .build();
 
         AerRequestPayload aerRequestPayload = AerRequestPayload.builder()
@@ -311,7 +315,8 @@ class RequestAerSubmitServiceTest {
         return AerTotalReportableEmissions.builder()
                 .totalEmissions(new BigDecimal("1"))
                 .surrenderEmissions(new BigDecimal("2"))
-                .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
+                .less5PercentIceClassDeduction(new BigDecimal("3"))
+                .lessIslandFerryDeduction(new BigDecimal("4"))
                 .build();
     }
 }

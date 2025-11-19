@@ -10,6 +10,7 @@ import {
 import {
   AerAggregatedDataAnnualEmissionsPayloadMutator,
   AerAggregatedDataDeletePayloadMutator,
+  AerAggregatedDataEmissionsForSmallIslandPayloadMutator,
   AerAggregatedDataFlowManager,
   AerAggregatedDataFuelConsumptionPayloadMutator,
   AerAggregatedDataListSummarySideEffect,
@@ -161,6 +162,7 @@ export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataDeletePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataFuelConsumptionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataAnnualEmissionsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataEmissionsForSmallIslandPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataShipSummaryPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerFetchFromVoyagesAndPortsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataUploadPayloadMutator },

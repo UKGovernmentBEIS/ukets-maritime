@@ -12,19 +12,18 @@
   <mrtm-aer-aggregated-emissions-form
     class="govuk-!-margin-bottom-5 govuk-!-display-block"
     [header]="wizardMap.emissionsBetweenUKPorts.title"
-    hint="Do not include emissions from voyages between Great Britain and Northern Ireland"
     formGroupName="emissionsBetweenUKPorts" />
 
   <mrtm-aer-aggregated-emissions-form
     class="govuk-!-margin-bottom-5 govuk-!-display-block"
-    [header]="wizardMap.emissionsBetweenUKAndNIVoyages.title"
-    formGroupName="emissionsBetweenUKAndNIVoyages" />
+    [header]="wizardMap.emissionsBetweenUKAndEEAVoyages.title"
+    formGroupName="emissionsBetweenUKAndEEAVoyages" />
 
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 
   <mrtm-aer-aggregated-data-annual-emissions-totals
-    [header]="wizardMap.totalEmissionsFromVoyagesAndPorts.title"
-    [data]="form.get('totalEmissionsFromVoyagesAndPorts').value" />
+    [header]="wizardMap.totalAggregatedEmissions.title"
+    [data]="form.get('totalAggregatedEmissions').value" />
 </mrtm-wizard-step>
 <div>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />

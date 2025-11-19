@@ -48,7 +48,7 @@ public class AerFuelConsumption {
 
     @Positive
     @Digits(integer = 1, fraction = 3)
-    @DecimalMax(value = "2")
+    @DecimalMax(value = "1")
     private BigDecimal fuelDensity;
 
     @NotNull

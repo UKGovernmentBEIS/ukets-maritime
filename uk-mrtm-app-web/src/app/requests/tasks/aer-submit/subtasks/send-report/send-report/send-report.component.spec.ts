@@ -11,8 +11,8 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import { AerCommonService } from '@requests/common/aer/services';
 import { taskProviders } from '@requests/common/task.providers';
+import { AerSubmitService } from '@requests/tasks/aer-submit/services';
 import { SendReportComponent } from '@requests/tasks/aer-submit/subtasks/send-report/send-report/send-report.component';
 import { screen } from '@testing-library/angular';
 
@@ -25,7 +25,7 @@ describe('SendReportComponent', () => {
   let router: Router;
 
   const activatedRouteStub = new ActivatedRouteStub();
-  const taskServiceMock: MockType<AerCommonService> = {
+  const taskServiceMock: MockType<AerSubmitService> = {
     submit: jest.fn().mockReturnValue(of({})),
     submitForVerification: jest.fn().mockReturnValue(of({})),
   };

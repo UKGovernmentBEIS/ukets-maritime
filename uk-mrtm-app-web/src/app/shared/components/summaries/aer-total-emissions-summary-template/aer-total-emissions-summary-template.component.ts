@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 import { isNil } from 'lodash-es';
@@ -11,7 +12,7 @@ import { BigNumberPipe } from '@shared/pipes';
 @Component({
   selector: 'mrtm-aer-total-emissions-summary-template',
   standalone: true,
-  imports: [TableComponent, BigNumberPipe],
+  imports: [NgTemplateOutlet, TableComponent, BigNumberPipe],
   templateUrl: './aer-total-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -42,24 +43,52 @@ export class AerTotalEmissionsSummaryTemplateComponent {
             total: totalEmissions.totalEmissions.total,
           },
           {
+            emissionLabel: 'Less captured CO2',
+            co2: totalEmissions.lessCapturedCo2.co2,
+            ch4: totalEmissions.lessCapturedCo2.ch4,
+            n2o: totalEmissions.lessCapturedCo2.n2o,
+            total: totalEmissions.lessCapturedCo2.total,
+          },
+          {
+            emissionLabel: 'Less voyages not in scope',
+            co2: totalEmissions.lessVoyagesNotInScope.co2,
+            ch4: totalEmissions.lessVoyagesNotInScope.ch4,
+            n2o: totalEmissions.lessVoyagesNotInScope.n2o,
+            total: totalEmissions.lessVoyagesNotInScope.total,
+          },
+          {
             emissionLabel: 'Less emissions reduction claim',
-            co2: totalEmissions.lessEmissionsReductionClaim.co2,
-            ch4: totalEmissions.lessEmissionsReductionClaim.ch4,
-            n2o: totalEmissions.lessEmissionsReductionClaim.n2o,
-            total: totalEmissions.lessEmissionsReductionClaim.total,
+            co2: totalEmissions.lessAnyERC.co2,
+            ch4: totalEmissions.lessAnyERC.ch4,
+            n2o: totalEmissions.lessAnyERC.n2o,
+            total: totalEmissions.lessAnyERC.total,
           },
           {
             emissionLabel: this.totalEmissionsHeading,
             total: totalEmissions.totalShipEmissions,
             isSummary: true,
           },
+        ];
+  });
+
+  readonly surrenderTableData = computed(() => {
+    const totalEmissions = this.totalEmissions();
+    return isNil(totalEmissions)
+      ? []
+      : [
           {
-            emissionLabel: 'Less Northern Ireland surrender deduction',
-            co2: totalEmissions.lessVoyagesInNorthernIrelandDeduction.co2,
-            ch4: totalEmissions.lessVoyagesInNorthernIrelandDeduction.ch4,
-            n2o: totalEmissions.lessVoyagesInNorthernIrelandDeduction.n2o,
-            total: totalEmissions.lessVoyagesInNorthernIrelandDeduction.total,
-            hasPaddingTop: true,
+            emissionLabel: 'Less small island ferry deduction',
+            co2: totalEmissions.lessIslandFerryDeduction.co2,
+            ch4: totalEmissions.lessIslandFerryDeduction.ch4,
+            n2o: totalEmissions.lessIslandFerryDeduction.n2o,
+            total: totalEmissions.lessIslandFerryDeduction.total,
+          },
+          {
+            emissionLabel: 'Less 5% ice class deduction',
+            co2: totalEmissions.less5PercentIceClassDeduction.co2,
+            ch4: totalEmissions.less5PercentIceClassDeduction.ch4,
+            n2o: totalEmissions.less5PercentIceClassDeduction.n2o,
+            total: totalEmissions.less5PercentIceClassDeduction.total,
           },
           {
             emissionLabel: this.surrenderHeading,

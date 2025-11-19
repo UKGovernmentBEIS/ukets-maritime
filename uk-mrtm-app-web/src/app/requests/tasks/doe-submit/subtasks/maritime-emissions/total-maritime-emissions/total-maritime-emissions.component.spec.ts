@@ -49,8 +49,12 @@ describe('TotalMaritimeEmissionsComponent', () => {
       this.setInputValue(`#totalReportableEmissions`, value);
     }
 
-    set lessVoyagesInNorthernIrelandDeduction(value: number) {
-      this.setInputValue(`#lessVoyagesInNorthernIrelandDeduction`, value);
+    set smallIslandFerryDeduction(value: number) {
+      this.setInputValue(`#smallIslandFerryDeduction`, value);
+    }
+
+    set iceClassDeduction(value: number) {
+      this.setInputValue(`#iceClassDeduction`, value);
     }
 
     set surrenderEmissions(value: number) {
@@ -104,11 +108,12 @@ describe('TotalMaritimeEmissionsComponent', () => {
       fixture.detectChanges();
 
       expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryListContents.length).toEqual(5);
+      expect(page.errorSummaryListContents.length).toEqual(6);
       expect(page.errorSummaryListContents).toEqual([
         'Select if you are determining maritime emissions or only the emissions figure for surrender',
         'Enter the total maritime emissions',
-        'Enter the Northern Ireland surrender deduction',
+        'Enter the small island ferry deduction',
+        'Enter the 5% ice class deduction',
         'Enter the emissions figure for surrender',
         'Enter how you calculated the emissions',
       ]);
@@ -146,8 +151,9 @@ describe('TotalMaritimeEmissionsComponent', () => {
 
       page.determinationTypeRadios[0].click();
       page.totalReportableEmissions = 5;
-      page.lessVoyagesInNorthernIrelandDeduction = 4;
-      page.surrenderEmissions = 3;
+      page.smallIslandFerryDeduction = 1;
+      page.iceClassDeduction = 0;
+      page.surrenderEmissions = 10;
       page.fileDeleteButtons[0].click();
       supportingDocumentsControl.setValue([{ file: new File(['test content 3'], 'testfile3.jpg'), uuid: uuid3 }]);
       page.filesValue = [new File(['test content 4'], 'testfile4.jpg')];
@@ -165,8 +171,9 @@ describe('TotalMaritimeEmissionsComponent', () => {
         {
           determinationType: 'MARITIME_EMISSIONS',
           totalReportableEmissions: 5,
-          lessVoyagesInNorthernIrelandDeduction: 4,
-          surrenderEmissions: 3,
+          smallIslandFerryDeduction: 1,
+          iceClassDeduction: 0,
+          surrenderEmissions: 10,
           calculationApproach: 'test another data source',
           supportingDocuments: [
             { file: new File([''], 'filename'), uuid: uuid3 },

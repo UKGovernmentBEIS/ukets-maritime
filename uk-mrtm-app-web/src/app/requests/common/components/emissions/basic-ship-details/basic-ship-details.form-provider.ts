@@ -19,6 +19,7 @@ import { getYearFromRequestId } from '@netz/common/utils';
 import { GovukValidators, MessageValidatorFn } from '@netz/govuk-components';
 
 import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
+import { shouldShowHasIceClassDerogation } from '@requests/common/components/emissions/basic-ship-details/basic-ship-details.helpers';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { isAer } from '@shared/utils';
 
@@ -87,6 +88,17 @@ export const basicShipDetailsFormProvider: Provider = {
       return fb.group(
         {
           ...baseFormGroup,
+          hasIceClassDerogation: fb.control<boolean>(
+            {
+              value: details?.hasIceClassDerogation ?? true,
+              disabled: !shouldShowHasIceClassDerogation(shipDetails?.iceClass),
+            },
+            {
+              validators: [
+                GovukValidators.required('Select yes if you are claiming a surrender reduction for ice class ships'),
+              ],
+            },
+          ),
           allYear: fb.control<boolean>(details?.allYear ?? true, {
             validators: [GovukValidators.required('Select all year or a specific period')],
           }),
