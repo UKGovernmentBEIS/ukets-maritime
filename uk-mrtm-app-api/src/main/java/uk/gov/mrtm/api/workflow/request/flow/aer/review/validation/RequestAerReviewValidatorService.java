@@ -32,11 +32,15 @@ public class RequestAerReviewValidatorService {
         boolean hasVoyages = reviewRequestTaskPayload.getAer() != null
             && reviewRequestTaskPayload.getAer().getVoyageEmissions() != null
             && !reviewRequestTaskPayload.getAer().getVoyageEmissions().getVoyages().isEmpty();
+        boolean smfExist = reviewRequestTaskPayload.getAer() != null
+            && reviewRequestTaskPayload.getAer().getSmf().getExist();
 
         //validate all groups have decisions which are accepted
         //(no need to check accepted decision for verification report review groups accepted is the only  option for these)
-        if (!existDecisionForAllReviewGroups(reviewGroupDecisions, reportingRequired, isVerificationPerformed, hasPorts, hasVoyages) ||
-                !areAllAerReviewGroupsAccepted(reviewGroupDecisions)) {
+        if (!existDecisionForAllReviewGroups(reviewGroupDecisions, reportingRequired,
+            isVerificationPerformed, hasPorts, hasVoyages, smfExist)
+            || !areAllAerReviewGroupsAccepted(reviewGroupDecisions)) {
+
             throw new BusinessException(ErrorCode.FORM_VALIDATION);
         }
     }
@@ -53,13 +57,13 @@ public class RequestAerReviewValidatorService {
     }
 
     private boolean existDecisionForAllReviewGroups(@NotEmpty Map<AerReviewGroup, @Valid AerReviewDecision> reviewGroupDecisions,
-                                                    boolean isReportingRequired,
-                                                    boolean isVerificationPerformed, boolean hasPorts, boolean hasVoyages) {
+                                                    boolean isReportingRequired, boolean isVerificationPerformed,
+                                                    boolean hasPorts, boolean hasVoyages, boolean smfExist) {
         Set<AerReviewGroup> aerReviewGroups = new HashSet<>(AerReviewGroup
             .getAerDataReviewGroups(isReportingRequired, hasPorts, hasVoyages));
 
         if (isVerificationPerformed) {
-            aerReviewGroups.addAll(AerReviewGroup.getVerificationReportDataReviewGroups());
+            aerReviewGroups.addAll(AerReviewGroup.getVerificationReportDataReviewGroups(smfExist));
         }
 
         return CollectionUtils.isEqualCollection(reviewGroupDecisions.keySet(), aerReviewGroups);

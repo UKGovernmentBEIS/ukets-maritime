@@ -7,7 +7,7 @@ import { AdminVerifierUserInvitationDTO } from '@mrtm/api';
 import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { VerificationBodyAdminUserSummaryComponent } from '@verification-bodies/components';
-import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/mock-data';
+import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/verification-bodies-data.mock';
 
 @Component({
   selector: 'mrtm-test-parent',

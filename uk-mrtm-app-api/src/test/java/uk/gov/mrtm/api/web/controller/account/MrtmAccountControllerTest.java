@@ -181,6 +181,10 @@ class MrtmAccountControllerTest {
 
     @Test
     void isExistingAccountImoNumber() throws Exception {
+        AppUser user = AppUser.builder().userId("userId").build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH + IMO_NUMBER_CONTROLLER_PATH + IMO_NUMBER)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());

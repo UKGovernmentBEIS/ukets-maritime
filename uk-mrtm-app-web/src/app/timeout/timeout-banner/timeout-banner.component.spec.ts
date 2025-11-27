@@ -16,9 +16,16 @@ describe('TimeoutBannerComponent', () => {
     timeExtensionAllowed$: new BehaviorSubject<boolean>(true),
   };
 
-  beforeEach(async () => {
+  beforeAll(() => {
     console.error = jest.fn();
     console.warn = jest.fn();
+  });
+
+  afterAll(() => {
+    console = originalConsole;
+  });
+
+  beforeEach(async () => {
     await TestBed.configureTestingModule({
       providers: [{ provide: TimeoutBannerService, useValue: timeoutBannerService }],
     }).compileComponents();
@@ -28,10 +35,6 @@ describe('TimeoutBannerComponent', () => {
     fixture = TestBed.createComponent(TimeoutBannerComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
-  });
-
-  afterEach(() => {
-    console = originalConsole;
   });
 
   it('should create', () => {

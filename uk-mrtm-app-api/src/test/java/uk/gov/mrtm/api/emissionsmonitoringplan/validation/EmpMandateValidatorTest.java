@@ -74,6 +74,7 @@ class EmpMandateValidatorTest {
 
         EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
                 .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
+                        .operatorDetails(EmpOperatorDetails.builder().imoNumber("1234567").build())
                         .emissions(EmpEmissions.builder()
                                 .ships(Set.of(buildEmpShipEmissions("1111111", "Ship A", ReportingResponsibilityNature.SHIPOWNER)))
                                 .build())
@@ -94,6 +95,7 @@ class EmpMandateValidatorTest {
 
         EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
                 .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
+                        .operatorDetails(EmpOperatorDetails.builder().imoNumber("1234567").build())
                         .emissions(EmpEmissions.builder()
                                 .ships(Set.of(buildEmpShipEmissions("1111111", "Ship A", ReportingResponsibilityNature.SHIPOWNER)))
                                 .build())
@@ -116,6 +118,7 @@ class EmpMandateValidatorTest {
         final String shipImo2 = "2222222";
         EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
                 .emissionsMonitoringPlan(EmissionsMonitoringPlan.builder()
+                        .operatorDetails(EmpOperatorDetails.builder().imoNumber("1234567").build())
                         .emissions(EmpEmissions.builder()
                                 .ships(Set.of(buildEmpShipEmissions(shipImo1, "Ship A", ReportingResponsibilityNature.ISM_COMPANY),
                                         buildEmpShipEmissions(shipImo2, "Ship B", ReportingResponsibilityNature.SHIPOWNER)
@@ -347,6 +350,9 @@ class EmpMandateValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getMessage)
                 .containsExactly(SHIP_NOT_ASSOCIATED_WITH_REGISTERED_OWNER.getMessage());
+        assertThat(result.getEmpViolations())
+            .anySatisfy(violation -> assertThat(violation.getData())
+                .containsExactlyInAnyOrder(shipImoNumber5));
     }
 
     private EmissionsMonitoringPlanContainer buildEmissionsMonitoringPlanContainer(Set<EmpShipEmissions> ships,

@@ -23,6 +23,8 @@ export class AerReviewSkippedComponent {
   private readonly aer = this.store.select(aerTimelineCommonQuery.selectAer);
   private readonly assessmentsAndFindingsSections = getAerVerificationAssessmentsAndFindingsSections(
     AER_REVIEW_SKIPPED_ROUTE_PREFIX,
+    undefined,
+    this.aer(),
   );
 
   readonly superSections: Signal<TaskSuperSection[]> = computed(() => {

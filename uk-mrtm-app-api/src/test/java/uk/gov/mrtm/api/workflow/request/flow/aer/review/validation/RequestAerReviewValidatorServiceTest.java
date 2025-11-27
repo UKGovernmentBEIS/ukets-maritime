@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
 import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPort;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortEmissions;
+import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageEmissions;
@@ -55,6 +56,7 @@ class RequestAerReviewValidatorServiceTest {
         AerApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
                 AerApplicationReviewRequestTaskPayload.builder()
                         .reportingRequired(false)
+                        .aer(Aer.builder().smf(AerSmf.builder().exist(true).build()).build())
                         .reviewGroupDecisions(reviewGroupDecisions)
                         .build();
 
@@ -76,6 +78,7 @@ class RequestAerReviewValidatorServiceTest {
         AerApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
                 AerApplicationReviewRequestTaskPayload.builder()
                         .reportingRequired(false)
+                        .aer(Aer.builder().smf(AerSmf.builder().exist(false).build()).build())
                         .reviewGroupDecisions(reviewGroupDecisions)
                         .build();
 
@@ -88,7 +91,8 @@ class RequestAerReviewValidatorServiceTest {
     @Test
     void validateReviewGroups_without_verification_report_valid() {
         Aer aer = Aer.builder()
-                .build();
+            .smf(AerSmf.builder().exist(true).build())
+            .build();
 
         AerDataReviewDecision aerDataReviewDecision = AerDataReviewDecision.builder()
                 .reviewDataType(AerReviewDataType.AER_DATA)
@@ -115,25 +119,40 @@ class RequestAerReviewValidatorServiceTest {
         reviewValidatorService.validateAllReviewGroupsExistAndAccepted(reviewRequestTaskPayload, false);
     }
 
-    @Test
-    void validateReviewGroups_with_verification_report_valid() {
+    @ParameterizedTest
+    @MethodSource("validateReviewGroupsValidScenarios")
+    void validateReviewGroups_with_verification_report_valid(boolean smfExist,
+                                                             Map<AerReviewGroup, AerReviewDecision> reviewGroupDecisions) {
         Aer aer = Aer.builder()
-                .build();
+            .smf(AerSmf.builder().exist(smfExist).build())
+            .build();
         AerVerificationReport verificationReport = AerVerificationReport.builder()
                 .build();
 
+        AerApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
+                AerApplicationReviewRequestTaskPayload.builder()
+                        .reportingRequired(true)
+                        .aer(aer)
+                        .reviewGroupDecisions(reviewGroupDecisions)
+                        .verificationReport(verificationReport)
+                        .build();
+
+        reviewValidatorService.validateAllReviewGroupsExistAndAccepted(reviewRequestTaskPayload, true);
+    }
+
+    public static Stream<Arguments> validateReviewGroupsValidScenarios() {
         AerDataReviewDecision aerDataReviewDecision = AerDataReviewDecision.builder()
-                .reviewDataType(AerReviewDataType.AER_DATA)
-                .type(AerDataReviewDecisionType.ACCEPTED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build())
-                .build();
+            .reviewDataType(AerReviewDataType.AER_DATA)
+            .type(AerDataReviewDecisionType.ACCEPTED)
+            .details(ReviewDecisionDetails.builder().notes("notes").build())
+            .build();
 
         AerVerificationReportDataReviewDecision verificationReportDataReviewDecision =
-                AerVerificationReportDataReviewDecision.builder()
-                        .reviewDataType(AerReviewDataType.VERIFICATION_REPORT_DATA)
-                        .type(AerVerificationReportDataReviewDecisionType.ACCEPTED)
-                        .details(ReviewDecisionDetails.builder().notes("notes").build())
-                        .build();
+            AerVerificationReportDataReviewDecision.builder()
+                .reviewDataType(AerReviewDataType.VERIFICATION_REPORT_DATA)
+                .type(AerVerificationReportDataReviewDecisionType.ACCEPTED)
+                .details(ReviewDecisionDetails.builder().notes("notes").build())
+                .build();
 
         Map<AerReviewGroup, AerReviewDecision> reviewGroupDecisions = new HashMap<>();
         reviewGroupDecisions.put(AerReviewGroup.LIST_OF_SHIPS, aerDataReviewDecision);
@@ -156,15 +175,13 @@ class RequestAerReviewValidatorServiceTest {
         reviewGroupDecisions.put(AerReviewGroup.CLOSE_DATA_GAPS_METHODOLOGIES, verificationReportDataReviewDecision);
         reviewGroupDecisions.put(AerReviewGroup.MATERIALITY_LEVEL, verificationReportDataReviewDecision);
 
-        AerApplicationReviewRequestTaskPayload reviewRequestTaskPayload =
-                AerApplicationReviewRequestTaskPayload.builder()
-                        .reportingRequired(true)
-                        .aer(aer)
-                        .reviewGroupDecisions(reviewGroupDecisions)
-                        .verificationReport(verificationReport)
-                        .build();
+        Map<AerReviewGroup, AerReviewDecision> reviewGroupDecisionsWithSmf = new HashMap<>(reviewGroupDecisions);
+        reviewGroupDecisionsWithSmf.put(AerReviewGroup.EMISSIONS_REDUCTION_CLAIM_VERIFICATION, verificationReportDataReviewDecision);
 
-        reviewValidatorService.validateAllReviewGroupsExistAndAccepted(reviewRequestTaskPayload, true);
+        return Stream.of(
+            Arguments.of(true, reviewGroupDecisionsWithSmf),
+            Arguments.of(false, reviewGroupDecisions)
+        );
     }
 
     @ParameterizedTest
@@ -174,6 +191,7 @@ class RequestAerReviewValidatorServiceTest {
         Aer aer = Aer.builder()
             .portEmissions(ports)
             .voyageEmissions(voyages)
+            .smf(AerSmf.builder().exist(false).build())
             .build();
         AerVerificationReport verificationReport = AerVerificationReport.builder()
             .build();
@@ -254,7 +272,8 @@ class RequestAerReviewValidatorServiceTest {
     @Test
     void validateReviewGroups_invalid_decision() {
         Aer aer = Aer.builder()
-                .build();
+            .smf(AerSmf.builder().exist(true).build())
+            .build();
 
         AerDataReviewDecision aerDataReviewAcceptedDecision = AerDataReviewDecision.builder()
                 .reviewDataType(AerReviewDataType.AER_DATA)
@@ -296,7 +315,8 @@ class RequestAerReviewValidatorServiceTest {
     @Test
     void validateReviewGroups_invalid_missing_group() {
         Aer aer = Aer.builder()
-                .build();
+            .smf(AerSmf.builder().exist(true).build())
+            .build();
 
         AerDataReviewDecision aerDataReviewAcceptedDecision = AerDataReviewDecision.builder()
                 .reviewDataType(AerReviewDataType.AER_DATA)

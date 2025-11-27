@@ -2,8 +2,6 @@ import { isNil } from 'lodash-es';
 
 import {
   Aer,
-  AerAggregatedEmissionsMeasurement,
-  AerAggregatedEmissionsMeasurementSave,
   AerFuelConsumption,
   AerFuelConsumptionSave,
   AerPort,
@@ -29,10 +27,10 @@ const mapDirectEmissions = (directEmissions?: AerPortEmissionsMeasurement): AerP
   n2o: directEmissions?.n2o,
 });
 
-const mapAerAggregatedEmissionsMeasurementToSavePayload = ({
+const mapAerPortEmissionsMeasurementToSavePayload = ({
   total,
   ...measurement
-}: AerAggregatedEmissionsMeasurement): AerAggregatedEmissionsMeasurementSave => measurement;
+}: AerPortEmissionsMeasurement): AerPortEmissionsMeasurementSave => measurement;
 
 const mapPortsToSavePayload = (ports: Array<AerPort>): Array<AerPortSave> =>
   (ports ?? []).map<AerPortSave>(({ imoNumber, directEmissions, portDetails, uniqueIdentifier, fuelConsumptions }) => ({
@@ -65,8 +63,7 @@ const mapAggregatedDataToSavePayload = (
       fuelConsumptions,
       emissionsWithinUKPorts,
       emissionsBetweenUKPorts,
-      emissionsBetweenUKAndEEAVoyages,
-      smallIslandSurrenderReduction,
+      emissionsBetweenUKAndNIVoyages,
       fromFetch,
     }) => ({
       uniqueIdentifier,
@@ -74,16 +71,13 @@ const mapAggregatedDataToSavePayload = (
       fromFetch,
       fuelConsumptions,
       emissionsWithinUKPorts: !isNil(emissionsWithinUKPorts)
-        ? mapAerAggregatedEmissionsMeasurementToSavePayload(emissionsWithinUKPorts)
+        ? mapAerPortEmissionsMeasurementToSavePayload(emissionsWithinUKPorts)
         : undefined,
       emissionsBetweenUKPorts: !isNil(emissionsBetweenUKPorts)
-        ? mapAerAggregatedEmissionsMeasurementToSavePayload(emissionsBetweenUKPorts)
+        ? mapAerPortEmissionsMeasurementToSavePayload(emissionsBetweenUKPorts)
         : undefined,
-      emissionsBetweenUKAndEEAVoyages: !isNil(emissionsBetweenUKAndEEAVoyages)
-        ? mapAerAggregatedEmissionsMeasurementToSavePayload(emissionsBetweenUKAndEEAVoyages)
-        : undefined,
-      smallIslandSurrenderReduction: !isNil(smallIslandSurrenderReduction)
-        ? mapAerAggregatedEmissionsMeasurementToSavePayload(smallIslandSurrenderReduction)
+      emissionsBetweenUKAndNIVoyages: !isNil(emissionsBetweenUKAndNIVoyages)
+        ? mapAerPortEmissionsMeasurementToSavePayload(emissionsBetweenUKAndNIVoyages)
         : undefined,
     }),
   );

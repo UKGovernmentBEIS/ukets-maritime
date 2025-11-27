@@ -14,7 +14,7 @@ import {
   CONTROL_ACTIVITIES_SUB_TASK,
   ControlActivitiesWizardStep,
 } from '@requests/common/emp/subtasks/control-activities';
-import { mockEmpControlActivities, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockEmpControlActivities, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { EmpVariationReviewService } from '@requests/tasks/emp-variation-review/services';

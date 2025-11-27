@@ -41,6 +41,6 @@ describe('SummaryRegisteredOwnerShipDetailsComponent', () => {
   });
 
   it('should display all HTML elements', () => {
-    expect(page.listContents).toEqual(['EVER GREEN (IMO: 1111111)', 'Thon Green (IMO: 2222222)']);
+    expect(page.listContents).toEqual(['EVER GREEN(IMO: 1111111)', 'Thon Green(IMO: 2222222)']);
   });
 });

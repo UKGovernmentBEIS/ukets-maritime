@@ -12,6 +12,7 @@ import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
 import uk.gov.netz.api.workflow.request.core.service.InitializeRequestTaskHandler;
 import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionRequiredChange;
 
+import java.time.LocalDate;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -34,6 +35,11 @@ public class EmpNotificationFollowUpWaitForAmendsInitializer implements Initiali
             .filter(e -> amendFiles.contains(e.getKey()) || followUpResponseFiles.contains(e.getKey()))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+        LocalDate followUpDueDate = ((EmpNotificationAcceptedDecisionDetails)
+            requestPayload.getReviewDecision().getDetails()).getFollowUp().getFollowUpResponseExpirationDate();
+        LocalDate amendsDueDate = ((EmpNotificationFollowupRequiredChangesDecisionDetails)
+            requestPayload.getFollowUpReviewDecision().getDetails()).getDueDate();
+
         return EmpNotificationFollowUpWaitForAmendsRequestTaskPayload.builder()
             .payloadType(MrtmRequestTaskPayloadType.EMP_NOTIFICATION_FOLLOW_UP_WAIT_FOR_AMENDS_PAYLOAD)
             .followUpRequest(((EmpNotificationAcceptedDecisionDetails) requestPayload.getReviewDecision().getDetails()).getFollowUp().getFollowUpRequest())
@@ -41,6 +47,7 @@ public class EmpNotificationFollowUpWaitForAmendsInitializer implements Initiali
             .followUpFiles(followUpResponseFiles)
             .reviewDecision(requestPayload.getFollowUpReviewDecision())
             .followUpResponseAttachments(followUpResponseAttachments)
+            .followUpResponseExpirationDate(amendsDueDate != null ? amendsDueDate : followUpDueDate)
             .build();
     }
 

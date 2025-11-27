@@ -103,6 +103,9 @@ export class ErrorCodes {
   static BATCHREISSUE0002: string = 'BATCHREISSUE0002';
   static AER1008: string = 'AER1008';
   static NOTFOUND1001: string = 'NOTFOUND1001';
+  static THIRDPARTYDATAPROVIDER1000: string = 'THIRDPARTYDATAPROVIDER1000';
+  static THIRDPARTYDATAPROVIDER1001: string = 'THIRDPARTYDATAPROVIDER1001';
+  static THIRDPARTYDATAPROVIDER1002: string = 'THIRDPARTYDATAPROVIDER1002';
 }
 
 export interface BadRequest extends HttpErrorResponse {

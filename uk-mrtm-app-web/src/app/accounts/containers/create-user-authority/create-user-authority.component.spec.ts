@@ -15,7 +15,7 @@ import {
   selectNewUserAuthority,
   selectSubmissionErrors,
 } from '@accounts/store/user-authority.selectors';
-import { mockOperatorUser } from '@accounts/testing/mock-data';
+import { mockOperatorUser } from '@accounts/testing/accounts-data.mock';
 import { SubmissionError } from '@shared/types';
 
 describe('CreateUserAuthorityComponent', () => {

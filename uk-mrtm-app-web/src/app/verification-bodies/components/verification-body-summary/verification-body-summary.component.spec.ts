@@ -9,7 +9,7 @@ import { ActivatedRouteStub } from '@netz/common/testing';
 import { CountryService } from '@core/services';
 import { CountryServiceStub } from '@registration/testing/country-service-stub';
 import { VerificationBodySummaryComponent } from '@verification-bodies/components';
-import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/mock-data';
+import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/verification-bodies-data.mock';
 
 @Component({
   selector: 'mrtm-test-parent',

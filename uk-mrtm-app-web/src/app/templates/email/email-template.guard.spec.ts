@@ -9,7 +9,7 @@ import { NotificationTemplatesService } from '@mrtm/api';
 import { ActivatedRouteSnapshotStub, mockClass, MockType } from '@netz/common/testing';
 
 import { EmailTemplateGuard } from '@templates/email/email-template.guard';
-import { mockedEmailTemplate } from '@templates/testing/mock-data';
+import { mockedEmailTemplate } from '@templates/testing/templates-data.mock';
 
 describe('EmailTemplateGuard', () => {
   let guard: EmailTemplateGuard;

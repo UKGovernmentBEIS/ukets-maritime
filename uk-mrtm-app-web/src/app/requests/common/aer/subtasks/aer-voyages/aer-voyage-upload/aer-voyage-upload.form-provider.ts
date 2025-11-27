@@ -30,7 +30,6 @@ import {
   csvColumnDiffValidator,
   csvFieldArrayIncludesValidator,
   csvFieldDateValidator,
-  csvFieldMaxDecimalsValidator,
   csvFieldPatternValidator,
   csvFieldRequiredValidator,
   csvFieldTimeValidator,
@@ -39,18 +38,16 @@ import {
   emptyFileValidator,
   fileExtensionValidator,
   fileNameLengthValidator,
+  fileRequiredValidator,
   maxFileSizeValidator,
 } from '@shared/validators';
 
 export const aerVoyageUploadFormProvider: Provider = {
   provide: TASK_FORM,
-  deps: [RequestTaskStore, FormBuilder],
-  useFactory: (store: RequestTaskStore, fb: FormBuilder) => {
+  deps: [FormBuilder],
+  useFactory: (fb: FormBuilder) => {
     return fb.group<AerVoyageUploadCSVFormModel>({
-      voyages: fb.array([] as FormGroup<VoyageFormModel>[], {
-        updateOn: 'change',
-        validators: uploadCSVFormValidators(store),
-      }),
+      voyages: fb.array([] as FormGroup<VoyageFormModel>[]),
       columns: fb.control(null, {
         updateOn: 'change',
         validators: [csvColumnDiffValidator(aerVoyageCsvMap)],
@@ -62,6 +59,7 @@ export const aerVoyageUploadFormProvider: Provider = {
           maxFileSizeValidator(20, 'The selected file must be smaller than 20MB'),
           fileNameLengthValidator(100, 'The selected file must have a file name length less than 100 characters'),
           emptyFileValidator('The selected file cannot be empty'),
+          fileRequiredValidator('Upload the voyages and emission details file'),
         ],
       }),
     });
@@ -79,9 +77,6 @@ export const addVoyageFormGroup = (voyage: FlattenedVoyage): FormGroup<VoyageFor
     arrivalPort: new FormControl<AerPortVisit['port']>(voyage?.arrivalPort),
     arrivalDate: new FormControl<string>(voyage?.arrivalDate),
     arrivalActualTime: new FormControl<string>(voyage?.arrivalActualTime),
-    ccs: new FormControl<string>(voyage?.ccs),
-    ccu: new FormControl<string>(voyage?.ccu),
-    smallIslandFerryReduction: new FormControl<boolean>(voyage?.smallIslandFerryReduction),
     fuelConsumptionOrigin: new FormControl<FuelOriginTypeName['origin']>(voyage?.fuelConsumptionOrigin),
     fuelConsumptionType: new FormControl<AllFuelOriginTypeName>(voyage?.fuelConsumptionType),
     fuelConsumptionOtherName: new FormControl<FuelOriginTypeName['name']>(voyage?.fuelConsumptionOtherName),
@@ -100,7 +95,7 @@ export const addVoyageFormGroup = (voyage: FlattenedVoyage): FormGroup<VoyageFor
   });
 };
 
-const uploadCSVFormValidators = (store: RequestTaskStore) => {
+export const uploadVoyageCSVFormValidators = (store: RequestTaskStore) => {
   const ships = store.select(aerCommonQuery.selectListOfShips)();
   const shipImoNumberKeys = ships.map((ship) => ship.imoNumber);
   const reportingYear = store.select(aerCommonQuery.selectReportingYear)();
@@ -194,17 +189,6 @@ const uploadCSVFormValidators = (store: RequestTaskStore) => {
 
     // Overlap of dates
     csvFieldVoyageDateOverlapValidator<FlattenedVoyage>('departureDate', 'arrivalDate', aerVoyageCsvMap, store),
-
-    // ccs
-    csvFieldRequiredValidator<FlattenedVoyage>('ccs', aerVoyageCsvMap),
-    csvFieldMaxDecimalsValidator<FlattenedVoyage>('ccs', aerVoyageCsvMap, 2, true),
-
-    // ccu
-    csvFieldRequiredValidator<FlattenedVoyage>('ccu', aerVoyageCsvMap),
-    csvFieldMaxDecimalsValidator<FlattenedVoyage>('ccu', aerVoyageCsvMap, 2, true),
-
-    // smallIslandFerryReduction
-    csvFieldRequiredValidator<FlattenedVoyage>('smallIslandFerryReduction', aerVoyageCsvMap),
 
     // fuelConsumptions / directEmissions
     csvFieldNoEmissionsValidator('The ship has not recorded any emissions for one or more voyages'),

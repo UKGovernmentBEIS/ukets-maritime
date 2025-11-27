@@ -3,6 +3,7 @@ import { Type } from '@angular/core';
 import { TaskSection } from '@netz/common/model';
 
 type RequestTaskPageContent = {
+  pageTopComponent?: Type<unknown>;
   contentComponent?: Type<unknown>;
   postHeaderComponent?: Type<unknown>;
   preContentComponent?: Type<unknown>;

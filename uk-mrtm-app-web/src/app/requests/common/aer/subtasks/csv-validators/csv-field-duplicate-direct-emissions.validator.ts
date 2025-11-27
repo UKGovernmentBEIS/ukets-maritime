@@ -38,9 +38,9 @@ export function csvFieldDuplicateDirectEmissionsValidator(type: 'voyages' | 'por
 
       const existingRows = combinations.get(entityUuid);
       if (existingRows) {
-        existingRows.push(index + 1);
+        existingRows.push(index + 2);
       } else {
-        combinations.set(entityUuid, [index + 1]);
+        combinations.set(entityUuid, [index + 2]);
       }
     });
 

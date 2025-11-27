@@ -2,6 +2,7 @@
   [heading]="headerTitle"
   submitText="Confirm and complete"
   [formGroup]="form"
+  [hideSubmit]="!isEditable()"
   (formSubmit)="onSubmit()">
   @for (amendsDecision of decisionForAmends(); track amendsDecision.subtask) {
     <mrtm-review-return-for-amends-subtask-summary-template
@@ -9,11 +10,15 @@
       [reviewDecision]="amendsDecision.decision" />
   }
 
-  <div govuk-checkboxes formControlName="accepted">
-    <govuk-checkbox label="I have made the changes and want to mark this task as complete"></govuk-checkbox>
-  </div>
+  @if (isEditable()) {
+    <div govuk-checkboxes formControlName="accepted">
+      <govuk-checkbox label="I have made changes and want to mark this task as complete"></govuk-checkbox>
+    </div>
+  }
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  @if (isEditable()) {
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  }
   <netz-return-to-task-or-action-page />
 </div>

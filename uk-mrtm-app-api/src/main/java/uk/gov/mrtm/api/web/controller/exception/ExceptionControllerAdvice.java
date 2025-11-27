@@ -19,11 +19,12 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+import uk.gov.mrtm.api.common.exception.ExternalBusinessException;
+import uk.gov.mrtm.api.web.util.ErrorUtil;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.netz.api.common.validation.Violation;
-import uk.gov.mrtm.api.web.util.ErrorUtil;
 
 
 /**
@@ -45,6 +46,20 @@ public class ExceptionControllerAdvice {
         log.error("Business Logic Exception:", ExceptionUtils.getRootCause(e));
 
         return ErrorUtil.getErrorResponse(e.getData(), e.getErrorCode());
+    }
+
+    /**
+     * Exception External Business Handler for all External Business exceptions.
+     *
+     * @param e {@link ExternalBusinessException}
+     * @return {@link ResponseEntity}
+     */
+    @ExceptionHandler(ExternalBusinessException.class)
+    @ResponseBody
+    public ResponseEntity<ExternalErrorResponse> handleExternalBusinessException(ExternalBusinessException e) {
+        log.error("External API Business Logic Exception:", ExceptionUtils.getRootCause(e));
+
+        return ErrorUtil.getExternalErrorResponse(e.getData(), e.getErrorCode());
     }
 
     /**

@@ -12,19 +12,16 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.FuelOrigin;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.biofuel.AerFuelOriginBiofuelTypeName;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.biofuel.FuelOriginBiofuelTypeName;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.efuel.AerFuelOriginEFuelTypeName;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.efuel.FuelOriginEFuelTypeName;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.fossil.AerFuelOriginFossilTypeName;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.fossil.FuelOriginFossilTypeName;
 
 import java.util.UUID;
 
 @Schema(
     discriminatorMapping = {
-        @DiscriminatorMapping(schema = FuelOriginFossilTypeName.class, value = "FOSSIL"),
-        @DiscriminatorMapping(schema = FuelOriginBiofuelTypeName.class, value = "BIOFUEL"),
-        @DiscriminatorMapping(schema = FuelOriginEFuelTypeName.class, value = "RFNBO")
+        @DiscriminatorMapping(schema = AerFuelOriginFossilTypeName.class, value = "FOSSIL"),
+        @DiscriminatorMapping(schema = AerFuelOriginBiofuelTypeName.class, value = "BIOFUEL"),
+        @DiscriminatorMapping(schema = AerFuelOriginEFuelTypeName.class, value = "RFNBO")
     },
     discriminatorProperty = "origin")
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXISTING_PROPERTY, property = "origin", visible = true)

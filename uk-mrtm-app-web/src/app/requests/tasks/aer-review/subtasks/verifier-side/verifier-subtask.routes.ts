@@ -36,6 +36,11 @@ import {
   verifierDetailsMap,
 } from '@requests/common/aer';
 import {
+  EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK,
+  EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+  emissionsReductionClaimVerificationSubtaskListMap,
+} from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
+import {
   AER_REVIEW_GROUP,
   AER_REVIEW_SUBTASK,
   AER_REVIEW_TASK_TITLE,
@@ -160,6 +165,17 @@ export const VERIFIER_SUBTASK_ROUTES: Routes = [
       { provide: AER_REVIEW_TASK_TITLE, useValue: materialityLevelMap.title },
       { provide: AER_REVIEW_GROUP, useValue: 'MATERIALITY_LEVEL' },
       verifierSideSummariesProvidersMap[MATERIALITY_LEVEL_SUB_TASK],
+    ],
+    loadChildren: () =>
+      import('@requests/tasks/aer-review/subtasks/review-application').then((r) => r.REVIEW_APPLICATION_ROUTES),
+  },
+  {
+    path: EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+    providers: [
+      { provide: AER_REVIEW_SUBTASK, useValue: EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK },
+      { provide: AER_REVIEW_TASK_TITLE, useValue: emissionsReductionClaimVerificationSubtaskListMap.title },
+      { provide: AER_REVIEW_GROUP, useValue: 'EMISSIONS_REDUCTION_CLAIM_VERIFICATION' },
+      verifierSideSummariesProvidersMap[EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK],
     ],
     loadChildren: () =>
       import('@requests/tasks/aer-review/subtasks/review-application').then((r) => r.REVIEW_APPLICATION_ROUTES),

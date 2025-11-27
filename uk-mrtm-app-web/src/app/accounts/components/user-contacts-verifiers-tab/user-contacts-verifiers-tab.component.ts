@@ -7,6 +7,7 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { combineLatest, map, of, ReplaySubject, shareReplay, switchMap, takeUntil, tap } from 'rxjs';
 
 import {
+  AccountThirdPartyDataProvidersService,
   AccountVerificationBodyService,
   AuthoritiesService,
   MrtmAccountStatus,
@@ -77,6 +78,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
   private readonly operatorAuthoritiesService = inject(OperatorAuthoritiesService);
   private readonly operatorAccountsStore = inject(OperatorAccountsStore);
   private readonly accountVerificationBodyService = inject(AccountVerificationBodyService);
+  private readonly accountThirdPartyDataProvidersService = inject(AccountThirdPartyDataProvidersService);
   private readonly businessErrorService = inject(BusinessErrorService);
   private readonly router = inject(Router);
   private readonly destroy$ = inject(DestroySubject);
@@ -104,7 +106,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
   );
   isAccountClosed$ = this.operatorAccountsStore.pipe(
     selectAccount,
-    map((account) => account.status === MrtmAccountStatus.CLOSED),
+    map((account) => account?.status === MrtmAccountStatus.CLOSED),
   );
   isEditable = toSignal(this.operatorsManagement$.pipe(map((operators) => operators.editable)));
   verificationBody$ = this.accountVerificationBodyService.getVerificationBodyOfAccount(this.accountId).pipe(
@@ -116,12 +118,37 @@ export class UserContactsVerifiersTabComponent implements OnInit {
   );
   hasVerificationBody = toSignal(this.verificationBody$.pipe(map((value) => !!value)));
 
+  dataSupplier = this.accountThirdPartyDataProvidersService.getThirdPartyDataProviderOfAccount(this.accountId).pipe(
+    catchElseRethrow(
+      (error) => error.status === HttpStatuses.NotFound,
+      () => of(null),
+    ),
+    shareReplay({ bufferSize: 1, refCount: true }),
+  );
+
+  hasDataSupplier = toSignal(this.dataSupplier.pipe(map((value) => !!value)));
+
   accountAuthorities$ = combineLatest([
     this.operatorsManagement$.pipe(map((operators) => operators.authorities)),
     this.verificationBody$.pipe(
       map((body) => (body ? [{ firstName: body.name, lastName: '', roleName: 'Verifier', roleCode: 'verifier' }] : [])),
     ),
-  ]).pipe(map(([operators, bodies]) => operators.concat(bodies)));
+    this.dataSupplier.pipe(
+      map((body) =>
+        body
+          ? [
+              {
+                firstName: body.name,
+                lastName: '',
+                roleName: 'Data supplier',
+                roleCode: 'dataSupplier',
+                userId: `${body.id ?? -1}`,
+              },
+            ]
+          : [],
+      ),
+    ),
+  ]).pipe(map(([operators, bodies, dataSuppliers]) => operators.concat(bodies, dataSuppliers)));
   userType$ = this.authoritiesService
     .getOperatorRoleCodes(this.accountId)
     .pipe(map((res) => res.map((role) => ({ text: role.name, value: role.code }))));

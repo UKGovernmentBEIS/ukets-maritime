@@ -25,7 +25,7 @@
     </div>
   </form>
 } @else {
-  <govuk-table [columns]="columns" [data]="tableData$ | async">
+  <govuk-table id="regulators" [columns]="columns" [data]="tableData$ | async">
     <ng-template let-column="column" let-row="row">
       @switch (column.field) {
         @case ('user') {
@@ -41,5 +41,9 @@
 }
 
 <ng-template #pagination>
-  <govuk-pagination (currentPageChange)="page$.next($event)" [count]="count$ | async" [pageSize]="pageSize" />
+  <govuk-pagination
+    fragment="regulators"
+    (currentPageChange)="page$.next($event)"
+    [count]="count$ | async"
+    [pageSize]="pageSize" />
 </ng-template>

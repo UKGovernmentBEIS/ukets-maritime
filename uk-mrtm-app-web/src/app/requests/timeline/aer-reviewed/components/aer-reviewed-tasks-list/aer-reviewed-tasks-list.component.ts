@@ -21,8 +21,11 @@ import { AER_REVIEWED_ROUTE_PREFIX } from '@requests/timeline/aer-reviewed';
 export class AerReviewedTasksListComponent {
   private readonly store = inject(RequestActionStore);
   private readonly aer = this.store.select(aerTimelineCommonQuery.selectAer);
-  private readonly assessmentsAndFindingsSections =
-    getAerVerificationAssessmentsAndFindingsSections(AER_REVIEWED_ROUTE_PREFIX);
+  private readonly assessmentsAndFindingsSections = getAerVerificationAssessmentsAndFindingsSections(
+    AER_REVIEWED_ROUTE_PREFIX,
+    undefined,
+    this.aer(),
+  );
 
   readonly superSections: Signal<TaskSuperSection[]> = computed(() => {
     return [

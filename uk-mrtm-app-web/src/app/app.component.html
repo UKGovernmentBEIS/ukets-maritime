@@ -31,10 +31,9 @@
       }
       @if (permissions.showRegulators) {
         <a govukLink="header" [routerLink]="['/templates']">Templates</a>
-      }
-      @if (permissions.showRegulators) {
         <a govukLink="header" [routerLink]="['/mi-reports']">MI Reports</a>
         <a govukLink="header" [routerLink]="['/batch-variations']">Batch variations</a>
+        <a govukLink="header" [routerLink]="['/data-suppliers']">Data suppliers</a>
       }
       @if (permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers) {
         <a govukLink="header" [routerLink]="['/guidance']">Guidance</a>

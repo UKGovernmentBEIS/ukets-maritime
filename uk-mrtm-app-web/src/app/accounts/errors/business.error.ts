@@ -43,7 +43,7 @@ export const saveNotFoundVerificationBodyError = (accountId: number) =>
 export const appointedVerificationBodyError = (accountId: number) =>
   new BusinessError('A verification body is already appointed.').withLink({
     link: ['/accounts', accountId],
-    linkText: 'Return to users, contacts and verifiers page',
+    linkText: 'Return to: Users, contacts and verifiers page',
     fragment: 'users',
   });
 
@@ -62,3 +62,10 @@ export const financialContactError = operatorErrorWithAccountIdFactory(
 export const serviceContactError = operatorErrorWithAccountIdFactory(
   () => new BusinessError('You must have a service contact on your account'),
 );
+
+export const dataSupplierAlreadyAppointed = (accountId: number) =>
+  new BusinessError('A data supplier is already appointed.').withLink({
+    link: ['/accounts', accountId],
+    linkText: 'Return to: Users, contacts and verifiers page',
+    fragment: 'users',
+  });

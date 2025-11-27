@@ -29,7 +29,7 @@ public class RequestAerSubmitVerificationService {
                 (AerApplicationVerificationSubmitRequestTaskPayload) requestTask.getPayload();
 
         //validate verification report
-        aerVerificationReportValidatorService.validate(taskPayload.getVerificationReport());
+        aerVerificationReportValidatorService.validate(taskPayload.getAer(), taskPayload.getVerificationReport());
 
         // update request payload
         updateRequestPayload(request, taskPayload);

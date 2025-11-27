@@ -10,13 +10,13 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { EMISSION_SOURCES_SUB_TASK, EmissionSourcesWizardStep } from '@requests/common/emp/subtasks/emission-sources';
-import { mockEmpEmissionSources } from '@requests/common/emp/testing/mock-data';
+import { mockEmpEmissionSources } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { EmpVariationRegulatorService } from '@requests/tasks/emp-variation-regulator/services';
 import { EmissionSourcesVariationRegulatorDecisionComponent } from '@requests/tasks/emp-variation-regulator/subtasks/emission-sources';
-import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/mock-data';
+import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/emp-variation-regulator-data.mock';
 import { HTML_DIFF } from '@shared/directives';
 
 describe('EmissionSourcesVariationRegulatorDecisionComponent', () => {

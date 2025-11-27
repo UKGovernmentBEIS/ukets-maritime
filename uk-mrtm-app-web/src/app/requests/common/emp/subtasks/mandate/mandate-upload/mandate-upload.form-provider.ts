@@ -29,18 +29,16 @@ import {
   emptyFileValidator,
   fileExtensionValidator,
   fileNameLengthValidator,
+  fileRequiredValidator,
   maxFileSizeValidator,
 } from '@shared/validators';
 
 export const mandateUploadFormProvider: Provider = {
   provide: TASK_FORM,
-  deps: [RequestTaskStore, FormBuilder],
-  useFactory: (store: RequestTaskStore, fb: FormBuilder) => {
+  deps: [FormBuilder],
+  useFactory: (fb: FormBuilder) => {
     return fb.group<MandateUploadCSVFormModel>({
-      owners: fb.array([] as FormGroup<MandateUploadFormModel>[], {
-        updateOn: 'change',
-        validators: mandateUploadCSVFormValidators(store),
-      }),
+      owners: fb.array([] as FormGroup<MandateUploadFormModel>[]),
       columns: fb.control(null, {
         updateOn: 'change',
         validators: [csvColumnDiffValidator(mandateCsvMap)],
@@ -52,6 +50,7 @@ export const mandateUploadFormProvider: Provider = {
           maxFileSizeValidator(20, 'The selected file must be smaller than 20MB'),
           fileNameLengthValidator(100, 'The selected file must have a file name length less than 100 characters'),
           emptyFileValidator('The selected file cannot be empty'),
+          fileRequiredValidator('Upload the registered owners file'),
         ],
       }),
     });
@@ -69,9 +68,9 @@ export const addMandateFormGroup = (owner: FlattenedRegisteredOwner): FormGroup<
   });
 };
 
-const mandateUploadCSVFormValidators = (store: RequestTaskStore) => {
+export const uploadMandateCSVFormValidators = (store: RequestTaskStore) => {
   return [
-    csvRowsEmptyValidator('Upload the registered owners file'),
+    csvRowsEmptyValidator(),
     csvRowsLengthValidator(1000, 'The maximum number of entries allowed in the file is 1000'),
 
     // registered owner details

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import { COMPLIANCE_MONITORING_REPORTING_SUB_TASK_PATH } from '@requests/common/aer/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting.helpers';
 import { DATA_GAPS_METHODOLOGIES_SUB_TASK_PATH } from '@requests/common/aer/subtasks/data-gaps-methodologies/data-gaps-methodologies.helpers';
+import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { ETS_COMPLIANCE_RULES_SUB_TASK_PATH } from '@requests/common/aer/subtasks/ets-compliance-rules/ets-compliance-rules.helpers';
 import { MATERIALITY_LEVEL_SUB_TASK_PATH } from '@requests/common/aer/subtasks/materiality-level/materiality-level.helpers';
 import { OPINION_STATEMENT_SUB_TASK_PATH } from '@requests/common/aer/subtasks/opinion-statement/opinion-statement.helpers';
@@ -43,6 +44,14 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/compliance-monitoring-reporting-submitted').then(
         (c) => c.ComplianceMonitoringReportingSubmittedComponent,
+      ),
+  },
+  {
+    path: EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+    data: { breadcrumb: false, backlink: '../../' },
+    loadComponent: () =>
+      import('@requests/common/timeline/aer-common/subtasks/emissions-reduction-claims-verification-submitted').then(
+        (c) => c.EmissionsReductionClaimsVerificationSubmittedComponent,
       ),
   },
   {

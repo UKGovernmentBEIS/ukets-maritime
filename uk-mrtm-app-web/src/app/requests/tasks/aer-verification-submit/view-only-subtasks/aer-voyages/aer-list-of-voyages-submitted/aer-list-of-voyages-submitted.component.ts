@@ -3,8 +3,8 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { RequestTaskStore } from '@netz/common/store';
 
-import { aerCommonQuery } from '@requests/common/aer/+state';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages';
+import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
 import { VoyagesListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
@@ -17,5 +17,5 @@ import { VoyagesListSummaryTemplateComponent } from '@shared/components';
 export class AerListOfVoyagesSubmittedComponent {
   private readonly store = inject(RequestTaskStore);
   readonly map = aerVoyagesMap;
-  readonly voyages = this.store.select(aerCommonQuery.selectVoyagesList);
+  readonly voyages = this.store.select(aerVerificationSubmitQuery.selectVoyagesList);
 }

@@ -59,6 +59,8 @@
     <include file="db/migration/changelogs/file_guidance_ddl.xml" />
     <include file="db/migration/changelogs/guidance_section_ddl.xml" />
     <include file="db/migration/changelogs/guidance_document_ddl.xml" />
+    
+    <include file="db/migration/changelogs/third_party_data_provider_ddl.xml" />
 
     <!-- application dml changelogs -->
     <include file="changelogs/v0.1.0/main.xml" relativeToChangelogFile="true" />

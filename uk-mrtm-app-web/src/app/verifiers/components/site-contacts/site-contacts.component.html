@@ -1,5 +1,5 @@
 <form (ngSubmit)="onSave()" [formGroup]="form" name="site-contacts">
-  <govuk-table [columns]="columns" [data]="tableData$ | async" formArrayName="siteContacts">
+  <govuk-table id="site-contacts" [columns]="columns" [data]="tableData$ | async" formArrayName="siteContacts">
     <ng-template let-column="column" let-index="index" let-row="row">
       <ng-container [formGroupName]="index">
         @switch (column.field) {
@@ -24,7 +24,11 @@
   </govuk-table>
 
   @if ((count$ | async) > pageSize) {
-    <govuk-pagination (currentPageChange)="page$.next($event)" [count]="count$ | async" [pageSize]="pageSize" />
+    <govuk-pagination
+      fragment="site-contacts"
+      (currentPageChange)="page$.next($event)"
+      [count]="count$ | async"
+      [pageSize]="pageSize" />
   }
 
   @if (isEditable$ | async) {

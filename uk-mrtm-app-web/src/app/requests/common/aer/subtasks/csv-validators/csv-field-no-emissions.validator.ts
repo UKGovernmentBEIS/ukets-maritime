@@ -25,7 +25,7 @@ export function csvFieldNoEmissionsValidator(message: string): ValidatorFn {
 
       if (!origin && !type && !amount && !co2 && !ch4 && !n2o) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

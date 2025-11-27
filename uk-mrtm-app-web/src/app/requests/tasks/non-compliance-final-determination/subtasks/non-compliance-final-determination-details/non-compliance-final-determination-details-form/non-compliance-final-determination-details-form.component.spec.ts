@@ -6,6 +6,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { mockNonComplianceFinalDeterminationRequestTask } from '@requests/common/non-compliance/testing';
+import { taskProviders } from '@requests/common/task.providers';
 import { NonComplianceFinalDeterminationDetailsFormComponent } from '@requests/tasks/non-compliance-final-determination/subtasks/non-compliance-final-determination-details/non-compliance-final-determination-details-form';
 
 describe('NonComplianceFinalDeterminationDetailsFormComponent', () => {
@@ -21,6 +22,7 @@ describe('NonComplianceFinalDeterminationDetailsFormComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
+        ...taskProviders,
       ],
     }).compileComponents();
 

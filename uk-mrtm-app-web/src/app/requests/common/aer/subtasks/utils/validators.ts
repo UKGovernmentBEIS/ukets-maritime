@@ -5,6 +5,7 @@ import { isAfter, isBefore } from 'date-fns';
 
 import { AerFuelConsumption, AerFuelOriginFossilTypeName, AerShipEmissions } from '@mrtm/api';
 
+import { FuelOriginTitlePipe } from '@shared/pipes';
 import { mergeDatesToDate } from '@shared/utils';
 
 export const arrivalDepartureDateValidator =
@@ -107,19 +108,22 @@ export const validateIfUsedFuelsExistInEmissionsValidator = (
   fuels: Array<AerFuelConsumption>,
   relatedShip: AerShipEmissions,
 ): ValidationErrors => {
+  const errors: ValidationErrors = {};
+  const fuelOriginPipe = new FuelOriginTitlePipe();
   for (const fuel of fuels) {
     const fuelOriginTypeName = fuel.fuelOriginTypeName as unknown as AerFuelOriginFossilTypeName;
     if (
       !(relatedShip?.fuelsAndEmissionsFactors as unknown as Array<AerFuelOriginFossilTypeName>)?.find(
         (shipFuel: AerFuelOriginFossilTypeName) =>
+          shipFuel?.uniqueIdentifier === fuelOriginTypeName.uniqueIdentifier &&
           shipFuel?.origin === fuelOriginTypeName.origin &&
           shipFuel?.type === fuelOriginTypeName.type &&
           shipFuel?.name === fuelOriginTypeName.name,
       )
     ) {
-      return { fuelConsumptions: 'The highlighted entries have invalid values' };
+      errors[fuelOriginTypeName.uniqueIdentifier] =
+        `Fuel type ${fuelOriginPipe.transform(fuelOriginTypeName, false)} used in fuel consumption does not exist in related Ship`;
     }
   }
-
-  return null;
+  return Object.keys(errors).length ? errors : null;
 };

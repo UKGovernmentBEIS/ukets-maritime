@@ -10,13 +10,13 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { ABBREVIATIONS_SUB_TASK, AbbreviationsWizardStep } from '@requests/common/emp/subtasks/abbreviations';
-import { mockEmpAbbreviations } from '@requests/common/emp/testing/mock-data';
+import { mockEmpAbbreviations } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { EmpVariationRegulatorService } from '@requests/tasks/emp-variation-regulator/services';
 import { AbbreviationsVariationRegulatorDecisionComponent } from '@requests/tasks/emp-variation-regulator/subtasks/abbreviations';
-import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/mock-data';
+import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/emp-variation-regulator-data.mock';
 import { HTML_DIFF } from '@shared/directives';
 
 describe('AbbreviationsVariationRegulatorDecisionComponent', () => {

@@ -9,5 +9,6 @@ export const relatedPrintableItemsMap: RelatedPrintableItemsMap = {
   AER_APPLICATION_SENT_TO_VERIFIER: AerSubmittedReportComponent,
   AER_APPLICATION_SUBMITTED: AerSubmittedReportComponent,
   AER_APPLICATION_AMENDS_SUBMITTED: AerSubmittedReportComponent,
+  AER_APPLICATION_AMENDS_SENT_TO_VERIFIER: AerSubmittedReportComponent,
   AER_APPLICATION_VERIFICATION_SUBMITTED: AerVerificationSubmittedReportComponent,
 };

@@ -9,7 +9,7 @@ import { DocumentTemplatesService } from '@mrtm/api';
 import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
 
 import { DocumentTemplateComponent } from '@templates/document/edit/document-template.component';
-import { mockedDocumentTemplate } from '@templates/testing/mock-data';
+import { mockedDocumentTemplate } from '@templates/testing/templates-data.mock';
 
 describe('DocumentTemplateComponent', () => {
   let component: DocumentTemplateComponent;

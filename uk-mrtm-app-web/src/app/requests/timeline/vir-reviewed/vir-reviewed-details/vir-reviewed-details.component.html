@@ -21,7 +21,7 @@
       <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
       <dd
         govukSummaryListRowValue
-        [notProvided]="data?.decisionNotification?.signatory | userInfoResolver: data?.usersInfo"></dd>
+        [notProvided]="data?.decisionNotification?.signatory | userInfoResolver: data?.usersInfo : false"></dd>
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Official notice</dt>

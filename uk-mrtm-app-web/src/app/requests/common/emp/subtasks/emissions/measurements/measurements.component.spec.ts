@@ -13,8 +13,8 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { MeasurementsComponent } from '@requests/common/emp/subtasks/emissions/measurements/measurements.component';
-import { mockEmpIssuanceSubmitRequestTask, mockStateBuild } from '@requests/common/emp/testing/mock-data';
-import { mockEmissions } from '@requests/common/emp/testing/mock-emissions';
+import { emissionsMock } from '@requests/common/emp/testing/emissions.mock';
+import { mockEmpIssuanceSubmitRequestTask, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
@@ -28,7 +28,7 @@ describe('MeasurementsComponent', () => {
     saveSubtask: jest.fn().mockReturnValue(of({})),
   };
   const taskServiceSpy = jest.spyOn(taskService, 'saveSubtask');
-  const route: any = { snapshot: { params: { shipId: mockEmissions.ships[0].uniqueIdentifier }, pathFromRoot: [] } };
+  const route: any = { snapshot: { params: { shipId: emissionsMock.ships[0].uniqueIdentifier }, pathFromRoot: [] } };
 
   class Page extends BasePage<MeasurementsComponent> {
     getEmissionSourcesCheckboxes() {
@@ -102,7 +102,7 @@ describe('MeasurementsComponent', () => {
   describe('for existing measurements question', () => {
     beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
-      store.setState(mockStateBuild({ emissions: mockEmissions }, { emissions: TaskItemStatus.IN_PROGRESS }));
+      store.setState(mockStateBuild({ emissions: emissionsMock }, { emissions: TaskItemStatus.IN_PROGRESS }));
       createComponent();
     });
 
@@ -138,14 +138,14 @@ describe('MeasurementsComponent', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(EMISSIONS_SUB_TASK, EmissionsWizardStep.MEASUREMENTS, route, {
         measurements: [
-          ...mockEmissions.ships[0].measurements,
+          ...emissionsMock.ships[0].measurements,
           {
             emissionSources: ['Main gas turbine'],
             name: 'Device 2',
             technicalDescription: null,
           },
         ],
-        shipId: mockEmissions.ships[0].uniqueIdentifier,
+        shipId: emissionsMock.ships[0].uniqueIdentifier,
       });
     });
 
@@ -155,8 +155,8 @@ describe('MeasurementsComponent', () => {
 
       expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(EMISSIONS_SUB_TASK, EmissionsWizardStep.MEASUREMENTS, route, {
-        measurements: mockEmissions.ships[0].measurements,
-        shipId: mockEmissions.ships[0].uniqueIdentifier,
+        measurements: emissionsMock.ships[0].measurements,
+        shipId: emissionsMock.ships[0].uniqueIdentifier,
       });
     });
   });

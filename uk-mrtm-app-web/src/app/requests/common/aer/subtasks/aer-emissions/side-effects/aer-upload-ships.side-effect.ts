@@ -52,7 +52,7 @@ export class AerUploadShipsSideEffect extends SideEffect {
   private updateVoyages(payload: WritableDraft<AerSubmitTaskPayload>) {
     for (const key of Object.keys(payload?.aerSectionsCompleted)) {
       if (key.startsWith('voyages-voyage')) {
-        payload.aerSectionsCompleted[key] = TaskItemStatus.IN_PROGRESS;
+        payload.aerSectionsCompleted[key] = TaskItemStatus.NEEDS_REVIEW;
       }
     }
     if (payload.aerSectionsCompleted?.[AER_VOYAGES_SUB_TASK]) {
@@ -67,7 +67,7 @@ export class AerUploadShipsSideEffect extends SideEffect {
   private updatePorts(payload: WritableDraft<AerSubmitTaskPayload>) {
     for (const key of Object.keys(payload?.aerSectionsCompleted)) {
       if (key.startsWith('ports-port-call-')) {
-        payload.aerSectionsCompleted[key] = TaskItemStatus.IN_PROGRESS;
+        payload.aerSectionsCompleted[key] = TaskItemStatus.NEEDS_REVIEW;
       }
     }
     if (payload.aerSectionsCompleted?.[AER_PORTS_SUB_TASK]) {
@@ -82,7 +82,7 @@ export class AerUploadShipsSideEffect extends SideEffect {
   private updateAggregatedData(payload: WritableDraft<AerSubmitTaskPayload>) {
     for (const key of Object.keys(payload?.aerSectionsCompleted)) {
       if (key.startsWith('aggregatedData-aggregated-data-')) {
-        payload.aerSectionsCompleted[key] = TaskItemStatus.IN_PROGRESS;
+        payload.aerSectionsCompleted[key] = TaskItemStatus.NEEDS_REVIEW;
       }
     }
     if (payload.aerSectionsCompleted?.[AER_AGGREGATED_DATA_SUB_TASK]) {

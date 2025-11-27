@@ -79,39 +79,6 @@
         </dd>
       }
     </div>
-
-    @if (relatedShip()?.derogations?.carbonCaptureAndStorageReduction) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Carbon capture and storage (CCS) (t)</dt>
-        <dd govukSummaryListRowValue [notProvided]="voyage?.voyageDetails?.ccs"></dd>
-        @if (editable()) {
-          <dd govukSummaryListColumnActions>
-            <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
-          </dd>
-        }
-      </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Carbon capture and utilisation (CCU) (t)</dt>
-        <dd govukSummaryListRowValue [notProvided]="voyage?.voyageDetails?.ccu">{{ voyage?.voyageDetails?.ccu }}</dd>
-        @if (editable()) {
-          <dd govukSummaryListColumnActions>
-            <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
-          </dd>
-        }
-      </div>
-    }
-
-    @if (relatedShip()?.derogations?.smallIslandFerryOperatorReduction) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Are you claiming a small island ferry operator surrender reduction?</dt>
-        <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.smallIslandFerryReduction | booleanToText }}</dd>
-        @if (editable()) {
-          <dd govukSummaryListColumnActions>
-            <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
-          </dd>
-        }
-      </div>
-    }
   </dl>
 
   <mrtm-voyage-or-port-call-emissions-summary-template

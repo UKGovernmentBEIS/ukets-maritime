@@ -13,17 +13,17 @@ import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
 import { aerCommonSubtaskStepsQuery } from '@requests/common/aer/+state';
 import { AerShipsXmlService } from '@requests/common/aer/subtasks/aer-emissions/services';
 import {
+  aerShipsXmlMock,
   mockAerApplicationSubmitRequestTask,
   mockAerShipsPartialErrorsXml,
-  mockAerShipsXml,
 } from '@requests/common/aer/testing';
 import { EMISSIONS_SUB_TASK, UPLOAD_SHIPS_STEP } from '@requests/common/components/emissions/emissions.helpers';
 import { UploadShipsComponent } from '@requests/common/components/emissions/upload-ships/upload-ships.component';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships/upload-ships-xml-service.token';
 import { empCommonSubtaskStepsQuery } from '@requests/common/emp/+state';
 import { EmpShipsXmlService } from '@requests/common/emp/subtasks/emissions/services';
-import { mockEmpIssuanceSubmitRequestTask } from '@requests/common/emp/testing/mock-data';
-import { mockEmpShipsCoreErrorsXml, mockEmpShipsXml } from '@requests/common/emp/testing/mock-emp-ship-xml';
+import { mockEmpIssuanceSubmitRequestTask } from '@requests/common/emp/testing/emp-data.mock';
+import { mockEmpShipsCoreErrorsXml, mockEmpShipsXml } from '@requests/common/emp/testing/emp-ship-xml.mock';
 import { taskProviders } from '@requests/common/task.providers';
 
 describe('UploadShipsComponent', () => {
@@ -225,16 +225,13 @@ describe('UploadShipsComponent', () => {
   const expectedValidAerEmissions = [
     {
       derogations: {
-        carbonCaptureAndStorageReduction: true,
         exceptionFromPerVoyageMonitoring: false,
-        smallIslandFerryOperatorReduction: true,
       },
       details: {
         allYear: true,
         flagState: 'GR',
         from: null,
         grossTonnage: 10000,
-        hasIceClassDerogation: true,
         iceClass: 'PC1',
         imoNumber: '1111111',
         name: 'Ship A1',
@@ -322,16 +319,13 @@ describe('UploadShipsComponent', () => {
     },
     {
       derogations: {
-        carbonCaptureAndStorageReduction: false,
         exceptionFromPerVoyageMonitoring: true,
-        smallIslandFerryOperatorReduction: true,
       },
       details: {
         allYear: false,
         flagState: 'US',
         from: '2025-01-01',
         grossTonnage: 20000,
-        hasIceClassDerogation: null,
         iceClass: 'NA',
         imoNumber: '2222222',
         name: 'Ship B1',
@@ -503,7 +497,7 @@ describe('UploadShipsComponent', () => {
     });
 
     it('should parse XML, update ship lists and submit form when valid XML is uploaded', async () => {
-      await component.onFileSelect(createMockFileEvent(mockAerShipsXml));
+      await component.onFileSelect(createMockFileEvent(aerShipsXmlMock));
       fixture.detectChanges();
 
       expect(component.xmlErrors()).toEqual([]);
@@ -513,7 +507,6 @@ describe('UploadShipsComponent', () => {
           flagState: 'GR',
           from: null,
           grossTonnage: 10000,
-          hasIceClassDerogation: true,
           iceClass: 'PC1',
           imoNumber: '1111111',
           name: 'Ship A1',
@@ -527,7 +520,6 @@ describe('UploadShipsComponent', () => {
           flagState: 'US',
           from: '2025-01-01',
           grossTonnage: 20000,
-          hasIceClassDerogation: null,
           iceClass: 'NA',
           imoNumber: '2222222',
           name: 'Ship B1',

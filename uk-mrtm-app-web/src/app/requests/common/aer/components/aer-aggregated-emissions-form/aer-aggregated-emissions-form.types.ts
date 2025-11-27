@@ -1,5 +1,5 @@
 import { FormControl } from '@angular/forms';
 
-import { AerAggregatedEmissionsMeasurement } from '@mrtm/api';
+import { AerPortEmissionsMeasurement } from '@mrtm/api';
 
-export type AerAggregatedEmissionsFormGroupModel = Record<keyof AerAggregatedEmissionsMeasurement, FormControl>;
+export type AerAggregatedEmissionsFormGroupModel = Record<keyof AerPortEmissionsMeasurement, FormControl>;

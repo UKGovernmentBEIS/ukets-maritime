@@ -158,4 +158,43 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_ADD_LESS_VOYAGES_IN_NORTHERN_IRELAND_DEDUCTION_COLUMN_ON_RPT_REPORTABLE_EMISSIONS_TABLE" author="P44065">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Update rpt_reportable_emissions TABLE add less voyages in northern ireland deduction column</comment>
+
+        <addColumn tableName="rpt_reportable_emissions">
+            <column name="less_voyages_in_northern_ireland_deduction" type="numeric" defaultValueNumeric="0.0" remarks="The less voyages in northern ireland deduction"/>
+        </addColumn>
+
+        <rollback>
+            <dropColumn tableName="rpt_reportable_emissions" columnName="less_voyages_in_northern_ireland_deduction"/>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_DROP_ISLAND_FERRY_DEDUCTION_ICE_CLASS_DEDUCTION_ON_RPT_REPORTABLE_EMISSIONS_TABLE" author="P44065">
+        <preConditions onFail="WARN">
+            <sqlCheck expectedResult="1">SELECT count(*) FROM information_schema.tables where table_name = 'rpt_reportable_emissions';</sqlCheck>
+        </preConditions>
+
+        <comment>Drop island ferry deduction and ice class deduction columns</comment>
+
+        <sql>
+            ALTER TABLE rpt_reportable_emissions DROP COLUMN island_ferry_deduction CASCADE;
+            ALTER TABLE rpt_reportable_emissions DROP COLUMN ice_class_deduction CASCADE;
+        </sql>
+        <rollback>
+            <addColumn tableName="rpt_reportable_emissions">
+                <column name="island_ferry_deduction" type="numeric" defaultValueNumeric="0.0" remarks="The less small island ferry deduction"/>
+            </addColumn>
+
+            <addColumn tableName="rpt_reportable_emissions">
+                <column name="ice_class_deduction" type="numeric" defaultValueNumeric="0.0" remarks="The less 5 percent ice class deduction"/>
+            </addColumn>
+
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

@@ -39,7 +39,9 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.uncertainty.Unce
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueElementsValidator;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -126,6 +128,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_FUEL_NAME.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(OTHER_FUEL_NAME_1).toArray());
     }
 
     @Test
@@ -142,6 +146,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
                 emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_FUEL_NAME.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(OTHER_FUEL_NAME_1).toArray());
     }
 
     @Test
@@ -190,7 +196,7 @@ class EmpEmissionsValidatorTest {
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_POTENTIAL_FUEL_TYPE.getMessage()));
         assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
-            .containsExactlyInAnyOrder(Set.of(fuelOriginEFuelTypeName).toArray());
+            .containsExactlyInAnyOrder(Set.of(E_FUEL_TYPE_1.name()).toArray());
     }
 
     @Test
@@ -213,6 +219,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
                 emissionsMonitoringPlanViolation.getMessage().equals(FUEL_NOT_ASSOCIATED_WITH_EMISSION_SOURCES.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(E_FUEL_TYPE_1.name()).toArray());
     }
 
     @Test
@@ -228,6 +236,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_UNCERTAINTY_METHODS.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(MonitoringMethod.DIRECT.name()).toArray());
     }
 
     @Test
@@ -244,6 +254,11 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_UNCERTAINTY_METHODS.getMessage()));
+
+        assertThat(result.getEmpViolations()).hasSize(1);
+        Set<Object> actualData = new HashSet<>(Arrays.asList((result.getEmpViolations().getFirst().getData())));
+        Set<Object> expectedData = Set.of(MonitoringMethod.FLOW_METERS.name(), MonitoringMethod.DIRECT.name());
+        assertThat(actualData).isEqualTo(expectedData);
     }
 
     @Test
@@ -259,6 +274,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_CARBON_TECHNOLOGIES_NAMES.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(EMISSION_SOURCES_NAME_3).toArray());
     }
 
     @Test
@@ -275,6 +292,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
                 emissionsMonitoringPlanViolation.getMessage().equals(INVALID_MEASUREMENT_DESCRIPTION_EMISSION_SOURCES.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(EMISSION_SOURCES_NAME_3).toArray());
     }
 
     private EmissionsMonitoringPlanContainer createEmpContainer(EmpEmissions NEW) {

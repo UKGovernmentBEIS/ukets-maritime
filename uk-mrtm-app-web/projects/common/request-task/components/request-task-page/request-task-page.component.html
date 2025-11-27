@@ -1,4 +1,8 @@
 @if (vm(); as vm) {
+  @if (vm.pageTopComponent; as pageTopComponent) {
+    <ng-container *ngComponentOutlet="pageTopComponent" />
+  }
+
   <div class="govuk-grid-row">
     <div [class]="vm.hasSidebar ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
       <netz-page-heading [size]="vm.headerSize ?? 'l'">

@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
+import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderViewServiceDelegator;
 import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -41,6 +43,7 @@ public class RequestTaskController {
 
     private final RequestTaskViewService requestTaskViewService;
     private final RequestTaskActionHandlerMapper requestTaskActionHandlerMapper;
+    private final ThirdPartyProviderViewServiceDelegator thirdPartyProviderViewServiceDelegator;
 
     @GetMapping(path = "/{id}")
     @Operation(summary = "Get task item info by id")
@@ -78,5 +81,16 @@ public class RequestTaskController {
                 requestTaskActionProcessDTO.getRequestTaskActionPayload());
 
         return ObjectUtils.isEmpty(taskPayload) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : ResponseEntity.ok(taskPayload);
+    }
+
+    @GetMapping(path = "/{id}/third-party-data-provider-info")
+    @Operation(summary = "Get third party provider data info by request id")
+    @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ThirdPartyDataProviderDTO.class))})
+    @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @Authorized(resourceId = "#taskId")
+    public ResponseEntity<ThirdPartyDataProviderDTO> getThirdPartyDataProviderInfoByRequestId(@PathVariable("id") @Parameter(description = "The task id") Long taskId) {
+        final ThirdPartyDataProviderDTO data = thirdPartyProviderViewServiceDelegator.getThirdPartyDataProviderInfo(taskId);
+        return ObjectUtils.isEmpty(data) ? new ResponseEntity<>(HttpStatus.NO_CONTENT) : ResponseEntity.ok(data);
     }
 }

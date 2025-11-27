@@ -34,6 +34,11 @@ public class MrtmAccountQueryService {
                 .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
     }
 
+    public Long getAccountIdByImoNumber(String imoNumber) {
+        return accountRepository.findAccountIdByImoNumber(imoNumber)
+            .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+    }
+
     public boolean isExistingAccountImoNumber(String imoNumber) {
         return accountRepository.existsByImoNumber(imoNumber);
     }

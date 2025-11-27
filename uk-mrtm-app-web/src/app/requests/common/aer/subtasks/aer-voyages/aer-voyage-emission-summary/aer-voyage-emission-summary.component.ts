@@ -48,7 +48,17 @@ export class AerVoyageEmissionSummaryComponent {
   readonly form = new UntypedFormGroup({});
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly voyageId: InputSignal<string> = input<string>();
-  readonly voyage = computed(() => this.store.select(aerCommonQuery.selectVoyage(this.voyageId()))());
+  readonly voyage = computed(() => {
+    const voyage = this.store.select(aerCommonQuery.selectVoyage(this.voyageId()))();
+
+    return {
+      ...voyage,
+      fuelConsumptions: (voyage?.fuelConsumptions ?? []).map((fuelConsumption) => ({
+        ...fuelConsumption,
+        needsReview: !isNil(validateIfUsedFuelsExistInEmissionsValidator([fuelConsumption], voyage.relatedShip)),
+      })),
+    };
+  });
   readonly ship: Signal<AerShipEmissions> = computed(() =>
     this.store.select(aerCommonQuery.selectRelatedShipForVoyage(this.voyageId()))(),
   );

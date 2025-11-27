@@ -25,7 +25,7 @@ import {
   mockRegulatorRolePermissions,
   mockRegulatorUser,
   mockRegulatorUserStatus,
-} from '@regulators/testing/mock-data';
+} from '@regulators/testing/regulators-data.mock';
 
 describe('RegulatorDetailsComponent', () => {
   let component: DetailsComponent;

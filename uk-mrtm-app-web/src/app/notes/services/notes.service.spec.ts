@@ -10,7 +10,7 @@ import { HttpStatuses } from '@netz/common/error';
 import { MockType } from '@netz/common/testing';
 
 import { NotesService } from '@notes/services';
-import { mockAccountNotesResults, mockRequestNotesResults } from '@notes/testing/mock-data';
+import { mockAccountNotesResults, mockRequestNotesResults } from '@notes/testing/notes-data.mock';
 
 describe('NotesService', () => {
   let service: NotesService;

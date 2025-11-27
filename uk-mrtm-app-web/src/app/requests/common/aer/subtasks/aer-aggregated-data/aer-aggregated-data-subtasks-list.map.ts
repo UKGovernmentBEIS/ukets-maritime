@@ -1,10 +1,9 @@
 import { AerShipAggregatedData } from '@mrtm/api';
-import { AerAggregatedEmissionsMeasurement } from '@mrtm/api';
 
 import { SubTaskListMap } from '@shared/types';
 
 export const aerAggregatedDataSubtasksListMap: SubTaskListMap<
-  AerShipAggregatedData & { annualAggregatedEmissions: AerAggregatedEmissionsMeasurement; uploadAggregatedData: string }
+  AerShipAggregatedData & { annualAggregatedEmissions: string; uploadAggregatedData: string }
 > = {
   caption: 'Aggregated data',
   title: 'Aggregated data for ships',
@@ -28,17 +27,11 @@ export const aerAggregatedDataSubtasksListMap: SubTaskListMap<
   emissionsBetweenUKPorts: {
     title: 'Aggregated greenhouse gas emissions from all voyages between UK ports',
   },
-  emissionsBetweenUKAndEEAVoyages: {
-    title: 'Aggregated greenhouse gas emissions from all voyages between the UK and EEA',
+  emissionsBetweenUKAndNIVoyages: {
+    title: 'Aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
   },
-  totalAggregatedEmissions: {
+  totalEmissionsFromVoyagesAndPorts: {
     title: 'Total aggregated greenhouse gas emitted',
-  },
-  smallIslandSurrenderReduction: {
-    caption: 'Add aggregated data for',
-    title: 'Emissions eligible for small island ferry operator surrender reduction',
-    description:
-      'Only include emissions from eligible voyages and port calls. These will be deducted from your surrender obligation.',
   },
   totalShipEmissions: {
     caption: 'Add aggregated data for',

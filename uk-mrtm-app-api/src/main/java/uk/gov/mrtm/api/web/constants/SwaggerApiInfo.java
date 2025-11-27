@@ -40,6 +40,7 @@ public final class SwaggerApiInfo {
     public static final String ACCOUNT1006_ERROR_CODE = "ACCOUNT1006 | A verification body has already been appointed to the account \t\n";
     public static final String ACCOUNT1008_ERROR_CODE = "ACCOUNT1008 | The verification body is not accredited to the account's emission trading scheme \t\n";
     public static final String ACCOUNT1010_ERROR_CODE = "ACCOUNT1010 | Verification body is attached on open tasks \t\n";
+    public static final String THIRDPARTYDATAPROVIDER1002_ERROR_CODE = "THIRDPARTYDATAPROVIDER1002 | Third party data provider has already been appointed to the account \t\n";
     public static final String NOTIF1000_ERROR_CODE = "NOTIF1000 | Template processing failed \t\n";
     public static final String OTP1001_ERROR_CODE = "OTP1001 | Invalid OTP \t\n";
     public static final String USER1005_ERROR_CODE = "USER1005 | User not exist \t\n";
@@ -310,4 +311,22 @@ public final class SwaggerApiInfo {
     public static final String CREATE_MARITIME_ACCOUNT_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         FORM1001_ERROR_CODE +
         "ACCOUNT1011 | Enter a different company IMO number. This one is already in use.";
+    public static final String EXTERNAL_SAVE_EMP_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
+        FORM1001_ERROR_CODE +
+        FORM1002_ERROR_CODE +
+        "EMP1001 | Business validation error";
+    public static final String EXTERNAL_SAVE_AER_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
+        FORM1001_ERROR_CODE +
+        FORM1002_ERROR_CODE +
+        "AER1004 | Business validation error";
+    public static final String CREATE_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
+        FORM1001_ERROR_CODE +
+        "THIRDPARTYDATAPROVIDER1000 | Third party data provider name already exists" +
+        "THIRDPARTYDATAPROVIDER1001 | Third party data provider JWKS url already exists";
+    public static final String APPOINT_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+        ACCOUNT1009_ERROR_CODE +
+        NOTFOUND1001_ERROR_CODE +
+        THIRDPARTYDATAPROVIDER1002_ERROR_CODE;
+    public static final String UNAPPOINT_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
+        NOTFOUND1001_ERROR_CODE;
 }

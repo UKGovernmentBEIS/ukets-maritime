@@ -1,3 +1,5 @@
+import { Aer } from '@mrtm/api';
+
 import { TaskSection } from '@netz/common/model';
 
 import { selectStatusForSubtask } from '@requests/common/aer/helpers/common.helpers';
@@ -11,6 +13,11 @@ import {
   DATA_GAPS_METHODOLOGIES_SUB_TASK_PATH,
   dataGapsMethodologiesMap,
 } from '@requests/common/aer/subtasks/data-gaps-methodologies';
+import {
+  EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK,
+  EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+  emissionsReductionClaimVerificationSubtaskListMap,
+} from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import {
   ETS_COMPLIANCE_RULES_SUB_TASK,
   ETS_COMPLIANCE_RULES_SUB_TASK_PATH,
@@ -61,6 +68,7 @@ import { TaskItemStatus } from '@requests/common/task-item-status';
 export function getAerVerificationAssessmentsAndFindingsSections(
   routePrefix: string,
   sectionsCompleted?: { [key: string]: string },
+  aer?: Aer,
   defaultStatus: TaskItemStatus = TaskItemStatus.NOT_STARTED,
 ): TaskSection[] {
   return [
@@ -99,6 +107,20 @@ export function getAerVerificationAssessmentsAndFindingsSections(
           linkText: complianceMonitoringReportingMap.title,
           link: `${routePrefix}/${COMPLIANCE_MONITORING_REPORTING_SUB_TASK_PATH}`,
         },
+        aer?.smf?.exist
+          ? {
+              name: EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK,
+              status: sectionsCompleted
+                ? selectStatusForSubtask(
+                    EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK,
+                    sectionsCompleted,
+                    defaultStatus,
+                  )
+                : '',
+              linkText: emissionsReductionClaimVerificationSubtaskListMap.title,
+              link: `${routePrefix}/${EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH}`,
+            }
+          : undefined,
         {
           name: OVERALL_VERIFICATION_DECISION_SUB_TASK,
           status: sectionsCompleted
@@ -107,7 +129,7 @@ export function getAerVerificationAssessmentsAndFindingsSections(
           linkText: overallVerificationDecisionMap.title,
           link: `${routePrefix}/${OVERALL_VERIFICATION_DECISION_SUB_TASK_PATH}`,
         },
-      ],
+      ].filter(Boolean),
     },
     {
       title: 'Verifier findings',

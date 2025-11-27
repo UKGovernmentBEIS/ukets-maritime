@@ -74,6 +74,10 @@ import {
 } from '@requests/common/emp/subtasks/operator-details';
 import { AdditionalDocumentsFlowManager } from '@requests/common/utils/additional-documents';
 import { EmpApiService, EmpService } from '@requests/tasks/emp-submit/services';
+import {
+  ThirdPartyDataProviderImportFlowManager,
+  ThirdPartyDataProviderImportPayloadMutator,
+} from '@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider-import';
 
 export function provideEmpSubmitPayloadMutators(): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -101,6 +105,7 @@ export function provideEmpSubmitPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ThirdPartyDataProviderImportPayloadMutator },
     ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
     ...provideMandatePayloadMutators(),
   ]);
@@ -146,5 +151,6 @@ export function provideEmpSubmitStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourceFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ThirdPartyDataProviderImportFlowManager },
   ]);
 }

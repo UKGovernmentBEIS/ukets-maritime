@@ -11,7 +11,7 @@ import { ActivatedRouteSnapshotStub, mockClass } from '@netz/common/testing';
 
 import { AccountReportingStatusHistoryGuard } from '@accounts/guards';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockReportingStatusHistoryResults } from '@accounts/testing/mock-data';
+import { mockReportingStatusHistoryResults } from '@accounts/testing/accounts-data.mock';
 
 let guard: AccountReportingStatusHistoryGuard;
 

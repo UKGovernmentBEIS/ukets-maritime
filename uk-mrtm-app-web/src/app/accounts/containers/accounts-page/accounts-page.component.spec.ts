@@ -13,7 +13,7 @@ import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { AccountsListComponent } from '@accounts/containers/accounts-list';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockMrtmAccountResults, operatorUserRole, regulatorUserRole } from '@accounts/testing/mock-data';
+import { mockMrtmAccountResults, operatorUserRole, regulatorUserRole } from '@accounts/testing/accounts-data.mock';
 
 import { AccountsPageComponent } from '.';
 

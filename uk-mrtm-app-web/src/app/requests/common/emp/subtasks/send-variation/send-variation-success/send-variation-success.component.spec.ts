@@ -5,7 +5,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { SendVariationSuccessComponent } from '@requests/common/emp/subtasks/send-variation/send-variation-success/send-variation-success.component';
-import { mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 describe('SendVariationSuccessComponent', () => {

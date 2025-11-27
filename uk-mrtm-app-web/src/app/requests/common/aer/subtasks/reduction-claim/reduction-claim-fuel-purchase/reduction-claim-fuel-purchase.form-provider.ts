@@ -55,10 +55,10 @@ export const reductionClaimFuelPurchaseFormProvider: Provider = {
         fuelPurchase?.smfMass ?? null,
         {
           validators: [
-            GovukValidators.required('Enter a total mass of sustainable fuel claimed from the batch'),
+            GovukValidators.required('Enter a total mass of eligible fuel claimed from the batch'),
             GovukValidators.notNaN('Enter a numerical value'),
             GovukValidators.positiveNumber(
-              'The total mass of sustainable fuel claimed from the batch should be greater than 0 ',
+              'The total mass of eligible fuel claimed from the batch should be greater than 0 ',
             ),
             GovukValidators.maxDecimalsValidator(5),
           ],
@@ -70,7 +70,7 @@ export const reductionClaimFuelPurchaseFormProvider: Provider = {
           validators: [
             GovukValidators.min(
               0,
-              'The total mass of sustainable fuel claimed from the batch should be greater than or equal 0',
+              'The total mass of eligible fuel claimed from the batch should be greater than or equal 0',
             ),
           ],
         },

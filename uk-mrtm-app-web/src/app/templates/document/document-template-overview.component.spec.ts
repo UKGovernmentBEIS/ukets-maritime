@@ -5,7 +5,7 @@ import { PageHeadingComponent } from '@netz/common/components';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { DocumentTemplateOverviewComponent } from '@templates/document/document-template-overview.component';
-import { mockedDocumentTemplate } from '@templates/testing/mock-data';
+import { mockedDocumentTemplate } from '@templates/testing/templates-data.mock';
 
 describe('DocumentTemplateOverviewComponent,', () => {
   let component: DocumentTemplateOverviewComponent;

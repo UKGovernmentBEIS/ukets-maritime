@@ -7,7 +7,6 @@ import {
   inject,
   Injector,
   runInInjectionContext,
-  Signal,
   Type,
   ViewEncapsulation,
 } from '@angular/core';
@@ -38,6 +37,7 @@ type ViewModel = {
   header: string;
   headerSize: 'l' | 'xl';
   sections: TaskSection[] | null;
+  pageTopComponent: Type<unknown> | null;
   contentComponent: Type<unknown> | null;
   postHeaderComponent: Type<unknown> | null;
   preContentComponent: Type<unknown> | null;
@@ -79,7 +79,7 @@ export class RequestTaskPageComponent {
   private readonly injector: Injector = inject(Injector);
   private readonly relatedActionsHiddenFromSidebar = ['SYSTEM_MESSAGE_DISMISS'];
 
-  vm: Signal<ViewModel> = computed(() => {
+  vm = computed<ViewModel>(() => {
     const requestTask = this.store.select(requestTaskQuery.selectRequestTask)();
     if (!requestTask) {
       return null;
@@ -94,6 +94,7 @@ export class RequestTaskPageComponent {
       header,
       headerSize,
       sections,
+      pageTopComponent,
       contentComponent,
       postHeaderComponent,
       preContentComponent,
@@ -113,6 +114,7 @@ export class RequestTaskPageComponent {
       header,
       headerSize,
       sections,
+      pageTopComponent,
       contentComponent,
       postHeaderComponent,
       preContentComponent,

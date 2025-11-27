@@ -19,6 +19,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import uk.gov.mrtm.api.common.exception.ExternalBusinessException;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.validation.Violation;
@@ -60,6 +61,32 @@ class ExceptionControllerAdviceTest {
         assertNotNull(errorResponse);
         assertEquals(errorCode.getCode(), errorResponse.getCode());
         assertEquals(errorCode.getMessage(), errorResponse.getMessage());
+    }
+
+
+    @Test
+    void handleExternalBusinessException() {
+        final ErrorCode errorCode = ErrorCode.USER_INVALID_STATUS;
+        Violation[] data = new  Violation[]{new Violation("fieldName", "message")};
+
+        ExternalBusinessException businessException = new ExternalBusinessException(errorCode, data);
+
+        //invoke
+        ResponseEntity<ExternalErrorResponse> errorResponseEntity =
+            exceptionControllerAdvice.handleExternalBusinessException(businessException);
+
+        //assertions
+        assertNotNull(errorResponseEntity);
+        assertEquals(errorCode.getHttpStatus(), errorResponseEntity.getStatusCode());
+
+        ExternalErrorResponse errorResponse = errorResponseEntity.getBody();
+        assertNotNull(errorResponse);
+        assertEquals(errorCode.getCode(), errorResponse.getCode());
+        assertEquals(errorCode.getMessage(), errorResponse.getMessage());
+        assertThat(errorResponse.getData()).hasSize(1);
+        assertEquals("fieldName", errorResponse.getData()[0].getFieldName());
+        assertEquals("message", errorResponse.getData()[0].getMessage());
+
     }
 
     @Test

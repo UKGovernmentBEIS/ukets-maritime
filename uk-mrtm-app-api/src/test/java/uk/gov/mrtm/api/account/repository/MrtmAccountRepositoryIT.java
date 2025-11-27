@@ -70,6 +70,20 @@ class MrtmAccountRepositoryIT extends AbstractContainerBaseTest {
     }
 
     @Test
+    void findAccountIdByImoNumber() {
+        String imoNumber1 = "0000000";
+        String imoNumber2 = "0000001";
+        long accountId1 = 1L;
+        long accountId2 = 2L;
+        createAccount(accountId1, imoNumber1, null);
+        createAccount(accountId2, imoNumber2, null);
+
+        assertEquals(accountId1, repository.findAccountIdByImoNumber(imoNumber1).get());
+        assertEquals(accountId2, repository.findAccountIdByImoNumber(imoNumber2).get());
+        assertTrue(repository.findAccountIdByImoNumber("0000002").isEmpty());
+    }
+
+    @Test
     void findByBusinessId() {
         long accountId1 = 1234L;
         long accountId2 = 4321L;

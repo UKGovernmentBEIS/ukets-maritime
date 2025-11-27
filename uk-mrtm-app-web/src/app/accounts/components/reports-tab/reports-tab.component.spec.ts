@@ -10,7 +10,7 @@ import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
 
 import { ReportsTabComponent } from '@accounts/components';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockedAccount } from '@accounts/testing/mock-data';
+import { mockedAccount } from '@accounts/testing/accounts-data.mock';
 
 export const mockWorkflowResults: RequestDetailsSearchResults = {
   requestDetails: [

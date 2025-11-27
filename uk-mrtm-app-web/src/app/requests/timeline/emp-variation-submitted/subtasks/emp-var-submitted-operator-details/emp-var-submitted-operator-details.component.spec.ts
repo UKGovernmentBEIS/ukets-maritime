@@ -6,8 +6,8 @@ import { ActivatedRoute } from '@angular/router';
 import { RequestActionStore } from '@netz/common/store';
 import { ActivatedRouteStub } from '@netz/common/testing';
 
-import { mockSubmittedStateBuild } from '@requests/common/emp/testing/mock-action-data';
-import { mockAdditionalDocuments } from '@requests/common/emp/testing/mock-data';
+import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
+import { mockAdditionalDocuments } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { EmpVarSubmittedOperatorDetailsComponent } from '@requests/timeline/emp-variation-submitted/subtasks/emp-var-submitted-operator-details';
 

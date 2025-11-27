@@ -5,7 +5,7 @@ import {
   mockEmpShipsCoreErrorsXml,
   mockEmpShipsErrorsXml,
   mockEmpShipsXml,
-} from '@requests/common/emp/testing/mock-emp-ship-xml';
+} from '@requests/common/emp/testing/emp-ship-xml.mock';
 
 describe('EmpShipsXmlService', () => {
   let service: EmpShipsXmlService;

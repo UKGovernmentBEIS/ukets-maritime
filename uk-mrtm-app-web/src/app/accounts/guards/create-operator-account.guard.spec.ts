@@ -13,7 +13,7 @@ import { mockClass } from '@netz/common/testing';
 
 import { CreateOperatorAccountGuard } from '@accounts/guards/create-operator-account.guard';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockAuthService } from '@core/guards/mocks';
+import { mockAuthService } from '@core/guards/core-guards.mock';
 import { AuthService } from '@core/services/auth.service';
 
 let guard: CreateOperatorAccountGuard;

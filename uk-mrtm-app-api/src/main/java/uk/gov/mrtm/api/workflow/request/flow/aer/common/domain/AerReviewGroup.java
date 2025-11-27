@@ -30,24 +30,29 @@ public enum AerReviewGroup {
     UNCORRECTED_NON_CONFORMITIES,
     UNCORRECTED_NON_COMPLIANCES,
     RECOMMENDED_IMPROVEMENTS,
+    EMISSIONS_REDUCTION_CLAIM_VERIFICATION,
     CLOSE_DATA_GAPS_METHODOLOGIES,
     MATERIALITY_LEVEL,
     ;
 
-    public static Set<AerReviewGroup> getVerificationReportDataReviewGroups() {
-        return Set.of(
-                VERIFIER_DETAILS,
-                OPINION_STATEMENT,
-                ETS_COMPLIANCE_RULES,
-                COMPLIANCE_MONITORING_REPORTING,
-                OVERALL_DECISION,
-                UNCORRECTED_MISSTATEMENTS,
-                UNCORRECTED_NON_CONFORMITIES,
-                UNCORRECTED_NON_COMPLIANCES,
-                RECOMMENDED_IMPROVEMENTS,
-                CLOSE_DATA_GAPS_METHODOLOGIES,
-                MATERIALITY_LEVEL
-        );
+    public static Set<AerReviewGroup> getVerificationReportDataReviewGroups(boolean smfExist) {
+        Set<AerReviewGroup> verificationReportReviewGroups = new HashSet<>(Set.of(VERIFIER_DETAILS,
+            OPINION_STATEMENT,
+            ETS_COMPLIANCE_RULES,
+            COMPLIANCE_MONITORING_REPORTING,
+            OVERALL_DECISION,
+            UNCORRECTED_MISSTATEMENTS,
+            UNCORRECTED_NON_CONFORMITIES,
+            UNCORRECTED_NON_COMPLIANCES,
+            RECOMMENDED_IMPROVEMENTS,
+            CLOSE_DATA_GAPS_METHODOLOGIES,
+            MATERIALITY_LEVEL));
+
+        if (smfExist) {
+            verificationReportReviewGroups.add(EMISSIONS_REDUCTION_CLAIM_VERIFICATION);
+        }
+
+        return verificationReportReviewGroups;
     }
 
     public static Set<AerReviewGroup> getAerDataReviewGroups(boolean isReportingRequired, boolean hasPorts, boolean hasVoyages) {

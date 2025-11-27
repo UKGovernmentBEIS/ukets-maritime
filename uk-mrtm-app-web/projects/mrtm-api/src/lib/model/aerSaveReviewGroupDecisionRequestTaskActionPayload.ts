@@ -31,6 +31,7 @@ export interface AerSaveReviewGroupDecisionRequestTaskActionPayload {
     | 'UNCORRECTED_NON_CONFORMITIES'
     | 'UNCORRECTED_NON_COMPLIANCES'
     | 'RECOMMENDED_IMPROVEMENTS'
+    | 'EMISSIONS_REDUCTION_CLAIM_VERIFICATION'
     | 'CLOSE_DATA_GAPS_METHODOLOGIES'
     | 'MATERIALITY_LEVEL';
   decision: AerReviewDecision;

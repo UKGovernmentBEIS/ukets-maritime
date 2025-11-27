@@ -3,14 +3,13 @@ package uk.gov.mrtm.api.reporting.domain.aggregateddata;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import uk.gov.netz.api.common.validation.uniqueelements.UniqueElements;
+import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurementSave;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 
 import java.util.HashSet;
@@ -40,14 +39,11 @@ public class AerShipAggregatedDataSave {
     private Set<@NotNull @Valid AerAggregatedDataFuelConsumption> fuelConsumptions = new HashSet<>();
 
     @Valid
-    private AerAggregatedEmissionsMeasurementSave emissionsWithinUKPorts;
+    private AerPortEmissionsMeasurementSave emissionsWithinUKPorts;
 
     @Valid
-    private AerAggregatedEmissionsMeasurementSave emissionsBetweenUKPorts;
+    private AerPortEmissionsMeasurementSave emissionsBetweenUKPorts;
 
     @Valid
-    private AerAggregatedEmissionsMeasurementSave emissionsBetweenUKAndEEAVoyages;
-
-    @Valid
-    private AerAggregatedEmissionsMeasurementSave smallIslandSurrenderReduction;
+    private AerPortEmissionsMeasurementSave emissionsBetweenUKAndNIVoyages;
 }

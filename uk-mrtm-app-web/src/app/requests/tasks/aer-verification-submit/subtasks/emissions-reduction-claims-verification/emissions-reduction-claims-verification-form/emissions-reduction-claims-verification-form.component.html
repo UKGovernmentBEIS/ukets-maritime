@@ -1,0 +1,67 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  [heading]="map.caption"
+  [caption]="map.title"
+  [isTwoThirds]="true"
+  [showReturnLink]="true"
+  (formSubmit)="onSubmit()">
+  <div
+    formControlName="smfBatchClaimsReviewed"
+    govuk-radio
+    [legend]="map.smfBatchClaimsReviewed.title"
+    legendSize="medium">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="batchReferencesNotReviewed"
+          govuk-textarea
+          [label]="map.batchReferencesNotReviewed.title"
+          [maxLength]="10000"></div>
+        <div formControlName="dataSampling" govuk-textarea [label]="map.dataSampling.title" [maxLength]="10000"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+  <h3 class="govuk-heading-m">{{ map.reviewResults.title }}</h3>
+  <p class="govuk-body">You should state if:</p>
+  <ul class="govuk-list govuk-list--bullet">
+    <li>the emissions reduction claim is supported by sufficient and appropriate internal and external evidence</li>
+    <li>the amount of reductions from the use of eligible fuel is fair and accurate</li>
+  </ul>
+  <div formControlName="reviewResults" govuk-textarea [label]="map.reviewResults.caption" [maxLength]="10000"></div>
+  <div
+    formControlName="noDoubleCountingConfirmation"
+    govuk-textarea
+    [label]="map.noDoubleCountingConfirmation.title"
+    labelSize="medium"
+    [hint]="map.noDoubleCountingConfirmation.description"></div>
+  <div
+    formControlName="evidenceAllCriteriaMetExist"
+    govuk-radio
+    [legend]="map.evidenceAllCriteriaMetExist.title"
+    legendSize="medium"
+    [hint]="map.evidenceAllCriteriaMetExist.description">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div formControlName="noCriteriaMetIssues" govuk-textarea [label]="map.noCriteriaMetIssues.title"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+  <div
+    formControlName="complianceWithEmpRequirementsExist"
+    govuk-radio
+    [legend]="map.complianceWithEmpRequirementsExist.title"
+    legendSize="medium"
+    [hint]="map.complianceWithEmpRequirementsExist.description">
+    <govuk-radio-option [value]="true" label="Yes" />
+    <govuk-radio-option [value]="false" label="No">
+      <ng-container govukConditionalContent>
+        <div
+          formControlName="notCompliedWithEmpRequirementsAspects"
+          govuk-textarea
+          [label]="map.notCompliedWithEmpRequirementsAspects.title"></div>
+      </ng-container>
+    </govuk-radio-option>
+  </div>
+</mrtm-wizard-step>

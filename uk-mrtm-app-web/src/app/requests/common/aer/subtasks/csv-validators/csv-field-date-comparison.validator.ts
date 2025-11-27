@@ -32,7 +32,7 @@ export function csvFieldDateComparisonValidator<T>(
 
       if (!earlierDateTime || !laterDateTime || !isAfter(laterDateTime, earlierDateTime)) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

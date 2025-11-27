@@ -6,7 +6,7 @@
     <h3 class="govuk-heading-m">Fuel consumption</h3>
     @if (fuelConsumptions()?.length) {
       <div class="overflow-auto overflow-auto-table">
-        <govuk-table [columns]="columns" [data]="fuelConsumptions()">
+        <govuk-table [columns]="columns" [data]="fuelConsumptions()" [rowCssClasses]="onDefineRowAdditionalStyle">
           <ng-template let-column="column" let-row="row">
             @switch (column?.field) {
               @case ('fuelOriginTypeName') {

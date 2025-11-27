@@ -10,6 +10,4 @@
 
 export interface AerDerogations {
   exceptionFromPerVoyageMonitoring: boolean;
-  carbonCaptureAndStorageReduction: boolean;
-  smallIslandFerryOperatorReduction: boolean;
 }

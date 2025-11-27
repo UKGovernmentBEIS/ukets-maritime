@@ -15,7 +15,10 @@ import {
   DetailsChangeSummaryComponent,
   DetailsChangeWizardStep,
 } from '@requests/tasks/notification-review/subtasks/details-change';
-import { mockReviewDecision, mockStateBuild } from '@requests/tasks/notification-review/testing/mock-data';
+import {
+  mockReviewDecision,
+  mockStateBuild,
+} from '@requests/tasks/notification-review/testing/notification-review-data.mock';
 
 describe('DetailsChangeSummaryComponent', () => {
   let component: DetailsChangeSummaryComponent;

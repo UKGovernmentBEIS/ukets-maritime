@@ -11,12 +11,12 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { TaskItemStatus } from '@requests/common';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
-import { mockEmpMandate } from '@requests/common/emp/testing/mock-data';
+import { mockEmpMandate } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { EmpVariationRegulatorService } from '@requests/tasks/emp-variation-regulator/services';
 import { MandateVariationRegulatorDecisionComponent } from '@requests/tasks/emp-variation-regulator/subtasks/mandate';
-import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/mock-data';
+import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/emp-variation-regulator-data.mock';
 import { HTML_DIFF } from '@shared/directives';
 
 describe('MandateVariationRegulatorDecisionComponent', () => {

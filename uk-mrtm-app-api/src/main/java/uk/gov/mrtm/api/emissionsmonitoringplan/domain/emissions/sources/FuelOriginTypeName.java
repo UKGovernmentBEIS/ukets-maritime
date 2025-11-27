@@ -63,4 +63,7 @@ public abstract class FuelOriginTypeName {
 
     @JsonIgnore
     public abstract String getLongDescription();
+
+    @JsonIgnore
+    public abstract String getTypeAsString();
 }

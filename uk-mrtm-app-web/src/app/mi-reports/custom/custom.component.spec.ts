@@ -1,16 +1,16 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of, throwError } from 'rxjs';
 
-import { MiReportsService } from '@mrtm/api';
+import { MiReportResult, MiReportsService } from '@mrtm/api';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { DestroySubject } from '@netz/common/services';
 import { BasePage, mockClass } from '@netz/common/testing';
 
 import { CustomReportComponent } from '@mi-reports/custom/custom.component';
-import { mockCustomMiReportResult } from '@mi-reports/testing/mock-data';
+import { mockCustomMiReportResult } from '@mi-reports/testing/mi-reports-data.mock';
 import * as fs from 'fs';
 
 describe('CustomComponent', () => {
@@ -66,7 +66,9 @@ describe('CustomComponent', () => {
     page.executeButton.click();
     fixture.detectChanges();
 
-    miReportsService.generateCustomReport.mockReturnValueOnce(of(mockCustomMiReportResult));
+    miReportsService.generateCustomReport.mockReturnValueOnce(
+      of(mockCustomMiReportResult as unknown as HttpResponse<MiReportResult>),
+    );
 
     expect(page.formErrorMessage).toBeTruthy();
 

@@ -42,7 +42,7 @@ class AerVerificationReportRecommendedImprovementsValidatorTest {
                 .build();
 
         final AerValidationResult aerValidationResult =
-                validator.validate(aerVerificationReport);
+                validator.validate(null, aerVerificationReport);
         assertTrue(aerValidationResult.isValid());
         assertEquals(0, aerValidationResult.getAerViolations().size());
     }
@@ -61,7 +61,7 @@ class AerVerificationReportRecommendedImprovementsValidatorTest {
                 .build();
 
         final AerValidationResult aerValidationResult =
-                validator.validate(aerVerificationReport);
+                validator.validate(null, aerVerificationReport);
         assertTrue(aerValidationResult.isValid());
         assertEquals(0, aerValidationResult.getAerViolations().size());
     }
@@ -82,7 +82,7 @@ class AerVerificationReportRecommendedImprovementsValidatorTest {
                 .build();
 
         final AerValidationResult validationResult =
-                validator.validate(aerVerificationReport);
+                validator.validate(null, aerVerificationReport);
         assertFalse(validationResult.isValid());
         assertEquals(1, validationResult.getAerViolations().size());
         assertThat(validationResult.getAerViolations()).extracting(AerViolation::getMessage)

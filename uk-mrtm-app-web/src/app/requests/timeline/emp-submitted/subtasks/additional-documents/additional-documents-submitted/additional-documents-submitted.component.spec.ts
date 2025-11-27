@@ -5,8 +5,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { actionProviders } from '@requests/common/action.providers';
-import { mockSubmittedStateBuild } from '@requests/common/emp/testing/mock-action-data';
-import { mockAdditionalDocuments } from '@requests/common/emp/testing/mock-data';
+import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
+import { mockAdditionalDocuments } from '@requests/common/emp/testing/emp-data.mock';
 import { AdditionalDocumentsSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/additional-documents';
 
 describe('AdditionalDocumentsSubmittedComponent', () => {

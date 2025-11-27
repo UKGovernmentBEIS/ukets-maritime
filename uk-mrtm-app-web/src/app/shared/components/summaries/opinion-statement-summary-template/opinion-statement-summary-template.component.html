@@ -27,28 +27,13 @@
       }
     </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ map.manuallyProvidedLessIslandFerryDeduction.title }}</dt>
+      <dt govukSummaryListRowKey>{{ map.manuallyProvidedLessVoyagesInNorthernIrelandDeduction.title }}</dt>
       <dd
         govukSummaryListRowValue
         [notProvided]="
-          isNil(opinionStatement()?.manuallyProvidedLessIslandFerryDeduction)
-            ? opinionStatement()?.manuallyProvidedLessIslandFerryDeduction
-            : opinionStatement()?.manuallyProvidedLessIslandFerryDeduction + ' tCO2e'
-        "></dd>
-      @if (isEditable()) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
-        </dd>
-      }
-    </div>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ map.manuallyProvidedLess5PercentIceClassDeduction.title }}</dt>
-      <dd
-        govukSummaryListRowValue
-        [notProvided]="
-          isNil(opinionStatement()?.manuallyProvidedLess5PercentIceClassDeduction)
-            ? opinionStatement()?.manuallyProvidedLess5PercentIceClassDeduction
-            : opinionStatement()?.manuallyProvidedLess5PercentIceClassDeduction + ' tCO2e'
+          isNil(opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction)
+            ? opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction
+            : opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction + ' tCO2e'
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>

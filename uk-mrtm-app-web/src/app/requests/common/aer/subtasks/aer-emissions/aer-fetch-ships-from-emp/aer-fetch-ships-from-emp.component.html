@@ -2,6 +2,10 @@
   <netz-page-heading [caption]="map.title">{{ map.fetchFromEMP.title }}</netz-page-heading>
   <govuk-warning-text
     assistiveText="If you import the ships from the Emissions Monitoring Plan (EMP), all of the data that has been entered will be replaced." />
+  <p class="govuk-body govuk-!-margin-bottom-9">
+    Ships imported from the EMP will automatically have their date set as 'All year'. You must manually change the date
+    for each ship if necessary.
+  </p>
 </div>
 
 <button govukButton netzPendingButton type="button" (click)="onFetchFromEMP()">Yes, import ships from EMP</button>

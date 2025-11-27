@@ -157,11 +157,13 @@ public class RequestAerReviewService {
         boolean hasVoyages = requestPayload.getAer() != null
             && requestPayload.getAer().getVoyageEmissions() != null
             && !requestPayload.getAer().getVoyageEmissions().getVoyages().isEmpty();
+        boolean smfExist = requestPayload.getAer() != null
+            && requestPayload.getAer().getSmf().getExist();
 
         final Set<AerReviewGroup> aerDataReviewGroups = AerReviewGroup
             .getAerDataReviewGroups(requestPayload.getReportingRequired(), hasPorts, hasVoyages);
         final Set<AerReviewGroup> verificationDataReviewGroups = isVerificationPerformed ?
-                AerReviewGroup.getVerificationReportDataReviewGroups() :
+                AerReviewGroup.getVerificationReportDataReviewGroups(smfExist) :
                 Collections.emptySet() ;
 
         final Map<AerReviewGroup, AerReviewDecision> reviewGroupDecisions = requestPayload.getReviewGroupDecisions();

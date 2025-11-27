@@ -13,7 +13,7 @@ import {
   GreenhouseGasWizardStep,
 } from '@requests/common/emp/subtasks/greenhouse-gas';
 import { greenhouseGasMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { mockGreenhouseGas, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockGreenhouseGas, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { screen } from '@testing-library/angular';

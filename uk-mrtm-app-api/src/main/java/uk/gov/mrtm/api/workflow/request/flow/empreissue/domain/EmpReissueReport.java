@@ -14,6 +14,6 @@ import java.time.LocalDate;
 public abstract class EmpReissueReport {
 
     private LocalDate issueDate;
-    private boolean succeeded;
+    private Boolean succeeded;
 
 }

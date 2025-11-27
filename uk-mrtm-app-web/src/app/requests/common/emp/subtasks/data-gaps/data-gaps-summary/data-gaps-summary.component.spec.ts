@@ -9,7 +9,7 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { DATA_GAPS_SUB_TASK, DataGapsWizardStep } from '@requests/common/emp/subtasks/data-gaps';
 import { DataGapsSummaryComponent } from '@requests/common/emp/subtasks/data-gaps/data-gaps-summary';
-import { mockEmpDataGaps, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockEmpDataGaps, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 

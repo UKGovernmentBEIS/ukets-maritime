@@ -23,6 +23,8 @@ export class AerVerificationSubmittedComponent {
   private readonly aer = this.store.select(aerTimelineCommonQuery.selectAer);
   private readonly assessmentsAndFindingsSections = getAerVerificationAssessmentsAndFindingsSections(
     AER_VERIFICATION_SUBMITTED_ROUTE_PREFIX,
+    undefined,
+    this.aer(),
   );
 
   readonly superSections: Signal<TaskSuperSection[]> = computed(() => {

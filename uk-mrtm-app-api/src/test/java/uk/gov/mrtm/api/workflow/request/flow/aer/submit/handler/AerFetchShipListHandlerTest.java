@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -82,8 +82,8 @@ class AerFetchShipListHandlerTest {
     private RequestTaskService requestTaskService;
 
     @ParameterizedTest
-    @MethodSource("processScenarios")
-    void process(boolean exceptionFromPerVoyageMonitoring, boolean carbonCaptureAndStorageReduction) {
+    @ValueSource(booleans = {true, false})
+    void process(boolean exceptionFromPerVoyageMonitoring) {
         Long requestTaskId = 1L;
         Long accountId = 100L;
         AppUser appUser = AppUser.builder().build();
@@ -98,7 +98,7 @@ class AerFetchShipListHandlerTest {
                 .resourceId("100").resourceType(ResourceType.ACCOUNT).build())).build();
 
         EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder()
-            .emissions(createEmpEmissions(exceptionFromPerVoyageMonitoring, carbonCaptureAndStorageReduction))
+            .emissions(createEmpEmissions(exceptionFromPerVoyageMonitoring))
             .build();
 
         EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
@@ -112,7 +112,7 @@ class AerFetchShipListHandlerTest {
                                 .build())
                 );
 
-        AerEmissions aerEmissions = createAerEmissions(exceptionFromPerVoyageMonitoring, carbonCaptureAndStorageReduction);
+        AerEmissions aerEmissions = createAerEmissions(exceptionFromPerVoyageMonitoring);
 
         AerApplicationSubmitRequestTaskPayload expectedTaskPayload = AerApplicationSubmitRequestTaskPayload.builder()
             .aer(Aer.builder().emissions(aerEmissions).build())
@@ -131,22 +131,12 @@ class AerFetchShipListHandlerTest {
         assertThat(actualTaskPayload).isEqualTo(expectedTaskPayload);
     }
 
-    public static Stream<Arguments> processScenarios() {
-        return Stream.of(
-            Arguments.of(true, true),
-            Arguments.of(true, false),
-            Arguments.of(false, true),
-            Arguments.of(false, false)
-        );
-    }
-
     @Test
     void getTypes() {
         assertThat(aerFetchShipListHandler.getTypes()).containsOnly(MrtmRequestTaskActionType.AER_FETCH_EMP_LIST_OF_SHIPS);
     }
 
-    private AerEmissions createAerEmissions(boolean exceptionFromPerVoyageMonitoring,
-                                            boolean carbonCaptureAndStorageReduction) {
+    private AerEmissions createAerEmissions(boolean exceptionFromPerVoyageMonitoring) {
         return AerEmissions.builder()
             .ships(Set.of(AerShipEmissions.builder()
                 .details(
@@ -218,7 +208,6 @@ class AerFetchShipListHandlerTest {
                 ))
                 .derogations(
                     AerDerogations.builder()
-                        .carbonCaptureAndStorageReduction(carbonCaptureAndStorageReduction)
                         .exceptionFromPerVoyageMonitoring(exceptionFromPerVoyageMonitoring)
                         .build()
                 )
@@ -226,8 +215,7 @@ class AerFetchShipListHandlerTest {
             .build();
     }
 
-    private EmpEmissions createEmpEmissions(boolean exceptionFromPerVoyageMonitoring,
-                                            boolean carbonCaptureAndStorageReduction) {
+    private EmpEmissions createEmpEmissions(boolean exceptionFromPerVoyageMonitoring) {
         return EmpEmissions.builder()
             .ships(
                 Set.of(
@@ -291,7 +279,16 @@ class AerFetchShipListHandlerTest {
                                     .build()
                             )
                         )
-                        .carbonCapture(createCarbonCapture(carbonCaptureAndStorageReduction))
+                        .carbonCapture(EmpCarbonCapture.builder()
+                            .exist(true)
+                            .technologies(
+                                EmpCarbonCaptureTechnologies.builder()
+                                    .description("desc")
+                                    .files(Set.of(UNIQUE_IDENTIFIER))
+                                    .technologyEmissionSources(Set.of("emission source name"))
+                                    .build()
+                            )
+                            .build())
                         .uniqueIdentifier(UNIQUE_IDENTIFIER)
                         .uncertaintyLevel(Set.of(
                             UncertaintyLevel.builder()
@@ -309,19 +306,6 @@ class AerFetchShipListHandlerTest {
                             .build())
                         .build()
                 )
-            )
-            .build();
-    }
-
-    private EmpCarbonCapture createCarbonCapture(boolean carbonCaptureAndStorageReduction) {
-        return EmpCarbonCapture.builder()
-            .exist(carbonCaptureAndStorageReduction)
-            .technologies(
-                EmpCarbonCaptureTechnologies.builder()
-                    .description("desc")
-                    .files(Set.of(UNIQUE_IDENTIFIER))
-                    .technologyEmissionSources(Set.of("emission source name"))
-                    .build()
             )
             .build();
     }

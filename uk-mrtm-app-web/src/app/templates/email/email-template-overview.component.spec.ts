@@ -4,7 +4,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { EmailTemplateOverviewComponent } from '@templates/email/email-template-overview.component';
-import { mockedEmailTemplate } from '@templates/testing/mock-data';
+import { mockedEmailTemplate } from '@templates/testing/templates-data.mock';
 
 describe('EmailTemplateOverviewComponent,', () => {
   let component: EmailTemplateOverviewComponent;

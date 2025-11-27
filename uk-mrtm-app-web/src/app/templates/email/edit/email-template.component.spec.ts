@@ -6,7 +6,7 @@ import { NotificationTemplatesService } from '@mrtm/api';
 import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
 
 import { EmailTemplateComponent } from '@templates/email/edit/email-template.component';
-import { mockedEmailTemplate } from '@templates/testing/mock-data';
+import { mockedEmailTemplate } from '@templates/testing/templates-data.mock';
 
 describe('EmailTemplateComponent', () => {
   let component: EmailTemplateComponent;

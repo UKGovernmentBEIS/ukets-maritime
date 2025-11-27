@@ -16,7 +16,7 @@ import { FollowUpReviewService } from '@requests/tasks/notification-follow-up-re
 import {
   mockFollowUpReviewDecision,
   mockStateBuild,
-} from '@requests/tasks/notification-follow-up-review/testing/mock-data';
+} from '@requests/tasks/notification-follow-up-review/testing/notification-follow-up-review-data.mock';
 
 describe('ReturnForAmendsConfirmComponent', () => {
   let component: ReturnForAmendsConfirmComponent;

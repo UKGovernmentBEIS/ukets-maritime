@@ -85,6 +85,10 @@ export const canActivatePortsSummary: CanActivateFn = (route: ActivatedRouteSnap
   const ports = store.select(aerCommonQuery.selectPorts)();
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
 
+  if (route.fragment === AerPortsWizardStep.LIST_OF_PORTS && !isWizardCompleted(ports)) {
+    return createUrlTreeFromSnapshot(route, ['../../']);
+  }
+
   return (
     !isEditable ||
     (isEditable && (subtaskStatus === TaskItemStatus.COMPLETED || isWizardCompleted(ports))) ||

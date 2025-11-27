@@ -8,7 +8,7 @@ import { NotificationTemplateDTO } from '@mrtm/api';
 import { BasePage } from '@netz/common/testing';
 
 import { EmailTemplateDetailsTemplateComponent } from '@templates/email/email-template-details-template.component';
-import { mockedEmailTemplate } from '@templates/testing/mock-data';
+import { mockedEmailTemplate } from '@templates/testing/templates-data.mock';
 
 describe('EmailTemplateDetailsTemplateComponent', () => {
   let component: EmailTemplateDetailsTemplateComponent;

@@ -1,0 +1,10 @@
+@use 'base' as govuk;
+
+a {
+  cursor: pointer;
+  color: govuk.$govuk-link-colour;
+}
+
+span.secret{
+  -webkit-text-security: disc!important;
+}

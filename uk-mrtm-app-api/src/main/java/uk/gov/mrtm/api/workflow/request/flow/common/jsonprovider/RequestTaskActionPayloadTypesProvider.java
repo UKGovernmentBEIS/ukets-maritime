@@ -60,6 +60,7 @@ import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequest
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.DOE_SAVE_APPLICATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.DOE_SUBMIT_NOTIFY_OPERATOR_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.DOE_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_ISSUANCE_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_ISSUANCE_REQUEST_PEER_REVIEW_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_ISSUANCE_REVIEW_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD;
@@ -124,6 +125,7 @@ public class RequestTaskActionPayloadTypesProvider implements JsonSubTypesProvid
 
                 //EMP_ISSUANCE
                 new NamedType(EmpIssuanceSaveApplicationRequestTaskActionPayload.class, EMP_ISSUANCE_SAVE_APPLICATION_PAYLOAD),
+                new NamedType(EmpIssuanceSaveApplicationRequestTaskActionPayload.class, EMP_ISSUANCE_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD),
                 new NamedType(EmpIssuanceSaveApplicationReviewRequestTaskActionPayload.class, EMP_ISSUANCE_SAVE_APPLICATION_REVIEW_PAYLOAD),
                 new NamedType(EmpIssuanceSaveReviewGroupDecisionRequestTaskActionPayload.class, EMP_ISSUANCE_SAVE_REVIEW_GROUP_DECISION_PAYLOAD),
                 new NamedType(EmpIssuanceSaveReviewDeterminationRequestTaskActionPayload.class, EMP_ISSUANCE_SAVE_REVIEW_DETERMINATION_PAYLOAD),

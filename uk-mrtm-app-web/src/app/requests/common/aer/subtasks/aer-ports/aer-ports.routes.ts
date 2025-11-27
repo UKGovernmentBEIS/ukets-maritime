@@ -25,11 +25,8 @@ export const AER_PORTS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        data: { breadcrumb: false },
-        resolve: {
-          backlink: aerPortsBacklinkResolver(AerPortsWizardStep.LIST_OF_PORTS),
-        },
         title: aerPortsMap.title,
+        data: { breadcrumb: false, backlink: '../', backlinkFragment: AerPortsWizardStep.LIST_OF_PORTS },
         canActivate: [canActivateListOfPorts],
         loadComponent: () =>
           import('@requests/common/aer/subtasks/aer-ports/aer-ports-list').then((c) => c.AerPortsListComponent),

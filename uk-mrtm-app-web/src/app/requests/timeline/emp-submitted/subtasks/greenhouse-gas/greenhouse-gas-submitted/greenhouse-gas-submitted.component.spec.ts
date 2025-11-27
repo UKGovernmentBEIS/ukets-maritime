@@ -6,8 +6,8 @@ import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { actionProviders } from '@requests/common/action.providers';
 import { greenhouseGasMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { mockSubmittedStateBuild } from '@requests/common/emp/testing/mock-action-data';
-import { mockGreenhouseGas } from '@requests/common/emp/testing/mock-data';
+import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
+import { mockGreenhouseGas } from '@requests/common/emp/testing/emp-data.mock';
 import { GreenhouseGasSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/greenhouse-gas';
 import { screen } from '@testing-library/angular';
 

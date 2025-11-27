@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '@netz/common/forms';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
+import { taskProviders } from '@requests/common/task.providers';
 import { UncorrectedNonConformitiesExistComponent } from '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-exist/uncorrected-non-conformities-exist.component';
 
 describe('UncorrectedNonConformitiesExistComponent', () => {
@@ -18,6 +19,7 @@ describe('UncorrectedNonConformitiesExistComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
+        ...taskProviders,
       ],
     }).compileComponents();
 

@@ -1,0 +1,8 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  heading="Data supplier details"
+  caption="Add a new data supplier"
+  (formSubmit)="onSubmit()"
+  [isTwoThirds]="true">
+  <div govuk-text-input formControlName="name" label="Name of data supplier"></div>
+</mrtm-wizard-step>

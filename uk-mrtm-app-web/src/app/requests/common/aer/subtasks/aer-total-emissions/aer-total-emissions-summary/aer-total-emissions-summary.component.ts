@@ -65,7 +65,7 @@ export class AerTotalEmissionsSummaryComponent {
       return message;
     }
     if (this.hasNeedsReviewStatus()) {
-      return 'You must review the total aggregated data again';
+      return 'Data has been updated due to changes to the other dependent subtasks. Review the updated information, then select Confirm and continue.';
     }
     return null;
   });

@@ -9,6 +9,7 @@
  */
 import { AerComplianceMonitoringReporting } from './aerComplianceMonitoringReporting';
 import { AerDataGapsMethodologies } from './aerDataGapsMethodologies';
+import { AerEmissionsReductionClaimVerification } from './aerEmissionsReductionClaimVerification';
 import { AerEtsComplianceRules } from './aerEtsComplianceRules';
 import { AerMaterialityLevel } from './aerMaterialityLevel';
 import { AerOpinionStatement } from './aerOpinionStatement';
@@ -30,6 +31,7 @@ export interface AerSaveApplicationVerificationRequestTaskActionPayload {
   overallDecision: AerVerificationDecision;
   uncorrectedNonConformities: AerUncorrectedNonConformities;
   recommendedImprovements: AerRecommendedImprovements;
+  emissionsReductionClaimVerification?: AerEmissionsReductionClaimVerification;
   materialityLevel: AerMaterialityLevel;
   etsComplianceRules: AerEtsComplianceRules;
   complianceMonitoringReporting: AerComplianceMonitoringReporting;

@@ -2,14 +2,18 @@
   @if (totalItems() > 0) {
     @if (totalEmissionsSummary(); as totalEmissionsSummary) {
       <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="!warningMessages()?.length">
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions from voyages (tCO2e)</dt>
-          <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions figure for surrender (tCO2e)</dt>
-          <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.surrenderEmissions | bigNumber: 4 }}</dd>
-        </div>
+        @if (totalEmissionsSummary?.totalEmissions) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions from voyages (tCO2e)</dt>
+            <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
+          </div>
+        }
+        @if (totalEmissionsSummary?.surrenderEmissions) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey class="govuk-!-width-one-third">Total emissions figure for surrender (tCO2e)</dt>
+            <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.surrenderEmissions | bigNumber: 4 }}</dd>
+          </div>
+        }
       </dl>
     }
 
@@ -35,6 +39,7 @@
     </mrtm-multi-select-table>
   } @else {
     <govuk-table
+      id="voyages"
       [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
@@ -47,7 +52,11 @@
   }
 
   @if (totalItems() > pageSize()) {
-    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
+    <govuk-pagination
+      fragment="voyages"
+      [count]="this.totalItems()"
+      [pageSize]="pageSize()"
+      (currentPageChange)="onPageChange($event)" />
   }
 
   <ng-template let-column="column" let-row="row" #tableContent>
@@ -91,6 +100,13 @@
         <govuk-tag [color]="row[column.field] | statusTagColor">
           {{ row?.[column?.field] | portVoyageAggregatedStatus }}
         </govuk-tag>
+      }
+      @case ('surrenderEmissions') {
+        @if (['International', 'EU'].includes(row?.['journeyType'])) {
+          Not applicable
+        } @else {
+          {{ row?.[column?.field] | bigNumber: 7 }}
+        }
       }
       @default {
         {{ row?.[column?.field] | bigNumber: 7 }}

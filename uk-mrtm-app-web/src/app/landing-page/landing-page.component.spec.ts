@@ -16,7 +16,7 @@ import {
   mockKeycloakService,
   mockTermsAndConditionsService,
   mockUsersService,
-} from '@core/guards/mocks';
+} from '@core/guards/core-guards.mock';
 import { LandingPageComponent } from '@landing-page/landing-page.component';
 
 describe('LandingPageComponent', () => {

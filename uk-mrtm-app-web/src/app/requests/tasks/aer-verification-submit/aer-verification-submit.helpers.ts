@@ -10,9 +10,12 @@ import { getAerVerificationAssessmentsAndFindingsSections } from '@requests/comm
 export function getCanSubmitAerVerification(): boolean {
   const store = inject(RequestTaskStore);
   const sectionsCompleted = store.select(aerCommonQuery.selectVerificationSectionsCompleted)();
+  const aer = store.select(aerCommonQuery.selectAer)();
+
   const subtaskNames = getAerVerificationAssessmentsAndFindingsSections(
     AER_VERIFICATION_SUBMIT_ROUTE_PREFIX,
     sectionsCompleted,
+    aer,
   )
     .map((section) => section.tasks)
     .reduce((acc, tasks) => [...acc, ...tasks], [])

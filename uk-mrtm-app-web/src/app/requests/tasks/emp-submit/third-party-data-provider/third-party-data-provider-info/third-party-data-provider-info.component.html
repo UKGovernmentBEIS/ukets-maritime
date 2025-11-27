@@ -1,0 +1,25 @@
+@if (dataInfo(); as dataInfo) {
+  <govuk-details
+    summary="Import data from a trusted external source/system"
+    [bottomContentPadding]="0"
+    [openOnInit]="!dataInfo.importedOn">
+    <p class="govuk-!-margin-bottom-1">
+      Data was recorded for your account that can be transferred to your application.
+    </p>
+    <div>
+      <strong>Source/system:</strong>
+      {{ dataInfo.providerName }}
+    </div>
+    <div class="govuk-!-margin-top-1">
+      <strong>Date data received:</strong>
+      {{ dataInfo.receivedOn | govukDate: 'datetime' }}
+    </div>
+    @if (dataInfo.importedOn) {
+      <div class="govuk-!-margin-top-1">
+        <strong>Date data imported:</strong>
+        {{ dataInfo.importedOn | govukDate: 'datetime' }}
+      </div>
+    }
+    <a govukButton class="govuk-!-margin-top-4" [routerLink]="[importPagePath]">Import data</a>
+  </govuk-details>
+}

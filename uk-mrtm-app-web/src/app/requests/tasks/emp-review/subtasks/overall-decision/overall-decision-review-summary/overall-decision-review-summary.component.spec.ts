@@ -12,7 +12,7 @@ import { OVERALL_DECISION_SUB_TASK, OverallDecisionWizardStep } from '@requests/
 import { taskProviders } from '@requests/common/task.providers';
 import { EmpReviewService } from '@requests/tasks/emp-review/services';
 import { OverallDecisionReviewSummaryComponent } from '@requests/tasks/emp-review/subtasks/overall-decision';
-import { mockEmpReviewStateBuild } from '@requests/tasks/emp-review/testing/mock-data';
+import { mockEmpReviewStateBuild } from '@requests/tasks/emp-review/testing/emp-review-data.mock';
 
 describe('OverallDecisionSummaryComponent', () => {
   let component: OverallDecisionReviewSummaryComponent;

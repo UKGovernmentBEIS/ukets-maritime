@@ -10,8 +10,8 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
-import { mockEmpMandate, mockEmpOperatorDetails, mockStateBuild } from '@requests/common/emp/testing/mock-data';
-import { mockEmissions } from '@requests/common/emp/testing/mock-emissions';
+import { emissionsMock } from '@requests/common/emp/testing/emissions.mock';
+import { mockEmpMandate, mockEmpOperatorDetails, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
@@ -64,7 +64,7 @@ describe('MandateVariationReviewDecisionComponent', () => {
       mockStateBuild(
         {
           operatorDetails: mockEmpOperatorDetails,
-          emissions: mockEmissions,
+          emissions: emissionsMock,
           mandate: mockEmpMandate,
         },
         { mandate: TaskItemStatus.IN_PROGRESS },
@@ -93,7 +93,7 @@ describe('MandateVariationReviewDecisionComponent', () => {
       'Date of written agreement',
       'RegisteredOwner11111111',
       'RegisteredOwner1RegisteredOwner1@o.com',
-      'EVER GREEN (IMO: 1111111)',
+      'EVER GREEN(IMO: 1111111)',
       '1 Mar 2025',
     ]);
   });

@@ -9,7 +9,7 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { ABBREVIATIONS_SUB_TASK, AbbreviationsWizardStep } from '@requests/common/emp/subtasks/abbreviations';
 import { AbbreviationsSummaryComponent } from '@requests/common/emp/subtasks/abbreviations/abbreviations-summary';
-import { mockEmpAbbreviations, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockEmpAbbreviations, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 

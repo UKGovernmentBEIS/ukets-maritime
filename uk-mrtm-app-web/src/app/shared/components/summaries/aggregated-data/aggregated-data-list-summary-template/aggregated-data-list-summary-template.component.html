@@ -17,6 +17,7 @@
     </mrtm-multi-select-table>
   } @else {
     <govuk-table
+      id="aggregated-data"
       [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
@@ -28,7 +29,11 @@
     </govuk-table>
   }
   @if (totalItems() > pageSize()) {
-    <govuk-pagination [count]="totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
+    <govuk-pagination
+      fragment="aggregated-data"
+      [count]="totalItems()"
+      [pageSize]="pageSize()"
+      (currentPageChange)="onPageChange($event)" />
   }
 }
 

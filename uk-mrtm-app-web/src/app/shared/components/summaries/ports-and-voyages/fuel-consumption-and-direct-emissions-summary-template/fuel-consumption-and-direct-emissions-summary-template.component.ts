@@ -22,7 +22,7 @@ import { AER_PORT_MEASURING_UNIT_SELECT_ITEMS } from '@shared/constants';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { BigNumberPipe } from '@shared/pipes/big-number.pipe';
 import { MethaneSlipValuePipe } from '@shared/pipes/methane-slip-value.pipe';
-import { FuelsAndEmissionsFactors } from '@shared/types';
+import { FuelsAndEmissionsFactors, WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-fuel-consumption-and-direct-emissions-summary-template',
@@ -53,7 +53,7 @@ export class FuelConsumptionAndDirectEmissionsSummaryTemplateComponent {
   public readonly deletable = input<boolean>(false);
   public readonly isSummary = input<boolean>(true);
   public readonly directEmissions = input<AerPortEmissionsMeasurement>();
-  public readonly fuelConsumptions = input<Array<AerFuelConsumption>>([]);
+  public readonly fuelConsumptions = input<Array<WithNeedsReview<AerFuelConsumption>>>([]);
   public readonly emissionFactors = input<Array<FuelsAndEmissionsFactors>>();
   public readonly directEmissionsEditPath = input<string>('.');
   public readonly fuelConsumptionsEditPath = input<string>('.');
@@ -66,5 +66,9 @@ export class FuelConsumptionAndDirectEmissionsSummaryTemplateComponent {
 
   public onAddDirectEmission(): void {
     this.addDirectEmission.emit();
+  }
+
+  onDefineRowAdditionalStyle(item: WithNeedsReview<AerFuelConsumption>): string | string[] | undefined {
+    return item?.needsReview ? 'needs-review' : undefined;
   }
 }

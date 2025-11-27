@@ -25,8 +25,7 @@ public class DoePopulateRequestMetadataWithReportableEmissionsService {
 		metadata.setEmissions(AerTotalReportableEmissions.builder()
 						.totalEmissions(totalMaritimeEmissions.getTotalReportableEmissions())
 						.surrenderEmissions(totalMaritimeEmissions.getSurrenderEmissions())
-						.lessIslandFerryDeduction(totalMaritimeEmissions.getSmallIslandFerryDeduction())
-						.less5PercentIceClassDeduction(totalMaritimeEmissions.getIceClassDeduction())
+						.lessVoyagesInNorthernIrelandDeduction(totalMaritimeEmissions.getLessVoyagesInNorthernIrelandDeduction())
 				.build());
 	}
 }

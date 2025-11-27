@@ -13,10 +13,13 @@ export const itemActionToTitleTransformer: ItemActionTransformer = (
   submitter?: string,
 ): string => {
   let text = itemActionsMap[actionType]?.text ?? null;
+  const suffix = itemActionsMap[actionType]?.suffix ?? null;
 
   if ((isAer(actionType) || isDoe(actionType) || isVir(actionType)) && year) {
     text = text?.replace(/annual/i, `${year}`);
   }
 
-  return itemActionsMap[actionType]?.transformed && submitter ? `${text} by ${submitter}` : text;
+  return !text
+    ? null
+    : `${itemActionsMap[actionType]?.transformed && submitter ? `${text} by ${submitter}` : text} ${!suffix ? '' : suffix}`.trim();
 };

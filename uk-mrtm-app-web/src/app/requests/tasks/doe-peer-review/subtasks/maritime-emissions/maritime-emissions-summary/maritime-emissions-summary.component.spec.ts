@@ -7,7 +7,10 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { taskProviders } from '@requests/common/task.providers';
-import { mockDoePeerReviewMaritimeEmissions, mockStateBuild } from '@requests/tasks/doe-peer-review/testing/mock-data';
+import {
+  mockDoePeerReviewMaritimeEmissions,
+  mockStateBuild,
+} from '@requests/tasks/doe-peer-review/testing/doe-peer-review-data.mock';
 import { MaritimeEmissionsSummaryComponent } from '@requests/tasks/doe-submit/subtasks/maritime-emissions/maritime-emissions-summary';
 
 describe('MaritimeEmissionsSummaryComponent', () => {
@@ -62,10 +65,8 @@ describe('MaritimeEmissionsSummaryComponent', () => {
       'Maritime emissions and emissions figure for surrender',
       'Total maritime emissions',
       '1 tCO2e',
-      'Less small island ferry deduction',
+      'Less Northern Ireland surrender deduction',
       '2 tCO2e',
-      'Less 5% ice class deduction',
-      '3 tCO2e',
       'Emissions figure for surrender',
       '12 tCO2e',
       'How have you calculated the emissions?',

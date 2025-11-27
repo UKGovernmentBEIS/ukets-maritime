@@ -34,7 +34,7 @@ public class EmpMandate implements EmissionMonitoringPlanSection {
     @JsonDeserialize(as = LinkedHashSet.class)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @UniqueElements
-    Set<@NotNull @Valid EmpRegisteredOwner> registeredOwners = new HashSet<>();
+    private Set<@NotNull @Valid EmpRegisteredOwner> registeredOwners = new HashSet<>();
 
     private Boolean responsibilityDeclaration;
 

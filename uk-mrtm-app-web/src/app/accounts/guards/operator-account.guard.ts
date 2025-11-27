@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
-import { ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, CanDeactivateFn } from '@angular/router';
 
-import { combineLatest, map, Observable, switchMap, tap } from 'rxjs';
+import { combineLatest, map, Observable, of, switchMap, tap } from 'rxjs';
 
 import { AccountReportingStatusHistoryService, MaritimeAccountsService } from '@mrtm/api';
 
@@ -31,4 +31,11 @@ export const canActivateOperatorAccount = (route: ActivatedRouteSnapshot): Obser
     }),
     map(([account]) => !!account),
   );
+};
+
+export const canDeactivateOperatorAccount: CanDeactivateFn<Observable<boolean>> = () => {
+  const operatorAccountsStore = inject(OperatorAccountsStore);
+  operatorAccountsStore.reset();
+
+  return of(true);
 };

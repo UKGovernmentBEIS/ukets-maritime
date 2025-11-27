@@ -47,7 +47,17 @@ export class AerPortCallSummaryComponent {
   public readonly wizardMap = aerPortsMap;
   public readonly form = new UntypedFormGroup({});
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-  public readonly port = computed(() => this.store.select(aerCommonQuery.selectPort(this.portId()))());
+  public readonly port = computed(() => {
+    const port = this.store.select(aerCommonQuery.selectPort(this.portId()))();
+
+    return {
+      ...port,
+      fuelConsumptions: (port?.fuelConsumptions ?? []).map((fuelConsumption) => ({
+        ...fuelConsumption,
+        needsReview: !isNil(validateIfUsedFuelsExistInEmissionsValidator([fuelConsumption], port.relatedShip)),
+      })),
+    };
+  });
   public readonly ship: Signal<AerShipEmissions> = computed(() =>
     this.store.select(aerCommonQuery.selectShipByImoNumber(this.port()?.imoNumber))(),
   );

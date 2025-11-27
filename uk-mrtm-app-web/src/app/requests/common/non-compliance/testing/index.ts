@@ -1,1 +1,1 @@
-export * from './mock-data';
+export * from './non-compliance-data.mock';

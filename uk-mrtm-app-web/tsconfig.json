@@ -24,6 +24,7 @@
       "@contact-us/*": ["src/app/contact-us/*"],
       "@cookies/*": ["src/app/cookies/*"],
       "@core/*": ["src/app/core/*"],
+      "@data-suppliers/*": ["src/app/data-suppliers/*"],
       "@error/*": ["src/app/error/*"],
       "@feedback/*": ["src/app/feedback/*"],
       "@forgot-password/*": ["src/app/forgot-password/*"],

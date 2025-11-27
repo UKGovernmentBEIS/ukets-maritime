@@ -9,7 +9,7 @@ import { ActivatedRouteSnapshotStub, mockClass } from '@netz/common/testing';
 
 import { canActivateOperatorAccount } from '@accounts/guards/operator-account.guard';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockedAccount, mockReportingStatusesResults } from '@accounts/testing/mock-data';
+import { mockedAccount, mockReportingStatusesResults } from '@accounts/testing/accounts-data.mock';
 
 describe('canActivateOperatorAccount', () => {
   let accountsService: Partial<jest.Mocked<MaritimeAccountsService>>;

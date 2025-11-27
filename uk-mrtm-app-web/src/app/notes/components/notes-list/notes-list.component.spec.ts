@@ -10,7 +10,7 @@ import { AccountNotesService } from '@mrtm/api';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { NotesListComponent } from '@notes/components';
-import { mockAccountNotesResults } from '@notes/testing/mock-data';
+import { mockAccountNotesResults } from '@notes/testing/notes-data.mock';
 
 describe('NotesListComponent', () => {
   let component: NotesListComponent;

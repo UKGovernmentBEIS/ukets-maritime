@@ -35,15 +35,12 @@ public class AerViolation {
         NO_DIRECT_EMISSIONS_OR_FUEL_CONSUMPTIONS("Port does not contain direct emissions or fuel consumptions"),
         PORT_VISIT_INVALID_PORT_CODE("Port code is not correct"),
         PORT_VISIT_INVALID_PORT_COUNTRY("Port country is not correct"),
-        CCS_CCU_INVALID_VALUE("Port ccs and ccu value is not correct"),
-        SMALL_ISLAND_FERRY_OPERATOR_INVALID_VALUE("Port small island ferry operator value is not correct"),
         ARRIVAL_YEAR_MISMATCH_AER_YEAR("Port arrival year is not the same as AER year"),
         DEPARTURE_YEAR_MISMATCH_AER_YEAR("Port departure year is not the same as AER year"),
         OVERLAPPING_VISIT_FOUND("Ports overlapping visit found"),
         OVERLAPPING_VOYAGES_FOUND("Voyages overlapping voyage found"),
         PORTS_FUEL_CONSUMPTION_METHANE_SLIP_OR_NAME_MISMATCH("Port ports fuel consumption methane slip or name mismatch"),
         SHIP_DETAILS_INVALID_YEAR("Ship details year is not the same as AER year"),
-        AGGREGATED_DATA_INVALID_SMALL_ISLAND_FERRY_EMISSIONS("Aggregated data has invalid small island ferry emissions"),
         AGGREGATED_DATA_FETCHED_SHIP_NOT_FOUND_IN_PORTS_OR_VOYAGES("Aggregated data fetched ship not found in ports or voyages"),
         INVALID_FUEL_CONSUMPTION("Invalid fuel consumption that does not exist in list of ships"),
         DUPLICATE_FUEL_ENTRIES("Duplicate fuel entries found"),
@@ -54,6 +51,7 @@ public class AerViolation {
         VERIFICATION_REPORT_INVALID_UNCORRECTED_NON_COMPLIANCES_REFERENCE("Uncorrected non compliances reference format is not valid"),
         VERIFICATION_REPORT_INVALID_UNCORRECTED_MISSTATEMENT_REFERENCE("Uncorrected misstatements reference format is not valid"),
         FUEL_NOT_ASSOCIATED_WITH_EMISSION_SOURCES("AER fuel type not associated with any emission source"),
+        VERIFICATION_REPORT_INVALID_ERC_VERIFICATION_AND_SMF_EXISTS_COMBINATION("Emissions reduction claim verification and smf exist properties are not mutually valid"),
         ;
 
         private final String message;

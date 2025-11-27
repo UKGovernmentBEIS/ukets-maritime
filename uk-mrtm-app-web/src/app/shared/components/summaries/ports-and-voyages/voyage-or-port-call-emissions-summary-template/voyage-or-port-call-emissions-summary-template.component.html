@@ -39,7 +39,7 @@
             </strong>
           }
           @default {
-            @if (row['emission'] === 'SURRENDER' && journeyType() === 'International') {
+            @if (row['emission'] === 'SURRENDER' && ['International', 'EU'].includes(journeyType())) {
               Not applicable
             } @else {
               {{ row?.[column?.field] | bigNumber: 7 }}

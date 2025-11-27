@@ -2,6 +2,7 @@ package uk.gov.mrtm.api.reporting.validation;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
@@ -13,7 +14,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public abstract class AerVerificationReportReferenceValidator implements AerVerificationReportContextValidator {
     @Override
-    public AerValidationResult validate(AerVerificationReport verificationReport) {
+    public AerValidationResult validate(Aer aer, AerVerificationReport verificationReport) {
         List<AerViolation> aerViolations = new ArrayList<>();
         final Set<String> references = getReferences(verificationReport);
 

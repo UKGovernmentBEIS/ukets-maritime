@@ -92,7 +92,7 @@
     [users]="accountAuthorities$"
     mrtmUsersTable>
     <ng-template let-column="column" let-index="index" let-row="row">
-      @if (row.roleCode !== 'verifier') {
+      @if (!['verifier', 'dataSupplier'].includes(row.roleCode)) {
         <div>
           @switch (column.field) {
             @case ('name') {
@@ -171,7 +171,16 @@
             }
             @case ('deleteBtn') {
               @if (roleType() === 'OPERATOR') {
-                <a govukLink routerLink="verification-body/replace">Replace or remove</a>
+                @switch (row.roleCode) {
+                  @case ('verifier') {
+                    <a govukLink routerLink="verification-body/replace">Replace or remove</a>
+                  }
+                  @case ('dataSupplier') {
+                    <a govukLink routerLink="data-supplier/replace" [queryParams]="{ dataSupplierId: row.userId }">
+                      Replace or remove
+                    </a>
+                  }
+                }
               }
             }
             @default {
@@ -183,10 +192,17 @@
     </ng-template>
   </govuk-table>
   @if (isEditable()) {
-    @if ((isAccountClosed$ | async) === false && hasVerificationBody() === false && roleType() === 'OPERATOR') {
-      <div class="govuk-!-margin-bottom-6">
-        <a govukLink routerLink="verification-body/appoint">Appoint a verifier</a>
-      </div>
+    @if ((isAccountClosed$ | async) === false && roleType() === 'OPERATOR') {
+      @if (hasVerificationBody() === false) {
+        <div class="govuk-!-margin-bottom-6">
+          <a id="appointToVerifier" govukLink routerLink="verification-body/appoint">Appoint a verifier</a>
+        </div>
+      }
+      @if (!hasDataSupplier()) {
+        <div class="govuk-!-margin-bottom-6">
+          <a id="appointToDataSupplier" govukLink routerLink="data-supplier/appoint">Appoint a data supplier</a>
+        </div>
+      }
     }
     @if ((accountAuthorities$ | async)?.length > 0) {
       <div class="govuk-button-group">

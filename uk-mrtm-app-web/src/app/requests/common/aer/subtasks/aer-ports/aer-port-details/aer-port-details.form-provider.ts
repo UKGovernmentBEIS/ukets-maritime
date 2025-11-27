@@ -17,7 +17,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
 import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { mergeDatesToDate } from '@shared/utils';
+import { convertToUTCDate, mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherPortCall =
   (
@@ -91,7 +91,6 @@ export const aerPortDetailsFormProvider: Provider = {
     const portId = route?.snapshot?.params?.portId;
     const port = store.select(aerCommonQuery.selectPort(portId))();
     const reportingYear = store.select(aerCommonQuery.selectReportingYear)();
-    const derogations = store.select(aerCommonQuery.selectShipByImoNumber(port?.imoNumber))()?.derogations;
 
     return formBuilder.group<AerPortDetailsFormGroupModel>(
       {
@@ -103,7 +102,7 @@ export const aerPortDetailsFormProvider: Provider = {
           validators: [GovukValidators.required('Enter a port')],
         }),
         arrivalDate: formBuilder.control<AerPortDetailsModel['arrivalDate'] | Date | null>(
-          !isNil(port?.portDetails?.arrivalTime) ? new Date(port?.portDetails?.arrivalTime) : null,
+          !isNil(port?.portDetails?.arrivalTime) ? convertToUTCDate(new Date(port?.portDetails?.arrivalTime)) : null,
           {
             validators: [GovukValidators.required('Enter date of arrival'), sameReportingYearValidator(+reportingYear)],
           },
@@ -115,7 +114,9 @@ export const aerPortDetailsFormProvider: Provider = {
           },
         ),
         departureDate: formBuilder.control<AerPortDetailsModel['departureTime'] | Date | null>(
-          !isNil(port?.portDetails?.departureTime) ? new Date(port?.portDetails?.departureTime) : null,
+          !isNil(port?.portDetails?.departureTime)
+            ? convertToUTCDate(new Date(port?.portDetails?.departureTime))
+            : null,
           {
             validators: [
               GovukValidators.required('Enter date of departure'),
@@ -127,40 +128,6 @@ export const aerPortDetailsFormProvider: Provider = {
           !isNil(port?.portDetails?.departureTime) ? new Date(port?.portDetails?.departureTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of departure')],
-          },
-        ),
-        ccu: formBuilder.control<AerPortDetailsModel['ccu'] | null>(
-          derogations?.carbonCaptureAndStorageReduction ? port?.portDetails?.ccu : null,
-          {
-            validators: derogations?.carbonCaptureAndStorageReduction
-              ? [
-                  GovukValidators.required('Enter Carbon capture and storage (CCS)(t)'),
-                  GovukValidators.notNaN('Enter a numerical value'),
-                  GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
-                  GovukValidators.maxDecimalsValidator(2),
-                ]
-              : [],
-          },
-        ),
-        ccs: formBuilder.control<AerPortDetailsModel['ccs'] | null>(
-          derogations?.carbonCaptureAndStorageReduction ? port?.portDetails?.ccs : null,
-          {
-            validators: derogations?.carbonCaptureAndStorageReduction
-              ? [
-                  GovukValidators.required('Enter Carbon capture and utilisation (CCU)(t)'),
-                  GovukValidators.notNaN('Enter a numerical value'),
-                  GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
-                  GovukValidators.maxDecimalsValidator(2),
-                ]
-              : [],
-          },
-        ),
-        smallIslandFerryReduction: formBuilder.control<AerPortDetailsModel['smallIslandFerryReduction'] | null>(
-          derogations?.smallIslandFerryOperatorReduction ? port?.portDetails?.smallIslandFerryReduction : null,
-          {
-            validators: derogations?.smallIslandFerryOperatorReduction
-              ? [GovukValidators.required('Select claiming a small island ferry operator surrender reduction')]
-              : [],
           },
         ),
       },

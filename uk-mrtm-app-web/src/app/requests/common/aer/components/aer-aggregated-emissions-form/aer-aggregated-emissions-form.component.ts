@@ -5,7 +5,7 @@ import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms
 import { debounceTime } from 'rxjs';
 import { isNil } from 'lodash-es';
 
-import { AerAggregatedEmissionsMeasurement } from '@mrtm/api';
+import { AerPortEmissionsMeasurement } from '@mrtm/api';
 
 import { FieldsetDirective, LegendDirective, TextInputComponent } from '@netz/govuk-components';
 
@@ -24,19 +24,19 @@ import { bigNumberUtils } from '@shared/utils';
 })
 export class AerAggregatedEmissionsFormComponent implements OnInit {
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
-  public readonly controlContainer = inject(ControlContainer);
-  public readonly header: InputSignal<string> = input<string>();
-  public readonly showSummaryForCo2Captured: InputSignal<boolean> = input<boolean>(false);
-  public readonly isNil = isNil;
+  readonly controlContainer = inject(ControlContainer);
+  readonly header: InputSignal<string> = input<string>();
+  readonly hint: InputSignal<string> = input<string>();
+  readonly isNil = isNil;
 
   private get formGroup(): FormGroup<AerAggregatedEmissionsFormGroupModel> {
     return this.controlContainer?.control as FormGroup<AerAggregatedEmissionsFormGroupModel>;
   }
 
-  public ngOnInit() {
+  ngOnInit() {
     this.formGroup.valueChanges
       .pipe(takeUntilDestroyed(this.destroyRef), debounceTime(200))
-      .subscribe((value: Partial<AerAggregatedEmissionsMeasurement>) => {
+      .subscribe((value: AerPortEmissionsMeasurement) => {
         const { co2, ch4, n2o, total } = value;
         let newTotal = null;
 

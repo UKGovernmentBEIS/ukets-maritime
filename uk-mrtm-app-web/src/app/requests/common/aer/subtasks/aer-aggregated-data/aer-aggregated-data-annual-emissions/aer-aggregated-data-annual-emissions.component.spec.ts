@@ -50,7 +50,7 @@ describe('AerAggregatedDataAnnualEmissionsComponent', () => {
     expect(page.queryAll('fieldset>legend').map((item) => item.textContent.trim())).toEqual([
       'Aggregated greenhouse gas emissions which occurred within UK ports',
       'Aggregated greenhouse gas emissions from all voyages between UK ports',
-      'Aggregated greenhouse gas emissions from all voyages between the UK and EEA',
+      'Aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
     ]);
 
     expect(page.submitButton).toBeTruthy();
@@ -62,7 +62,7 @@ describe('AerAggregatedDataAnnualEmissionsComponent', () => {
     fixture.detectChanges();
 
     expect(page.errorSummary).toBeTruthy();
-    expect(page.errorSummaryListContents.length).toEqual(19);
+    expect(page.errorSummaryListContents.length).toEqual(16);
 
     expect(page.errorSummaryListContents).toEqual([
       'Must accept only positive numbers or zero',
@@ -74,12 +74,9 @@ describe('AerAggregatedDataAnnualEmissionsComponent', () => {
       'Must accept only positive numbers or zero',
       'Must accept only positive numbers or zero',
       'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
+      'Enter aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
       'Must accept only positive numbers or zero',
       'Enter the aggregated greenhouse gas emissions from all voyages between UK ports',
-      'Must accept only positive numbers or zero',
-      'Enter aggregated greenhouse gas emissions from all voyages between the UK and EEA',
       'Must accept only positive numbers or zero',
       'Enter aggregated greenhouse gas emissions which occurred within UK ports',
       'Must accept only positive numbers or zero',

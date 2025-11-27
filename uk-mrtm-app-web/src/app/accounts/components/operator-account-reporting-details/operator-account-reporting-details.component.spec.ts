@@ -6,7 +6,7 @@ import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { OperatorAccountReportingDetailsComponent } from '@accounts/components';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockedAccount } from '@accounts/testing/mock-data';
+import { mockedAccount } from '@accounts/testing/accounts-data.mock';
 
 describe('OperatorAccountReportingDetailsComponent', () => {
   let component: OperatorAccountReportingDetailsComponent;

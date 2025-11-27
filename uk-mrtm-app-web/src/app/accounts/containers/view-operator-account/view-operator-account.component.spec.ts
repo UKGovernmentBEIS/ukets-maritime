@@ -9,7 +9,7 @@ import { ActivatedRouteStub, mockClass } from '@netz/common/testing';
 
 import { ViewOperatorAccountComponent } from '@accounts/containers';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockedAccount } from '@accounts/testing/mock-data';
+import { mockedAccount } from '@accounts/testing/accounts-data.mock';
 
 describe('ViewOperatorAccountComponent', () => {
   let component: ViewOperatorAccountComponent;

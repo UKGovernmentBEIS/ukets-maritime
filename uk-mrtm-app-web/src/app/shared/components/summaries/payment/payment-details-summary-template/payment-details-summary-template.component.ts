@@ -31,7 +31,7 @@ import { PaymentDetailsDto } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentDetailsSummaryTemplateComponent {
-  public readonly header: InputSignal<string> = input<string>('Payment details');
+  public readonly header: InputSignal<string> = input<string>(undefined);
   public readonly data: InputSignal<PaymentDetailsDto> = input<PaymentDetailsDto>();
   protected readonly PAYMENT_METHOD_SELECT_OPTIONS = PAYMENT_METHOD_SELECT_OPTIONS;
 }

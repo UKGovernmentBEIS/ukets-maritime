@@ -33,7 +33,7 @@ export function csvFieldMandateShip<T>(
 
       if (!shipDetailsFound) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

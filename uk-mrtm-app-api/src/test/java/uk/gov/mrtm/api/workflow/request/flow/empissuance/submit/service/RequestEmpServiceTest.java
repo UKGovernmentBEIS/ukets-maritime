@@ -12,6 +12,8 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.abbreviations.EmpAbbreviat
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.abbreviations.EmpAbbreviations;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
+import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
+import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayloadType;
@@ -24,13 +26,16 @@ import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuan
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 
@@ -39,9 +44,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class RequestEmpServiceTest {
@@ -55,6 +63,11 @@ class RequestEmpServiceTest {
     @Mock
     private EmpValidatorService empValidatorService;
 
+    @Mock
+    private StagingEmissionsMonitoringPlanRepository stagingEmpRepository;
+
+    @Mock
+    private DateService dateService;
 
     @Test
     void applySaveAction() {
@@ -101,7 +114,6 @@ class RequestEmpServiceTest {
         requestEmpService.applySaveAction(requestTaskActionPayload, requestTask);
 
         //verify
-
         assertThat(requestTask.getPayload()).isInstanceOf(EmpIssuanceApplicationSubmitRequestTaskPayload.class);
 
         EmpIssuanceApplicationSubmitRequestTaskPayload payloadSaved =
@@ -109,6 +121,33 @@ class RequestEmpServiceTest {
 
         assertEquals(updatedEmissionsMonitoringPlan, payloadSaved.getEmissionsMonitoringPlan());
         assertThat(payloadSaved.getEmpSectionsCompleted()).containsExactly(Map.entry("Section B", "completed"));
+    }
+
+    @Test
+    void updateStagingEmp() {
+        long accountId = 1L;
+        LocalDateTime now = LocalDateTime.now();
+
+        StagingEmissionsMonitoringPlanEntity stagingEmpEntity = mock(StagingEmissionsMonitoringPlanEntity.class);
+
+        Request request = Request.builder()
+            .requestResources(List.of(RequestResource.builder().resourceType(ResourceType.ACCOUNT).resourceId(Long.toString(accountId)).build()))
+            .build();
+
+        RequestTask requestTask = RequestTask.builder()
+            .request(request)
+            .build();
+
+        when(stagingEmpRepository.findByAccountId(accountId)).thenReturn(Optional.of(stagingEmpEntity));
+        when(dateService.getLocalDateTime()).thenReturn(now);
+
+        requestEmpService.updateStagingEmp(requestTask);
+
+        verify(stagingEmpRepository).findByAccountId(accountId);
+        verify(dateService).getLocalDateTime();
+        verify(stagingEmpEntity).setImportedOn(now);
+        verifyNoMoreInteractions(stagingEmpRepository, stagingEmpEntity);
+        verifyNoInteractions(requestService, empValidatorService);
     }
 
     @Test

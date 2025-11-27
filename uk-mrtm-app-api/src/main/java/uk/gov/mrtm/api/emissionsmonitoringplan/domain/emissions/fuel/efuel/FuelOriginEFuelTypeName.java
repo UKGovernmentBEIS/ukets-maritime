@@ -20,6 +20,11 @@ public class FuelOriginEFuelTypeName extends FuelOriginTypeName {
     private EFuelType type;
 
     @Override
+    public String getTypeAsString() {
+        return type.name();
+    }
+
+    @Override
     public String getLongDescription() {
         if (type == EFuelType.OTHER) {
             return getOrigin().getDescription() + "/ Other e-fuel/ " + getName();

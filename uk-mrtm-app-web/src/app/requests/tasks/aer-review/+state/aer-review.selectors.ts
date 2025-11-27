@@ -15,6 +15,7 @@ import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AER_SUBTASK_REVIEW_GROUP_MAP } from '@requests/common/aer/common';
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages';
+import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation';
 import { AerReviewTaskPayload } from '@requests/tasks/aer-review/aer-review.types';
 import { ReviewDecisionDto } from '@shared/types';
@@ -91,6 +92,7 @@ const selectCanCompleteReport: StateSelector<RequestTaskState, boolean> = create
     const { aerSectionsCompleted, reviewGroupDecisions, aer } = payload;
     const hasPorts = !!aer?.portEmissions?.ports?.length;
     const hasVoyages = !!aer?.voyageEmissions?.voyages?.length;
+    const hasReductionClaims = !!aer?.smf?.exist;
 
     if (!allowedRequestTaskActions.includes('AER_COMPLETE_REVIEW') || canReturnForAmends) {
       return false;
@@ -109,6 +111,7 @@ const selectCanCompleteReport: StateSelector<RequestTaskState, boolean> = create
       if (
         (!hasPorts && section === AER_PORTS_SUB_TASK) ||
         (!hasVoyages && section === AER_VOYAGES_SUB_TASK) ||
+        (!hasReductionClaims && section === EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK) ||
         section === REPORTING_OBLIGATION_SUB_TASK
       ) {
         continue;

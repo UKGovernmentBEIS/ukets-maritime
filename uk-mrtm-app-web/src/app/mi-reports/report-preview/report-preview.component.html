@@ -12,11 +12,12 @@
     <div>
       @if (reportData?.results?.length) {
         <div class="overflow-auto overflow-auto-table">
-          <govuk-table [columns]="tableColumns()" [data]="tableData()"></govuk-table>
+          <govuk-table id="report" [columns]="tableColumns()" [data]="tableData()"></govuk-table>
         </div>
 
         @if (reportData?.results?.length > pageSize) {
           <govuk-pagination
+            fragment="report"
             [count]="reportData?.results?.length"
             (currentPageChange)="currentPage.set($event)"
             [pageSize]="pageSize"></govuk-pagination>

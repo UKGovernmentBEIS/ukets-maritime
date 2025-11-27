@@ -37,6 +37,7 @@ export class AerVerificationSubmitComponent {
         sections: getAerVerificationAssessmentsAndFindingsSections(
           AER_VERIFICATION_SUBMIT_ROUTE_PREFIX,
           this.sectionsCompleted(),
+          this.aer(),
         ),
       },
       {

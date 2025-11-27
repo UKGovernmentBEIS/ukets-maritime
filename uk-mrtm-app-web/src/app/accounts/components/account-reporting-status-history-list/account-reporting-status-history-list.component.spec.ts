@@ -4,7 +4,7 @@ import { BasePage } from '@netz/common/testing';
 
 import { AccountReportingStatusHistoryListComponent } from '@accounts/components';
 import { AccountReportingStatusPipe } from '@accounts/pipes';
-import { mockReportingStatusHistoryResults } from '@accounts/testing/mock-data';
+import { mockReportingStatusHistoryResults } from '@accounts/testing/accounts-data.mock';
 
 describe('AccountReportingStatusHistoryListComponent', () => {
   let component: AccountReportingStatusHistoryListComponent;

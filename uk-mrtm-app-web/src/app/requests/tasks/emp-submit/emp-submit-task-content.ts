@@ -26,17 +26,25 @@ import {
   mandateMap,
 } from '@requests/common/emp/subtasks/subtask-list.map';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
+import { EMP_SUBMIT_ROUTE_PREFIX } from '@requests/tasks/emp-submit/emp-submit.const';
+import { ThirdPartyDataProviderInfoComponent } from '@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider-info';
+import { NotificationBannerComponent } from '@shared/components';
 import { taskActionTypeToTitleMap } from '@shared/constants';
 
-const routePrefix = 'emp';
+const routePrefix = EMP_SUBMIT_ROUTE_PREFIX;
 
 export const empSubmitTaskContent: RequestTaskPageContentFactory = () => {
   const store = inject(RequestTaskStore);
   const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
+  const allowedRequestTaskActions = store.select(requestTaskQuery.selectAllowedRequestTaskActions)();
   const isEmpSectionCompleted = store.select(empCommonQuery.selectIsEmpSectionCompleted)();
 
   return {
+    pageTopComponent: NotificationBannerComponent,
     header: taskActionTypeToTitleMap?.[requestTaskType],
+    preContentComponent: allowedRequestTaskActions.includes('EMP_ISSUANCE_IMPORT_THIRD_PARTY_DATA_APPLICATION')
+      ? ThirdPartyDataProviderInfoComponent
+      : null,
     sections: [
       {
         title: 'Account details',

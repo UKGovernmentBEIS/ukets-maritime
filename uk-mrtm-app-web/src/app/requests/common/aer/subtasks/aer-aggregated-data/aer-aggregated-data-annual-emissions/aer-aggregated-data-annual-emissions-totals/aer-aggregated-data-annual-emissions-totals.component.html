@@ -1,28 +1,14 @@
 @if (header(); as header) {
   <h3 class="govuk-heading-m">{{ header }}</h3>
 }
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-one-third">
-    <p class="govuk-body govuk-!-margin-bottom-1">CO2 emissions (t)</p>
-    <p class="govuk-body">
-      @if (!isNil(data()?.co2)) {
-        {{ data()?.co2 | bigNumber: 7 }}
-      } @else {
-        Not calculated yet.
-      }
-    </p>
-  </div>
-  <div class="govuk-grid-column-one-third">
-    <h4 class="govuk-heading-s govuk-!-margin-bottom-1">CO2 Captured (t)</h4>
-    <p class="govuk-body">
-      @if (!isNil(data()?.co2Captured)) {
-        <strong>{{ data()?.co2Captured | bigNumber: 7 }}</strong>
-      } @else {
-        Not calculated yet.
-      }
-    </p>
-  </div>
-</div>
+<p class="govuk-body govuk-!-margin-bottom-1">CO2 emissions (t)</p>
+<p class="govuk-body">
+  @if (!isNil(data()?.co2)) {
+    {{ data()?.co2 | bigNumber: 7 }}
+  } @else {
+    Not calculated yet.
+  }
+</p>
 <p class="govuk-body govuk-!-margin-bottom-1">CH4 emissions (tCO2e)</p>
 <p class="govuk-body">
   @if (!isNil(data()?.ch4)) {

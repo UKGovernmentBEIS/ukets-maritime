@@ -18,9 +18,13 @@
       </div>
       <div class="govuk-grid-column-full">
         @if (vm.accounts?.length) {
-          <mrtm-accounts-list [accounts]="vm.accounts" />
+          <mrtm-accounts-list id="accounts-list" [accounts]="vm.accounts" />
           @if (vm.total > vm.pageSize) {
-            <govuk-pagination [count]="vm.total" (currentPageChange)="onPageChange($event)" [pageSize]="vm.pageSize" />
+            <govuk-pagination
+              fragment="accounts-list"
+              [count]="vm.total"
+              (currentPageChange)="onPageChange($event)"
+              [pageSize]="vm.pageSize" />
           }
         } @else {
           <div class="govuk-grid-row">

@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of, throwError } from 'rxjs';
 
 import {
+  AccountThirdPartyDataProvidersService,
   AccountVerificationBodyService,
   AuthoritiesService,
   OperatorAuthoritiesService,
@@ -31,7 +32,7 @@ import {
   mockedClosedAccount,
   mockOperatorListData,
   mockOperatorRoleCodes,
-} from '@accounts/testing/mock-data';
+} from '@accounts/testing/accounts-data.mock';
 import { AuthService } from '@core/services/auth.service';
 
 describe('UserContactsVerifiersTabComponent', () => {
@@ -41,6 +42,7 @@ describe('UserContactsVerifiersTabComponent', () => {
   let page: Page;
   let router: Router;
   let accountVerificationBodyService: MockType<AccountVerificationBodyService>;
+  let accountThirdPartyDataProvidersService: MockType<AccountThirdPartyDataProvidersService>;
   let authStore: AuthStore;
   let authService: MockType<AuthService>;
 
@@ -120,7 +122,11 @@ describe('UserContactsVerifiersTabComponent', () => {
     }
 
     get appointVerifierLink() {
-      return this.query<HTMLAnchorElement>('form > div >  a');
+      return this.query<HTMLAnchorElement>('form > div > a#appointToVerifier');
+    }
+
+    get appointDataSupplierLink() {
+      return this.query<HTMLAnchorElement>('form > div > a#appointToDataSupplier');
     }
 
     get details() {
@@ -168,6 +174,10 @@ describe('UserContactsVerifiersTabComponent', () => {
     accountVerificationBodyService = {
       getVerificationBodyOfAccount: jest.fn().mockReturnValue(throwError(() => ({ status: 404 }))),
     };
+    accountThirdPartyDataProvidersService = {
+      getAllThirdPartyDataProviders1: jest.fn().mockReturnValue(of(null)),
+      getThirdPartyDataProviderOfAccount: jest.fn().mockReturnValue(of(null)),
+    };
     activatedRouteStub = new ActivatedRouteStub({ accountId: mockedAccount.account.id });
     authService = {
       loadUserState: jest.fn(),
@@ -182,6 +192,7 @@ describe('UserContactsVerifiersTabComponent', () => {
         { provide: AuthoritiesService, useValue: authoritiesService },
         { provide: OperatorAuthoritiesService, useValue: operatorAuthoritiesService },
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
+        { provide: AccountThirdPartyDataProvidersService, useValue: accountThirdPartyDataProvidersService },
         { provide: DestroySubject },
       ],
     }).compileComponents();
@@ -381,6 +392,22 @@ describe('UserContactsVerifiersTabComponent', () => {
       expect(page.rows[1].querySelectorAll('td')[1].textContent.trim()).toEqual(
         mockOperatorListData.authorities[2].roleName,
       );
+    });
+
+    it('should show appoint to data supplier if one is not already appointed', async () => {
+      expect(page.appointDataSupplierLink).toBeTruthy();
+
+      accountThirdPartyDataProvidersService.getThirdPartyDataProviderOfAccount = jest.fn().mockReturnValue(
+        of({
+          id: 1,
+          name: 'Data supplier',
+        }),
+      );
+      activatedRouteStub.setParamMap({ accountId: 2 });
+
+      createComponent();
+
+      expect(page.appointDataSupplierLink).toBeFalsy();
     });
 
     it('should show appoint verifier button if one is not already appointed', async () => {

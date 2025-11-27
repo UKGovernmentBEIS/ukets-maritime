@@ -2,7 +2,6 @@ package uk.gov.mrtm.api.web.controller.workflow;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.NamedType;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,12 +16,14 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
+import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderViewServiceDelegator;
+import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
+import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
-import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
-import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
@@ -73,6 +74,9 @@ class RequestTaskControllerTest {
 
     @Mock
     private RequestTaskActionHandler<RequestTaskActionEmptyPayload> requestTaskActionHandler;
+
+    @Mock
+    private ThirdPartyProviderViewServiceDelegator thirdPartyProviderViewServiceDelegator;
 
     private ObjectMapper mapper;
 
@@ -242,6 +246,47 @@ class RequestTaskControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(requestTaskActionHandler, never()).process(anyLong(), any(), any(), any());
+    }
+
+    @Test
+    void getThirdPartyDataProviderInfoByRequestId_with_content() throws Exception {
+        AppUser appUser = AppUser.builder().userId("id").build();
+        Long requestTaskId = 1L;
+        ThirdPartyDataProviderDTO response = ThirdPartyDataProviderDTO.builder()
+            .providerName("provider name")
+            .build();
+
+        when(thirdPartyProviderViewServiceDelegator.getThirdPartyDataProviderInfo(requestTaskId))
+            .thenReturn(response);
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get(BASE_PATH + "/"+ requestTaskId +"/third-party-data-provider-info")
+                .param("id", requestTaskId.toString())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.providerName").value(response.getProviderName()));
+
+        verify(thirdPartyProviderViewServiceDelegator).getThirdPartyDataProviderInfo(requestTaskId);
+    }
+
+    @Test
+    void getThirdPartyDataProviderInfoByRequestId_no_content() throws Exception {
+        AppUser appUser = AppUser.builder().userId("id").build();
+        Long requestTaskId = 1L;
+
+        when(thirdPartyProviderViewServiceDelegator.getThirdPartyDataProviderInfo(requestTaskId)).thenReturn(null);
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .get(BASE_PATH + "/"+ requestTaskId +"/third-party-data-provider-info")
+                .param("id", requestTaskId.toString())
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+
+        verify(thirdPartyProviderViewServiceDelegator).getThirdPartyDataProviderInfo(requestTaskId);
     }
 
     private RequestTaskItemDTO createTaskItem(Long taskid, String type) {

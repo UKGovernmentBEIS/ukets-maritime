@@ -22,7 +22,7 @@ export function csvFieldCountryValidator<T>(
       const currentField = dataRow[field];
       if (currentField && !allCountriesKeys.includes(currentField)) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

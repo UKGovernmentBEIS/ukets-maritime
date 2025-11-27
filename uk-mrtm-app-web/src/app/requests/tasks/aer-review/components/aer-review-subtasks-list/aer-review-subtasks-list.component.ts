@@ -30,12 +30,15 @@ export class AerReviewSubtasksListComponent {
 
   readonly superSections: Signal<Array<TaskSuperSection>> = computed(() => {
     const sectionsCompleted = this.sectionsCompleted();
+    const aer = this.aer();
+
     return [
       {
         superTitle: 'Review verifier’s assessments and findings',
         sections: getAerVerificationAssessmentsAndFindingsSections(
           `${AER_REVIEW_ROUTE_PREFIX}/${AER_REVIEW_VERIFIER_SIDE_ROUTE_PREFIX}`,
           sectionsCompleted,
+          aer,
           TaskItemStatus.UNDECIDED,
         ),
       },

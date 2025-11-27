@@ -166,7 +166,9 @@ class RequestTaskAttachmentControllerTest {
         Long requestTaskId = 1L;
         UUID attachmentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(requestTaskAttachmentService.generateGetFileAttachmentToken(requestTaskId, attachmentUuid)).thenReturn(expectedToken);
 
         mockMvc.perform(MockMvcRequestBuilders

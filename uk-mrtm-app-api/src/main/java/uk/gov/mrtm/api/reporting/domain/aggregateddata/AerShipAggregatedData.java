@@ -44,22 +44,15 @@ public class AerShipAggregatedData {
 
     @NotNull
     @Valid
-    private AerAggregatedEmissionsMeasurement emissionsWithinUKPorts;
+    private AerPortEmissionsMeasurement emissionsWithinUKPorts;
 
     @NotNull
     @Valid
-    private AerAggregatedEmissionsMeasurement emissionsBetweenUKPorts;
+    private AerPortEmissionsMeasurement emissionsBetweenUKPorts;
 
     @NotNull
     @Valid
-    private AerAggregatedEmissionsMeasurement emissionsBetweenUKAndEEAVoyages;
-
-    @NotNull
-    @Valid
-    private AerAggregatedEmissionsMeasurement totalAggregatedEmissions;
-
-    @Valid
-    private AerAggregatedEmissionsMeasurement smallIslandSurrenderReduction;
+    private AerPortEmissionsMeasurement emissionsBetweenUKAndNIVoyages;
 
     @NotNull
     @Valid
@@ -67,18 +60,7 @@ public class AerShipAggregatedData {
 
     @NotNull
     @Valid
-    private AerPortEmissionsMeasurement lessCapturedCo2;
-
-    @NotNull
-    @Valid
-    private AerPortEmissionsMeasurement lessVoyagesNotInScope;
-
-    @NotNull
-    @Valid
-    private AerPortEmissionsMeasurement lessIslandFerryDeduction;
-
-    @Valid
-    private AerPortEmissionsMeasurement less5PercentIceClassDeduction;
+    private AerPortEmissionsMeasurement lessVoyagesInNorthernIrelandDeduction;
 
     @NotNull
     @Valid

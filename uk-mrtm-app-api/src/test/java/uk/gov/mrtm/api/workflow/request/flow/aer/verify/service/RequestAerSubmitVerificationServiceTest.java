@@ -68,14 +68,12 @@ class RequestAerSubmitVerificationServiceTest {
         long verificationBodyId = 1L;
         BigDecimal totalEmissionsProvided = BigDecimal.valueOf(14500);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(4578);
-        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(4567);
-        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(234);
+        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(4567);
         String notCoveredChangesProvided = "not covered changes";
         AerTotalReportableEmissions totalEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissionsProvided)
                 .surrenderEmissions(surrenderEmissions)
-                .lessIslandFerryDeduction(lessIslandFerryDeduction)
-                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
+                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
                 .build();
 
         AerVerificationReport verificationReport = AerVerificationReport.builder()
@@ -123,7 +121,7 @@ class RequestAerSubmitVerificationServiceTest {
         assertEquals(reviewGroupDecisions, updatedRequestPayload.getReviewGroupDecisions());
         assertEquals(notCoveredChangesProvided, updatedRequestPayload.getNotCoveredChangesProvided());
 
-        verify(verificationReportValidatorService, times(1)).validate(verificationReport);
+        verify(verificationReportValidatorService, times(1)).validate(null, verificationReport);
         verify(aerVerifyMapper, times(1))
                 .toAerApplicationVerificationSubmittedRequestActionPayload(
                         verificationSubmitRequestTaskPayload,

@@ -13,8 +13,7 @@ export interface AerOpinionStatement {
   emissionsCorrect: boolean;
   manuallyProvidedTotalEmissions?: string;
   manuallyProvidedSurrenderEmissions?: string;
-  manuallyProvidedLessIslandFerryDeduction?: string;
-  manuallyProvidedLess5PercentIceClassDeduction?: string;
+  manuallyProvidedLessVoyagesInNorthernIrelandDeduction?: string;
   additionalChangesNotCovered: boolean;
   additionalChangesNotCoveredDetails?: string;
   siteVisit: AerSiteVisit;

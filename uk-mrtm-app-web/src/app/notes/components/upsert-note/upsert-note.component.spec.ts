@@ -10,7 +10,7 @@ import { DestroySubject } from '@netz/common/services';
 import { ActivatedRouteStub, asyncData, BasePage, MockType } from '@netz/common/testing';
 
 import { UpsertNoteComponent } from '@notes/components';
-import { mockAccountNotesResults } from '@notes/testing/mock-data';
+import { mockAccountNotesResults } from '@notes/testing/notes-data.mock';
 
 describe('UpsertNoteComponent', () => {
   let component: UpsertNoteComponent;

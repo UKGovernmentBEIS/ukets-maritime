@@ -13,7 +13,7 @@ import {
 } from '@requests/common/emp/subtasks/control-activities';
 import { ControlActivitiesSummaryComponent } from '@requests/common/emp/subtasks/control-activities/control-activities-summary';
 import { controlActivitiesMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { mockEmpControlActivities, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockEmpControlActivities, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { screen } from '@testing-library/angular';

@@ -12,36 +12,32 @@
 </div>
 
 <h3 class="govuk-heading-m">Emission calculations</h3>
-
-<h4 class="govuk-heading-s">{{ totalEmissionsHeading }}</h4>
-<ng-container
-  *ngTemplateOutlet="tableTpl; context: { description: totalEmissionsHeading, data: totalEmissionsTableData() }" />
-
-<h4 class="govuk-heading-s">{{ surrenderHeading }}</h4>
-<ng-container *ngTemplateOutlet="tableTpl; context: { description: surrenderHeading, data: surrenderTableData() }" />
-
-<ng-template #tableTpl let-description="description" let-data="data">
-  <govuk-table
-    class="govuk-!-margin-bottom-9 govuk-!-display-block"
-    [columns]="columns"
-    [data]="data"
-    emptyTableText="No emissions to display"
-    [description]="description">
-    <ng-template let-row="row" let-column="column">
-      @switch (column.field) {
-        @case ('emissionLabel') {
-          <strong>{{ row?.[column.field] }}</strong>
-        }
-        @default {
-          @if (row?.isSummary) {
-            @if (column.field === 'total') {
-              <strong>{{ row?.[column?.field] | bigNumber: 7 }}</strong>
-            }
-          } @else {
-            {{ row?.[column?.field] | bigNumber: 7 }}
+<govuk-table
+  class="govuk-!-margin-bottom-9 govuk-!-display-block"
+  [columns]="columns"
+  [data]="totalEmissionsTableData()"
+  emptyTableText="No emissions to display"
+  description="Emission calculations">
+  <ng-template let-row="row" let-column="column">
+    @switch (column.field) {
+      @case ('emissionLabel') {
+        <strong class="govuk-!-display-block" [class.govuk-!-padding-top-8]="row?.hasPaddingTop">
+          {{ row?.[column.field] }}
+        </strong>
+      }
+      @default {
+        @if (row?.isSummary) {
+          @if (column.field === 'total') {
+            <strong class="govuk-!-display-block" [class.govuk-!-padding-top-8]="row?.hasPaddingTop">
+              {{ row?.[column?.field] | bigNumber: 7 }}
+            </strong>
           }
+        } @else {
+          <span class="govuk-!-display-block" [class.govuk-!-padding-top-8]="row?.hasPaddingTop">
+            {{ row?.[column?.field] | bigNumber: 7 }}
+          </span>
         }
       }
-    </ng-template>
-  </govuk-table>
-</ng-template>
+    }
+  </ng-template>
+</govuk-table>

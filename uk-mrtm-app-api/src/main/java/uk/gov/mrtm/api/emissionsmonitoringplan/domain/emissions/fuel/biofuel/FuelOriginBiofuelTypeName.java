@@ -20,6 +20,11 @@ public class FuelOriginBiofuelTypeName extends FuelOriginTypeName {
     private BioFuelType type;
 
     @Override
+    public String getTypeAsString() {
+        return type.name();
+    }
+
+    @Override
     public String getLongDescription() {
         if (type == BioFuelType.OTHER) {
             return getOrigin().getDescription() + "/ Other BioFuel/ " + getName();

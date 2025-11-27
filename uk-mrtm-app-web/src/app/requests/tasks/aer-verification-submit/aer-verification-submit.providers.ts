@@ -25,6 +25,12 @@ import {
   DataGapsMethodologiesSummarySideEffect,
 } from '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies';
 import {
+  EmissionsReductionClaimsVerificationFlowManager,
+  EmissionsReductionClaimsVerificationInProgressSideEffect,
+  EmissionsReductionClaimsVerificationSummarySideEffect,
+  EmissionsReductionClaimVerificationFormPayload,
+} from '@requests/tasks/aer-verification-submit/subtasks/emissions-reduction-claims-verification';
+import {
   EtsComplianceRulesFlowManager,
   EtsComplianceRulesFormPayloadMutator,
   EtsComplianceRulesInProgressSideEffect,
@@ -117,6 +123,7 @@ export function provideAerVerificationSubmitPayloadMutators(): EnvironmentProvid
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ComplianceMonitoringReportingCompletenessPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ComplianceMonitoringReportingCctPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: ComplianceMonitoringReportingIntegrityPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionsReductionClaimVerificationFormPayload },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OverallVerificationDecisionAssessmentPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OverallVerificationDecisionCommentsFormAddPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: OverallVerificationDecisionCommentsFormEditPayloadMutator },
@@ -173,6 +180,8 @@ export function provideAerVerificationSubmitSideEffects(): EnvironmentProviders 
     { provide: SIDE_EFFECTS, multi: true, useClass: EtsComplianceRulesSummarySideEffect },
     { provide: SIDE_EFFECTS, multi: true, useClass: ComplianceMonitoringReportingInProgressSideEffect },
     { provide: SIDE_EFFECTS, multi: true, useClass: ComplianceMonitoringReportingSummarySideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionsReductionClaimsVerificationInProgressSideEffect },
+    { provide: SIDE_EFFECTS, multi: true, useClass: EmissionsReductionClaimsVerificationSummarySideEffect },
     { provide: SIDE_EFFECTS, multi: true, useClass: OverallVerificationDecisionInProgressSideEffect },
     { provide: SIDE_EFFECTS, multi: true, useClass: OverallVerificationDecisionSummarySideEffect },
 
@@ -197,6 +206,7 @@ export function provideAerVerificationSubmitStepFlowManagers(): EnvironmentProvi
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OpinionStatementFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EtsComplianceRulesFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ComplianceMonitoringReportingFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsReductionClaimsVerificationFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: OverallVerificationDecisionFlowManager },
 
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: UncorrectedMisstatementsFlowManager },

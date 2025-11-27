@@ -62,11 +62,8 @@ public class ReportableEmissionsEntity {
     @Column(name = "total_emissions")
     private BigDecimal totalEmissions;
 
-    @Column(name = "island_ferry_deduction")
-    private BigDecimal lessIslandFerryDeduction;
-
-    @Column(name = "ice_class_deduction")
-    private BigDecimal less5PercentIceClassDeduction;
+    @Column(name = "less_voyages_in_northern_ireland_deduction")
+    private BigDecimal lessVoyagesInNorthernIrelandDeduction;
 
     @Column(name = "is_from_doe", columnDefinition = "boolean default false")
     private boolean isFromDoe;

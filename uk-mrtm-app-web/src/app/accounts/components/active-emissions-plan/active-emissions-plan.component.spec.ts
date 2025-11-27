@@ -7,7 +7,7 @@ import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { ActiveEmissionsPlanComponent } from '@accounts/components/active-emissions-plan/active-emissions-plan.component';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockedAccount } from '@accounts/testing/mock-data';
+import { mockedAccount } from '@accounts/testing/accounts-data.mock';
 
 describe('ActiveEmissionsPlanComponent', () => {
   let component: ActiveEmissionsPlanComponent;

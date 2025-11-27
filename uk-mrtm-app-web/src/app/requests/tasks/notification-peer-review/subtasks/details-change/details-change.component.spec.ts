@@ -7,7 +7,10 @@ import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { DetailsChangeComponent } from '@requests/tasks/notification-peer-review/subtasks/details-change';
-import { mockReviewDecision, mockStateBuild } from '@requests/tasks/notification-peer-review/testing/mock-data';
+import {
+  mockReviewDecision,
+  mockStateBuild,
+} from '@requests/tasks/notification-peer-review/testing/notification-peer-review-data.mock';
 
 describe('DetailsChangeComponent', () => {
   let component: DetailsChangeComponent;

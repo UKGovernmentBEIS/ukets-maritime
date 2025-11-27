@@ -14,6 +14,7 @@ module.exports = {
     '^@contact-us/(.*)': '<rootDir>/src/app/contact-us/$1',
     '^@cookies/(.*)': '<rootDir>/src/app/cookies/$1',
     '^@core/(.*)': '<rootDir>/src/app/core/$1',
+    '^@data-suppliers/(.*)': '<rootDir>/src/app/data-suppliers/$1',
     '^@error/(.*)': '<rootDir>/src/app/error/$1',
     '^@feedback/(.*)': '<rootDir>/src/app/feedback/$1',
     '^@forgot-password/(.*)': '<rootDir>/src/app/forgot-password/$1',

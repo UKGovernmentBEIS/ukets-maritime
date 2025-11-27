@@ -1,12 +1,14 @@
 package uk.gov.mrtm.api.emissionsmonitoringplan.validation;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanValidationResult;
+import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.util.ArrayList;
@@ -28,6 +30,10 @@ public class EmpValidatorService {
         if (!isValid) {
             throw new BusinessException(MrtmErrorCode.INVALID_EMP, extractEmissionsMonitoringPlanViolations(empValidationResults));
         }
+    }
+
+    public void validateStagingEmissionsMonitoringPlan(@Valid @NotNull StagingEmissionsMonitoringPlan staging) {
+        // Trigger validations
     }
 
     private Object[] extractEmissionsMonitoringPlanViolations(List<EmissionsMonitoringPlanValidationResult> empValidationResults) {

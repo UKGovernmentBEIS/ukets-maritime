@@ -2,9 +2,11 @@ package uk.gov.mrtm.api.web.util;
 
 import lombok.experimental.UtilityClass;
 import org.springframework.http.ResponseEntity;
+import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
+import uk.gov.mrtm.api.web.controller.exception.ExternalErrorResponse;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.exception.NetzErrorCode;
-import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
+import uk.gov.netz.api.common.validation.Violation;
 
 /**
  * ErrorUtil for error manipulation.
@@ -23,9 +25,25 @@ public class ErrorUtil {
         ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(errorCode.getCode())
                 .message(errorCode.getMessage())
-                .security(errorCode.isSecurity())
                 .data(data)
                 .build();
+
+        return new ResponseEntity<>(errorResponse, errorCode.getHttpStatus());
+    }
+
+    /**
+     * Constructs the {@link ExternalErrorResponse}.
+     *
+     * @param data Error data populated
+     * @param errorCode {@link ErrorCode}
+     * @return {@link ErrorResponse}
+     */
+    public ResponseEntity<ExternalErrorResponse> getExternalErrorResponse(Violation[] data, NetzErrorCode errorCode) {
+        ExternalErrorResponse errorResponse = ExternalErrorResponse.builder()
+            .code(errorCode.getCode())
+            .message(errorCode.getMessage())
+            .data(data)
+            .build();
 
         return new ResponseEntity<>(errorResponse, errorCode.getHttpStatus());
     }

@@ -52,6 +52,19 @@ export class EmpApiService extends TaskApiService<EmpTaskPayload> {
     }
   }
 
+  private get importThirdPartyDataActionTypes(): SaveActionTypes {
+    const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
+
+    switch (taskType) {
+      case 'EMP_ISSUANCE_APPLICATION_SUBMIT':
+      default:
+        return {
+          actionType: 'EMP_ISSUANCE_IMPORT_THIRD_PARTY_DATA_APPLICATION',
+          actionPayloadType: 'EMP_ISSUANCE_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD',
+        };
+    }
+  }
+
   save(payload: EmpTaskPayload): Observable<EmpTaskPayload> {
     return this.service.processRequestTaskAction(this.createSaveAction(payload)).pipe(
       map(() => payload),
@@ -67,6 +80,21 @@ export class EmpApiService extends TaskApiService<EmpTaskPayload> {
 
   submit(): Observable<void> {
     return this.service.processRequestTaskAction(this.createSubmitAction()).pipe(
+      catchNotFoundRequest(ErrorCodes.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      catchBadRequest(ErrorCodes.FORM1001, () => {
+        const taskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
+        return this.businessErrorService.showError(empSubmitValidationError(taskId));
+      }),
+    );
+  }
+
+  importThirdPartyData(payload: EmpTaskPayload): Observable<EmpTaskPayload> {
+    return this.service.processRequestTaskAction(this.createImportThirdPartyDataAction(payload)).pipe(
       catchNotFoundRequest(ErrorCodes.NOTFOUND1001, () =>
         this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
       ),
@@ -106,6 +134,18 @@ export class EmpApiService extends TaskApiService<EmpTaskPayload> {
       requestTaskActionPayload: {
         payloadType: actionPayloadType,
       },
+    } as RequestTaskActionProcessDTO;
+  }
+
+  private createImportThirdPartyDataAction(payload: EmpTaskPayload): RequestTaskActionProcessDTO {
+    const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
+    const { emissionsMonitoringPlan, empSectionsCompleted } = payload;
+    const { actionType, actionPayloadType } = this.importThirdPartyDataActionTypes;
+
+    return {
+      requestTaskId,
+      requestTaskActionType: actionType,
+      requestTaskActionPayload: { payloadType: actionPayloadType, emissionsMonitoringPlan, empSectionsCompleted },
     } as RequestTaskActionProcessDTO;
   }
 }

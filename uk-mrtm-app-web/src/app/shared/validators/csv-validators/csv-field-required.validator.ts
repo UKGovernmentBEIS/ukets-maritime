@@ -21,7 +21,7 @@ export function csvFieldRequiredValidator<T>(
       const currentField = dataRow[field];
       if (currentField === undefined || currentField === null || currentField?.length === 0) {
         errorMessageRows.push({
-          rowIndex: index + 1,
+          rowIndex: index + 2,
         });
       }
     });

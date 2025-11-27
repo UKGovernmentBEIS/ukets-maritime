@@ -21,7 +21,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyage-details/aer-voyage-details.types';
 import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { mergeDatesToDate } from '@shared/utils';
+import { convertToUTCDate, mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherVoyage =
   (
@@ -95,7 +95,6 @@ export const aerVoyageDetailsFormProvider: Provider = {
     const voyageId = route?.snapshot?.params?.voyageId;
     const { imoNumber, voyageDetails, uniqueIdentifier } = store.select(aerCommonQuery.selectVoyage(voyageId))() ?? {};
     const reportingYear = store.select(aerCommonQuery.selectReportingYear)();
-    const derogations = store.select(aerCommonQuery.selectShipByImoNumber(imoNumber))()?.derogations;
 
     return formBuilder.group<AerVoyageDetailsFormGroup>(
       {
@@ -125,7 +124,7 @@ export const aerVoyageDetailsFormProvider: Provider = {
           },
         ),
         arrivalDate: formBuilder.control<AerVoyageDetailsFormModel['arrivalDate'] | Date | null>(
-          !isNil(voyageDetails?.arrivalTime) ? new Date(voyageDetails?.arrivalTime) : null,
+          !isNil(voyageDetails?.arrivalTime) ? convertToUTCDate(new Date(voyageDetails?.arrivalTime)) : null,
           {
             validators: [GovukValidators.required('Enter date of arrival'), sameReportingYearValidator(+reportingYear)],
           },
@@ -137,7 +136,7 @@ export const aerVoyageDetailsFormProvider: Provider = {
           },
         ),
         departureDate: formBuilder.control<AerVoyageDetailsFormModel['departureTime'] | Date | null>(
-          !isNil(voyageDetails?.departureTime) ? new Date(voyageDetails?.departureTime) : null,
+          !isNil(voyageDetails?.departureTime) ? convertToUTCDate(new Date(voyageDetails?.departureTime)) : null,
           {
             validators: [
               GovukValidators.required('Enter date of departure'),
@@ -149,40 +148,6 @@ export const aerVoyageDetailsFormProvider: Provider = {
           !isNil(voyageDetails?.departureTime) ? new Date(voyageDetails?.departureTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of departure')],
-          },
-        ),
-        ccu: formBuilder.control<AerVoyageDetailsFormModel['ccu'] | null>(
-          derogations?.carbonCaptureAndStorageReduction ? voyageDetails?.ccu : null,
-          {
-            validators: derogations?.carbonCaptureAndStorageReduction
-              ? [
-                  GovukValidators.required('Enter Carbon capture and utilisation (CCU)(t)'),
-                  GovukValidators.notNaN('Enter a numerical value'),
-                  GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
-                  GovukValidators.maxDecimalsValidator(2),
-                ]
-              : [],
-          },
-        ),
-        ccs: formBuilder.control<AerVoyageDetailsFormModel['ccs'] | null>(
-          derogations?.carbonCaptureAndStorageReduction ? voyageDetails?.ccs : null,
-          {
-            validators: derogations?.carbonCaptureAndStorageReduction
-              ? [
-                  GovukValidators.required('Enter Carbon capture and storage (CCS)(t)'),
-                  GovukValidators.notNaN('Enter a numerical value'),
-                  GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
-                  GovukValidators.maxDecimalsValidator(2),
-                ]
-              : [],
-          },
-        ),
-        smallIslandFerryReduction: formBuilder.control<AerVoyageDetailsFormModel['smallIslandFerryReduction'] | null>(
-          derogations?.smallIslandFerryOperatorReduction ? voyageDetails?.smallIslandFerryReduction : null,
-          {
-            validators: derogations?.smallIslandFerryOperatorReduction
-              ? [GovukValidators.required('Select claiming a small island ferry operator surrender reduction')]
-              : [],
           },
         ),
       },

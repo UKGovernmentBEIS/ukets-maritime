@@ -7,7 +7,7 @@ import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { GuidanceStore } from '@guidance/+state';
 import { GuidanceListComponent } from '@guidance/guidance-list';
-import { mockGuidanceSections } from '@guidance/testing/mock-data';
+import { mockGuidanceSections } from '@guidance/testing/guidance-data.mock';
 
 describe('GuidanceListComponent', () => {
   class Page extends BasePage<GuidanceListComponent> {}

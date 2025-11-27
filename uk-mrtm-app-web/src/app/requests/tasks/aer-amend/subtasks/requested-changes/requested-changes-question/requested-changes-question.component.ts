@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { TaskService } from '@netz/common/forms';
-import { RequestTaskStore } from '@netz/common/store';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { CheckboxComponent, CheckboxesComponent } from '@netz/govuk-components';
 
 import { regulatorCommentsSubtaskMap } from '@requests/common/emp/subtasks/subtask-list.map';
@@ -40,12 +40,12 @@ export class RequestedChangesQuestionComponent {
   private readonly service: TaskService<AerAmendTaskPayload> = inject(TaskService<AerAmendTaskPayload>);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  headerTitle = regulatorCommentsSubtaskMap.requestedChanges.title;
-  decisionForAmends = computed(() => this.store.select(aerAmendQuery.selectReviewDecisionsForAmends)());
+  readonly headerTitle = regulatorCommentsSubtaskMap.requestedChanges.title;
+  readonly decisionForAmends = computed(() => this.store.select(aerAmendQuery.selectReviewDecisionsForAmends)());
+  readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly subtaskTitleMap: Record<string, string> = AER_SUBTASK_TITLES_MAP;
 
-  subtaskTitleMap: Record<string, string> = AER_SUBTASK_TITLES_MAP;
-
-  onSubmit() {
+  onSubmit(): void {
     this.service
       .saveSubtask(
         REQUESTED_CHANGES_SUB_TASK,

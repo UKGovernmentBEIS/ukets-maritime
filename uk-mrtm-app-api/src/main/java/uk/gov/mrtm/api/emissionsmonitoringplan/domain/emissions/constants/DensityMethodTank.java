@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,5 +13,6 @@ public enum DensityMethodTank {
     NA("Not applicable")
     ;
 
+    @Schema(description = "Method for determination of density of fuel in tanks")
     private final String description;
 }

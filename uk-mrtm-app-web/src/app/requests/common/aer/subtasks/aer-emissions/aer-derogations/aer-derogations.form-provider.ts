@@ -25,18 +25,6 @@ export const aerDerogationsFormProvider: Provider = {
       exceptionFromPerVoyageMonitoring: fb.control<boolean>(derogations?.exceptionFromPerVoyageMonitoring, {
         validators: [GovukValidators.required('Select yes if you have an exemption from per voyage monitoring')],
       }),
-      carbonCaptureAndStorageReduction: fb.control<boolean>(derogations?.carbonCaptureAndStorageReduction, {
-        validators: [
-          GovukValidators.required(
-            'Select yes if you are claiming an emissions reduction for carbon capture and storage',
-          ),
-        ],
-      }),
-      smallIslandFerryOperatorReduction: fb.control<boolean>(derogations?.smallIslandFerryOperatorReduction, {
-        validators: [
-          GovukValidators.required('Select yes if you are claiming a small island ferry operator surrender reduction'),
-        ],
-      }),
     });
   },
 };

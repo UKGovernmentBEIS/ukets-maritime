@@ -1,0 +1,81 @@
+@if (data(); as data) {
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Have you reviewed the maritime operator's eligible fuel batch claims?</dt>
+      <dd govukSummaryListRowValue notProvided="{{ data?.smfBatchClaimsReviewed | booleanToText }}"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    @if (!data?.smfBatchClaimsReviewed) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Batch references that were not reviewed</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data?.batchReferencesNotReviewed"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>How data sampling was carried out and what documents you reviewed</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data?.dataSampling"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+          </dd>
+        }
+      </div>
+    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Results of your review</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data?.reviewResults"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Confirmation of no double-counting</dt>
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data?.noDoubleCountingConfirmation"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        Do all of the batch claims reviewed contain evidence that shows the eligibility criteria were met?
+      </dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">{{ data.evidenceAllCriteriaMetExist | booleanToText }}</p>
+        @if (!data.evidenceAllCriteriaMetExist) {
+          <p class="govuk-body pre-wrap">{{ data.noCriteriaMetIssues }}</p>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Compliance with UKETS requirements</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">{{ data.complianceWithEmpRequirementsExist | booleanToText }}</p>
+        @if (!data.complianceWithEmpRequirementsExist) {
+          <p class="govuk-body pre-wrap">{{ data.notCompliedWithEmpRequirementsAspects }}</p>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="wizardStep().FORM" [queryParams]="queryParams()">Change</a>
+        </dd>
+      }
+    </div>
+  </dl>
+}

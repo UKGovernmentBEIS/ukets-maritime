@@ -1,1 +1,1 @@
-export * from './mock-providers';
+export * from './batch-variation-providers.mock';

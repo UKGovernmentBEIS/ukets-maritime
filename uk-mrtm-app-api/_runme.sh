@@ -1,4 +1,4 @@
 #!/bin/bash
 
 docker-compose up -d
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
+mvn spring-boot:run -Pdev-maven -Dspring-boot.run.profiles=dev

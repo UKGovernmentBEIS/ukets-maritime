@@ -1,0 +1,16 @@
+@if (data(); as data) {
+  <netz-page-heading caption="Add a new data supplier">Check your answers</netz-page-heading>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name of data supplier</dt>
+      <dd govukSummaryListColumnValue>{{ data.name }}</dd>
+      <dd govukSummaryListRowActions>
+        <a govukLink routerLink="../">Change</a>
+      </dd>
+    </div>
+  </dl>
+
+  <div class="govuk-button-group">
+    <button govukButton netzPendingButton type="submit" role="button" (click)="onSubmit()">Submit</button>
+  </div>
+}

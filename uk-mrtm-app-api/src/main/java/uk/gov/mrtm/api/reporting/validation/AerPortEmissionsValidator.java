@@ -56,12 +56,6 @@ public class AerPortEmissionsValidator implements AerContextValidator {
                 aerContainer.getReportingYear().getValue(), aerViolations, AerPort.class);
 
             if (ship != null) {
-                AerValidatorHelper.validateCcsAndCcu(portDetails.getCcu(), portDetails.getCcs(),
-                    ship.getDerogations().getCarbonCaptureAndStorageReduction(), aerViolations, AerPort.class);
-
-                AerValidatorHelper.validateSmallIslandFerryReduction(portDetails.getSmallIslandFerryReduction(),
-                    ship.getDerogations().getSmallIslandFerryOperatorReduction(), aerViolations, AerPort.class);
-
                 AerValidatorHelper.validateFuelConsumptions(ship, port.getFuelConsumptions(), aerViolations, AerPort.class);
             }
         }

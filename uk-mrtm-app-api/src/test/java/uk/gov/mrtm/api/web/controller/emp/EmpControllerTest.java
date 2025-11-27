@@ -85,7 +85,9 @@ class EmpControllerTest {
         String empId = "1";
         UUID attachmentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(empAttachmentService.generateGetFileAttachmentToken(empId, attachmentUuid)).thenReturn(
             expectedToken);
 
@@ -123,7 +125,9 @@ class EmpControllerTest {
         String empId = "1";
         UUID documentUuid = UUID.randomUUID();
         FileToken expectedToken = FileToken.builder().token("token").build();
+        AppUser user = AppUser.builder().userId("userId").build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(empDocumentService.generateGetFileDocumentToken(empId, documentUuid)).thenReturn(
             expectedToken);
 

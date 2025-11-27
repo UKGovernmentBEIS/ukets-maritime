@@ -16,7 +16,7 @@ import {
   mockKeycloakService,
   mockTermsAndConditionsService,
   mockUsersService,
-} from '@core/guards/mocks';
+} from '@core/guards/core-guards.mock';
 import { TermsAndConditionsGuard } from '@core/guards/terms-and-conditions.guard';
 import { AuthService } from '@core/services/auth.service';
 import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';

@@ -14,6 +14,7 @@ import java.util.Map;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.ACCOUNT_CLOSURE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.ANNUAL_IMPROVEMENT_REPORT;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.MANAGE_GUIDANCE;
+import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.MANAGE_THIRD_PARTY_DATA_PROVIDERS;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_DOE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_EMP_APPLICATION;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_EMP_NOTIFICATION;
@@ -24,8 +25,8 @@ import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegula
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.REVIEW_EMP_NOTIFICATION;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.REVIEW_VIR;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.SUBMIT_DOE;
-import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.SUBMIT_NON_COMPLIANCE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.SUBMIT_EMP_BATCH_REISSUE;
+import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.SUBMIT_NON_COMPLIANCE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.SUBMIT_REVIEW_EMP_VARIATION;
 import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_ACCOUNT_USERS_EDIT;
 import static uk.gov.netz.api.authorization.core.domain.Permission.PERM_CA_USERS_EDIT;
@@ -245,6 +246,13 @@ public class MrtmRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
         permissionGroupLevelsConfig
                 .put(new RegulatorPermissionGroupLevel(MANAGE_GUIDANCE, EXECUTE),
                         List.of(MrtmPermission.PERM_MANAGE_GUIDANCE));
+
+        //THIRD_PARTY_DATA_PROVIDERS
+        permissionGroupLevelsConfig
+            .put(new RegulatorPermissionGroupLevel(MANAGE_THIRD_PARTY_DATA_PROVIDERS, NONE), List.of());
+        permissionGroupLevelsConfig
+            .put(new RegulatorPermissionGroupLevel(MANAGE_THIRD_PARTY_DATA_PROVIDERS, EXECUTE),
+                List.of(MrtmPermission.PERM_MANAGE_THIRD_PARTY_DATA_PROVIDERS));
     }
 
 

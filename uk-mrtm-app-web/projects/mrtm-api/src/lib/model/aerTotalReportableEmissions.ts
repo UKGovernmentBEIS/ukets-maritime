@@ -11,6 +11,5 @@
 export interface AerTotalReportableEmissions {
   surrenderEmissions?: string;
   totalEmissions?: string;
-  less5PercentIceClassDeduction?: string;
-  lessIslandFerryDeduction?: string;
+  lessVoyagesInNorthernIrelandDeduction?: string;
 }

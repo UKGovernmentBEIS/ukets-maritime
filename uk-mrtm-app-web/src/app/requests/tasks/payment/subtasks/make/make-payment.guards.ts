@@ -51,7 +51,7 @@ export const canActivatePaymentSummary: CanActivateFn = (activatedRouteSnapshot:
           const status = res?.state?.status;
           const nextUrl = res?.nextUrl;
 
-          if (['failed', 'cancelled', 'expired'].includes(status)) {
+          if (['failed', 'cancelled', 'expired', 'error'].includes(status)) {
             return createUrlTreeFromSnapshot(activatedRouteSnapshot, [`../${MakePaymentWizardSteps.NOT_SUCCESS}`]);
           } else if (['started', 'submitted'].includes(status) && !isNil(nextUrl)) {
             window.location.assign(nextUrl);

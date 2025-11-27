@@ -34,6 +34,7 @@
   </div>
   @if ((templates$ | async)?.length) {
     <govuk-table
+      id="templates"
       [columns]="(currentFragment$ | async) === 'regulator-emails' ? regulatorTabCols : operatorTabCols"
       [data]="templates$ | async">
       <ng-template let-column="column" let-row="row">
@@ -52,6 +53,7 @@
     </govuk-table>
     @if ((totalPages$ | async) > pageSize) {
       <govuk-pagination
+        fragment="templates"
         (currentPageChange)="currentPage$.next($event)"
         [count]="totalPages$ | async"
         [pageSize]="pageSize" />

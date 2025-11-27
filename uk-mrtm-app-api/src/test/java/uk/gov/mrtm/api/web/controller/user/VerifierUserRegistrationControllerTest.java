@@ -12,7 +12,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
+import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
 import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.user.core.domain.dto.InvitedUserCredentialsDTO;
 import uk.gov.netz.api.user.core.domain.dto.InvitedUserInfoDTO;
 import uk.gov.netz.api.user.core.domain.dto.TokenDTO;
@@ -45,6 +48,9 @@ class VerifierUserRegistrationControllerTest {
     @Mock
     private Validator validator;
 
+    @Mock
+    private AppSecurityComponent appSecurityComponent;
+
     private ObjectMapper objectMapper;
 
     @BeforeEach
@@ -53,6 +59,7 @@ class VerifierUserRegistrationControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
                 .setValidator(validator)
                 .setControllerAdvice(new ExceptionControllerAdvice())
+                .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
                 .build();
     }
 
@@ -61,9 +68,11 @@ class VerifierUserRegistrationControllerTest {
         String email = "email";
         TokenDTO tokenDTO = TokenDTO.builder().token("token").build();
         InvitedUserInfoDTO invitedUserInfo = InvitedUserInfoDTO.builder().email(email).build();
+        AppUser currentUser = AppUser.builder().userId("authId").build();
 
         // Mock
-        when(verifierUserInvitationService.acceptInvitation(tokenDTO.getToken())).thenReturn(invitedUserInfo);
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
+        when(verifierUserInvitationService.acceptInvitation(tokenDTO.getToken(), currentUser)).thenReturn(invitedUserInfo);
 
         // Invoke
         mockMvc.perform(
@@ -80,6 +89,9 @@ class VerifierUserRegistrationControllerTest {
                 .invitationToken("token")
                 .password("password")
                 .build();
+        AppUser currentUser = AppUser.builder().userId("authId").build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(currentUser);
 
         // Invoke
         mockMvc.perform(
@@ -88,6 +100,6 @@ class VerifierUserRegistrationControllerTest {
                                 .content(objectMapper.writeValueAsString(invitedUserCredentialsDTO)))
                 .andExpect(status().isNoContent());
 
-        verify(verifierUserActivateService).acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO);
+        verify(verifierUserActivateService).acceptAuthorityAndActivateInvitedUser(invitedUserCredentialsDTO, currentUser);
     }
 }

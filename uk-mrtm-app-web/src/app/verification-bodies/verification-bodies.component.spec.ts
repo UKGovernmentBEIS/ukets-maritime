@@ -6,7 +6,7 @@ import { VerificationBodiesService, VerifierAuthoritiesService } from '@mrtm/api
 import { ActivatedRouteStub, mockClass } from '@netz/common/testing';
 
 import { VerificationBodiesStoreService } from '@verification-bodies/+state/verification-bodies-store.service';
-import { mockedVerificationBodies } from '@verification-bodies/testing/mock-data';
+import { mockedVerificationBodies } from '@verification-bodies/testing/verification-bodies-data.mock';
 import { VerificationBodiesComponent } from '@verification-bodies/verification-bodies.component';
 
 describe('VerificationBodiesComponent', () => {

@@ -10,7 +10,7 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 import { TaskItemStatus } from '@requests/common';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { MandateSummaryComponent } from '@requests/common/emp/subtasks/mandate/mandate-summary';
-import { mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 
 describe('MandateSummaryComponent', () => {

@@ -3,7 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { BasePage } from '@netz/common/testing';
 
-import { mockAttachedFiles } from '@requests/common/aer/testing/mock-data';
+import { mockAttachedFiles } from '@requests/common/aer/testing/aer-data.mock';
 import { ReportingObligationSummaryTemplateComponent } from '@shared/components';
 
 const mockReportingObligationMap = {

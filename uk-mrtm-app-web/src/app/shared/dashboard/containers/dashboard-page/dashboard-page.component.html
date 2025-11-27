@@ -27,11 +27,19 @@
 <ng-template #tabTemplate let-header="header" let-tab="tab" let-unassigned="unassigned">
   <h2 class="govuk-heading-m">{{ header }}</h2>
   @if (activeTab() === tab) {
-    <mrtm-dashboard-items-list [items]="items()" [tableColumns]="tableColumns()" [unassignedLabel]="unassigned" />
+    <mrtm-dashboard-items-list
+      id="items-list"
+      [items]="items()"
+      [tableColumns]="tableColumns()"
+      [unassignedLabel]="unassigned" />
   }
   @if (total() > pageSize()) {
     @if (activeTab() === tab) {
-      <govuk-pagination (currentPageChange)="changePage($event)" [count]="total()" [pageSize]="pageSize()" />
+      <govuk-pagination
+        fragment="items-list"
+        (currentPageChange)="changePage($event)"
+        [count]="total()"
+        [pageSize]="pageSize()" />
     }
   }
 </ng-template>

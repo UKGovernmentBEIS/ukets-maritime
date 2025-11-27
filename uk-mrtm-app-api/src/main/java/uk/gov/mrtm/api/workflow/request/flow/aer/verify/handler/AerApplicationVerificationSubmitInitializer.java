@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.verify.handler;
 
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.BooleanUtils;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationData;
@@ -37,7 +38,7 @@ public class AerApplicationVerificationSubmitInitializer implements InitializeRe
         final Long verificationReportVBId = Optional.ofNullable(requestPayload.getVerificationReport())
 				.map(AerVerificationReport::getVerificationBodyId).orElse(null);
 
-//         If VB id is changed clear verification report from request
+        //  If VB id is changed clear verification report from request
  		if(isVbChanged(requestVBId, verificationReportVBId)) {
  			requestPayload.setVerificationReport(null);
             requestPayload.setVerificationSectionsCompleted(new HashMap<>());
@@ -51,6 +52,15 @@ public class AerApplicationVerificationSubmitInitializer implements InitializeRe
     					? AerVerificationData.builder().build()
     					: requestPayload.getVerificationData())
                 .build();
+
+        // if smf not exist, reset the respective verification property in the request
+        // task (request payload will be updated as well due to by-reference behavior)
+        if (BooleanUtils.isFalse(requestPayload.getAer().getSmf().getExist()) &&
+            latestVerificationReport.getVerificationData() != null) {
+
+            latestVerificationReport.getVerificationData().setEmissionsReductionClaimVerification(null);
+            requestPayload.getVerificationSectionsCompleted().keySet().removeIf(entry -> entry.equals("emissionsReductionClaimsVerification"));
+        }
 
         return MAPPER.toAerApplicationVerificationSubmitRequestTaskPayload(
             requestPayload,

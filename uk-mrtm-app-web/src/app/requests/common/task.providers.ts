@@ -13,22 +13,15 @@ import {
   TASK_STATUS_TAG_MAP,
 } from '@netz/common/pipes';
 import { REQUEST_TASK_IS_EDITABLE_RESOLVER } from '@netz/common/request-task';
-import {
-  ITEM_TYPE_TO_RETURN_TEXT_MAPPER,
-  requestTaskQuery,
-  RequestTaskStore,
-  TYPE_AWARE_STORE,
-} from '@netz/common/store';
+import { ITEM_TYPE_TO_RETURN_TEXT_MAPPER, RequestTaskStore, TYPE_AWARE_STORE } from '@netz/common/store';
 
 import { cancelActionsMap } from '@requests/common/cancel-actions.map';
 import { EmpVariationCancelSuccessComponent } from '@requests/common/components';
 import { RfiRdeCancelSuccessComponent } from '@requests/common/components/rfi-rde-cancel-success';
-import { empTaskSectionsCompletedMap } from '@requests/common/emp/utils';
 import { isEditableTaskResolver } from '@requests/common/is-editable-task-resolver.map';
 import { itemActionsMap } from '@requests/common/item-actions.map';
 import { relatedActionsMap } from '@requests/common/related-actions.map';
 import { taskRelatedPreviewDocumentsMapFactory } from '@requests/common/related-preview-documents-map.factory';
-import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { statusTagMap } from '@requests/common/status-tag.map';
 import { requestTypesWhitelistForItemLinkPipe } from '@shared/constants';
 import {
@@ -39,12 +32,6 @@ import {
 
 const taskTypeToReturnText = (type: RequestTaskDTO['type'], year?: string | number): string => {
   return taskActionTypeToTitleTransformer(type, year) ?? 'Dashboard';
-};
-
-const sectionsCompletedMapFactory = (store: RequestTaskStore): Record<string, string> | undefined => {
-  const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
-
-  return empTaskSectionsCompletedMap[requestTaskType];
 };
 
 export const taskProviders: Provider[] = [
@@ -75,5 +62,4 @@ export const taskProviders: Provider[] = [
   { provide: ITEM_NAME_TRANSFORMER, useValue: taskActionTypeToTitleTransformer },
   { provide: ITEM_LINK_REQUEST_TYPES_WHITELIST, useValue: requestTypesWhitelistForItemLinkPipe },
   { provide: DAYS_REMAINING_INPUT_TRANSFORMER, useValue: daysRemainingTransformer },
-  { provide: SECTIONS_COMPLETE_MAP, deps: [RequestTaskStore], useFactory: sectionsCompletedMapFactory },
 ];

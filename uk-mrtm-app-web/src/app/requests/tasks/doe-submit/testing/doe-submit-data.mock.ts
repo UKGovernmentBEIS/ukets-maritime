@@ -1,0 +1,63 @@
+import { produce } from 'immer';
+
+import { DoeMaritimeEmissions } from '@mrtm/api';
+
+import { mockRequestTask } from '@netz/common/request-task';
+import { RequestTaskState } from '@netz/common/store';
+
+import { TaskItemStatus } from '@requests/common/task-item-status';
+import { DoeTaskPayload } from '@requests/tasks/doe-submit/doe-submit.types';
+
+export const mockDoeMaritimeEmissions: DoeMaritimeEmissions = {
+  determinationReason: { type: 'CORRECTING_NON_MATERIAL_MISSTATEMENT', furtherDetails: 'test further details' },
+  totalMaritimeEmissions: {
+    determinationType: 'MARITIME_EMISSIONS',
+    totalReportableEmissions: 1,
+    lessVoyagesInNorthernIrelandDeduction: 2,
+    smallIslandFerryDeduction: 2,
+    surrenderEmissions: 12,
+    calculationApproach: 'test another data source',
+    supportingDocuments: ['11111111-1111-4111-a111-111111111111'],
+  },
+  chargeOperator: true,
+  feeDetails: {
+    totalBillableHours: 100,
+    hourlyRate: 56.23,
+    dueDate: new Date('2050-10-31') as unknown as string,
+    comments: 'test regulator comments',
+  },
+};
+
+export const mockDoeSubmitSubmitRequestTask = {
+  ...mockRequestTask,
+  requestTaskItem: {
+    ...mockRequestTask.requestTaskItem,
+    requestTask: {
+      ...mockRequestTask.requestTaskItem.requestTask,
+      payload: {
+        payloadType: 'DOE_APPLICATION_SUBMIT_PAYLOAD',
+        doe: {},
+        doeAttachments: {},
+        sectionsCompleted: {},
+        sendEmailNotification: true,
+      } as DoeTaskPayload,
+    },
+  },
+};
+
+export const mockStateBuild = (
+  data?: Partial<Record<keyof DoeTaskPayload['doe'], any>>,
+  taskStatus?: Partial<Record<keyof DoeTaskPayload['doe'], TaskItemStatus>>,
+  attachments?: DoeTaskPayload['doeAttachments'],
+): RequestTaskState => {
+  return {
+    ...mockDoeSubmitSubmitRequestTask,
+    requestTaskItem: produce(mockDoeSubmitSubmitRequestTask.requestTaskItem, (requestTaskItem) => {
+      const payload = requestTaskItem.requestTask.payload as DoeTaskPayload;
+
+      payload.doe = { ...payload.doe, ...data };
+      payload.sectionsCompleted = { ...payload.sectionsCompleted, ...taskStatus };
+      payload.doeAttachments = { ...payload.doeAttachments, ...attachments };
+    }),
+  };
+};

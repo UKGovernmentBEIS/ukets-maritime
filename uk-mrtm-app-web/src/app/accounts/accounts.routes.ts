@@ -18,6 +18,7 @@ import {
   UserAuthorityDetailsComponent,
   ViewOperatorAccountComponent,
 } from '@accounts/containers';
+import { DATA_SUPPLIER_ROUTE_PREFIX } from '@accounts/containers/data-supplier';
 import { EditReportingStatusSummaryComponent } from '@accounts/containers/edit-reporting-status-summary/edit-reporting-status-summary.component';
 import { ProcessActionsComponent } from '@accounts/containers/process-actions';
 import {
@@ -27,6 +28,7 @@ import {
   canActivateEditReportingStatusSummary,
   canActivateOperatorAccount,
   canDeactivateEditReportingStatus,
+  canDeactivateOperatorAccount,
   CreateOperatorAccountGuard,
   CreateOperatorAccountSuccessGuard,
   CreateOperatorAccountSummaryGuard,
@@ -81,6 +83,7 @@ export const ACCOUNTS_ROUTES: Routes = [
   {
     path: ':accountId',
     canActivate: [canActivateOperatorAccount],
+    canDeactivate: [canDeactivateOperatorAccount],
     title: 'Account',
     data: { breadcrumb: (data) => data.accountName },
     resolve: {
@@ -142,6 +145,10 @@ export const ACCOUNTS_ROUTES: Routes = [
             resolve: { verificationBody: ReplaceVerifierGuard },
           },
         ],
+      },
+      {
+        path: DATA_SUPPLIER_ROUTE_PREFIX,
+        loadChildren: () => import('@accounts/containers/data-supplier').then((r) => r.DATA_SUPPLIER_ROUTES),
       },
       {
         path: 'users',

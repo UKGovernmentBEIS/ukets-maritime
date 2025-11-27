@@ -16,6 +16,7 @@ import {
   VERIFIER_DETAILS_SUB_TASK,
 } from '@requests/common/aer';
 import { aerCommonQuery } from '@requests/common/aer/+state';
+import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { AER_REVIEW_SUBTASK_DETAILS } from '@requests/tasks/aer-review/aer-review.constants';
 import { AerReviewSummaryDetailsSection, AerReviewTaskPayload } from '@requests/tasks/aer-review/aer-review.types';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
@@ -23,6 +24,7 @@ import {
   AerOverallVerificationDecisionSummaryTemplateComponent,
   ComplianceMonitoringReportingSummaryTemplateComponent,
   DataGapsMethodologiesSummaryTemplateComponent,
+  EmissionsReductionClaimsVerificationSummaryTemplateComponent,
   EtsComplianceRulesSummaryTemplateComponent,
   MaterialityLevelSummaryTemplateComponent,
   OpinionStatementSummaryTemplateComponent,
@@ -179,6 +181,19 @@ const provideMaterialityLevelSubtaskSummary: Provider = {
   },
 };
 
+const provideEmissionsReductionClaimVerificationSubtaskSummary: Provider = {
+  provide: AER_REVIEW_SUBTASK_DETAILS,
+  deps: [RequestTaskStore],
+  useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
+    return {
+      component: EmissionsReductionClaimsVerificationSummaryTemplateComponent,
+      inputs: computed(() => ({
+        data: store.select(aerVerificationSubmitQuery.selectEmissionsReductionClaimVerification)(),
+      })),
+    };
+  },
+};
+
 export const verifierSideSummariesProvidersMap: Partial<
   Record<keyof AerReviewTaskPayload['verificationReport'] | string, Provider>
 > = {
@@ -193,4 +208,5 @@ export const verifierSideSummariesProvidersMap: Partial<
   [RECOMMENDED_IMPROVEMENTS_SUB_TASK]: provideRecommendedImprovementsSubtaskSummary,
   [DATA_GAPS_METHODOLOGIES_SUB_TASK]: provideDataGapsMethodologiesSubtaskSummary,
   [MATERIALITY_LEVEL_SUB_TASK]: provideMaterialityLevelSubtaskSummary,
+  [EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK]: provideEmissionsReductionClaimVerificationSubtaskSummary,
 };

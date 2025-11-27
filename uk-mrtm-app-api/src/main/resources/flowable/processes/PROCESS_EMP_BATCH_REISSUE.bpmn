@@ -4,63 +4,20 @@
     <startEvent id="StartEvent_1">
       <outgoing>Flow_1opujsq</outgoing>
     </startEvent>
-    <serviceTask id="Activity_0lpi6k4" name="trigger EMP reissue" flowable:async="true" flowable:delegateExpression="#{empBatchTriggerEmpReissueHandlerFlowable}">
+    <serviceTask id="Activity_0lpi6k4" name="trigger EMP reissue" flowable:delegateExpression="#{empBatchTriggerEmpReissueHandlerFlowable}">
       <incoming>Flow_1v0rz0n</incoming>
       <outgoing>Flow_0s0zu9j</outgoing>
-      <multiInstanceLoopCharacteristics flowable:collection="accountIds" flowable:elementVariable="accountId" flowable:async="true" />
+      <multiInstanceLoopCharacteristics flowable:collection="accountIds" flowable:elementVariable="accountId" />
     </serviceTask>
-    <intermediateCatchEvent id="Event_088wx5f" name="EMP batch reissue completed">
-      <incoming>Flow_0s0zu9j</incoming>
-      <outgoing>Flow_1etgsy1</outgoing>
-      <messageEventDefinition flowable:messageExpression="batchEmpReissueCompleted" />
-    </intermediateCatchEvent>
     <serviceTask id="Activity_0xd0pff" name="EMP batch reissue completed" flowable:delegateExpression="#{empBatchReissueCompletedHandlerFlowable}">
       <incoming>Flow_1v51yh4</incoming>
       <outgoing>Flow_1tc33w4</outgoing>
     </serviceTask>
     <sequenceFlow id="Flow_1opujsq" sourceRef="StartEvent_1" targetRef="Activity_131ih32" />
     <sequenceFlow id="Flow_0s0zu9j" sourceRef="Activity_0lpi6k4" targetRef="Event_088wx5f" />
-    <sequenceFlow id="Flow_1etgsy1" sourceRef="Event_088wx5f" targetRef="Activity_1v1o7ti" />
     <sequenceFlow id="Flow_1tc33w4" sourceRef="Activity_0xd0pff" targetRef="Event_05qh1be" />
-    <subProcess id="Activity_16k96ry" triggeredByEvent="true">
-      <startEvent id="Event_1izrf0m" name="EMP reissue completed message" isInterrupting="false">
-        <outgoing>Flow_0hq1tls</outgoing>
-        <messageEventDefinition flowable:messageExpression="empReissueCompleted" />
-      </startEvent>
-      <serviceTask id="Activity_1q4stws" name="EMP reissue completed" flowable:delegateExpression="#{empBatchEmpReissueCompletedHandlerFlowable}">
-        <incoming>Flow_0hq1tls</incoming>
-        <outgoing>Flow_19tev9h</outgoing>
-      </serviceTask>
-      <sequenceFlow id="Flow_0hq1tls" sourceRef="Event_1izrf0m" targetRef="Activity_1q4stws" />
-      <exclusiveGateway id="Gateway_1sr4tz1" name="batch EMP reissue completed ?" default="Flow_0yobfps">
-        <incoming>Flow_19tev9h</incoming>
-        <outgoing>Flow_1128ib6</outgoing>
-        <outgoing>Flow_0yobfps</outgoing>
-      </exclusiveGateway>
-      <sequenceFlow id="Flow_19tev9h" sourceRef="Activity_1q4stws" targetRef="Gateway_1sr4tz1" />
-      <endEvent id="Event_0v91jk3">
-        <incoming>Flow_0yobfps</incoming>
-      </endEvent>
-      <endEvent id="Event_0yhcv20">
-        <incoming>Flow_0zinmjw</incoming>
-      </endEvent>
-      <sequenceFlow id="Flow_1128ib6" name="yes" sourceRef="Gateway_1sr4tz1" targetRef="Activity_0eiaqdl">
-        <conditionExpression xsi:type="tFormalExpression">${accountIds.size() == batchAccountsCompleted}</conditionExpression>
-      </sequenceFlow>
-      <sequenceFlow id="Flow_0yobfps" sourceRef="Gateway_1sr4tz1" targetRef="Event_0v91jk3" />
-      <sequenceFlow id="Flow_0zinmjw" sourceRef="Activity_0eiaqdl" targetRef="Event_0yhcv20" />
-      <serviceTask id="Activity_0eiaqdl" name="Send batch EMP reissue completed event" flowable:delegateExpression="#{msgThrowHandlerFlowable}">
-        <extensionElements>
-          <flowable:field name="messageName">
-            <flowable:string>batchEmpReissueCompleted</flowable:string>
-          </flowable:field>
-        </extensionElements>
-        <incoming>Flow_1128ib6</incoming>
-        <outgoing>Flow_0zinmjw</outgoing>
-      </serviceTask>
-    </subProcess>
     <sequenceFlow id="Flow_06vywy1" sourceRef="Activity_131ih32" targetRef="Gateway_1wifmxg" />
-    <serviceTask id="Activity_131ih32" name="EMP batch reissue submitted" flowable:delegateExpression="#{empBatchReissueSubmittedHandlerFlowable}">
+    <serviceTask id="Activity_131ih32" name="EMP batch reissue submitted" flowable:delegateExpression="#{empBatchReissueSubmittedHandlerFlowable}"  flowable:async="true">
       <incoming>Flow_1opujsq</incoming>
       <outgoing>Flow_06vywy1</outgoing>
     </serviceTask>
@@ -69,8 +26,8 @@
     </endEvent>
     <sequenceFlow id="Flow_1v51yh4" sourceRef="Activity_1v1o7ti" targetRef="Activity_0xd0pff" />
     <serviceTask id="Activity_1v1o7ti" name="generate report" flowable:async="true" flowable:delegateExpression="#{empBatchReissueGenerateReportHandlerFlowable}">
-      <incoming>Flow_1etgsy1</incoming>
       <incoming>Flow_18vyfjp</incoming>
+      <incoming>Flow_13rkaiq</incoming>
       <outgoing>Flow_1v51yh4</outgoing>
     </serviceTask>
     <exclusiveGateway id="Gateway_1wifmxg" name="check accounts size" default="Flow_18vyfjp">
@@ -82,6 +39,31 @@
       <conditionExpression xsi:type="tFormalExpression">${accountIds.size() &gt; 0}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="Flow_18vyfjp" sourceRef="Gateway_1wifmxg" targetRef="Activity_1v1o7ti" />
+    <sequenceFlow id="Flow_00nbuu3" sourceRef="Activity_1kycge2" targetRef="Gateway_0h2ylyc" />
+    <serviceTask id="Activity_1kycge2" name="Populate reissues completed number" flowable:delegateExpression="#{empBatchReissuePopulateNumberOfAccountsCompletedHandlerFlowable}">
+      <incoming>Flow_1etgsy1</incoming>
+      <outgoing>Flow_00nbuu3</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_0h2ylyc" name="all completed">
+      <incoming>Flow_00nbuu3</incoming>
+      <outgoing>Flow_13rkaiq</outgoing>
+      <outgoing>Flow_0sa02ik</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_13rkaiq" sourceRef="Gateway_0h2ylyc" targetRef="Activity_1v1o7ti">
+      <conditionExpression xsi:type="tFormalExpression">${batchAccountsCompleted == accountIds.size()}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="Flow_0sa02ik" sourceRef="Gateway_0h2ylyc" targetRef="Event_088wx5f">
+      <conditionExpression xsi:type="tFormalExpression">${batchAccountsCompleted &lt; accountIds.size()}</conditionExpression>
+    </sequenceFlow>
+    <intermediateCatchEvent id="Event_088wx5f" name="timer event">
+      <incoming>Flow_0s0zu9j</incoming>
+      <incoming>Flow_0sa02ik</incoming>
+      <outgoing>Flow_1etgsy1</outgoing>
+      <timerEventDefinition id="TimerEventDefinition_0fe7m01">
+        <timeDuration>PT1S</timeDuration>
+      </timerEventDefinition>
+    </intermediateCatchEvent>
+    <sequenceFlow id="Flow_1etgsy1" sourceRef="Event_088wx5f" targetRef="Activity_1kycge2" />
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="PROCESS_EMP_BATCH_REISSUE">
@@ -92,14 +74,8 @@
         <omgdc:Bounds x="590" y="200" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_12mkita_di" bpmnElement="Event_088wx5f">
-        <omgdc:Bounds x="782" y="222" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="755" y="180" width="90" height="27" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_11sj2co_di" bpmnElement="Activity_0xd0pff">
-        <omgdc:Bounds x="1060" y="200" width="100" height="80" />
+        <omgdc:Bounds x="1350" y="200" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0evljui_di" bpmnElement="Activity_131ih32">
@@ -107,10 +83,10 @@
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1979u9q_di" bpmnElement="Event_05qh1be">
-        <omgdc:Bounds x="1222" y="222" width="36" height="36" />
+        <omgdc:Bounds x="1512" y="222" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_18l63n2_di" bpmnElement="Activity_1v1o7ti">
-        <omgdc:Bounds x="890" y="200" width="100" height="80" />
+        <omgdc:Bounds x="1180" y="200" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1wifmxg_di" bpmnElement="Gateway_1wifmxg" isMarkerVisible="true">
@@ -119,84 +95,41 @@
           <omgdc:Bounds x="442" y="275" width="77" height="27" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0dt37u3_di" bpmnElement="Activity_16k96ry" isExpanded="true">
-        <omgdc:Bounds x="300" y="480" width="888" height="270" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_15568ib_di" bpmnElement="Event_1izrf0m">
-        <omgdc:Bounds x="390" y="572" width="36" height="36" />
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="373" y="528" width="70" height="40" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0itubo7_di" bpmnElement="Activity_1q4stws">
-        <omgdc:Bounds x="520" y="550" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1s69doq_di" bpmnElement="Activity_1kycge2">
+        <omgdc:Bounds x="880" y="200" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_1sr4tz1_di" bpmnElement="Gateway_1sr4tz1" isMarkerVisible="true">
-        <omgdc:Bounds x="705" y="565" width="50" height="50" />
+      <bpmndi:BPMNShape id="Gateway_0h2ylyc_di" bpmnElement="Gateway_0h2ylyc" isMarkerVisible="true">
+        <omgdc:Bounds x="1065" y="215" width="50" height="50" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="685" y="534" width="90" height="40" />
+          <omgdc:Bounds x="1058" y="185" width="65" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0v91jk3_di" bpmnElement="Event_0v91jk3">
-        <omgdc:Bounds x="1112" y="652" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0f30rx9_di" bpmnElement="Event_0yhcv20">
-        <omgdc:Bounds x="1112" y="572" width="36" height="36" />
+      <bpmndi:BPMNShape id="Event_1772475_di" bpmnElement="Event_088wx5f">
+        <omgdc:Bounds x="762" y="222" width="36" height="36" />
         <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="1156" y="541" width="90" height="27" />
+          <omgdc:Bounds x="753" y="180" width="55" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0mjjwh0_di" bpmnElement="Activity_0eiaqdl">
-        <omgdc:Bounds x="890" y="550" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_0hq1tls_di" bpmnElement="Flow_0hq1tls">
-        <omgdi:waypoint x="426" y="590" />
-        <omgdi:waypoint x="520" y="590" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_19tev9h_di" bpmnElement="Flow_19tev9h">
-        <omgdi:waypoint x="620" y="590" />
-        <omgdi:waypoint x="705" y="590" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1128ib6_di" bpmnElement="Flow_1128ib6">
-        <omgdi:waypoint x="755" y="590" />
-        <omgdi:waypoint x="890" y="590" />
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds x="756" y="572" width="18" height="14" />
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0yobfps_di" bpmnElement="Flow_0yobfps">
-        <omgdi:waypoint x="730" y="615" />
-        <omgdi:waypoint x="730" y="670" />
-        <omgdi:waypoint x="1112" y="670" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0zinmjw_di" bpmnElement="Flow_0zinmjw">
-        <omgdi:waypoint x="990" y="590" />
-        <omgdi:waypoint x="1112" y="590" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1opujsq_di" bpmnElement="Flow_1opujsq">
         <omgdi:waypoint x="188" y="240" />
         <omgdi:waypoint x="270" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0s0zu9j_di" bpmnElement="Flow_0s0zu9j">
         <omgdi:waypoint x="690" y="240" />
-        <omgdi:waypoint x="782" y="240" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1etgsy1_di" bpmnElement="Flow_1etgsy1">
-        <omgdi:waypoint x="818" y="240" />
-        <omgdi:waypoint x="890" y="240" />
+        <omgdi:waypoint x="762" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1tc33w4_di" bpmnElement="Flow_1tc33w4">
-        <omgdi:waypoint x="1160" y="240" />
-        <omgdi:waypoint x="1222" y="240" />
+        <omgdi:waypoint x="1450" y="240" />
+        <omgdi:waypoint x="1512" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_06vywy1_di" bpmnElement="Flow_06vywy1">
         <omgdi:waypoint x="370" y="240" />
         <omgdi:waypoint x="455" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1v51yh4_di" bpmnElement="Flow_1v51yh4">
-        <omgdi:waypoint x="990" y="240" />
-        <omgdi:waypoint x="1060" y="240" />
+        <omgdi:waypoint x="1280" y="240" />
+        <omgdi:waypoint x="1350" y="240" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1v0rz0n_di" bpmnElement="Flow_1v0rz0n">
         <omgdi:waypoint x="505" y="240" />
@@ -205,8 +138,26 @@
       <bpmndi:BPMNEdge id="Flow_18vyfjp_di" bpmnElement="Flow_18vyfjp">
         <omgdi:waypoint x="480" y="215" />
         <omgdi:waypoint x="480" y="80" />
-        <omgdi:waypoint x="940" y="80" />
-        <omgdi:waypoint x="940" y="200" />
+        <omgdi:waypoint x="1230" y="80" />
+        <omgdi:waypoint x="1230" y="200" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00nbuu3_di" bpmnElement="Flow_00nbuu3">
+        <omgdi:waypoint x="980" y="240" />
+        <omgdi:waypoint x="1065" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13rkaiq_di" bpmnElement="Flow_13rkaiq">
+        <omgdi:waypoint x="1115" y="240" />
+        <omgdi:waypoint x="1180" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1etgsy1_di" bpmnElement="Flow_1etgsy1">
+        <omgdi:waypoint x="798" y="240" />
+        <omgdi:waypoint x="880" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0sa02ik_di" bpmnElement="Flow_0sa02ik">
+        <omgdi:waypoint x="1090" y="265" />
+        <omgdi:waypoint x="1090" y="390" />
+        <omgdi:waypoint x="780" y="390" />
+        <omgdi:waypoint x="780" y="258" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

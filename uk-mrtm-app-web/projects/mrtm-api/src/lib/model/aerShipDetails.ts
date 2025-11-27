@@ -235,7 +235,6 @@ export interface AerShipDetails {
   iceClass: 'PC1' | 'PC2' | 'PC3' | 'PC4' | 'PC5' | 'PC6' | 'PC7' | 'IC' | 'IB' | 'IA' | 'IA_SUPER' | 'NA';
   natureOfReportingResponsibility: 'SHIPOWNER' | 'ISM_COMPANY';
   allYear?: boolean;
-  hasIceClassDerogation?: boolean;
   from?: string;
   to?: string;
 }

@@ -176,6 +176,7 @@ export class DetailsComponent implements OnInit {
     permissions: this.fb.group({
       MANAGE_USERS_AND_CONTACTS: ['NONE'],
       MANAGE_GUIDANCE: ['NONE'],
+      MANAGE_THIRD_PARTY_DATA_PROVIDERS: ['NONE'],
       ADD_OPERATOR_ADMIN: ['NONE'],
       MANAGE_VERIFICATION_BODIES: ['NONE'],
       ASSIGN_REASSIGN_TASKS: ['NONE'],
@@ -215,6 +216,11 @@ export class DetailsComponent implements OnInit {
       permission: 'MANAGE_GUIDANCE',
       task: 'Manage guidance',
       type: 'Guidance',
+    },
+    {
+      permission: 'MANAGE_THIRD_PARTY_DATA_PROVIDERS',
+      task: 'Manage data suppliers',
+      type: 'Data suppliers',
     },
     {
       permission: 'ADD_OPERATOR_ADMIN',

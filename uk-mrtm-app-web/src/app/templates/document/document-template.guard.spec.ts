@@ -8,7 +8,7 @@ import { DocumentTemplatesService } from '@mrtm/api';
 import { ActivatedRouteSnapshotStub, mockClass, MockType } from '@netz/common/testing';
 
 import { DocumentTemplateGuard } from '@templates/document/document-template.guard';
-import { mockedDocumentTemplate } from '@templates/testing/mock-data';
+import { mockedDocumentTemplate } from '@templates/testing/templates-data.mock';
 
 describe('DocumentTemplateGuard', () => {
   let guard: DocumentTemplateGuard;

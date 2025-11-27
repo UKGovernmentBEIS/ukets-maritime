@@ -847,4 +847,29 @@
             </sql>
         </rollback>
     </changeSet>
+    
+    
+    <changeSet id="0_1_0_insert_third_party_data_provider_role" author="p35066">
+        <sql>
+        	insert into au_role (id, name, code, type) VALUES (nextval('au_role_seq'), 'Third party data provider', 'third_party_data_provider', 'THIRD_PARTY_DATA_PROVIDER');
+        </sql>
+        <rollback>
+        	delete from au_role where code = 'third_party_data_provider';
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_role_permissions_for_PERM_MANAGE_THIRD_PARTY_DATA_PROVIDERS" author="P44065">
+        <sql>
+            INSERT INTO public.au_role_permission (id, role_id, permission)
+            VALUES (nextval('au_role_permission_seq'), (select id from au_role where code='ca_super_user'), 'PERM_MANAGE_THIRD_PARTY_DATA_PROVIDERS');
+            INSERT INTO public.au_role_permission (id, role_id, permission)
+            VALUES (nextval('au_role_permission_seq'), (select id from au_role where code='service_super_user'), 'PERM_MANAGE_THIRD_PARTY_DATA_PROVIDERS');
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_role_permission where permission = 'PERM_MANAGE_THIRD_PARTY_DATA_PROVIDERS';
+            </sql>
+        </rollback>
+    </changeSet>
+    
 </databaseChangeLog>

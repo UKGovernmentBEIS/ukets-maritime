@@ -6,7 +6,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { RequestTaskStore } from '@netz/common/store';
 
 import { ABBREVIATIONS_SUB_TASK } from '@requests/common/emp/subtasks/abbreviations';
-import { mockEmpIssuanceSubmitRequestTask } from '@requests/common/emp/testing/mock-data';
+import { mockEmpIssuanceSubmitRequestTask } from '@requests/common/emp/testing/emp-data.mock';
 import { ReviewDecisionComponent } from '@requests/tasks/emp-variation-review/components/review-decision/review-decision.component';
 import { VARIATION_REVIEW_DECISION_FORM } from '@requests/tasks/emp-variation-review/components/review-decision/review-decision-form.token';
 import { ReviewDecisionFormModel } from '@requests/tasks/emp-variation-review/components/review-decision/review-decision-form-model.type';

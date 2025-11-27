@@ -3,7 +3,7 @@
     @switch (column.field) {
       @case ('fuelOriginTypeName') {
         @if (row.isSummary) {
-          <strong>Total sustainable emissions</strong>
+          <strong>Total emissions</strong>
         } @else {
           {{ row[column.field] | fuelOriginTitle }}
         }

@@ -5,8 +5,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { emissionSourcesMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { mockSubmittedStateBuild } from '@requests/common/emp/testing/mock-action-data';
-import { mockEmpEmissionSources } from '@requests/common/emp/testing/mock-data';
+import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
+import { mockEmpEmissionSources } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { EmissionSourcesSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/emission-sources';
 import { screen } from '@testing-library/angular';

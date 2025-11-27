@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.1.0/third_party_data.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_sch_third_party_data_create_schema" author="P44065">
+        <sql>
+            CREATE SCHEMA IF NOT EXISTS sch_third_party_data;
+        </sql>
+        <rollback>
+            <sql>
+                DROP SCHEMA sch_third_party_data CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+    
+    <changeSet id="0_1_0_sch_third_party_data_schema_assign_privileges_for_app_user" author="P44065">
+        <sql>
+        	GRANT USAGE ON SCHEMA sch_third_party_data TO ${spring-db-user};
+        	GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON ALL TABLES IN SCHEMA sch_third_party_data TO ${spring-db-user};
+			ALTER DEFAULT PRIVILEGES GRANT SELECT, INSERT, UPDATE, DELETE, TRUNCATE, REFERENCES, TRIGGER ON TABLES TO ${spring-db-user};
+			GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA sch_third_party_data TO ${spring-db-user};
+			ALTER DEFAULT PRIVILEGES GRANT ALL ON SEQUENCES TO ${spring-db-user};
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_EMP_STAGING_SEQ_SEQUENCE" author="P44065">
+        <createSequence sequenceName="emp_staging_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false" schemaName="sch_third_party_data"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS sch_third_party_data.emp_staging_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_EMP_STAGING_TABLE" author="P44065" >
+        <createTable tableName="emp_staging" schemaName="sch_third_party_data">
+            <column name="id" type="bigint" remarks="The staging emissions monitoring plan id (primary key)">
+                <constraints primaryKey="true" primaryKeyName="emp_staging_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id to which the staging data entry refers to">
+                <constraints nullable="false" foreignKeyName="emp_account_id_uc" referencedTableName="account_mrtm" referencedColumnNames="id" />
+            </column>
+            <column name="payload" type="jsonb" remarks="The staging EMP payload" />
+            <column name="provider_name" type="varchar(512)" remarks="The name of the data provider">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_on" type="timestamp" remarks="When the data was initially received">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated_on" type="timestamp" remarks="When the data was updated" />
+            <column name="imported_on" type="timestamp" remarks="When the data was imported on EMP task" />
+        </createTable>
+        <createIndex indexName="emp_staging_account_id_idx" tableName="emp_staging" schemaName="sch_third_party_data">
+            <column name="account_id"/>
+        </createIndex>
+        <rollback>
+            <sql>
+                DROP INDEX IF EXISTS sch_third_party_data.emp_staging_account_id_idx;
+                DROP TABLE IF EXISTS sch_third_party_data.emp_staging;
+            </sql>
+        </rollback>
+    </changeSet>
+</databaseChangeLog>

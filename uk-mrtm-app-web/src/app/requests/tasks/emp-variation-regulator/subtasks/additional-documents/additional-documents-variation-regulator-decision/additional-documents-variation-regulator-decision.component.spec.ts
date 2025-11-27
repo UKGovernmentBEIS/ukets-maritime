@@ -10,7 +10,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { TaskItemStatus } from '@requests/common';
-import { mockAdditionalDocuments } from '@requests/common/emp/testing/mock-data';
+import { mockAdditionalDocuments } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import {
@@ -19,7 +19,7 @@ import {
 } from '@requests/common/utils/additional-documents';
 import { EmpVariationRegulatorService } from '@requests/tasks/emp-variation-regulator/services';
 import { AdditionalDocumentsVariationRegulatorDecisionComponent } from '@requests/tasks/emp-variation-regulator/subtasks/additional-documents';
-import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/mock-data';
+import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/emp-variation-regulator-data.mock';
 import { HTML_DIFF } from '@shared/directives';
 
 describe('AdditionalDocumentsVariationRegulatorDecisionComponent', () => {

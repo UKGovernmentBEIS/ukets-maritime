@@ -56,7 +56,6 @@ public interface AerMapper {
                                            EmpShipEmissions empShipEmissions) {
         aerShipEmissions.setDerogations(
             AerDerogations.builder()
-                .carbonCaptureAndStorageReduction(empShipEmissions.getCarbonCapture().getExist())
                 .exceptionFromPerVoyageMonitoring(empShipEmissions.getExemptionConditions().getExist())
                 .build()
         );

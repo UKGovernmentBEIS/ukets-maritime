@@ -5,8 +5,8 @@ import { RequestActionStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { actionProviders } from '@requests/common/action.providers';
-import { mockSubmittedStateBuild } from '@requests/common/emp/testing/mock-action-data';
-import { mockEmpAbbreviations } from '@requests/common/emp/testing/mock-data';
+import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
+import { mockEmpAbbreviations } from '@requests/common/emp/testing/emp-data.mock';
 import { AbbreviationsSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/abbreviations';
 
 describe('AbbreviationsSubmittedComponent', () => {

@@ -46,6 +46,9 @@ public class AerVerificationData {
     @Valid
     private AerRecommendedImprovements recommendedImprovements;
 
+    @Valid
+    private AerEmissionsReductionClaimVerification emissionsReductionClaimVerification;
+
     @NotNull
     @Valid
     private AerMaterialityLevel materialityLevel;
@@ -57,8 +60,6 @@ public class AerVerificationData {
     @NotNull
     @Valid
     private AerComplianceMonitoringReporting complianceMonitoringReporting;
-
-    //TODO fill this report with all verifier subtasks
 
     @NotNull
     @Valid

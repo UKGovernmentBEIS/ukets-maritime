@@ -5,7 +5,7 @@ describe('itemActionToTitleTransformer', () => {
   it('should return mapped title for valid action type', () => {
     Object.keys(itemActionsMap).forEach((actionType) => {
       const result = itemActionToTitleTransformer(actionType);
-      expect(result).toBe(itemActionsMap[actionType].text);
+      expect(result).toBe(`${itemActionsMap[actionType].text} ${itemActionsMap[actionType].suffix ?? ''}`.trim());
     });
   });
 
@@ -13,9 +13,11 @@ describe('itemActionToTitleTransformer', () => {
     Object.keys(itemActionsMap).forEach((actionType) => {
       const result = itemActionToTitleTransformer(actionType, undefined, 'John Doe');
       if (itemActionsMap[actionType].transformed) {
-        expect(result).toBe(`${itemActionsMap[actionType].text} by John Doe`);
+        expect(result).toBe(
+          `${itemActionsMap[actionType].text} by John Doe ${itemActionsMap[actionType].suffix ?? ''}`.trim(),
+        );
       } else {
-        expect(result).toBe(itemActionsMap[actionType].text);
+        expect(result).toBe(`${itemActionsMap[actionType].text} ${itemActionsMap[actionType].suffix ?? ''}`.trim());
       }
     });
   });

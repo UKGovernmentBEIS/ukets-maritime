@@ -10,12 +10,12 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 import { TaskItemStatus } from '@requests/common';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { MandateUploadComponent } from '@requests/common/emp/subtasks/mandate/mandate-upload/mandate-upload.component';
-import { mockStateBuild } from '@requests/common/emp/testing/mock-data';
-import { mockEmissions } from '@requests/common/emp/testing/mock-emissions';
+import { emissionsMock } from '@requests/common/emp/testing/emissions.mock';
+import { mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import {
   mockMandateCsvErrorPapaResult,
   mockMandateCsvSuccessPapaResult,
-} from '@requests/common/emp/testing/mock-mandate-csv';
+} from '@requests/common/emp/testing/mandate-csv.mock';
 import { taskProviders } from '@requests/common/task.providers';
 
 describe('MandateUploadComponent', () => {
@@ -55,7 +55,7 @@ describe('MandateUploadComponent', () => {
     }).compileComponents();
 
     store = TestBed.inject(RequestTaskStore);
-    store.setState(mockStateBuild({ emissions: mockEmissions }, { emissions: TaskItemStatus.COMPLETED }));
+    store.setState(mockStateBuild({ emissions: emissionsMock }, { emissions: TaskItemStatus.COMPLETED }));
     fixture = TestBed.createComponent(MandateUploadComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
@@ -82,17 +82,18 @@ describe('MandateUploadComponent', () => {
     expect(page.errorSummary).toBeTruthy();
     expect(page.errorTitles.map((item) => item.textContent.trim())).toEqual([
       'The registered owner name is missing. Enter the registered owner name and reupload the file',
-      "Check the data in column 'Registered owner name' on row(s) 1",
+      "Check the data in column 'Registered owner name' on row(s) 2",
       'The IMO number is missing. Enter the IMO number and reupload the file',
-      "Check the data in column 'IMO unique company and registered owner identification number' on row(s) 1",
+      "Check the data in column 'IMO unique company and registered owner identification number' on row(s) 2",
       "The registered owner's contact name is missing. Enter the contact name and reupload the file",
-      "Check the data in column 'Contact Name' on row(s) 1",
+      "Check the data in column 'Contact Name' on row(s) 2",
       'The contact email is missing. Enter the contact email and reupload the file',
-      "Check the data in column 'Contact Email' on row(s) 1",
+      "Check the data in column 'Contact Email' on row(s) 2",
       'The date of written agreement is missing. Enter the date of written agreement and reupload the file',
-      "Check the data in column 'Date of written agreement' on row(s) 1",
+      "Check the data in column 'Date of written agreement' on row(s) 2",
       'The ship IMO number is missing. Enter the ship IMO number and reupload the file',
-      "Check the data in column 'Associated ship IMO number' on row(s) 1",
+      "Check the data in column 'Associated ship IMO number' on row(s) 2",
+      'Upload the registered owners file',
     ]);
   });
 
@@ -105,6 +106,7 @@ describe('MandateUploadComponent', () => {
     expect(page.errorSummary).toBeFalsy();
 
     component['processCSVData'](mockMandateCsvSuccessPapaResult);
+    component.fileCtrl.setErrors(null);
     fixture.detectChanges();
     expect(page.errorSummary).toBeFalsy();
 

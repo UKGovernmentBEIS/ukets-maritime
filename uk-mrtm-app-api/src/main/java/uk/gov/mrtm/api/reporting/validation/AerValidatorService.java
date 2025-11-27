@@ -32,7 +32,7 @@ public class AerValidatorService {
 
         //validate verification report
         if (!ObjectUtils.isEmpty(aerContainer.getVerificationReport())) {
-            aerVerificationReportValidatorService.validate(aerContainer.getVerificationReport());
+            aerVerificationReportValidatorService.validate(aerContainer.getAer(), aerContainer.getVerificationReport());
         }
     }
 

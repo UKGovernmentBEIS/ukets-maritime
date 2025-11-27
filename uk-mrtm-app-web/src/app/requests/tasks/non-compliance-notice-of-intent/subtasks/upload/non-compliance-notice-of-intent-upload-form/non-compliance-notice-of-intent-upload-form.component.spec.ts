@@ -8,6 +8,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { mockNonComplianceNoticeOfIntentRequestTask } from '@requests/common/non-compliance/testing';
+import { taskProviders } from '@requests/common/task.providers';
 import { NonComplianceNoticeOfIntentUploadFormComponent } from '@requests/tasks/non-compliance-notice-of-intent/subtasks/upload/non-compliance-notice-of-intent-upload-form';
 
 describe('NonComplianceNoticeOfIntentFormComponent', () => {
@@ -25,6 +26,7 @@ describe('NonComplianceNoticeOfIntentFormComponent', () => {
         provideHttpClientTesting(),
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
+        ...taskProviders,
       ],
     }).compileComponents();
 

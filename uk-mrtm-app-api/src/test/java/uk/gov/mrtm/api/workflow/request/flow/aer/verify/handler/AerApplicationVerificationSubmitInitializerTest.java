@@ -2,6 +2,9 @@ package uk.gov.mrtm.api.workflow.request.flow.aer.verify.handler;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -9,7 +12,9 @@ import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.reporting.domain.AerOperatorDetails;
 import uk.gov.mrtm.api.reporting.domain.AerTotalReportableEmissions;
 import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
+import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.totalemissions.AerTotalEmissions;
+import uk.gov.mrtm.api.reporting.domain.verification.AerEmissionsReductionClaimVerification;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerifierContact;
@@ -30,8 +35,11 @@ import uk.gov.netz.api.workflow.request.core.domain.RequestType;
 
 import java.math.BigDecimal;
 import java.time.Year;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,32 +57,32 @@ class AerApplicationVerificationSubmitInitializerTest {
     @Mock
     private VerificationBodyDetailsQueryService verificationBodyDetailsQueryService;
 
-    @Test
-    void initializePayload_vb_not_changed() {
+    @ParameterizedTest
+    @MethodSource("initializePayloadVbNotChangedScenarios")
+    void initializePayload_vb_not_changed(boolean smfExists, AerVerificationData expectedAerVerificationData,
+                                          Map<String, String> expectedVerificationSectionsCompleted) {
         Long requestVBId = 1L;
         Long accountId = 1L;
         Year reportingYear = Year.of(2022);
         BigDecimal totalEmissions = BigDecimal.valueOf(12345);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(234);
-        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(10);
-        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(12);
+        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(10);
 
         final AerTotalReportableEmissions aerTotalReportableEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissions)
                 .surrenderEmissions(surrenderEmissions)
-                .lessIslandFerryDeduction(lessIslandFerryDeduction)
-                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
+                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
                 .build();
 
         Aer aer = Aer.builder()
                 .operatorDetails(AerOperatorDetails.builder()
                         .operatorName("name")
                         .build())
+                .smf(AerSmf.builder().exist(smfExists).build())
                 .totalEmissions(AerTotalEmissions.builder()
                         .totalShipEmissionsSummary(totalEmissions)
                         .surrenderEmissionsSummary(surrenderEmissions)
-                        .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(lessIslandFerryDeduction).build())
-                        .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(less5PercentIceClassDeduction).build())
+                        .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(lessVoyagesInNorthernIrelandDeduction).build())
                         .build())
                 .build();
 
@@ -84,6 +92,7 @@ class AerApplicationVerificationSubmitInitializerTest {
                         .accreditationReferenceNumber("old vb details")
                         .build())
                 .verificationData(AerVerificationData.builder()
+                    .emissionsReductionClaimVerification(AerEmissionsReductionClaimVerification.builder().build())
                         .build())
                 .build();
 
@@ -91,6 +100,7 @@ class AerApplicationVerificationSubmitInitializerTest {
                 .payloadType(MrtmRequestPayloadType.AER_REQUEST_PAYLOAD)
                 .reportingRequired(true)
                 .aer(aer)
+                .verificationSectionsCompleted(new HashMap<>(Map.of("a", "COMPLETED", "emissionsReductionClaimsVerification", "COMPLETED")))
                 .totalEmissions(aerTotalReportableEmissions)
                 .verificationReport(requestVerificationReport)
                 .build();
@@ -122,13 +132,23 @@ class AerApplicationVerificationSubmitInitializerTest {
         assertThat(resultPayload.getVerificationReport()).isEqualTo(AerVerificationReport.builder()
                 .verificationBodyId(requestVBId)
                 .verificationBodyDetails(latestVerificationBodyDetails)
-                .verificationData(requestPayload.getVerificationData())
+                .verificationData(expectedAerVerificationData)
                 .build());
+        assertThat(resultPayload.getVerificationSectionsCompleted()).isEqualTo(expectedVerificationSectionsCompleted);
         assertThat(resultPayload.getTotalEmissions()).isEqualTo(aerTotalReportableEmissions);
         assertThat(resultPayload.getReportingYear()).isEqualTo(reportingYear);
 
         verify(verificationBodyDetailsQueryService, times(1)).getVerificationBodyDetails(requestVBId);
         verifyNoMoreInteractions(verificationBodyDetailsQueryService);
+    }
+
+    public static Stream<Arguments> initializePayloadVbNotChangedScenarios() {
+        return Stream.of(
+            Arguments.of(true, AerVerificationData.builder()
+                .emissionsReductionClaimVerification(AerEmissionsReductionClaimVerification.builder().build()).build(),
+                Map.of("a", "COMPLETED", "emissionsReductionClaimsVerification", "COMPLETED")),
+            Arguments.of(false, AerVerificationData.builder().build(), Map.of("a", "COMPLETED"))
+        );
     }
 
     @Test
@@ -139,25 +159,23 @@ class AerApplicationVerificationSubmitInitializerTest {
         Year reportingYear = Year.of(2022);
         BigDecimal totalEmissions = BigDecimal.valueOf(12345);
         BigDecimal surrenderEmissions = BigDecimal.valueOf(234);
-        BigDecimal lessIslandFerryDeduction = BigDecimal.valueOf(10);
-        BigDecimal less5PercentIceClassDeduction = BigDecimal.valueOf(12);
+        BigDecimal lessVoyagesInNorthernIrelandDeduction = BigDecimal.valueOf(10);
 
         final AerTotalReportableEmissions aerTotalReportableEmissions = AerTotalReportableEmissions.builder()
                 .totalEmissions(totalEmissions)
                 .surrenderEmissions(surrenderEmissions)
-                .lessIslandFerryDeduction(lessIslandFerryDeduction)
-                .less5PercentIceClassDeduction(less5PercentIceClassDeduction)
+                .lessVoyagesInNorthernIrelandDeduction(lessVoyagesInNorthernIrelandDeduction)
                 .build();
 
         Aer aer = Aer.builder()
                 .operatorDetails(AerOperatorDetails.builder()
                         .operatorName("name")
                         .build())
+                .smf(AerSmf.builder().exist(true).build())
                 .totalEmissions(AerTotalEmissions.builder()
                         .totalShipEmissionsSummary(totalEmissions)
                         .surrenderEmissionsSummary(surrenderEmissions)
-                        .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(lessIslandFerryDeduction).build())
-                        .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(less5PercentIceClassDeduction).build())
+                        .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(lessVoyagesInNorthernIrelandDeduction).build())
                         .build())
                 .build();
 

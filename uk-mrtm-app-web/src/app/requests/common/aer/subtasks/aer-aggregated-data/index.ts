@@ -5,7 +5,6 @@ export * from './aer-aggregated-data.routes';
 export * from './payload-mutators';
 export * from './aer-aggregated-data-fuel-consumption';
 export * from './aer-aggregated-data-annual-emissions';
-export * from './aer-aggregated-data-emissions-for-small-island';
 export * from './aer-aggregated-data-list-summary';
 export * from './aer-aggregated-data-ship-summary';
 export * from './aer-aggregated-data-upload';

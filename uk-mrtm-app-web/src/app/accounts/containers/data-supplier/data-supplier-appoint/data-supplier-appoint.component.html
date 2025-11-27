@@ -1,0 +1,16 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  submitText="Submit"
+  [heading]="dataSupplierId() ? 'Replace a data supplier' : 'Appoint a data supplier'"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <govuk-warning-text
+    assistiveText="A software pro will have the ability to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus justo diam, finibus sit amet sagittis at, egestas non felis. " />
+
+  <div
+    govuk-select
+    formControlName="dataSupplierId"
+    [options]="dataSuppliers()"
+    label="Select data supplier"
+    widthClass="govuk-!-width-one-third"></div>
+</mrtm-wizard-step>

@@ -20,6 +20,11 @@ public class FuelOriginFossilTypeName extends FuelOriginTypeName {
     private FossilFuelType type;
 
     @Override
+    public String getTypeAsString() {
+        return type.name();
+    }
+
+    @Override
     public String getLongDescription() {
         if (type == FossilFuelType.OTHER) {
             return getOrigin().getDescription() + "/ Other Fossil Fuel/ " + getName();

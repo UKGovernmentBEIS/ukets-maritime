@@ -1,5 +1,6 @@
 export * from './accountNotes.service';
 export * from './accountReportingStatusHistory.service';
+export * from './accountThirdPartyDataProviders.service';
 export * from './accountVerificationBody.service';
 export * from './authorities.service';
 export * from './caExternalContacts.service';
@@ -42,6 +43,7 @@ export * from './tasks.service';
 export * from './tasksAssignment.service';
 export * from './tasksRelease.service';
 export * from './termsAndConditions.service';
+export * from './thirdPartyDataProviderAPI.service';
 export * from './uIConfiguration.service';
 export * from './unassignedItems.service';
 export * from './userSignatures.service';

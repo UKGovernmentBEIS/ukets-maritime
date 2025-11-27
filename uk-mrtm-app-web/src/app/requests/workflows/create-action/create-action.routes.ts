@@ -12,8 +12,8 @@ export const CREATE_ACTION_ROUTES: Routes = [
     children: [],
   },
   {
-    path: `${CREATE_ACTION_TYPE.AER_REINITIATE}`,
-    providers: [{ provide: CREATE_ACTION, useValue: CREATE_ACTION_TYPE.AER_REINITIATE }],
+    path: `${CREATE_ACTION_TYPE.AER}`,
+    providers: [{ provide: CREATE_ACTION, useValue: CREATE_ACTION_TYPE.AER }],
     loadChildren: () =>
       import('@requests/workflows/create-action/aer-re-initiate').then((r) => r.AER_RE_INITIATE_ROUTES),
   },

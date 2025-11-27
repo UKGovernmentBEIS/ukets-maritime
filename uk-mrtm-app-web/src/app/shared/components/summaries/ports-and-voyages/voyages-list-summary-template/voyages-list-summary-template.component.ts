@@ -74,7 +74,6 @@ export class VoyagesListSummaryTemplateComponent {
   readonly totalEmissionsSummary: Signal<Pick<AerVoyageSummaryItemDto, 'totalEmissions' | 'surrenderEmissions'>> =
     computed(() => {
       const allItems = this.data() ?? [];
-
       return !allItems.length
         ? undefined
         : allItems

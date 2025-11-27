@@ -10,13 +10,13 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { DATA_GAPS_SUB_TASK, DataGapsWizardStep } from '@requests/common/emp/subtasks/data-gaps';
-import { mockEmpDataGaps } from '@requests/common/emp/testing/mock-data';
+import { mockEmpDataGaps } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { EmpVariationRegulatorService } from '@requests/tasks/emp-variation-regulator/services';
 import { DataGapsVariationRegulatorDecisionComponent } from '@requests/tasks/emp-variation-regulator/subtasks/data-gaps';
-import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/mock-data';
+import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/emp-variation-regulator-data.mock';
 import { HTML_DIFF } from '@shared/directives';
 
 describe('DataGapsVariationRegulatorDecisionComponent', () => {

@@ -14,12 +14,12 @@ import {
   CONTROL_ACTIVITIES_SUB_TASK,
   ControlActivitiesWizardStep,
 } from '@requests/common/emp/subtasks/control-activities';
-import { mockEmpControlActivities } from '@requests/common/emp/testing/mock-data';
+import { mockEmpControlActivities } from '@requests/common/emp/testing/emp-data.mock';
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
 import { taskProviders } from '@requests/common/task.providers';
 import { EmpVariationRegulatorService } from '@requests/tasks/emp-variation-regulator/services';
 import { ControlActivitiesVariationRegulatorDecisionComponent } from '@requests/tasks/emp-variation-regulator/subtasks/control-activities';
-import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/mock-data';
+import { mockEmpVariationRegulatorStateBuild } from '@requests/tasks/emp-variation-regulator/testing/emp-variation-regulator-data.mock';
 import { HTML_DIFF } from '@shared/directives';
 
 describe('ControlActivitiesVariationRegulatorDecisionComponent', () => {

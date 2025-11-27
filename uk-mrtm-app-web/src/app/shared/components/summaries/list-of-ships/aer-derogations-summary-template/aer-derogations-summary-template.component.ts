@@ -12,6 +12,7 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
+import { aerEmissionsShipMap } from '@requests/common/aer/subtasks/aer-subtasks-list.map';
 import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
@@ -31,8 +32,9 @@ import { BooleanToTextPipe } from '@shared/pipes';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerDerogationsSummaryTemplateComponent {
-  public readonly data = input<AerDerogations>();
-  public readonly isEditable = input<boolean>(false);
-  public readonly changeLink = input<string>();
-  public readonly queryParams = input<Params>({});
+  readonly data = input<AerDerogations>();
+  readonly isEditable = input<boolean>(false);
+  readonly changeLink = input<string>();
+  readonly queryParams = input<Params>({});
+  readonly map = aerEmissionsShipMap;
 }

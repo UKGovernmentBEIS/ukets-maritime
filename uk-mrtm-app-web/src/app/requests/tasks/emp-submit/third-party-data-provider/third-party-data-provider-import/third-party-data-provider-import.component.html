@@ -1,0 +1,44 @@
+@if (dataInfo(); as dataInfo) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <netz-page-heading size="l">Import data from an external source/system</netz-page-heading>
+
+      @if (showWarning()) {
+        <govuk-warning-text
+          [assistiveText]="
+            'If you import data from external source/system, all of the data that has been entered will be replaced.'
+          " />
+      }
+      <dl govuk-summary-list [hasBorders]="true">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Source/system</dt>
+          <dd govukSummaryListRowValue>
+            {{ dataInfo.providerName }}
+          </dd>
+        </div>
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Date data received</dt>
+          <dd govukSummaryListRowValue>
+            {{ dataInfo.receivedOn | govukDate: 'datetime' }}
+          </dd>
+        </div>
+
+        @if (dataInfo.importedOn) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Date data imported</dt>
+            <dd govukSummaryListRowValue>
+              {{ dataInfo.importedOn | govukDate: 'datetime' }}
+            </dd>
+          </div>
+        }
+      </dl>
+
+      <button govukButton type="button" class="govuk-!-margin-top-4" (click)="onImportData()">Import data</button>
+    </div>
+  </div>
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <netz-return-to-task-or-action-page />
+  </div>
+}

@@ -8,7 +8,7 @@ import { ActivatedRouteStub, mockClass } from '@netz/common/testing';
 import { screen } from '@testing-library/angular';
 import { VerificationBodiesStoreService } from '@verification-bodies/+state/verification-bodies-store.service';
 import { SuccessComponent } from '@verification-bodies/create-verification-body/success';
-import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/mock-data';
+import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/verification-bodies-data.mock';
 
 describe('SuccessComponent', () => {
   let component: SuccessComponent;

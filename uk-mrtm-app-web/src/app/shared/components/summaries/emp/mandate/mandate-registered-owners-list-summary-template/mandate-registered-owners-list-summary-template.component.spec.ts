@@ -68,11 +68,11 @@ describe('MandateRegisteredOwnersListSummaryTemplateComponent', () => {
       'Date of written agreement',
       'RegisteredOwner11000000',
       'RegisteredOwner1RegisteredOwner1@o.com',
-      'EVER GREEN (IMO: 1111111)',
+      'EVER GREEN(IMO: 1111111)',
       '1 Mar 2025',
       'RegisteredOwner22000000',
       'RegisteredOwner2RegisteredOwner2@o.com',
-      'Thon Green (IMO: 2222222)',
+      'Thon Green(IMO: 2222222)',
       '1 Mar 2025',
     ]);
   });

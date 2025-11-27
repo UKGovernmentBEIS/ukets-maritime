@@ -19,8 +19,7 @@ const isEmissionsFormStepCompleted = (opinionStatement: AerOpinionStatement): bo
     opinionStatement?.emissionsCorrect === true ||
     (opinionStatement?.emissionsCorrect === false &&
       !isNil(opinionStatement?.manuallyProvidedTotalEmissions) &&
-      !isNil(opinionStatement?.manuallyProvidedLess5PercentIceClassDeduction) &&
-      !isNil(opinionStatement?.manuallyProvidedLessIslandFerryDeduction) &&
+      !isNil(opinionStatement?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction) &&
       !isNil(opinionStatement?.manuallyProvidedSurrenderEmissions))
   );
 };

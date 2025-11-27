@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 
 import { AerShipsXmlService } from '@requests/common/aer/subtasks/aer-emissions/services';
-import { mockAerShipsPartialErrorsXml, mockAerShipsXml } from '@requests/common/aer/testing';
+import { aerShipsXmlMock, mockAerShipsPartialErrorsXml } from '@requests/common/aer/testing';
 
 describe('AerShipsXmlService', () => {
   let service: AerShipsXmlService;
@@ -21,21 +21,18 @@ describe('AerShipsXmlService', () => {
       value: { getRandomValues: getFixedUUID, randomUUID: getFixedUUID },
     });
 
-    const result = service.parse(mockAerShipsXml, '2025');
+    const result = service.parse(aerShipsXmlMock, '2025');
     expect(result).toEqual({
       data: [
         {
           derogations: {
-            carbonCaptureAndStorageReduction: true,
             exceptionFromPerVoyageMonitoring: false,
-            smallIslandFerryOperatorReduction: true,
           },
           details: {
             allYear: true,
             flagState: 'GR',
             from: null,
             grossTonnage: 10000,
-            hasIceClassDerogation: true,
             iceClass: 'PC1',
             imoNumber: '1111111',
             name: 'Ship A1',
@@ -123,16 +120,13 @@ describe('AerShipsXmlService', () => {
         },
         {
           derogations: {
-            carbonCaptureAndStorageReduction: false,
             exceptionFromPerVoyageMonitoring: true,
-            smallIslandFerryOperatorReduction: true,
           },
           details: {
             allYear: false,
             flagState: 'US',
             from: '2025-01-01',
             grossTonnage: 20000,
-            hasIceClassDerogation: null,
             iceClass: 'NA',
             imoNumber: '2222222',
             name: 'Ship B1',

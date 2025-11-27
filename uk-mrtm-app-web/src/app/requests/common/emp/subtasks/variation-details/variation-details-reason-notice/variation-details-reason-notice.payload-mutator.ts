@@ -1,5 +1,3 @@
-import { inject } from '@angular/core';
-
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
 
@@ -12,11 +10,9 @@ import {
   VARIATION_DETAILS_SUB_TASK,
   VariationDetailsWizardStep,
 } from '@requests/common/emp/subtasks/variation-details/variation-details.helper';
-import { SECTIONS_COMPLETE_MAP } from '@requests/common/section-completed-map.token';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 export class VariationDetailsReasonNoticePayloadMutator extends PayloadMutator {
-  private readonly sectionsCompletedMap = inject(SECTIONS_COMPLETE_MAP, { optional: true });
   subtask = VARIATION_DETAILS_SUB_TASK;
   step = VariationDetailsWizardStep.REASON_NOTICE;
 
@@ -31,8 +27,7 @@ export class VariationDetailsReasonNoticePayloadMutator extends PayloadMutator {
           ...userInput,
         };
         payload.empVariationDetailsCompleted = TaskItemStatus.IN_PROGRESS;
-        payload.empSectionsCompleted[this.sectionsCompletedMap?.[this.subtask] ?? this.subtask] =
-          TaskItemStatus.IN_PROGRESS;
+        payload.empSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
       }),
     );
   }

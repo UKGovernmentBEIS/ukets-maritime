@@ -18,7 +18,7 @@ import {
   mockDoeMaritimeEmissions,
   mockDoeSubmitSubmitRequestTask,
   mockStateBuild,
-} from '@requests/tasks/doe-submit/testing/mock-data';
+} from '@requests/tasks/doe-submit/testing/doe-submit-data.mock';
 
 describe('ChargeOperatorComponent', () => {
   let component: ChargeOperatorComponent;

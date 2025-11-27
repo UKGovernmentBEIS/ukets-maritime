@@ -15,8 +15,8 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { CarbonCaptureComponent } from '@requests/common/emp/subtasks/emissions/carbon-capture/carbon-capture.component';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
-import { mockEmpIssuanceSubmitRequestTask, mockStateBuild } from '@requests/common/emp/testing/mock-data';
-import { mockEmissions } from '@requests/common/emp/testing/mock-emissions';
+import { emissionsMock } from '@requests/common/emp/testing/emissions.mock';
+import { mockEmpIssuanceSubmitRequestTask, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
@@ -30,7 +30,7 @@ describe('CarbonCaptureComponent', () => {
     saveSubtask: jest.fn().mockReturnValue(of({})),
   };
   const taskServiceSpy = jest.spyOn(taskService, 'saveSubtask');
-  const route: any = { snapshot: { params: { shipId: mockEmissions.ships[1].uniqueIdentifier }, pathFromRoot: [] } };
+  const route: any = { snapshot: { params: { shipId: emissionsMock.ships[1].uniqueIdentifier }, pathFromRoot: [] } };
   const uuid4 = '44444444-4444-4444-a444-444444444444';
   const attachmentService: MockType<RequestTaskAttachmentsHandlingService> = {
     uploadRequestTaskAttachment: jest.fn().mockReturnValue(asyncData<any>(new HttpResponse({ body: { uuid: uuid4 } }))),
@@ -108,7 +108,7 @@ describe('CarbonCaptureComponent', () => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(
         mockStateBuild(
-          { emissions: mockEmissions },
+          { emissions: emissionsMock },
           { emissions: TaskItemStatus.IN_PROGRESS },
           {
             '11111111-1111-4111-a111-111111111111': '100.png',
@@ -163,10 +163,10 @@ describe('CarbonCaptureComponent', () => {
                 uuid: uuid4,
               },
             ],
-            technologyEmissionSources: [mockEmissions.ships[1].emissionsSources[0].name],
+            technologyEmissionSources: [emissionsMock.ships[1].emissionsSources[0].name],
           },
         },
-        shipId: mockEmissions.ships[1].uniqueIdentifier,
+        shipId: emissionsMock.ships[1].uniqueIdentifier,
       });
     });
 
@@ -176,8 +176,8 @@ describe('CarbonCaptureComponent', () => {
 
       expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(EMISSIONS_SUB_TASK, EmissionsWizardStep.CARBON_CAPTURE, route, {
-        carbonCapture: mockEmissions.ships[1].carbonCapture,
-        shipId: mockEmissions.ships[1].uniqueIdentifier,
+        carbonCapture: emissionsMock.ships[1].carbonCapture,
+        shipId: emissionsMock.ships[1].uniqueIdentifier,
       });
     });
   });

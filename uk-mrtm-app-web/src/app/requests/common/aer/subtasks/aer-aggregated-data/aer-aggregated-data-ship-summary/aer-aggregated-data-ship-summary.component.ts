@@ -112,7 +112,7 @@ export class AerAggregatedDataShipSummaryComponent {
       isValid = false;
     }
 
-    if (!isNil(surrenderEmissions) && new BigNumber(surrenderEmissions).lte(0)) {
+    if (!isNil(surrenderEmissions) && new BigNumber(surrenderEmissions).lt(0)) {
       errors['surrenderEmissions'] = 'The emissions figure for surrender should be greater than or equal to 0';
       isValid = false;
     }

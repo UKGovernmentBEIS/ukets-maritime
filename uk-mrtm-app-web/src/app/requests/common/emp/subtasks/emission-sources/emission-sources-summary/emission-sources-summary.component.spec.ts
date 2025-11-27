@@ -10,7 +10,7 @@ import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 import { EMISSION_SOURCES_SUB_TASK, EmissionSourcesWizardStep } from '@requests/common/emp/subtasks/emission-sources';
 import { EmissionSourcesSummaryComponent } from '@requests/common/emp/subtasks/emission-sources/emission-sources-summary/emission-sources-summary.component';
 import { emissionSourcesMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { mockEmpEmissionSources, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockEmpEmissionSources, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { screen } from '@testing-library/angular';

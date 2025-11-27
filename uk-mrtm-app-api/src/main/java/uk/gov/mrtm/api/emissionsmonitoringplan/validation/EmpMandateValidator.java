@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanValidationResult;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.EmpEmissions;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.EmpShipEmissions;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.ShipDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.ReportingResponsibilityNature;
@@ -25,72 +26,86 @@ public class EmpMandateValidator implements EmpContextValidator {
 
     @Override
     public EmissionsMonitoringPlanValidationResult validate(EmissionsMonitoringPlanContainer empContainer, Long accountId) {
+        return validate(
+            empContainer.getEmissionsMonitoringPlan().getMandate(),
+            empContainer.getEmissionsMonitoringPlan().getEmissions(),
+            empContainer.getEmissionsMonitoringPlan().getOperatorDetails().getImoNumber());
+    }
+
+    public EmissionsMonitoringPlanValidationResult validate(EmpMandate mandate, EmpEmissions emissions, String imoNumber) {
         List<EmissionsMonitoringPlanViolation> empViolations = new ArrayList<>();
 
-        final EmpMandate mandate = empContainer.getEmissionsMonitoringPlan().getMandate();
-
-        final Set<String> allIsmShips = getAllIsmShips(empContainer);
+        final Set<String> allIsmShips = getAllIsmShips(emissions);
         if (!allIsmShips.isEmpty() && Boolean.FALSE.equals(mandate.getExist())) {
-            empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
-                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS,
-                    allIsmShips.toArray()));
+            empViolations.add(new EmissionsMonitoringPlanViolation(
+                "delegatedResponsibility",
+                EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS,
+                allIsmShips.toArray()));
         }
 
         if (Boolean.TRUE.equals(mandate.getExist()) && !mandate.getRegisteredOwners().isEmpty()) {
 
-            final boolean imoNumberExists = validateImoNumberUniqueness(empContainer);
+            final boolean imoNumberExists = validateImoNumberUniqueness(mandate, imoNumber);
             if (imoNumberExists) {
-                empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
-                        EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER));
+                empViolations.add(new EmissionsMonitoringPlanViolation(
+                    "delegatedResponsibility",
+                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER));
             }
 
-            final Set<String> invalidShipImoNumbers = validateShipImoNumbers(empContainer);
+            final Set<String> invalidShipImoNumbers = validateShipImoNumbers(mandate, emissions);
             if (!invalidShipImoNumbers.isEmpty()) {
-                empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
-                        EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP,
-                        invalidShipImoNumbers.toArray()));
+                empViolations.add(new EmissionsMonitoringPlanViolation(
+                    "delegatedResponsibility",
+                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP,
+                    invalidShipImoNumbers.toArray()));
             }
 
             final Set<String> duplicateShipImoNumbers = validateDuplicateShipsAcrossOwners(mandate);
             if (!duplicateShipImoNumbers.isEmpty()) {
-                empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
-                        EmissionsMonitoringPlanViolation.ViolationMessage.DUPLICATE_SHIP_IMO_ACROSS_REGISTERED_OWNERS,
-                        duplicateShipImoNumbers.toArray()));
+                empViolations.add(new EmissionsMonitoringPlanViolation(
+                    "delegatedResponsibility",
+                    EmissionsMonitoringPlanViolation.ViolationMessage.DUPLICATE_SHIP_IMO_ACROSS_REGISTERED_OWNERS,
+                    duplicateShipImoNumbers.toArray()));
             }
-            final Set<String> invalidShipNamesImoNumbers = validateShipNames(empContainer);
+            final Set<String> invalidShipNamesImoNumbers = validateShipNames(mandate, emissions);
             if (!invalidShipNamesImoNumbers.isEmpty()) {
-                empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
-                        EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP_NAME,
-                        invalidShipNamesImoNumbers.toArray()));
+                empViolations.add(new EmissionsMonitoringPlanViolation(
+                    "delegatedResponsibility",
+                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP_NAME,
+                    invalidShipNamesImoNumbers.toArray()));
             }
-            final boolean allShipsAssociated = validateAllShipsAssociated(empContainer);
-            if (!allShipsAssociated) {
-                empViolations.add(new EmissionsMonitoringPlanViolation(EmpMandate.class.getSimpleName(),
-                        EmissionsMonitoringPlanViolation.ViolationMessage.SHIP_NOT_ASSOCIATED_WITH_REGISTERED_OWNER));
+            final Set<String> allShipsAssociated = validateAllShipsAssociated(mandate, emissions);
+            if (!allShipsAssociated.isEmpty()) {
+                empViolations.add(new EmissionsMonitoringPlanViolation(
+                    "delegatedResponsibility",
+                    EmissionsMonitoringPlanViolation.ViolationMessage.SHIP_NOT_ASSOCIATED_WITH_REGISTERED_OWNER,
+                    allShipsAssociated.toArray()));
             }
         }
 
         return EmissionsMonitoringPlanValidationResult.builder()
-                .valid(empViolations.isEmpty())
-                .empViolations(empViolations)
-                .build();
+            .valid(empViolations.isEmpty())
+            .empViolations(empViolations)
+            .build();
     }
 
-    private boolean validateImoNumberUniqueness(EmissionsMonitoringPlanContainer empContainer) {
-        final Set<String> imoNumbers = empContainer.getEmissionsMonitoringPlan().getMandate().getRegisteredOwners().stream()
+    private boolean validateImoNumberUniqueness(EmpMandate mandate,
+                                                String imoNumber) {
+        final Set<String> imoNumbers = mandate.getRegisteredOwners().stream()
                 .map(EmpRegisteredOwner::getImoNumber)
                 .collect(Collectors.toSet());
-        return imoNumbers.contains(empContainer.getEmissionsMonitoringPlan().getOperatorDetails().getImoNumber());
+        return imoNumbers.contains(imoNumber);
     }
 
-    private Set<String> validateShipImoNumbers(EmissionsMonitoringPlanContainer empContainer) {
-        final Set<String> allShipImoNumbers = empContainer.getEmissionsMonitoringPlan().getEmissions().getShips().stream()
+    private Set<String> validateShipImoNumbers(EmpMandate mandate,
+                                               EmpEmissions emissions) {
+        final Set<String> allShipImoNumbers = emissions.getShips().stream()
                 .map(EmpShipEmissions::getDetails)
                 .filter(shipDetails -> ReportingResponsibilityNature.ISM_COMPANY.equals(shipDetails.getNatureOfReportingResponsibility()))
                 .map(ShipDetails::getImoNumber)
                 .collect(Collectors.toSet());
 
-        return empContainer.getEmissionsMonitoringPlan().getMandate().getRegisteredOwners().stream()
+        return mandate.getRegisteredOwners().stream()
                 .flatMap(empRegisteredOwner -> empRegisteredOwner.getShips().stream())
                 .map(RegisteredOwnerShipDetails::getImoNumber)
                 .filter(shipImo -> !allShipImoNumbers.contains(shipImo))
@@ -107,12 +122,12 @@ public class EmpMandateValidator implements EmpContextValidator {
                 .collect(Collectors.toSet());
     }
 
-    private Set<String> validateShipNames(EmissionsMonitoringPlanContainer empContainer) {
-        final Map<String, String> allShipImoNames = empContainer.getEmissionsMonitoringPlan().getEmissions().getShips().stream()
+    private Set<String> validateShipNames(EmpMandate mandate, EmpEmissions emissions) {
+        final Map<String, String> allShipImoNames = emissions.getShips().stream()
                 .map(EmpShipEmissions::getDetails)
                 .collect(Collectors.toMap(ShipDetails::getImoNumber, ShipDetails::getName));
 
-        return empContainer.getEmissionsMonitoringPlan().getMandate().getRegisteredOwners().stream()
+        return mandate.getRegisteredOwners().stream()
                 .flatMap(owner -> owner.getShips().stream())
                 .filter(shipDetails -> allShipImoNames.containsKey(shipDetails.getImoNumber())
                         && !allShipImoNames.get(shipDetails.getImoNumber()).equals(shipDetails.getName()))
@@ -120,25 +135,28 @@ public class EmpMandateValidator implements EmpContextValidator {
                 .collect(Collectors.toSet());
     }
 
-    private boolean validateAllShipsAssociated(EmissionsMonitoringPlanContainer empContainer) {
+    private Set<String> validateAllShipsAssociated(EmpMandate mandate, EmpEmissions emissions) {
 
-        final Set<String> allShipImoNumbers = empContainer.getEmissionsMonitoringPlan().getEmissions().getShips().stream()
+        final Set<String> allShipImoNumbers = emissions.getShips().stream()
                 .map(EmpShipEmissions::getDetails)
                 .filter(shipDetails -> ReportingResponsibilityNature.ISM_COMPANY.equals(shipDetails.getNatureOfReportingResponsibility()))
                 .map(ShipDetails::getImoNumber)
                 .collect(Collectors.toSet());
 
-        final Set<String> associatedShipImoNumbers = empContainer.getEmissionsMonitoringPlan().getMandate().getRegisteredOwners().stream()
+        final Set<String> associatedShipImoNumbers = mandate.getRegisteredOwners().stream()
                 .flatMap(owner -> owner.getShips().stream())
                 .map(RegisteredOwnerShipDetails::getImoNumber)
                 .filter(allShipImoNumbers::contains)
                 .collect(Collectors.toSet());
 
-        return allShipImoNumbers.size() == associatedShipImoNumbers.size();
+        allShipImoNumbers.removeAll(associatedShipImoNumbers);
+        return allShipImoNumbers.stream()
+            .filter(shipNumber -> !associatedShipImoNumbers.contains(shipNumber))
+            .collect(Collectors.toSet());
     }
 
-    private Set<String> getAllIsmShips(EmissionsMonitoringPlanContainer empContainer) {
-        return empContainer.getEmissionsMonitoringPlan().getEmissions().getShips().stream()
+    private Set<String> getAllIsmShips(EmpEmissions emissions) {
+        return emissions.getShips().stream()
                 .map(EmpShipEmissions::getDetails)
                 .filter(shipDetails -> ReportingResponsibilityNature.ISM_COMPANY.equals(shipDetails.getNatureOfReportingResponsibility()))
                 .map(ShipDetails::getImoNumber)

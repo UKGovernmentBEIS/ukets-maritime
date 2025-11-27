@@ -103,6 +103,34 @@ class MrtmAccountQueryServiceTest {
     }
 
     @Test
+    void getAccountIdByImoNumber() {
+        String imoNumber = "1234567";
+        long accountId = 1L;
+
+        when(mrtmAccountRepository.findAccountIdByImoNumber(imoNumber)).thenReturn(Optional.of(accountId));
+        long response = mrtmAccountQueryService.getAccountIdByImoNumber(imoNumber);
+
+        assertEquals(accountId, response);
+
+        verify(mrtmAccountRepository).findAccountIdByImoNumber(imoNumber);
+        verifyNoMoreInteractions(mrtmAccountRepository);
+    }
+
+    @Test
+    void getAccountIdByImoNumber_throws_exception() {
+        String imoNumber = "1234567";
+        when(mrtmAccountRepository.findAccountIdByImoNumber(imoNumber)).thenReturn(Optional.empty());
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> mrtmAccountQueryService.getAccountIdByImoNumber(imoNumber));
+
+        assertEquals(RESOURCE_NOT_FOUND, exception.getErrorCode());
+
+        verify(mrtmAccountRepository).findAccountIdByImoNumber(imoNumber);
+        verifyNoMoreInteractions(mrtmAccountRepository);
+    }
+
+    @Test
     void getAccountIdsByStatuses() {
         Long accountId = 1L;
         List<MrtmAccountStatus> accountStatuses = List.of(MrtmAccountStatus.LIVE);

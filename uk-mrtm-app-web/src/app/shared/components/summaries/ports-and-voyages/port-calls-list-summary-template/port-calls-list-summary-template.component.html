@@ -4,14 +4,18 @@
   @if (totalItems() > 0) {
     @if (totalEmissionsSummary(); as totalEmissionsSummary) {
       <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="!warningMessages()?.length">
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Total emissions while in port (tCO2e)</dt>
-          <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
-        </div>
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Total emissions figure for surrender (tCO2e)</dt>
-          <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.surrenderEmissions | bigNumber: 4 }}</dd>
-        </div>
+        @if (totalEmissionsSummary?.totalEmissions) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Total emissions while in port (tCO2e)</dt>
+            <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.totalEmissions | bigNumber: 4 }}</dd>
+          </div>
+        }
+        @if (totalEmissionsSummary?.surrenderEmissions) {
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Total emissions figure for surrender (tCO2e)</dt>
+            <dd govukSummaryListRowValue>{{ totalEmissionsSummary?.surrenderEmissions | bigNumber: 4 }}</dd>
+          </div>
+        }
       </dl>
     }
 
@@ -37,6 +41,7 @@
     </mrtm-multi-select-table>
   } @else {
     <govuk-table
+      id="port-calls"
       [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
@@ -49,7 +54,11 @@
   }
 
   @if (totalItems() > pageSize()) {
-    <govuk-pagination [count]="this.totalItems()" [pageSize]="pageSize()" (currentPageChange)="onPageChange($event)" />
+    <govuk-pagination
+      id="port-calls"
+      [count]="this.totalItems()"
+      [pageSize]="pageSize()"
+      (currentPageChange)="onPageChange($event)" />
   }
 
   <ng-template let-column="column" let-row="row" #tableContent>

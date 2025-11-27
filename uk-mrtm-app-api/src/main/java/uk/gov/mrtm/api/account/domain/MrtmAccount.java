@@ -52,6 +52,12 @@ import java.util.List;
                 + "where acc.imoNumber = :imoNumber"
 )
 @NamedQuery(
+    name = MrtmAccount.NAMED_QUERY_FIND_ACCOUNT_ID_BY_IMO_NUMBER,
+    query = "select acc.id "
+        + "from account_mrtm acc "
+        + "where acc.imoNumber = :imoNumber"
+)
+@NamedQuery(
         name = MrtmAccount.NAMED_QUERY_FIND_BY_USER_ID,
         query = "select acc "
                 + "from account_mrtm acc "
@@ -60,6 +66,7 @@ import java.util.List;
 )
 public class MrtmAccount extends Account {
 
+    public static final String NAMED_QUERY_FIND_ACCOUNT_ID_BY_IMO_NUMBER = "MrtmAccount.findAccountIdByImoNumber";
     public static final String NAMED_QUERY_FIND_BY_IMO_NUMBER = "MrtmAccount.findByImoNumber";
     public static final String NAMED_QUERY_FIND_BY_USER_ID = "MrtmAccount.findByUserId";
 

@@ -4,6 +4,7 @@ import { AER_TOTAL_EMISSIONS_SUB_TASK } from '@requests/common/aer/subtasks/aer-
 import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages';
 import { COMPLIANCE_MONITORING_REPORTING_SUB_TASK } from '@requests/common/aer/subtasks/compliance-monitoring-reporting';
 import { DATA_GAPS_METHODOLOGIES_SUB_TASK } from '@requests/common/aer/subtasks/data-gaps-methodologies';
+import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { ETS_COMPLIANCE_RULES_SUB_TASK } from '@requests/common/aer/subtasks/ets-compliance-rules';
 import { MATERIALITY_LEVEL_SUB_TASK } from '@requests/common/aer/subtasks/materiality-level';
 import { MONITORING_PLAN_CHANGES_SUB_TASK } from '@requests/common/aer/subtasks/monitoring-plan-changes';
@@ -46,4 +47,5 @@ export const VERIFIER_SUBTASKS = [
   RECOMMENDED_IMPROVEMENTS_SUB_TASK,
   DATA_GAPS_METHODOLOGIES_SUB_TASK,
   MATERIALITY_LEVEL_SUB_TASK,
+  EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK,
 ];

@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router';
 import { BasePage } from '@netz/common/testing';
 
 import { DocumentTemplateDetailsTemplateComponent } from '@templates/document/document-template-details-template.component';
-import { mockedDocumentTemplate } from '@templates/testing/mock-data';
+import { mockedDocumentTemplate } from '@templates/testing/templates-data.mock';
 
 describe('DocumentTemplateDetailsTemplateComponent', () => {
   let component: DocumentTemplateDetailsTemplateComponent;

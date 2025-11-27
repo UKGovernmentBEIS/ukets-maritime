@@ -9,6 +9,7 @@ import {
   provideEmpSubmitStepFlowManagers,
   provideEmpSubmitTaskServices,
 } from '@requests/tasks/emp-submit/emp-submit.providers';
+import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider.const';
 
 export const EMP_SUBMIT_ROUTES: Routes = [
   {
@@ -72,6 +73,14 @@ export const EMP_SUBMIT_ROUTES: Routes = [
         canActivate: [canActivateEmpSubmitSendApplicationAction],
         loadChildren: () =>
           import('@requests/common/emp/subtasks/send-application').then((r) => r.SEND_APPLICATION_ROUTES),
+      },
+      {
+        path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
+        data: { backlink: '../../', breadcrumb: false },
+        loadComponent: () =>
+          import('@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider-import').then(
+            (c) => c.ThirdPartyDataProviderImportComponent,
+          ),
       },
     ],
   },

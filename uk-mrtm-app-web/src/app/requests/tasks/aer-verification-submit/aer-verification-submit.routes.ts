@@ -20,6 +20,7 @@ import { AER_AGGREGATED_DATA_SUB_TASK_PATH } from '@requests/common/aer/subtasks
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_TOTAL_EMISSIONS_SUB_TASK_PATH } from '@requests/common/aer/subtasks/aer-total-emissions/aer-total-emissions.helpers';
 import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { MONITORING_PLAN_CHANGES_SUB_TASK_PATH } from '@requests/common/aer/subtasks/monitoring-plan-changes';
 import { AER_REDUCTION_CLAIM_SUB_TASK } from '@requests/common/aer/subtasks/reduction-claim';
 import { EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
@@ -74,6 +75,13 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
         loadChildren: () =>
           import('@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting').then(
             (c) => c.COMPLIANCE_MONITORING_REPORTING_ROUTES,
+          ),
+      },
+      {
+        path: EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+        loadChildren: () =>
+          import('@requests/tasks/aer-verification-submit/subtasks/emissions-reduction-claims-verification').then(
+            (r) => r.EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_ROUTES,
           ),
       },
       {

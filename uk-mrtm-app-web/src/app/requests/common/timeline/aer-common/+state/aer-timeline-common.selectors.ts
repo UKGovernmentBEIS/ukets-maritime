@@ -9,6 +9,7 @@ import {
   AerDataGapsMethodologies,
   AerDataReviewDecision,
   AerEmissions,
+  AerEmissionsReductionClaimVerification,
   AerEtsComplianceRules,
   AerMaterialityLevel,
   AerMonitoringPlanChanges,
@@ -152,6 +153,7 @@ const selectVoyagesList: StateSelector<RequestActionState, Array<AerVoyageSummar
           totalEmissions: totalEmissions?.total,
           status: TaskItemStatus.COMPLETED,
           shipName: relatedShip?.details?.name,
+          journeyType: getAerJourneyType(voyageDetails),
           canViewDetails: true,
         };
       },
@@ -354,6 +356,14 @@ const selectMaterialityLevel: StateSelector<RequestActionState, AerMaterialityLe
   (verificationReport) => verificationReport?.materialityLevel,
 );
 
+const selectEmissionsReductionClaimVerification: StateSelector<
+  RequestActionState,
+  AerEmissionsReductionClaimVerification
+> = createDescendingSelector(
+  selectVerificationReport,
+  (verificationReport) => verificationReport?.emissionsReductionClaimVerification,
+);
+
 const isReviewCompletedActionType: StateSelector<RequestActionState, boolean> = createDescendingSelector(
   requestActionQuery.selectActionType,
   (actionType) => actionType === 'AER_APPLICATION_COMPLETED',
@@ -436,4 +446,5 @@ export const aerTimelineCommonQuery = {
   isReviewCompletedActionType,
   selectSummaryReviewGroupDecision,
   selectReviewGroupDecisions,
+  selectEmissionsReductionClaimVerification,
 };

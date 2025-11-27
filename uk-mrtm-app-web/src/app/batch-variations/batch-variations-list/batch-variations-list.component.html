@@ -10,7 +10,7 @@
     }
   </div>
   @if (vm?.data?.length > 0) {
-    <govuk-table [columns]="vm.columns" [data]="vm.data">
+    <govuk-table id="batch-variations" [columns]="vm.columns" [data]="vm.data">
       <ng-template let-column="column" let-row="row">
         @switch (column.field) {
           @case ('id') {
@@ -26,7 +26,11 @@
       </ng-template>
     </govuk-table>
     @if (vm.totalItems > pageSize) {
-      <govuk-pagination [count]="vm.totalItems" [pageSize]="pageSize" (currentPageChange)="onPageChanged($event)" />
+      <govuk-pagination
+        fragment="batch-variations"
+        [count]="vm.totalItems"
+        [pageSize]="pageSize"
+        (currentPageChange)="onPageChanged($event)" />
     }
   } @else {
     <div class="govuk-grid-row">

@@ -13,7 +13,7 @@ import { mockClass } from '@netz/common/testing';
 
 import { EditOperatorAccountGuard } from '@accounts/guards/edit-operator-account.guard';
 import { OperatorAccountsStore } from '@accounts/store';
-import { mockedAccount } from '@accounts/testing/mock-data';
+import { mockedAccount } from '@accounts/testing/accounts-data.mock';
 
 let guard: EditOperatorAccountGuard;
 

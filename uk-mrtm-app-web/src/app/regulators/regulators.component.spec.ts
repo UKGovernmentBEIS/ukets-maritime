@@ -14,7 +14,7 @@ import { ActivatedRouteStub, BasePage, expectBusinessErrorToBe, RouterStubCompon
 
 import { savePartiallyNotFoundRegulatorError } from '@regulators/errors/business-error';
 import { RegulatorsComponent } from '@regulators/regulators.component';
-import { mockRegulatorsRouteData } from '@regulators/testing/mock-data';
+import { mockRegulatorsRouteData } from '@regulators/testing/regulators-data.mock';
 
 describe('RegulatorsComponent', () => {
   let component: RegulatorsComponent;

@@ -17,6 +17,7 @@ import uk.gov.mrtm.api.reporting.domain.AerTotalReportableEmissions;
 import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPort;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortEmissions;
+import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.totalemissions.AerTotalEmissions;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationData;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationDecisionType;
@@ -224,8 +225,7 @@ class RequestAerReviewServiceTest {
         AerTotalEmissions totalEmissions = AerTotalEmissions.builder()
             .totalShipEmissionsSummary(new BigDecimal("1"))
             .surrenderEmissionsSummary(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
-            .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("4")).build())
+            .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
             .build();
 
         Aer aer = Aer.builder().totalEmissions(totalEmissions)
@@ -238,8 +238,7 @@ class RequestAerReviewServiceTest {
         AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(new BigDecimal("1"))
             .surrenderEmissions(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(new BigDecimal("3"))
-            .lessIslandFerryDeduction(new BigDecimal("4"))
+            .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
             .build();
 
         AerVerificationReport verificationReport = AerVerificationReport.builder().build();
@@ -344,8 +343,7 @@ class RequestAerReviewServiceTest {
         AerTotalEmissions totalEmissions = AerTotalEmissions.builder()
             .totalShipEmissionsSummary(new BigDecimal("1"))
             .surrenderEmissionsSummary(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
-            .lessIslandFerryDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("4")).build())
+            .lessVoyagesInNorthernIrelandDeduction(AerPortEmissionsMeasurement.builder().total(new BigDecimal("3")).build())
             .build();
 
         Aer aer = Aer.builder().totalEmissions(totalEmissions).build();
@@ -355,8 +353,7 @@ class RequestAerReviewServiceTest {
         AerTotalReportableEmissions totalReportableEmissions = AerTotalReportableEmissions.builder()
             .totalEmissions(new BigDecimal("1"))
             .surrenderEmissions(new BigDecimal("2"))
-            .less5PercentIceClassDeduction(new BigDecimal("3"))
-            .lessIslandFerryDeduction(new BigDecimal("4"))
+            .lessVoyagesInNorthernIrelandDeduction(new BigDecimal("3"))
             .build();
 
         AerRequestPayload requestPayload = AerRequestPayload.builder()
@@ -451,7 +448,7 @@ class RequestAerReviewServiceTest {
         AerRequestPayload requestPayload = AerRequestPayload
                 .builder()
                 .reportingRequired(reportingRequired)
-                .aer(Aer.builder().portEmissions(ports).voyageEmissions(voyages).build())
+                .aer(Aer.builder().portEmissions(ports).smf(AerSmf.builder().exist(false).build()).voyageEmissions(voyages).build())
                 .verificationReport(AerVerificationReport.builder().build())
                 .build();
         Request request = Request.builder().payload(requestPayload).build();

@@ -43,7 +43,7 @@ class AerVerificationReportUncorrectedNonCompliancesValidatorTest {
                 .build())
             .build();
 
-        AerValidationResult validationResult = validator.validate(verificationReport);
+        AerValidationResult validationResult = validator.validate(null, verificationReport);
         assertTrue(validationResult.isValid());
         assertEquals(0, validationResult.getAerViolations().size());
     }
@@ -58,7 +58,7 @@ class AerVerificationReportUncorrectedNonCompliancesValidatorTest {
                 .build())
             .build();
 
-        AerValidationResult validationResult = validator.validate(verificationReport);
+        AerValidationResult validationResult = validator.validate(null, verificationReport);
         assertTrue(validationResult.isValid());
         assertEquals(0, validationResult.getAerViolations().size());
     }
@@ -77,7 +77,7 @@ class AerVerificationReportUncorrectedNonCompliancesValidatorTest {
                 .build())
             .build();
 
-        AerValidationResult validationResult = validator.validate(verificationReport);
+        AerValidationResult validationResult = validator.validate(null, verificationReport);
         assertFalse(validationResult.isValid());
         assertEquals(1, validationResult.getAerViolations().size());
         assertThat(validationResult.getAerViolations()).extracting(AerViolation::getMessage)

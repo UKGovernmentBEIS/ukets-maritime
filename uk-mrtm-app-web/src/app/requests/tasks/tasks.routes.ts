@@ -32,6 +32,7 @@ import {
 } from '@requests/common/provide-note-redirect';
 import { taskProviders } from '@requests/common/task.providers';
 import { AER_REVIEW_ROUTE_PREFIX } from '@requests/tasks/aer-review';
+import { EMP_SUBMIT_ROUTE_PREFIX } from '@requests/tasks/emp-submit/emp-submit.const';
 import { tasksContent } from '@requests/tasks/tasks-content';
 import { VIR_RESPOND_TO_REGULATOR_COMMENTS_PREFIX } from '@requests/tasks/vir-respond-to-regulator-comments';
 import { VIR_REVIEW_PREFIX } from '@requests/tasks/vir-review';
@@ -66,7 +67,7 @@ export const TASKS_ROUTES: Routes = [
           import('@requests/tasks/account-closure/account-closure.routes').then((r) => r.ACCOUNT_CLOSURE_ROUTES),
       },
       {
-        path: 'emp',
+        path: EMP_SUBMIT_ROUTE_PREFIX,
         loadChildren: () => import('@requests/tasks/emp-submit/emp-submit.routes').then((r) => r.EMP_SUBMIT_ROUTES),
       },
       {

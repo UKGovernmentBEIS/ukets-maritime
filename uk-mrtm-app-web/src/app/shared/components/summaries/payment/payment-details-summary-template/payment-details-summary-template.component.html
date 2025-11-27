@@ -1,5 +1,7 @@
 @if (data(); as data) {
-  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  @if (header(); as header) {
+    <h3 class="govuk-heading-m">{{ header }}</h3>
+  }
   <dl govuk-summary-list [hasBottomMargin]="false">
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Payment status</dt>
@@ -7,8 +9,20 @@
     </div>
     @if (data?.paymentDate) {
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Date marked as paid</dt>
+        <dt govukSummaryListRowKey>
+          @if (data?.paymentMethod === 'CREDIT_OR_DEBIT_CARD') {
+            Date paid
+          } @else {
+            Date marked as paid
+          }
+        </dt>
         <dd govukSummaryListRowValue>{{ data?.paymentDate | govukDate }}</dd>
+      </div>
+    }
+    @if (data?.receivedDate) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Date marked as received</dt>
+        <dd govukSummaryListRowValue>{{ data?.receivedDate | govukDate }}</dd>
       </div>
     }
     @if (data?.paidByFullName) {

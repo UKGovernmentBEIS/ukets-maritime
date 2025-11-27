@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '@netz/common/forms';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
+import { taskProviders } from '@requests/common/task.providers';
 import { MaterialityLevelSummaryComponent } from '@requests/tasks/aer-verification-submit/subtasks/materiality-level/materiality-level-summary/materiality-level-summary.component';
 
 describe('MaterialityLevelSummaryComponent', () => {
@@ -18,6 +19,7 @@ describe('MaterialityLevelSummaryComponent', () => {
       providers: [
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
+        ...taskProviders,
       ],
     }).compileComponents();
 

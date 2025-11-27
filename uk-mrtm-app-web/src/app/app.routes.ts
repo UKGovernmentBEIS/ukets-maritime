@@ -1,6 +1,8 @@
 import { ExtraOptions, Routes } from '@angular/router';
 
 import { AuthGuard, loggedInGuard, NonAuthGuard, PendingRequestGuard, TermsAndConditionsGuard } from '@core/guards';
+import { DATA_SUPPLIERS_ROUTE_PREFIX } from '@data-suppliers/data-suppliers.constants';
+import { canActivateDataSuppliers } from '@data-suppliers/data-suppliers.guards';
 import { GUIDANCE_ROUTE_PREFIX } from '@guidance/guidance.constants';
 import { LandingPageComponent } from '@landing-page/landing-page.component';
 import { landingPageGuard } from '@landing-page/landing-page.guard';
@@ -136,6 +138,12 @@ export const APP_ROUTES: Routes = [
       {
         path: GUIDANCE_ROUTE_PREFIX,
         loadChildren: () => import('@guidance/guidance.routes').then((r) => r.GUIDANCE_ROUTES),
+      },
+      {
+        path: DATA_SUPPLIERS_ROUTE_PREFIX,
+        data: { breadcrumb: 'Manage data suppliers' },
+        canActivate: [canActivateDataSuppliers],
+        loadChildren: () => import('@data-suppliers/data-suppliers.routes').then((r) => r.DATA_SUPPLIERS_ROUTES),
       },
     ],
   },

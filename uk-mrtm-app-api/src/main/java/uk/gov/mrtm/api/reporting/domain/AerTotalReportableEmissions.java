@@ -21,8 +21,5 @@ public class AerTotalReportableEmissions {
     private BigDecimal totalEmissions;
 
     @Digits(integer = Integer.MAX_VALUE, fraction = 0)
-    private BigDecimal less5PercentIceClassDeduction;
-
-    @Digits(integer = Integer.MAX_VALUE, fraction = 0)
-    private BigDecimal lessIslandFerryDeduction;
+    private BigDecimal lessVoyagesInNorthernIrelandDeduction;
 }

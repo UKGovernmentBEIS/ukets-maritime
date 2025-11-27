@@ -183,6 +183,7 @@ class DocumentTemplateControllerTest {
     void getDocumentTemplateById() throws Exception {
         Long documentTemplateId = 1L;
         String documentTemplateName = "document_template_name";
+        AppUser user = AppUser.builder().userId("userId").build();
 
         uk.gov.netz.api.documenttemplate.domain.dto.DocumentTemplateDTO documentTemplateDTO = uk.gov.netz.api.documenttemplate.domain.dto.DocumentTemplateDTO.builder()
             .id(documentTemplateId)
@@ -196,6 +197,7 @@ class DocumentTemplateControllerTest {
         				))
         		.build();
 
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
         when(documentTemplateQueryOrchestratorService.getDocumentTemplateDTOById(documentTemplateId)).thenReturn(documentTemplateDTOResponse);
 
         mockMvc.perform(MockMvcRequestBuilders

@@ -7,7 +7,7 @@ import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 import { CountryService } from '@core/services';
 import { CountryServiceStub } from '@registration/testing/country-service-stub';
 import { actionProviders } from '@requests/common/action.providers';
-import { mockRequestActionAerSubmittedState } from '@requests/common/aer/testing/mock-aer-submitted';
+import { mockRequestActionAerSubmittedState } from '@requests/common/aer/testing/aer-submitted.mock';
 import { AerSubmittedReportComponent } from '@requests/common/timeline/components/aer-submitted-report/index';
 
 describe('AerSubmittedReportComponent', () => {

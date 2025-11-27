@@ -96,10 +96,12 @@ class AccountVerificationBodyControllerTest {
         Long verificationBodyId = 1L;
         String verificationBodyName = "vb";
         VerificationBodyNameInfoDTO vb = VerificationBodyNameInfoDTO.builder().id(verificationBodyId).name(verificationBodyName).build();
-        
+        AppUser user = AppUser.builder().userId("userId").build();
+
         when(accountVerificationBodyService.getVerificationBodyNameInfoByAccount(accountId))
             .thenReturn(Optional.of(vb));
-        
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+
         mockMvc.perform(
                 MockMvcRequestBuilders
                     .get(CONTROLLER_PATH + "/" + accountId + "/verification-body")
@@ -137,10 +139,12 @@ class AccountVerificationBodyControllerTest {
         String verificationBodyName = "vb";
         VerificationBodyNameInfoDTO vb = VerificationBodyNameInfoDTO.builder().id(verificationBodyId).name(verificationBodyName).build();
         List<VerificationBodyNameInfoDTO> vbs = List.of(vb);
-        
+        AppUser user = AppUser.builder().userId("userId").build();
+
         when(accountVerificationBodyService.getAllActiveVerificationBodiesAccreditedToAccountEmissionTradingScheme(accountId))
             .thenReturn(vbs);
-        
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+
         mockMvc.perform(
                 MockMvcRequestBuilders
                     .get(CONTROLLER_PATH + "/" + accountId + "/active-verification-bodies")

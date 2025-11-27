@@ -15,7 +15,7 @@ import {
   MaritimeEmissionsWizardStep,
 } from '@requests/tasks/doe-submit/subtasks/maritime-emissions';
 import { MaritimeEmissionsSummaryComponent } from '@requests/tasks/doe-submit/subtasks/maritime-emissions/maritime-emissions-summary';
-import { mockDoeMaritimeEmissions, mockStateBuild } from '@requests/tasks/doe-submit/testing/mock-data';
+import { mockDoeMaritimeEmissions, mockStateBuild } from '@requests/tasks/doe-submit/testing/doe-submit-data.mock';
 
 describe('MaritimeEmissionsSummaryComponent', () => {
   let component: MaritimeEmissionsSummaryComponent;
@@ -84,11 +84,8 @@ describe('MaritimeEmissionsSummaryComponent', () => {
       'Total maritime emissions',
       '1 tCO2e',
       'Change',
-      'Less small island ferry deduction',
+      'Less Northern Ireland surrender deduction',
       '2 tCO2e',
-      'Change',
-      'Less 5% ice class deduction',
-      '3 tCO2e',
       'Change',
       'Emissions figure for surrender',
       '12 tCO2e',

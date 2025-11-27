@@ -8,7 +8,7 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { AdditionalDocumentsSummaryComponent } from '@requests/common/emp/subtasks/additional-documents/additional-documents-summary';
-import { mockAdditionalDocuments, mockStateBuild } from '@requests/common/emp/testing/mock-data';
+import { mockAdditionalDocuments, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import {

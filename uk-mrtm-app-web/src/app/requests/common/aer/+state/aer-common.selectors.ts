@@ -34,9 +34,13 @@ import { getYearFromRequestId } from '@netz/common/utils';
 
 import { AerCommonTaskPayload, AerVoyageItem } from '@requests/common/aer/aer.types';
 import { AER_AGGREGATED_DATA_SUB_TASK } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
-import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
+import { AER_PORTS_SUB_TASK, portEmissionsCompleted } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
 import { AER_TOTAL_EMISSIONS_SUB_TASK } from '@requests/common/aer/subtasks/aer-total-emissions/aer-total-emissions.helpers';
-import { AER_VOYAGES_SUB_TASK, getAerJourneyType } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import {
+  AER_VOYAGES_SUB_TASK,
+  getAerJourneyType,
+  voyageEmissionsCompleted,
+} from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { AER_REDUCTION_CLAIM_SUB_TASK } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim.helpers';
 import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation/reporting-obligation.helpers';
 import { EMISSIONS_SUB_TASK, EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
@@ -246,13 +250,14 @@ const selectIsShipStatusCompleted = (
 
 const selectPorts: StateSelector<
   RequestTaskState,
-  Array<AerPort & { status: TaskItemStatus }>
+  Array<AerPort & { status: TaskItemStatus; relatedShip: AerShipEmissions }>
 > = createAggregateSelector(selectPayload, selectShips, (payload, ships) =>
   (payload?.aer?.portEmissions?.ports ?? []).map((port) => {
     const relatedShip = ships.find((x) => x?.details?.imoNumber === port?.imoNumber);
 
     return {
       ...port,
+      relatedShip,
       status:
         relatedShip?.status !== TaskItemStatus.COMPLETED
           ? TaskItemStatus.NEEDS_REVIEW
@@ -267,26 +272,25 @@ const selectPortsList: StateSelector<RequestTaskState, Array<AerPortSummaryItemD
   selectShips,
   selectAerSectionsCompleted,
   (ports, ships, sectionsCompleted) =>
-    ports.map<AerPortSummaryItemDto>(
-      ({ uniqueIdentifier, imoNumber, portDetails, surrenderEmissions, totalEmissions }: AerPort) => {
-        const relatedShip = ships?.find((x) => x?.details?.imoNumber === imoNumber);
-        return {
-          uniqueIdentifier,
-          imoNumber,
-          ...portDetails,
-          ...portDetails?.visit,
-          surrenderEmissions: surrenderEmissions?.total,
-          totalEmissions: totalEmissions?.total,
-          status:
-            relatedShip?.status !== TaskItemStatus.COMPLETED
-              ? TaskItemStatus.NEEDS_REVIEW
-              : ((sectionsCompleted?.[`ports-port-call-${uniqueIdentifier}`] ??
-                  TaskItemStatus.IN_PROGRESS) as TaskItemStatus),
-          shipName: relatedShip?.details?.name,
-          canViewDetails: relatedShip?.status === TaskItemStatus.COMPLETED,
-        };
-      },
-    ),
+    ports.map<AerPortSummaryItemDto>((port: AerPort) => {
+      const { uniqueIdentifier, imoNumber, portDetails, surrenderEmissions, totalEmissions } = port;
+      const relatedShip = ships?.find((x) => x?.details?.imoNumber === imoNumber);
+      return {
+        uniqueIdentifier,
+        imoNumber,
+        ...portDetails,
+        ...portDetails?.visit,
+        surrenderEmissions: portEmissionsCompleted(port) ? surrenderEmissions?.total : undefined,
+        totalEmissions: portEmissionsCompleted(port) ? totalEmissions?.total : undefined,
+        status:
+          relatedShip?.status !== TaskItemStatus.COMPLETED
+            ? TaskItemStatus.NEEDS_REVIEW
+            : ((sectionsCompleted?.[`ports-port-call-${uniqueIdentifier}`] ??
+                TaskItemStatus.IN_PROGRESS) as TaskItemStatus),
+        shipName: relatedShip?.details?.name,
+        canViewDetails: relatedShip?.status === TaskItemStatus.COMPLETED,
+      };
+    }),
 );
 
 const selectListOfShipsWithPortCalls: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> =
@@ -315,7 +319,9 @@ const selectIsPortStatusCompleted = (portId: AerPort['uniqueIdentifier']): State
   );
 };
 
-const selectPort = (portId: AerPort['uniqueIdentifier']): StateSelector<RequestTaskState, AerPort> =>
+const selectPort = (
+  portId: AerPort['uniqueIdentifier'],
+): StateSelector<RequestTaskState, AerPort & { status: TaskItemStatus; relatedShip: AerShipEmissions }> =>
   createDescendingSelector(selectPorts, (ports) => ports.find((port) => port.uniqueIdentifier === portId));
 
 const selectPortDirectEmissions = (
@@ -395,29 +401,29 @@ const selectVoyagesList: StateSelector<RequestTaskState, Array<AerVoyageSummaryI
   selectShips,
   selectAerSectionsCompleted,
   (voyages, ships, sectionsCompleted) =>
-    voyages.map<AerVoyageSummaryItemDto>(
-      ({ uniqueIdentifier, imoNumber, voyageDetails, surrenderEmissions, totalEmissions }: AerVoyage) => {
-        const relatedShip = ships?.find((x) => x?.details?.imoNumber === imoNumber);
-        return {
-          uniqueIdentifier,
-          imoNumber,
-          ...voyageDetails,
-          arrivalPort: voyageDetails?.arrivalPort?.port,
-          arrivalCountry: voyageDetails?.arrivalPort?.country,
-          departurePort: voyageDetails?.departurePort?.port,
-          departureCountry: voyageDetails?.departurePort?.country,
-          surrenderEmissions: surrenderEmissions?.total,
-          totalEmissions: totalEmissions?.total,
-          status:
-            relatedShip?.status !== TaskItemStatus.COMPLETED
-              ? TaskItemStatus.NEEDS_REVIEW
-              : ((sectionsCompleted?.[`${AER_VOYAGES_SUB_TASK}-voyage-${uniqueIdentifier}`] ??
-                  TaskItemStatus.IN_PROGRESS) as TaskItemStatus),
-          shipName: relatedShip?.details?.name,
-          canViewDetails: relatedShip?.status === TaskItemStatus.COMPLETED,
-        };
-      },
-    ),
+    voyages.map<AerVoyageSummaryItemDto>((voyage: AerVoyage) => {
+      const { uniqueIdentifier, imoNumber, voyageDetails, surrenderEmissions, totalEmissions } = voyage;
+      const relatedShip = ships?.find((x) => x?.details?.imoNumber === imoNumber);
+      return {
+        uniqueIdentifier,
+        imoNumber,
+        ...voyageDetails,
+        arrivalPort: voyageDetails?.arrivalPort?.port,
+        arrivalCountry: voyageDetails?.arrivalPort?.country,
+        departurePort: voyageDetails?.departurePort?.port,
+        departureCountry: voyageDetails?.departurePort?.country,
+        surrenderEmissions: voyageEmissionsCompleted(voyage) ? surrenderEmissions?.total : undefined,
+        totalEmissions: voyageEmissionsCompleted(voyage) ? totalEmissions?.total : undefined,
+        status:
+          relatedShip?.status !== TaskItemStatus.COMPLETED
+            ? TaskItemStatus.NEEDS_REVIEW
+            : ((sectionsCompleted?.[`${AER_VOYAGES_SUB_TASK}-voyage-${uniqueIdentifier}`] ??
+                TaskItemStatus.IN_PROGRESS) as TaskItemStatus),
+        shipName: relatedShip?.details?.name,
+        journeyType: getAerJourneyType(voyageDetails),
+        canViewDetails: relatedShip?.status === TaskItemStatus.COMPLETED,
+      };
+    }),
 );
 
 const selectListOfShipsWithVoyages: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> =

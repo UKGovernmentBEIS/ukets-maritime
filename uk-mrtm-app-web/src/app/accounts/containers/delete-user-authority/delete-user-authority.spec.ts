@@ -12,7 +12,7 @@ import { ActivatedRouteStub, BasePage, expectBusinessErrorToBe, mockClass, MockT
 
 import { DeleteUserAuthorityComponent } from '@accounts/containers/delete-user-authority/delete-user-authority';
 import { saveNotFoundOperatorError } from '@accounts/errors';
-import { mockOperatorDTO } from '@accounts/testing/mock-data';
+import { mockOperatorDTO } from '@accounts/testing/accounts-data.mock';
 import { AuthService } from '@core/services/auth.service';
 
 describe('DeleteComponent', () => {
