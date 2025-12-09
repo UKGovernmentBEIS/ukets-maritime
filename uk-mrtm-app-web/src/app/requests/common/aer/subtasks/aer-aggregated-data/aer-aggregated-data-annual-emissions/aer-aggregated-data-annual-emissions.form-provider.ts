@@ -22,7 +22,7 @@ const emissionsGroupValidator =
   (validationMessage: string): ValidatorFn =>
   (abstractControl: FormGroup<AerAggregatedEmissionsFormGroupModel>) => {
     const { co2, n2o, ch4 } = abstractControl.value;
-    if (isNil(ch4) || isNil(n2o) || isNil(co2)) {
+    if ([ch4, n2o, co2].every((x) => isNil(x) || `${x}`.trim().length === 0)) {
       return {
         invalidGroupValues: validationMessage,
       };
@@ -41,27 +41,32 @@ export const aerAggregatedDataAnnualEmissionsFormProvider: Provider = {
     const dataId = route?.snapshot?.params?.[AER_AGGREGATED_DATA_PARAM];
     const aggregatedData = store.select(aerCommonQuery.selectAggregatedDataItem(dataId))();
 
-    return formBuilder.group<AerAggregatedDataAnnualEmissionsFormGroupModel>({
-      uniqueIdentifier: formBuilder.control<AerShipAggregatedData['uniqueIdentifier'] | null>(dataId),
-      emissionsBetweenUKAndNIVoyages: provideAerAggregatedEmissionsFormGroup(
-        aggregatedData?.emissionsBetweenUKAndNIVoyages,
-        [
-          emissionsGroupValidator(
-            'Enter aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
-          ),
-        ],
-      ),
-      emissionsBetweenUKPorts: provideAerAggregatedEmissionsFormGroup(aggregatedData?.emissionsBetweenUKPorts, [
-        emissionsGroupValidator('Enter the aggregated greenhouse gas emissions from all voyages between UK ports'),
-      ]),
-      emissionsWithinUKPorts: provideAerAggregatedEmissionsFormGroup(aggregatedData?.emissionsWithinUKPorts, [
-        emissionsGroupValidator('Enter aggregated greenhouse gas emissions which occurred within UK ports'),
-      ]),
-      totalEmissionsFromVoyagesAndPorts: provideAerAggregatedEmissionsFormGroup(
-        aggregatedData?.totalEmissionsFromVoyagesAndPorts,
-        aerAggregatedDataValidators.totalEmissionsValidator('The total emissions should be greater than 0'),
-        false,
-      ),
-    });
+    return formBuilder.group<AerAggregatedDataAnnualEmissionsFormGroupModel>(
+      {
+        uniqueIdentifier: formBuilder.control<AerShipAggregatedData['uniqueIdentifier'] | null>(dataId),
+        emissionsBetweenUKAndNIVoyages: provideAerAggregatedEmissionsFormGroup(
+          aggregatedData?.emissionsBetweenUKAndNIVoyages,
+          [
+            emissionsGroupValidator(
+              'Enter aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
+            ),
+          ],
+        ),
+        emissionsBetweenUKPorts: provideAerAggregatedEmissionsFormGroup(aggregatedData?.emissionsBetweenUKPorts, [
+          emissionsGroupValidator('Enter the aggregated greenhouse gas emissions from all voyages between UK ports'),
+        ]),
+        emissionsWithinUKPorts: provideAerAggregatedEmissionsFormGroup(aggregatedData?.emissionsWithinUKPorts, [
+          emissionsGroupValidator('Enter aggregated greenhouse gas emissions which occurred within UK ports'),
+        ]),
+        totalEmissionsFromVoyagesAndPorts: provideAerAggregatedEmissionsFormGroup(
+          aggregatedData?.totalEmissionsFromVoyagesAndPorts,
+          aerAggregatedDataValidators.totalEmissionsValidator('The total emissions should be greater than 0'),
+          false,
+        ),
+      },
+      {
+        updateOn: 'change',
+      },
+    );
   },
 };

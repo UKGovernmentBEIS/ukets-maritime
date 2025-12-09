@@ -56,7 +56,7 @@ export class ListOfShipsComponent {
     this.formGroup.reset();
     this.notificationBannerStore.reset();
 
-    this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+    this.router.navigate(['../'], { relativeTo: this.activatedRoute, queryParams: { submit: true } });
   }
 
   onAddNew() {

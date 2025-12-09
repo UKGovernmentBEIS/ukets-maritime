@@ -58,14 +58,15 @@ export const canActivateEmissionsSummary: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);
   const status = store.select(empCommonQuery.selectStatusForSubtask('emissions'))();
   const ships = store.select(empCommonQuery.selectShips)();
-
+  const submit = route.queryParamMap.get('submit') === 'true';
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
 
   return (
     !isEditable ||
     (isEditable &&
       (status === TaskItemStatus.COMPLETED ||
-        (ships.length > 0 &&
+        (submit &&
+          ships.length > 0 &&
           ships.every((ship) => isShipWizardCompleted(ship) && ship.status === TaskItemStatus.COMPLETED)))) ||
     createUrlTreeFromSnapshot(route, ['./', EmissionsWizardStep.LIST_OF_SHIPS])
   );

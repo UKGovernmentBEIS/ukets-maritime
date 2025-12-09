@@ -4,9 +4,14 @@
   [heading]="dataSupplierId() ? 'Replace a data supplier' : 'Appoint a data supplier'"
   [isTwoThirds]="true"
   (formSubmit)="onSubmit()">
-  <govuk-warning-text
-    assistiveText="A software pro will have the ability to Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus justo diam, finibus sit amet sagittis at, egestas non felis. " />
-
+  <p class="govuk-body">
+    Some workflows in METS will allow you to import data from an authorised data supplier using an application
+    programming interface (API). When you appoint a data supplier, a secure direct API connection will be established
+    between your system and the supplier.
+    <br />
+    Choose your supplier and select submit. If data is available the option to import it will be available in the
+    relevant workflows
+  </p>
   <div
     govuk-select
     formControlName="dataSupplierId"

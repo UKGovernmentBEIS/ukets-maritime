@@ -86,15 +86,12 @@ const isValidFuelConsumption = (imoNumber: string, cfc: CsvFuelConsumption, stor
       imoNumber,
       cfc.origin,
       type,
-      cfc.emissionSourceName,
-      cfc.methaneSlip,
+      cfc?.emissionSourceName,
+      cfc?.methaneSlip,
     ),
   )();
-
   const isAmountValid = maxDecimals(cfc.amount, 5);
-
   const isMeasuringUnitValid = ['M3', 'TONNES'].includes(cfc.measuringUnit);
-
   const isAmountDensityValid =
     maxDecimals(cfc.fuelDensity, 3) && Number(cfc?.fuelDensity) > 0 && Number(cfc?.fuelDensity) <= 2;
   const isDensityValid =

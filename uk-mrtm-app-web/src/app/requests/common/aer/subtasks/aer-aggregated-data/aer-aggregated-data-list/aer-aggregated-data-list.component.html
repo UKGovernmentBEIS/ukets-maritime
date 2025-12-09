@@ -30,11 +30,8 @@
 </div>
 
 <h3 class="govuk-heading-m">{{ aggregatedDataListHeader() }}</h3>
-@if (needsReviewMessage(); as warningMessage) {
-  <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="notCompletedMessage() ? 0 : 6" />
-}
-@if (notCompletedMessage(); as warningMessage) {
-  <govuk-warning-text [assistiveText]="warningMessage" />
+@for (warningMessage of warningMessages(); track i; let i = $index) {
+  <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
 }
 <mrtm-aggregated-data-list-summary-template
   [data]="filteredAggregatedDataList()"

@@ -86,7 +86,7 @@ export class ThirdPartyDataProviderImportComponent {
       .pipe(take(1))
       .subscribe(() =>
         this.notificationBannerStore.setSuccessMessages([
-          'The data has been imported from the external source/system successfully.',
+          'The data has been successfully imported from the data supplier.',
         ]),
       );
   }

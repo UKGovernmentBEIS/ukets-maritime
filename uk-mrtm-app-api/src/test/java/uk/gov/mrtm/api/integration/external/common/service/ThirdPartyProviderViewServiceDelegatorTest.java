@@ -50,7 +50,7 @@ class ThirdPartyProviderViewServiceDelegatorTest {
 
         verify(requestTaskService).findTaskById(requestTaskId);
         verify(empThirdPartyProviderViewService).getTypes();
-        verify(empThirdPartyProviderViewService).getThirdPartyDataProviderInfo(accountId);
+        verify(empThirdPartyProviderViewService).getThirdPartyDataProviderInfo(accountId, null);
 
         verifyNoMoreInteractions(requestTaskService, empThirdPartyProviderViewService);
     }

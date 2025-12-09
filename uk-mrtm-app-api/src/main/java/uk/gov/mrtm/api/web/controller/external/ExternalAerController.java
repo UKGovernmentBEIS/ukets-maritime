@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -35,6 +36,7 @@ import static uk.gov.mrtm.api.web.constants.SwaggerApiInfo.NO_CONTENT;
 @RequiredArgsConstructor
 @Tag(name = "Maritime annual emissions report API")
 @RequestMapping(path = "/external/v1.0/accounts")
+@ConditionalOnProperty(name = "feature-flag.external.integration.aer.enabled", havingValue = "true")
 public class ExternalAerController {
 
     private final ExternalAerService externalAerService;
@@ -46,7 +48,7 @@ public class ExternalAerController {
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExternalErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExternalErrorResponse.class))})
-    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND,
+    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.EXTERNAL_SAVE_AER_NOT_FOUND,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExternalErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExternalErrorResponse.class))})
@@ -54,7 +56,7 @@ public class ExternalAerController {
     public ResponseEntity<Void> submitAerData(
         @PathVariable("company-imo-number") @Parameter(name = "company-imo-number", description = "The company IMO number")
         @NotBlank @Pattern(regexp = "^\\d{7}$") String companyImoNumber,
-        @PathVariable("year") @Parameter(description = "The year of the annual emissions report", required = true)
+        @PathVariable("year") @Parameter(description = "The year of the annual emissions report. Accepts the current year and possibly previous years with AER (based on the first year of maritime activity of the account)", required = true)
         @NotNull Year year,
         @RequestBody @Valid @NotNull @Parameter(description = "The annual emissions report data", required = true)
         ExternalAer aer,

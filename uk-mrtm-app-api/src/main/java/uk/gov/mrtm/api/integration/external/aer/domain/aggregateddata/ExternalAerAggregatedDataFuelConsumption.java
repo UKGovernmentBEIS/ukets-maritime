@@ -35,6 +35,6 @@ public class ExternalAerAggregatedDataFuelConsumption {
     @NotNull
     @PositiveOrZero
     @Digits(integer = Integer.MAX_VALUE, fraction = 5)
-    @Schema(description = "Fuel consumption amount. Positive or zero decimal number with fraction part max 5 digits")
+    @Schema(description = "Fuel consumption amount. Positive or zero decimal number with fraction part max 5 digits", minimum = "0")
     private BigDecimal amount;
 }

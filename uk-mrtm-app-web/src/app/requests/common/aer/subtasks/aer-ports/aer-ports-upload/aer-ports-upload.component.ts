@@ -169,6 +169,8 @@ export class AerPortsUploadComponent {
         fv.imoNumber,
         fv.fuelConsumptionOrigin,
         fv.fuelConsumptionType as unknown as AerFuel['type'],
+        fv?.fuelConsumptionEmissionSourceName,
+        fv?.fuelConsumptionMethaneSlip,
       ),
     )();
     const matchedEmissionSource = this.store.select(

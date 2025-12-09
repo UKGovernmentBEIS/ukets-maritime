@@ -168,10 +168,11 @@ class AerPortEmissionsCalculatorTest {
                     .total(new BigDecimal("599138.7824275"))
                     .build()),
             Arguments.of(MeasuringUnit.TONNES, new BigDecimal("1.12345"),
-                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).name("name").methaneSlip(new BigDecimal("99.1")).build(),
+                FuelOriginEFuelTypeName.builder().origin(FuelOrigin.RFNBO).type(EFuelType.OTHER).name("name").methaneSlip(new BigDecimal("99.1")).build(),
                 AerEFuels.builder()
                     .origin(FuelOrigin.RFNBO)
                     .name("name")
+                    .type(EFuelType.OTHER)
                     .carbonDioxide(new BigDecimal("5423523.45245"))
                     .methane(new BigDecimal("8364.24"))
                     .nitrousOxide(new BigDecimal("8.842145"))

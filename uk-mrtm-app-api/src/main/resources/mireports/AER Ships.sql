@@ -6,7 +6,7 @@ WITH allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data F
                  WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
 ), sectionOperatorDetails
     AS (
-        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID", aer.reporting_year "Reporting year",
+        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMPlan Id", aer.reporting_year "Reporting year",
                CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
     WHEN 'LIMITED_COMPANY'
     THEN 'Limited Company'
@@ -71,64 +71,64 @@ AS u("monitoringMethod" varchar, "methodApproach" varchar, "value" numeric)), de
 AS (SELECT account_id, reporting_year,"details" ->> 'imoNumber' imoShip,
 CASE "derogations" ->> 'exceptionFromPerVoyageMonitoring' WHEN 'true' THEN 'Yes' ELSE 'No' END exceptionFromPerVoyageMonitoring
 FROM shipEmissions)
-(SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMP ID", o.legalStatus "Legal status", 0 sectionId, 'Account details' section, null "IMO Ship", null "Ship Name", null "Ship Type", cast(null
-AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Origin", null "Type", null "Name", cast(null
+(SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMPlan Id", o.legalStatus "Legal status", 0 sectionId, 'Account details' section, null "IMO Ship", null "Name", null "Type", cast(null
+AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Fuel Origin", null "Fuel Type", null "Other Fuel Type(O)", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
 AS numeric) "Tank to Wake emission factor for nitrous oxide", null "Emission source reference number", null "Unique emission source name", null "Emission source type", null "Emission source class", null "Potential fuel types used", cast(null
-AS numeric) "Methane slip (%)", null "Monitoring Method", null "Approach used", cast(null
-AS numeric) "Uncertainty value (%)", null  "Do you have an exemption from per voyage monitoring?"
+AS numeric) "Methane slip (%)", null "Monitoring Methods", null "Approach used per method", cast(null
+AS numeric) "Uncertainty value (%) per method", null  "Do you have an exemption from per voyage monitoring?"
 FROM sectionOperatorDetails o
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMP ID", o.legalStatus "Legal status", 1 sectionId, 'Ship details' section, imoShip "IMO Ship", name "Ship Name", type "Ship Type", cast(grossTonnage
-AS numeric) "Gross Tonage", flagState "Flag State", iceClass "Ice class", natureOfReportingResponsibility "Nature of reporting responsibility", d.fromDate "Reporting Date From", d.toDate "Reporting Date To", null "Origin", null "Type", null "Name", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMPlan Id", o.legalStatus "Legal status", 1 sectionId, 'Ship details' section, imoShip "IMO Ship", name "Name", type "Type", cast(grossTonnage
+AS numeric) "Gross Tonage", flagState "Flag State", iceClass "Ice class", natureOfReportingResponsibility "Nature of reporting responsibility", d.fromDate "Reporting Date From", d.toDate "Reporting Date To", null "Fuel Origin", null "Fuel Type", null "Other Fuel Type(O)", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
 AS numeric) "Tank to Wake emission factor for nitrous oxide",null "Emission source reference number", null "Unique emission source name", null "Emission source type", null "Emission source class", null "Potential fuel types used", cast(null
-AS numeric) "Methane slip (%)", null "Monitoring Method", null "Approach used", cast(null
-AS numeric) "Uncertainty value (%)", null  "Do you have an exemption from per voyage monitoring?"
+AS numeric) "Methane slip (%)", null "Monitoring Methods", null "Approach used per method", cast(null
+AS numeric) "Uncertainty value (%) per method", null  "Do you have an exemption from per voyage monitoring?"
 FROM sectionOperatorDetails o
 JOIN shipDetailsSection d
 ON o.account_id = d.account_id AND o."Reporting year" = d.reporting_year
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMP ID", o.legalStatus "Legal status", 2 sectionId, 'Fuels and emission factors' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
-AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Reporting Date From", null "Reporting Date To", origin "Origin", type "Type", name "Name", cast("carbonDioxide"
+SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMPlan Id", o.legalStatus "Legal status", 2 sectionId, 'Fuels and emission factors' section, imoShip "IMO Ship", null "Name", null "Type", cast(null
+AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Reporting Date From", null "Reporting Date To", origin "Fuel Origin", type "Fuel Type", name "Other Fuel Type(O)", cast("carbonDioxide"
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(methane
 AS numeric) "Tank to Wake emission factor for methane", cast("nitrousOxide"
 AS numeric) "Tank to Wake emission factor for nitrous oxide", null "Emission source reference number", null "Unique emission source name", null "Emission source type", null "Emission source class", null "Potential fuel types used", cast(null
-AS numeric) "Methane slip (%)", null "Monitoring Method", null "Approach used", cast(null
-AS numeric) "Uncertainty value (%)", null  "Do you have an exemption from per voyage monitoring?"
+AS numeric) "Methane slip (%)", null "Monitoring Methods", null "Approach used per method", cast(null
+AS numeric) "Uncertainty value (%) per method", null  "Do you have an exemption from per voyage monitoring?"
 FROM sectionOperatorDetails o
 JOIN fuelsEmissionsFactorsSection d
 ON o.account_id = d.account_id AND o."Reporting year" = d.reporting_year
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMP ID", o.legalStatus "Legal status", 3 sectionId, 'Emission sources' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
-AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Origin", null "Type", null "Name", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMPlan Id", o.legalStatus "Legal status", 3 sectionId, 'Emission sources' section, imoShip "IMO Ship", null "Name", null "Type", cast(null
+AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Fuel Origin", null "Fuel Type", null "Other Fuel Type(O)", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
-AS numeric) "Tank to Wake emission factor for nitrous oxide", "referenceNumber" "Emission source reference number", sourceName "Unique emission source name", sourceType "Emission source type", "sourceClass" "Emission source class", fuelTypes "Potential fuel types used", "methaneSlip" "Methane slip (%)", monitoringMethod "Monitoring Method", null "Approach used", cast(null
-AS numeric) "Uncertainty value (%)", null  "Do you have an exemption from per voyage monitoring?"
+AS numeric) "Tank to Wake emission factor for nitrous oxide", "referenceNumber" "Emission source reference number", sourceName "Unique emission source name", sourceType "Emission source type", "sourceClass" "Emission source class", fuelTypes "Potential fuel types used", "methaneSlip" "Methane slip (%)", monitoringMethod "Monitoring Methods", null "Approach used per method", cast(null
+AS numeric) "Uncertainty value (%) per method", null  "Do you have an exemption from per voyage monitoring?"
 FROM sectionOperatorDetails o
 JOIN emissionsSourcesSection s
 ON o.account_id = s.account_id AND o."Reporting year" = s.reporting_year
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMP ID", o.legalStatus "Legal status", 4 sectionId, 'Uncertainty level' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
-AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Origin", null "Type", null "Name", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMPlan Id", o.legalStatus "Legal status", 4 sectionId, 'Uncertainty level' section, imoShip "IMO Ship", null "Name", null "Type", cast(null
+AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Fuel Origin", null "Fuel Type", null "Other Fuel Type(O)", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
 AS numeric) "Tank to Wake emission factor for nitrous oxide", null "Emission source reference number", null "Unique emission source name", null "Emission source type", null "Emission source class", null "Potential fuel types used", cast(null
-AS numeric) "Methane slip (%)", null "Monitoring Method",       monitoringMethodApproach "Approach used", monitoringMethodValue    "Uncertainty value (%)", null  "Do you have an exemption from per voyage monitoring?"
+AS numeric) "Methane slip (%)", null "Monitoring Methods",       monitoringMethodApproach "Approach used per method", monitoringMethodValue    "Uncertainty value (%) per method", null  "Do you have an exemption from per voyage monitoring?"
 FROM sectionOperatorDetails o
 JOIN uncertaintyLevelSection s
 ON o.account_id = s.account_id AND o."Reporting year" = s.reporting_year
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMP ID", o.legalStatus "Legal status", 5 sectionId, 'Derogations' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
-AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Origin", null "Type", null "Name", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", cast(null as numeric) "Reporting Year", "Reporting status", "EMPlan Id", o.legalStatus "Legal status", 5 sectionId, 'Derogations' section, imoShip "IMO Ship", null "Name", null "Type", cast(null
+AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility",null "Reporting Date From", null "Reporting Date To", null "Fuel Origin", null "Fuel Type", null "Other Fuel Type(O)", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
 AS numeric) "Tank to Wake emission factor for nitrous oxide", null "Emission source reference number", null "Unique emission source name", null "Emission source type", null "Emission source class", null "Potential fuel types used", cast(null
-AS numeric) "Methane slip (%)", null "Monitoring Method", null "Approach used", cast(null
-AS numeric) "Uncertainty value (%)", exceptionFromPerVoyageMonitoring  "Do you have an exemption from per voyage monitoring?"
+AS numeric) "Methane slip (%)", null "Monitoring Methods", null "Approach used per method", cast(null
+AS numeric) "Uncertainty value (%) per method", exceptionFromPerVoyageMonitoring  "Do you have an exemption from per voyage monitoring?"
 FROM sectionOperatorDetails o
 JOIN derogationsSection s
 ON o.account_id = s.account_id AND o."Reporting year" = s.reporting_year)

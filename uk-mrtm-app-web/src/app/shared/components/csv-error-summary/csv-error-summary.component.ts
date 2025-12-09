@@ -3,11 +3,11 @@ import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  contentChild,
   ElementRef,
   inject,
   input,
   OnChanges,
+  viewChild,
 } from '@angular/core';
 import { AbstractControl, FormControlStatus, NgForm, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -30,7 +30,7 @@ export class CsvErrorSummaryComponent implements OnChanges, AfterViewInit {
   private readonly title: Title = inject(Title);
 
   form = input<UntypedFormGroup | NgForm>();
-  container = contentChild<ElementRef<HTMLDivElement>>('container');
+  container = viewChild<ElementRef<HTMLElement>>('container');
 
   errorList$: Observable<NestedMessageValidationError[]>;
   private formControl: UntypedFormGroup | NgForm;
@@ -53,17 +53,16 @@ export class CsvErrorSummaryComponent implements OnChanges, AfterViewInit {
         } else if (!errors) {
           this.title.setTitle(currentTitle.replace(prefix, ''));
         }
+
+        if (errors?.length > 0) {
+          this.tryScrollAndFocus(this.container()?.nativeElement);
+        }
       }),
     );
   }
 
   ngAfterViewInit(): void {
-    if (this.container()?.nativeElement?.scrollIntoView) {
-      this.container().nativeElement.scrollIntoView();
-    }
-    if (this.container()?.nativeElement?.focus) {
-      this.container().nativeElement.focus();
-    }
+    this.tryScrollAndFocus(this.container()?.nativeElement);
   }
 
   private getAbstractControlErrors(control: AbstractControl, path: string[] = []): NestedMessageValidationError[] {
@@ -95,5 +94,14 @@ export class CsvErrorSummaryComponent implements OnChanges, AfterViewInit {
 
   getRowIndexes(rows: any[]): number[] {
     return rows.map((row) => row.rowIndex);
+  }
+
+  private tryScrollAndFocus(element: HTMLElement) {
+    if (element?.scrollIntoView) {
+      element.scrollIntoView();
+    }
+    if (element?.focus) {
+      element.focus();
+    }
   }
 }

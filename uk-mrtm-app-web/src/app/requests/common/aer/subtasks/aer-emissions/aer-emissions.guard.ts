@@ -34,10 +34,11 @@ export const canActivateAerEmissionsSummary: CanActivateFn = (route) => {
   const isSubtaskCompleted = store.select(aerCommonQuery.selectIsSubtaskCompleted(EMISSIONS_SUB_TASK))();
   const ships = store.select(aerCommonQuery.selectShips)();
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const submit = route.queryParamMap.get('submit') === 'true';
 
   return (
     !isEditable ||
-    (isEditable && (isSubtaskCompleted || isWizardCompleted(ships))) ||
+    (isEditable && (isSubtaskCompleted || (isWizardCompleted(ships) && submit))) ||
     createUrlTreeFromSnapshot(route, ['./', AerEmissionsWizardStep.LIST_OF_SHIPS])
   );
 };

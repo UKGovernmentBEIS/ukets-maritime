@@ -96,14 +96,23 @@ class ExternalEmpValidatorTest {
         assertEquals(be.getData()[1].getMessage(), "EMP contains multiple emission sources with the same name about the same ship | ErrorData: [d]");
         verify(empMandateValidator).validate(mandate, emissions, companyImoNumber);
         verify(empEmissionsValidator).validate(emissions);
-        verify(empValidatorService).validateStagingEmissionsMonitoringPlan(staging);
         verifyNoMoreInteractions(empMandateValidator, empEmissionsValidator, empValidatorService);
+        verifyNoInteractions(empValidatorService);
     }
 
     @Test
     void validate_staging_is_invalid() {
         String companyImoNumber = "1234567";
         StagingEmissionsMonitoringPlan staging = mock(StagingEmissionsMonitoringPlan.class);
+        EmpEmissions emissions = mock(EmpEmissions.class);
+        EmpMandate mandate = mock(EmpMandate.class);
+
+        when(empMandateValidator.validate(mandate, emissions, companyImoNumber))
+            .thenReturn(EmissionsMonitoringPlanValidationResult.validEmissionsMonitoringPlan());
+        when(empEmissionsValidator.validate(emissions))
+            .thenReturn(EmissionsMonitoringPlanValidationResult.validEmissionsMonitoringPlan());
+        when(staging.getEmissions()).thenReturn(emissions);
+        when(staging.getMandate()).thenReturn(mandate);
 
         doThrow(new BusinessException(ErrorCode.INTERNAL_SERVER)).when(empValidatorService).validateStagingEmissionsMonitoringPlan(staging);
 
@@ -111,8 +120,9 @@ class ExternalEmpValidatorTest {
 
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INTERNAL_SERVER);
 
+        verify(empMandateValidator).validate(mandate, emissions, companyImoNumber);
+        verify(empEmissionsValidator).validate(emissions);
         verify(empValidatorService).validateStagingEmissionsMonitoringPlan(staging);
-        verifyNoMoreInteractions(empValidatorService);
-        verifyNoInteractions(empMandateValidator, empEmissionsValidator);
+        verifyNoMoreInteractions(empValidatorService, empMandateValidator, empEmissionsValidator);
     }
 }

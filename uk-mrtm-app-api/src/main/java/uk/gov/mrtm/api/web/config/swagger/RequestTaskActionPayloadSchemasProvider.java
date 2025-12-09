@@ -5,6 +5,7 @@ import uk.gov.mrtm.api.workflow.request.flow.accountclosure.domain.AccountClosur
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerApplicationSkipReviewRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSaveReviewGroupDecisionRequestTaskActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerImportThirdPartyDataRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerSaveApplicationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.verify.domain.AerSaveApplicationVerificationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.verify.domain.AerVerificationReturnToOperatorRequestTaskActionPayload;
@@ -127,8 +128,8 @@ public class RequestTaskActionPayloadSchemasProvider extends SwaggerSchemasAbstr
 		//AER
 		addResolvedShemas(AerSaveApplicationRequestTaskActionPayload.class.getSimpleName(),
 			AerSaveApplicationRequestTaskActionPayload.class);
-		addResolvedShemas(AerSaveApplicationRequestTaskActionPayload.class.getSimpleName(),
-				AerSaveApplicationRequestTaskActionPayload.class);
+		addResolvedShemas(AerImportThirdPartyDataRequestTaskActionPayload.class.getSimpleName(),
+				AerImportThirdPartyDataRequestTaskActionPayload.class);
 		addResolvedShemas(AerSaveApplicationVerificationRequestTaskActionPayload.class.getSimpleName(),
 				AerSaveApplicationVerificationRequestTaskActionPayload.class);
 		addResolvedShemas(AerVerificationReturnToOperatorRequestTaskActionPayload.class.getSimpleName(),

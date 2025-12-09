@@ -66,7 +66,7 @@ export class AerAggregatedDataXmlService {
               errors.push({
                 row: index + 1,
                 column: 'NO_FIELD',
-                message: 'The ship has recorded invalid or missing annual aggregated fuel and emissions data',
+                message: 'The required fields are out of the expected criteria',
               });
             }
           } else {

@@ -21,7 +21,7 @@ export class AerEmissionReportDetailsDtoValidator {
   }
 
   private static isNameValid(value?: EmissionReportDetailsDTO['name']): boolean {
-    return XmlValidator.isRequired(value) && XmlValidator.isString(value) && XmlValidator.maxLength(value, 30);
+    return XmlValidator.isRequired(value) && XmlValidator.isString(value) && XmlValidator.maxLength(value, 255);
   }
 
   private static isShipTypeValid(value?: EmissionReportDetailsDTO['shipType']): boolean {
@@ -122,7 +122,7 @@ export class AerEmissionReportDetailsDtoValidator {
         errors.push({
           row: index + 1,
           column: 'name',
-          message: 'The Ship Name is required and must be less than 30 characters',
+          message: 'The Ship Name is required and must be less than 255 characters',
         });
       }
     });

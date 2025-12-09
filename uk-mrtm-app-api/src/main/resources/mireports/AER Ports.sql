@@ -34,8 +34,8 @@ ships AS (
 ),ports
 AS (
 SELECT account_id, reporting_year, "imoNumber" imoShip,
-split_part("portDetails"->>'arrivalTime', 'T', 1) as arrival_date, replace(split_part("portDetails"->>'arrivalTime', 'T', 2), 'Z', '') as arrival_time,
 split_part("portDetails"->>'departureTime', 'T', 1) as departure_date, replace(split_part("portDetails"->>'departureTime', 'T', 2), 'Z', '') as departure_time,
+split_part("portDetails"->>'arrivalTime', 'T', 1) as arrival_date, replace(split_part("portDetails"->>'arrivalTime', 'T', 2), 'Z', '') as arrival_time,
 "portDetails"->'visit'->>'country' countryCode, "portDetails"->'visit'->>'port' portCode,
 "totalEmissions"->>'total' totalEmissions, "surrenderEmissions"->>'total' surrenderEmissions
 FROM allAERs, jsonb_to_recordset(aer_data -> 'aer' -> 'portEmissions' -> 'ports')
@@ -43,7 +43,7 @@ AS v("imoNumber" varchar, "portDetails" jsonb, "totalEmissions" jsonb, "surrende
 SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMP ID", o.legalStatus "Legal status",
        s.ship_name "Ship name", imoShip "Ship IMO Number",
        countryCode "Country code of port", portCode "Port code",
-       departure_date "Date of departure", departure_time "Actual time of departure (ATD)", arrival_date "Date of arrival", arrival_time "Actual time of arrival (ATA)",
+       arrival_date "Date of arrival", arrival_time "Actual time of arrival (ATA)", departure_date "Date of departure", departure_time "Actual time of departure (ATD)",
        totalEmissions "Total in port emissions", surrenderEmissions "Emissions figure for surrender from ports"
 FROM sectionOperatorDetails o
          JOIN ports d

@@ -1,3 +1,5 @@
+import { isNil } from 'lodash-es';
+
 import { SortEvent } from '@netz/govuk-components';
 
 import { DiffItem, ShipEmissionTableListItem } from '@shared/types';
@@ -6,24 +8,30 @@ import { DiffItem, ShipEmissionTableListItem } from '@shared/types';
  * Used on "List of Ships", "Voyages list", "Port calls list" and "Aggregated data list"
  */
 export const sortAndPaginateListWithShipNameAndStatus = <T>(
-  sorting: SortEvent,
+  baseSorting: Array<SortEvent<T>>,
+  sorting: SortEvent<T>,
   tableData: Array<T>,
   currentPage: number,
   pageSize: number,
 ): Array<T> => {
-  const sortedData = (tableData ?? [])
-    .sort((a, b) => {
-      // first sort rows by ship name ascending
-      const shipNameKey = a['shipName'] ? 'shipName' : a['name'] ? 'name' : null;
-      return shipNameKey ? a[shipNameKey].localeCompare(b[shipNameKey], 'en-GB', { sensitivity: 'base' }) : 0;
-    })
-    .sort((a, b) => {
-      if (!sorting) {
-        return 0;
-      }
-      const diff = a[sorting.column].localeCompare(b[sorting.column], 'en-GB', { sensitivity: 'base' });
-      return diff * (sorting.direction === 'ascending' ? 1 : -1);
+  let sortedData = tableData ?? [];
+
+  for (const sort of baseSorting) {
+    const { column, direction } = sort;
+    sortedData = sortedData.sort((a, b) => {
+      const objA = (direction === 'ascending' ? a[column] : b[column]) as any;
+      const objB = (direction === 'ascending' ? b[column] : a[column]) as any;
+      return column && !isNil(objA) ? objA.localeCompare(objB, 'en-GB', { sensitivity: 'base' }) : 0;
     });
+  }
+
+  sortedData.sort((a, b) => {
+    if (!sorting) {
+      return 0;
+    }
+    const diff = a[sorting.column as string].localeCompare(b[sorting.column], 'en-GB', { sensitivity: 'base' });
+    return diff * (sorting.direction === 'ascending' ? 1 : -1);
+  });
 
   if (currentPage && pageSize) {
     const firstIndex = (currentPage - 1) * pageSize;

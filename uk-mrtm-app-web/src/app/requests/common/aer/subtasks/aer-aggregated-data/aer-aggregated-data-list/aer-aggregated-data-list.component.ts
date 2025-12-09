@@ -53,13 +53,13 @@ export class AerAggregatedDataListComponent {
   private readonly router = inject(Router);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly formGroup = new UntypedFormGroup({});
-
   private readonly shipsWithoutAggregatedData = computed(() =>
     this.store
       .select(aerCommonQuery.selectListOfShipsWithoutAggregatedData(null))()
       .filter((ship) => ship.status === TaskItemStatus.COMPLETED),
   );
   private readonly aggregatedDataList = this.store.select(aerCommonQuery.selectAggregatedDataList);
+
   readonly filter = signal<FilterByShip | null>(null);
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly shipsWithAggregatedData = this.store.select(aerCommonQuery.selectListOfShipsWithAggregatedData);
@@ -84,7 +84,20 @@ export class AerAggregatedDataListComponent {
     this.filter()?.shipName ? `Aggregated data of ${this.filter()?.shipName}` : 'Aggregated data of all ships',
   );
 
-  readonly needsReviewMessage = computed<string>(() => {
+  private readonly noImoReferenceMessage = computed<string>(() => {
+    const allShipsImoNumbers = this.store
+      .select(aerCommonQuery.selectShips)()
+      ?.map((ship) => ship?.details?.imoNumber);
+
+    const isIncomplete = this.aggregatedDataList().some(
+      (aggregatedDataItem) => !allShipsImoNumbers?.includes(aggregatedDataItem?.imoNumber),
+    );
+    return isIncomplete
+      ? `Some aggregated data are not linked to ships in the 'Ships and emission details list' subtask. Check the Aggregated data list and make any changes needed.`
+      : undefined;
+  });
+
+  private readonly needsReviewMessage = computed<string>(() => {
     const needsReviewAggregatedData = this.aggregatedDataList().filter(
       (aggregatedDataItem) => aggregatedDataItem.status === TaskItemStatus.NEEDS_REVIEW,
     );
@@ -94,18 +107,22 @@ export class AerAggregatedDataListComponent {
     }
 
     return needsReviewAggregatedData.find((data) => !data.canViewDetails)
-      ? 'You must go back to the ‘Ships and emission details list’ task and complete the ship details for any entries with the status ‘Needs review’.'
-      : 'The aggregated data has been updated. Select the Ship name for any entries that have the status ‘Needs review’ to review and confirm the information.';
+      ? `Some aggregated data entries have ships with incomplete status. Confirm and complete the ship status from the 'Ships and emission details list' subtask, then review the aggregated data again.`
+      : `The aggregated data has been updated due to changes made to the 'Ships and emission details list' subtask. Review the information for each aggregated data entry, then select Confirm and continue.`;
   });
 
-  readonly notCompletedMessage = computed<string>(() => {
+  private readonly notCompletedMessage = computed<string>(() => {
     const hasIncompleteAggregatedData: boolean = this.aggregatedDataList().some(
       (aggregatedDataItem) => aggregatedDataItem.status === TaskItemStatus.IN_PROGRESS,
     );
     return hasIncompleteAggregatedData
-      ? 'Enter the missing details for all entries with the status ‘Incomplete’'
+      ? `Enter the missing details for all entries with the status 'Incomplete'`
       : undefined;
   });
+
+  readonly warningMessages = computed<string[]>(() =>
+    [this.noImoReferenceMessage(), this.needsReviewMessage(), this.notCompletedMessage()].filter((message) => message),
+  );
 
   readonly canContinue = computed<boolean>(() => this.editable() && this.aggregatedDataList()?.length > 0);
 
@@ -136,6 +153,11 @@ export class AerAggregatedDataListComponent {
   async onContinue(): Promise<void> {
     const errors: ValidationErrors = {};
     let isValid = true;
+
+    if (this.noImoReferenceMessage()) {
+      errors['NO_IMO_REFERENCE'] = this.noImoReferenceMessage();
+      isValid = false;
+    }
 
     if (this.notCompletedMessage()) {
       errors['NOT_COMPLETED'] = this.notCompletedMessage();

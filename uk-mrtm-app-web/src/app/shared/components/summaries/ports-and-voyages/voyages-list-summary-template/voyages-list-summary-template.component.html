@@ -28,6 +28,7 @@
   }
   @if (editable()) {
     <mrtm-multi-select-table
+      id="voyages"
       [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"

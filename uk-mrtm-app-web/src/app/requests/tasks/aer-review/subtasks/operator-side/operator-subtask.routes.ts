@@ -8,7 +8,11 @@ import {
   aerAggregatedDataSubtasksListMap,
 } from '@requests/common/aer/subtasks/aer-aggregated-data';
 import { AER_PORT_PARAM, AER_PORTS_SUB_TASK, aerPortsMap } from '@requests/common/aer/subtasks/aer-ports';
-import { aerTotalEmissionsMap, monitoringPlanChangesMap } from '@requests/common/aer/subtasks/aer-subtasks-list.map';
+import {
+  aerEmissionsMap,
+  aerTotalEmissionsMap,
+  monitoringPlanChangesMap,
+} from '@requests/common/aer/subtasks/aer-subtasks-list.map';
 import {
   AER_TOTAL_EMISSIONS_SUB_TASK,
   AER_TOTAL_EMISSIONS_SUB_TASK_PATH,
@@ -19,7 +23,7 @@ import {
   MONITORING_PLAN_CHANGES_SUB_TASK_PATH,
 } from '@requests/common/aer/subtasks/monitoring-plan-changes';
 import { AER_REDUCTION_CLAIM_SUB_TASK, reductionClaimMap } from '@requests/common/aer/subtasks/reduction-claim';
-import { emissionsShipSubtaskMap, emissionsSubtaskMap } from '@requests/common/components/emissions';
+import { emissionsShipSubtaskMap } from '@requests/common/components/emissions';
 import { EMISSIONS_SUB_TASK, EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
 import {
   OPERATOR_DETAILS_SUB_TASK,
@@ -66,7 +70,7 @@ export const OPERATOR_SUBTASK_ROUTES: Routes = [
     path: EMISSIONS_SUB_TASK_PATH,
     providers: [
       { provide: AER_REVIEW_SUBTASK, useValue: EMISSIONS_SUB_TASK },
-      { provide: AER_REVIEW_TASK_TITLE, useValue: emissionsSubtaskMap.title },
+      { provide: AER_REVIEW_TASK_TITLE, useValue: aerEmissionsMap.title },
       { provide: AER_REVIEW_GROUP, useValue: 'LIST_OF_SHIPS' },
       operatorSideSummariesProvidersMap[EMISSIONS_SUB_TASK],
     ],
@@ -96,7 +100,7 @@ export const OPERATOR_SUBTASK_ROUTES: Routes = [
     path: AER_VOYAGES_SUB_TASK,
     providers: [
       { provide: AER_REVIEW_SUBTASK, useValue: AER_VOYAGES_SUB_TASK },
-      { provide: AER_REVIEW_TASK_TITLE, useValue: aerVoyagesMap.title },
+      { provide: AER_REVIEW_TASK_TITLE, useValue: aerVoyagesMap.caption },
       { provide: AER_REVIEW_GROUP, useValue: 'VOYAGES' },
       operatorSideSummariesProvidersMap[AER_VOYAGES_SUB_TASK],
     ],
@@ -126,7 +130,7 @@ export const OPERATOR_SUBTASK_ROUTES: Routes = [
     path: AER_PORTS_SUB_TASK,
     providers: [
       { provide: AER_REVIEW_SUBTASK, useValue: AER_PORTS_SUB_TASK },
-      { provide: AER_REVIEW_TASK_TITLE, useValue: aerPortsMap.title },
+      { provide: AER_REVIEW_TASK_TITLE, useValue: aerPortsMap.caption },
       { provide: AER_REVIEW_GROUP, useValue: 'PORTS' },
       operatorSideSummariesProvidersMap[AER_PORTS_SUB_TASK],
     ],
@@ -156,7 +160,7 @@ export const OPERATOR_SUBTASK_ROUTES: Routes = [
     path: AER_AGGREGATED_DATA_SUB_TASK_PATH,
     providers: [
       { provide: AER_REVIEW_SUBTASK, useValue: AER_AGGREGATED_DATA_SUB_TASK },
-      { provide: AER_REVIEW_TASK_TITLE, useValue: aerAggregatedDataSubtasksListMap.title },
+      { provide: AER_REVIEW_TASK_TITLE, useValue: aerAggregatedDataSubtasksListMap.caption },
       { provide: AER_REVIEW_GROUP, useValue: 'AGGREGATED_EMISSIONS_DATA' },
       operatorSideSummariesProvidersMap[AER_AGGREGATED_DATA_SUB_TASK],
     ],

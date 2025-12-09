@@ -11,6 +11,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -33,6 +34,7 @@ import static uk.gov.mrtm.api.web.constants.SwaggerApiInfo.NO_CONTENT;
 @RequiredArgsConstructor
 @Tag(name = "Maritime emissions monitoring plan API")
 @RequestMapping(path = "/external/v1.0/accounts")
+@ConditionalOnProperty(name = "feature-flag.external.integration.emp.enabled", havingValue = "true")
 public class ExternalEmpController {
 
     private final ExternalEmpService externalEmpService;

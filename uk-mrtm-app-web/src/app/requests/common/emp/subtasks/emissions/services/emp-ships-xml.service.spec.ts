@@ -157,8 +157,13 @@ describe('EmpShipsXmlService', () => {
         },
         {
           column: 'name',
-          message: 'The Ship Name is required and must be less than 30 characters',
+          message: 'The Ship Name is required and must be less than 255 characters',
           row: 1,
+        },
+        {
+          column: 'name',
+          message: 'The Ship Name is required and must be less than 255 characters',
+          row: 2,
         },
         {
           column: 'shipImoNumber',

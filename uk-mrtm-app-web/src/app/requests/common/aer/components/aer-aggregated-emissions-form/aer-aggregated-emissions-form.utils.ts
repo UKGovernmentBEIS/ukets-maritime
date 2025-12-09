@@ -6,7 +6,7 @@ import { GovukValidators } from '@netz/govuk-components';
 
 import { AerAggregatedEmissionsFormGroupModel } from '@requests/common/aer/components/aer-aggregated-emissions-form/aer-aggregated-emissions-form.types';
 
-const fieldValidators: Array<ValidatorFn> = [
+export const fieldValidators = [
   GovukValidators.notNaN('Enter a numerical value'),
   GovukValidators.positiveOrZeroNumber('Must accept only positive numbers or zero'),
   GovukValidators.required('Must accept only positive numbers or zero'),
@@ -29,9 +29,7 @@ export const provideAerAggregatedEmissionsFormGroup = (
       n2o: new FormControl<AerPortEmissionsMeasurement['n2o'] | null>(data?.n2o, {
         validators: useFieldValidators ? fieldValidators : undefined,
       }),
-      total: new FormControl<AerPortEmissionsMeasurement['total'] | null>(data?.total, {
-        validators: fieldValidators,
-      }),
+      total: new FormControl<AerPortEmissionsMeasurement['total'] | null>(data?.total),
     },
     { validators },
   );

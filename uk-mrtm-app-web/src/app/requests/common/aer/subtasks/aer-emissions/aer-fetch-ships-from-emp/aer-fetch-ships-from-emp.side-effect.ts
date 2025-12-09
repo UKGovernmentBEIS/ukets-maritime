@@ -17,7 +17,7 @@ export class AerFetchShipsFromEmpSideEffect extends SideEffect {
     return of(
       produce(currentPayload, (payload) => {
         for (const ship of payload?.aer?.emissions?.ships ?? []) {
-          payload.aerSectionsCompleted[`${this.subtask}-ship-${ship.uniqueIdentifier}`] = TaskItemStatus.IN_PROGRESS;
+          payload.aerSectionsCompleted[`${this.subtask}-ship-${ship.uniqueIdentifier}`] = TaskItemStatus.COMPLETED;
         }
 
         payload.aerSectionsCompleted[EMISSIONS_SUB_TASK] = TaskItemStatus.IN_PROGRESS;

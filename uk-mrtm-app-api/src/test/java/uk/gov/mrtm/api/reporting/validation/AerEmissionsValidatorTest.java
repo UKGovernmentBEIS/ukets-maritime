@@ -36,7 +36,9 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueElementsValidator;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.Set;
@@ -46,9 +48,9 @@ import java.util.stream.Collectors;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.FUEL_NOT_ASSOCIATED_WITH_EMISSION_SOURCES;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.DUPLICATE_EMISSIONS_FUEL_NAME;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.DUPLICATE_EMISSIONS_SOURCE_NAME;
+import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.FUEL_NOT_ASSOCIATED_WITH_EMISSION_SOURCES;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.INVALID_EMISSIONS_SOURCES_POTENTIAL_FUEL_TYPE;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.INVALID_EMISSIONS_SOURCES_UNCERTAINTY_METHODS;
 
@@ -56,10 +58,10 @@ import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolati
 class AerEmissionsValidatorTest {
     private static final String IMO_NUMBER_1 = "1234567";
     private static final String IMO_NUMBER_2 = "7654321";
-    private static final String OTHER_FUEL_NAME_1 = "name1";
-    private static final String OTHER_FUEL_NAME_2 = "name2";
-    private static final String EMISSION_SOURCES_NAME_1 = "name1";
-    private static final String EMISSION_SOURCES_NAME_2 = "name2";
+    private static final String OTHER_FUEL_NAME_1 = "fuel name1";
+    private static final String OTHER_FUEL_NAME_2 = "fuel name2";
+    private static final String EMISSION_SOURCES_NAME_1 = "emission source name1";
+    private static final String EMISSION_SOURCES_NAME_2 = "emission source name2";
     private static final EFuelType E_FUEL_TYPE_1 = EFuelType.E_LNG;
     private static final EFuelType E_FUEL_TYPE_2 = EFuelType.E_H2;
     private static final Long ACCOUNT_ID = 1L;
@@ -115,6 +117,8 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_FUEL_NAME.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(OTHER_FUEL_NAME_1).toArray());
     }
 
     @Test
@@ -129,6 +133,8 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
                 emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_FUEL_NAME.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(OTHER_FUEL_NAME_1).toArray());
     }
 
     @Test
@@ -143,6 +149,8 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(EMISSION_SOURCES_NAME_1).toArray());
     }
 
     @Test
@@ -157,6 +165,8 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
                 emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(EMISSION_SOURCES_NAME_1).toArray());
     }
 
     @Test
@@ -174,7 +184,7 @@ class AerEmissionsValidatorTest {
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_POTENTIAL_FUEL_TYPE.getMessage()));
         assertThat(result.getAerViolations()).extracting(AerViolation::getData)
-            .containsExactlyInAnyOrder(Set.of(fuelOriginEFuelTypeName).toArray());
+            .containsExactlyInAnyOrder(Set.of(E_FUEL_TYPE_1.name()).toArray());
     }
 
     @Test
@@ -196,6 +206,8 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(FUEL_NOT_ASSOCIATED_WITH_EMISSION_SOURCES.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(E_FUEL_TYPE_1.name()).toArray());
     }
 
     @Test
@@ -210,6 +222,8 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_UNCERTAINTY_METHODS.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(MonitoringMethod.DIRECT.name()).toArray());
     }
 
     @Test
@@ -224,6 +238,10 @@ class AerEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(INVALID_EMISSIONS_SOURCES_UNCERTAINTY_METHODS.getMessage()));
+        assertThat(result.getAerViolations()).hasSize(1);
+        Set<Object> actualData = new HashSet<>(Arrays.asList((result.getAerViolations().getFirst().getData())));
+        Set<Object> expectedData = Set.of(MonitoringMethod.FLOW_METERS.name(), MonitoringMethod.DIRECT.name());
+        assertThat(actualData).isEqualTo(expectedData);
     }
 
     private AerContainer createAerContainer(AerEmissions NEW) {
@@ -247,7 +265,7 @@ class AerEmissionsValidatorTest {
                     AerShipEmissions.builder()
                         .details(AerShipDetails.builder()
                             .imoNumber(IMO_NUMBER_1)
-                            .name("name1")
+                            .name("ship name 1")
                             .build()
                         )
                         .fuelsAndEmissionsFactors(
@@ -307,7 +325,7 @@ class AerEmissionsValidatorTest {
                     AerShipEmissions.builder()
                         .details(AerShipDetails.builder()
                             .imoNumber(imoNumber2)
-                            .name("name2")
+                            .name("ship name 2")
                             .build()
                         )
                         .fuelsAndEmissionsFactors(

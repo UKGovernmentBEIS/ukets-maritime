@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.reporting.validation;
 
+import org.apache.commons.lang3.ObjectUtils;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.biofuel.AerFuelOriginBiofuelTypeName;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.biofuel.FuelOriginBiofuelTypeName;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.efuel.AerFuelOriginEFuelTypeName;
@@ -24,6 +25,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Set;
 
@@ -33,29 +35,6 @@ public class AerValidatorHelper {
             "Unexpected FuelsAndEmissionsFactors type: ";
 
     private AerValidatorHelper() {
-    }
-
-
-    public static FuelOriginTypeName buildFuelOriginTypeName(AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors) {
-        return switch (fuelsAndEmissionsFactors) {
-            case AerFossilFuels fossilFuels -> FuelOriginFossilTypeName.builder()
-                .origin(fossilFuels.getOrigin())
-                .type(fossilFuels.getType())
-                .name(fossilFuels.getName())
-                .build();
-            case AerBioFuels bioFuels -> FuelOriginBiofuelTypeName.builder()
-                .origin(bioFuels.getOrigin())
-                .type(bioFuels.getType())
-                .name(bioFuels.getName())
-                .build();
-            case AerEFuels eFuels -> FuelOriginEFuelTypeName.builder()
-                .origin(eFuels.getOrigin())
-                .type(eFuels.getType())
-                .name(eFuels.getName())
-                .build();
-            default -> throw new IllegalStateException(UNEXPECTED_FUEL_TYPE
-                + fuelsAndEmissionsFactors);
-        };
     }
 
     public static FuelOriginTypeName buildFuelOriginTypeNameWithUuid(AerFuelsAndEmissionsFactors fuelsAndEmissionsFactors) {
@@ -108,74 +87,6 @@ public class AerValidatorHelper {
         };
     }
 
-    public static FuelOriginTypeName buildFuelOriginTypeName(AerAggregatedDataFuelOriginTypeName aerAggregatedDataFuelOriginTypeName) {
-        return switch (aerAggregatedDataFuelOriginTypeName) {
-            case AerFuelOriginFossilTypeName fossilFuels -> FuelOriginFossilTypeName.builder()
-                .origin(fossilFuels.getOrigin())
-                .type(fossilFuels.getType())
-                .name(fossilFuels.getName())
-                .build();
-            case AerFuelOriginBiofuelTypeName bioFuels -> FuelOriginBiofuelTypeName.builder()
-                .origin(bioFuels.getOrigin())
-                .type(bioFuels.getType())
-                .name(bioFuels.getName())
-                .build();
-            case AerFuelOriginEFuelTypeName eFuels -> FuelOriginEFuelTypeName.builder()
-                .origin(eFuels.getOrigin())
-                .type(eFuels.getType())
-                .name(eFuels.getName())
-                .build();
-            default -> throw new IllegalStateException("Unexpected aerAggregatedDataFuelOriginTypeName type: "
-                + aerAggregatedDataFuelOriginTypeName);
-        };
-    }
-
-    public static FuelOriginTypeName buildFuelOriginTypeName(FuelOriginTypeName fuelOriginTypeName) {
-        return switch (fuelOriginTypeName) {
-            case FuelOriginFossilTypeName fossilFuels -> FuelOriginFossilTypeName.builder()
-                .origin(fossilFuels.getOrigin())
-                .type(fossilFuels.getType())
-                .name(fossilFuels.getName())
-                .build();
-            case FuelOriginBiofuelTypeName bioFuels -> FuelOriginBiofuelTypeName.builder()
-                .origin(bioFuels.getOrigin())
-                .type(bioFuels.getType())
-                .name(bioFuels.getName())
-                .build();
-            case FuelOriginEFuelTypeName eFuels -> FuelOriginEFuelTypeName.builder()
-                .origin(eFuels.getOrigin())
-                .type(eFuels.getType())
-                .name(eFuels.getName())
-                .build();
-            default -> throw new IllegalStateException("Unexpected fuelOriginTypeName type: "
-                + fuelOriginTypeName);
-        };
-    }
-
-    private static FuelOriginTypeName buildFuelOriginTypeNameWithMethaneSlip(FuelOriginTypeName fuelOriginTypeName) {
-        return switch (fuelOriginTypeName) {
-            case FuelOriginFossilTypeName fossilFuels -> FuelOriginFossilTypeName.builder()
-                    .origin(fossilFuels.getOrigin())
-                    .type(fossilFuels.getType())
-                    .name(fossilFuels.getName())
-                    .methaneSlip(fossilFuels.getMethaneSlip())
-                    .build();
-            case FuelOriginBiofuelTypeName bioFuels -> FuelOriginBiofuelTypeName.builder()
-                    .origin(bioFuels.getOrigin())
-                    .type(bioFuels.getType())
-                    .name(bioFuels.getName())
-                    .methaneSlip(bioFuels.getMethaneSlip())
-                    .build();
-            case FuelOriginEFuelTypeName eFuels -> FuelOriginEFuelTypeName.builder()
-                    .origin(eFuels.getOrigin())
-                    .type(eFuels.getType())
-                    .name(eFuels.getName())
-                    .methaneSlip(eFuels.getMethaneSlip())
-                    .build();
-            default -> throw new IllegalStateException("Unexpected fuelOriginTypeName type: "
-                    + fuelOriginTypeName);
-        };
-    }
 
     protected static Object[] extractAerViolations(final List<AerValidationResult> aerValidationResults) {
         return aerValidationResults.stream()
@@ -244,11 +155,13 @@ public class AerValidatorHelper {
     }
 
     protected static void validateShipExistsInListOfShips(AerShipEmissions ship, String imoNumber,
-                                                          List<AerViolation> aerViolations, Class<?> className) {
+                                                          List<AerViolation> aerViolations, String className) {
 
         if (ship == null) {
-            aerViolations.add(new AerViolation(className.getSimpleName(),
-                AerViolation.ViolationMessage.SHIP_NOT_FOUND_IN_LIST_OF_SHIPS, imoNumber));
+            aerViolations.add(new AerViolation(
+                className,
+                AerViolation.ViolationMessage.SHIP_NOT_FOUND_IN_LIST_OF_SHIPS,
+                imoNumber));
         }
     }
 
@@ -262,7 +175,10 @@ public class AerValidatorHelper {
                     (fuelConsumption.getName() == null || emissionsSources.getName().equals(fuelConsumption.getName()))
                         && emissionsSources.getFuelDetails()
                         .stream()
-                        .anyMatch(fuelOriginTypeName -> buildFuelOriginTypeNameWithMethaneSlip(fuelOriginTypeName).equals(buildFuelOriginTypeNameWithMethaneSlip(fuelConsumption.getFuelOriginTypeName())))
+                        .anyMatch(fuelOriginTypeName ->
+                            getUniqueFuelName(fuelOriginTypeName.getName(), fuelOriginTypeName.getTypeAsString()).equals(
+                            getUniqueFuelName(fuelConsumption.getFuelOriginTypeName().getName(), fuelConsumption.getFuelOriginTypeName().getTypeAsString()))
+                            && Objects.equals(fuelConsumption.getFuelOriginTypeName().getMethaneSlip(), fuelOriginTypeName.getMethaneSlip()))
                 );
 
             if (!hasValidFuelConsumption) {
@@ -272,4 +188,9 @@ public class AerValidatorHelper {
         }
     }
 
+    public static String getUniqueFuelName(String otherName, String type) {
+        return  ObjectUtils.defaultIfNull(
+            otherName != null ? otherName.toLowerCase(Locale.ROOT) : null,
+            type);
+    }
 }

@@ -38,14 +38,21 @@ export class AerVoyagesSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-  public readonly wizardStep = AerVoyagesWizardStep;
-  public readonly wizardMap = aerVoyagesMap;
-  public readonly voyages = this.store.select(aerCommonQuery.selectVoyagesList);
+  readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly wizardStep = AerVoyagesWizardStep;
+  readonly wizardMap = aerVoyagesMap;
+  readonly voyages = this.store.select(aerCommonQuery.selectVoyagesList);
+  readonly subtaskStatus = this.store.select(aerCommonQuery.selectStatusForSubtask(AER_VOYAGES_SUB_TASK));
 
-  public readonly subtaskStatus = this.store.select(aerCommonQuery.selectStatusForSubtask(AER_VOYAGES_SUB_TASK));
+  readonly warningMessages: Signal<string[]> = computed(() => {
+    return this.subtaskStatus() === 'NEEDS_REVIEW'
+      ? [
+          "The voyage and emission details have been updated due to changes made to the 'Ships and emission details list' subtask. Review the information for each voyage, then select Confirm and continue.",
+        ]
+      : [];
+  });
 
-  public readonly canSubmit: Signal<boolean> = computed(() => {
+  readonly canSubmit: Signal<boolean> = computed(() => {
     const statuses = this.voyages().map((voyage) => voyage.status);
 
     return (
@@ -56,7 +63,7 @@ export class AerVoyagesSummaryComponent {
     );
   });
 
-  public onSubmit(): void {
+  onSubmit(): void {
     this.service
       .submitSubtask(AER_VOYAGES_SUB_TASK, AerVoyagesWizardStep.SUMMARY, this.activatedRoute)
       .pipe(take(1))

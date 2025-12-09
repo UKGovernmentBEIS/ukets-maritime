@@ -38,13 +38,13 @@ public class ExternalAerReductionClaimPurchase {
     @Size(min = 1, max = 500)
     private String batchNumber;
 
-    @Schema(description = "Fuel mass. Positive decimal number with fraction part max 5 digits")
+    @Schema(description = "Fuel mass. Positive decimal number with fraction part max 5 digits", minimum = "0", exclusiveMinimum = true)
     @NotNull
     @Digits(integer = Integer.MAX_VALUE, fraction = 5)
     @Positive
     private BigDecimal fuelMass;
 
-    @Schema(description = "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits")
+    @Schema(description = "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits", minimum = "0")
     @NotNull
     @Digits(integer = 12, fraction = Integer.MAX_VALUE)
     @PositiveOrZero

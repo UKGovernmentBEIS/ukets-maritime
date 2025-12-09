@@ -40,7 +40,7 @@ export class AerAggregatedEmissionsFormComponent implements OnInit {
         const { co2, ch4, n2o, total } = value;
         let newTotal = null;
 
-        if (!isNil(co2) && !isNil(n2o) && !isNil(n2o)) {
+        if ([co2, n2o, n2o].every((val) => !isNil(val) && `${val ?? ''}`.trim().length > 0)) {
           newTotal = bigNumberUtils.getSum([co2, n2o, ch4], 7);
         }
 

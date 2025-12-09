@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.EmissionsSources;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.uncertainty.UncertaintyLevel;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 
 import java.util.HashSet;
@@ -53,4 +54,7 @@ public class AerShipEmissions {
     @Valid
     @NotNull
     private AerDerogations derogations;
+
+    @NotNull
+    private DataSaveMethod dataSaveMethod;
 }

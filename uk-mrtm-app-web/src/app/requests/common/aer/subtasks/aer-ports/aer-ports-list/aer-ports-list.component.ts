@@ -61,12 +61,11 @@ export class AerPortsListComponent {
 
     if (this.filter()?.arrivalDate && this.filter()?.departureDate) {
       // find all the port calls within arrivalDate - departureDate range
-      const filteredByShipAndDates = filteredByShip.filter(
+      return filteredByShip.filter(
         (portCall) =>
           isSameDayOrAfter(new Date(portCall.arrivalTime), this.filter()?.arrivalDate) &&
           isSameDayOrBefore(new Date(portCall.departureTime), this.filter()?.departureDate),
       );
-      return filteredByShipAndDates;
     }
     return filteredByShip;
   });
@@ -76,6 +75,17 @@ export class AerPortsListComponent {
   );
 
   readonly canContinue = computed<boolean>(() => this.editable() && this.allPortCalls()?.length > 0);
+
+  private readonly noImoReferenceMessage = computed<string>(() => {
+    const allShipsImoNumbers = this.store
+      .select(aerCommonQuery.selectShips)()
+      ?.map((ship) => ship?.details?.imoNumber);
+
+    const isIncomplete = this.allPortCalls().some((port) => !allShipsImoNumbers?.includes(port?.imoNumber));
+    return isIncomplete
+      ? `Some port calls are not linked to ships in the 'Ships and emission details list' subtask. Check the Port calls list and make any changes needed.`
+      : undefined;
+  });
 
   private readonly needsReviewMessage = computed<string>(() => {
     const needsReviewPortCalls = this.allPortCalls().filter(
@@ -87,17 +97,17 @@ export class AerPortsListComponent {
     }
 
     return needsReviewPortCalls.find((portCall) => !portCall.canViewDetails)
-      ? 'You must go back to the ‘Ships and emission details list’ task and complete the ship details for any entries with the status ‘Needs review’.'
-      : 'The port calls and emission details have been updated. Select the Ship name for any entries that have the status ‘Needs review’ to review and confirm the information.';
+      ? `Some port calls have ships with incomplete status. Confirm and complete the ship status from the 'Ships and emission details list' subtask, then review the port call again.`
+      : `The port calls and emission details have been updated due to changes made to the 'Ships and emission details list' subtask. Review the information for each port call, then select Confirm and continue.`;
   });
 
   private readonly notCompletedMessage = computed<string>(() => {
     const isIncomplete = this.allPortCalls().some((portCall) => portCall.status === TaskItemStatus.IN_PROGRESS);
-    return isIncomplete ? 'Enter the missing details for all entries with the status ‘Incomplete’' : undefined;
+    return isIncomplete ? `Enter the missing details for all entries with the status 'Incomplete'` : undefined;
   });
 
   readonly warningMessages = computed<string[]>(() =>
-    [this.needsReviewMessage(), this.notCompletedMessage()].filter((message) => message),
+    [this.noImoReferenceMessage(), this.needsReviewMessage(), this.notCompletedMessage()].filter((message) => message),
   );
 
   readonly emptyTableText = computed<string>(() =>
@@ -128,6 +138,11 @@ export class AerPortsListComponent {
   onContinue(): void {
     const errors: ValidationErrors = {};
     let isValid = true;
+
+    if (this.noImoReferenceMessage()) {
+      errors['NO_IMO_REFERENCE'] = this.noImoReferenceMessage();
+      isValid = false;
+    }
 
     if (this.notCompletedMessage()) {
       errors['NOT_COMPLETED'] = this.notCompletedMessage();

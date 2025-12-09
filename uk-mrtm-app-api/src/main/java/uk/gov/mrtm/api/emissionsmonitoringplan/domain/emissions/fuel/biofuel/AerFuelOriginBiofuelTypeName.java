@@ -18,4 +18,9 @@ public class AerFuelOriginBiofuelTypeName extends AerAggregatedDataFuelOriginTyp
 
     @NotNull
     private BioFuelType type;
+
+    @Override
+    public String getTypeAsString() {
+        return type.name();
+    }
 }

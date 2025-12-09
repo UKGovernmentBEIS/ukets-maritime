@@ -2,15 +2,12 @@ import { Observable, of } from 'rxjs';
 import { produce, WritableDraft } from 'immer';
 import { isNil } from 'lodash-es';
 
-import { AerShipEmissions, FuelOriginBiofuelTypeName } from '@mrtm/api';
+import { AerShipEmissions, EmissionsSources } from '@mrtm/api';
 
 import { PayloadMutator } from '@netz/common/forms';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import {
-  AER_AGGREGATED_DATA_SUB_TASK,
-  isAggregatedDataWizardCompleted,
-} from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
+import { AER_AGGREGATED_DATA_SUB_TASK } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { AerEmissionsWizardStep } from '@requests/common/aer/subtasks/aer-emissions';
 import { AER_PORTS_SUB_TASK, isPortWizardCompleted } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
 import {
@@ -124,31 +121,18 @@ export class AerShipSummaryPayloadMutator extends PayloadMutator {
   }
 
   /**
-   * Update the AggregatedData task and all AggregatedData keys in aerSectionsCompleted when:
-   * The fuel combination of id, type is not found in the equivalent ship.
-   * If the keys are not already IN_PROGRESS.
+   * Update the AggregatedData task and all AggregatedData keys as long as an entry with a related shipImoNumber is found
    */
   private updateAggregatedData(payload: WritableDraft<AerSubmitTaskPayload>, shipImoNumber: string) {
-    const aggregatedData = payload?.aer.aggregatedData?.emissions?.filter((data) => data?.imoNumber === shipImoNumber);
-    const affectedAggregatedData: string[] = [];
-    for (const data of aggregatedData) {
-      const ship = payload?.aer?.emissions?.ships?.find((ship) => ship?.details?.imoNumber === shipImoNumber);
-      const allAggregatedDataFuelConsumptionsValid = data?.fuelConsumptions.every((fuelConsumption) =>
-        this.emissionSourceFuelExists(
-          ship,
-          fuelConsumption?.fuelOriginTypeName?.uniqueIdentifier,
-          (fuelConsumption?.fuelOriginTypeName as AllFuelOriginTypeName)?.type,
-        ),
-      );
+    const affectedAggregatedData = payload?.aer.aggregatedData?.emissions?.filter(
+      (data) => data?.imoNumber === shipImoNumber,
+    );
 
-      if (!(allAggregatedDataFuelConsumptionsValid && isAggregatedDataWizardCompleted(data))) {
-        affectedAggregatedData.push(data?.uniqueIdentifier);
-      }
-    }
-
-    affectedAggregatedData.forEach((uniqueIdentifier) => {
-      if (payload.aerSectionsCompleted[getAggregatedDataSectionKey(uniqueIdentifier)] !== TaskItemStatus.IN_PROGRESS) {
-        payload.aerSectionsCompleted[getAggregatedDataSectionKey(uniqueIdentifier)] = TaskItemStatus.NEEDS_REVIEW;
+    affectedAggregatedData.forEach((item) => {
+      if (
+        payload.aerSectionsCompleted[getAggregatedDataSectionKey(item?.uniqueIdentifier)] !== TaskItemStatus.IN_PROGRESS
+      ) {
+        payload.aerSectionsCompleted[getAggregatedDataSectionKey(item?.uniqueIdentifier)] = TaskItemStatus.NEEDS_REVIEW;
       }
     });
 
@@ -165,10 +149,10 @@ export class AerShipSummaryPayloadMutator extends PayloadMutator {
    */
   private emissionSourceFuelExists(
     ship: AerShipEmissions,
-    fuelId: string,
-    fuelType: string,
-    fuelMethaneSlip?: string,
-    emissionSourceName?: string,
+    fuelId: AllFuelOriginTypeName['uniqueIdentifier'],
+    fuelType: AllFuelOriginTypeName['type'],
+    fuelMethaneSlip?: AllFuelOriginTypeName['methaneSlip'],
+    emissionSourceName?: EmissionsSources['name'],
   ) {
     return ship?.emissionsSources?.some((source) => {
       const emissionSourceNameFound = isNil(emissionSourceName) ? true : source?.name === emissionSourceName;
@@ -177,9 +161,7 @@ export class AerShipSummaryPayloadMutator extends PayloadMutator {
         source?.fuelDetails?.some((fuel) => {
           const methaneSlipValid = isNil(fuelMethaneSlip) ? true : fuel?.methaneSlip === fuelMethaneSlip;
           return (
-            methaneSlipValid &&
-            (fuel as FuelOriginBiofuelTypeName)?.type === fuelType &&
-            fuel?.uniqueIdentifier === fuelId
+            methaneSlipValid && (fuel as AllFuelOriginTypeName)?.type === fuelType && fuel?.uniqueIdentifier === fuelId
           );
         })
       );

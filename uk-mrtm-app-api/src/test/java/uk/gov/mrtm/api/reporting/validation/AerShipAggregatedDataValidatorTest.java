@@ -26,6 +26,7 @@ import uk.gov.mrtm.api.reporting.domain.ports.AerPortEmissions;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageEmissions;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -41,6 +42,7 @@ import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolati
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.INVALID_FUEL_CONSUMPTION;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.NEGATIVE_EMISSIONS_INPUT;
 import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.SHIP_NOT_FOUND_IN_LIST_OF_SHIPS;
+import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation.ViolationMessage.TOTAL_EMISSIONS_IS_ZERO;
 
 @ExtendWith(MockitoExtension.class)
 class AerShipAggregatedDataValidatorTest {
@@ -88,6 +90,8 @@ class AerShipAggregatedDataValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(aerViolation ->
             aerViolation.getMessage().equals(SHIP_NOT_FOUND_IN_LIST_OF_SHIPS.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(IMO_NUMBER).toArray());
     }
 
     @ParameterizedTest
@@ -132,6 +136,22 @@ class AerShipAggregatedDataValidatorTest {
                 .total(new BigDecimal("-6"))
                 .build()
         );
+    }
+
+    @Test
+    void validate_total_emissions_negative_or_zero() {
+        Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
+        AerPortEmissionsMeasurement emissionsMeasurement = getZeroAerPortEmissionsMeasurement();
+        AerContainer aerContainer = getAerContainer(IMO_NUMBER,
+            fuelsAndEmissionsFactors, new HashSet<>(), true, true, false, emissionsMeasurement);
+
+        AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
+
+        assertFalse(result.isValid());
+        assertThat(result.getAerViolations()).allMatch(aerViolation ->
+            aerViolation.getMessage().equals(TOTAL_EMISSIONS_IS_ZERO.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(IMO_NUMBER).toArray());
     }
 
     @Test
@@ -314,13 +334,21 @@ class AerShipAggregatedDataValidatorTest {
         );
     }
 
-
     private AerPortEmissionsMeasurement getAerPortEmissionsMeasurement() {
         return AerPortEmissionsMeasurement.builder()
             .co2(new BigDecimal("1"))
             .ch4(new BigDecimal("2"))
             .n2o(new BigDecimal("3"))
             .total(new BigDecimal("6"))
+            .build();
+    }
+
+    private AerPortEmissionsMeasurement getZeroAerPortEmissionsMeasurement() {
+        return AerPortEmissionsMeasurement.builder()
+            .co2(new BigDecimal("0"))
+            .ch4(new BigDecimal("0"))
+            .n2o(new BigDecimal("0"))
+            .total(new BigDecimal("0"))
             .build();
     }
 }

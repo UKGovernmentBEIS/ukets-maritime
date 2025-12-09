@@ -34,7 +34,8 @@ public class AerVoyageEmissionsValidator implements AerContextValidator {
                 .findFirst()
                 .orElse(null);
 
-            AerValidatorHelper.validateShipExistsInListOfShips(ship, voyage.getImoNumber(), aerViolations, AerVoyage.class);
+            AerValidatorHelper.validateShipExistsInListOfShips(ship, voyage.getImoNumber(), aerViolations,
+                AerVoyage.class.getSimpleName());
 
             AerValidatorHelper.validateDirectEmissionsOrFuelConsumptionsExist(
                 voyage.getFuelConsumptions(),

@@ -20155,4 +20155,34 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_getThirdPartyDataProviderInfoByRequestId_of_request_task_type_AER_APPLICATION_SUBMIT" author="P44065">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getThirdPartyDataProviderInfoByRequestId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'AER_APPLICATION_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('getThirdPartyDataProviderInfoByRequestId')
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'AER_APPLICATION_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_TASK_VIEW';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

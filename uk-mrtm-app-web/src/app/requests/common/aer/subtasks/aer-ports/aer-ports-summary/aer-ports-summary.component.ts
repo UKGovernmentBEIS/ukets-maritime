@@ -37,11 +37,19 @@ export class AerPortsSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-  public readonly wizardStep = AerPortsWizardStep;
-  public readonly wizardMap = aerPortsMap;
-  public readonly ports = this.store.select(aerCommonQuery.selectPortsList);
-  public readonly subtaskStatus = this.store.select(aerCommonQuery.selectStatusForSubtask(AER_PORTS_SUB_TASK));
+  readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
+  readonly wizardStep = AerPortsWizardStep;
+  readonly wizardMap = aerPortsMap;
+  readonly ports = this.store.select(aerCommonQuery.selectPortsList);
+  readonly subtaskStatus = this.store.select(aerCommonQuery.selectStatusForSubtask(AER_PORTS_SUB_TASK));
+
+  readonly warningMessages: Signal<string[]> = computed(() => {
+    return this.subtaskStatus() === 'NEEDS_REVIEW'
+      ? [
+          "The port calls and emission details have been updated due to changes made to the 'Ships and emission details list' subtask. Review the information for each port call, then select Confirm and continue.",
+        ]
+      : [];
+  });
 
   public readonly canSubmit: Signal<boolean> = computed(() => {
     const statuses = this.ports().map((port) => port.status);
@@ -54,7 +62,7 @@ export class AerPortsSummaryComponent {
     );
   });
 
-  public onSubmit(): void {
+  onSubmit(): void {
     this.service
       .submitSubtask(AER_PORTS_SUB_TASK, AerPortsWizardStep.SUMMARY, this.activatedRoute)
       .pipe(take(1))

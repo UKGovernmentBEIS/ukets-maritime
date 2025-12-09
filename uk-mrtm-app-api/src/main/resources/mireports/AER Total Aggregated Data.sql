@@ -7,7 +7,7 @@ WITH allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data F
                  WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
 ),sectionOperatorDetails
     AS (
-        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID", aer.reporting_year "Reporting year",
+        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMPlan Id", aer.reporting_year "Reporting year",
                CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
     WHEN 'LIMITED_COMPANY' THEN 'Limited Company' WHEN 'INDIVIDUAL' THEN 'Individual' WHEN 'PARTNERSHIP' THEN 'Partnership' ELSE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
 END legalStatus, p.data
@@ -27,13 +27,13 @@ total_aggregated_data
 AS (
 SELECT account_id, reporting_year,
 aer_data -> 'aer' -> 'totalEmissions'-> 'totalEmissions' ->> 'total' totalEmissions,
-aer_data -> 'aer' -> 'totalEmissions'->'lessAnyERC'->>'total' lessAnyERC, aer_data -> 'aer' -> 'totalEmissions'->> 'totalShipEmissions' totalShipEmissions,
+aer_data -> 'aer' -> 'totalEmissions'->'lessAnyERC'->>'total' lessAnyERC,
 aer_data -> 'aer' -> 'totalEmissions' ->'lessVoyagesInNorthernIrelandDeduction'->>'total' northernIrelandDeduction,
 aer_data -> 'aer' -> 'totalEmissions'->> 'surrenderEmissions' surrenderEmissions
 FROM allAERs)
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMP ID", o.legalStatus "Legal status",
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMPlan Id", o.legalStatus "Legal status",
        totalEmissions "Total emissions from all ships",
-       lessAnyERC "Less emissions reduction claim", totalShipEmissions "Total maritime emissions", northernIrelandDeduction "Northern Ireland deduction",
+       lessAnyERC "Less emissions reduction claim", northernIrelandDeduction "Northern Ireland deduction",
        surrenderEmissions "Emissions figure for surrender"
 FROM sectionOperatorDetails o
          JOIN total_aggregated_data d

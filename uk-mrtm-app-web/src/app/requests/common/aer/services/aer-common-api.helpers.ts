@@ -11,6 +11,7 @@ import {
   AerSave,
   AerShipAggregatedData,
   AerShipAggregatedDataSave,
+  AerShipEmissions,
   AerSmfDetails,
   AerSmfDetailsSave,
   AerSmfPurchaseSave,
@@ -40,6 +41,18 @@ const mapPortsToSavePayload = (ports: Array<AerPort>): Array<AerPortSave> =>
     directEmissions: !isNil(directEmissions) ? mapDirectEmissions(directEmissions) : undefined,
     fuelConsumptions: mapFuelConsumptions(fuelConsumptions),
   }));
+
+const mapEmissionsToSavePayload = (emissions: Array<AerShipEmissions>): Array<AerShipEmissions> =>
+  (emissions ?? []).map<AerShipEmissions>(
+    ({ details, uniqueIdentifier, fuelsAndEmissionsFactors, emissionsSources, uncertaintyLevel, derogations }) => ({
+      details,
+      uniqueIdentifier,
+      fuelsAndEmissionsFactors,
+      emissionsSources,
+      uncertaintyLevel,
+      derogations,
+    }),
+  );
 
 const mapVoyagesToSavePayload = (voyages: Array<AerVoyage>): Array<AerVoyageSave> =>
   (voyages ?? []).map<AerVoyageSave>(
@@ -85,6 +98,8 @@ const mapAggregatedDataToSavePayload = (
 const mapSmfDetailsToSavePayload = (smfDetails: AerSmfDetails): AerSmfDetailsSave => ({
   purchases: (smfDetails?.purchases ?? []).map<AerSmfPurchaseSave>(({ ...purchase }) => {
     delete purchase.co2Emissions;
+    // TODO DELETE THIS emissions: mapEmissionsToSavePayload ALONG WITH LINE 115-117 AND METHOD mapEmissionsToSavePayload
+    delete purchase?.['dataSaveMethod'];
 
     return purchase;
   }),
@@ -95,6 +110,10 @@ export const mapAerToSavePayload = ({ ...aer }: Aer): AerSave => {
 
   return {
     ...aer,
+    // TODO DELETE THIS emissions: mapEmissionsToSavePayload ALONG WITH LINE 103
+    emissions: {
+      ships: mapEmissionsToSavePayload(aer?.emissions?.ships),
+    },
     portEmissions: {
       ports: mapPortsToSavePayload(aer?.portEmissions?.ports),
     },

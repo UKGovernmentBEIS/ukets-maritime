@@ -4,10 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOriginTypeName;
 import uk.gov.mrtm.api.reporting.domain.Aer;
+import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedData;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedDataFuelConsumption;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerShipAggregatedData;
 import uk.gov.mrtm.api.reporting.domain.common.AerFuelConsumption;
 import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
+import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPort;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortEmissions;
@@ -39,12 +41,17 @@ public class AerAggregatedDataEmissionsCalculator {
 
         filterOutNonEligibleFetchedShips(aer);
 
-        for (AerShipAggregatedData emissions : aer.getAggregatedData().getEmissions()) {
-            Optional<AerShipEmissions> shipEmissionsOptional = aer.getEmissions().getShips().stream()
-                    .filter(aerShipEmission -> aerShipEmission.getDetails().getImoNumber().equals(emissions.getImoNumber()))
-                    .findFirst();
+        calculateEmissions(aer.getAggregatedData(), aer.getEmissions(), aer.getPortEmissions(), aer.getVoyageEmissions());
+    }
+
+    public void calculateEmissions(AerAggregatedData aerAggregatedData, AerEmissions shipEmissions,
+                                   AerPortEmissions portEmissions, AerVoyageEmissions voyageEmissions) {
+        for (AerShipAggregatedData emissions : aerAggregatedData.getEmissions()) {
+            Optional<AerShipEmissions> shipEmissionsOptional = shipEmissions.getShips().stream()
+                .filter(aerShipEmission -> aerShipEmission.getDetails().getImoNumber().equals(emissions.getImoNumber()))
+                .findFirst();
             if (shipEmissionsOptional.isPresent()) {
-                processShipEmissions(aer, emissions, shipEmissionsOptional.get());
+                processShip(portEmissions, voyageEmissions, emissions, shipEmissionsOptional.get());
             }
         }
     }
@@ -76,19 +83,20 @@ public class AerAggregatedDataEmissionsCalculator {
             });
     }
 
-    private void processShipEmissions(Aer aer, AerShipAggregatedData emissions, AerShipEmissions shipEmissions) {
+    private void processShip(AerPortEmissions portEmissions, AerVoyageEmissions voyageEmissions,
+                             AerShipAggregatedData emissions, AerShipEmissions shipEmissions) {
         AerPortEmissionsMeasurement emissionsWithinUKPorts = getOrCalculateEmissionsWithinUKPorts(
-                aer.getPortEmissions(), emissions);
+            portEmissions, emissions);
 
         AerPortEmissionsMeasurement emissionsBetweenUKPorts = getOrCalculateEmissionsBetweenUKPorts(
-                aer.getVoyageEmissions(), emissions);
+            voyageEmissions, emissions);
 
         AerPortEmissionsMeasurement emissionsBetweenUKAndNIVoyages = getOrCalculateEmissionsBetweenUKAndNIVoyages(
-                aer.getVoyageEmissions(), emissions);
+            voyageEmissions, emissions);
 
         if (emissionsWithinUKPorts != null && emissionsBetweenUKPorts != null && emissionsBetweenUKAndNIVoyages != null) {
             if (emissions.isFromFetch()) {
-                setFuelConsumptions(aer, emissions, shipEmissions);
+                setFuelConsumptions(portEmissions, voyageEmissions, emissions, shipEmissions);
             }
 
             calculateAndSetTotalEmissionsFromVoyagesAndPorts(emissions, emissionsWithinUKPorts, emissionsBetweenUKPorts,
@@ -296,15 +304,16 @@ public class AerAggregatedDataEmissionsCalculator {
         return false;
     }
 
-    private void setFuelConsumptions(Aer aer, AerShipAggregatedData aggregatedData, AerShipEmissions emissions) {
+    private void setFuelConsumptions(AerPortEmissions portEmissions, AerVoyageEmissions voyageEmissions,
+                                     AerShipAggregatedData aggregatedData, AerShipEmissions emissions) {
         HashMap<FuelOriginTypeName, BigDecimal> totalFuelConsumptions = new HashMap<>();
 
-        aer.getPortEmissions().getPorts().stream()
+        portEmissions.getPorts().stream()
             .filter(aerPort -> aerPort.getImoNumber().equals(aggregatedData.getImoNumber()))
             .flatMap(aerPort -> aerPort.getFuelConsumptions().stream())
             .forEach(aerFuelConsumption -> addTotalFuelConsumption(aerFuelConsumption, totalFuelConsumptions));
 
-        aer.getVoyageEmissions().getVoyages().stream()
+        voyageEmissions.getVoyages().stream()
             .filter(aerVoyage -> aerVoyage.getImoNumber().equals(aggregatedData.getImoNumber()))
             .filter(aerVoyage -> filterByJourneyType(aerVoyage, PortType.NI) || filterByJourneyType(aerVoyage, PortType.GB))
             .flatMap(aerVoyage -> aerVoyage.getFuelConsumptions().stream())

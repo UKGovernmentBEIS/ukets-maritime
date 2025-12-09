@@ -18,4 +18,9 @@ public class AerFuelOriginFossilTypeName extends AerAggregatedDataFuelOriginType
 
     @NotNull
     private FossilFuelType type;
+
+    @Override
+    public String getTypeAsString() {
+        return type.name();
+    }
 }

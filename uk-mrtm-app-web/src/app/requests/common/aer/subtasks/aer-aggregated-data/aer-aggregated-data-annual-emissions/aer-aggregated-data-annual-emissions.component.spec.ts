@@ -8,7 +8,6 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { AerAggregatedDataAnnualEmissionsComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions/aer-aggregated-data-annual-emissions.component';
 import { taskProviders } from '@requests/common/task.providers';
-
 describe('AerAggregatedDataAnnualEmissionsComponent', () => {
   class Page extends BasePage<AerAggregatedDataAnnualEmissionsComponent> {}
 
@@ -62,34 +61,24 @@ describe('AerAggregatedDataAnnualEmissionsComponent', () => {
     fixture.detectChanges();
 
     expect(page.errorSummary).toBeTruthy();
-    expect(page.errorSummaryListContents.length).toEqual(16);
+    expect(page.errorSummaryListContents.length).toEqual(3);
 
     expect(page.errorSummaryListContents).toEqual([
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
       'Enter aggregated greenhouse gas emissions from all voyages between Great Britain and Northern Ireland',
-      'Must accept only positive numbers or zero',
       'Enter the aggregated greenhouse gas emissions from all voyages between UK ports',
-      'Must accept only positive numbers or zero',
       'Enter aggregated greenhouse gas emissions which occurred within UK ports',
-      'Must accept only positive numbers or zero',
-      'Must accept only positive numbers or zero',
     ]);
 
     expect(taskServiceSpy).not.toHaveBeenCalled();
   });
 
   it('should display error for invalid data', () => {
-    page.setInputValue('#emissionsWithinUKPorts.co2', 'testIncorrectValue');
-    page.setInputValue('#emissionsWithinUKPorts.ch4', 0.12332125);
-    page.setInputValue('#emissionsWithinUKPorts.n2o', -10);
+    page.setInputValue('input[name="emissionsWithinUKPorts.co2"]', 'testIncorrectValue');
+    page.setInputValue('input[name="emissionsWithinUKPorts.ch4"]', 0.12332125);
+    page.setInputValue('input[name="emissionsWithinUKPorts.n2o"]', -10);
+
+    fixture.componentInstance.onCalculationValueChanged('emissionsWithinUKPorts');
+
     page.submitButton.click();
     fixture.detectChanges();
 

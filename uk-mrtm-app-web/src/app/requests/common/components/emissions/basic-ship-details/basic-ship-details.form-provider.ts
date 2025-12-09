@@ -53,7 +53,7 @@ export const basicShipDetailsFormProvider: Provider = {
       name: fb.control<ShipDetails['name'] | null>(shipDetails?.name, {
         validators: [
           GovukValidators.required('Enter a ship name'),
-          GovukValidators.maxLength(30, 'Enter up to 30 characters'),
+          GovukValidators.maxLength(255, 'Enter up to 255 characters'),
         ],
       }),
       type: fb.control<ShipDetails['type'] | null>(shipDetails?.type, {

@@ -21,6 +21,6 @@ public class ExternalEmpRegisteredOwnerShipDetails {
     private String shipImoNumber;
 
     @NotBlank
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 255)
     private String name;
 }

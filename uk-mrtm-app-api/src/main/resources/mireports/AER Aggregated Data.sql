@@ -7,7 +7,7 @@ WITH allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data F
                  WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
 ),sectionOperatorDetails
     AS (
-        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID", aer.reporting_year "Reporting year",
+        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMPlan Id", aer.reporting_year "Reporting year",
                CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
     WHEN 'LIMITED_COMPANY' THEN 'Limited Company' WHEN 'INDIVIDUAL' THEN 'Individual' WHEN 'PARTNERSHIP' THEN 'Partnership' ELSE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
 END legalStatus, p.data
@@ -34,14 +34,14 @@ ships AS (
 ),aggregated_data
 AS (
 SELECT account_id, reporting_year, "imoNumber" imoShip, "totalEmissionsFromVoyagesAndPorts"->> 'total' totalEmissionsFromVoyagesAndPorts,
-"lessVoyagesInNorthernIrelandDeduction"->>'total' northernIrelandDeduction, "totalShipEmissions" totalShipEmissions,
+"lessVoyagesInNorthernIrelandDeduction"->>'total' northernIrelandDeduction,
 "surrenderEmissions" surrenderEmissions
 FROM allAERs, jsonb_to_recordset(aer_data -> 'aer' -> 'aggregatedData' -> 'emissions')
-AS v("imoNumber" varchar, "totalEmissionsFromVoyagesAndPorts" jsonb, "lessVoyagesInNorthernIrelandDeduction" jsonb, "totalShipEmissions" numeric, "surrenderEmissions" numeric))
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMP ID", o.legalStatus "Legal status",
+AS v("imoNumber" varchar, "totalEmissionsFromVoyagesAndPorts" jsonb, "lessVoyagesInNorthernIrelandDeduction" jsonb, "surrenderEmissions" numeric))
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year", "Reporting status", "EMPlan Id", o.legalStatus "Legal status",
        s.ship_name "Ship name", imoShip "Ship IMO Number",
        totalEmissionsFromVoyagesAndPorts "Total emissions from voyages and in port",
-       northernIrelandDeduction "Northern Ireland deduction", totalShipEmissions "Total ship emissions",
+       northernIrelandDeduction "Northern Ireland deduction",
        surrenderEmissions "Emissions figure for surrender"
 FROM sectionOperatorDetails o
          JOIN aggregated_data d

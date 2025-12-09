@@ -84,6 +84,11 @@ export const aerEmissionsMock: AerEmissions = {
               methaneSlipValueType: 'PRESELECTED',
               type: 'BIO_LNG',
             } as FuelOriginTypeName,
+            {
+              origin: 'RFNBO',
+              uniqueIdentifier: '182b17e9-22ff-4f35-8ffd-796c98964cf3',
+              type: 'E_NH3',
+            } as FuelOriginTypeName,
           ],
           monitoringMethod: ['BDN'],
           uniqueIdentifier: 'e226a1d7-33c2-4a61-97be-dfda7de47ada',

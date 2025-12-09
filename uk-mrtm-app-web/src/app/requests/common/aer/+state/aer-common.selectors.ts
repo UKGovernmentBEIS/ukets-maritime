@@ -59,6 +59,7 @@ import {
   ReductionClaimDetailsListItemDto,
   ShipEmissionTableListItem,
 } from '@shared/types';
+import { isLNG } from '@shared/utils';
 
 const selectReportingYear: StateSelector<RequestTaskState, string> = createDescendingSelector(
   requestTaskQuery.selectRequestId,
@@ -711,7 +712,7 @@ const selectShipFuelOriginMethaneCombination = (
           ?.fuelDetails as AllFuelOriginTypeName[]);
 
     return currentFuelDetails?.find((fuelDetail) => {
-      const methaneSlipFound = isNil(methaneSlip) ? true : fuelDetail?.methaneSlip === methaneSlip;
+      const methaneSlipFound = isLNG(fuelDetail) ? fuelDetail?.methaneSlip === methaneSlip : isNil(methaneSlip);
       return fuelDetail?.origin === origin && fuelDetail?.type === type && methaneSlipFound;
     });
   });

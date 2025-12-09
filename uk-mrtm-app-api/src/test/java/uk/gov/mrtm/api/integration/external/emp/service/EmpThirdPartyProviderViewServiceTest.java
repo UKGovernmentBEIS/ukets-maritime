@@ -56,7 +56,7 @@ class EmpThirdPartyProviderViewServiceTest {
         when(stagingEmpRepository.findByAccountId(ACCOUNT_ID))
             .thenReturn(Optional.ofNullable(stagingEmissionsMonitoringPlan));
 
-        ThirdPartyDataProviderDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID);
+        ThirdPartyDataProviderDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID, null);
 
         assertEquals(expectedResponse, actualResponse);
         verify(stagingEmpRepository).findByAccountId(ACCOUNT_ID);
@@ -67,7 +67,7 @@ class EmpThirdPartyProviderViewServiceTest {
     void getThirdPartyDataProviderInfo_staging_emp_not_exists() {
         when(stagingEmpRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.empty());
 
-        ThirdPartyDataProviderDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID);
+        ThirdPartyDataProviderDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID, null);
 
         assertNull(actualResponse);
         verify(stagingEmpRepository).findByAccountId(ACCOUNT_ID);

@@ -15,7 +15,7 @@
                     </xs:restriction>
                 </xs:simpleType>
             </xs:element>
-            <xs:element name="name" type="nonEmptyStringMax30" minOccurs="1" maxOccurs="1"/>
+            <xs:element name="name" type="nonEmptyStringMax255" minOccurs="1" maxOccurs="1"/>
             <xs:element name="shipType" type="shipTypeEnum" minOccurs="1" maxOccurs="1"/>
             <xs:element name="grossTonnage" minOccurs="1" maxOccurs="1">
                 <xs:simpleType>

@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.reporting.domain.aggregateddata;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import io.swagger.v3.oas.annotations.media.DiscriminatorMapping;
@@ -46,4 +47,7 @@ public abstract class AerAggregatedDataFuelOriginTypeName {
 
     @NotNull
     private UUID uniqueIdentifier;
+
+    @JsonIgnore
+    public abstract String getTypeAsString();
 }

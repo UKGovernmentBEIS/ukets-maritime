@@ -63,11 +63,11 @@ import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoring
 class EmpEmissionsValidatorTest {
     private static final String IMO_NUMBER_1 = "1234567";
     private static final String IMO_NUMBER_2 = "7654321";
-    private static final String OTHER_FUEL_NAME_1 = "name1";
-    private static final String OTHER_FUEL_NAME_2 = "name2";
-    private static final String EMISSION_SOURCES_NAME_1 = "name1";
-    private static final String EMISSION_SOURCES_NAME_2 = "name2";
-    private static final String EMISSION_SOURCES_NAME_3 = "name3";
+    private static final String OTHER_FUEL_NAME_1 = "fuel name1";
+    private static final String OTHER_FUEL_NAME_2 = "fuel name2";
+    private static final String EMISSION_SOURCES_NAME_1 = "emission source name1";
+    private static final String EMISSION_SOURCES_NAME_2 = "emission source name2";
+    private static final String EMISSION_SOURCES_NAME_3 = "emission source name3";
     private static final EFuelType E_FUEL_TYPE_1 = EFuelType.E_LNG;
     private static final EFuelType E_FUEL_TYPE_2 = EFuelType.E_H2;
     private static final Long ACCOUNT_ID = 1L;
@@ -96,8 +96,8 @@ class EmpEmissionsValidatorTest {
 
         EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, ACCOUNT_ID);
 
-            assertTrue(result.isValid());
-            assertThat(result.getEmpViolations()).isEmpty();
+        assertTrue(result.isValid());
+        assertThat(result.getEmpViolations()).isEmpty();
     }
 
     @Test
@@ -163,6 +163,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
             emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(EMISSION_SOURCES_NAME_1).toArray());
     }
 
     @Test
@@ -178,6 +180,8 @@ class EmpEmissionsValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).allMatch(emissionsMonitoringPlanViolation ->
                 emissionsMonitoringPlanViolation.getMessage().equals(DUPLICATE_EMISSIONS_SOURCE_NAME.getMessage()));
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(EMISSION_SOURCES_NAME_1).toArray());
     }
 
     @Test
@@ -318,7 +322,7 @@ class EmpEmissionsValidatorTest {
                     EmpShipEmissions.builder()
                         .details(ShipDetails.builder()
                             .imoNumber(EmpEmissionsValidatorTest.IMO_NUMBER_1)
-                            .name("name1")
+                            .name("ship name 1")
                             .build()
                         )
                         .fuelsAndEmissionsFactors(
@@ -405,7 +409,7 @@ class EmpEmissionsValidatorTest {
                     EmpShipEmissions.builder()
                         .details(ShipDetails.builder()
                             .imoNumber(imoNumber2)
-                            .name("name2")
+                            .name("ship name 2")
                             .build()
                         )
                         .fuelsAndEmissionsFactors(

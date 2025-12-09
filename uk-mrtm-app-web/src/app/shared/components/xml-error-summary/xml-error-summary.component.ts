@@ -3,12 +3,12 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  contentChild,
   effect,
   ElementRef,
   inject,
   input,
   Signal,
+  viewChild,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
@@ -26,9 +26,8 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
 })
 export class XmlErrorSummaryComponent implements AfterViewInit {
   private readonly title: Title = inject(Title);
-
   xmlErrors = input<XmlValidationError[]>();
-  container = contentChild<ElementRef<HTMLDivElement>>('container');
+  container = viewChild<ElementRef<HTMLElement>>('container');
   xmlErrorList: Signal<NestedMessageValidationError[]> = computed(() => this.getGroupedErrors());
   formatNestedErrorDetails: Signal<(error: NestedMessageValidationError) => string | undefined> =
     input<(error: NestedMessageValidationError) => string | undefined>();
@@ -66,15 +65,23 @@ export class XmlErrorSummaryComponent implements AfterViewInit {
       } else if (!hasErrors) {
         this.title.setTitle(currentTitle.replace(prefix, ''));
       }
+
+      if (hasErrors) {
+        this.tryScrollAndFocus(this.container()?.nativeElement);
+      }
     });
   }
 
   ngAfterViewInit(): void {
-    if (this.container()?.nativeElement?.scrollIntoView) {
-      this.container().nativeElement.scrollIntoView();
+    this.tryScrollAndFocus(this.container()?.nativeElement);
+  }
+
+  private tryScrollAndFocus(element: HTMLElement) {
+    if (element?.scrollIntoView) {
+      element.scrollIntoView();
     }
-    if (this.container()?.nativeElement?.focus) {
-      this.container().nativeElement.focus();
+    if (element?.focus) {
+      element.focus();
     }
   }
 }

@@ -7,6 +7,7 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
+import uk.gov.mrtm.api.integration.external.aer.domain.StagingAer;
 import uk.gov.mrtm.api.reporting.domain.AerContainer;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
@@ -46,6 +47,10 @@ public class AerValidatorService {
         if(!isValid) {
             throw new BusinessException(MrtmErrorCode.INVALID_AER, AerValidatorHelper.extractAerViolations(aerValidationResults));
         }
+    }
+
+    public void validateStagingAer(@Valid @NotNull StagingAer staging) {
+        // Trigger validations
     }
 
     private void validateVerificationReportExistence(AerContainer aerContainer) {

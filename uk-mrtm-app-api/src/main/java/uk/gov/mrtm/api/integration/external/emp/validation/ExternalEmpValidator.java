@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.integration.external.emp.validation;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
@@ -22,6 +23,7 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 @Validated
+@Log4j2
 public class ExternalEmpValidator {
 
     private final EmpMandateValidator empMandateValidator;
@@ -30,8 +32,6 @@ public class ExternalEmpValidator {
     private static final EmpViolationMapper EMP_VIOLATION_MAPPER = Mappers.getMapper(EmpViolationMapper.class);
 
     public void validate(StagingEmissionsMonitoringPlan staging, String companyImoNumber) {
-        validateStagingEmissionsMonitoringPlan(staging);
-
         List<EmissionsMonitoringPlanValidationResult> validationResults = new ArrayList<>();
         validationResults.add(empMandateValidator.validate(staging.getMandate(), staging.getEmissions(), companyImoNumber));
         validationResults.add(empEmissionsValidator.validate(staging.getEmissions()));
@@ -41,6 +41,8 @@ public class ExternalEmpValidator {
         if (!isValid) {
             throw new ExternalBusinessException(MrtmErrorCode.INVALID_EMP, extractEmissionsMonitoringPlanViolations(validationResults));
         }
+
+        validateStagingEmissionsMonitoringPlan(staging);
     }
 
     // This is used to verify that the staging model is valid. INTERNAL_SERVER is thrown because this indicates
@@ -49,6 +51,7 @@ public class ExternalEmpValidator {
         try {
             empValidatorService.validateStagingEmissionsMonitoringPlan(staging);
         } catch (Exception e) {
+            log.error("Error when validating staging EMP: {}", e.getMessage());
             throw new BusinessException(ErrorCode.INTERNAL_SERVER);
         }
     }

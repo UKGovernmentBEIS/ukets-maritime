@@ -64,12 +64,11 @@ export class AerVoyagesListComponent {
 
     if (this.filter()?.arrivalDate && this.filter()?.departureDate) {
       // find all the voyages within arrivalDate - departureDate range
-      const filteredByShipAndDates = filteredByShip.filter(
+      return filteredByShip.filter(
         (voyage) =>
           isSameDayOrAfter(new Date(voyage.departureTime), this.filter()?.departureDate) &&
           isSameDayOrBefore(new Date(voyage.arrivalTime), this.filter()?.arrivalDate),
       );
-      return filteredByShipAndDates;
     }
     return filteredByShip;
   });
@@ -80,6 +79,17 @@ export class AerVoyagesListComponent {
 
   readonly canContinue = computed<boolean>(() => this.editable() && this.allVoyages()?.length > 0);
 
+  private readonly noImoReferenceMessage = computed<string>(() => {
+    const allShipsImoNumbers = this.store
+      .select(aerCommonQuery.selectShips)()
+      ?.map((ship) => ship?.details?.imoNumber);
+
+    const isIncomplete = this.allVoyages().some((voyage) => !allShipsImoNumbers?.includes(voyage?.imoNumber));
+    return isIncomplete
+      ? `Some voyages are not linked to ships in the 'Ships and emission details list' subtask. Check the Voyages list and make any changes needed.`
+      : undefined;
+  });
+
   private readonly needsReviewMessage = computed<string>(() => {
     const needsReviewVoyages = this.allVoyages().filter((voyage) => voyage.status === TaskItemStatus.NEEDS_REVIEW);
 
@@ -88,17 +98,17 @@ export class AerVoyagesListComponent {
     }
 
     return needsReviewVoyages.find((voyage) => !voyage.canViewDetails)
-      ? 'You must go back to the ‘Ships and emission details list’ task and complete the ship details for any entries with the status ‘Needs review’.'
-      : 'The voyage and emission details have been updated. Select the Ship name for any entries that have the status ‘Needs review’ to review and confirm the information.';
+      ? `Some voyages have ships with incomplete status. Confirm and complete the ship status from the 'Ships and emission details list' subtask, then review the voyage again.`
+      : `The voyage and emission details have been updated due to changes made to the 'Ships and emission details list' subtask. Review the information for each voyage, then select Confirm and continue.`;
   });
 
   private readonly notCompletedMessage = computed<string>(() => {
     const isIncomplete = this.allVoyages().some((voyage) => voyage.status === TaskItemStatus.IN_PROGRESS);
-    return isIncomplete ? 'Enter the missing details for all entries with the status ‘Incomplete’' : undefined;
+    return isIncomplete ? `Enter the missing details for all entries with the status 'Incomplete'` : undefined;
   });
 
   readonly warningMessages = computed<string[]>(() =>
-    [this.needsReviewMessage(), this.notCompletedMessage()].filter((message) => message),
+    [this.noImoReferenceMessage(), this.needsReviewMessage(), this.notCompletedMessage()].filter((message) => message),
   );
 
   readonly emptyTableText = computed<string>(() =>
@@ -129,6 +139,11 @@ export class AerVoyagesListComponent {
   onContinue(): void {
     const errors: ValidationErrors = {};
     let isValid = true;
+
+    if (this.noImoReferenceMessage()) {
+      errors['NO_IMO_REFERENCE'] = this.noImoReferenceMessage();
+      isValid = false;
+    }
 
     if (this.notCompletedMessage()) {
       errors['NOT_COMPLETED'] = this.notCompletedMessage();

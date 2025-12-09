@@ -3,9 +3,9 @@ import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angu
 import { isNil } from 'lodash-es';
 import { isAfter, isBefore } from 'date-fns';
 
-import { AerFuelConsumption, AerFuelOriginFossilTypeName, AerShipEmissions } from '@mrtm/api';
+import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
-import { FuelOriginTitlePipe } from '@shared/pipes';
+import { AllFuelOriginTypeName } from '@shared/types';
 import { mergeDatesToDate } from '@shared/utils';
 
 export const arrivalDepartureDateValidator =
@@ -109,20 +109,27 @@ export const validateIfUsedFuelsExistInEmissionsValidator = (
   relatedShip: AerShipEmissions,
 ): ValidationErrors => {
   const errors: ValidationErrors = {};
-  const fuelOriginPipe = new FuelOriginTitlePipe();
   for (const fuel of fuels) {
-    const fuelOriginTypeName = fuel.fuelOriginTypeName as unknown as AerFuelOriginFossilTypeName;
-    if (
-      !(relatedShip?.fuelsAndEmissionsFactors as unknown as Array<AerFuelOriginFossilTypeName>)?.find(
-        (shipFuel: AerFuelOriginFossilTypeName) =>
-          shipFuel?.uniqueIdentifier === fuelOriginTypeName.uniqueIdentifier &&
-          shipFuel?.origin === fuelOriginTypeName.origin &&
-          shipFuel?.type === fuelOriginTypeName.type &&
-          shipFuel?.name === fuelOriginTypeName.name,
-      )
-    ) {
-      errors[fuelOriginTypeName.uniqueIdentifier] =
-        `Fuel type ${fuelOriginPipe.transform(fuelOriginTypeName, false)} used in fuel consumption does not exist in related Ship`;
+    const fuelOriginTypeName = fuel.fuelOriginTypeName as AllFuelOriginTypeName;
+    const isValid = relatedShip?.emissionsSources?.some((source) => {
+      const emissionSourceNameFound = isNil(fuel?.name) ? true : source?.name === fuel?.name;
+      return (
+        emissionSourceNameFound &&
+        source?.fuelDetails?.some((fuel) => {
+          const methaneSlipValid = isNil(fuelOriginTypeName?.methaneSlip)
+            ? true
+            : fuel?.methaneSlip === fuelOriginTypeName?.methaneSlip;
+          return (
+            methaneSlipValid &&
+            (fuel as AllFuelOriginTypeName)?.type === fuelOriginTypeName?.type &&
+            fuel?.uniqueIdentifier === fuelOriginTypeName?.uniqueIdentifier
+          );
+        })
+      );
+    });
+
+    if (!isValid) {
+      errors[fuelOriginTypeName.uniqueIdentifier] = 'The highlighted entries have invalid values';
     }
   }
   return Object.keys(errors).length ? errors : null;

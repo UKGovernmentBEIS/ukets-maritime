@@ -74,7 +74,7 @@ export const VERIFIER_SUBTASK_ROUTES: Routes = [
     path: ETS_COMPLIANCE_RULES_SUB_TASK_PATH,
     providers: [
       { provide: AER_REVIEW_SUBTASK, useValue: ETS_COMPLIANCE_RULES_SUB_TASK },
-      { provide: AER_REVIEW_TASK_TITLE, useValue: etsComplianceRulesMap.title },
+      { provide: AER_REVIEW_TASK_TITLE, useValue: etsComplianceRulesMap.caption },
       { provide: AER_REVIEW_GROUP, useValue: 'ETS_COMPLIANCE_RULES' },
       verifierSideSummariesProvidersMap[ETS_COMPLIANCE_RULES_SUB_TASK],
     ],

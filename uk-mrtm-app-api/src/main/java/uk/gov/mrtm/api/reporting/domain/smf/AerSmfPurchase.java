@@ -13,6 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedDataFuelOriginTypeName;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
 
 import java.math.BigDecimal;
 import java.util.HashSet;
@@ -54,4 +55,7 @@ public class AerSmfPurchase {
 
     @NotNull
     private UUID uniqueIdentifier;
+
+    @NotNull
+    private DataSaveMethod dataSaveMethod;
 }

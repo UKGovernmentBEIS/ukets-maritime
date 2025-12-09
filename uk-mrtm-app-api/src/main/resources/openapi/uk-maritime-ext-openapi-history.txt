@@ -1,7 +1,16 @@
 -----------------------------------------------------------------------------------
+MARITIME OpenApi file 	(04-12-2025) Version 1.2.0
+-----------------------------------------------------------------------------------
+
+- EMP
+    1. Updated documentation about the size of big decimal fields to mark them as positive/positive or zero
+    2. Updated ship name size to 255
+
+-----------------------------------------------------------------------------------
 MARITIME OpenApi file 	(25-11-2025) Version 1.1.0
 -----------------------------------------------------------------------------------
 
+- EMP
 1. Field responsibilityDeclaration added to ExternalEmpDelegatedResponsibility
 2. Updated documentation of fields
 

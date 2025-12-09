@@ -18,4 +18,9 @@ public class AerFuelOriginEFuelTypeName extends AerAggregatedDataFuelOriginTypeN
 
     @NotNull
     private EFuelType type;
+
+    @Override
+    public String getTypeAsString() {
+        return type.name();
+    }
 }

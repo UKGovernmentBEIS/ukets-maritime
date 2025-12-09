@@ -28,7 +28,7 @@ public class ShipDetails {
     private String imoNumber;
 
     @NotBlank
-    @Size(max = 30)
+    @Size(max = 255)
     private String name;
 
     @NotNull

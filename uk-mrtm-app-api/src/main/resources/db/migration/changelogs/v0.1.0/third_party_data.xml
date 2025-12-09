@@ -62,4 +62,65 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_ALTER_EMP_STAGING_MAKE_ACCOUNT_ID_UNIQUE" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.emp_staging
+            ADD CONSTRAINT emp_staging_account_id_uc UNIQUE (account_id);
+        </sql>
+
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.emp_staging
+                DROP CONSTRAINT emp_staging_account_id_uc;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_AER_STAGING_SEQ_SEQUENCE" author="P44065">
+        <createSequence sequenceName="aer_staging_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false" schemaName="sch_third_party_data"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS sch_third_party_data.aer_staging_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_AER_STAGING_TABLE" author="P44065" >
+        <createTable tableName="aer_staging" schemaName="sch_third_party_data">
+            <column name="id" type="bigint" remarks="The staging AER id (primary key)">
+                <constraints primaryKey="true" primaryKeyName="aer_staging_pk" nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id to which the staging data entry refers to">
+                <constraints nullable="false" foreignKeyName="aer_account_id_uc" referencedTableName="account_mrtm" referencedColumnNames="id" />
+            </column>
+            <column name="year" type="int" remarks="The reporting status year">
+                <constraints nullable="false" />
+            </column>
+            <column name="payload" type="jsonb" remarks="The staging AER payload" />
+            <column name="provider_name" type="varchar(512)" remarks="The name of the data provider">
+                <constraints nullable="false" />
+            </column>
+            <column name="created_on" type="timestamp" remarks="When the data was initially received">
+                <constraints nullable="false" />
+            </column>
+            <column name="updated_on" type="timestamp" remarks="When the data was updated" />
+            <column name="imported_on" type="timestamp" remarks="When the data was imported on AER task" />
+        </createTable>
+        <addUniqueConstraint tableName="aer_staging"
+                             schemaName="sch_third_party_data"
+                             columnNames="account_id, year"
+                             constraintName="aer_staging_account_id_year_uc"/>
+
+        <createIndex indexName="aer_staging_account_id_idx" tableName="aer_staging" schemaName="sch_third_party_data">
+            <column name="account_id"/>
+        </createIndex>
+        <rollback>
+            <sql>
+                DROP INDEX IF EXISTS sch_third_party_data.aer_staging_account_id_idx;
+                DROP TABLE IF EXISTS sch_third_party_data.aer_staging;
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

@@ -124,12 +124,12 @@ describe('AerAggregatedDataXmlService', () => {
         },
         {
           column: 'NO_FIELD',
-          message: 'The ship has recorded invalid or missing annual aggregated fuel and emissions data',
+          message: 'The required fields are out of the expected criteria',
           row: 2,
         },
         {
           column: 'NO_FIELD',
-          message: 'The ship has recorded invalid or missing annual aggregated fuel and emissions data',
+          message: 'The required fields are out of the expected criteria',
           row: 3,
         },
       ],

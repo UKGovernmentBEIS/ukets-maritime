@@ -58,6 +58,7 @@ export class ListOfShipsTableComponent {
 
   readonly rows = computed<MultiSelectedItem<ShipEmissionTableListItem>[]>(() =>
     sortAndPaginateListWithShipNameAndStatus(
+      [{ column: 'name', direction: 'ascending' }],
       this.sort(),
       this.filteredData() ?? [],
       this.currentPage(),

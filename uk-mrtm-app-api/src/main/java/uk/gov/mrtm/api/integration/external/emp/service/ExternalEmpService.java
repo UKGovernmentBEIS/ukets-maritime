@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.integration.external.emp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
@@ -24,6 +25,7 @@ import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Component
 @RequiredArgsConstructor
+@ConditionalOnProperty(name = "feature-flag.external.integration.emp.enabled", havingValue = "true")
 public class ExternalEmpService {
 
     private final ExternalEmpValidator validator;

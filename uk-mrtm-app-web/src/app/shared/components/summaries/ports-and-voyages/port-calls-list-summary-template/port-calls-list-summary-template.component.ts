@@ -89,7 +89,16 @@ export class PortCallsListSummaryTemplateComponent {
     });
 
   readonly rows = computed<Array<MultiSelectedItem<AerPortSummaryItemDto>>>(() =>
-    sortAndPaginateListWithShipNameAndStatus(this.sort(), this.data() ?? [], this.currentPage(), this.pageSize()),
+    sortAndPaginateListWithShipNameAndStatus(
+      [
+        { column: 'shipName', direction: 'ascending' },
+        { column: 'arrivalTime', direction: 'descending' },
+      ],
+      this.sort(),
+      this.data() ?? [],
+      this.currentPage(),
+      this.pageSize(),
+    ),
   );
 
   onPageChange(page: number): void {

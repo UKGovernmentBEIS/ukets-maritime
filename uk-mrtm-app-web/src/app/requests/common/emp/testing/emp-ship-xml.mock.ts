@@ -136,7 +136,7 @@ export const mockEmpShipsCoreErrorsXml = `
   <shipParticulars></shipParticulars>
   <shipParticulars>
     <shipImoNumber>1111111</shipImoNumber>
-    <name>Ship1</name>
+    <name>Ship1 name longer than 255 characters Ship1 name longer than 255 characters Ship1 name longer than 255 characters Ship1 name longer than 255 characters Ship1 name longer than 255 characters Ship1 name longer than 255 characters Ship1 name longer than 255 characters</name>
     <shipType>RORO</shipType>
   </shipParticulars>
   <shipParticulars>

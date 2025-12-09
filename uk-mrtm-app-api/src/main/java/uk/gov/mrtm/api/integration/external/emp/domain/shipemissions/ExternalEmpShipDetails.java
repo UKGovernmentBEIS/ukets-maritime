@@ -30,7 +30,7 @@ public class ExternalEmpShipDetails {
 
     @Schema(description = "Name of the Ship as stated on IMO GISIS")
     @NotBlank
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 255)
     private String name;
 
     @NotNull

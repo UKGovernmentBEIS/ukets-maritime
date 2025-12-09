@@ -9,7 +9,7 @@ export interface GovukTableColumn<T = any> {
   isNumeric?: boolean;
 }
 
-export interface SortEvent {
-  column: GovukTableColumn['field'];
+export interface SortEvent<T = any> {
+  column: GovukTableColumn<T>['field'];
   direction: 'ascending' | 'descending';
 }

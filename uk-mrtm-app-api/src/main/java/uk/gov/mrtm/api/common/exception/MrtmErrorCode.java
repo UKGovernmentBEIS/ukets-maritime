@@ -37,6 +37,8 @@ public enum MrtmErrorCode implements NetzErrorCode {
     INVALID_AER("AER1004", HttpStatus.BAD_REQUEST, "Invalid AER"),
     INVALID_AER_VERIFICATION_REPORT("AER1005", HttpStatus.BAD_REQUEST, "Invalid AER verification report"),
     INVALID_AER_REVIEW("AER1006", HttpStatus.BAD_REQUEST, "Invalid AER review"),
+    AER_NOT_FOUND("AER1007", HttpStatus.NOT_FOUND, "AER does not exist for specific year"),
+    AER_IMPORT_EXTERNAL_DATA_NOT_ALLOWED("AER1008", HttpStatus.BAD_REQUEST, "Import of external data when reporting is not required is not allowed"),
 
 
     /** Codes for registry integration. */

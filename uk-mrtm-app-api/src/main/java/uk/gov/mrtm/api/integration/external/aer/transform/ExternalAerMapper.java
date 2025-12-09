@@ -1,4 +1,4 @@
-package uk.gov.mrtm.api.integration.external.aer.mapper;
+package uk.gov.mrtm.api.integration.external.aer.transform;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -32,12 +32,15 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfDetails;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfPurchase;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerAggregatedDataEmissionsCalculator;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerSmfEmissionsCalculator;
 
 import java.util.List;
 import java.util.Set;
@@ -48,11 +51,19 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExternalAerMapper extends ExternalCommonMapper {
 
+    private final AerAggregatedDataEmissionsCalculator aggregatedDataCalculator;
+    private final AerSmfEmissionsCalculator smfCalculator;
+
     public StagingAer toStagingAer(ExternalAer external) {
 
         AerEmissions emissions = toAerEmissions(external.getShipParticulars());
         AerAggregatedData aggregatedData = toAerAggregatedData(external.getEmissions());
         AerSmf smf = toAerSmf(external.getReductionClaim());
+
+        // Emissions are calculated in the importing stage to ensure the
+        // calculated emissions have valid values.
+        aggregatedDataCalculator.calculateEmissions(aggregatedData, emissions, null, null);
+        smfCalculator.calculateEmissions(smf);
 
         return StagingAer.builder()
             .emissions(emissions)
@@ -84,6 +95,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
     private AerSmfPurchase toAerSmfPurchase(ExternalAerReductionClaimPurchase purchase) {
         return AerSmfPurchase.builder()
             .uniqueIdentifier(UUID.randomUUID())
+            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
             .fuelOriginTypeName(toAerAggregatedDataFuelOriginTypeName(purchase.getFuelOriginCode(),
                 purchase.getFuelTypeCode(), purchase.getOtherFuelType()))
             .smfMass(purchase.getFuelMass())
@@ -97,6 +109,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
             emission -> AerShipAggregatedData.builder()
                 .uniqueIdentifier(UUID.randomUUID())
                 .isFromFetch(false)
+                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                 .fuelConsumptions(toAerAggregatedDataFuelConsumption(emission.getAnnualEmission().getEmissions()))
                 .imoNumber(emission.getShipImoNumber())
                 .emissionsWithinUKPorts(toAerPortEmissionsMeasurement(emission.getAnnualEmission().getEtsEmissionsWithinUkPort()))
@@ -151,6 +164,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
                         .details(toShipDetails(ship))
                         .fuelsAndEmissionsFactors(fuelsAndEmissionsFactors)
                         .emissionsSources(emissionsSources)
+                        .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                         .uncertaintyLevel(ship.getUncertaintyLevel().stream().map(
                             this::toUncertaintyLevel).collect(Collectors.toSet()))
                         .derogations(aerDerogations)
@@ -241,7 +255,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
             .flagState(ship.getShipDetails().getFlag())
             .iceClass(ship.getShipDetails().getIceClassPolarCode())
             .natureOfReportingResponsibility(ship.getShipDetails().getCompanyNature())
-            .allYear(ship.getShipDetails().isAllYear())
+            .allYear(ship.getShipDetails().getAllYear())
             .from(ship.getShipDetails().getFrom())
             .to(ship.getShipDetails().getTo())
             .build();

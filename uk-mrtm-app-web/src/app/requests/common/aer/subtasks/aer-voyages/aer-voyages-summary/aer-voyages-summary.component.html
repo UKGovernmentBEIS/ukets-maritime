@@ -14,13 +14,7 @@
 </div>
 
 <mrtm-voyages-list-summary-template
-  [warningMessages]="
-    subtaskStatus() === 'NEEDS_REVIEW'
-      ? [
-          'The voyage and emission details have been updated due to changes made to the ‘Ships and emission details list’ subtask. Review the information for each voyage, then select Confirm and continue.',
-        ]
-      : []
-  "
+  [warningMessages]="warningMessages()"
   [data]="voyages()"
   [editPath]="wizardStep.LIST_OF_VOYAGES" />
 

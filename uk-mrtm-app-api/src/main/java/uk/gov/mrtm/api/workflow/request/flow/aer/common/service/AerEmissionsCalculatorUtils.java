@@ -7,12 +7,13 @@ import uk.gov.mrtm.api.reporting.domain.common.AerFuelConsumption;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.reporting.enumeration.MeasuringUnit;
-import uk.gov.mrtm.api.reporting.validation.AerValidatorHelper;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Optional;
 import java.util.Set;
+
+import static uk.gov.mrtm.api.reporting.validation.AerValidatorHelper.getUniqueFuelName;
 
 @UtilityClass
 public class AerEmissionsCalculatorUtils {
@@ -80,7 +81,8 @@ public class AerEmissionsCalculatorUtils {
     }
 
     public static boolean filterFuelAndEmissionsFactors(AerFuelsAndEmissionsFactors emissions, FuelOriginTypeName fuelOriginTypeName) {
-        return AerValidatorHelper.buildFuelOriginTypeName(emissions).equals(AerValidatorHelper.buildFuelOriginTypeName(fuelOriginTypeName));
+        return getUniqueFuelName(emissions.getName(), emissions.getTypeAsString())
+            .equals(getUniqueFuelName(fuelOriginTypeName.getName(), fuelOriginTypeName.getTypeAsString()));
     }
 
     public static Optional<AerShipEmissions> findShipEmissions(Set<AerShipEmissions> aerEmissions, String imoNumber) {
@@ -90,10 +92,12 @@ public class AerEmissionsCalculatorUtils {
             .findFirst();
     }
 
-    public static BigDecimal sumAndScale(BigDecimal value1, BigDecimal value2, BigDecimal value3) {
-        return value1.add(value2)
-                .add(value3)
-                .setScale(7, RoundingMode.HALF_UP);
+    public static BigDecimal sumAndScale(BigDecimal... values) {
+        BigDecimal sum = BigDecimal.ZERO;
+        for (BigDecimal value : values) {
+                sum = sum.add(value);
+        }
+        return sum.setScale(7, RoundingMode.HALF_UP);
     }
 
     public static Triple<BigDecimal, BigDecimal, BigDecimal> calculateEmissionTotals(AerShipEmissions shipEmissions,

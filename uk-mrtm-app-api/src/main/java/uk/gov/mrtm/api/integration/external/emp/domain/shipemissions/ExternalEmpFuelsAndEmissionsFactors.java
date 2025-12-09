@@ -98,19 +98,19 @@ public class ExternalEmpFuelsAndEmissionsFactors {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String otherFuelType;
 
-    @Schema(description = "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits")
+    @Schema(description = "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits", minimum = "0")
     @NotNull
     @Digits(integer = 12, fraction = Integer.MAX_VALUE)
     @PositiveOrZero
     private BigDecimal ttwEFCarbonDioxide;
 
-    @Schema(description = "Tank to wake emission factor for methane. Positive or zero decimal number with integer part max 12 digits")
+    @Schema(description = "Tank to wake emission factor for methane. Positive or zero decimal number with integer part max 12 digits", minimum = "0")
     @NotNull
     @Digits(integer = 12, fraction = Integer.MAX_VALUE)
     @PositiveOrZero
     private BigDecimal ttwEFMethane;
 
-    @Schema(description = "Tank to wake emission factor for nitrousOxide. Positive or zero decimal number with integer part max 12 digits")
+    @Schema(description = "Tank to wake emission factor for nitrousOxide. Positive or zero decimal number with integer part max 12 digits", minimum = "0")
     @NotNull
     @Digits(integer = 12, fraction = Integer.MAX_VALUE)
     @PositiveOrZero

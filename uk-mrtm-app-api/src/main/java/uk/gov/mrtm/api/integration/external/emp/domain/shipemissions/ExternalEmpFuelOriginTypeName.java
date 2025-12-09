@@ -43,7 +43,7 @@ public class ExternalEmpFuelOriginTypeName {
     @EqualsAndHashCode.Include
     private String otherFuelType;
 
-    @Schema(description = "Slip percentage value. Decimal number between 0 and 100 (inclusive) with up to 3 integer digits and 2 fractional digits")
+    @Schema(description = "Slip percentage value. Decimal number between 0 and 100 (inclusive) with up to 3 integer digits and 2 fractional digits", minimum = "0")
     @PositiveOrZero
     @Digits(integer=3, fraction=2)
     @DecimalMax(value = "100")

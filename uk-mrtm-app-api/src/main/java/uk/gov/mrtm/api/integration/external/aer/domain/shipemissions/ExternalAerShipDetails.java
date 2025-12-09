@@ -36,7 +36,7 @@ public class ExternalAerShipDetails {
 
     @Schema(description = "Name of the Ship as stated on IMO GISIS")
     @NotBlank
-    @Size(min = 1, max = 30)
+    @Size(min = 1, max = 255)
     private String name;
 
     @NotNull
@@ -60,7 +60,8 @@ public class ExternalAerShipDetails {
     private ReportingResponsibilityNature companyNature;
 
     @Schema(description = "Indicates if the reporting period of the ship covers the entire year")
-    private boolean allYear;
+    @NotNull
+    private Boolean allYear;
 
     @Schema(description = "Start date of the period. Required only when 'allYear' is false, otherwise must be omitted")
     private LocalDate from;

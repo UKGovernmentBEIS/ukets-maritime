@@ -1,4 +1,4 @@
-package uk.gov.mrtm.api.swagger.config;
+package uk.gov.mrtm.api.common.config;
 
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.servers.Server;
@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class MrtmSwaggerConfig {
     private final BuildProperties buildProperties;
-    private static final String EXTERNAL_API_VERSION = "1.1.0";
+    private static final String EXTERNAL_API_VERSION = "1.2.0";
 
     public MrtmSwaggerConfig(BuildProperties buildProperties) {
         this.buildProperties = buildProperties;
@@ -26,7 +26,7 @@ public class MrtmSwaggerConfig {
             .addOpenApiCustomizer(openApi -> openApi.info(new Info()
                     .title("API Documentation")
                     .version(buildProperties.getVersion())
-                    .description("Endpoints intended for internal systems and teams.")))
+                    .description("Endpoints intended for internal systems and teams")))
             .build();
     }
 
@@ -41,6 +41,9 @@ public class MrtmSwaggerConfig {
         Server prodServer = new Server()
             .url("https://manage-emissions-reporting.service.gov.uk/maritime/api")
             .description("Production environment");
+        Server uatServer = new Server()
+                .url("https://uat1.ukpmrv.net/maritime/api")
+                .description("UAT environment");
 
         return GroupedOpenApi.builder()
             .group("External API")
@@ -49,11 +52,11 @@ public class MrtmSwaggerConfig {
                 !entry.getKey().startsWith("External")
                     && !entry.getKey().equals("Violation")
                     && !entry.getKey().equals("EmpMonitoringReportingRole")))
-            .addOpenApiCustomizer(openApi -> openApi.setServers(List.of(prodServer)))
+            .addOpenApiCustomizer(openApi -> openApi.setServers(List.of(prodServer, uatServer)))
             .addOpenApiCustomizer(openApi -> openApi.info(new Info()
                 .title("Maritime External API")
                 .version(EXTERNAL_API_VERSION)
-                .description("Maritime external API description.")))
+                .description("Maritime Εxternal API Specification")))
             .build();
     }
 }

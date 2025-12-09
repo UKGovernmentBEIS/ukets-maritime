@@ -15,6 +15,7 @@ import {
   AerInPersonSiteVisitDatesFormGroupModel,
   AerInPersonSiteVisitFormGroupModel,
 } from '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-in-person/opinion-statement-site-visit-in-person.types';
+import { todayOrPastDateValidator } from '@shared/validators';
 
 export const addVisitDateFormGroup = (
   data?: AerInPersonSiteVisitDates,
@@ -23,6 +24,7 @@ export const addVisitDateFormGroup = (
     {
       startDate: new FormControl<Date>(!isNil(data?.startDate) ? new Date(data?.startDate) : null, [
         GovukValidators.required('Enter the date when the site visit began'),
+        todayOrPastDateValidator('The date entered must be today or in the past'),
       ]),
       numberOfDays: new FormControl<number>(data?.numberOfDays, [
         GovukValidators.required('Enter the number of days your team were on site'),
@@ -30,7 +32,7 @@ export const addVisitDateFormGroup = (
         GovukValidators.max(365, 'Must be less than 365 days'),
       ]),
     },
-    { validators: [todayOrPastDateValidator(), duplicatedDateValidator()] },
+    { validators: [siteVisitRangeTodayOrInThePast(), duplicatedDateValidator()], updateOn: 'change' },
   );
 
 export const opinionStatementSiteVisitInPersonFormProvider: Provider = {
@@ -53,12 +55,16 @@ export const opinionStatementSiteVisitInPersonFormProvider: Provider = {
   },
 };
 
-function todayOrPastDateValidator(): ValidatorFn {
+function siteVisitRangeTodayOrInThePast(): ValidatorFn {
   return (formGroup: FormGroup<AerInPersonSiteVisitDatesFormGroupModel>): { [key: string]: string } | null => {
+    if (formGroup.get('startDate').invalid || formGroup.get('numberOfDays').invalid) {
+      return null;
+    }
+
     const dates = getDates(formGroup);
     const today = new Date();
     if (dates.length && dates.some((date) => date > today)) {
-      return { invalidDate: 'The date entered must be today or in the past' };
+      return { invalidDate: 'The days must be in accordance with when the site visit began' };
     }
     return null;
   };
@@ -79,7 +85,7 @@ function duplicatedDateValidator(): ValidatorFn {
         const formGroupIncludesDuplicatedDate = formGroupDates.some((date) => duplicatedDates.includes(date));
 
         return formGroupIncludesDuplicatedDate
-          ? { duplicatedDate: 'You cannot enter the same date more than once' }
+          ? { duplicatedDate: 'Site visit dates cannot overlap. Choose different dates' }
           : null;
       }
     }

@@ -5,7 +5,9 @@ import { ActivatedRoute } from '@angular/router';
 import { RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';
 
+import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AER_OBJECT_ROUTE_KEY } from '@requests/common/aer/aer.consts';
+import { AER_SELECT_SHIP_QUERY_SELECTOR, AerShipStateQuery } from '@requests/common/aer/components';
 import {
   AER_FUEL_CONSUMPTION_SELECTOR,
   AerFuelConsumptionFormGroupModel,
@@ -18,10 +20,18 @@ import { isLNG } from '@shared/utils';
 
 export const aerFuelConsumptionFormProvider: Provider = {
   provide: TASK_FORM,
-  deps: [FormBuilder, RequestTaskStore, AER_FUEL_CONSUMPTION_SELECTOR, AER_OBJECT_ROUTE_KEY, ActivatedRoute],
+  deps: [
+    FormBuilder,
+    RequestTaskStore,
+    AER_SELECT_SHIP_QUERY_SELECTOR,
+    AER_FUEL_CONSUMPTION_SELECTOR,
+    AER_OBJECT_ROUTE_KEY,
+    ActivatedRoute,
+  ],
   useFactory: (
     formBuilder: FormBuilder,
     store: RequestTaskStore,
+    shipSelector: AerShipStateQuery,
     fuelConsumptionSelector: FuelConsumptionSelector,
     routeParamName: string,
     route: ActivatedRoute,
@@ -29,7 +39,20 @@ export const aerFuelConsumptionFormProvider: Provider = {
     const objectId = route?.snapshot?.params?.[routeParamName];
     const fuelConsumptionId = route?.snapshot?.params?.fuelConsumptionId;
     const fuelConsumption = store.select(fuelConsumptionSelector(objectId, fuelConsumptionId))();
-    const isLNGType = isLNG(fuelConsumption?.fuelOriginTypeName as AllFuelOriginTypeName);
+    const voyagePortAggregate = store.select(shipSelector(objectId))();
+    const fuelOrigin = fuelConsumption?.fuelOriginTypeName as AllFuelOriginTypeName;
+    const isLNGType = isLNG(fuelOrigin);
+    const fuelOriginExists = store.select(
+      aerCommonQuery.selectShipFuelOriginMethaneCombination(
+        voyagePortAggregate?.imoNumber,
+        fuelOrigin?.origin,
+        fuelOrigin?.type,
+        fuelConsumption?.name,
+        fuelOrigin?.methaneSlip,
+      ),
+    )();
+    const methaneSlipValue = fuelOriginExists ? `${fuelOrigin?.methaneSlip}` : null;
+    const emissionSourceNameValue = fuelOriginExists ? fuelConsumption?.name : null;
 
     return formBuilder.group<AerFuelConsumptionFormGroupModel>({
       objectId: formBuilder.control<AerFuelConsumptionFormModel['objectId']>(objectId),
@@ -59,7 +82,7 @@ export const aerFuelConsumptionFormProvider: Provider = {
           GovukValidators.maxDecimalsValidator(5),
         ],
       }),
-      name: formBuilder.control<AerFuelConsumptionFormModel['name'] | null>(fuelConsumption?.name ?? null),
+      name: formBuilder.control<AerFuelConsumptionFormModel['name'] | null>(emissionSourceNameValue),
       totalConsumption: formBuilder.control<AerFuelConsumptionFormModel['totalConsumption'] | null>(
         fuelConsumption?.totalConsumption,
         {
@@ -74,9 +97,7 @@ export const aerFuelConsumptionFormProvider: Provider = {
       ),
       methaneSlip: formBuilder.control<number | string | null>(
         {
-          value: fuelConsumption?.fuelOriginTypeName?.methaneSlip
-            ? `${fuelConsumption?.fuelOriginTypeName?.methaneSlip}`
-            : null,
+          value: methaneSlipValue,
           disabled: !isLNGType,
         },
         {

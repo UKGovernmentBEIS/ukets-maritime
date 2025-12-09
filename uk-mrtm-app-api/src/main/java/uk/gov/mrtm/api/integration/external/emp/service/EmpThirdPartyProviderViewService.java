@@ -7,6 +7,7 @@ import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderSer
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
 import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
+import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,7 +18,7 @@ public class EmpThirdPartyProviderViewService implements ThirdPartyProviderServi
 
     private final StagingEmissionsMonitoringPlanRepository stagingEmpRepository;
 
-    public ThirdPartyDataProviderDTO getThirdPartyDataProviderInfo(Long accountId) {
+    public ThirdPartyDataProviderDTO getThirdPartyDataProviderInfo(Long accountId, RequestTaskPayload requestTaskPayload) {
         Optional<StagingEmissionsMonitoringPlanEntity> stagingEmissionsMonitoringPlanEntity =
             stagingEmpRepository.findByAccountId(accountId);
 

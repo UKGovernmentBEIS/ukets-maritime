@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedDataSave;
-import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
+import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissionsSave;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortEmissionsSave;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfSave;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageEmissionsSave;
@@ -29,7 +29,7 @@ public class AerSave {
 
     @Valid
     @NotNull
-    private AerEmissions emissions;
+    private AerEmissionsSave emissions;
 
     @Valid
     @NotNull

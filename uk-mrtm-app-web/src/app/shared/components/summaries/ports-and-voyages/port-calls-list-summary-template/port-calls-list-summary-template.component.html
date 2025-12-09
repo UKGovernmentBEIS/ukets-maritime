@@ -30,6 +30,7 @@
   }
   @if (editable()) {
     <mrtm-multi-select-table
+      id="port-calls"
       [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
@@ -55,7 +56,7 @@
 
   @if (totalItems() > pageSize()) {
     <govuk-pagination
-      id="port-calls"
+      fragment="port-calls"
       [count]="this.totalItems()"
       [pageSize]="pageSize()"
       (currentPageChange)="onPageChange($event)" />

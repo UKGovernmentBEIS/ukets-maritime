@@ -35,7 +35,7 @@ describe('ReductionClaimDetailsSummaryTemplateComponent', () => {
     expect(page.tableColumnContents).toEqual([
       'Fuel name',
       'Batch number',
-      'Mass of SMF',
+      'Mass of fuel',
       'CO2 EF t/t',
       'CO2 emissions (t)',
       'Supporting evidence',

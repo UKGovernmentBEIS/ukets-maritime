@@ -16,7 +16,7 @@ export class ShipParticularsDtoValidator {
   }
 
   private static isNameValid(value?: ShipParticularsDTO['name']): boolean {
-    return XmlValidator.isRequired(value) && XmlValidator.isString(value) && XmlValidator.maxLength(value, 30);
+    return XmlValidator.isRequired(value) && XmlValidator.isString(value) && XmlValidator.maxLength(value, 255);
   }
 
   private static isShipTypeValid(value?: ShipParticularsDTO['shipType']): boolean {
@@ -82,7 +82,7 @@ export class ShipParticularsDtoValidator {
         errors.push({
           row: index + 1,
           column: 'name',
-          message: 'The Ship Name is required and must be less than 30 characters',
+          message: 'The Ship Name is required and must be less than 255 characters',
         });
       }
     });

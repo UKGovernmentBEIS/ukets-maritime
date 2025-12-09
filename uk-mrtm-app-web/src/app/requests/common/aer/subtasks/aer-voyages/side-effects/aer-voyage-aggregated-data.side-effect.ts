@@ -20,18 +20,22 @@ export class AerVoyageAggregatedDataSideEffect extends SideEffect {
         const relatedAggregatedData = payload?.aer?.aggregatedData?.emissions?.filter((data) => data.fromFetch);
 
         for (const data of relatedAggregatedData) {
-          const associatedVoyage = payload?.aer?.voyageEmissions?.voyages?.find(
-            (voyage) => voyage.imoNumber === data.imoNumber,
-          );
+          const associatedVoyages =
+            payload?.aer?.voyageEmissions?.voyages?.filter(
+              (voyage) => voyage.imoNumber === data.imoNumber && data.fromFetch,
+            ) ?? [];
 
-          if (
-            isNil(associatedVoyage) ||
-            payload.aerSectionsCompleted?.[`${this.subtask}-voyage-${associatedVoyage.uniqueIdentifier}`] !==
-              TaskItemStatus.COMPLETED
-          ) {
-            payload.aerSectionsCompleted[`${AER_AGGREGATED_DATA_SUB_TASK}-aggregated-data-${data.uniqueIdentifier}`] =
-              TaskItemStatus.NEEDS_REVIEW;
-            payload.aerSectionsCompleted[AER_AGGREGATED_DATA_SUB_TASK] = TaskItemStatus.NEEDS_REVIEW;
+          for (const voyage of associatedVoyages) {
+            if (
+              isNil(voyage) ||
+              payload.aerSectionsCompleted?.[`${this.subtask}-voyage-${voyage.uniqueIdentifier}`] !==
+                TaskItemStatus.COMPLETED
+            ) {
+              payload.aerSectionsCompleted[`${AER_AGGREGATED_DATA_SUB_TASK}-aggregated-data-${data.uniqueIdentifier}`] =
+                TaskItemStatus.NEEDS_REVIEW;
+              payload.aerSectionsCompleted[AER_AGGREGATED_DATA_SUB_TASK] = TaskItemStatus.NEEDS_REVIEW;
+              break;
+            }
           }
         }
       }),

@@ -22,7 +22,7 @@ public class ThirdPartyProviderViewServiceDelegator {
         Long accountId = requestTask.getRequest().getAccountId();
         String requestTaskCode = requestTask.getType().getCode();
 
-        return getService(requestTaskCode).getThirdPartyDataProviderInfo(accountId);
+        return getService(requestTaskCode).getThirdPartyDataProviderInfo(accountId, requestTask.getPayload());
     }
 
     private ThirdPartyProviderService getService(String requestTaskCode) {

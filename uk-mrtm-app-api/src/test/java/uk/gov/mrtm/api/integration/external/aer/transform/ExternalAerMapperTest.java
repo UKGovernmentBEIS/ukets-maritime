@@ -1,10 +1,11 @@
-package uk.gov.mrtm.api.integration.external.aer.mapper;
+package uk.gov.mrtm.api.integration.external.aer.transform;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.BioFuelType;
@@ -55,12 +56,15 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfDetails;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfPurchase;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerAggregatedDataEmissionsCalculator;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerSmfEmissionsCalculator;
 
 import java.math.BigDecimal;
 import java.util.LinkedHashSet;
@@ -70,6 +74,8 @@ import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mockStatic;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 
 @ExtendWith(MockitoExtension.class)
 class ExternalAerMapperTest {
@@ -88,6 +94,11 @@ class ExternalAerMapperTest {
 
     @InjectMocks
     private ExternalAerMapper externalAerMapper;
+
+    @Mock
+    private AerAggregatedDataEmissionsCalculator aggregatedDataCalculator;
+    @Mock
+    private AerSmfEmissionsCalculator aerSmfEmissionsCalculator;
 
     private static MockedStatic<UUID> mockedSettings;
 
@@ -123,6 +134,11 @@ class ExternalAerMapperTest {
         StagingAer actual = externalAerMapper.toStagingAer(external);
 
         assertEquals(expected, actual);
+
+        verify(aggregatedDataCalculator).calculateEmissions(expected.getAggregatedData(), expected.getEmissions(), null, null);
+        verify(aerSmfEmissionsCalculator).calculateEmissions(expected.getSmf());
+
+        verifyNoMoreInteractions(aggregatedDataCalculator, aerSmfEmissionsCalculator);
     }
 
     @Test
@@ -143,6 +159,11 @@ class ExternalAerMapperTest {
         StagingAer actual = externalAerMapper.toStagingAer(external);
 
         assertEquals(expected, actual);
+
+        verify(aggregatedDataCalculator).calculateEmissions(expected.getAggregatedData(), expected.getEmissions(), null, null);
+        verify(aerSmfEmissionsCalculator).calculateEmissions(expected.getSmf());
+
+        verifyNoMoreInteractions(aggregatedDataCalculator, aerSmfEmissionsCalculator);
     }
 
     private StagingAer createStagingAer(boolean reductionClaimApplied) {
@@ -169,6 +190,7 @@ class ExternalAerMapperTest {
                     .purchases(
                         List.of(
                             AerSmfPurchase.builder()
+                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber1")
                                 .smfMass(new BigDecimal("1000"))
                                 .co2EmissionFactor(new BigDecimal("0.01"))
@@ -176,6 +198,7 @@ class ExternalAerMapperTest {
                                 .uniqueIdentifier(SMF_PURCHASE_1_ID)
                             .build(),
                             AerSmfPurchase.builder()
+                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber2")
                                 .smfMass(new BigDecimal("2000"))
                                 .co2EmissionFactor(new BigDecimal("0.02"))
@@ -183,6 +206,7 @@ class ExternalAerMapperTest {
                                 .uniqueIdentifier(SMF_PURCHASE_2_ID)
                                 .build(),
                             AerSmfPurchase.builder()
+                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber3")
                                 .smfMass(new BigDecimal("3000"))
                                 .co2EmissionFactor(new BigDecimal("0.03"))
@@ -190,6 +214,7 @@ class ExternalAerMapperTest {
                                 .uniqueIdentifier(SMF_PURCHASE_3_ID)
                                 .build(),
                             AerSmfPurchase.builder()
+                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber4")
                                 .smfMass(new BigDecimal("4000"))
                                 .co2EmissionFactor(new BigDecimal("0.04"))
@@ -283,6 +308,7 @@ class ExternalAerMapperTest {
             .emissions(Set.of(
                 AerShipAggregatedData.builder()
                     .imoNumber("9876543")
+                    .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
                     .uniqueIdentifier(AGGREGATED_DATA_ID)
                     .isFromFetch(false)
                     .fuelConsumptions(
@@ -514,6 +540,7 @@ class ExternalAerMapperTest {
 
         return AerShipEmissions.builder()
             .uniqueIdentifier(AER_SHIP_EMISSIONS_ID)
+            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
             .details(AerShipDetails.builder()
                 .imoNumber("9876543")
                 .name("ship details name")

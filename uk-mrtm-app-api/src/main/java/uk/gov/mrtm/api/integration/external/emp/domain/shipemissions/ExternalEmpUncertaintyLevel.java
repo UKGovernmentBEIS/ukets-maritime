@@ -33,7 +33,7 @@ public class ExternalEmpUncertaintyLevel {
     @NotNull
     private MethodApproach levelOfUncertaintyTypeCode;
 
-    @Schema(description = "Specific value for the level of uncertainty. Decimal number between 0 and 100 (inclusive) with up to 3 integer digits and 2 fractional digits")
+    @Schema(description = "Specific value for the level of uncertainty. Decimal number between 0 and 100 (inclusive) with up to 3 integer digits and 2 fractional digits", minimum = "0")
     @NotNull
     @Positive
     @Digits(integer=3, fraction=2)

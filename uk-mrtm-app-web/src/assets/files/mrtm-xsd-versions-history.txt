@@ -1,4 +1,17 @@
 -----------------------------------------------------------------------------------
+MARITIME XSD Files 	(05-12-2025)
+-----------------------------------------------------------------------------------
+
+1) Updates on ship-details-and-emissions-v1.5.xsd
+  1.1) updated field name (shipName), changing the requirement to 255 characters
+
+XSD Schema Files:
+
+ship-details-and-emissions-v1.5.xsd: Updates
+aer-ship-details-and-emissions-v1.4.xsd: No updates
+emissions-aggregated-data-v1.1.xsd: No updates
+
+-----------------------------------------------------------------------------------
 MARITIME XSD Files 	(13-10-2025)
 -----------------------------------------------------------------------------------
 

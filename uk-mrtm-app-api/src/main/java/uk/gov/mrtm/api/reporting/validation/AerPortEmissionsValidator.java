@@ -33,7 +33,8 @@ public class AerPortEmissionsValidator implements AerContextValidator {
                 .findFirst()
                 .orElse(null);
 
-            AerValidatorHelper.validateShipExistsInListOfShips(ship, port.getImoNumber(), aerViolations, AerPort.class);
+            AerValidatorHelper.validateShipExistsInListOfShips(ship, port.getImoNumber(), aerViolations,
+                AerPort.class.getSimpleName());
 
             AerValidatorHelper.validateDirectEmissionsOrFuelConsumptionsExist(
                 port.getFuelConsumptions(),

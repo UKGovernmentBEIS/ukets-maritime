@@ -21,6 +21,7 @@ import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfDetails;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfPurchase;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 
 import java.util.List;
 import java.util.Set;
@@ -63,6 +64,8 @@ class AerSmfValidatorTest {
         assertFalse(result.isValid());
         assertThat(result.getAerViolations()).allMatch(aerViolation ->
             aerViolation.getMessage().equals(INVALID_FUEL_CONSUMPTION.getMessage()));
+        assertThat(result.getAerViolations()).extracting(AerViolation::getData)
+            .containsExactlyInAnyOrder(Set.of(FossilFuelType.METHANOL.name()).toArray());
     }
 
     public static Stream<Arguments> invalidFuelConsumptionScenarios() {

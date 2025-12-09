@@ -87,7 +87,16 @@ export class VoyagesListSummaryTemplateComponent {
     });
 
   readonly rows = computed<Array<MultiSelectedItem<AerVoyageSummaryItemDto>>>(() =>
-    sortAndPaginateListWithShipNameAndStatus(this.sort(), this.data() ?? [], this.currentPage(), this.pageSize()),
+    sortAndPaginateListWithShipNameAndStatus(
+      [
+        { column: 'shipName', direction: 'ascending' },
+        { column: 'departureTime', direction: 'descending' },
+      ],
+      this.sort(),
+      this.data() ?? [],
+      this.currentPage(),
+      this.pageSize(),
+    ),
   );
 
   onPageChange(page: number): void {

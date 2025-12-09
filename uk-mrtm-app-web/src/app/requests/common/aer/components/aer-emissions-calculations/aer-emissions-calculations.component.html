@@ -18,9 +18,11 @@
   then the emissions can be added in the direct emissions tab below.
 </p>
 
-@if (emissionsCalculationObject()?.journeyType === 'International') {
+@if (['International', 'EU'].includes(emissionsCalculationObject()?.journeyType)) {
   <govuk-warning-text
-    assistiveText="International voyages are not counted towards the emissions figure for surrender"></govuk-warning-text>
+    assistiveText="{{
+      emissionsCalculationObject()?.journeyType
+    }} voyages are not counted towards the emissions figure for surrender"></govuk-warning-text>
 }
 
 <mrtm-voyage-or-port-call-emissions-summary-template
