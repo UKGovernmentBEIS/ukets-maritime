@@ -19,7 +19,8 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissionsSave;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputType;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputTypeSave;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfDetails;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmfPurchase;
@@ -48,7 +49,7 @@ class AerMapperTest {
         AerShipEmissions savedShip1 = createAerShipEmissions("1");
         AerShipEmissions savedShip3 = createAerShipEmissions("3");
         AerShipEmissions savedShip2 = AerShipEmissions.builder()
-            .dataSaveMethod(DataSaveMethod.MANUAL)
+            .dataInputType(DataInputType.MANUAL)
             .details(shipToSave2.getDetails())
             .uniqueIdentifier(shipToSave2.getUniqueIdentifier())
             .fuelsAndEmissionsFactors(shipToSave2.getFuelsAndEmissionsFactors())
@@ -77,7 +78,7 @@ class AerMapperTest {
         AerShipAggregatedData savedData1 = createAerShipAggregatedData("1");
         AerShipAggregatedData savedData3 = createAerShipAggregatedData("3");
         AerShipAggregatedData savedData2 = AerShipAggregatedData.builder()
-            .dataSaveMethod(DataSaveMethod.MANUAL)
+            .dataInputType(DataInputType.MANUAL)
             .uniqueIdentifier(dataToSave2.getUniqueIdentifier())
             .isFromFetch(dataToSave2.isFromFetch())
             .imoNumber(dataToSave2.getImoNumber())
@@ -108,7 +109,7 @@ class AerMapperTest {
         AerSmfPurchase savedData1 = createAerSmfPurchase(id1);
         AerSmfPurchase savedData3 = createAerSmfPurchase(id3);
         AerSmfPurchase savedData2 = AerSmfPurchase.builder()
-            .dataSaveMethod(DataSaveMethod.MANUAL)
+            .dataInputType(DataInputType.MANUAL)
             .fuelOriginTypeName(dataToSave2.getFuelOriginTypeName())
             .batchNumber(dataToSave2.getBatchNumber())
             .smfMass(dataToSave2.getSmfMass())
@@ -129,7 +130,7 @@ class AerMapperTest {
 
     private AerSmfPurchase createAerSmfPurchase(UUID uniqueIdentifier) {
         return AerSmfPurchase.builder()
-            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+            .dataInputType(DataInputType.EXTERNAL_PROVIDER)
             .fuelOriginTypeName(mock(AerAggregatedDataFuelOriginTypeName.class))
             .batchNumber("batchNumber" + uniqueIdentifier)
             .smfMass(mock(BigDecimal.class))
@@ -143,6 +144,7 @@ class AerMapperTest {
         return AerSmfPurchaseSave.builder()
             .fuelOriginTypeName(mock(AerAggregatedDataFuelOriginTypeName.class))
             .batchNumber("batchNumber" + uniqueIdentifier)
+            .dataInputType(DataInputTypeSave.MANUAL)
             .smfMass(mock(BigDecimal.class))
             .co2EmissionFactor(mock(BigDecimal.class))
             .evidenceFiles(Set.of(mock(UUID.class)))
@@ -152,7 +154,7 @@ class AerMapperTest {
 
     private AerShipAggregatedData createAerShipAggregatedData(String imoNumber) {
         return AerShipAggregatedData.builder()
-            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+            .dataInputType(DataInputType.EXTERNAL_PROVIDER)
             .uniqueIdentifier(mock(UUID.class))
             .isFromFetch(true)
             .imoNumber(imoNumber)
@@ -172,6 +174,7 @@ class AerMapperTest {
             .uniqueIdentifier(mock(UUID.class))
             .isFromFetch(true)
             .imoNumber(imoNumber)
+            .dataInputType(DataInputTypeSave.MANUAL)
             .fuelConsumptions(Set.of(mock(AerAggregatedDataFuelConsumption.class)))
             .build();
     }
@@ -180,6 +183,7 @@ class AerMapperTest {
         return AerShipEmissionsSave.builder()
             .details(AerShipDetails.builder().imoNumber(imoNumber).build())
             .uniqueIdentifier(mock(UUID.class))
+            .dataInputType(DataInputTypeSave.MANUAL)
             .fuelsAndEmissionsFactors(Set.of(mock(AerFuelsAndEmissionsFactors.class)))
             .emissionsSources(Set.of(mock(EmissionsSources.class)))
             .uncertaintyLevel(Set.of(mock(UncertaintyLevel.class)))
@@ -189,7 +193,7 @@ class AerMapperTest {
 
     private AerShipEmissions createAerShipEmissions(String imoNumber) {
         return AerShipEmissions.builder()
-            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+            .dataInputType(DataInputType.EXTERNAL_PROVIDER)
             .details(AerShipDetails.builder().imoNumber(imoNumber).build())
             .uniqueIdentifier(mock(UUID.class))
             .fuelsAndEmissionsFactors(Set.of(mock(AerFuelsAndEmissionsFactors.class)))

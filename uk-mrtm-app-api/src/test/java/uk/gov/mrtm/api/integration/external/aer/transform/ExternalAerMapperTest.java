@@ -44,6 +44,7 @@ import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAer
 import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAerShipDetails;
 import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAerShipEmissions;
+import uk.gov.mrtm.api.integration.external.common.MrtmStagingPayloadType;
 import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpFuelOriginTypeName;
 import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpUncertaintyLevel;
 import uk.gov.mrtm.api.integration.external.emp.enums.ExternalFuelType;
@@ -56,7 +57,7 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputType;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
@@ -168,6 +169,7 @@ class ExternalAerMapperTest {
 
     private StagingAer createStagingAer(boolean reductionClaimApplied) {
         return StagingAer.builder()
+            .payloadType(MrtmStagingPayloadType.AER_STAGING_PAYLOAD)
             .emissions(AerEmissions.builder().ships(Set.of(createAerShipEmissions())).build())
             .aggregatedData(createAerAggregatedData())
             .smf(createAerSmf(reductionClaimApplied))
@@ -190,7 +192,7 @@ class ExternalAerMapperTest {
                     .purchases(
                         List.of(
                             AerSmfPurchase.builder()
-                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                                .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber1")
                                 .smfMass(new BigDecimal("1000"))
                                 .co2EmissionFactor(new BigDecimal("0.01"))
@@ -198,7 +200,7 @@ class ExternalAerMapperTest {
                                 .uniqueIdentifier(SMF_PURCHASE_1_ID)
                             .build(),
                             AerSmfPurchase.builder()
-                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                                .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber2")
                                 .smfMass(new BigDecimal("2000"))
                                 .co2EmissionFactor(new BigDecimal("0.02"))
@@ -206,7 +208,7 @@ class ExternalAerMapperTest {
                                 .uniqueIdentifier(SMF_PURCHASE_2_ID)
                                 .build(),
                             AerSmfPurchase.builder()
-                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                                .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber3")
                                 .smfMass(new BigDecimal("3000"))
                                 .co2EmissionFactor(new BigDecimal("0.03"))
@@ -214,7 +216,7 @@ class ExternalAerMapperTest {
                                 .uniqueIdentifier(SMF_PURCHASE_3_ID)
                                 .build(),
                             AerSmfPurchase.builder()
-                                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                                .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                                 .batchNumber("batchNumber4")
                                 .smfMass(new BigDecimal("4000"))
                                 .co2EmissionFactor(new BigDecimal("0.04"))
@@ -308,7 +310,7 @@ class ExternalAerMapperTest {
             .emissions(Set.of(
                 AerShipAggregatedData.builder()
                     .imoNumber("9876543")
-                    .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                    .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                     .uniqueIdentifier(AGGREGATED_DATA_ID)
                     .isFromFetch(false)
                     .fuelConsumptions(
@@ -427,10 +429,10 @@ class ExternalAerMapperTest {
                     .emissionSourceTypeCode(EmissionSourceType.AUX_ENGINE)
                     .emissionSourceClassCode(EmissionSourceClass.BOILERS)
                     .fuelTypeCodes(Set.of(
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.FOSSIL, ExternalFuelType.METHANOL, null, new BigDecimal("1")),
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.RFNBO, ExternalFuelType.E_METHANOL, null, new BigDecimal("3.100")),
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.BIO_METHANOL, null, new BigDecimal("01.7")),
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.OTHER, "otherFuelType", new BigDecimal("0"))
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.FOSSIL, ExternalFuelType.METHANOL, null, new BigDecimal("0.01")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.RFNBO, ExternalFuelType.E_METHANOL, null, new BigDecimal("0.0310")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.BIO_METHANOL, null, new BigDecimal("0.017")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.OTHER, "otherFuelType", new BigDecimal("0.0"))
                     ))
                     .monitoringMethods(Set.of(MonitoringMethod.BDN))
                     .build()
@@ -482,7 +484,7 @@ class ExternalAerMapperTest {
             .origin(FuelOrigin.RFNBO)
             .type(EFuelType.E_METHANOL)
             .methaneSlipValueType(MethaneSlipValueType.PRESELECTED)
-            .methaneSlip(new BigDecimal("3.100"))
+            .methaneSlip(new BigDecimal("3.1"))
             .build();
     }
 
@@ -540,7 +542,7 @@ class ExternalAerMapperTest {
 
         return AerShipEmissions.builder()
             .uniqueIdentifier(AER_SHIP_EMISSIONS_ID)
-            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+            .dataInputType(DataInputType.EXTERNAL_PROVIDER)
             .details(AerShipDetails.builder()
                 .imoNumber("9876543")
                 .name("ship details name")
@@ -561,7 +563,7 @@ class ExternalAerMapperTest {
                     .fuelDetails(Set.of(
                         createFuelOriginFossilTypeName(),
                         createFuelOriginEFuelTypeName(),
-                        createFuelOriginBiofuelTypeName(BioFuelType.BIO_METHANOL, null, BIO_METHANOL_FUEL_ID, new BigDecimal("01.7")),
+                        createFuelOriginBiofuelTypeName(BioFuelType.BIO_METHANOL, null, BIO_METHANOL_FUEL_ID, new BigDecimal("1.7")),
                         createFuelOriginBiofuelTypeName(BioFuelType.OTHER, "otherFuelType", OTHER_FUEL_ID, new BigDecimal("0"))
                     ))
                     .monitoringMethod(Set.of(MonitoringMethod.BDN))

@@ -20,6 +20,7 @@ import uk.gov.mrtm.api.integration.external.aer.domain.reductionclaim.ExternalAe
 import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAerEmissionsSources;
 import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.integration.external.aer.domain.shipemissions.ExternalAerShipEmissions;
+import uk.gov.mrtm.api.integration.external.common.MrtmStagingPayloadType;
 import uk.gov.mrtm.api.integration.external.common.mapper.ExternalCommonMapper;
 import uk.gov.mrtm.api.integration.external.emp.enums.ExternalFuelType;
 import uk.gov.mrtm.api.reporting.domain.aggregateddata.AerAggregatedData;
@@ -32,7 +33,7 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputType;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
@@ -66,6 +67,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
         smfCalculator.calculateEmissions(smf);
 
         return StagingAer.builder()
+            .payloadType(MrtmStagingPayloadType.AER_STAGING_PAYLOAD)
             .emissions(emissions)
             .aggregatedData(aggregatedData)
             .smf(smf)
@@ -95,7 +97,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
     private AerSmfPurchase toAerSmfPurchase(ExternalAerReductionClaimPurchase purchase) {
         return AerSmfPurchase.builder()
             .uniqueIdentifier(UUID.randomUUID())
-            .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+            .dataInputType(DataInputType.EXTERNAL_PROVIDER)
             .fuelOriginTypeName(toAerAggregatedDataFuelOriginTypeName(purchase.getFuelOriginCode(),
                 purchase.getFuelTypeCode(), purchase.getOtherFuelType()))
             .smfMass(purchase.getFuelMass())
@@ -109,7 +111,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
             emission -> AerShipAggregatedData.builder()
                 .uniqueIdentifier(UUID.randomUUID())
                 .isFromFetch(false)
-                .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                 .fuelConsumptions(toAerAggregatedDataFuelConsumption(emission.getAnnualEmission().getEmissions()))
                 .imoNumber(emission.getShipImoNumber())
                 .emissionsWithinUKPorts(toAerPortEmissionsMeasurement(emission.getAnnualEmission().getEtsEmissionsWithinUkPort()))
@@ -164,7 +166,7 @@ public class ExternalAerMapper extends ExternalCommonMapper {
                         .details(toShipDetails(ship))
                         .fuelsAndEmissionsFactors(fuelsAndEmissionsFactors)
                         .emissionsSources(emissionsSources)
-                        .dataSaveMethod(DataSaveMethod.EXTERNAL_PROVIDER)
+                        .dataInputType(DataInputType.EXTERNAL_PROVIDER)
                         .uncertaintyLevel(ship.getUncertaintyLevel().stream().map(
                             this::toUncertaintyLevel).collect(Collectors.toSet()))
                         .derogations(aerDerogations)

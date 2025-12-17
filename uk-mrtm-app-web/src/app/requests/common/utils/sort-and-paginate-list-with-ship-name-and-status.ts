@@ -4,33 +4,68 @@ import { SortEvent } from '@netz/govuk-components';
 
 import { DiffItem, ShipEmissionTableListItem } from '@shared/types';
 
+const compareValues = <T = unknown>(
+  a: T[keyof T],
+  b: T[keyof T],
+  direction: SortEvent['direction'],
+  nulls: 'first' | 'last' = 'last',
+): number => {
+  const aNil = isNil(a);
+  const bNil = isNil(b);
+
+  if (aNil || bNil) {
+    if (aNil && bNil) return 0;
+    const nilOrder = nulls === 'first' ? -1 : 1;
+    return aNil ? nilOrder : -nilOrder;
+  }
+
+  let result = 0;
+
+  // Dates (Date object)
+  if (a instanceof Date && b instanceof Date) {
+    result = a.valueOf() - b.valueOf();
+  }
+  // ISO date strings (or other date-like strings) - only if both parse to valid dates
+  else if (typeof a === 'string' && typeof b === 'string') {
+    const da = Date.parse(a);
+    const db = Date.parse(b);
+    if (!Number.isNaN(da) && !Number.isNaN(db)) {
+      result = da - db;
+    } else {
+      result = a.localeCompare(b, 'en-GB', { sensitivity: 'base' });
+    }
+  }
+  // Numbers
+  else if (typeof a === 'number' && typeof b === 'number') {
+    result = a - b;
+  }
+  // Fallback: compare as strings
+  else {
+    result = String(a).localeCompare(String(b), 'en-GB', { sensitivity: 'base' });
+  }
+
+  return direction === 'ascending' ? result : -result;
+};
+
 /**
  * Used on "List of Ships", "Voyages list", "Port calls list" and "Aggregated data list"
  */
 export const sortAndPaginateListWithShipNameAndStatus = <T>(
-  baseSorting: Array<SortEvent<T>>,
-  sorting: SortEvent<T>,
+  rules: Array<SortEvent<T>>,
   tableData: Array<T>,
   currentPage: number,
   pageSize: number,
 ): Array<T> => {
-  let sortedData = tableData ?? [];
+  const sortedData = [...tableData];
+  sortedData.sort((left, right) => {
+    for (const rule of rules) {
+      const a = left[rule.column];
+      const b = right[rule.column];
 
-  for (const sort of baseSorting) {
-    const { column, direction } = sort;
-    sortedData = sortedData.sort((a, b) => {
-      const objA = (direction === 'ascending' ? a[column] : b[column]) as any;
-      const objB = (direction === 'ascending' ? b[column] : a[column]) as any;
-      return column && !isNil(objA) ? objA.localeCompare(objB, 'en-GB', { sensitivity: 'base' }) : 0;
-    });
-  }
-
-  sortedData.sort((a, b) => {
-    if (!sorting) {
-      return 0;
+      const diff = compareValues<T>(a, b, rule.direction);
+      if (diff !== 0) return diff;
     }
-    const diff = a[sorting.column as string].localeCompare(b[sorting.column], 'en-GB', { sensitivity: 'base' });
-    return diff * (sorting.direction === 'ascending' ? 1 : -1);
+    return 0;
   });
 
   if (currentPage && pageSize) {

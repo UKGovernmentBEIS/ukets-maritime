@@ -27,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountDTO;
 import uk.gov.mrtm.api.account.service.MrtmAccountCreateService;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
+import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
 import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.netz.api.account.domain.dto.AccountSearchCriteria;
@@ -61,6 +62,8 @@ public class MrtmAccountController {
     @ApiResponse(responseCode = "201", description = CREATED)
     @ApiResponse(responseCode = "400", description = CREATE_MARITIME_ACCOUNT_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "429", description = SwaggerApiInfo.TOO_MANY_REQUESTS,
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = REGULATOR)
     public ResponseEntity<Void> createMaritimeAccount(
@@ -75,6 +78,8 @@ public class MrtmAccountController {
     @Operation(summary = "Checks if maritime account IMO number exists")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = Boolean.class))})
     @ApiResponse(responseCode = "403", description = FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "429", description = SwaggerApiInfo.TOO_MANY_REQUESTS,
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = REGULATOR)
     public ResponseEntity<Boolean> isExistingAccountImoNumber(
@@ -86,6 +91,8 @@ public class MrtmAccountController {
     @GetMapping
     @Operation(summary = "Retrieves the current user associated maritime accounts")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = AccountSearchResults.class))})
+    @ApiResponse(responseCode = "429", description = SwaggerApiInfo.TOO_MANY_REQUESTS,
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = {OPERATOR, REGULATOR, VERIFIER})
     public ResponseEntity<AccountSearchResults> searchCurrentUserMrtmAccounts (

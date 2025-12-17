@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.mrtm.api.web.controller.authorization.orchestrator.UserAuthorityQueryOrchestrator;
 import uk.gov.mrtm.api.web.controller.authorization.orchestrator.dto.UserStateDTO;
@@ -32,6 +33,8 @@ public class AuthorityController {
     @GetMapping(path = "/current-user-state")
     @Operation(summary = "Retrieves the status of the logged in user")
     @ApiResponse(responseCode = "200", description = OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = UserStateDTO.class))})
+    @ApiResponse(responseCode = "429", description = SwaggerApiInfo.TOO_MANY_REQUESTS,
+            content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     public ResponseEntity<UserStateDTO> getCurrentUserState(@Parameter(hidden = true) AppUser appUser) {
         UserStateDTO userState = UserStateDTO.builder()

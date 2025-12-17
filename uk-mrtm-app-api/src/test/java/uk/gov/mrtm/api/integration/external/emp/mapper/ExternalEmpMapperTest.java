@@ -52,6 +52,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpMandate;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpRegisteredOwner;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.RegisteredOwnerShipDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.monitoringreenhousegas.EmpMonitoringGreenhouseGas;
+import uk.gov.mrtm.api.integration.external.common.MrtmStagingPayloadType;
 import uk.gov.mrtm.api.integration.external.emp.domain.ExternalEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.datagaps.ExternalEmpDataGaps;
@@ -176,6 +177,7 @@ class ExternalEmpMapperTest {
                                                                                 boolean defaultFactorsUsed, boolean emissionsReductionClaimExists,
                                                                                 boolean delegatedResponsibilityUsed, boolean outsourcedActivitiesExists) {
         return StagingEmissionsMonitoringPlan.builder()
+            .payloadType(MrtmStagingPayloadType.EMP_STAGING_PAYLOAD)
             .emissions(EmpEmissions.builder().ships(Set.of(createEmpShipEmissions(captureAndStorageApplied, derogationCodeUsed))).build())
             .mandate(createEmpMandate(delegatedResponsibilityUsed))
             .sources(createEmpEmissionSources(defaultFactorsUsed, emissionsReductionClaimExists))
@@ -378,10 +380,10 @@ class ExternalEmpMapperTest {
                     .emissionSourceTypeCode(EmissionSourceType.AUX_ENGINE)
                     .emissionSourceClassCode(EmissionSourceClass.BOILERS)
                     .fuelTypeCodes(Set.of(
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.FOSSIL, ExternalFuelType.METHANOL, null, new BigDecimal("1")),
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.RFNBO, ExternalFuelType.E_METHANOL, null, new BigDecimal("3.100")),
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.BIO_METHANOL, null, new BigDecimal("01.7")),
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.OTHER, "otherFuelType", new BigDecimal("0"))
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.FOSSIL, ExternalFuelType.METHANOL, null, new BigDecimal("0.01")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.RFNBO, ExternalFuelType.E_METHANOL, null, new BigDecimal("0.0310")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.BIO_METHANOL, null, new BigDecimal("0.017")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.OTHER, "otherFuelType", new BigDecimal("0.0"))
                     ))
                     .monitoringMethods(Set.of(MonitoringMethod.BDN))
                     .identificationNumber("identificationNumber")
@@ -449,7 +451,7 @@ class ExternalEmpMapperTest {
             .origin(FuelOrigin.RFNBO)
             .type(EFuelType.E_METHANOL)
             .methaneSlipValueType(MethaneSlipValueType.PRESELECTED)
-            .methaneSlip(new BigDecimal("3.100"))
+            .methaneSlip(new BigDecimal("3.1"))
             .build();
     }
 
@@ -567,7 +569,7 @@ class ExternalEmpMapperTest {
                     .fuelDetails(Set.of(
                         createFuelOriginFossilTypeName(),
                         createFuelOriginEFuelTypeName(),
-                        createFuelOriginBiofuelTypeName(BioFuelType.BIO_METHANOL, null, BIO_METHANOL_FUEL_ID, new BigDecimal("01.7")),
+                        createFuelOriginBiofuelTypeName(BioFuelType.BIO_METHANOL, null, BIO_METHANOL_FUEL_ID, new BigDecimal("1.7")),
                         createFuelOriginBiofuelTypeName(BioFuelType.OTHER, "otherFuelType", OTHER_FUEL_ID, new BigDecimal("0"))
                     ))
                     .monitoringMethod(Set.of(MonitoringMethod.BDN))

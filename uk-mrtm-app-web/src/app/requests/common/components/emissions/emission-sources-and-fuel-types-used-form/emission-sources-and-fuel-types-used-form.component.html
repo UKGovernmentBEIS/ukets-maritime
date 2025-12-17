@@ -50,6 +50,8 @@
           formControlName="uniqueIdentifier"
           [options]="fuelDetailsOptions(i)"
           (change)="onChangeFuelDetails(i)"
+          [label]="'Select fuel type ' + (i + 1)"
+          [isLabelHidden]="true"
           widthClass="govuk-!-width-full"></div>
 
         @if (isLNGType(i)) {

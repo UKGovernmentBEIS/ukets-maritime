@@ -13,7 +13,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurement;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputType;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 
 import java.math.BigDecimal;
@@ -76,5 +76,5 @@ public class AerShipAggregatedData {
     private BigDecimal surrenderEmissions;
 
     @NotNull
-    private DataSaveMethod dataSaveMethod;
+    private DataInputType dataInputType;
 }

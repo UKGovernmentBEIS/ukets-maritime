@@ -1,8 +1,8 @@
 import { NgClass } from '@angular/common';
-import { Component, inject, Input } from '@angular/core';
+import { Component, ContentChild, inject, Input } from '@angular/core';
 import { ControlContainer, ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
 
-import { FormErrorDirective } from '../directives';
+import { FormErrorDirective, LabelDirective } from '../directives';
 import { ErrorMessageComponent } from '../error-message';
 import { FormService } from '../form';
 import { FormInput } from '../form/form-input';
@@ -27,6 +27,7 @@ export class SelectComponent extends FormInput implements ControlValueAccessor {
   @Input() options: GovukSelectOption[];
   @Input() widthClass: GovukSelectWidthClass;
   @Input() isLabelHidden = true;
+  @ContentChild(LabelDirective) templateLabel: LabelDirective;
   currentLabel = 'Select';
   currentLabelSize = 'govuk-label';
 

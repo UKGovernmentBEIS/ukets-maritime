@@ -50,6 +50,7 @@ public final class SwaggerApiInfo {
     public static final String NO_CONTENT = "No Content";
     public static final String CREATED = "Created";
     public static final String BAD_REQUEST = "Bad Request";
+    public static final String TOO_MANY_REQUESTS = "Too Many Requests";
     public static final String NOT_FOUND = "Not Found";
     public static final String FORBIDDEN = "Forbidden";
     public static final String INTERNAL_SERVER_ERROR = "Internal Server Error";

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.1.0/changelog_payload_modifications.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_MODIFY_EMP_STAGING_PAYLOAD_ADD_payloadType" author="P44065">
+        <sql>
+            UPDATE sch_third_party_data.emp_staging SET payload = jsonb_set(payload, '{payloadType}', '"EMP_STAGING_PAYLOAD"');
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>

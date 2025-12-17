@@ -103,7 +103,7 @@ export class ReductionClaimSummaryComponent {
             shipFuel?.name === fuelOriginTypeName.name,
         )
       ) {
-        errors['fuelConsumptions'] = 'The field “Fuel type” has an invalid value';
+        errors['fuelConsumptions'] = 'The field “Fuel name” has an invalid value';
         isValid = false;
         break;
       }

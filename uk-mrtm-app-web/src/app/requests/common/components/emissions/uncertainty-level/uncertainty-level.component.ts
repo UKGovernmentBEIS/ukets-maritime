@@ -7,7 +7,7 @@ import { UncertaintyLevel } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { GovukSelectOption, SelectComponent, TextInputComponent } from '@netz/govuk-components';
+import { GovukSelectOption, LabelDirective, SelectComponent, TextInputComponent } from '@netz/govuk-components';
 
 import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
 import { emissionsShipSubtaskMap, emissionsSubtaskMap } from '@requests/common/components/emissions';
@@ -34,6 +34,7 @@ import { isAer } from '@shared/utils';
     TextInputComponent,
     SelectOptionToTitlePipe,
     ReturnToShipsListTableComponent,
+    LabelDirective,
   ],
   providers: [uncertaintyLevelFormProvider],
   templateUrl: './uncertainty-level.component.html',
@@ -57,6 +58,16 @@ export class UncertaintyLevelComponent implements OnInit {
 
   get uncertaintyLevelFormArray(): UncertaintyLevelFormModel['uncertaintyLevels'] {
     return this.formGroup.get('uncertaintyLevels') as FormArray;
+  }
+
+  getMethodName(index: number): string {
+    const monitoringMethodValue = this.uncertaintyLevelFormArray?.controls?.[index]?.controls?.monitoringMethod?.value;
+
+    return monitoringMethodMap[monitoringMethodValue]?.text;
+  }
+
+  getMethodAccessibilitySuffix(index: number): string {
+    return ` for ${this.getMethodName(index)}`;
   }
 
   ngOnInit() {

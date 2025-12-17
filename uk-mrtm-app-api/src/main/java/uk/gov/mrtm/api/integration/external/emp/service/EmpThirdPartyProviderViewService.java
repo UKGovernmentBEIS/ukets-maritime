@@ -1,8 +1,10 @@
 package uk.gov.mrtm.api.integration.external.emp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
+import uk.gov.mrtm.api.integration.external.common.mapper.ThirdPartyDataCommonMapper;
 import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderService;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
 import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
@@ -17,19 +19,13 @@ import java.util.Optional;
 public class EmpThirdPartyProviderViewService implements ThirdPartyProviderService {
 
     private final StagingEmissionsMonitoringPlanRepository stagingEmpRepository;
+    private final ThirdPartyDataCommonMapper thirdPartyDataCommonMapper = Mappers.getMapper(ThirdPartyDataCommonMapper.class);
 
     public ThirdPartyDataProviderDTO getThirdPartyDataProviderInfo(Long accountId, RequestTaskPayload requestTaskPayload) {
-        Optional<StagingEmissionsMonitoringPlanEntity> stagingEmissionsMonitoringPlanEntity =
+        Optional<StagingEmissionsMonitoringPlanEntity> stagingEntity =
             stagingEmpRepository.findByAccountId(accountId);
 
-        return stagingEmissionsMonitoringPlanEntity.map(emissionsMonitoringPlanEntity ->
-                ThirdPartyDataProviderDTO.builder()
-                    .importedOn(emissionsMonitoringPlanEntity.getImportedOn())
-                    .receivedOn(emissionsMonitoringPlanEntity.getUpdatedOn())
-                    .providerName(emissionsMonitoringPlanEntity.getProviderName())
-                    .payload(emissionsMonitoringPlanEntity.getPayload())
-                    .build())
-            .orElse(null);
+        return stagingEntity.map(thirdPartyDataCommonMapper::map).orElse(null);
     }
 
     public List<String> getTypes() {

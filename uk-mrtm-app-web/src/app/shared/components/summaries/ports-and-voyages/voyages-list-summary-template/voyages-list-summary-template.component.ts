@@ -90,9 +90,9 @@ export class VoyagesListSummaryTemplateComponent {
     sortAndPaginateListWithShipNameAndStatus(
       [
         { column: 'shipName', direction: 'ascending' },
+        this.sort(),
         { column: 'departureTime', direction: 'descending' },
       ],
-      this.sort(),
       this.data() ?? [],
       this.currentPage(),
       this.pageSize(),

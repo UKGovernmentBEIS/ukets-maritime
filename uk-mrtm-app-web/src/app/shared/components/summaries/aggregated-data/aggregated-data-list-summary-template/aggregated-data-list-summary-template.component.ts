@@ -53,8 +53,7 @@ export class AggregatedDataListSummaryTemplateComponent {
   readonly columns = AGGREGATED_DATA_SUMMARY_COLUMNS;
   readonly rows = computed<Array<MultiSelectedItem<AerAggregatedDataSummaryItemDto>>>(() =>
     sortAndPaginateListWithShipNameAndStatus(
-      [{ column: 'shipName', direction: 'ascending' }],
-      this.sort(),
+      [{ column: 'shipName', direction: 'ascending' }, this.sort()],
       this.data() ?? [],
       this.currentPage(),
       this.pageSize(),

@@ -43,9 +43,9 @@ public class ExternalEmpFuelOriginTypeName {
     @EqualsAndHashCode.Include
     private String otherFuelType;
 
-    @Schema(description = "Slip percentage value. Decimal number between 0 and 100 (inclusive) with up to 3 integer digits and 2 fractional digits", minimum = "0")
+    @Schema(description = "Emission factor of slipped fuel. Decimal number between 0.0000 and 1 (inclusive) with up to 1 integer digits and 4 fractional digits", minimum = "0")
     @PositiveOrZero
-    @Digits(integer=3, fraction=2)
-    @DecimalMax(value = "100")
+    @Digits(integer=1, fraction=4)
+    @DecimalMax(value = "1")
     private BigDecimal slipPercentage;
 }

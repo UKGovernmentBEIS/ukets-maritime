@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import uk.gov.mrtm.api.reporting.domain.common.AerPortEmissionsMeasurementSave;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputTypeSave;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 
 import java.util.HashSet;
@@ -46,4 +47,7 @@ public class AerShipAggregatedDataSave {
 
     @Valid
     private AerPortEmissionsMeasurementSave emissionsBetweenUKAndNIVoyages;
+
+    @NotNull
+    private DataInputTypeSave dataInputType;
 }

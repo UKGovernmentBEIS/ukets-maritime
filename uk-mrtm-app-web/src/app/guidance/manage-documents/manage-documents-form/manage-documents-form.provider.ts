@@ -11,7 +11,7 @@ import { guidanceQuery, GuidanceStore } from '@guidance/+state';
 import { MANAGE_GUIDANCE_FORM } from '@guidance/guidance.constants';
 import { ManageGuidanceDocumentDTO } from '@guidance/guidance.types';
 import { ManageDocumentsFormGroupModel } from '@guidance/manage-documents/manage-documents-form/manage-documents-form.types';
-import { createCommonFileAsyncValidators } from '@shared/components';
+import { createCommonFileValidators } from '@shared/components';
 import { FileUploadService } from '@shared/services';
 
 const uniqueDocumentNameValidator =
@@ -71,10 +71,8 @@ export const manageDocumentsFormProvider: Provider = {
             }
           : null,
         {
-          asyncValidators: [
-            ...createCommonFileAsyncValidators(true),
-            uploadFileAsyncValidator(section.id, fileUploadService, guidanceDocumentsService),
-          ],
+          validators: createCommonFileValidators(true),
+          asyncValidators: [uploadFileAsyncValidator(section.id, fileUploadService, guidanceDocumentsService)],
           updateOn: 'change',
         },
       ),

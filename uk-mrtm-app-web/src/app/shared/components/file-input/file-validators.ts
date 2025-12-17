@@ -1,6 +1,4 @@
-import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
-
-import { of } from 'rxjs';
+import { ValidatorFn } from '@angular/forms';
 
 import { GovukValidators, MessageValidationErrors, MessageValidatorFn } from '@netz/govuk-components';
 
@@ -100,11 +98,8 @@ export const commonFileValidators: MessageValidatorFn[] = [FileValidators.maxFil
 export const requiredFileValidator = GovukValidators.required('Select a file');
 
 /**
- * convert synchronous file validators to asynchronous in order for file upload to run even if there are errors
  * @isRequired this form field is required
  */
-export const createCommonFileAsyncValidators = (isRequired: boolean): AsyncValidatorFn[] => {
-  return commonFileValidators
-    .concat(isRequired ? [requiredFileValidator] : [])
-    .map((v) => (control: AbstractControl) => of(v(control)));
+export const createCommonFileValidators = (isRequired: boolean): ValidatorFn[] => {
+  return commonFileValidators.concat(isRequired ? [requiredFileValidator] : []);
 };

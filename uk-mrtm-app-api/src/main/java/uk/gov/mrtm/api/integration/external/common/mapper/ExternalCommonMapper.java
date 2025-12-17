@@ -15,6 +15,7 @@ import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmp
 import uk.gov.mrtm.api.integration.external.emp.enums.ExternalFuelType;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,30 +27,34 @@ public class ExternalCommonMapper {
 
     public FuelOriginTypeName toFuelOriginTypeName(ExternalEmpFuelOriginTypeName fuelOriginTypeName) {
         UUID fuelTypeUuid = getFuelTypeUuids(fuelOriginTypeName.getFuelTypeCode(), fuelOriginTypeName.getOtherFuelType());
+        BigDecimal slipPercentage = fuelOriginTypeName.getSlipPercentage()
+            .multiply(new BigDecimal("100"))
+            .setScale(2, RoundingMode.DOWN)
+            .stripTrailingZeros();
 
         return switch (fuelOriginTypeName.getFuelOriginCode()) {
             case FuelOrigin.BIOFUEL -> FuelOriginBiofuelTypeName.builder()
                 .origin(fuelOriginTypeName.getFuelOriginCode())
                 .type(BioFuelType.valueOf(fuelOriginTypeName.getFuelTypeCode().name()))
                 .name(fuelOriginTypeName.getOtherFuelType())
-                .methaneSlip(fuelOriginTypeName.getSlipPercentage())
-                .methaneSlipValueType(getMethaneSlipValueType(fuelOriginTypeName.getSlipPercentage()))
+                .methaneSlip(slipPercentage)
+                .methaneSlipValueType(getMethaneSlipValueType(slipPercentage))
                 .uniqueIdentifier(fuelTypeUuid)
                 .build();
             case FuelOrigin.RFNBO -> FuelOriginEFuelTypeName.builder()
                 .origin(fuelOriginTypeName.getFuelOriginCode())
                 .type(EFuelType.valueOf(fuelOriginTypeName.getFuelTypeCode().name()))
                 .name(fuelOriginTypeName.getOtherFuelType())
-                .methaneSlip(fuelOriginTypeName.getSlipPercentage())
-                .methaneSlipValueType(getMethaneSlipValueType(fuelOriginTypeName.getSlipPercentage()))
+                .methaneSlip(slipPercentage)
+                .methaneSlipValueType(getMethaneSlipValueType(slipPercentage))
                 .uniqueIdentifier(fuelTypeUuid)
                 .build();
             case FuelOrigin.FOSSIL -> FuelOriginFossilTypeName.builder()
                 .origin(fuelOriginTypeName.getFuelOriginCode())
                 .type(FossilFuelType.valueOf(fuelOriginTypeName.getFuelTypeCode().name()))
                 .name(fuelOriginTypeName.getOtherFuelType())
-                .methaneSlip(fuelOriginTypeName.getSlipPercentage())
-                .methaneSlipValueType(getMethaneSlipValueType(fuelOriginTypeName.getSlipPercentage()))
+                .methaneSlip(slipPercentage)
+                .methaneSlipValueType(getMethaneSlipValueType(slipPercentage))
                 .uniqueIdentifier(fuelTypeUuid)
                 .build();
         };

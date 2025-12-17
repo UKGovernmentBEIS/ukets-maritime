@@ -1,9 +1,13 @@
 <label
-  [class.govuk-visually-hidden]="isLabelHidden"
+  [class.govuk-visually-hidden]="!templateLabel && isLabelHidden"
   [for]="identifier"
   [id]="'l.' + identifier"
   [class]="currentLabelSize">
-  {{ currentLabel }}
+  @if (!templateLabel) {
+    {{ currentLabel }}
+  } @else {
+    <ng-content select="[govukLabel]"></ng-content>
+  }
 </label>
 @if (hint) {
   <div [id]="identifier + '-hint'" class="govuk-hint">

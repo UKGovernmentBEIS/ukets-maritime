@@ -119,7 +119,7 @@ describe('MultiSelectTableComponent', () => {
     expect(rows).toHaveLength(3);
     expect(checkBoxes).toHaveLength(4);
 
-    expect(rows[0].querySelectorAll<HTMLTableCellElement>('td')[0].textContent.trim()).toContain('Select item');
+    expect(rows[0].querySelectorAll<HTMLTableCellElement>('td')[0].textContent.trim()).toContain('Select Name 1');
     expect(rows[0].querySelectorAll<HTMLTableCellElement>('td')[1].textContent.trim()).toContain('Name 1');
     expect(rows[0].querySelectorAll<HTMLTableCellElement>('td')[2].textContent.trim()).toContain('Surname 1');
     expect(rows[0].querySelectorAll<HTMLTableCellElement>('td')[3].textContent.trim()).toContain('23');

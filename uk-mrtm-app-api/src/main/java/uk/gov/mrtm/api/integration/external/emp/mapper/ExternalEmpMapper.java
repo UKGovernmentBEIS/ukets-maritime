@@ -31,6 +31,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpMandate;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.EmpRegisteredOwner;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.mandate.RegisteredOwnerShipDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.monitoringreenhousegas.EmpMonitoringGreenhouseGas;
+import uk.gov.mrtm.api.integration.external.common.MrtmStagingPayloadType;
 import uk.gov.mrtm.api.integration.external.common.mapper.ExternalCommonMapper;
 import uk.gov.mrtm.api.integration.external.emp.domain.ExternalEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
@@ -66,6 +67,7 @@ public class ExternalEmpMapper extends ExternalCommonMapper {
         EmpEmissions emissions = toEmpEmissions(external.getShipParticulars());
 
         return StagingEmissionsMonitoringPlan.builder()
+            .payloadType(MrtmStagingPayloadType.EMP_STAGING_PAYLOAD)
             .mandate(empMandate)
             .greenhouseGas(greenhouseGas)
             .managementProcedures(managementProcedures)

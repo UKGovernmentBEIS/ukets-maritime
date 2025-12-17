@@ -25,7 +25,7 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissionsSave;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataSaveMethod;
+import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputType;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
@@ -120,7 +120,7 @@ public interface AerMapper {
             .stream()
             .filter(ship -> ship.getDetails() != null
                 && ship.getDetails().getImoNumber() != null
-                && DataSaveMethod.EXTERNAL_PROVIDER.equals(ship.getDataSaveMethod()))
+                && DataInputType.EXTERNAL_PROVIDER.equals(ship.getDataInputType()))
             .collect(Collectors.toMap(ship -> ship.getDetails().getImoNumber(), ship -> ship));
 
         return saveShips.stream()
@@ -131,7 +131,6 @@ public interface AerMapper {
             .collect(Collectors.toSet());
     }
 
-    @Mapping(target = "dataSaveMethod", constant = "MANUAL")
     AerShipEmissions toAerShipEmissionsSave(AerShipEmissionsSave aerShipEmissionsSave, @Context Aer existingAer);
 
     default Set<AerShipAggregatedData> aerShipAggregatedDataSaveSetToAerShipAggregatedDataSet(Set<AerShipAggregatedDataSave> aggregatedData,
@@ -146,7 +145,7 @@ public interface AerMapper {
             .orElse(Collections.emptySet())
             .stream()
             .filter(data -> data.getImoNumber() != null
-                && DataSaveMethod.EXTERNAL_PROVIDER.equals(data.getDataSaveMethod()))
+                && DataInputType.EXTERNAL_PROVIDER.equals(data.getDataInputType()))
             .collect(Collectors.toMap(AerShipAggregatedData::getImoNumber, data -> data));
 
         return aggregatedData.stream()
@@ -157,7 +156,6 @@ public interface AerMapper {
             .collect(Collectors.toSet());
     }
 
-    @Mapping(target = "dataSaveMethod", constant = "MANUAL")
     AerShipAggregatedData toAerShipAggregatedDataSave(AerShipAggregatedDataSave aerShipAggregatedDataSave, @Context Aer existingAer);
 
     default List<AerSmfPurchase> aerSmfPurchaseSaveListToAerSmfPurchaseList(List<AerSmfPurchaseSave> aerSmfPurchases,
@@ -173,7 +171,7 @@ public interface AerMapper {
             .orElse(Collections.emptyList())
             .stream()
             .filter(data -> data.getUniqueIdentifier() != null
-                && DataSaveMethod.EXTERNAL_PROVIDER.equals(data.getDataSaveMethod()))
+                && DataInputType.EXTERNAL_PROVIDER.equals(data.getDataInputType()))
             .collect(Collectors.toMap(AerSmfPurchase::getUniqueIdentifier, data -> data));
 
         return aerSmfPurchases.stream()
@@ -190,7 +188,6 @@ public interface AerMapper {
             .collect(Collectors.toList());
     }
 
-    @Mapping(target = "dataSaveMethod", constant = "MANUAL")
     AerSmfPurchase toAerSmfPurchaseSave(AerSmfPurchaseSave aerSmfPurchaseSave, @Context Aer existingAer);
 
     @Mapping(target = "reportingYear", source = "requestMetadata.year")
