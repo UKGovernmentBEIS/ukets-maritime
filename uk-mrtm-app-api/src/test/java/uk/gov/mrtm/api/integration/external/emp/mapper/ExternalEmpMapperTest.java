@@ -380,7 +380,7 @@ class ExternalEmpMapperTest {
                     .emissionSourceTypeCode(EmissionSourceType.AUX_ENGINE)
                     .emissionSourceClassCode(EmissionSourceClass.BOILERS)
                     .fuelTypeCodes(Set.of(
-                        createExternalEmpFuelOriginTypeName(FuelOrigin.FOSSIL, ExternalFuelType.METHANOL, null, new BigDecimal("0.01")),
+                        createExternalEmpFuelOriginTypeName(FuelOrigin.FOSSIL, ExternalFuelType.METHANOL, null, null),
                         createExternalEmpFuelOriginTypeName(FuelOrigin.RFNBO, ExternalFuelType.E_METHANOL, null, new BigDecimal("0.0310")),
                         createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.BIO_METHANOL, null, new BigDecimal("0.017")),
                         createExternalEmpFuelOriginTypeName(FuelOrigin.BIOFUEL, ExternalFuelType.OTHER, "otherFuelType", new BigDecimal("0.0"))
@@ -428,8 +428,6 @@ class ExternalEmpMapperTest {
             .uniqueIdentifier(METHANOL_FUEL_ID)
             .origin(FuelOrigin.FOSSIL)
             .type(FossilFuelType.METHANOL)
-            .methaneSlipValueType(MethaneSlipValueType.OTHER)
-            .methaneSlip(new BigDecimal("1"))
             .build();
     }
 

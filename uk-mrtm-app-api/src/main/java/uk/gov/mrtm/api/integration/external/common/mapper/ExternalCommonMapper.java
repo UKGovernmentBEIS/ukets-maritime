@@ -27,10 +27,14 @@ public class ExternalCommonMapper {
 
     public FuelOriginTypeName toFuelOriginTypeName(ExternalEmpFuelOriginTypeName fuelOriginTypeName) {
         UUID fuelTypeUuid = getFuelTypeUuids(fuelOriginTypeName.getFuelTypeCode(), fuelOriginTypeName.getOtherFuelType());
-        BigDecimal slipPercentage = fuelOriginTypeName.getSlipPercentage()
-            .multiply(new BigDecimal("100"))
-            .setScale(2, RoundingMode.DOWN)
-            .stripTrailingZeros();
+        BigDecimal slipPercentage = fuelOriginTypeName.getSlipPercentage();
+
+        if (slipPercentage != null) {
+            slipPercentage = slipPercentage
+                .multiply(new BigDecimal("100"))
+                .setScale(2, RoundingMode.DOWN)
+                .stripTrailingZeros();
+        }
 
         return switch (fuelOriginTypeName.getFuelOriginCode()) {
             case FuelOrigin.BIOFUEL -> FuelOriginBiofuelTypeName.builder()
