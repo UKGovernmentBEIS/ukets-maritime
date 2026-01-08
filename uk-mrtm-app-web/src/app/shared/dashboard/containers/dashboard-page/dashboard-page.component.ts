@@ -1,9 +1,9 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, DestroyRef, inject, OnInit } from '@angular/core';
-import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { toObservable, toSignal } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { combineLatest, distinctUntilChanged, filter, startWith, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 
 import { MrtmItemDTO } from '@mrtm/api';
 
@@ -26,12 +26,7 @@ import {
 import { requestTypesWhitelistForItemLinkPipe } from '@shared/constants';
 import {
   DashboardItemsListComponent,
-  DashboardStore,
-  selectActiveTab,
-  selectItems,
-  selectPage,
-  selectPageSize,
-  selectTotal,
+  initialState,
   WorkflowItemsAssignmentType,
   WorkflowItemsService,
 } from '@shared/dashboard';
@@ -75,52 +70,57 @@ const getTableColumns = (activeTab: WorkflowItemsAssignmentType): GovukTableColu
     TabLazyDirective,
   ],
 })
-export class DashboardPageComponent implements OnInit {
+export class DashboardPageComponent {
   private readonly workflowItemsService = inject(WorkflowItemsService);
-  private readonly dashboardStore = inject(DashboardStore);
   private readonly authStore = inject(AuthStore);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly destroy$ = inject(DestroyRef);
+  private readonly router = inject(Router);
 
+  pageSize = initialState.paging.pageSize;
   role = this.authStore.select(selectUserRoleType);
-  activeTab = this.dashboardStore.select(selectActiveTab);
-  items = this.dashboardStore.select(selectItems);
-  total = this.dashboardStore.select(selectTotal);
-  page = this.dashboardStore.select(selectPage);
-  pageSize = this.dashboardStore.select(selectPageSize);
-  tableColumns = computed(() => getTableColumns(this.activeTab()));
-  private readonly defaultAssignmentType: WorkflowItemsAssignmentType = 'assigned-to-me';
-  private readonly activeTab$ = toObservable(this.activeTab);
-  private readonly page$ = toObservable(this.page);
-
-  ngOnInit(): void {
-    this.activatedRoute.fragment
-      .pipe(
-        startWith(this.defaultAssignmentType),
-        distinctUntilChanged(),
-        filter((fragment) => !!fragment),
-        takeUntilDestroyed(this.destroy$),
-      )
-      .subscribe((tab: WorkflowItemsAssignmentType) => {
-        this.dashboardStore.setPage(1);
-        this.dashboardStore.setActiveTab(this.isValidTab(tab) ? tab : this.defaultAssignmentType);
-      });
-
-    combineLatest([this.activeTab$, this.page$])
-      .pipe(
-        switchMap(([activeTab, page]) => {
-          return this.workflowItemsService.getItems(activeTab, page, this.pageSize());
-        }),
-        takeUntilDestroyed(this.destroy$),
-      )
-      .subscribe(({ items, totalItems }) => {
-        this.dashboardStore.setItems(items);
-        this.dashboardStore.setTotal(totalItems);
-      });
-  }
+  activeTab = signal(
+    this.isValidTab(this.activatedRoute.snapshot.fragment as any)
+      ? (this.activatedRoute.snapshot.fragment as WorkflowItemsAssignmentType)
+      : initialState.activeTab,
+  );
+  page = signal(
+    this.activatedRoute.snapshot.queryParamMap.get('page')
+      ? +this.activatedRoute.snapshot.queryParamMap.get('page')
+      : initialState.paging.page,
+  );
+  readonly tableColumns = computed(() => getTableColumns(this.activeTab()));
+  private readonly params = computed(() => ({
+    activeTab: this.activeTab(),
+    page: this.page(),
+  }));
+  private readonly response = toSignal(
+    toObservable(this.params).pipe(
+      switchMap(({ activeTab, page }) => this.workflowItemsService.getItems(activeTab, page, this.pageSize)),
+    ),
+    {
+      initialValue: {
+        items: initialState.items,
+        totalItems: initialState.total,
+      },
+    },
+  );
+  items = computed(() => this.response().items);
+  total = computed(() => this.response().totalItems);
 
   changePage(page: number) {
-    this.dashboardStore.setPage(page);
+    this.page.update(() => page);
+  }
+
+  selectTab(selected: string) {
+    if (selected !== this.activeTab()) {
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { page: 1 },
+        fragment: selected,
+      });
+      this.page.update(() => 1);
+      this.activeTab.update(() => selected as WorkflowItemsAssignmentType);
+    }
   }
 
   /**
@@ -128,6 +128,6 @@ export class DashboardPageComponent implements OnInit {
    * @param tab
    */
   isValidTab(tab: WorkflowItemsAssignmentType) {
-    return !(tab !== 'assigned-to-me' && tab !== 'assigned-to-others' && tab !== 'unassigned');
+    return ['assigned-to-me', 'assigned-to-others', 'unassigned'].includes(tab);
   }
 }

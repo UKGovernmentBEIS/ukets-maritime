@@ -20185,4 +20185,65 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_update_getThirdPartyDataProviderOfAccount_authorization_service_scope" author="P44065">
+        <sql>
+            delete
+            from au_service_rule sr
+                using au_rule r, au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name in ('getThirdPartyDataProviderOfAccount')
+              and r.resource_type = 'ACCOUNT'
+              and r.handler = 'accountAccessHandler'
+              and r.scope = 'EDIT_USER';
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'getThirdPartyDataProviderOfAccount'
+              and aur.resource_type = 'ACCOUNT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'accountAccessHandler'
+              and aur.scope is null
+              and aur.role_type = 'OPERATOR';
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'getThirdPartyDataProviderOfAccount'
+              and aur.resource_type = 'ACCOUNT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'accountAccessHandler'
+              and aur.scope is null
+              and aur.role_type = 'REGULATOR';
+        </sql>
+        <rollback>
+            <sql>
+                insert into au_service_rule(service_id, rule_id)
+                select aus.id, aur.id
+                from au_service aus
+                cross join au_rule aur
+                where aus.name = 'getThirdPartyDataProviderOfAccount'
+                and aur.resource_type = 'ACCOUNT'
+                and aur.resource_sub_type is null
+                and aur.handler = 'accountAccessHandler'
+                and aur.scope = 'EDIT_USER'
+                and aur.role_type = 'OPERATOR';
+
+                insert into au_service_rule(service_id, rule_id)
+                select aus.id, aur.id
+                from au_service aus
+                cross join au_rule aur
+                where aus.name = 'getThirdPartyDataProviderOfAccount'
+                and aur.resource_type = 'ACCOUNT'
+                and aur.resource_sub_type is null
+                and aur.handler = 'accountAccessHandler'
+                and aur.scope = 'EDIT_USER'
+                and aur.role_type = 'REGULATOR';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

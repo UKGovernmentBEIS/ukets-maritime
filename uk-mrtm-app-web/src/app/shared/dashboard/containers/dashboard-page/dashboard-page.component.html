@@ -1,5 +1,5 @@
 <netz-page-heading size="xl">Tasks</netz-page-heading>
-<govuk-tabs>
+<govuk-tabs (selectedTab)="selectTab($event)">
   <ng-template govukTabLazy id="assigned-to-me" label="Assigned to me">
     <ng-container
       *ngTemplateOutlet="
@@ -33,13 +33,13 @@
       [tableColumns]="tableColumns()"
       [unassignedLabel]="unassigned" />
   }
-  @if (total() > pageSize()) {
+  @if (total() > pageSize) {
     @if (activeTab() === tab) {
       <govuk-pagination
         fragment="items-list"
         (currentPageChange)="changePage($event)"
         [count]="total()"
-        [pageSize]="pageSize()" />
+        [pageSize]="pageSize" />
     }
   }
 </ng-template>

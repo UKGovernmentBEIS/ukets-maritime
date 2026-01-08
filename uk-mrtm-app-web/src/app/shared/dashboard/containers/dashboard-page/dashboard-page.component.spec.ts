@@ -114,42 +114,37 @@ describe('DashboardPageComponent', () => {
     }).compileComponents();
 
     authStore = TestBed.inject(AuthStore);
-    authStore.setUserState({
-      roleType: 'OPERATOR',
-      userId: 'opTestId',
-    });
   });
 
   beforeEach(createComponent);
-
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-
-  it('should render assigned to me table rows', () => {
-    fixture.detectChanges();
-
-    const anchors = Array.from(page.assignedToMeTab.querySelectorAll('td'))
-      .map((cell) => cell.querySelector('a'))
-      .filter((anchor) => !!anchor);
-    expect(anchors.map((anchor) => anchor.href).length).toEqual(2);
-  });
-
-  it('should render assigned to others table rows', () => {
-    fixture.detectChanges();
-    page.assignedToOthersTabLink.click();
-    fixture.detectChanges();
-
-    const anchors = Array.from(page.assignedToOthersTab.querySelectorAll('td'))
-      .map((cell) => cell.querySelector('a'))
-      .filter((anchor) => !!anchor);
-    expect(anchors.map((anchor) => anchor.href).length).toEqual(1);
-  });
 
   describe('for operators', () => {
     beforeEach(() => {
       authStore.setUserState({ roleType: 'OPERATOR', userId: '331' });
       fixture.detectChanges();
+    });
+
+    it('should create', () => {
+      expect(component).toBeTruthy();
+    });
+
+    it('should render assigned to me table rows', () => {
+      fixture.detectChanges();
+
+      const anchors = Array.from(page.assignedToMeTab.querySelectorAll('td'))
+        .map((cell) => cell.querySelector('a'))
+        .filter((anchor) => !!anchor);
+      expect(anchors.map((anchor) => anchor.href).length).toEqual(2);
+    });
+
+    it('should render assigned to others table rows', () => {
+      page.assignedToOthersTabLink.click();
+      fixture.detectChanges();
+
+      const anchors = Array.from(page.assignedToOthersTab.querySelectorAll('td'))
+        .map((cell) => cell.querySelector('a'))
+        .filter((anchor) => !!anchor);
+      expect(anchors.map((anchor) => anchor.href).length).toEqual(1);
     });
 
     it('should not display the unassigned items', () => {
