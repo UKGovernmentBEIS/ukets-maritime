@@ -14,7 +14,7 @@ import java.math.RoundingMode;
 public class AerSmfEmissionsCalculator {
 
     public void calculateEmissions(Aer aer) {
-        if (aer == null || aer.getSmf() == null || aer.getSmf().getSmfDetails() == null) {
+        if (aer == null || aer.getSmf() == null) {
             return;
         }
 
@@ -22,6 +22,10 @@ public class AerSmfEmissionsCalculator {
     }
 
     public void calculateEmissions(AerSmf smf) {
+        if (smf.getSmfDetails() == null) {
+            return;
+        }
+
         BigDecimal totalCo2Emissions = BigDecimal.ZERO;
 
         for (AerSmfPurchase purchase : smf.getSmfDetails().getPurchases()) {

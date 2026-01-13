@@ -1,8 +1,15 @@
+<mrtm-notification-banner />
 <netz-page-heading [caption]="wizardMap.smfDetails.caption">{{ wizardMap.smfDetails.title }}</netz-page-heading>
-<p class="govuk-hint">The total CO2 emissions will be deducted from your voyages and ports emissions.</p>
+<p class="govuk-body">The total CO2 emissions will be deducted from your voyages and ports emissions.</p>
+
+@if (warningMessage(); as warningMessage) {
+  <govuk-warning-text [assistiveText]="warningMessage" />
+}
+
 <mrtm-reduction-claim-details-summary-template
   [editable]="isEditable()"
   [data]="data()"
+  [dataSupplierName]="thirdPartyDataProviderName()"
   (handleChange)="onChange($event)"
   (handleDelete)="onDelete($event)" />
 
@@ -12,7 +19,7 @@
       <a govukSecondaryButton [routerLink]="['./', wizardStep.FUEL_PURCHASE]">Add another item</a>
     </div>
     <div class="govuk-body">
-      <a govukButton [routerLink]="['../']">Continue</a>
+      <button govukButton (click)="onContinue()" type="button">Continue</button>
     </div>
   } @else {
     <a govukButton [routerLink]="['./', wizardStep.FUEL_PURCHASE]">Add new item</a>

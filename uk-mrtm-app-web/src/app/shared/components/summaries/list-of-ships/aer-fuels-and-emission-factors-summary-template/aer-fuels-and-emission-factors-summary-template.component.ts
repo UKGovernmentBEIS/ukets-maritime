@@ -45,7 +45,10 @@ export class AerFuelsAndEmissionFactorsSummaryTemplateComponent {
   ];
   readonly columns: Signal<GovukTableColumn[]> = computed(() =>
     this.isEditable()
-      ? [...this.mainColumns, { field: 'actionLinks', header: undefined, widthClass: 'app-column-width-15-per' }]
+      ? [
+          ...this.mainColumns,
+          { field: 'actionLinks', header: 'Actions', hiddenHeader: true, widthClass: 'app-column-width-15-per' },
+        ]
       : this.mainColumns,
   );
 

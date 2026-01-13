@@ -3,11 +3,15 @@ import { SubTaskListMap } from '@shared/types';
 export const emissionsSubtaskMap: SubTaskListMap<{
   ships: string;
   uploadShips: string;
+  uploadShipsConfirmation: string;
 }> = {
   title: 'List of ships and calculation of maritime emissions',
   ships: { title: 'Add ships and emission details' },
   uploadShips: {
     title: 'Upload the ships and emission details file',
+  },
+  uploadShipsConfirmation: {
+    title: 'Are you sure you want to replace the data?',
   },
 };
 

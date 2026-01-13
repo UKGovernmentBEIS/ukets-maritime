@@ -16,7 +16,7 @@ import {
 import { sortAndPaginateListWithShipNameAndStatus } from '@requests/common/utils/sort-and-paginate-list-with-ship-name-and-status';
 import { MultiSelectedItem, MultiSelectTableComponent } from '@shared/components';
 import { AGGREGATED_DATA_SUMMARY_COLUMNS } from '@shared/components/summaries/aggregated-data/aggregated-data-list-summary-template/aggregated-data-list-summary-template.consts';
-import { AerPortVoyageAggregatedStatusPipe, BigNumberPipe } from '@shared/pipes';
+import { AerPortVoyageAggregatedStatusPipe, BigNumberPipe, InitialDataSourcePipe } from '@shared/pipes';
 import { AerAggregatedDataSummaryItemDto } from '@shared/types';
 
 @Component({
@@ -35,6 +35,7 @@ import { AerAggregatedDataSummaryItemDto } from '@shared/types';
     MultiSelectTableComponent,
     RouterLink,
     AerPortVoyageAggregatedStatusPipe,
+    InitialDataSourcePipe,
   ],
   templateUrl: './aggregated-data-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,6 +43,7 @@ import { AerAggregatedDataSummaryItemDto } from '@shared/types';
 export class AggregatedDataListSummaryTemplateComponent {
   readonly deleteItems = output<AerAggregatedDataSummaryItemDto[]>();
   readonly data = input<Array<MultiSelectedItem<AerAggregatedDataSummaryItemDto>>>();
+  readonly dataSupplierName = input<string>();
   readonly header = input<string>();
   readonly editable = input<boolean>(false);
   readonly pageSize = input<number>(10);
@@ -53,7 +55,7 @@ export class AggregatedDataListSummaryTemplateComponent {
   readonly columns = AGGREGATED_DATA_SUMMARY_COLUMNS;
   readonly rows = computed<Array<MultiSelectedItem<AerAggregatedDataSummaryItemDto>>>(() =>
     sortAndPaginateListWithShipNameAndStatus(
-      [{ column: 'shipName', direction: 'ascending' }, this.sort()],
+      [this.sort(), { column: 'shipName', direction: 'ascending' }],
       this.data() ?? [],
       this.currentPage(),
       this.pageSize(),

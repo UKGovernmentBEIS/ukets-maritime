@@ -47,6 +47,7 @@ public enum ExternalFuelType {
     private FuelOrigin fuelOriginCode;
 
     public static boolean validateFuelOrigin(ExternalFuelType fuelTypeCode, FuelOrigin fuelOriginCode) {
-        return fuelTypeCode.equals(OTHER) || fuelTypeCode.getFuelOriginCode() == fuelOriginCode;
+        return fuelTypeCode != null &&
+            (fuelTypeCode.equals(OTHER) || fuelTypeCode.getFuelOriginCode() == fuelOriginCode);
     }
 }

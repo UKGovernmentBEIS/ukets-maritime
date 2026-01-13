@@ -27,7 +27,7 @@ import {
   ReductionClaimSummaryTemplateComponent,
 } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
-import { ReductionClaimDetailsListItemDto, SubTaskListMap } from '@shared/types';
+import { ReductionClaimDetailsListItemDto, SubTaskListMap, WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-reduction-claim-summary',
@@ -58,7 +58,8 @@ export class ReductionClaimSummaryComponent {
   public readonly wizardMap: SubTaskListMap<AerSmf> = reductionClaimMap;
   public readonly wizardStep: typeof ReductionClaimWizardStep = ReductionClaimWizardStep;
   public readonly data: Signal<AerSmf> = this.store.select(aerCommonQuery.selectReductionClaim);
-  public readonly fuelPurchases: Signal<Array<ReductionClaimDetailsListItemDto>> = this.store.select(
+  public readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
+  public readonly fuelPurchases: Signal<Array<WithNeedsReview<ReductionClaimDetailsListItemDto>>> = this.store.select(
     aerCommonQuery.selectReductionClaimDetailsListItems,
   );
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
@@ -70,7 +71,11 @@ export class ReductionClaimSummaryComponent {
   });
 
   public readonly warningMessage: Signal<string> = computed(() =>
-    this.status() === TaskItemStatus.NEEDS_REVIEW ? 'You must review the emissions reduction claim' : undefined,
+    this.status() === TaskItemStatus.NEEDS_REVIEW
+      ? 'You must review the emissions reduction claim'
+      : this.fuelPurchases().find((fuel) => fuel.needsReview && fuel.dataInputType === 'EXTERNAL_PROVIDER')
+        ? 'Data imported from a supplier does not include supporting evidence. Import the supporting evidence manually to continue.'
+        : undefined,
   );
 
   public onChange(item: ReductionClaimDetailsListItemDto): void {
@@ -91,8 +96,9 @@ export class ReductionClaimSummaryComponent {
     const errors: ValidationErrors = {};
     let isValid = true;
     const allFuels = this.store.select(aerCommonQuery.selectSupersetOfFuelTypes)();
+    const fuelPurchases = this.fuelPurchases();
 
-    for (const fuelOriginTypeName of this.fuelPurchases()
+    for (const fuelOriginTypeName of fuelPurchases
       ?.map((item) => item.fuelOriginTypeName)
       .filter(Boolean) as Array<AerFuelOriginFossilTypeName>) {
       if (
@@ -107,6 +113,12 @@ export class ReductionClaimSummaryComponent {
         isValid = false;
         break;
       }
+    }
+
+    if (fuelPurchases.find((fuelPurchase) => fuelPurchase.needsReview)) {
+      errors['needsReview'] =
+        'Data imported from a supplier does not include supporting evidence. Import the supporting evidence manually to continue.';
+      isValid = false;
     }
 
     if (!isValid) {

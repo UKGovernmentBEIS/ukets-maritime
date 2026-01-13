@@ -42,20 +42,6 @@
         </rollback>
     </changeSet>
 
-    <changeSet id="0_1_0_SET_UP_SYSTEM_MESSAGE_NOTIFICATION" author="P44065">
-        <sql>
-            INSERT INTO public.request_type
-            (id, code, description, process_definition_id, history_category, hold_history, displayed_in_progress, cascadable, can_create_manually, resource_type)
-            VALUES(nextval('request_type_seq'), 'SYSTEM_MESSAGE_NOTIFICATION', 'System Message Notification', 'SYSTEM_MESSAGE_NOTIFICATION', 'SYSTEM_MESSAGE_NOTIFICATION', false, true, false, false, 'ACCOUNT');
-        </sql>
-        <rollback>
-            <sql>
-                DELETE FROM public.request_type
-                WHERE code = 'SYSTEM_MESSAGE_NOTIFICATION';
-            </sql>
-        </rollback>
-    </changeSet>
-
     <changeSet id="0_1_0_SET_UP_NEW_VERIFICATION_BODY_SYSTEM_NOTIFICATION" author="P44065">
         <sql>
             INSERT INTO public.request_task_type

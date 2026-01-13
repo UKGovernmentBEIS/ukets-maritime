@@ -6,25 +6,42 @@
   (formSubmit)="onSubmit()">
   <p class="govuk-body">{{ heading().description }}</p>
 
-  <div
-    govuk-select
-    label="Fuel name"
-    formControlName="fuelOriginTypeName"
-    widthClass="govuk-!-width-one-third"
-    [options]="fuelTypeSelectItems()"></div>
-  <div govuk-text-input label="Batch number" formControlName="batchNumber" widthClass="govuk-!-width-one-third"></div>
-  <div
-    govuk-text-input
-    label="Total mass of eligible fuel claimed from the batch"
-    formControlName="smfMass"
-    suffix="tonnes"
-    widthClass="govuk-!-width-one-quarter"></div>
-  <div
-    govuk-text-input
-    label="CO2 EF t/t"
-    formControlName="co2EmissionFactor"
-    widthClass="govuk-!-width-one-third"></div>
-  <p class="govuk-body govuk-!-margin-bottom-3">CO2 emissions (t)</p>
+  @if (form.value?.dataInputType === 'EXTERNAL_PROVIDER') {
+    <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
+    <p class="govuk-label govuk-label--s">Fuel name</p>
+    <p
+      class="govuk-body"
+      [notProvided]="form.value?.fuelOriginTypeName | selectOptionToTitle: fuelTypeSelectItems()"></p>
+
+    <p class="govuk-label govuk-label--s">Batch number</p>
+    <p class="govuk-body" [notProvided]="form.value?.batchNumber"></p>
+
+    <p class="govuk-label govuk-label--s">Total mass of eligible fuel claimed from the batch</p>
+    <p class="govuk-body" [notProvided]="form.value?.smfMass"></p>
+
+    <p class="govuk-label govuk-label--s">CO2 EF t/t</p>
+    <p class="govuk-body" [notProvided]="form.value?.co2EmissionFactor"></p>
+  } @else {
+    <div
+      govuk-select
+      label="Fuel name"
+      formControlName="fuelOriginTypeName"
+      widthClass="govuk-!-width-one-third"
+      [options]="fuelTypeSelectItems()"></div>
+    <div govuk-text-input label="Batch number" formControlName="batchNumber" widthClass="govuk-!-width-one-third"></div>
+    <div
+      govuk-text-input
+      label="Total mass of eligible fuel claimed from the batch"
+      formControlName="smfMass"
+      suffix="tonnes"
+      widthClass="govuk-!-width-one-quarter"></div>
+    <div
+      govuk-text-input
+      label="CO2 EF t/t"
+      formControlName="co2EmissionFactor"
+      widthClass="govuk-!-width-one-third"></div>
+  }
+  <p class="govuk-label govuk-label--s">CO2 emissions (t)</p>
   <p class="govuk-body">
     {{ isNil(form.get('co2Emissions').value) ? 'Not calculated yet' : form.get('co2Emissions').value }}
   </p>

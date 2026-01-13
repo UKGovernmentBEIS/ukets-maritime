@@ -67,6 +67,9 @@
         {{ row?.[column?.field] | portVoyageAggregatedStatus }}
       </govuk-tag>
     }
+    @case ('dataInputType') {
+      <span class="pre-wrap" [innerHtml]="row?.[column?.field] | initialDataSource: dataSupplierName()"></span>
+    }
     @default {
       {{ row?.[column?.field] }}
     }

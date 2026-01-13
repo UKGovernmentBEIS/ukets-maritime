@@ -13,7 +13,7 @@
   <ng-container formArrayName="answers">
     @for (answer of answersCtrl.controls; track answer; let i = $index) {
       <p class="govuk-heading-m">Question {{ i + 1 }}</p>
-      <p class="govuk-body pre-wrap">{{ questions?.questions[i] }}</p>
+      <p class="govuk-body overflow-wrap pre-wrap">{{ questions?.questions[i] }}</p>
       @if (canBeDisplayed) {
         <div govuk-textarea labelSize="medium" label="Your response" [formControlName]="i" [maxLength]="10000"></div>
       }

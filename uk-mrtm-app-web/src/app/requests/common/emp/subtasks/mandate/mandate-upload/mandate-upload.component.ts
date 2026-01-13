@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal, viewChild, WritableSignal } from '@angular/core';
 import { FormGroup } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { EmpRegisteredOwner } from '@mrtm/api';
@@ -52,6 +53,7 @@ export class MandateUploadComponent {
   private readonly taskService = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
+  private readonly title = inject(Title);
 
   private readonly dataParserWizardStep = viewChild.required(DataParserWizardStepComponent);
 
@@ -175,6 +177,9 @@ export class MandateUploadComponent {
 
   toggleConfirmation(value: boolean) {
     this.showConfirmation = value;
+    this.showConfirmation
+      ? this.title.setTitle(this.wizardMap.uploadOwnersConfirmation.title)
+      : this.title.setTitle(this.wizardMap.uploadOwners.title);
   }
 
   onSubmit() {

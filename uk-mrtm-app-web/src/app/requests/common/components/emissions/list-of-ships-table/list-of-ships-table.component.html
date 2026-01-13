@@ -10,6 +10,9 @@
     </div>
 
     <h2 class="govuk-heading-m">List of ships</h2>
+    @if (hasExternalSystemData()) {
+      <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
+    }
     @if (notCompletedWarningMessage(); as warningMessage) {
       <govuk-warning-text [assistiveText]="warningMessage" />
     }
@@ -18,7 +21,7 @@
     }
     <mrtm-multi-select-table
       id="listOfShips"
-      [columns]="columns"
+      [columns]="columns()"
       [data]="tableData"
       emptyTableText="No items to display"
       (sort)="sort.set($event)">
@@ -34,6 +37,9 @@
           }
           @case ('status') {
             <govuk-tag [color]="row[column.field] | statusTagColor">{{ row[column.field] | shipTaskStatus }}</govuk-tag>
+          }
+          @case ('dataInputType') {
+            <span [innerHTML]="row?.[column.field] | initialDataSource: dataSupplierName()"></span>
           }
           @default {
             {{ row[column.field] }}

@@ -1,5 +1,8 @@
 @if (vm(); as vm) {
   <netz-page-heading [caption]="vm.caption">Check your answers</netz-page-heading>
+  @if (vm?.ship?.dataInputType === 'EXTERNAL_PROVIDER') {
+    <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
+  }
   <mrtm-aer-ship-summary-template
     [data]="vm.ship"
     [isEditable]="vm.isEditable"

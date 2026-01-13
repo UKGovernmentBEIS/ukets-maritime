@@ -16,7 +16,7 @@ import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissi
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeTotalMaritimeEmissions;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
 
@@ -41,7 +41,7 @@ class DoeUpdateReportableEmissionsServiceTest {
     private ReportableEmissionsService reportableEmissionsService;
 
     @Mock
-    private SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
+    private EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
 
     @Test
     void updateReportableEmissions() {
@@ -95,7 +95,7 @@ class DoeUpdateReportableEmissionsServiceTest {
 
         verify(requestService).findRequestById(requestId);
         verify(reportableEmissionsService).saveReportableEmissions(saveParams);
-        verify(sendRegistryUpdatedEventAddRequestActionService).addRequestAction(request, eventDetails, regulatorAssignee);
-        verifyNoMoreInteractions(requestService, reportableEmissionsService, sendRegistryUpdatedEventAddRequestActionService);
+        verify(emissionsUpdatedEventAddRequestActionService).addRequestAction(request, eventDetails, regulatorAssignee);
+        verifyNoMoreInteractions(requestService, reportableEmissionsService, emissionsUpdatedEventAddRequestActionService);
     }
 }

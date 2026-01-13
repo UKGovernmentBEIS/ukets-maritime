@@ -22,7 +22,7 @@ export class AerTotalEmissionsSummaryTemplateComponent {
   readonly surrenderHeading = 'Emissions figure for surrender';
 
   readonly columns: GovukTableColumn[] = [
-    { field: 'emissionLabel', header: undefined, widthClass: 'app-column-width-20-per' },
+    { field: 'emissionLabel', header: 'Emission type', hiddenHeader: true, widthClass: 'app-column-width-20-per' },
     { field: 'co2', header: 'CO2 emissions (t)', widthClass: 'app-column-width-15-per', isNumeric: true },
     { field: 'ch4', header: 'CH4 emissions (tCO2e)', widthClass: 'app-column-width-15-per', isNumeric: true },
     { field: 'n2o', header: 'N2O emissions (tCO2e)', widthClass: 'app-column-width-15-per', isNumeric: true },

@@ -17,6 +17,7 @@
       <mrtm-reduction-claim-details-summary-template
         [editable]="editable()"
         [data]="fuelPurchases()"
+        [dataSupplierName]="thirdPartyDataProviderName()"
         (handleDelete)="onDelete($event)"
         (handleChange)="onChange($event)" />
       @if (editable()) {

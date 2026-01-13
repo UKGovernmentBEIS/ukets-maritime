@@ -1,6 +1,6 @@
 <govuk-table
   id="listOfShips"
-  [columns]="columns"
+  [columns]="columns()"
   [data]="paginatedData()"
   (sort)="sort.set($event)"
   emptyTableText="No items to display">
@@ -36,6 +36,9 @@
             {{ row?.current?.status | shipTaskStatus }}
           </govuk-tag>
         }
+      }
+      @case ('dataInputType') {
+        <span [innerHTML]="row?.current?.[column.field] | initialDataSource: dataSupplierName()"></span>
       }
       @default {
         <span htmlDiff [current]="row?.current?.[column.field]" [previous]="row?.previous?.[column.field]"></span>

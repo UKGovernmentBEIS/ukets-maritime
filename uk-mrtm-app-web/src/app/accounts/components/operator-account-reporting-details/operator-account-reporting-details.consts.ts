@@ -11,7 +11,8 @@ export const ACCOUNT_REPORTING_STATUS_COLUMNS: Array<GovukTableColumn> = [
   },
   {
     field: 'actions',
-    header: undefined,
+    hiddenHeader: true,
+    header: 'Actions',
   },
   {
     field: 'lastUpdate',

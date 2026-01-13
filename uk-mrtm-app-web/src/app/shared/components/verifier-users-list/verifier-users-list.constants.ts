@@ -6,7 +6,7 @@ export const VERIFIER_USERS_LIST_COLUMNS: GovukTableColumn[] = [
   { field: 'name', header: 'Name', isSortable: true },
   { field: 'roleCode', header: 'User type' },
   { field: 'authorityStatus', header: 'Account status' },
-  { field: 'deleteBtn', header: undefined },
+  { field: 'deleteBtn', header: 'Actions', hiddenHeader: true },
 ];
 
 export const VERIFIER_USER_STATUSES: GovukSelectOption<UserAuthorityInfoDTO['authorityStatus']>[] = [

@@ -5,9 +5,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
-import uk.gov.mrtm.api.account.domain.MrtmAccountUpdatedEvent;
+import uk.gov.mrtm.api.account.domain.MrtmAccountReportingYearsUpdatedEvent;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountUpdateDTO;
 import uk.gov.mrtm.api.account.enumeration.AccountSearchKey;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
@@ -15,6 +16,9 @@ import uk.gov.mrtm.api.account.transform.AddressStateMapper;
 import uk.gov.mrtm.api.account.transform.MrtmAccountMapper;
 import uk.gov.mrtm.api.account.transform.RegisteredAddressStateMapper;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
+import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.netz.api.account.service.AccountSearchAdditionalKeywordService;
 import uk.gov.netz.api.account.service.validator.AccountStatus;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
@@ -32,8 +36,10 @@ public class MrtmAccountUpdateService {
     private final MrtmAccountMapper mrtmAccountMapper;
     private final AccountSearchAdditionalKeywordService accountSearchAdditionalKeywordService;
     private final RegisteredAddressStateMapper registeredAddressStateMapper;
+    private final EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
     private final AddressStateMapper addressStateMapper;
     private final ApplicationEventPublisher publisher;
+    private final MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
 
     @Value("${feature-flag.aer.workflow.enabled}")
     private boolean aerEnabled;
@@ -54,11 +60,13 @@ public class MrtmAccountUpdateService {
                 .calculateReportingYears(Year.of(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate().getYear()));
 
         if (aerEnabled) {
-            publisher.publishEvent(MrtmAccountUpdatedEvent.builder()
+            publisher.publishEvent(MrtmAccountReportingYearsUpdatedEvent.builder()
                     .accountId(accountId)
                     .reportingYears(reportingYears)
                     .build());
         }
+
+        sendAccountUpdateToRegistry(accountId);
     }
 
     @Transactional
@@ -99,4 +107,15 @@ public class MrtmAccountUpdateService {
         account.setAddress(addressStateMapper.toAddressStateDTO(contactAddress));
         account.setRegisteredAddress(registeredAddressStateMapper.toRegisteredAddressState(registeredAddress));
     }
+
+    private void sendAccountUpdateToRegistry(Long accountId) {
+        EmissionsMonitoringPlan emissionsMonitoringPlan = emissionsMonitoringPlanQueryService
+            .getLastestEmissionsMonitoringPlan(accountId);
+
+        accountUpdatedRegistryListener.onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
+            .accountId(accountId)
+            .emissionsMonitoringPlan(emissionsMonitoringPlan)
+            .build());
+    }
+
 }

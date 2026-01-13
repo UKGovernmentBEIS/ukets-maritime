@@ -90,7 +90,7 @@ export class PortCallsListSummaryTemplateComponent {
 
   readonly rows = computed<Array<MultiSelectedItem<AerPortSummaryItemDto>>>(() =>
     sortAndPaginateListWithShipNameAndStatus(
-      [{ column: 'shipName', direction: 'ascending' }, this.sort(), { column: 'arrivalTime', direction: 'descending' }],
+      [this.sort(), { column: 'shipName', direction: 'ascending' }, { column: 'arrivalTime', direction: 'descending' }],
       this.data() ?? [],
       this.currentPage(),
       this.pageSize(),

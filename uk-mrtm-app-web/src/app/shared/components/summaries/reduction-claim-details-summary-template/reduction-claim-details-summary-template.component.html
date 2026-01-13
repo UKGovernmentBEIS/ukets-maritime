@@ -1,4 +1,8 @@
-<govuk-table [columns]="columns()" [data]="$any(data())" emptyTableText="No items to display">
+<govuk-table
+  [columns]="columns()"
+  [data]="$any(data())"
+  emptyTableText="No items to display"
+  [rowCssClasses]="onDefineRowAdditionalStyle">
   <ng-template let-row="row" let-column="column">
     @switch (column.field) {
       @case ('fuelOriginTypeName') {
@@ -23,6 +27,9 @@
             <a (click)="onDelete($event, row)" routerLink="." govukLink>Remove</a>
           </div>
         }
+      }
+      @case ('dataInputType') {
+        <span class="pre-wrap" [innerHtml]="row?.[column?.field] | initialDataSource: dataSupplierName()"></span>
       }
       @default {
         {{ row[column.field] | bigNumber: 7 }}

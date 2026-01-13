@@ -7009,4 +7009,50 @@ Emissions Trading Operations'
         </customChange>
     </changeSet>
 
+    <changeSet id="0_2_0_insert_kafka_registry_id_existence_error_action" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                event_trigger,
+                workflow,
+                role_type,
+                is_managed,
+                last_updated_date,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Registry integration account update missing registry id template',
+                       'ACTION REQUIRED - Error with integration point ${integrationPoint} for Operator: ${operatorName} with Emitter ID: ${emitterId} ',
+                       null,
+                       null,
+                       null,
+                       false,
+                       CURRENT_TIMESTAMP,
+                       'The integration point ''${integrationPoint}'' has failed with error(s):
+
+''No Registry ID exists in METS account''
+
+for **Operator: ${operatorName}** with **Emitter ID: ${emitterId}**
+
+Please review the affected fields:
+UK ETS Registry ID
+
+If there is a need, then please raise a support ticket including the following information:
+
+Source system identifier: ${sourceSystem}
+
+Thank you.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            delete from notification_template
+            where name = 'Registry integration account update missing registry id template' and competent_authority = 'ENGLAND';
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

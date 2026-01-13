@@ -14,7 +14,11 @@
           [class]="column.widthClass"
           scope="col">
           @if (!column.isSortable) {
-            {{ column.header }}
+            @if (column.hiddenHeader) {
+              <span class="govuk-visually-hidden">{{ column.header }}</span>
+            } @else {
+              {{ column.header }}
+            }
           } @else {
             <button (click)="sortBy(column.field)" type="button">
               {{ column.header }}

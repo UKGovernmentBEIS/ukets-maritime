@@ -1,4 +1,4 @@
-import { UpperCasePipe } from '@angular/common';
+import { TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -31,7 +31,7 @@ import { AerJourneyTypeEnum, AerVoyageOrPortCalculationsSummaryItemDto } from '@
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
-    UpperCasePipe,
+    TitleCasePipe,
   ],
   templateUrl: './voyage-or-port-call-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

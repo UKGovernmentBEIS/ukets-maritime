@@ -58,6 +58,7 @@ export class AerListOfShipsComponent {
   readonly map = aerEmissionsMap;
   readonly listOfShips = this.store.select(aerCommonQuery.selectListOfShips);
   readonly canContinue = computed(() => this.listOfShips()?.length);
+  readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
 
   readonly notCompletedMessage = computed<string>(() => {
     const notCompleted: boolean = this.listOfShips()?.some((ship) => ship.status !== TaskItemStatus.COMPLETED);
