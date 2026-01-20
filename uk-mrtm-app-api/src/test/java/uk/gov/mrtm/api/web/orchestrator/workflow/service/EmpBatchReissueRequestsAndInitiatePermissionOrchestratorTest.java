@@ -65,7 +65,7 @@ public class EmpBatchReissueRequestsAndInitiatePermissionOrchestratorTest {
                 .requestTypes(Set.of(MrtmRequestType.EMP_BATCH_REISSUE))
                 .paging(pagingRequestInfo).build();
 
-        when(requestQueryService.findRequestDetailsBySearchCriteria(requestSearchCriteria, authUser)).thenReturn(requestDetailsSearchResults);
+        when(requestQueryService.findRequestDetailsBySearchCriteria(requestSearchCriteria)).thenReturn(requestDetailsSearchResults);
         when(compAuthAuthorizationResourceService.hasUserScopeOnResourceSubType(authUser,
                 Scope.REQUEST_CREATE, MrtmRequestType.EMP_BATCH_REISSUE)).thenReturn(true);
 
@@ -76,7 +76,7 @@ public class EmpBatchReissueRequestsAndInitiatePermissionOrchestratorTest {
                 .canInitiateBatchReissue(true)
                 .build());
 
-        verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(requestSearchCriteria, authUser);
+        verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(requestSearchCriteria);
         verify(compAuthAuthorizationResourceService, times(1)).hasUserScopeOnResourceSubType(authUser,
                 Scope.REQUEST_CREATE, MrtmRequestType.EMP_BATCH_REISSUE);
 

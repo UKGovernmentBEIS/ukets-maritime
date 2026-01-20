@@ -6,5 +6,5 @@ export const DATA_SUPPLIERS_LIST_COLUMNS: Array<GovukTableColumn<DataSupplierIte
   { header: 'Data supplier name', field: 'name', widthClass: 'govuk-!-width-one-third' },
   { header: 'Client ID', field: 'clientId', widthClass: 'govuk-!-width-one-third' },
   { header: 'Client secret', field: 'clientSecret', widthClass: 'govuk-!-width-one-third' },
-  { header: 'Actions', field: 'actions', hiddenHeader: true },
+  { header: null, field: 'actions' },
 ];

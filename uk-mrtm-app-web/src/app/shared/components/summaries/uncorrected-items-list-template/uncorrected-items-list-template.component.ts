@@ -32,6 +32,6 @@ export class UncorrectedItemsListTemplateComponent {
     { field: 'reference', header: 'Reference', widthClass: 'app-column-width-15-per' },
     { field: 'explanation', header: 'Explanation' },
     { field: 'materialEffect', header: 'Impact', widthClass: 'app-column-width-15-per' },
-    { field: 'actionLinks', header: 'Actions', hiddenHeader: true },
+    { field: 'actionLinks', header: '' },
   ];
 }

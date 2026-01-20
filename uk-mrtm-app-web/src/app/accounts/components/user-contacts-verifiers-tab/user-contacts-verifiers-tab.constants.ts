@@ -10,7 +10,7 @@ export const editableCols = [
   { field: 'SERVICE', header: 'Service contact' },
   { field: 'FINANCIAL', header: 'Financial contact' },
   { field: 'authorityStatus', header: 'Account status', widthClass: 'app-column-width-15-per' },
-  { field: 'deleteBtn', header: 'Actions', hiddenHeader: true },
+  { field: 'deleteBtn', header: undefined },
 ];
 
 export const userTypeOptions: GovukSelectOption<string>[] = [

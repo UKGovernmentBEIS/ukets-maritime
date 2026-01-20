@@ -9,7 +9,7 @@ import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsSaveParams;
 import uk.gov.mrtm.api.reporting.service.ReportableEmissionsService;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestPayload;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
 
@@ -19,7 +19,7 @@ public class DoeUpdateReportableEmissionsService {
 
 	private final RequestService requestService;
 	private final ReportableEmissionsService reportableEmissionsService;
-	private final EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
+	private final SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
 
 	@Transactional
 	public void updateReportableEmissions(String requestId) {
@@ -45,7 +45,7 @@ public class DoeUpdateReportableEmissionsService {
 		ReportableEmissionsUpdatedSubmittedEventDetails eventDetails =
 			reportableEmissionsService.saveReportableEmissions(saveParams);
 
-		emissionsUpdatedEventAddRequestActionService.addRequestAction(request, eventDetails,
+		sendRegistryUpdatedEventAddRequestActionService.addRequestAction(request, eventDetails,
 			request.getPayload().getRegulatorAssignee());
 	}
 }

@@ -11,7 +11,6 @@ import uk.gov.mrtm.api.integration.external.aer.domain.StagingAer;
 import uk.gov.mrtm.api.integration.external.aer.transform.AerViolationMapper;
 import uk.gov.mrtm.api.reporting.validation.AerEmissionsValidator;
 import uk.gov.mrtm.api.reporting.validation.AerShipAggregatedDataValidator;
-import uk.gov.mrtm.api.reporting.validation.AerShipDetailsValidator;
 import uk.gov.mrtm.api.reporting.validation.AerSmfValidator;
 import uk.gov.mrtm.api.reporting.validation.AerValidatorService;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
@@ -19,7 +18,6 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.validation.Violation;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -32,16 +30,14 @@ public class ExternalAerValidator {
 
     private final AerEmissionsValidator aerEmissionsValidator;
     private final AerShipAggregatedDataValidator aerShipAggregatedDataValidator;
-    private final AerShipDetailsValidator aerShipDetailsValidator;
     private final AerSmfValidator aerSmfValidator;
     private final AerValidatorService aerValidatorService;
     private static final AerViolationMapper AER_VIOLATION_MAPPER = Mappers.getMapper(AerViolationMapper.class);
 
-    public void validate(StagingAer staging, Year year) {
+    public void validate(StagingAer staging) {
         List<AerValidationResult> validationResults = new ArrayList<>();
         validationResults.add(aerSmfValidator.validate(staging.getSmf(), staging.getEmissions()));
         validationResults.add(aerEmissionsValidator.validate(staging.getEmissions()));
-        validationResults.add(aerShipDetailsValidator.validate(staging.getEmissions(), year));
         validationResults.add(aerShipAggregatedDataValidator.validate(staging.getAggregatedData(), staging.getEmissions(),
             Collections.emptySet(), Collections.emptySet()));
 

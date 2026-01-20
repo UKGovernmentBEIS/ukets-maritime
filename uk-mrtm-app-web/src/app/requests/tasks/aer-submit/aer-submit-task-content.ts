@@ -12,14 +12,12 @@ import {
   REPORTING_OBLIGATION_SUB_TASK,
   REPORTING_OBLIGATION_SUB_TASK_PATH,
 } from '@requests/common/aer/subtasks/reporting-obligation';
-import { ThirdPartyDataProviderInfoComponent } from '@requests/common/third-party-data-provider';
 import { getCanSubmitAer } from '@requests/tasks/aer-submit/aer-submit.helpers';
 import { ReturnedForChangesWarningComponent } from '@requests/tasks/aer-submit/components';
 import {
   SEND_REPORT_SUB_TASK,
   SEND_REPORT_SUB_TASK_PATH,
 } from '@requests/tasks/aer-submit/subtasks/send-report/send-report.helpers';
-import { NotificationBannerComponent } from '@shared/components';
 import { taskActionTypeToTitleTransformer } from '@shared/utils';
 
 export const aerSubmitTaskContent: RequestTaskPageContentFactory = () => {
@@ -27,18 +25,10 @@ export const aerSubmitTaskContent: RequestTaskPageContentFactory = () => {
   const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
   const year = store.select(aerCommonQuery.selectReportingYear)();
   const canSubmitAer = getCanSubmitAer();
-  const allowedRequestTaskActions = store.select(requestTaskQuery.selectAllowedRequestTaskActions)();
-  const hasReportingObligation = store.select(aerCommonQuery.selectHasReportingObligation)();
 
   return {
-    pageTopComponent: NotificationBannerComponent,
     header: taskActionTypeToTitleTransformer(requestTaskType, year),
-    preContentComponent: [
-      allowedRequestTaskActions.includes('AER_IMPORT_THIRD_PARTY_DATA_APPLICATION') && hasReportingObligation
-        ? ThirdPartyDataProviderInfoComponent
-        : null,
-      ReturnedForChangesWarningComponent,
-    ].filter(Boolean),
+    preContentComponent: ReturnedForChangesWarningComponent,
     sections: [
       {
         title: reportingObligationMap.title,

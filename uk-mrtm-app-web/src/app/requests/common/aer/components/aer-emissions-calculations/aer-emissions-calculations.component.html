@@ -18,7 +18,7 @@
   then the emissions can be added in the direct emissions tab below.
 </p>
 
-@if (['International', 'European Economic Area'].includes(emissionsCalculationObject()?.journeyType)) {
+@if (['International', 'EU'].includes(emissionsCalculationObject()?.journeyType)) {
   <govuk-warning-text
     assistiveText="{{
       emissionsCalculationObject()?.journeyType

@@ -3,11 +3,7 @@ import { AerShipAggregatedData } from '@mrtm/api';
 import { SubTaskListMap } from '@shared/types';
 
 export const aerAggregatedDataSubtasksListMap: SubTaskListMap<
-  AerShipAggregatedData & {
-    annualAggregatedEmissions: string;
-    uploadAggregatedData: string;
-    uploadAggregatedDataConfirmation: string;
-  }
+  AerShipAggregatedData & { annualAggregatedEmissions: string; uploadAggregatedData: string }
 > = {
   caption: 'Aggregated data',
   title: 'Aggregated data for ships',
@@ -43,9 +39,6 @@ export const aerAggregatedDataSubtasksListMap: SubTaskListMap<
   },
   uploadAggregatedData: {
     title: 'Upload the aggregated data for ships file',
-  },
-  uploadAggregatedDataConfirmation: {
-    title: 'Are you sure you want to replace the data?',
   },
   fromFetch: {
     title: 'Import aggregated data from voyages and ports',

@@ -11,10 +11,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
-import uk.gov.mrtm.api.account.domain.MrtmAccountReportingYearsUpdatedEvent;
+import uk.gov.mrtm.api.account.domain.MrtmAccountUpdatedEvent;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountUpdateDTO;
 import uk.gov.mrtm.api.account.enumeration.AccountSearchKey;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
@@ -24,9 +23,7 @@ import uk.gov.mrtm.api.account.transform.RegisteredAddressStateMapper;
 import uk.gov.mrtm.api.common.domain.AddressState;
 import uk.gov.mrtm.api.common.domain.RegisteredAddressState;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
-import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
+import uk.gov.mrtm.api.workflow.request.flow.event.MrtmAccountCreatedEventListener;
 import uk.gov.netz.api.account.service.AccountSearchAdditionalKeywordService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 
@@ -75,12 +72,6 @@ class MrtmAccountUpdateServiceTest {
     @Mock
     private  ApplicationEventPublisher publisher;
 
-    @Mock
-    private EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
-
-    @Mock
-    private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
-
     @Captor
     ArgumentCaptor<LocalDateTime> dateTimeArgumentCaptor;
 
@@ -92,7 +83,6 @@ class MrtmAccountUpdateServiceTest {
 
         MrtmAccountUpdateDTO mrtmAccountUpdateDTO = mock(MrtmAccountUpdateDTO.class);
         MrtmAccount mrtmAccount = mock(MrtmAccount.class);
-        EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
 
         Field field = MrtmAccountUpdateService.class.getDeclaredField("aerEnabled");
         field.setAccessible(true);
@@ -101,26 +91,18 @@ class MrtmAccountUpdateServiceTest {
         when(mrtmAccountUpdateDTO.getName()).thenReturn(name);
         when(mrtmAccountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(mrtmAccount);
         when(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate()).thenReturn(firstMaritimeActivity);
-        when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID))
-            .thenReturn(emissionsMonitoringPlan);
 
         mrtmAccountUpdateService.updateMaritimeAccount(ACCOUNT_ID, mrtmAccountUpdateDTO, appUser);
 
         verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
         verify(mrtmAccountMapper).updateMrtmAccount(mrtmAccount, mrtmAccountUpdateDTO);
-        verify(emissionsMonitoringPlanQueryService).getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
-        verify(accountUpdatedRegistryListener).onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
-            .accountId(ACCOUNT_ID)
-            .emissionsMonitoringPlan(emissionsMonitoringPlan)
-            .build());
         verify(accountSearchAdditionalKeywordService).storeKeywordsForAccount(ACCOUNT_ID,
             Map.of(AccountSearchKey.ACCOUNT_NAME.name(), name));
-        verify(publisher).publishEvent(MrtmAccountReportingYearsUpdatedEvent.builder()
+        verify(publisher).publishEvent(MrtmAccountUpdatedEvent.builder()
                 .accountId(ACCOUNT_ID)
                 .reportingYears(expectedYears)
                 .build());
-        verifyNoMoreInteractions(emissionsMonitoringPlanQueryService, accountUpdatedRegistryListener,
-            mrtmAccountQueryService, mrtmAccountMapper, accountSearchAdditionalKeywordService, publisher);
+        verifyNoMoreInteractions(mrtmAccountQueryService, mrtmAccountMapper, accountSearchAdditionalKeywordService, publisher);
         verifyNoInteractions(mrtmAccountRepository);
     }
 

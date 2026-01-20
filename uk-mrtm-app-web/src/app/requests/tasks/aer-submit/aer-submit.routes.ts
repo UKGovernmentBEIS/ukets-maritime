@@ -22,7 +22,6 @@ import {
 import { REPORTING_OBLIGATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/reporting-obligation/reporting-obligation.helpers';
 import { EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
 import { OPERATOR_DETAILS_SUB_TASK_PATH } from '@requests/common/components/operator-details';
-import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/common/third-party-data-provider';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK_PATH } from '@requests/common/utils/additional-documents';
 import { canActivateAerSubmitSendReportAction } from '@requests/tasks/aer-submit/aer-submit.guard';
 import {
@@ -30,7 +29,6 @@ import {
   provideAerSubmitSideEffects,
   provideAerSubmitStepFlowManagers,
   provideAerSubmitTaskServices,
-  provideThirdPartyConfigurations,
 } from '@requests/tasks/aer-submit/aer-submit.providers';
 import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-submit/subtasks/send-report/send-report.helpers';
 
@@ -38,7 +36,6 @@ export const AER_SUBMIT_ROUTES: Routes = [
   {
     path: '',
     providers: [
-      provideThirdPartyConfigurations(),
       PayloadMutatorsHandler,
       provideAerSubmitPayloadMutators(),
       SideEffectsHandler,
@@ -114,14 +111,6 @@ export const AER_SUBMIT_ROUTES: Routes = [
         path: SEND_REPORT_SUB_TASK_PATH,
         canActivate: [canActivateAerSubmitSendReportAction],
         loadChildren: () => import('@requests/tasks/aer-submit/subtasks/send-report').then((r) => r.SEND_REPORT_ROUTES),
-      },
-      {
-        path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
-        data: { backlink: '../../', breadcrumb: false },
-        loadComponent: () =>
-          import('@requests/common/third-party-data-provider/third-party-data-provider-import').then(
-            (c) => c.ThirdPartyDataProviderImportComponent,
-          ),
       },
     ],
   },

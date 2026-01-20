@@ -15,5 +15,6 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 public class EmpApprovedEvent {
 
     private Long accountId;
+    private String empId;
     private EmissionsMonitoringPlan emissionsMonitoringPlan;
 }

@@ -42,12 +42,6 @@ export class AerAggregatedDataListSummaryComponent {
   public readonly aggregatedData = this.store.select(aerCommonQuery.selectAggregatedDataList);
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
 
-  public readonly hasExternalSystemData = computed(() => {
-    return !!this.aggregatedData().find((data) => data.dataInputType === 'EXTERNAL_PROVIDER');
-  });
-
-  public readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
-
   public readonly canSubmit: Signal<boolean> = computed(() => {
     const statuses = this.aggregatedData().map((port) => port.status);
 

@@ -20,10 +20,8 @@
             [taskType]="rt.type" />
         }
       </netz-page-heading>
-      @if (vm.preContentComponents; as preContentComponents) {
-        @for (preContentComponent of preContentComponents; track preContentComponent) {
-          <ng-container *ngComponentOutlet="preContentComponent" />
-        }
+      @if (vm.preContentComponent; as preContentComponent) {
+        <ng-container *ngComponentOutlet="preContentComponent" />
       }
 
       @if (vm.contentComponent; as component) {

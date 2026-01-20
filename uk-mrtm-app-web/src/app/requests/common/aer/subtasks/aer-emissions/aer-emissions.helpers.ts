@@ -113,7 +113,7 @@ export const aerDerogationsValidator = (derogations: AerDerogations): boolean =>
   !isNil(derogations?.exceptionFromPerVoyageMonitoring);
 
 export const shipStepsCompletedMap: Record<
-  keyof Omit<AerShipEmissions, 'uniqueIdentifier' | 'dataInputType'>,
+  keyof Omit<AerShipEmissions, 'uniqueIdentifier'>,
   (ship: AerShipEmissions) => boolean
 > = {
   details: (ship) => aerShipDetailsValidator(ship?.details),

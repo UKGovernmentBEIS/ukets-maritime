@@ -13,10 +13,7 @@ export enum ReductionClaimWizardStep {
 }
 
 export const aerSmfDetailsCompleted = (data: AerSmf): boolean =>
-  (!isNil(data?.exist) && !data?.exist) ||
-  (data?.exist &&
-    !isNil(data?.smfDetails.purchases?.length) &&
-    data?.smfDetails?.purchases?.every((purchase) => purchase?.evidenceFiles?.length > 0));
+  (!isNil(data?.exist) && !data?.exist) || (data?.exist && !isNil(data?.smfDetails.purchases?.length));
 
 export const aerReductionClaimStepsCompleted: Record<keyof AerSmf, (data: AerSmf) => boolean> = {
   exist: (data: AerSmf) => !isNil(data?.exist),

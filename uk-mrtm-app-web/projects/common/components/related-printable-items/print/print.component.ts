@@ -79,10 +79,6 @@ export class PrintComponent {
   printContent(): void {
     const printableContent = this.el.nativeElement.querySelector('.printable-content-wrapper');
 
-    for (const anchor of printableContent.querySelectorAll('a[href]')) {
-      anchor.removeAttribute('href');
-    }
-
     const clonedElement = printableContent.cloneNode(true);
     this.renderer.appendChild(document.body, clonedElement);
     this.renderer.setStyle(clonedElement, 'display', 'block');

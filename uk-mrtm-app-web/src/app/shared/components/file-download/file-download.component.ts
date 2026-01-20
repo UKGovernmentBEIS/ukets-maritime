@@ -13,7 +13,7 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { combineLatest, expand, map, Observable, of, switchMap, take, tap, timer } from 'rxjs';
+import { combineLatest, expand, map, Observable, of, switchMap, tap, timer } from 'rxjs';
 import { isNil } from 'lodash-es';
 
 import {
@@ -100,7 +100,6 @@ export class FileDownloadComponent implements OnInit {
           ),
         ]);
       }),
-      take(1),
       map(([fileType, fileToken]) => {
         switch (fileType) {
           case 'attachment':

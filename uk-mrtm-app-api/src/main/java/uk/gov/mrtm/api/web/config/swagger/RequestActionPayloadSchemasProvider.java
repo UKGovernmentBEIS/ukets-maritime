@@ -135,8 +135,6 @@ public class RequestActionPayloadSchemasProvider extends SwaggerSchemasAbstractP
 		//Registry
 		addResolvedShemas(RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class.getSimpleName(),
 			RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class);
-		addResolvedShemas(RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class.getSimpleName(),
-			RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class);
 
 		//NON_COMPLIANCE
 		addResolvedShemas(NonComplianceApplicationSubmittedRequestActionPayload.class.getSimpleName(),

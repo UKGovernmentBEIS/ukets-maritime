@@ -51,9 +51,7 @@ export class AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent {
     { field: 'monitoringMethod', header: 'Monitoring methods' },
   ];
   readonly columns: Signal<GovukTableColumn[]> = computed(() =>
-    this.isEditable()
-      ? [...this.mainColumns, { field: 'actionLinks', header: 'Actions', hiddenHeader: true }]
-      : this.mainColumns,
+    this.isEditable() ? [...this.mainColumns, { field: 'actionLinks', header: undefined }] : this.mainColumns,
   );
 
   getSortedMonitoringMethods(item: EmissionsSources): EmissionsSources['monitoringMethod'] {

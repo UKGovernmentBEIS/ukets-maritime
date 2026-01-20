@@ -8,7 +8,6 @@ import java.util.Optional;
 public class PayloadFieldsUtils {
 
     //Account details
-    public static final String ACCOUNT_TYPE = "Account Type";
     public static final String EMITTER_ID = "AccountDetails.EmitterID";
     public static final String ACCOUNT_NAME = "AccountDetails.Account Name";
     public static final String EMP_ID = "AccountDetails.MonitoringPlanID";

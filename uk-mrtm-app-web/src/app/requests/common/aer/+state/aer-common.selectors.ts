@@ -43,16 +43,14 @@ import {
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { AER_REDUCTION_CLAIM_SUB_TASK } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim.helpers';
 import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation/reporting-obligation.helpers';
-import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
+import { EMISSIONS_SUB_TASK, EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { monitoringMethodMap } from '@shared/constants';
 import {
   AerAggregatedDataShipSummary,
   AerAggregatedDataSummaryItemDto,
-  AerDataInitialSourceType,
   AerFuel,
   AerPortSummaryItemDto,
-  AerShipEmissionTableListItem,
   AerVoyageSummaryItemDto,
   AllFuelOriginTypeName,
   AllFuels,
@@ -60,7 +58,6 @@ import {
   FuelsAndEmissionsFactors,
   ReductionClaimDetailsListItemDto,
   ShipEmissionTableListItem,
-  WithNeedsReview,
 } from '@shared/types';
 import { isLNG } from '@shared/utils';
 
@@ -172,7 +169,7 @@ const selectShips: StateSelector<
     .sort((a, b) => a?.details?.name?.localeCompare(b?.details?.name)),
 );
 
-const selectListOfShips: StateSelector<RequestTaskState, Array<AerShipEmissionTableListItem>> = createAggregateSelector(
+const selectListOfShips: StateSelector<RequestTaskState, Array<ShipEmissionTableListItem>> = createAggregateSelector(
   selectShips,
   selectAerSectionsCompleted,
   (ships, sectionsCompleted) =>
@@ -181,24 +178,11 @@ const selectListOfShips: StateSelector<RequestTaskState, Array<AerShipEmissionTa
       ...ship.details,
       status: (sectionsCompleted?.[`${EMISSIONS_SUB_TASK}-ship-${ship.uniqueIdentifier}`] ??
         TaskItemStatus.COMPLETED) as TaskItemStatus,
-      dataInputType:
-        ship?.dataInputType === 'MANUAL'
-          ? AerDataInitialSourceType.MANUAL
-          : ship?.dataInputType === 'FETCH_FROM_EMP'
-            ? AerDataInitialSourceType.FETCH_FROM_EMP
-            : AerDataInitialSourceType.EXTERNAL_PROVIDER,
     })),
 );
 
 const selectShip = (shipId: AerShipEmissions['uniqueIdentifier']): StateSelector<RequestTaskState, AerShipEmissions> =>
   createDescendingSelector(selectShips, (ships) => ships?.find((ship) => ship.uniqueIdentifier === shipId));
-
-const selectIsShipEditable = (shipId: AerShipEmissions['uniqueIdentifier']): StateSelector<RequestTaskState, boolean> =>
-  createAggregateSelector(
-    requestTaskQuery.selectIsEditable,
-    selectShip(shipId),
-    (isEditable, ship) => isEditable && ship?.dataInputType !== 'EXTERNAL_PROVIDER',
-  );
 
 const selectShipByImoNumber = (
   imoNumber: AerShipDetails['imoNumber'],
@@ -506,12 +490,6 @@ const selectAggregatedDataList: StateSelector<
     shipName: data?.relatedShip?.details?.name,
     status: data?.status,
     canViewDetails: data.relatedShip?.status === TaskItemStatus.COMPLETED,
-    dataInputType:
-      data?.dataInputType === 'MANUAL'
-        ? data?.fromFetch
-          ? AerDataInitialSourceType.FROM_FETCH_PORTS_OR_VOYAGES
-          : AerDataInitialSourceType.MANUAL
-        : AerDataInitialSourceType.EXTERNAL_PROVIDER,
   })),
 );
 
@@ -542,7 +520,7 @@ const selectAggregatedDataSummaryItem = (
   }
 > =>
   createDescendingSelector(selectAggregatedDataItem(dataId), (aggregatedData) => {
-    const shipFuels = ((aggregatedData?.relatedShip?.fuelsAndEmissionsFactors ?? []) as AllFuels[]).map(
+    const shipFuels = (aggregatedData.relatedShip.fuelsAndEmissionsFactors as AllFuels[]).map(
       (fuel) => `${fuel.origin}-${fuel.type}-${fuel.name ?? ''}`,
     );
 
@@ -622,12 +600,10 @@ const selectStatusForAggregatedDataSubtask = selectStatusForAerSubtaskWithEmissi
 );
 
 const selectStatusForReductionClaim = createAggregateSelector(
-  selectListOfShips,
+  selectStatusForSubtask(EMISSIONS_SUB_TASK_PATH),
   selectStatusForSubtask(AER_REDUCTION_CLAIM_SUB_TASK),
-  (ships, reductionClaimSubtaskStatus) =>
-    !isNil(ships.find((ship) => ship.status === TaskItemStatus.COMPLETED))
-      ? reductionClaimSubtaskStatus
-      : TaskItemStatus.CANNOT_START_YET,
+  (emissionsSubtaskStatus, reductionClaimSubtaskStatus) =>
+    emissionsSubtaskStatus === TaskItemStatus.COMPLETED ? reductionClaimSubtaskStatus : TaskItemStatus.CANNOT_START_YET,
 );
 
 const selectReductionClaim: StateSelector<RequestTaskState, AerSmf> = createDescendingSelector(
@@ -652,7 +628,7 @@ const selectSupersetOfFuelTypes: StateSelector<RequestTaskState, Array<FuelOrigi
 
 const selectReductionClaimDetailsListItems: StateSelector<
   RequestTaskState,
-  Array<WithNeedsReview<ReductionClaimDetailsListItemDto>>
+  Array<ReductionClaimDetailsListItemDto>
 > = createAggregateSelector(
   requestTaskQuery.selectTasksDownloadUrl,
   selectAerAttachments,
@@ -665,7 +641,6 @@ const selectReductionClaimDetailsListItems: StateSelector<
           downloadUrl: downloadUrl + file,
           fileName: attachments?.[file],
         })),
-        needsReview: !purchase.evidenceFiles?.length,
       })),
       smf?.smfDetails?.purchases?.length
         ? { isSummary: true, co2Emissions: smf?.smfDetails?.totalSustainableEmissions }
@@ -761,9 +736,6 @@ const selectShipFuelOriginTypeNameCombination = (
     (items ?? []).find((item) => item.origin === origin && item.type === type && item.name === name),
   );
 
-const selectThirdPartyDataProviderName: StateSelector<RequestTaskState, Aer['thirdPartyDataProviderName']> =
-  createDescendingSelector(selectAer, (aer) => aer?.thirdPartyDataProviderName);
-
 export const aerCommonQuery = {
   selectReportingYear,
   selectPayload,
@@ -784,7 +756,6 @@ export const aerCommonQuery = {
   selectShips,
   selectListOfShips,
   selectShip,
-  selectIsShipEditable,
   selectShipByImoNumber,
   selectShipName,
   selectShipNameByImoNumber,
@@ -835,5 +806,4 @@ export const aerCommonQuery = {
   selectShipFuelOriginMethaneCombination,
   selectShipFuelOriginTypeCombination,
   selectShipFuelOriginTypeNameCombination,
-  selectThirdPartyDataProviderName,
 };

@@ -33,14 +33,10 @@
 @for (warningMessage of warningMessages(); track i; let i = $index) {
   <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
 }
-@if (hasExternalSystemData()) {
-  <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
-}
 <mrtm-aggregated-data-list-summary-template
   [data]="filteredAggregatedDataList()"
   (deleteItems)="onDelete($event)"
-  [editable]="editable()"
-  [dataSupplierName]="thirdPartyDataProviderName()" />
+  [editable]="editable()" />
 
 @if (canContinue()) {
   <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>

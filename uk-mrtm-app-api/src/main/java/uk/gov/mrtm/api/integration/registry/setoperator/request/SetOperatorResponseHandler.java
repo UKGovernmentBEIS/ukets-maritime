@@ -5,14 +5,10 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
-import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
-import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnum;
@@ -50,8 +46,6 @@ public class SetOperatorResponseHandler {
     private final KafkaTemplate<String, OperatorUpdateEventOutcome> setOperatorKafkaTemplate;
     private final SetOperatorRequestValidator validator;
     private final MrtmAccountRepository mrtmAccountRepository;
-    private final MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
-    private final EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
 
     public void handleResponse(OperatorUpdateEvent event, String correlationId) {
         log.info("Set operator outcome with correlationId {} and emitter ID {}", correlationId, event.getEmitterId());
@@ -64,9 +58,7 @@ public class SetOperatorResponseHandler {
         List<IntegrationEventErrorDetails> errors = validator.validate(event);
 
         if (errors.isEmpty()) {
-            MrtmAccount account = mrtmAccountRepository.findByBusinessId(event.getEmitterId());
-            saveOperatorId(account, event.getOperatorId());
-            sendUpdateAccountEvent(account.getId());
+            saveOperatorId(event);
         } else {
             handleValidationErrors(event, correlationId, errors);
         }
@@ -76,17 +68,6 @@ public class SetOperatorResponseHandler {
             .outcome(errors.isEmpty() ? IntegrationEventOutcome.SUCCESS : IntegrationEventOutcome.ERROR)
             .errors(errors)
             .build();
-    }
-
-    private void sendUpdateAccountEvent(Long accountId) {
-        EmissionsMonitoringPlan emissionsMonitoringPlan = emissionsMonitoringPlanQueryService
-            .getLastestEmissionsMonitoringPlan(accountId);
-
-        accountUpdatedRegistryListener
-            .onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
-                .accountId(accountId)
-                .emissionsMonitoringPlan(emissionsMonitoringPlan)
-                .build());
     }
 
     private void handleValidationErrors(OperatorUpdateEvent event, String correlationId, List<IntegrationEventErrorDetails> errors) {
@@ -160,8 +141,10 @@ public class SetOperatorResponseHandler {
         return fields;
     }
 
-    private void saveOperatorId(MrtmAccount account, Long operatorId) {
-        account.setRegistryId(operatorId.intValue());
+    private void saveOperatorId(OperatorUpdateEvent event) {
+        MrtmAccount account = mrtmAccountRepository.findByBusinessId(event.getEmitterId());
+        account.setRegistryId(event.getOperatorId().intValue());
+
         mrtmAccountRepository.save(account);
     }
 }

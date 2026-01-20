@@ -13,8 +13,8 @@
   @if (journeyType(); as journeyType) {
     <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey><strong>Voyage type</strong></dt>
-        <dd govukSummaryListRowValue>{{ journeyType | titlecase }}</dd>
+        <dt govukSummaryListRowKey><strong>Journey type</strong></dt>
+        <dd govukSummaryListRowValue>{{ journeyType | uppercase }}</dd>
       </div>
     </dl>
   }
@@ -39,9 +39,7 @@
             </strong>
           }
           @default {
-            @if (
-              row['emission'] === 'SURRENDER' && ['International', 'European Economic Area'].includes(journeyType())
-            ) {
+            @if (row['emission'] === 'SURRENDER' && ['International', 'EU'].includes(journeyType())) {
               Not applicable
             } @else {
               {{ row?.[column?.field] | bigNumber: 7 }}

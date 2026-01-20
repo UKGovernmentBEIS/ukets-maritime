@@ -76,12 +76,7 @@ export class AerAggregatedDataShipSummaryComponent {
     }
   > = computed(() => this.store.select(aerCommonQuery.selectAggregatedDataSummaryItem(this.dataId()))());
   readonly editable: Signal<boolean> = computed(() => {
-    const aggregatedData = this.aggregatedData();
-    return (
-      !aggregatedData?.fromFetch &&
-      aggregatedData?.dataInputType !== 'EXTERNAL_PROVIDER' &&
-      this.store.select(requestTaskQuery.selectIsEditable)()
-    );
+    return !this.aggregatedData()?.fromFetch && this.store.select(requestTaskQuery.selectIsEditable)();
   });
 
   readonly canSubmit: Signal<boolean> = computed(() => {

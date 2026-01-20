@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewChild, WritableSignal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AerShipEmissions, EmpShipEmissions } from '@mrtm/api';
@@ -60,7 +59,6 @@ export class UploadShipsComponent {
   private readonly xmlService = inject(UPLOAD_SHIPS_XML_SERVICE);
   private readonly commonSubtaskStepsQuery = inject(REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
-  private readonly title = inject(Title);
 
   private readonly taskType = this.store.select(requestTaskQuery.selectRequestTaskType);
 
@@ -125,9 +123,6 @@ export class UploadShipsComponent {
 
   toggleConfirmation(value: boolean) {
     this.showConfirmation = value;
-    this.showConfirmation
-      ? this.title.setTitle(this.taskMap.uploadShipsConfirmation.title)
-      : this.title.setTitle(this.taskMap.uploadShips.title);
   }
 
   onSubmit() {

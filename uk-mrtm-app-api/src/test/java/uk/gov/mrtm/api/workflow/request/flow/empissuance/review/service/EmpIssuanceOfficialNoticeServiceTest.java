@@ -5,13 +5,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
-import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.common.config.RegistryConfig;
@@ -22,13 +22,10 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.event.EmpApprovedEvent;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationStructure;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
-import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
-import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuanceRequestPayload;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
@@ -54,7 +51,6 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -103,12 +99,6 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
     @Captor
     private ArgumentCaptor<EmpApprovedEvent> empApprovedEventArgumentCaptor;
-
-    @Mock
-    private AccountUpdatedEventAddRequestActionService accountUpdatedEventRequestActionService;
-
-    @Mock
-    private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
 
     @Test
     void generateGrantedOfficialNotice() throws InterruptedException, ExecutionException {
@@ -301,13 +291,13 @@ class EmpIssuanceOfficialNoticeServiceTest {
             officialNoticeSendService, empQueryService, publisher, requestActionService, accountQueryService);
 
         assertEquals(accountId, empApprovedEventArgumentCaptor.getValue().getAccountId());
+        assertEquals(id, empApprovedEventArgumentCaptor.getValue().getEmpId());
         assertEquals(emissionsMonitoringPlan, empApprovedEventArgumentCaptor.getValue().getEmissionsMonitoringPlan());
     }
 
     @ParameterizedTest
-    @MethodSource("sendOfficialNoticeAlreadySentToRegistryScenarios")
-    void sendOfficialNotice_already_sent_to_registry(boolean accountOpeningEventSentToRegistry,
-                                                     int accountUpdateSentToRegistryInvocations) {
+    @ValueSource(booleans = {true, false})
+    void sendOfficialNotice_already_sent_to_registry(boolean accountOpeningEventSentToRegistry) {
         FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
         List<FileInfoDTO> attachments = List.of(officialDocFileInfoDTO);
         String requestId = "1";
@@ -335,34 +325,10 @@ class EmpIssuanceOfficialNoticeServiceTest {
             .build();
 
         List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
-        OrganisationStructure organisationStructure = mock(OrganisationStructure.class);
-        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder()
-            .operatorDetails(
-                EmpOperatorDetails.builder()
-                    .organisationStructure(organisationStructure)
-                    .build()
-            )
-            .build();
         MrtmAccount mrtmAccount = MrtmAccount.builder().registryId(accountOpeningEventSentToRegistry? null : 1234567).build();
-        EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer
-            .builder()
-            .emissionsMonitoringPlan(emissionsMonitoringPlan)
-            .build();
-        String id = "UK-1234";
-        AccountUpdatedRegistryEvent accountUpdatedRegistryEvent = AccountUpdatedRegistryEvent.builder()
-            .accountId(request.getAccountId())
-            .emissionsMonitoringPlan(emissionsMonitoringPlan)
-            .build();
-        AccountUpdatedSubmittedEventDetails accountUpdatedSubmittedEventDetails = mock(AccountUpdatedSubmittedEventDetails.class);
 
         when(accountQueryService.getAccountById(accountId)).thenReturn(mrtmAccount);
-        EmissionsMonitoringPlanDTO emissionsMonitoringPlanDTO = EmissionsMonitoringPlanDTO.builder()
-            .empContainer(empContainer)
-            .id(id)
-            .build();
-        when(empQueryService.getEmissionsMonitoringPlanDTOByAccountId(accountId)).thenReturn(Optional.of(emissionsMonitoringPlanDTO));
         when(requestService.findRequestById(requestId)).thenReturn(request);
-        lenient().when(accountUpdatedRegistryListener.onAccountUpdatedEvent(accountUpdatedRegistryEvent)).thenReturn(accountUpdatedSubmittedEventDetails);
         when(registryConfig.getEmail()).thenReturn(registryEmail);
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of(decisionNotificationUserEmail));
 
@@ -372,24 +338,11 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
         verify(accountQueryService).getAccountById(accountId);
-        verify(empQueryService).getEmissionsMonitoringPlanDTOByAccountId(accountId);
-        verify(accountUpdatedRegistryListener, times(accountUpdateSentToRegistryInvocations)).onAccountUpdatedEvent(accountUpdatedRegistryEvent);
-        verify(accountUpdatedEventRequestActionService, times(accountUpdateSentToRegistryInvocations)).addRequestAction(
-            request, accountUpdatedSubmittedEventDetails, organisationStructure, null);
-
         verifyNoInteractions(requestActionService);
 
-        verifyNoMoreInteractions(accountUpdatedRegistryListener, accountUpdatedEventRequestActionService,
-            empQueryService, requestService, decisionNotificationUsersService, officialNoticeSendService,
-            accountQueryService);
-        verifyNoInteractions(publisher);
-    }
-
-    public static Stream<Arguments> sendOfficialNoticeAlreadySentToRegistryScenarios() {
-        return Stream.of(
-            Arguments.of(true, 0),
-            Arguments.of(false, 1)
-        );
+        verifyNoMoreInteractions(requestService, decisionNotificationUsersService,
+            officialNoticeSendService, accountQueryService);
+        verifyNoInteractions(empQueryService, publisher);
     }
 
     private static Stream<Arguments> provideSendOfficialNoticeTestArgs() {

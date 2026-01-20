@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
@@ -37,11 +37,6 @@ export class AerEmissionsSummaryComponent {
   isEditable = this.store.select(requestTaskQuery.selectIsEditable);
   isSubTaskCompleted = this.store.select(aerCommonQuery.selectIsSubtaskCompleted(EMISSIONS_SUB_TASK))();
   wizardStep = AerEmissionsWizardStep;
-  readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
-
-  readonly hasExternalSystemData = computed(() => {
-    return !!(this.ships() ?? []).find((ship) => ship?.dataInputType === 'EXTERNAL_PROVIDER');
-  });
 
   constructor() {
     if (this.activatedRoute.snapshot.queryParams?.['change'] === 'true') {

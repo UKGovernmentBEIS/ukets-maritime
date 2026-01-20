@@ -12,7 +12,6 @@ import {
   AerShipAggregatedData,
   AerShipAggregatedDataSave,
   AerShipEmissions,
-  AerShipEmissionsSave,
   AerSmfDetails,
   AerSmfDetailsSave,
   AerSmfPurchaseSave,
@@ -43,8 +42,8 @@ const mapPortsToSavePayload = (ports: Array<AerPort>): Array<AerPortSave> =>
     fuelConsumptions: mapFuelConsumptions(fuelConsumptions),
   }));
 
-const mapEmissionsToSavePayload = (emissions: Array<AerShipEmissions>): Array<AerShipEmissionsSave> =>
-  (emissions ?? []).map<AerShipEmissionsSave>(
+const mapEmissionsToSavePayload = (emissions: Array<AerShipEmissions>): Array<AerShipEmissions> =>
+  (emissions ?? []).map<AerShipEmissions>(
     ({ details, uniqueIdentifier, fuelsAndEmissionsFactors, emissionsSources, uncertaintyLevel, derogations }) => ({
       details,
       uniqueIdentifier,
@@ -52,7 +51,6 @@ const mapEmissionsToSavePayload = (emissions: Array<AerShipEmissions>): Array<Ae
       emissionsSources,
       uncertaintyLevel,
       derogations,
-      dataInputType: 'MANUAL',
     }),
   );
 
@@ -94,7 +92,6 @@ const mapAggregatedDataToSavePayload = (
       emissionsBetweenUKAndNIVoyages: !isNil(emissionsBetweenUKAndNIVoyages)
         ? mapAerPortEmissionsMeasurementToSavePayload(emissionsBetweenUKAndNIVoyages)
         : undefined,
-      dataInputType: 'MANUAL',
     }),
   );
 
@@ -104,16 +101,12 @@ const mapSmfDetailsToSavePayload = (smfDetails: AerSmfDetails): AerSmfDetailsSav
     // TODO DELETE THIS emissions: mapEmissionsToSavePayload ALONG WITH LINE 115-117 AND METHOD mapEmissionsToSavePayload
     delete purchase?.['dataSaveMethod'];
 
-    return {
-      ...purchase,
-      dataInputType: 'MANUAL',
-    };
+    return purchase;
   }),
 });
 
 export const mapAerToSavePayload = ({ ...aer }: Aer): AerSave => {
   delete aer.totalEmissions;
-  delete aer.thirdPartyDataProviderName;
 
   return {
     ...aer,

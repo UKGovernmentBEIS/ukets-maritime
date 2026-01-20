@@ -7,11 +7,10 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { ThirdPartyDataProviderPayload } from './thirdPartyDataProviderPayload';
 
 export interface ThirdPartyDataProviderDTO {
   providerName?: string;
   receivedOn?: string;
   importedOn?: string;
-  payload?: ThirdPartyDataProviderPayload;
+  payload?: object;
 }

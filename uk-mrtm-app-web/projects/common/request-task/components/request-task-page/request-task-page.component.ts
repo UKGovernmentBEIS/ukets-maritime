@@ -40,7 +40,7 @@ type ViewModel = {
   pageTopComponent: Type<unknown> | null;
   contentComponent: Type<unknown> | null;
   postHeaderComponent: Type<unknown> | null;
-  preContentComponents: Array<Type<unknown>> | null;
+  preContentComponent: Type<unknown> | null;
   postContentComponent: Type<unknown> | null;
   relatedTasks: ItemDTO[];
   hasRelatedTasks: boolean;
@@ -117,7 +117,7 @@ export class RequestTaskPageComponent {
       pageTopComponent,
       contentComponent,
       postHeaderComponent,
-      preContentComponents: preContentComponent ? [preContentComponent].flat() : null,
+      preContentComponent,
       postContentComponent,
       relatedTasks,
       timeline,

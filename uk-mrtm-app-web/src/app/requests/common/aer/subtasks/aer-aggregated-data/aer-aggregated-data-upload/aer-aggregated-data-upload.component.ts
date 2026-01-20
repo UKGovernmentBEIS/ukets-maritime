@@ -9,7 +9,6 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AerShipAggregatedDataSave } from '@mrtm/api';
@@ -59,7 +58,6 @@ export class AerAggregatedDataUploadComponent {
   private readonly service = inject(TaskService<AerSubmitTaskPayload>);
   private readonly xmlService = inject(AerAggregatedDataXmlService);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
-  private readonly title = inject(Title);
 
   private readonly dataParserWizardStep = viewChild.required(DataParserWizardStepComponent);
 
@@ -115,9 +113,6 @@ export class AerAggregatedDataUploadComponent {
 
   toggleConfirmation(value: boolean) {
     this.showConfirmation = value;
-    this.showConfirmation
-      ? this.title.setTitle(this.taskMap.uploadAggregatedDataConfirmation.title)
-      : this.title.setTitle(this.taskMap.uploadAggregatedData.title);
   }
 
   onSubmit() {

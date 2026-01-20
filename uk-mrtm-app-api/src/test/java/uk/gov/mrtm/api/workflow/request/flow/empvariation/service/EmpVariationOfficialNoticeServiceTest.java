@@ -8,17 +8,9 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.LimitedCompanyOrganisation;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationLegalStatusType;
-import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
-import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
@@ -43,7 +35,6 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -71,12 +62,6 @@ class EmpVariationOfficialNoticeServiceTest {
 
     @Mock
     private OfficialNoticeSendService officialNoticeSendService;
-
-    @Mock
-    private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
-
-    @Mock
-    private AccountUpdatedEventAddRequestActionService accountUpdatedEventRequestActionService;
 
     @Test
     void generateApprovedOfficialNotice() throws InterruptedException, ExecutionException {
@@ -210,46 +195,24 @@ class EmpVariationOfficialNoticeServiceTest {
                 .signatory("signatoryUser")
                 .build();
 
-        LimitedCompanyOrganisation organisationStructure = LimitedCompanyOrganisation.builder()
-            .legalStatusType(OrganisationLegalStatusType.LIMITED_COMPANY)
-            .registrationNumber("registration number")
-            .evidenceFiles(Set.of(UUID.randomUUID()))
-            .build();
-        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder()
-            .operatorDetails(
-                EmpOperatorDetails.builder()
-                    .organisationStructure(organisationStructure)
-                    .build()
-            )
-            .build();
+
         Request request = Request.builder()
                 .id(requestId)
                 .payload(EmpVariationRequestPayload.builder()
                         .decisionNotification(decisionNotification)
                         .officialNotice(officialDocFileInfoDTO)
-                        .emissionsMonitoringPlan(emissionsMonitoringPlan)
                         .empDocument(empDocFileInfoDTO)
                         .build())
                 .build();
 
         List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
-        AccountUpdatedRegistryEvent accountUpdatedRegistryEvent = AccountUpdatedRegistryEvent.builder()
-            .accountId(request.getAccountId())
-            .emissionsMonitoringPlan(emissionsMonitoringPlan)
-            .build();
-        AccountUpdatedSubmittedEventDetails accountUpdatedSubmittedEventDetails = mock(AccountUpdatedSubmittedEventDetails.class);
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of(decisionNotificationUserEmail));
-        when(accountUpdatedRegistryListener.onAccountUpdatedEvent(accountUpdatedRegistryEvent))
-            .thenReturn(accountUpdatedSubmittedEventDetails);
 
         empVariationOfficialNoticeService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
-        verify(accountUpdatedRegistryListener, times(1)).onAccountUpdatedEvent(accountUpdatedRegistryEvent);
-        verify(accountUpdatedEventRequestActionService, times(1))
-            .addRequestAction(request, accountUpdatedSubmittedEventDetails, organisationStructure, null);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails);
     }

@@ -54,8 +54,5 @@ export const canActivateAggregatedDataEdit: CanActivateFn = (route: ActivatedRou
   const editable = store.select(requestTaskQuery.selectIsEditable)();
   const aggregatedData = store.select(aerCommonQuery.selectAggregatedDataItem(dataId))();
 
-  return (
-    (!aggregatedData?.fromFetch && aggregatedData.dataInputType !== 'EXTERNAL_PROVIDER' && editable) ||
-    createUrlTreeFromSnapshot(route, ['../'])
-  );
+  return (!aggregatedData?.fromFetch && editable) || createUrlTreeFromSnapshot(route, ['../']);
 };

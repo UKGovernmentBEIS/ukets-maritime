@@ -103,7 +103,7 @@
         </govuk-tag>
       }
       @case ('surrenderEmissions') {
-        @if (['International', 'European Economic Area'].includes(row?.['journeyType'])) {
+        @if (['International', 'EU'].includes(row?.['journeyType'])) {
           Not applicable
         } @else {
           {{ row?.[column?.field] | bigNumber: 7 }}

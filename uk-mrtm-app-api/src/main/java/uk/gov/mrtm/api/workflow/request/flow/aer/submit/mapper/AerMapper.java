@@ -66,7 +66,6 @@ public interface AerMapper {
         aerShipDetails.setAllYear(true);
     }
 
-    @Mapping(target = "dataInputType", constant = "FETCH_FROM_EMP")
     AerShipEmissions empShipEmissionsToAerShipEmissions(EmpShipEmissions empShipEmissions);
 
     @AfterMapping
@@ -108,48 +107,31 @@ public interface AerMapper {
     @Mapping(target = "smf.attachmentIds", ignore = true)
     Aer toAer(AerSave savePayload, @Context Aer existingAer);
 
-    @AfterMapping
-    default void copyThirdPartyDataProviderName(@MappingTarget Aer target,
-                                                @Context Aer existingAer) {
-        if (existingAer != null) {
-            target.setThirdPartyDataProviderName(existingAer.getThirdPartyDataProviderName());
-        }
-    }
-
     default Set<AerShipEmissions> aerShipEmissionsSaveSetToAerShipEmissionsSet(Set<AerShipEmissionsSave> saveShips,
                                                                                @Context Aer existingAer) {
         if ( saveShips == null ) {
             return null;
         }
 
-        Map<String, AerShipEmissions> existing = Optional.ofNullable(existingAer)
+        Map<String, AerShipEmissions> externalShips = Optional.ofNullable(existingAer)
             .map(Aer::getEmissions)
             .map(AerEmissions::getShips)
             .orElse(Collections.emptySet())
             .stream()
             .filter(ship -> ship.getDetails() != null
-                && ship.getDetails().getImoNumber() != null)
+                && ship.getDetails().getImoNumber() != null
+                && DataInputType.EXTERNAL_PROVIDER.equals(ship.getDataInputType()))
             .collect(Collectors.toMap(ship -> ship.getDetails().getImoNumber(), ship -> ship));
 
         return saveShips.stream()
             .filter(saveShip -> saveShip.getDetails() != null)
-            .map(saveShip -> {
-                if (existing.containsKey(saveShip.getDetails().getImoNumber())) {
-                    AerShipEmissions existingShip = existing.get(saveShip.getDetails().getImoNumber());
-                    if (DataInputType.EXTERNAL_PROVIDER.equals(existingShip.getDataInputType())) {
-                        return existingShip;
-                    } else {
-                        return toAerShipEmissionsSave(saveShip, existingAer, existingShip.getDataInputType());
-                    }
-                } else {
-                    return toAerShipEmissionsSave(saveShip, existingAer, DataInputType.valueOf(saveShip.getDataInputType().name()));
-                }
-            })
+            .map(saveShip -> externalShips.getOrDefault(
+                saveShip.getDetails().getImoNumber(),
+                toAerShipEmissionsSave(saveShip, existingAer)))
             .collect(Collectors.toSet());
     }
 
-    @Mapping(source = "dataInputType", target = "dataInputType")
-    AerShipEmissions toAerShipEmissionsSave(AerShipEmissionsSave aerShipEmissionsSave, @Context Aer existingAer, DataInputType dataInputType);
+    AerShipEmissions toAerShipEmissionsSave(AerShipEmissionsSave aerShipEmissionsSave, @Context Aer existingAer);
 
     default Set<AerShipAggregatedData> aerShipAggregatedDataSaveSetToAerShipAggregatedDataSet(Set<AerShipAggregatedDataSave> aggregatedData,
                                                                                               @Context Aer existingAer) {
