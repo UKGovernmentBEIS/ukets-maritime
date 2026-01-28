@@ -12,6 +12,7 @@ import java.util.List;
 public enum MrtmRequestHistoryCategory {
     PERMIT(List.of(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER, RoleTypeConstants.REGULATOR)),
     REPORTING(List.of(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER, RoleTypeConstants.REGULATOR)),
+    SYSTEM_MESSAGE_NOTIFICATION(List.of(RoleTypeConstants.OPERATOR, RoleTypeConstants.VERIFIER, RoleTypeConstants.REGULATOR)),
     NON_COMPLIANCE(List.of(RoleTypeConstants.REGULATOR)),
     CA(List.of(RoleTypeConstants.REGULATOR));
 

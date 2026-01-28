@@ -8,7 +8,7 @@ import lombok.Getter;
 public enum BioFuelType {
     ETHANOL("Ethanol"),
     BIO_DIESEL("Bio-diesel"),
-    HVO("Hydro Treated Vegetabel Oil (HVO)"),
+    HVO("Hydro Treated Vegetable Oil (HVO)"),
     BIO_LNG("Liquified bio-methane as transport fuel (Bio-LNG)"),
     BIO_METHANOL("Bio-methanol"),
     BIO_H2("Bio-H2"),

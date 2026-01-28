@@ -72,7 +72,13 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
       Array.from(totalEmissionsTable.querySelectorAll('thead th').values())
         .map((el) => el.textContent.trim())
         .filter(Boolean),
-    ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+    ).toEqual([
+      'Emission type',
+      'CO2 emissions (t)',
+      'CH4 emissions (tCO2e)',
+      'N2O emissions (tCO2e)',
+      'Total emissions (tCO2e)',
+    ]);
   });
 
   it('should display total emissions table', () => {
@@ -81,7 +87,13 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
       Array.from(page.totalEmissionsTableElement.querySelectorAll('thead th'))
         .map((col) => col.textContent.trim())
         .filter(Boolean),
-    ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+    ).toEqual([
+      'Emission type',
+      'CO2 emissions (t)',
+      'CH4 emissions (tCO2e)',
+      'N2O emissions (tCO2e)',
+      'Total emissions (tCO2e)',
+    ]);
 
     expect(
       Array.from(page.totalEmissionsTableElement.querySelectorAll('tbody tr td:first-child')).map((col) =>

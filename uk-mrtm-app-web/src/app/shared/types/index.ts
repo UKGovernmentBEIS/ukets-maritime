@@ -66,3 +66,5 @@ export * from './non-compliance.types';
 export * from './peer-review-decision-timeline-map.type';
 export * from './with-needs-review.dto';
 export * from './aer-aggregated-data-ship-summary.interface';
+export * from './aer-data-initial-source-type.enum';
+export * from './aer-ship-emission-table-list-item.iterface';

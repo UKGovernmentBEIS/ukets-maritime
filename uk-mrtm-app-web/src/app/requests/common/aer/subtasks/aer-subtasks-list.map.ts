@@ -54,6 +54,7 @@ export const aerEmissionsMap: SubTaskListMap<{
   ships: string;
   fetchFromEMP: string;
   uploadShips: string;
+  uploadShipsConfirmation: string;
 }> = {
   ...emissionsSubtaskMap,
   fetchFromEMP: {

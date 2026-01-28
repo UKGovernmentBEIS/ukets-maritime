@@ -26,6 +26,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
     children: [
       {
         path: '',
+        title: 'Check your answers',
         data: {
           backlink: `./${RdeWizardSteps.RDE_DEADLINE_NOTIFICATION}`,
           breadcrumb: false,
@@ -38,6 +39,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
       },
       {
         path: RdeWizardSteps.RDE_DEADLINE_EXTENSION,
+        title: 'Request deadline extension (RDE)',
         data: { breadcrumb: false },
         resolve: {
           backlink: backlinkResolver(RdeWizardSteps.SUMMARY, '../../'),
@@ -51,6 +53,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
       {
         path: RdeWizardSteps.RDE_DEADLINE_NOTIFICATION,
         data: { breadcrumb: false },
+        title: 'Select who you want to notify about this request',
         resolve: {
           backlink: backlinkResolver(RdeWizardSteps.SUMMARY, RdeWizardSteps.RDE_DEADLINE_EXTENSION),
         },
@@ -70,6 +73,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
       },
       {
         path: RdeWizardSteps.SUCCESS,
+        title: 'Request for deadline extension sent',
         canActivate: [canActivateRdeSuccess],
         loadComponent: () =>
           import('@requests/common/emp/request-deadline-extension/request-deadline-extension-success').then(
@@ -80,6 +84,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
   },
   {
     path: 'not-allowed',
+    title: 'You can only have one active request at any given time',
     loadComponent: () =>
       import('@requests/common/emp/components/request-not-allowed').then((c) => c.RequestNotAllowedComponent),
   },
@@ -88,6 +93,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
     children: [
       {
         path: 'success',
+        title: 'Extension request decision',
         canActivate: [canActivateRdeDecisionSuccess],
         loadComponent: () =>
           import('@requests/common/emp/request-deadline-extension/request-deadline-extension-decision-success').then(

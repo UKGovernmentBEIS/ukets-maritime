@@ -11,9 +11,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
+import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
-import uk.gov.mrtm.api.account.domain.MrtmAccountUpdatedEvent;
+import uk.gov.mrtm.api.account.domain.MrtmAccountReportingYearsUpdatedEvent;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountUpdateDTO;
 import uk.gov.mrtm.api.account.enumeration.AccountSearchKey;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
@@ -23,9 +24,13 @@ import uk.gov.mrtm.api.account.transform.RegisteredAddressStateMapper;
 import uk.gov.mrtm.api.common.domain.AddressState;
 import uk.gov.mrtm.api.common.domain.RegisteredAddressState;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
-import uk.gov.mrtm.api.workflow.request.flow.event.MrtmAccountCreatedEventListener;
+import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
+import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.netz.api.account.service.AccountSearchAdditionalKeywordService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.common.exception.BusinessException;
 
 import java.lang.reflect.Field;
 import java.time.LocalDate;
@@ -38,6 +43,8 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
+import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -72,17 +79,26 @@ class MrtmAccountUpdateServiceTest {
     @Mock
     private  ApplicationEventPublisher publisher;
 
+    @Mock
+    private EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
+
+    @Mock
+    private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
+
     @Captor
     ArgumentCaptor<LocalDateTime> dateTimeArgumentCaptor;
 
     @ParameterizedTest
     @MethodSource("createRemainingReportingYearsScenarios")
-    void updateMaritimeAccount_publish_account_updated_event(LocalDate firstMaritimeActivity, List<Year> expectedYears) throws IllegalAccessException, NoSuchFieldException {
+    void updateMaritimeAccount_publish_account_updated_event(LocalDate currentFirstMaritimeActivity,
+                                                             LocalDate newFirstMaritimeActivity,
+                                                             List<Year> expectedYears) throws IllegalAccessException, NoSuchFieldException {
         String name = "name";
         AppUser appUser = AppUser.builder().userId("userId").build();
 
         MrtmAccountUpdateDTO mrtmAccountUpdateDTO = mock(MrtmAccountUpdateDTO.class);
         MrtmAccount mrtmAccount = mock(MrtmAccount.class);
+        EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
 
         Field field = MrtmAccountUpdateService.class.getDeclaredField("aerEnabled");
         field.setAccessible(true);
@@ -90,28 +106,60 @@ class MrtmAccountUpdateServiceTest {
 
         when(mrtmAccountUpdateDTO.getName()).thenReturn(name);
         when(mrtmAccountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(mrtmAccount);
-        when(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate()).thenReturn(firstMaritimeActivity);
+        when(mrtmAccount.getFirstMaritimeActivityDate()).thenReturn(currentFirstMaritimeActivity);
+        when(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate()).thenReturn(newFirstMaritimeActivity);
+        when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID))
+            .thenReturn(emissionsMonitoringPlan);
 
         mrtmAccountUpdateService.updateMaritimeAccount(ACCOUNT_ID, mrtmAccountUpdateDTO, appUser);
 
         verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
         verify(mrtmAccountMapper).updateMrtmAccount(mrtmAccount, mrtmAccountUpdateDTO);
+        verify(emissionsMonitoringPlanQueryService).getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
+        verify(accountUpdatedRegistryListener).onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
+            .accountId(ACCOUNT_ID)
+            .emissionsMonitoringPlan(emissionsMonitoringPlan)
+            .build());
         verify(accountSearchAdditionalKeywordService).storeKeywordsForAccount(ACCOUNT_ID,
             Map.of(AccountSearchKey.ACCOUNT_NAME.name(), name));
-        verify(publisher).publishEvent(MrtmAccountUpdatedEvent.builder()
+        verify(publisher).publishEvent(MrtmAccountReportingYearsUpdatedEvent.builder()
                 .accountId(ACCOUNT_ID)
                 .reportingYears(expectedYears)
                 .build());
-        verifyNoMoreInteractions(mrtmAccountQueryService, mrtmAccountMapper, accountSearchAdditionalKeywordService, publisher);
+        verifyNoMoreInteractions(emissionsMonitoringPlanQueryService, accountUpdatedRegistryListener,
+            mrtmAccountQueryService, mrtmAccountMapper, accountSearchAdditionalKeywordService, publisher);
         verifyNoInteractions(mrtmAccountRepository);
     }
 
     private static Stream<Arguments> createRemainingReportingYearsScenarios() {
         return Stream.of(
-            Arguments.of(LocalDate.of(Year.now().getValue(), 4, 26), List.of(Year.now())),
-            Arguments.of(LocalDate.of(Year.now().plusYears(1).getValue(), 4, 26), List.of(Year.now())),
-            Arguments.of(LocalDate.of(Year.now().minusYears(1).getValue(), 4, 26), List.of(Year.now().minusYears(1), Year.now()))
+            Arguments.of(LocalDate.now(), LocalDate.now(), List.of(Year.now())),
+            Arguments.of(LocalDate.now().plusYears(1), LocalDate.now().plusYears(1), List.of(Year.now())),
+            Arguments.of(LocalDate.now(), LocalDate.now().minusYears(1), List.of(Year.now().minusYears(1), Year.now()))
         );
+    }
+
+    @Test
+    void updateMaritimeAccount_throws_invalid_year_exception() {
+        AppUser appUser = AppUser.builder().userId("userId").build();
+
+        MrtmAccountUpdateDTO mrtmAccountUpdateDTO = mock(MrtmAccountUpdateDTO.class);
+        MrtmAccount mrtmAccount = mock(MrtmAccount.class);
+
+        when(mrtmAccountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(mrtmAccount);
+        when(mrtmAccount.getFirstMaritimeActivityDate()).thenReturn(LocalDate.now().minusYears(1));
+        when(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate()).thenReturn(LocalDate.now());
+
+        BusinessException exception = assertThrows(BusinessException.class,
+            () -> mrtmAccountUpdateService.updateMaritimeAccount(ACCOUNT_ID, mrtmAccountUpdateDTO, appUser));
+
+        assertEquals(MrtmErrorCode.FIRST_MARITIME_ACTIVITY_DATE_AFTER_PREVIOUS, exception.getErrorCode());
+
+        verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
+
+        verifyNoMoreInteractions(mrtmAccountQueryService);
+        verifyNoInteractions(emissionsMonitoringPlanQueryService, accountUpdatedRegistryListener,
+            mrtmAccountMapper, accountSearchAdditionalKeywordService, publisher);
     }
 
     @Test

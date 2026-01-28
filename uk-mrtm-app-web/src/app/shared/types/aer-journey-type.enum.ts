@@ -1,6 +1,6 @@
 export enum AerJourneyTypeEnum {
   International = 'International',
-  EU = 'EU',
+  EU = 'European Economic Area',
   Domestic = 'Domestic',
   NI = 'Northern Ireland',
 }

@@ -1,4 +1,3 @@
-import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -37,7 +36,7 @@ import { LoadingSpinnerComponent } from '@shared/components';
   `,
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LinkDirective, AsyncPipe, LoadingSpinnerComponent],
+  imports: [LinkDirective, LoadingSpinnerComponent],
 })
 export class NoteFileDownloadComponent implements OnInit {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);

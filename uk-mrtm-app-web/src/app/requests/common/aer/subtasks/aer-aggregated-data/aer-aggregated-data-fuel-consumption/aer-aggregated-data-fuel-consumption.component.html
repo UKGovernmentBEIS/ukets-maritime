@@ -34,7 +34,7 @@
             type="number"></div>
         </div>
       </fieldset>
-      <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-bottom-4" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     }
   </ng-container>
   @if (availableFuelSelectItems()?.length > fuelConsumptionsFormArray.controls.length) {
@@ -42,6 +42,6 @@
   }
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
 </div>

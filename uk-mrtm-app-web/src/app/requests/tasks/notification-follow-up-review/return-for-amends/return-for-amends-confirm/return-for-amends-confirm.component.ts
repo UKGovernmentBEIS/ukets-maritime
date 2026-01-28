@@ -27,7 +27,7 @@ import { FollowUpReviewDecisionSummaryTemplateComponent } from '@shared/componen
     <mrtm-follow-up-review-decision-summary-template [followUpReviewDecision]="followUpReviewDecisionDTO" />
     <button netzPendingButton govukButton type="button" (click)="onSubmit()">Confirm and return</button>
     <div>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
       <netz-return-to-task-or-action-page />
     </div>
   `,

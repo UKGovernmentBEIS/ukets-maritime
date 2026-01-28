@@ -10,7 +10,9 @@
       [data]="rows"
       [description]="header()"
       emptyTableText="No items to display"
-      (sort)="sort.set($event)">
+      (sort)="sort.set($event)"
+      mrtmScrollablePane
+      [ariaLabel]="header()">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>
@@ -22,7 +24,9 @@
       [data]="rows"
       (sort)="sort.set($event)"
       emptyTableText="No items to display"
-      [description]="header()">
+      [description]="header()"
+      mrtmScrollablePane
+      [ariaLabel]="header()">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>
@@ -66,6 +70,9 @@
       <govuk-tag [color]="row[column.field] | statusTagColor">
         {{ row?.[column?.field] | portVoyageAggregatedStatus }}
       </govuk-tag>
+    }
+    @case ('dataInputType') {
+      <span class="pre-wrap" [innerHtml]="row?.[column?.field] | initialDataSource: dataSupplierName()"></span>
     }
     @default {
       {{ row?.[column?.field] }}

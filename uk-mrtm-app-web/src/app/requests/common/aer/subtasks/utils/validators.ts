@@ -130,7 +130,9 @@ export const validateIfUsedFuelsExistInEmissionsValidator = (
 
     if (!isValid) {
       errors[fuelOriginTypeName.uniqueIdentifier] = 'The highlighted entries have invalid values';
+      return errors;
     }
   }
-  return Object.keys(errors).length ? errors : null;
+
+  return null;
 };

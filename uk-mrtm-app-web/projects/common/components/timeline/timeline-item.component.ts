@@ -20,7 +20,7 @@ import { LinkDirective } from '@netz/govuk-components';
         <a [routerLink]="link()" [relativeTo]="route" [state]="state()" govukLink>View details</a>
       }
     </div>
-    <hr class="govuk-!-margin-top-4 govuk-!-margin-bottom-3" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [ItemActionHeaderPipe, GovukDatePipe, RouterLink, LinkDirective],

@@ -3,6 +3,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { RequestTaskStore } from '@netz/common/store';
 
+import { aerTotalEmissionsMap } from '@requests/common/aer';
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerTotalEmissionsSummaryTemplateComponent } from '@shared/components/summaries';
 
@@ -16,4 +17,5 @@ import { AerTotalEmissionsSummaryTemplateComponent } from '@shared/components/su
 export class AerTotalEmissionsSubmittedComponent {
   private readonly store = inject(RequestTaskStore);
   readonly totalEmissions = this.store.select(aerCommonQuery.selectTotalEmissions);
+  readonly aerTotalEmissionsMap = aerTotalEmissionsMap;
 }

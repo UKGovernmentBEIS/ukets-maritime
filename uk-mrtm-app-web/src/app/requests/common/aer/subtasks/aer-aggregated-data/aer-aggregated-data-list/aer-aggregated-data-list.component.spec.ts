@@ -64,6 +64,7 @@ describe('AerAggregatedDataListComponent', () => {
       'Ship name and IMO number',
       'Total ship emissions (tCO2e)',
       'Emissions figure for surrender  (tCO2e)',
+      'Initial source',
       'Status',
     ]);
 

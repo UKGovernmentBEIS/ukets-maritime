@@ -26,6 +26,6 @@ export class RecommendedImprovementsListTemplateComponent {
   readonly columns: Array<GovukTableColumn> = [
     { field: 'reference', header: 'Reference', widthClass: 'app-column-width-15-per' },
     { field: 'explanation', header: 'Explanation' },
-    { field: 'actionLinks', header: '' },
+    { field: 'actionLinks', header: 'Actions', hiddenHeader: true },
   ];
 }

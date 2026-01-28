@@ -10,7 +10,7 @@ import {
   EMISSION_SOURCES_TYPE_SELECT_ITEMS,
   monitoringMethodMap,
 } from '@shared/constants';
-import { NotProvidedDirective } from '@shared/directives';
+import { NotProvidedDirective, ScrollablePaneDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { MethaneSlipValuePipe } from '@shared/pipes/methane-slip-value.pipe';
 import { WithNeedsReview } from '@shared/types';
@@ -26,6 +26,7 @@ import { WithNeedsReview } from '@shared/types';
     TableComponent,
     LinkDirective,
     MethaneSlipValuePipe,
+    ScrollablePaneDirective,
   ],
   templateUrl: './aer-emission-sources-and-fuel-types-used-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -51,7 +52,9 @@ export class AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent {
     { field: 'monitoringMethod', header: 'Monitoring methods' },
   ];
   readonly columns: Signal<GovukTableColumn[]> = computed(() =>
-    this.isEditable() ? [...this.mainColumns, { field: 'actionLinks', header: undefined }] : this.mainColumns,
+    this.isEditable()
+      ? [...this.mainColumns, { field: 'actionLinks', header: 'Actions', hiddenHeader: true }]
+      : this.mainColumns,
   );
 
   getSortedMonitoringMethods(item: EmissionsSources): EmissionsSources['monitoringMethod'] {

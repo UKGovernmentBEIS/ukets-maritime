@@ -91,7 +91,7 @@ class ExternalAerServiceTest {
         externalAerService.submitAerData(external, companyImoNumber, year, appUser);
         verify(mapper).toStagingAer(external);
         verify(aerRequestQueryService).findRequestByAccountAndTypeForYear(accountId, year);
-        verify(validator).validate(staging);
+        verify(validator).validate(staging, year);
         verify(mrtmAccountRepository).findByImoNumber(companyImoNumber);
         verify(stagingAerRepository).findByAccountIdAndYear(accountId, year);
         verify(dateService).getLocalDateTime();
@@ -143,7 +143,7 @@ class ExternalAerServiceTest {
         externalAerService.submitAerData(external, companyImoNumber, year, appUser);
         verify(mapper).toStagingAer(external);
         verify(aerRequestQueryService).findRequestByAccountAndTypeForYear(accountId, year);
-        verify(validator).validate(staging);
+        verify(validator).validate(staging, year);
         verify(mrtmAccountRepository).findByImoNumber(companyImoNumber);
         verify(stagingAerRepository).findByAccountIdAndYear(accountId, year);
         verify(thirdPartyDataProviderRepository).findById(thirdPartyDataProviderId);
@@ -178,7 +178,7 @@ class ExternalAerServiceTest {
 
         verify(mapper).toStagingAer(external);
         verify(aerRequestQueryService).findRequestByAccountAndTypeForYear(accountId, year);
-        verify(validator).validate(staging);
+        verify(validator).validate(staging, year);
         verify(mrtmAccountRepository).findByImoNumber(companyImoNumber);
 
         verifyNoMoreInteractions(mapper, validator, mrtmAccountRepository, aerRequestQueryService, dateService);

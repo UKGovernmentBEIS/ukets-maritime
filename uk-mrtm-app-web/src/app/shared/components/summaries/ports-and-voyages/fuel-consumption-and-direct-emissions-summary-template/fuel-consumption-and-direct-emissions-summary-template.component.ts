@@ -19,6 +19,7 @@ import {
 import { FUEL_CONSUMPTIONS_SUMMARY_COLUMNS } from '@shared/components/summaries/ports-and-voyages/fuel-consumption-and-direct-emissions-summary-template/fuel-consumption-and-direct-emissions-summary-template.consts';
 import { FuelsAndEmissionsFactorsInfoSummaryTemplateComponent } from '@shared/components/summaries/ports-and-voyages/fuel-consumption-and-direct-emissions-summary-template/fuels-and-emissions-factors-info-summary-template';
 import { AER_PORT_MEASURING_UNIT_SELECT_ITEMS } from '@shared/constants';
+import { ScrollablePaneDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { BigNumberPipe } from '@shared/pipes/big-number.pipe';
 import { MethaneSlipValuePipe } from '@shared/pipes/methane-slip-value.pipe';
@@ -44,6 +45,7 @@ import { FuelsAndEmissionsFactors, WithNeedsReview } from '@shared/types';
     FuelsAndEmissionsFactorsInfoSummaryTemplateComponent,
     MethaneSlipValuePipe,
     ButtonDirective,
+    ScrollablePaneDirective,
   ],
   templateUrl: './fuel-consumption-and-direct-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -8,6 +8,7 @@ import { getYearFromRequestId } from '@netz/common/utils';
 import { GovukTableColumn, LinkDirective, TableComponent, TagComponent } from '@netz/govuk-components';
 
 import { ItemTypePipe } from '@shared/dashboard/pipes/item-type.pipe';
+import { ScrollablePaneDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-dashboard-items-list',
@@ -24,6 +25,7 @@ import { ItemTypePipe } from '@shared/dashboard/pipes/item-type.pipe';
     UserFullNamePipe,
     ItemTypePipe,
     DaysRemainingPipe,
+    ScrollablePaneDirective,
   ],
 })
 export class DashboardItemsListComponent {

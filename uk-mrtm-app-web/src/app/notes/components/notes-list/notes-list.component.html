@@ -2,7 +2,7 @@
   <h2 class="govuk-heading-m">Notes</h2>
   <div>
     <a govukSecondaryButton routerLink="./notes/add" type="button">Add a note</a>
-    <hr class="govuk-section-break govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   </div>
   @for (note of result.notes; track note; let i = $index) {
     <dl govuk-summary-list>

@@ -27,7 +27,7 @@
             <div govuk-textarea [maxLength]="10000" [formControlName]="i"></div>
           </fieldset>
           @if (variationScheduleItemsCtrl?.length > 1) {
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
           }
         }
         <button (click)="addAnotherVariationSchedule()" govukSecondaryButton type="button">
@@ -64,7 +64,7 @@
               formControlName="files"></mrtm-multiple-file-input>
           </fieldset>
           @if (requiredChangesCtrl?.length > 1) {
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
           }
         }
         <button (click)="addOtherRequiredChange()" govukSecondaryButton type="button">

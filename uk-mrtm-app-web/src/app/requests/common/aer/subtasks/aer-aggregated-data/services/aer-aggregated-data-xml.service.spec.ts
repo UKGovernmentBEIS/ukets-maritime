@@ -36,6 +36,7 @@ describe('AerAggregatedDataXmlService', () => {
     expect(result).toEqual({
       data: [
         {
+          dataInputType: 'MANUAL',
           emissionsBetweenUKAndNIVoyages: {
             ch4: '12.87654',
             co2: '500.12345',
@@ -74,6 +75,7 @@ describe('AerAggregatedDataXmlService', () => {
           uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
         },
         {
+          dataInputType: 'MANUAL',
           emissionsBetweenUKAndNIVoyages: {
             ch4: '8.76543',
             co2: '340.987',

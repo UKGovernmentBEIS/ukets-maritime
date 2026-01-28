@@ -17,6 +17,7 @@ import { TaskApiService } from '@netz/common/forms';
 import { PendingRequestService } from '@netz/common/services';
 import { requestTaskQuery } from '@netz/common/store';
 
+import { EmpTaskPayload } from '@requests/common';
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import {
@@ -25,6 +26,7 @@ import {
   aerSubmitValidationError,
 } from '@requests/common/aer/errors';
 import { mapAerToSavePayload } from '@requests/common/aer/services/aer-common-api.helpers';
+import { empSubmitValidationError } from '@requests/tasks/emp-submit/errors';
 import { SaveActionTypes } from '@shared/types';
 
 @Injectable()
@@ -64,6 +66,19 @@ export class AerCommonApiService extends TaskApiService<AerSubmitTaskPayload> {
         return {
           actionType: 'AER_SUBMIT_APPLICATION',
           actionPayloadType: 'EMPTY_PAYLOAD',
+        };
+    }
+  }
+
+  private get importThirdPartyDataActionTypes(): SaveActionTypes {
+    const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
+
+    switch (taskType) {
+      case 'AER_APPLICATION_SUBMIT':
+      default:
+        return {
+          actionType: 'AER_IMPORT_THIRD_PARTY_DATA_APPLICATION',
+          actionPayloadType: 'AER_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD',
         };
     }
   }
@@ -166,6 +181,33 @@ export class AerCommonApiService extends TaskApiService<AerSubmitTaskPayload> {
       requestTaskId,
       requestTaskActionType: actionType,
       requestTaskActionPayload: { payloadType: actionPayloadType },
+    } as RequestTaskActionProcessDTO;
+  }
+
+  importThirdPartyData(payload: EmpTaskPayload): Observable<AerSubmitTaskPayload> {
+    return this.service.processRequestTaskAction(this.createImportThirdPartyDataAction(payload)).pipe(
+      catchNotFoundRequest(ErrorCodes.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      catchBadRequest(ErrorCodes.FORM1001, () => {
+        const taskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
+        return this.businessErrorService.showError(empSubmitValidationError(taskId));
+      }),
+    );
+  }
+
+  private createImportThirdPartyDataAction(payload: AerSubmitTaskPayload): RequestTaskActionProcessDTO {
+    const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
+    const { aerSectionsCompleted } = payload;
+    const { actionType, actionPayloadType } = this.importThirdPartyDataActionTypes;
+
+    return {
+      requestTaskId,
+      requestTaskActionType: actionType,
+      requestTaskActionPayload: { payloadType: actionPayloadType, aerSectionsCompleted },
     } as RequestTaskActionProcessDTO;
   }
 }

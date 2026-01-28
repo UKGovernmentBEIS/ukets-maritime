@@ -27,7 +27,7 @@ export class ExternalContactsComponent implements OnInit {
     { field: 'name', header: 'Displayed name', isSortable: true, isHeader: true },
     { field: 'email', header: 'Email address', isSortable: true },
     { field: 'description', header: 'Description' },
-    { field: null, header: null },
+    { field: null, header: 'Actions', hiddenHeader: true },
   ];
   nonEditableColumns = this.editableColumns.slice(0, 3);
 

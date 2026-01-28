@@ -6,16 +6,20 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ObjectUtils;
+import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.common.config.RegistryConfig;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.event.EmpApprovedEvent;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
+import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuanceRequestPayload;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
@@ -42,26 +46,18 @@ import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SE
 public class EmpIssuanceOfficialNoticeService {
 
     private final RequestService requestService;
-
     private final OfficialNoticeSendService officialNoticeSendService;
-
     private final DecisionNotificationUsersService decisionNotificationUsersService;
-
     private final RegistryConfig registryConfig;
-
     private final RequestAccountContactQueryService requestAccountContactQueryService;
-
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
-
     private final FileDocumentGenerateServiceDelegator documentFileGeneratorService;
-
     private final ApplicationEventPublisher publisher;
-
     private final EmissionsMonitoringPlanQueryService empQueryService;
-
     private final EmpIssuanceSendRegistryAccountOpeningAddRequestActionService addRequestActionService;
-
     private final MrtmAccountQueryService accountQueryService;
+    private final AccountUpdatedEventAddRequestActionService accountUpdatedEventRequestActionService;
+    private final MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
 
     private static final String INTEGRATION_POINT_KEY = "Account Created";
 
@@ -78,15 +74,15 @@ public class EmpIssuanceOfficialNoticeService {
 
         if (EmpIssuanceDeterminationType.APPROVED.equals(determinationType)) {
             final MrtmAccount account = accountQueryService.getAccountById(request.getAccountId());
+            final EmissionsMonitoringPlanDTO emp = empQueryService
+                .getEmissionsMonitoringPlanDTOByAccountId(request.getAccountId())
+                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
+            // TODO consider moving this to MrtmAccountUpdateService.updateAccountUponEmpApproved
             if (!requestPayload.isAccountOpeningEventSentToRegistry() && ObjectUtils.isEmpty(account.getRegistryId())) {
-                final EmissionsMonitoringPlanDTO emp = empQueryService
-                    .getEmissionsMonitoringPlanDTOByAccountId(request.getAccountId())
-                    .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
                 publisher.publishEvent(EmpApprovedEvent.builder()
                         .accountId(request.getAccountId())
-                        .empId(emp.getId())
                         .emissionsMonitoringPlan(emp.getEmpContainer().getEmissionsMonitoringPlan())
                         .build());
 
@@ -94,6 +90,20 @@ public class EmpIssuanceOfficialNoticeService {
                     request,
                     emp.getEmpContainer().getEmissionsMonitoringPlan().getOperatorDetails().getOrganisationStructure(),
                     requestPayload.getRegulatorReviewer());
+
+            } else if (!ObjectUtils.isEmpty(account.getRegistryId())) {
+
+                AccountUpdatedSubmittedEventDetails updatedSubmittedEventDetails = accountUpdatedRegistryListener
+                    .onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
+                    .accountId(request.getAccountId())
+                    .emissionsMonitoringPlan(emp.getEmpContainer().getEmissionsMonitoringPlan())
+                    .build());
+
+                accountUpdatedEventRequestActionService.addRequestAction(
+                    request,
+                    updatedSubmittedEventDetails,
+                    emp.getEmpContainer().getEmissionsMonitoringPlan().getOperatorDetails().getOrganisationStructure(),
+                    null);
 
             } else {
                 log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, request.getAccountId(),

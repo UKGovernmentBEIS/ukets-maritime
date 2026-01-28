@@ -55,6 +55,11 @@
           Where applicable, you must appoint a verifier body before you submit your annual emissions report. They will
           verify the report before you submit it to your regulator.
         </p>
+        <p class="govuk-body govuk-!-margin-bottom-1">Data supplier</p>
+        <p class="govuk-body">
+          Appointing a data supplier will allow the supplier to share data that can be imported into relevant METS
+          workflows.
+        </p>
         <h3 class="govuk-heading-s">User permissions</h3>
         <p class="govuk-body govuk-!-margin-bottom-1">Primary and secondary contacts</p>
         <ul class="govuk-list govuk-list--bullet">
@@ -90,7 +95,10 @@
     [columns]="isEditable() ? editableCols : nonEditableCols"
     [form]="usersForm"
     [users]="accountAuthorities$"
-    mrtmUsersTable>
+    mrtmUsersTable
+    description="Users list"
+    mrtmScrollablePane
+    ariaLabel="Users list">
     <ng-template let-column="column" let-index="index" let-row="row">
       @if (!['verifier', 'dataSupplier'].includes(row.roleCode)) {
         <div>

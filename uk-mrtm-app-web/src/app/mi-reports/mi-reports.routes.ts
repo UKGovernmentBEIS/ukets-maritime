@@ -10,17 +10,20 @@ import { miReportUseCaseMap } from '@mi-reports/use-cases';
 export const MI_REPORTS_ROUTES: Routes = [
   {
     path: '',
+    title: 'MI reports',
     component: MiReportsComponent,
     canActivate: [MiReportsListGuard],
     resolve: { miReports: MiReportsListGuard },
   },
   {
     path: 'custom',
-    data: { breadcrumb: 'Custom SQL report' },
+    title: miReportTypeDescriptionMap[MiReportType.CUSTOM],
+    data: { breadcrumb: miReportTypeDescriptionMap[MiReportType.CUSTOM] },
     component: CustomReportComponent,
   },
   {
     path: 'accounts-users-contacts',
+    title: miReportTypeDescriptionMap[MiReportType.LIST_OF_ACCOUNTS_USERS_CONTACTS],
     data: {
       breadcrumb: miReportTypeDescriptionMap[MiReportType.LIST_OF_ACCOUNTS_USERS_CONTACTS],
     },
@@ -29,6 +32,7 @@ export const MI_REPORTS_ROUTES: Routes = [
   },
   {
     path: 'assigned-regulator-site-contacts',
+    title: miReportTypeDescriptionMap[MiReportType.LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS],
     data: {
       breadcrumb: miReportTypeDescriptionMap[MiReportType.LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS],
     },
@@ -37,6 +41,7 @@ export const MI_REPORTS_ROUTES: Routes = [
   },
   {
     path: 'completed-work',
+    title: miReportTypeDescriptionMap[MiReportType.COMPLETED_WORK],
     data: {
       breadcrumb: miReportTypeDescriptionMap[MiReportType.COMPLETED_WORK],
     },
@@ -45,6 +50,7 @@ export const MI_REPORTS_ROUTES: Routes = [
   },
   {
     path: 'outstanding-request-tasks',
+    title: miReportTypeDescriptionMap[MiReportType.REGULATOR_OUTSTANDING_REQUEST_TASKS],
     data: {
       breadcrumb: miReportTypeDescriptionMap[MiReportType.REGULATOR_OUTSTANDING_REQUEST_TASKS],
     },
@@ -53,6 +59,7 @@ export const MI_REPORTS_ROUTES: Routes = [
   },
   {
     path: 'verification-body-users',
+    title: miReportTypeDescriptionMap[MiReportType.LIST_OF_VERIFICATION_BODY_USERS],
     data: {
       breadcrumb: miReportTypeDescriptionMap[MiReportType.LIST_OF_VERIFICATION_BODY_USERS],
     },

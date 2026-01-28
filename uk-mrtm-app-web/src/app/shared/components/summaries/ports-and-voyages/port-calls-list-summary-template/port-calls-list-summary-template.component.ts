@@ -25,6 +25,7 @@ import { sortAndPaginateListWithShipNameAndStatus } from '@requests/common/utils
 import { MultiSelectedItem, MultiSelectTableComponent } from '@shared/components';
 import { PORTS_SUMMARY_COLUMNS } from '@shared/components/summaries/ports-and-voyages/port-calls-list-summary-template/port-calls-list-summary-template.consts';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
+import { ScrollablePaneDirective } from '@shared/directives';
 import { AerPortVoyageAggregatedStatusPipe, BigNumberPipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { AerPortSummaryItemDto } from '@shared/types';
 import BigNumber from 'bignumber.js';
@@ -52,6 +53,7 @@ import BigNumber from 'bignumber.js';
     GovukDatePipe,
     AerPortVoyageAggregatedStatusPipe,
     WarningTextComponent,
+    ScrollablePaneDirective,
   ],
   templateUrl: './port-calls-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,7 +63,8 @@ export class PortCallsListSummaryTemplateComponent {
   readonly header = input<string>();
   readonly data = input.required<Array<MultiSelectedItem<AerPortSummaryItemDto>>>();
   readonly editable = input<boolean>(false);
-  readonly pageSize = input<number>(10);
+  readonly withPagination = input<boolean>(true);
+  readonly pageSize: Signal<number> = computed(() => (this.withPagination() ? 10 : Number.MAX_VALUE));
   readonly editPath = input<string>();
   readonly emptyTableText = input<string>('No items to display');
   readonly warningMessages = input<string[]>([]);
@@ -90,7 +93,7 @@ export class PortCallsListSummaryTemplateComponent {
 
   readonly rows = computed<Array<MultiSelectedItem<AerPortSummaryItemDto>>>(() =>
     sortAndPaginateListWithShipNameAndStatus(
-      [{ column: 'shipName', direction: 'ascending' }, this.sort(), { column: 'arrivalTime', direction: 'descending' }],
+      [this.sort(), { column: 'shipName', direction: 'ascending' }, { column: 'arrivalTime', direction: 'descending' }],
       this.data() ?? [],
       this.currentPage(),
       this.pageSize(),

@@ -3,14 +3,6 @@
   <div class="govuk-grid-column-two-thirds">
     <netz-page-heading [caption]="wizardMap.caption">{{ wizardMap.title }}</netz-page-heading>
     <p class="govuk-body">{{ wizardMap.description }}</p>
-
-    @if (editable()) {
-      <mrtm-filter-by-ship
-        class="govuk-!-margin-top-7"
-        [ships]="shipsWithAggregatedData()"
-        filterByShipLabel="Find aggregated per ship"
-        (filterChanged)="onFilterChanged($event)" />
-    }
   </div>
   @if (editable()) {
     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
@@ -29,20 +21,36 @@
   }
 </div>
 
+@if (editable()) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <mrtm-filter-by-ship
+        class="govuk-!-margin-top-7"
+        [ships]="shipsWithAggregatedData()"
+        filterByShipLabel="Find aggregated per ship"
+        (filterChanged)="onFilterChanged($event)" />
+    </div>
+  </div>
+}
+
 <h3 class="govuk-heading-m">{{ aggregatedDataListHeader() }}</h3>
 @for (warningMessage of warningMessages(); track i; let i = $index) {
   <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
 }
+@if (hasExternalSystemData()) {
+  <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
+}
 <mrtm-aggregated-data-list-summary-template
   [data]="filteredAggregatedDataList()"
   (deleteItems)="onDelete($event)"
-  [editable]="editable()" />
+  [editable]="editable()"
+  [dataSupplierName]="thirdPartyDataProviderName()" />
 
 @if (canContinue()) {
   <button type="button" govukButton netzPendingButton (click)="onContinue()">Continue</button>
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />
 </div>

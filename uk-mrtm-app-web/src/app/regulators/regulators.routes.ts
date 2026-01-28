@@ -54,12 +54,14 @@ export const REGULATORS_ROUTES: Routes = [
       },
       {
         path: 'file-download/:uuid',
+        title: 'Your download has started',
         component: SignatureFileDownloadComponent,
       },
     ],
   },
   {
     path: 'file-download/:uuid',
+    title: 'Your download has started',
     component: SignatureFileDownloadComponent,
   },
   {

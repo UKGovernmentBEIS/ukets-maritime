@@ -6,7 +6,7 @@ type RequestTaskPageContent = {
   pageTopComponent?: Type<unknown>;
   contentComponent?: Type<unknown>;
   postHeaderComponent?: Type<unknown>;
-  preContentComponent?: Type<unknown>;
+  preContentComponent?: Type<unknown> | Array<Type<unknown>>;
   postContentComponent?: Type<unknown>;
   header: string;
   headerSize?: 'l' | 'xl';

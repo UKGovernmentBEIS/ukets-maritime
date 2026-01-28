@@ -63,6 +63,7 @@ export class AerAggregatedDataListComponent {
   readonly filter = signal<FilterByShip | null>(null);
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly shipsWithAggregatedData = this.store.select(aerCommonQuery.selectListOfShipsWithAggregatedData);
+  readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
   readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;
   readonly wizardStep = AerAggregatedDataWizardStep;
 
@@ -72,6 +73,10 @@ export class AerAggregatedDataListComponent {
       this.store.select(aerCommonQuery.selectStatusForPortsSubtask)(),
     ].includes(TaskItemStatus.COMPLETED),
   );
+
+  readonly hasExternalSystemData = computed(() => {
+    return !!this.aggregatedDataList().find((data) => data.dataInputType === 'EXTERNAL_PROVIDER');
+  });
 
   readonly filteredAggregatedDataList = computed<AerAggregatedDataSummaryItemDto[]>(() => {
     const imoNumber = this.filter()?.imoNumber;

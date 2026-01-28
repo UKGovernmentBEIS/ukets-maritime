@@ -13,7 +13,8 @@
 
 .search-results-list_item {
   border-bottom: 1px solid $govuk-border-colour;
-  padding-bottom: 20px;
+  padding: 10px 0;
+  margin-bottom: 0 !important;
 }
 
 .status-tag {

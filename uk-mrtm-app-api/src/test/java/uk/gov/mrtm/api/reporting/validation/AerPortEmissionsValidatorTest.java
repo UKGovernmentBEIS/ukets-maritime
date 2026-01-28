@@ -54,7 +54,7 @@ import static uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolati
 class AerPortEmissionsValidatorTest {
     private static final long ACCOUNT_ID = 1L;
     private static final String IMO_NUMBER = "1234567";
-    private static final LocalDateTime NOW = LocalDateTime.now();
+    private static final LocalDateTime NOW = LocalDateTime.of(2025, 6, 1, 1, 1, 1);
 
     @InjectMocks
     private AerPortEmissionsValidator validator;

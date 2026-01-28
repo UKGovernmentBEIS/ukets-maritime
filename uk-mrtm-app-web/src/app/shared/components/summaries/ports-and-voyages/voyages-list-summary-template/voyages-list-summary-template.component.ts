@@ -25,6 +25,7 @@ import { sortAndPaginateListWithShipNameAndStatus } from '@requests/common/utils
 import { MultiSelectedItem, MultiSelectTableComponent } from '@shared/components';
 import { VOYAGES_SUMMARY_COLUMNS } from '@shared/components/summaries/ports-and-voyages/voyages-list-summary-template/voyages-list-summary-template.consts';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
+import { ScrollablePaneDirective } from '@shared/directives';
 import { AerPortVoyageAggregatedStatusPipe, BigNumberPipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { AerVoyageSummaryItemDto } from '@shared/types';
 import BigNumber from 'bignumber.js';
@@ -52,6 +53,7 @@ import BigNumber from 'bignumber.js';
     AerPortVoyageAggregatedStatusPipe,
     GovukDatePipe,
     WarningTextComponent,
+    ScrollablePaneDirective,
   ],
   templateUrl: './voyages-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -59,8 +61,9 @@ import BigNumber from 'bignumber.js';
 export class VoyagesListSummaryTemplateComponent {
   readonly deleteItems = output<AerVoyageSummaryItemDto[]>();
   readonly data = input.required<Array<MultiSelectedItem<AerVoyageSummaryItemDto>>>();
+  readonly withPagination = input<boolean>(true);
   readonly editable = input<boolean>(false);
-  readonly pageSize = input<number>(10);
+  readonly pageSize: Signal<number> = computed(() => (this.withPagination() ? 10 : Number.MAX_VALUE));
   readonly editPath = input<string>();
   readonly emptyTableText = input<string>('No items to display');
   readonly warningMessages = input<string[]>([]);
@@ -89,8 +92,8 @@ export class VoyagesListSummaryTemplateComponent {
   readonly rows = computed<Array<MultiSelectedItem<AerVoyageSummaryItemDto>>>(() =>
     sortAndPaginateListWithShipNameAndStatus(
       [
-        { column: 'shipName', direction: 'ascending' },
         this.sort(),
+        { column: 'shipName', direction: 'ascending' },
         { column: 'departureTime', direction: 'descending' },
       ],
       this.data() ?? [],

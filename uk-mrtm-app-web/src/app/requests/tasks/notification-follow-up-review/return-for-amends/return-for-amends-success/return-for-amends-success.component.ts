@@ -16,7 +16,7 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
       </div>
     </div>
     <div>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
       <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
     </div>
   `,

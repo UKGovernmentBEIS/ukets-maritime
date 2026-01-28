@@ -4,7 +4,7 @@
       @if (isSummaryDisplayedSubject | async) {
         <govuk-error-summary [form]="formGroup"></govuk-error-summary>
       }
-      <netz-page-heading [caption]="caption">{{ heading }}</netz-page-heading>
+      <netz-page-heading [caption]="caption" [size]="size">{{ heading }}</netz-page-heading>
       <ng-content></ng-content>
     </div>
   </div>
@@ -22,7 +22,7 @@
 
 @if (showReturnLink) {
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <netz-return-to-task-or-action-page />
   </div>
 }

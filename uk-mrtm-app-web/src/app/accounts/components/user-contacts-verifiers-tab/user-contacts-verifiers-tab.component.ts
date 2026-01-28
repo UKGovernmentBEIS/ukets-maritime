@@ -44,7 +44,7 @@ import { savePartiallyNotFoundOperatorError } from '@accounts/errors';
 import { OperatorAccountsStore, selectAccount } from '@accounts/store';
 import { RadioOptionComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
-import { UsersTableDirective } from '@shared/directives';
+import { ScrollablePaneDirective, UsersTableDirective } from '@shared/directives';
 import { IncludesPipe } from '@shared/pipes';
 import { FormUtils } from '@shared/utils/form.utils';
 
@@ -65,6 +65,7 @@ import { FormUtils } from '@shared/utils/form.utils';
     LinkDirective,
     RadioOptionComponent,
     UsersTableDirective,
+    ScrollablePaneDirective,
   ],
   templateUrl: './user-contacts-verifiers-tab.component.html',
   providers: [userContactsVerifiersTabFormProvider],

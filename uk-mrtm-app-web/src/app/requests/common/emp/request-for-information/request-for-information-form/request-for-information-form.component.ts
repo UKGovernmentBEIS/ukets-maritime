@@ -20,7 +20,6 @@ import {
 import { RequestForInformationStore } from '@requests/common/emp/request-for-information/services';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
-import { AddAnotherDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-request-for-information-form',
@@ -31,7 +30,6 @@ import { AddAnotherDirective } from '@shared/directives';
     MultipleFileInputComponent,
     DateInputComponent,
     TextareaComponent,
-    AddAnotherDirective,
     ButtonDirective,
     FieldsetDirective,
     LegendDirective,

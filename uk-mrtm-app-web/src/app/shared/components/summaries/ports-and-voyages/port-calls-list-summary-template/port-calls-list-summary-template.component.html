@@ -35,7 +35,9 @@
       [data]="rows"
       (sort)="sort.set($event)"
       [emptyTableText]="emptyTableText()"
-      description="Port calls of all ships">
+      description="Port calls of all ships"
+      mrtmScrollablePane
+      ariaLabel="Port calls of all ships">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>
@@ -47,7 +49,9 @@
       [data]="rows"
       (sort)="sort.set($event)"
       [emptyTableText]="emptyTableText()"
-      description="Port calls of all ships">
+      description="Port calls of all ships"
+      mrtmScrollablePane
+      ariaLabel="Port calls of all ships">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>

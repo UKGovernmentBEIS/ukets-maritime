@@ -7,11 +7,11 @@ import { PendingButtonDirective } from '@netz/common/directives';
 import {
   ButtonDirective,
   LinkDirective,
-  SummaryListColumnValueDirective,
   SummaryListComponent,
   SummaryListRowActionsDirective,
   SummaryListRowDirective,
   SummaryListRowKeyDirective,
+  SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
 import { dataSuppliersQuery, DataSuppliersStore } from '@data-suppliers/+state';
@@ -27,10 +27,10 @@ import { DataSuppliersService } from '@data-suppliers/services/data-suppliers.se
     SummaryListComponent,
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
-    SummaryListColumnValueDirective,
     SummaryListRowActionsDirective,
     ButtonDirective,
     PendingButtonDirective,
+    SummaryListRowValueDirective,
   ],
   templateUrl: './data-suppliers-form-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

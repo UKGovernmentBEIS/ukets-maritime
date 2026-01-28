@@ -7,12 +7,9 @@ import { distinctUntilKeyChanged, Observable, switchMap } from 'rxjs';
 
 import { TermsAndConditionsService, TermsDTO } from '@mrtm/api';
 
-import { PageHeadingComponent } from '@netz/common/components';
-import { PendingButtonDirective } from '@netz/common/directives';
 import {
   AccordionComponent,
   AccordionItemComponent,
-  ButtonDirective,
   CheckboxComponent,
   CheckboxesComponent,
   GovukValidators,
@@ -20,6 +17,7 @@ import {
 
 import { AuthService } from '@core/services/auth.service';
 import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
+import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-terms-and-conditions',
@@ -27,15 +25,13 @@ import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
   templateUrl: './terms-and-conditions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
-    PageHeadingComponent,
     AsyncPipe,
     ReactiveFormsModule,
-    PendingButtonDirective,
     AccordionComponent,
     AccordionItemComponent,
     CheckboxComponent,
     CheckboxesComponent,
-    ButtonDirective,
+    WizardStepComponent,
   ],
 })
 export class TermsAndConditionsComponent {

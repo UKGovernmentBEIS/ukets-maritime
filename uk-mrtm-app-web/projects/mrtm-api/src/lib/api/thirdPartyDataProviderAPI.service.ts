@@ -24,7 +24,7 @@ import { Observable } from 'rxjs';
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
 import { ThirdPartyDataProviderCreateDTO } from '../model/thirdPartyDataProviderCreateDTO';
-import { ThirdPartyDataProviderDTO } from '../model/thirdPartyDataProviderDTO';
+import { ThirdPartyDataProvidersResponseDTO } from '../model/thirdPartyDataProvidersResponseDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -198,17 +198,17 @@ export class ThirdPartyDataProviderAPIService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<Array<ThirdPartyDataProviderDTO>>;
+  ): Observable<Array<ThirdPartyDataProvidersResponseDTO>>;
   public getAllThirdPartyDataProviders(
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpResponse<Array<ThirdPartyDataProviderDTO>>>;
+  ): Observable<HttpResponse<Array<ThirdPartyDataProvidersResponseDTO>>>;
   public getAllThirdPartyDataProviders(
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpEvent<Array<ThirdPartyDataProviderDTO>>>;
+  ): Observable<HttpEvent<Array<ThirdPartyDataProvidersResponseDTO>>>;
   public getAllThirdPartyDataProviders(
     observe: any = 'body',
     reportProgress: boolean = false,
@@ -254,7 +254,7 @@ export class ThirdPartyDataProviderAPIService {
     }
 
     const localVarPath = `/v1.0/third-party-data-provider`;
-    return this.httpClient.request<Array<ThirdPartyDataProviderDTO>>(
+    return this.httpClient.request<Array<ThirdPartyDataProvidersResponseDTO>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {

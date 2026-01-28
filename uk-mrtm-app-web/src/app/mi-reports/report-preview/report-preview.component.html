@@ -11,9 +11,13 @@
   @if (reportData(); as reportData) {
     <div>
       @if (reportData?.results?.length) {
-        <div class="overflow-auto overflow-auto-table">
-          <govuk-table id="report" [columns]="tableColumns()" [data]="tableData()"></govuk-table>
-        </div>
+        <govuk-table
+          id="report"
+          [columns]="tableColumns()"
+          [data]="tableData()"
+          description="Report data"
+          mrtmScrollablePane
+          ariaLabel="Report data" />
 
         @if (reportData?.results?.length > pageSize) {
           <govuk-pagination

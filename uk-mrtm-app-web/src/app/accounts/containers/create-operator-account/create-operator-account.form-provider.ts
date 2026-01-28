@@ -8,7 +8,7 @@ import { MaritimeAccountsService, MrtmAccountDTO } from '@mrtm/api';
 
 import { GovukValidators } from '@netz/govuk-components';
 
-import { minYearValidator } from '@accounts/components/operator-account-form';
+import { commencementDateValidator } from '@accounts/components/operator-account-form';
 import { OperatorAccountsStore } from '@accounts/store';
 import { ConfigService } from '@core/config';
 import { getLocationStateFormGroup } from '@shared/components';
@@ -54,7 +54,7 @@ export const createOperatorAccountFormProvider: Provider = {
         {
           validators: [
             GovukValidators.required('Enter the first year of reporting obligation'),
-            minYearValidator(toSignal(configService.getConfigProperty('minYearOfFirstMrtmActivity'))()),
+            commencementDateValidator(toSignal(configService.getConfigProperty('minYearOfFirstMrtmActivity'))()),
           ],
         },
       ),

@@ -37,6 +37,7 @@ export class WizardStepComponent {
   @Input() showCancelLink: boolean = false;
   @Input() cancelLinkPath: string;
   @Input() isTwoThirds: boolean = false;
+  @Input() size: 'l' | 'xl' = 'l';
   @Output() readonly formSubmit = new EventEmitter<UntypedFormGroup>();
 
   isSummaryDisplayedSubject = new BehaviorSubject(false);

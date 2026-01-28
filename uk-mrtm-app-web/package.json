@@ -2,7 +2,7 @@
   "name": "uk-mrtm-app-web",
   "version": "0.81.0",
   "engines": {
-    "node": "^20.18.1"
+    "node": "^22"
   },
   "scripts": {
     "postinstall": "node git-version.js && yarn prebuild",
@@ -46,7 +46,6 @@
     "@angular/platform-browser": "^18.2.13",
     "@angular/platform-browser-dynamic": "^18.2.13",
     "@angular/router": "^18.2.13",
-    "@ministryofjustice/frontend": "^0.2.4",
     "@w11k/git-info": "^1.0.1",
     "@zxcvbn-ts/core": "^3.0.4",
     "@zxcvbn-ts/language-en": "^3.0.2",
@@ -89,7 +88,7 @@
     "@types/gtag.js": "^0.0.19",
     "@types/jest": "^29.5.13",
     "@types/lodash-es": "^4.17.11",
-    "@types/node": "20.17.14",
+    "@types/node": "22.19.7",
     "@types/papaparse": "^5.3.16",
     "@types/testing-library__jest-dom": "^6.0.0",
     "@typescript-eslint/eslint-plugin": "^7.2.0",

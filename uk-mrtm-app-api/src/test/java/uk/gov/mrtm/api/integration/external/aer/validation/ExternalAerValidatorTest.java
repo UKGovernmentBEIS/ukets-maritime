@@ -13,6 +13,7 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.smf.AerSmf;
 import uk.gov.mrtm.api.reporting.validation.AerEmissionsValidator;
 import uk.gov.mrtm.api.reporting.validation.AerShipAggregatedDataValidator;
+import uk.gov.mrtm.api.reporting.validation.AerShipDetailsValidator;
 import uk.gov.mrtm.api.reporting.validation.AerSmfValidator;
 import uk.gov.mrtm.api.reporting.validation.AerValidatorService;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
@@ -20,6 +21,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 
+import java.time.Year;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,12 +36,15 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class ExternalAerValidatorTest {
+    private static final Year NOW = Year.now();
 
     @InjectMocks
     private ExternalAerValidator validator;
 
     @Mock
     private AerEmissionsValidator aerEmissionsValidator;
+    @Mock
+    private AerShipDetailsValidator aerShipDetailsValidator;
     @Mock
     private AerShipAggregatedDataValidator aerShipAggregatedDataValidator;
     @Mock
@@ -56,6 +61,7 @@ class ExternalAerValidatorTest {
 
         when(aerSmfValidator.validate(smf, emissions)).thenReturn(AerValidationResult.validAer());
         when(aerEmissionsValidator.validate(emissions)).thenReturn(AerValidationResult.validAer());
+        when(aerShipDetailsValidator.validate(emissions, NOW)).thenReturn(AerValidationResult.validAer());
         when(aerShipAggregatedDataValidator.validate(aggregatedData, emissions, Collections.emptySet(), Collections.emptySet()))
             .thenReturn(AerValidationResult.validAer());
 
@@ -63,16 +69,17 @@ class ExternalAerValidatorTest {
         when(staging.getSmf()).thenReturn(smf);
         when(staging.getAggregatedData()).thenReturn(aggregatedData);
 
-        validator.validate(staging);
+        validator.validate(staging, NOW);
 
         verify(aerSmfValidator).validate(smf, emissions);
         verify(aerEmissionsValidator).validate(emissions);
+        verify(aerShipDetailsValidator).validate(emissions, NOW);
         verify(aerShipAggregatedDataValidator)
             .validate(aggregatedData, emissions, Collections.emptySet(), Collections.emptySet());
         verify(aerValidatorService).validateStagingAer(staging);
 
         verifyNoMoreInteractions(aerEmissionsValidator, aerShipAggregatedDataValidator, aerSmfValidator,
-            aerValidatorService);
+            aerValidatorService, aerShipDetailsValidator);
     }
 
     @Test
@@ -94,9 +101,14 @@ class ExternalAerValidatorTest {
             .valid(false)
             .aerViolations(List.of(new AerViolation("e", AerViolation.ViolationMessage.DUPLICATE_EMISSIONS_SOURCE_NAME, "f")))
             .build();
+        AerValidationResult shipDetailsError = AerValidationResult.builder()
+            .valid(false)
+            .aerViolations(List.of(new AerViolation("g", AerViolation.ViolationMessage.SHIP_DETAILS_INVALID_YEAR, "h")))
+            .build();
 
         when(aerSmfValidator.validate(smf, emissions)).thenReturn(smfError);
         when(aerEmissionsValidator.validate(emissions)).thenReturn(emissionsError);
+        when(aerShipDetailsValidator.validate(emissions, NOW)).thenReturn(shipDetailsError);
         when(aerShipAggregatedDataValidator.validate(aggregatedData, emissions, Collections.emptySet(), Collections.emptySet()))
             .thenReturn(aggregatedDataError);
 
@@ -106,24 +118,27 @@ class ExternalAerValidatorTest {
 
 
         ExternalBusinessException be =
-            assertThrows(ExternalBusinessException.class, () -> validator.validate(staging));
+            assertThrows(ExternalBusinessException.class, () -> validator.validate(staging, NOW));
 
         assertThat(be.getErrorCode()).isEqualTo(MrtmErrorCode.INVALID_AER);
-        assertThat(be.getData()).hasSize(3);
+        assertThat(be.getData()).hasSize(4);
         assertEquals(be.getData()[0].getFieldName(), "c");
         assertEquals(be.getData()[0].getMessage(), "AER fuel type not associated with any emission source | ErrorData: [d]");
         assertEquals(be.getData()[1].getFieldName(), "e");
         assertEquals(be.getData()[1].getMessage(), "AER contains multiple emission sources with the same name about the same ship | ErrorData: [f]");
-        assertEquals(be.getData()[2].getFieldName(), "a");
-        assertEquals(be.getData()[2].getMessage(), "AER contains multiple fuel records with the same name about the same ship | ErrorData: [b]");
+        assertEquals(be.getData()[2].getFieldName(), "g");
+        assertEquals(be.getData()[2].getMessage(), "Ship details year is not the same as AER year | ErrorData: [h]");
+        assertEquals(be.getData()[3].getFieldName(), "a");
+        assertEquals(be.getData()[3].getMessage(), "AER contains multiple fuel records with the same name about the same ship | ErrorData: [b]");
 
         verify(aerSmfValidator).validate(smf, emissions);
         verify(aerEmissionsValidator).validate(emissions);
+        verify(aerShipDetailsValidator).validate(emissions, NOW);
         verify(aerShipAggregatedDataValidator)
             .validate(aggregatedData, emissions, Collections.emptySet(), Collections.emptySet());
 
         verifyNoMoreInteractions(aerEmissionsValidator, aerShipAggregatedDataValidator, aerSmfValidator,
-            aerValidatorService);
+            aerValidatorService, aerShipDetailsValidator);
         verifyNoMoreInteractions(aerValidatorService);
     }
 
@@ -136,6 +151,7 @@ class ExternalAerValidatorTest {
 
         when(aerSmfValidator.validate(smf, emissions)).thenReturn(AerValidationResult.validAer());
         when(aerEmissionsValidator.validate(emissions)).thenReturn(AerValidationResult.validAer());
+        when(aerShipDetailsValidator.validate(emissions, NOW)).thenReturn(AerValidationResult.validAer());
         when(aerShipAggregatedDataValidator.validate(aggregatedData, emissions, Collections.emptySet(), Collections.emptySet()))
             .thenReturn(AerValidationResult.validAer());
         when(staging.getEmissions()).thenReturn(emissions);
@@ -143,17 +159,19 @@ class ExternalAerValidatorTest {
         when(staging.getAggregatedData()).thenReturn(aggregatedData);
         doThrow(new BusinessException(ErrorCode.INTERNAL_SERVER)).when(aerValidatorService).validateStagingAer(staging);
 
-        BusinessException be = assertThrows(BusinessException.class, () -> validator.validate(staging));
+        BusinessException be = assertThrows(BusinessException.class, () -> validator.validate(staging, NOW));
 
         assertThat(be.getErrorCode()).isEqualTo(ErrorCode.INTERNAL_SERVER);
 
         verify(aerSmfValidator).validate(smf, emissions);
         verify(aerEmissionsValidator).validate(emissions);
+        verify(aerShipDetailsValidator).validate(emissions, NOW);
         verify(aerShipAggregatedDataValidator)
             .validate(aggregatedData, emissions, Collections.emptySet(), Collections.emptySet());
         verify(aerValidatorService).validateStagingAer(staging);
 
-        verifyNoMoreInteractions(aerValidatorService, aerEmissionsValidator, aerShipAggregatedDataValidator, aerSmfValidator);
+        verifyNoMoreInteractions(aerValidatorService, aerEmissionsValidator, aerShipAggregatedDataValidator,
+            aerSmfValidator, aerShipDetailsValidator);
     }
 
 }

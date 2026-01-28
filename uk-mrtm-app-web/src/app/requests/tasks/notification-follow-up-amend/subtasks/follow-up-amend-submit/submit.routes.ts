@@ -5,6 +5,7 @@ import { canActivateConfirmComponent } from '@requests/tasks/notification-follow
 export const SUBMIT_ROUTES: Routes = [
   {
     path: '',
+    title: 'Submit to regulator',
     data: { breadcrumb: false, backlink: '../../' },
     canActivate: [canActivateConfirmComponent],
     loadComponent: () =>

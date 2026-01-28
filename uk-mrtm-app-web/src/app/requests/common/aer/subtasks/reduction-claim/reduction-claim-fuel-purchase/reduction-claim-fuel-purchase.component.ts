@@ -21,7 +21,8 @@ import { reductionClaimFuelPurchaseFormProvider } from '@requests/common/aer/sub
 import { ReductionClaimFuelPurchaseFormModel } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim-fuel-purchase/reduction-claim-fuel-purchase.types';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
-import { FuelOriginTitlePipe } from '@shared/pipes';
+import { NotProvidedDirective } from '@shared/directives';
+import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { bigNumberUtils } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
@@ -36,6 +37,8 @@ import BigNumber from 'bignumber.js';
     SelectComponent,
     ReactiveFormsModule,
     MultipleFileInputComponent,
+    NotProvidedDirective,
+    SelectOptionToTitlePipe,
   ],
   providers: [reductionClaimFuelPurchaseFormProvider],
   templateUrl: './reduction-claim-fuel-purchase.component.html',
@@ -56,7 +59,7 @@ export class ReductionClaimFuelPurchaseComponent {
   public readonly wizardMap = reductionClaimMap;
   public readonly isNil: typeof isNil = isNil;
   public readonly downloadUrl: Signal<string> = this.store.select(requestTaskQuery.selectTasksDownloadUrl);
-  private readonly isChange = this.route.snapshot.queryParamMap.get('change') === 'true';
+  private readonly isChange = !isNil(this.route.snapshot.paramMap.get('fuelPurchaseId'));
   protected readonly heading = computed(() => {
     return this.isChange ? this.wizardMap.purchaseEdit : this.wizardMap.purchaseAdd;
   });

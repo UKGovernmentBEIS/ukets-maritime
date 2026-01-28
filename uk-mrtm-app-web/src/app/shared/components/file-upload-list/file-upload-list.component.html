@@ -11,18 +11,18 @@
   <dl class="govuk-summary-list moj-multi-file-upload__list">
     @for (file of files; track i; let i = $index) {
       <div class="govuk-summary-list__row moj-multi-file-upload__row">
-        <dd aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
+        <div aria-live="polite" class="govuk-summary-list__value moj-multi-file-upload__message">
           <ng-container
             *ngTemplateOutlet="
               file.errors ? error : file.progress === 1 ? success : progress;
               context: { $implicit: file, message: file.errors ? file.errors : null }
             "></ng-container>
-        </dd>
-        <dd class="govuk-summary-list__actions moj-multi-file-upload__actions">
+        </div>
+        <div class="govuk-summary-list__actions moj-multi-file-upload__actions">
           <ng-container
             [ngTemplateOutlet]="fileDeleteButton"
             [ngTemplateOutletContext]="{ fileIndex: i, file: file }"></ng-container>
-        </dd>
+        </div>
       </div>
     }
   </dl>
@@ -51,12 +51,12 @@
       <svg
         class="moj-banner__icon"
         fill="currentColor"
-        focusable="false"
-        height="25"
         role="presentation"
+        focusable="false"
+        xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
-        width="25"
-        xmlns="http://www.w3.org/2000/svg">
+        height="25"
+        width="25">
         <path d="M25,6.2L8.7,23.2L0,14.1l4-4.2l4.7,4.9L21,2L25,6.2z" />
       </svg>
       <a [routerLink]="file.downloadUrl" govukLink target="_blank">{{ file.file.name }}</a>
@@ -68,12 +68,12 @@
       <svg
         class="moj-banner__icon"
         fill="currentColor"
-        focusable="false"
-        height="25"
         role="presentation"
+        focusable="false"
+        xmlns="http://www.w3.org/2000/svg"
         viewBox="0 0 25 25"
-        width="25"
-        xmlns="http://www.w3.org/2000/svg">
+        height="25"
+        width="25">
         <path d="M13.6,15.4h-2.3v-4.5h2.3V15.4z M13.6,19.8h-2.3v-2.2h2.3V19.8z M0,23.2h25L12.5,2L0,23.2z" />
       </svg>
       @for (error of message | keyvalue; track $index) {

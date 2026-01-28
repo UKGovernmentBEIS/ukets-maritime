@@ -15,7 +15,7 @@ $moj-datepicker-mid-grey: #949494;
   z-index: 2;
   top: 0;
   min-width: 280px;
-  padding: govuk-spacing(4);
+  @include govuk-responsive-padding(4);
   transition: background-color 0.2s,
   outline-color 0.2s;
   outline: 2px solid $govuk-text-colour;

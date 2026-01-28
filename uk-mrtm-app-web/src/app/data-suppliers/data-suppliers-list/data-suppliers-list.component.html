@@ -8,21 +8,6 @@
 
 <govuk-table [columns]="columns" [data]="data()" emptyTableText="No items to display">
   <ng-template let-column="column" let-row="row">
-    @switch (column.field) {
-      @case ('clientSecret') {
-        <span
-          [ngClass]="{
-            secret: !visibleSecrets.has(row.id),
-          }">
-          {{ row[column.field] }}
-        </span>
-      }
-      @case ('actions') {
-        <a class="govuk-link" (click)="toggleShow(row.id)">{{ visibleSecrets.has(row.id) ? 'Hide' : 'Show' }}</a>
-      }
-      @default {
-        {{ row[column.field] }}
-      }
-    }
+    {{ row[column.field] }}
   </ng-template>
 </govuk-table>

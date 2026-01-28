@@ -12,7 +12,7 @@ import { emissionsSubtaskMap } from '@requests/common/components/emissions/emiss
   imports: [LinkDirective, RouterLink],
   template: `
     <div>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
       <a govukLink [routerLink]="returnToUrl()">Return to: {{ label() }}</a>
     </div>
   `,
