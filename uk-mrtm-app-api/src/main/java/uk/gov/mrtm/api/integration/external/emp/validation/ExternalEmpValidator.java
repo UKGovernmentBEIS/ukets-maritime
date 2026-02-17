@@ -51,7 +51,7 @@ public class ExternalEmpValidator {
         try {
             empValidatorService.validateStagingEmissionsMonitoringPlan(staging);
         } catch (Exception e) {
-            log.error("Error when validating staging EMP: {}", e.getMessage());
+            log.error("Error when validating staging EMP", e);
             throw new BusinessException(ErrorCode.INTERNAL_SERVER);
         }
     }

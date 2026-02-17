@@ -18,13 +18,13 @@ import { UncorrectedMisstatementsSummaryTemplateComponent } from '@shared/compon
 
 @Component({
   selector: 'mrtm-uncorrected-misstatements-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     UncorrectedMisstatementsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './uncorrected-misstatements-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

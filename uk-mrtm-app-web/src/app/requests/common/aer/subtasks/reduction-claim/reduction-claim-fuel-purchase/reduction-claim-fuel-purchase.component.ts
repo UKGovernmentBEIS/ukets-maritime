@@ -28,7 +28,6 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-reduction-claim-fuel-purchase',
-  standalone: true,
   imports: [
     WizardStepComponent,
     LinkDirective,
@@ -40,8 +39,9 @@ import BigNumber from 'bignumber.js';
     NotProvidedDirective,
     SelectOptionToTitlePipe,
   ],
-  providers: [reductionClaimFuelPurchaseFormProvider],
+  standalone: true,
   templateUrl: './reduction-claim-fuel-purchase.component.html',
+  providers: [reductionClaimFuelPurchaseFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReductionClaimFuelPurchaseComponent {
@@ -64,7 +64,7 @@ export class ReductionClaimFuelPurchaseComponent {
     return this.isChange ? this.wizardMap.purchaseEdit : this.wizardMap.purchaseAdd;
   });
 
-  public fuelTypeSelectItems = computed(() =>
+  public readonly fuelTypeSelectItems = computed(() =>
     this.store
       .select(aerCommonQuery.selectSupersetOfFuelTypes)()
       .map<GovukSelectOption>((shipFuel) => ({

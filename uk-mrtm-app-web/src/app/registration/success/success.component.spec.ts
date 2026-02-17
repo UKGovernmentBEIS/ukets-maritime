@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { KeycloakService } from 'keycloak-angular';
-
 import { OperatorUserDTO } from '@mrtm/api';
 
 import { mockClass } from '@netz/common/testing';
@@ -11,6 +9,7 @@ import { AuthService } from '@core/services/auth.service';
 import { initialState } from '@registration/store/user-registration.state';
 import { UserRegistrationStore } from '@registration/store/user-registration.store';
 import { SuccessComponent } from '@registration/success/success.component';
+import { KeycloakService } from '@shared/services';
 
 describe('SuccessComponent', () => {
   let component: SuccessComponent;

@@ -1,11 +1,11 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, contentChild, HostBinding, input, TemplateRef } from '@angular/core';
+import { ChangeDetectionStrategy, Component, contentChild, input, TemplateRef } from '@angular/core';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: 'div[govuk-summary-card]',
-  standalone: true,
   imports: [NgTemplateOutlet],
+  standalone: true,
   template: `
     <div class="govuk-summary-card__title-wrapper">
       <h2 class="govuk-summary-card__title">{{ title() }}</h2>
@@ -20,10 +20,11 @@ import { ChangeDetectionStrategy, Component, contentChild, HostBinding, input, T
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.govuk-summary-card]': 'govukSummaryCard' },
 })
 export class SummaryCardComponent {
-  title = input.required<string>();
-  actions = contentChild<TemplateRef<any>>('actions');
+  readonly title = input.required<string>();
+  readonly actions = contentChild<TemplateRef<any>>('actions');
 
-  @HostBinding('class.govuk-summary-card') readonly govukSummaryCard = true;
+  readonly govukSummaryCard = true;
 }

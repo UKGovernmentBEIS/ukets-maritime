@@ -11,7 +11,7 @@
   }
 
   @if (isEditable()) {
-    <div govuk-checkboxes formControlName="accepted">
+    <div label="confirmation" [isLabelHidden]="true" govuk-checkboxes formControlName="accepted">
       <govuk-checkbox label="I have made changes and want to mark this task as complete"></govuk-checkbox>
     </div>
   }

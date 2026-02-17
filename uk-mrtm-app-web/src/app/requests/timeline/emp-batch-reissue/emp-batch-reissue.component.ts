@@ -8,8 +8,8 @@ import { EmpBatchVariationDetailsDTO } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-batch-reissue',
-  standalone: true,
   imports: [EmpBatchReissueSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './emp-batch-reissue.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

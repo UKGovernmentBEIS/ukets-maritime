@@ -22,7 +22,6 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-materiality-level-reference-documents',
-  standalone: true,
   imports: [
     ConditionalContentDirective,
     TextareaComponent,
@@ -32,9 +31,10 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
     WizardStepComponent,
     AccreditationReferenceDocumentTypesPipe,
   ],
+  standalone: true,
   templateUrl: './materiality-level-reference-documents.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [materialityLevelReferenceDocumentsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialityLevelReferenceDocumentsComponent {
   readonly map = materialityLevelMap;

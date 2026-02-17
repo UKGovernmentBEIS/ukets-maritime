@@ -40,7 +40,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-control-activities-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ControlActivitiesSummaryTemplateComponent,
@@ -50,6 +49,7 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './control-activities-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -58,7 +58,7 @@ export class ControlActivitiesSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const hasReview = this.store.select(empCommonQuery.selectHasReview)();
     const isEditable = this.store.select(empCommonQuery.selectIsPeerReview)()
       ? false

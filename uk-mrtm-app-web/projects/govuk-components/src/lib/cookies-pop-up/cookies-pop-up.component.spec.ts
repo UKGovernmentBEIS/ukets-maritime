@@ -1,4 +1,7 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+
+import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { CookiesPopUpComponent } from './cookies-pop-up.component';
 
@@ -9,6 +12,7 @@ describe('CookiesPopUpComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [CookiesPopUpComponent],
+      providers: [{ provide: ActivatedRoute, useValue: new ActivatedRouteStub() }],
     }).compileComponents();
   }));
 

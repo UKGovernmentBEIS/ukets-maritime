@@ -1,18 +1,18 @@
 <div class="moj-multi-file-upload moj-multi-file-upload--enhanced">
   <mrtm-file-upload-list
-    [listTitle]="listTitle"
-    [headerSize]="headerSize"
+    [listTitle]="listTitle()"
+    [headerSize]="headerSize()"
     (fileDelete)="onFileDeleteClick($event)"
     [files]="uploadedFiles$ | async"
     [isDisabled]="isDisabled"></mrtm-file-upload-list>
 
   <div class="moj-multi-file-upload__upload">
     <div class="govuk-form-group">
-      <label [for]="id" [class]="'govuk-label govuk-label--' + headerSize" id="{{ 'l.' + id }}">{{ label }}</label>
-      @if (hint) {
-        <div [id]="id + '-hint'" class="govuk-hint">{{ hint }}</div>
+      <label [for]="id" [class]="`govuk-label govuk-label--${headerSize()}`" id="{{ `l.${id}` }}">{{ label() }}</label>
+      @if (hint()) {
+        <div [id]="`${id}-hint`" class="govuk-hint">{{ hint() }}</div>
       }
-      <div [id]="id + '-hint-file-size'" class="govuk-hint">
+      <div [id]="`${id}-hint-file-size`" class="govuk-hint">
         Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or
         CSV file, no more than 20MB.
       </div>
@@ -27,22 +27,22 @@
           (blur)="onFileBlur()"
           (change)="onFileChange($event)"
           (focus)="onFileFocus()"
-          [accept]="accepted"
+          [accept]="accepted()"
           [class.moj-multi-file-upload--focused]="isFocused"
           [disabled]="isDisabled"
           [id]="id"
           [name]="id"
-          [attr.aria-labelledby]="'l.' + id + ' ld.' + id"
+          [attr.aria-labelledby]="`l.${id} ld.${id}`"
           class="govuk-file-upload moj-multi-file-upload__input"
           multiple
           type="file" />
-        <p class="govuk-body">{{ dropzoneHintText }}</p>
+        <p class="govuk-body">{{ dropzoneHintText() }}</p>
         <label
           [class.govuk-button--disabled]="isDisabled"
           [for]="id"
-          id="{{ 'ld.' + id }}"
+          id="{{ `ld.${id}` }}"
           class="govuk-button govuk-button--secondary">
-          {{ dropzoneButtonText }}
+          {{ dropzoneButtonText() }}
         </label>
         <div aria-live="polite" class="govuk-visually-hidden" role="status">{{ uploadStatusText$ | async }}</div>
       </div>

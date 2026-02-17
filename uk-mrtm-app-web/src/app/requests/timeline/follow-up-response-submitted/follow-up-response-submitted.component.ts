@@ -8,15 +8,15 @@ import { FollowUpResponse } from '@shared/types';
 
 @Component({
   selector: 'mrtm-follow-up-response-submitted',
-  standalone: true,
   imports: [FollowUpResponseSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './follow-up-response-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpResponseSubmittedComponent {
   private readonly store = inject(RequestActionStore);
 
-  vm: Signal<FollowUpResponse> = computed(() => {
+  readonly vm: Signal<FollowUpResponse> = computed(() => {
     return {
       request: this.store.select(followUpResponseSubmittedQuery.selectPayload)().request,
       response: this.store.select(followUpResponseSubmittedQuery.selectPayload)().response,

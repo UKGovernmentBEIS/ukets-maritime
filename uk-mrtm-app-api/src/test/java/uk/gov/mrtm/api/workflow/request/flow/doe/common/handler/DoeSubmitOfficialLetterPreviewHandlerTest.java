@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.flow.common.domain.MrtmAccountTemplatePa
 import uk.gov.mrtm.api.workflow.request.flow.common.service.PreviewOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
+import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeFeeDetails;
@@ -70,7 +71,10 @@ class DoeSubmitOfficialLetterPreviewHandlerTest {
                                 .comments("comments")
                                 .build())
                         .determinationReason(DoeDeterminationReason.builder()
-                                .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                .details(DoeDeterminationReasonDetails.builder()
+                                    .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                    .noticeText("noticeText")
+                                    .build())
                                 .furtherDetails("Further details")
                                 .build())
                         .totalMaritimeEmissions(DoeTotalMaritimeEmissions.builder()
@@ -108,7 +112,7 @@ class DoeSubmitOfficialLetterPreviewHandlerTest {
         final Map<String, Object> params = Map.of(
                 "totalEmissions", BigDecimal.TEN,
                 "reportingYear", Year.of(2022),
-                "determinationReasonDescription", String.format(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT.getDescription(), Year.of(2022)),
+                "noticeText", "noticeText",
                 "emissionsCalculationApproachDescription", "someCalculationApproach",
                 "lessVoyagesInNorthernIrelandDeduction", BigDecimal.ONE,
                 "surrenderEmissions", BigDecimal.TWO

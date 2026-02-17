@@ -20,20 +20,20 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-control-activities',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ControlActivitiesSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-control-activities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewControlActivitiesComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       controlActivities: this.store.select(empCommonQuery.selectControlActivities)(),
       originalControlActivities: this.store.select(

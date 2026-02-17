@@ -11,8 +11,8 @@ import { VoyageSummaryTemplateComponent } from '@shared/components/summaries/por
 
 @Component({
   selector: 'mrtm-aer-voyage-submitted',
-  standalone: true,
   imports: [VoyageSummaryTemplateComponent, RouterLink, LinkDirective, PageHeadingComponent],
+  standalone: true,
   templateUrl: './aer-voyage-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

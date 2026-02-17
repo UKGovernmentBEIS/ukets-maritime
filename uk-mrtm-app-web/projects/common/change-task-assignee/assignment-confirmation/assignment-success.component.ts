@@ -7,6 +7,7 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'netz-assignment-success',
+  imports: [PanelComponent, LinkDirective, RouterLink],
   standalone: true,
   template: `
     <div class="govuk-grid-row">
@@ -29,7 +30,6 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
       </div>
     </div>
   `,
-  imports: [PanelComponent, LinkDirective, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AssignmentSuccessComponent extends BaseSuccessComponent {

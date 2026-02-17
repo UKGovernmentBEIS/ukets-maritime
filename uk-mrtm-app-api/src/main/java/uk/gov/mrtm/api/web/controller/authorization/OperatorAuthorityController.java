@@ -19,14 +19,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.netz.api.authorization.operator.service.OperatorAuthorityDeletionService;
 import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
 import uk.gov.mrtm.api.web.orchestrator.authorization.dto.AccountOperatorAuthorityUpdateWrapperDTO;
 import uk.gov.mrtm.api.web.orchestrator.authorization.dto.AccountOperatorsUsersAuthoritiesInfoDTO;
+import uk.gov.mrtm.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityDeleteOrchestrator;
 import uk.gov.mrtm.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityQueryOrchestrator;
 import uk.gov.mrtm.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityUpdateOrchestrator;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.security.Authorized;
 
 @Validated
@@ -38,7 +38,7 @@ public class OperatorAuthorityController {
 
     private final AccountOperatorUserAuthorityQueryOrchestrator accountOperatorUserAuthorityQueryOrchestrator;
     private final AccountOperatorUserAuthorityUpdateOrchestrator accountOperatorUserAuthorityUpdateOrchestrator;
-    private final OperatorAuthorityDeletionService operatorAuthorityDeletionService;
+    private final AccountOperatorUserAuthorityDeleteOrchestrator accountOperatorUserAuthorityDeleteOrchestrator;
 
     @GetMapping(path = "/account/{accountId}")
     @Operation(summary = "Retrieves the authorities of type OPERATOR for the given account id along with the account contact types")
@@ -105,7 +105,7 @@ public class OperatorAuthorityController {
     public ResponseEntity<Void> deleteAccountOperatorAuthority(
             @PathVariable("accountId") @Parameter(description = "The account id") Long accountId,
             @PathVariable("userId") @Parameter(description = "The user id") String userId) {
-        operatorAuthorityDeletionService.deleteAccountOperatorAuthority(userId, accountId);
+        accountOperatorUserAuthorityDeleteOrchestrator.deleteAccountOperatorAuthority(userId, accountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -126,7 +126,7 @@ public class OperatorAuthorityController {
     public ResponseEntity<Void> deleteCurrentUserAccountOperatorAuthority(
             @Parameter(hidden = true) AppUser appUser,
             @PathVariable("accountId") @Parameter(description = "The account id") Long accountId) {
-        operatorAuthorityDeletionService.deleteAccountOperatorAuthority(appUser.getUserId(), accountId);
+        accountOperatorUserAuthorityDeleteOrchestrator.deleteAccountOperatorAuthority(appUser.getUserId(), accountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

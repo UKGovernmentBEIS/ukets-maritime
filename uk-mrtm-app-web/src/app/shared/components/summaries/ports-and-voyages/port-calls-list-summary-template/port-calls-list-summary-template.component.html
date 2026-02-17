@@ -19,10 +19,8 @@
       </dl>
     }
 
-    @for (warningMessage of warningMessages(); track i; let i = $index) {
-      <govuk-warning-text
-        [assistiveText]="warningMessage"
-        [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
+    @for (warningMessage of warningMessages(); track $index) {
+      <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="$last ? 7 : 0" />
     }
     @if (editable()) {
       <button type="button" govukSecondaryButton netzPendingButton (click)="onDelete(rows)">Delete</button>

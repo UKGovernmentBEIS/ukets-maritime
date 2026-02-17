@@ -9,6 +9,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskAct
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPayloadType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
+import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeFeeDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
@@ -88,7 +89,10 @@ class RequestDoeApplyServiceTest {
                                 .calculationApproach("calculationApproach")
                                 .totalReportableEmissions(BigDecimal.valueOf(1250.9)).build())
                         .determinationReason(DoeDeterminationReason.builder()
-                            .type(DoeDeterminationReasonType.VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER).build())
+                            .details(DoeDeterminationReasonDetails.builder()
+                                .type(DoeDeterminationReasonType.VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER)
+                                .noticeText("noticeText")
+                                .build()).build())
                         .build())
                 .build();
 
@@ -126,7 +130,10 @@ class RequestDoeApplyServiceTest {
                 .maritimeEmissions(DoeMaritimeEmissions.builder()
                         .chargeOperator(false)
                         .determinationReason(DoeDeterminationReason.builder()
-                                .type(DoeDeterminationReasonType.VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER)
+                                .details(DoeDeterminationReasonDetails.builder()
+                                    .type(DoeDeterminationReasonType.VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER)
+                                    .noticeText("noticeText")
+                                    .build())
                                 .build())
                         .totalMaritimeEmissions(DoeTotalMaritimeEmissions.builder()
                                 .calculationApproach("calculationApproach")

@@ -5,6 +5,11 @@
     [managementProceduresMap]="vm.managementProceduresMap"
     [dataFlowFiles]="vm.dataFlowFiles"
     [riskAssessmentFiles]="vm.riskAssessmentFiles" />
+
+  @if (vm?.reviewGroupDecision) {
+    <mrtm-review-decision-summary-template [reviewDecision]="vm.reviewGroupDecision" />
+  }
+
   <div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <netz-return-to-task-or-action-page />

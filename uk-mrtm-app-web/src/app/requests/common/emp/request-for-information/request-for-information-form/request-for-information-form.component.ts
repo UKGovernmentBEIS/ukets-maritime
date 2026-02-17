@@ -23,7 +23,6 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-request-for-information-form',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -34,8 +33,9 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
     FieldsetDirective,
     LegendDirective,
   ],
-  providers: [requestForInformationFormProvider],
+  standalone: true,
   templateUrl: './request-for-information-form.component.html',
+  providers: [requestForInformationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestForInformationFormComponent {

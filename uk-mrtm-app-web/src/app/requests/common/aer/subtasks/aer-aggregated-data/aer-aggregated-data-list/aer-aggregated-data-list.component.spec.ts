@@ -9,7 +9,6 @@ import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data';
 import { AerAggregatedDataListComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-list/aer-aggregated-data-list.component';
 import { taskProviders } from '@requests/common/task.providers';
-import { screen } from '@testing-library/angular';
 
 describe('AerAggregatedDataListComponent', () => {
   let component: AerAggregatedDataListComponent;
@@ -57,17 +56,14 @@ describe('AerAggregatedDataListComponent', () => {
   it('should display all HTMLElements', () => {
     expect(page.heading1.textContent).toEqual(aerAggregatedDataSubtasksListMap.title);
     expect(page.heading3.textContent).toEqual('Aggregated data of all ships');
-    expect(screen.getByRole('link', { name: /Return to:/ })?.textContent).toEqual(
-      'Return to: Complete annual emissions report',
-    );
-    expect(screen.getAllByRole('columnheader').map((column) => column.textContent.trim())).toEqual([
+    expect(page.link.textContent).toEqual('Return to: Complete annual emissions report');
+    expect(page.tableContents).toEqual([
       'Ship name and IMO number',
       'Total ship emissions (tCO2e)',
       'Emissions figure for surrender  (tCO2e)',
       'Initial source',
       'Status',
+      'No items to display',
     ]);
-
-    expect(screen.getByRole('cell')?.textContent?.trim()).toEqual('No items to display');
   });
 });

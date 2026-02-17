@@ -25,7 +25,6 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-basic-ship-details-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -37,6 +36,7 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
     SelectOptionToTitlePipe,
     GovukDatePipe,
   ],
+  standalone: true,
   templateUrl: './basic-ship-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

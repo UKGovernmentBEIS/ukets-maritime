@@ -16,6 +16,7 @@ import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
 import uk.gov.mrtm.api.account.repository.AccountReportingStatusRepository;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
+import uk.gov.mrtm.api.integration.registry.accountexempt.domain.AccountExemptEvent;
 import uk.gov.netz.api.account.service.validator.AccountStatus;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -75,6 +76,9 @@ public class AccountReportingStatusHistoryCreationService {
 
             publishReportingStatusChangedEvent(accountId, currentReportingStatus, newReportingStatus,
                 year, appUser.getUserId());
+
+            sendAccountExemptRegistryEvent(accountId, year, newReportingStatus);
+
         } else {
             throw new BusinessException(MrtmErrorCode.ACCOUNT_REPORTING_STATUS_NOT_CHANGED, accountId,
                     reportingStatusHistoryCreationDTO.getStatus());
@@ -134,5 +138,13 @@ public class AccountReportingStatusHistoryCreationService {
                 .build()
             );
         }
+    }
+
+    private void sendAccountExemptRegistryEvent(Long accountId, Year year, MrtmAccountReportingStatus newReportingStatus) {
+        publisher.publishEvent(AccountExemptEvent.builder()
+            .accountId(accountId)
+            .isExempt(!newReportingStatus.equals(MrtmAccountReportingStatus.REQUIRED_TO_REPORT))
+            .year(year)
+            .build());
     }
 }

@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-vir-review-notify-operator-success',
-  standalone: true,
   imports: [PanelComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './vir-review-notify-operator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

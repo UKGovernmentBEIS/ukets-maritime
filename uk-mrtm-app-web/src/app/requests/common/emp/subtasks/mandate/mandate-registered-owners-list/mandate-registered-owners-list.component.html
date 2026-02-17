@@ -18,9 +18,7 @@
 
 @if (hasNeedsReviewItems()) {
   <govuk-warning-text
-    [assistiveText]="
-      'The highlighted registered owners have been updated due to changes to the list of ships. Review the information for each highlighted registered owner, then select Continue.'
-    " />
+    assistiveText="The highlighted registered owners have been updated due to changes to the list of ships. Review the information for each highlighted registered owner, then select Continue." />
 }
 
 <mrtm-mandate-registered-owners-table

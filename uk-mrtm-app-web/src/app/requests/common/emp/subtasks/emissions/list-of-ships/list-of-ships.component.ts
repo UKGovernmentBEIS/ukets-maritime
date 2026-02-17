@@ -18,7 +18,6 @@ import { ShipEmissionTableListItem } from '@shared/types';
 
 @Component({
   selector: 'mrtm-list-of-ships',
-  standalone: true,
   imports: [
     ListOfShipsTableComponent,
     NotificationBannerComponent,
@@ -27,6 +26,7 @@ import { ShipEmissionTableListItem } from '@shared/types';
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './list-of-ships.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -11,7 +11,10 @@ import { DoeTaskPayload } from '@requests/tasks/doe-submit/doe-submit.types';
 
 export const mockDoePeerReviewMaritimeEmissions: DoeMaritimeEmissions = {
   determinationReason: {
-    type: 'CORRECTING_NON_MATERIAL_MISSTATEMENT',
+    details: {
+      type: 'CORRECTING_NON_MATERIAL_MISSTATEMENT',
+      noticeText: 'test notice text',
+    },
     furtherDetails: 'test further details',
   },
   totalMaritimeEmissions: {

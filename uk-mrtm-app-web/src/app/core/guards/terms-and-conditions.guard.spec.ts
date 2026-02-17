@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { lastValueFrom, of } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AuthoritiesService, TermsAndConditionsService, UsersService } from '@mrtm/api';
 
@@ -20,6 +19,7 @@ import {
 import { TermsAndConditionsGuard } from '@core/guards/terms-and-conditions.guard';
 import { AuthService } from '@core/services/auth.service';
 import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
+import { KeycloakService } from '@shared/services';
 
 describe('TermsAndConditionsGuard', () => {
   let guard: TermsAndConditionsGuard;

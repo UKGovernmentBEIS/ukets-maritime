@@ -24,7 +24,6 @@ import { MandateRegisteredOwnerTableListItem } from '@shared/types';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-table',
-  standalone: true,
   imports: [
     TableComponent,
     GovukDatePipe,
@@ -33,6 +32,7 @@ import { MandateRegisteredOwnerTableListItem } from '@shared/types';
     PaginationComponent,
     SummaryRegisteredOwnerShipDetailsComponent,
   ],
+  standalone: true,
   templateUrl: './mandate-registered-owners-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

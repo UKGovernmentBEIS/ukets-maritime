@@ -44,10 +44,10 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-fuel-consumption',
-  standalone: true,
   imports: [WizardStepComponent, LinkDirective, RouterLink, SelectComponent, ReactiveFormsModule, TextInputComponent],
-  providers: [aerFuelConsumptionFormProvider],
+  standalone: true,
   templateUrl: './aer-fuel-consumption.component.html',
+  providers: [aerFuelConsumptionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerFuelConsumptionComponent {
@@ -68,8 +68,10 @@ export class AerFuelConsumptionComponent {
   public readonly objectId: Signal<string> = toSignal(
     this.activatedRoute.params.pipe(map((param) => param?.[this.routeParamKey])),
   );
-  ship: Signal<AerShipEmissions> = computed(() => this.store.select(this.relatedShipSelector(this.objectId()))());
-  fuelTypeSelectItems: Signal<Array<GovukSelectOption<string>>> = computed(() => {
+  readonly ship: Signal<AerShipEmissions> = computed(() =>
+    this.store.select(this.relatedShipSelector(this.objectId()))(),
+  );
+  readonly fuelTypeSelectItems: Signal<Array<GovukSelectOption<string>>> = computed(() => {
     const existingFuelDetailsUniqueIdentifiers = new Set<string>();
 
     return this.ship()
@@ -116,7 +118,7 @@ export class AerFuelConsumptionComponent {
     },
   );
 
-  emissionSourceSelectItems: Signal<GovukSelectOption<string>[]> = computed(() =>
+  readonly emissionSourceSelectItems: Signal<GovukSelectOption<string>[]> = computed(() =>
     this.ship()
       ?.emissionsSources?.reduce((acc, emission) => {
         const filteredFuelDetails = emission.fuelDetails?.filter(
@@ -135,7 +137,7 @@ export class AerFuelConsumptionComponent {
       })),
   );
 
-  methaneSlipSelectItems: Signal<Array<GovukSelectOption>> = computed(() => {
+  readonly methaneSlipSelectItems: Signal<Array<GovukSelectOption>> = computed(() => {
     const filteredEmissionSources = this.ship()?.emissionsSources?.reduce((acc, emission) => {
       const filteredFuelDetails = emission.fuelDetails?.filter(
         (fuelDetail) => fuelDetail.uniqueIdentifier === this.currentFuelOrigin(),

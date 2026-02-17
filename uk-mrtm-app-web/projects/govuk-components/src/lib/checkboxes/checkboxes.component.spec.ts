@@ -16,11 +16,11 @@ describe('CheckboxesComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: true,
     imports: [ReactiveFormsModule, CheckboxesComponent, CheckboxComponent, ConditionalContentDirective],
+    standalone: true,
     template: `
       <form [formGroup]="form">
-        <div govuk-checkboxes formControlName="checkboxes" legend="Some options" hint="Choose an option">
+        <div govuk-checkboxes formControlName="checkboxes" label="Some options" hint="Choose an option">
           <govuk-checkbox label="First" [value]="0"></govuk-checkbox>
           <govuk-checkbox label="Second" [value]="1"></govuk-checkbox>
           <govuk-checkbox label="Third" [value]="2">
@@ -118,19 +118,19 @@ describe('CheckboxesComponent', () => {
     getAllCheckboxes()[0].triggerEventHandler('blur', {});
     fixture.detectChanges();
 
-    expect(component.options.get(0).isTouched).toBeTruthy();
+    expect(component.options().at(0).isTouched).toBeTruthy();
     expect(component.control.touched).toBeFalsy();
 
     getAllCheckboxes()[1].triggerEventHandler('blur', {});
     fixture.detectChanges();
 
-    expect(component.options.get(1).isTouched).toBeTruthy();
+    expect(component.options().at(1).isTouched).toBeTruthy();
     expect(component.control.touched).toBeFalsy();
 
     getAllCheckboxes()[2].triggerEventHandler('blur', {});
     fixture.detectChanges();
 
-    expect(component.options.get(2).isTouched).toBeTruthy();
+    expect(component.options().at(2).isTouched).toBeTruthy();
     expect(component.control.touched).toBeTruthy();
   });
 

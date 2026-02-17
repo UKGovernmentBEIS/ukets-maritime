@@ -23,7 +23,7 @@
       @case ('fuelDetails') {
         @if (row?.fuelDetails?.length) {
           <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-            @for (fuel of row.fuelDetails; track i; let i = $index) {
+            @for (fuel of row.fuelDetails; track $index) {
               <li class="pre-wrap" [innerHTML]="fuel | fuelOriginTitle"></li>
             }
           </ul>
@@ -34,7 +34,7 @@
       @case ('monitoringMethod') {
         @if (row?.monitoringMethod?.length) {
           <ul class="govuk-list govuk-list--bullet govuk-!-margin-top-0 govuk-!-margin-bottom-0">
-            @for (monitoringMethod of getSortedMonitoringMethods(row); track i; let i = $index) {
+            @for (monitoringMethod of getSortedMonitoringMethods(row); track $index) {
               <li>{{ monitoringMethodMap[monitoringMethod].text }}</li>
             }
           </ul>

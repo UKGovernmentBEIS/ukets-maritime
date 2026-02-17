@@ -4,8 +4,8 @@ import { DetailsComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-about-procedure-details',
-  standalone: true,
   imports: [DetailsComponent],
+  standalone: true,
   templateUrl: './about-procedure-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

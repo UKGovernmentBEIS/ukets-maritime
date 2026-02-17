@@ -21,9 +21,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-terms-and-conditions',
-  standalone: true,
-  templateUrl: './terms-and-conditions.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     AsyncPipe,
     ReactiveFormsModule,
@@ -33,6 +30,9 @@ import { WizardStepComponent } from '@shared/components';
     CheckboxesComponent,
     WizardStepComponent,
   ],
+  standalone: true,
+  templateUrl: './terms-and-conditions.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TermsAndConditionsComponent {
   private readonly router = inject(Router);

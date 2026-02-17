@@ -6,18 +6,16 @@ import { ScrollablePaneDirective } from '@shared/directives';
 
 describe('ScrollablePaneDirective', () => {
   @Component({
-    template: '<div id="test" mrtmScrollablePane ariaLabel="Test pane"><h1>Test header</h1></div>',
-    standalone: true,
     imports: [ScrollablePaneDirective],
+    standalone: true,
+    template: '<div id="test" mrtmScrollablePane ariaLabel="Test pane"><h1>Test header</h1></div>',
   })
   class TestComponent {}
 
   let directive: ScrollablePaneDirective;
   let fixture: ComponentFixture<TestComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
-
+  beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
     directive = fixture.debugElement.query(By.directive(ScrollablePaneDirective)).injector.get(ScrollablePaneDirective);

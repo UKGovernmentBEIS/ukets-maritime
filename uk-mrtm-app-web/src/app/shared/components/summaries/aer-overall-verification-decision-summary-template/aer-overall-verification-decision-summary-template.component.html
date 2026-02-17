@@ -33,8 +33,8 @@
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Reason</dt>
         <dd govukSummaryListRowValue>
-          @for (reason of $any(data)?.reasons; track i; let i = $index) {
-            <div class="pre-wrap" [class.govuk-!-margin-top-5]="i > 0">{{ i + 1 }}. {{ reason }}</div>
+          @for (reason of $any(data)?.reasons; track $index) {
+            <div class="pre-wrap" [class.govuk-!-margin-top-5]="!$first">{{ $index + 1 }}. {{ reason }}</div>
           }
         </dd>
         @if (isEditable()) {
@@ -51,8 +51,8 @@
         <dt govukSummaryListRowKey>Reason</dt>
         <dd govukSummaryListRowValue>
           <ul class="govuk-list govuk-list--bullet">
-            @for (reason of $any(data)?.notVerifiedReasons; track i; let i = $index) {
-              <li class="pre-wrap" [class.govuk-!-margin-top-5]="i > 0">
+            @for (reason of $any(data)?.notVerifiedReasons; track $index) {
+              <li class="pre-wrap" [class.govuk-!-margin-top-5]="!$first">
                 {{ reason.type | notVerifiedReasonType }}
                 @if (reason.details) {
                   - {{ reason.details }}

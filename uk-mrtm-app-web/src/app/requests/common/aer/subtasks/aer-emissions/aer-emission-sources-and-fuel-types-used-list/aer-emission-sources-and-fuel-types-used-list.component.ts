@@ -33,7 +33,6 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
 
 @Component({
   selector: 'mrtm-aer-emission-sources-and-fuel-types-used-list',
-  standalone: true,
   imports: [
     AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent,
     PageHeadingComponent,
@@ -42,6 +41,7 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
     XmlErrorSummaryComponent,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './aer-emission-sources-and-fuel-types-used-list.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

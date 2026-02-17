@@ -22,7 +22,6 @@ import { OverallVerificationDecisionPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-overall-verification-decision-assessment',
-  standalone: true,
   imports: [
     RadioComponent,
     RadioOptionComponent,
@@ -30,9 +29,10 @@ import { OverallVerificationDecisionPipe } from '@shared/pipes';
     WizardStepComponent,
     OverallVerificationDecisionPipe,
   ],
+  standalone: true,
   templateUrl: './overall-verification-decision-assessment.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [overallVerificationDecisionAssessmentProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallVerificationDecisionAssessmentComponent {
   readonly map = overallVerificationDecisionMap;

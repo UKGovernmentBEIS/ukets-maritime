@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal, ViewChild, WritableSignal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal, viewChild, WritableSignal } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -36,7 +36,6 @@ import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-upload-ships',
-  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -48,6 +47,7 @@ import { isAer } from '@shared/utils';
     PendingButtonDirective,
     PageHeadingComponent,
   ],
+  standalone: true,
   templateUrl: './upload-ships.component.html',
   providers: [uploadShipsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,7 +64,7 @@ export class UploadShipsComponent {
 
   private readonly taskType = this.store.select(requestTaskQuery.selectRequestTaskType);
 
-  @ViewChild(DataParserWizardStepComponent) wizardStep: DataParserWizardStepComponent;
+  readonly wizardStep = viewChild(DataParserWizardStepComponent);
 
   showConfirmation = false;
   taskMap = aerEmissionsMap;
@@ -75,16 +75,18 @@ export class UploadShipsComponent {
   ];
   fileCtrl = this.formGroup.controls.file;
   listOfShipsStep = LIST_OF_SHIPS_STEP;
-  isAer = computed(() => isAer(this.taskType()));
-  reportingYear = computed(() => (this.isAer() ? this.store.select(aerCommonQuery.selectReportingYear)() : null));
+  readonly isAer = computed(() => isAer(this.taskType()));
+  readonly reportingYear = computed(() =>
+    this.isAer() ? this.store.select(aerCommonQuery.selectReportingYear)() : null,
+  );
   existingShips = this.store.select(this.commonSubtaskStepsQuery.selectListOfShips);
-  xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
-  shipEmissionListItems: WritableSignal<Omit<ShipEmissionTableListItem, 'status'>[]> = signal([]);
-  listOfShips: WritableSignal<AerShipEmissions[] | EmpShipEmissions[]> = signal([]);
+  readonly xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
+  readonly shipEmissionListItems: WritableSignal<Omit<ShipEmissionTableListItem, 'status'>[]> = signal([]);
+  readonly listOfShips: WritableSignal<AerShipEmissions[] | EmpShipEmissions[]> = signal([]);
   uploadedFile: File;
 
   async onFileSelect(event: any) {
-    this.wizardStep.isSummaryDisplayedSubject.next(false);
+    this.wizardStep().isSummaryDisplayedSubject.next(false);
     this.xmlErrors.set([]);
     this.shipEmissionListItems.set([]);
     this.listOfShips.set([]);
@@ -105,7 +107,7 @@ export class UploadShipsComponent {
       }
     }
 
-    this.wizardStep.isSummaryDisplayedSubject.next(true);
+    this.wizardStep().isSummaryDisplayedSubject.next(true);
     event.target.value = '';
   }
 
@@ -120,7 +122,7 @@ export class UploadShipsComponent {
         message: 'Upload the ships and emission details file',
       },
     ]);
-    this.wizardStep.isSummaryDisplayedSubject.next(true);
+    this.wizardStep().isSummaryDisplayedSubject.next(true);
   }
 
   toggleConfirmation(value: boolean) {

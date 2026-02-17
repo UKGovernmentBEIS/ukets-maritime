@@ -33,16 +33,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-data-gaps-variation-regulator-decision',
-  standalone: true,
   imports: [
     DataGapsSummaryTemplateComponent,
     WizardStepComponent,
     ReactiveFormsModule,
     VariationRegulatorDecisionComponent,
   ],
+  standalone: true,
   templateUrl: './data-gaps-variation-regulator-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [variationRegulatorDecisionFormProvider(DATA_GAPS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -52,7 +52,7 @@ export class DataGapsVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empCommonQuery.selectDataGaps)(),
     originalDataGaps: this.store.select(empVariationRegulatorQuery.selectOriginalDataGaps)(),
     dataGapsMap: dataGapsMap,

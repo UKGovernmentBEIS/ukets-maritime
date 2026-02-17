@@ -19,7 +19,6 @@ import {
 
 @Component({
   selector: 'mrtm-registry-submitted-summary-template',
-  standalone: true,
   imports: [
     CompetentAuthorityPipe,
     SummaryListComponent,
@@ -31,9 +30,10 @@ import {
     OrganisationDetailsAddressTitlePipe,
     CountryPipe,
   ],
+  standalone: true,
   templateUrl: './registry-submitted-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistrySubmittedSummaryTemplateComponent {
-  data = input.required<EmpIssuanceSendRegistryAccountOpeningEventRequestActionPayload>();
+  readonly data = input.required<EmpIssuanceSendRegistryAccountOpeningEventRequestActionPayload>();
 }

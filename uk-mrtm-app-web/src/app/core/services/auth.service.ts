@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, from, map, Observable, of, switchMap, tap } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions, KeycloakProfile } from 'keycloak-js';
 
 import {
@@ -18,6 +17,7 @@ import {
 import { AuthStore } from '@netz/common/auth';
 
 import { ConfigStore, selectIsFeatureEnabled } from '@core/config';
+import { KeycloakService } from '@shared/services';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -92,7 +92,7 @@ export class AuthService {
   }
 
   loadIsLoggedIn(): Observable<boolean> {
-    return of(this.keycloakService.isLoggedIn()).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
+    return of(this.keycloakService.isAuthenticated).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
   }
 
   constructRedirectUri(path: string): string {

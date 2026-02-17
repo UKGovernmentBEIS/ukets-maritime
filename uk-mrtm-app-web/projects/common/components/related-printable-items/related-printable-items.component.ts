@@ -18,8 +18,8 @@ import { PrintComponent } from './print';
 
 @Component({
   selector: 'netz-related-printable-items',
-  standalone: true,
   imports: [LinkDirective, RouterLink, PrintComponent],
+  standalone: true,
   template: `
     <aside class="app-related-items" role="complementary">
       <h2 class="govuk-heading-m" id="related-printable-items-section">Related actions</h2>
@@ -41,9 +41,9 @@ import { PrintComponent } from './print';
 export class RelatedPrintableItemsComponent implements OnDestroy {
   private readonly requestActionReportService: RequestActionReportService = inject(RequestActionReportService);
 
-  dataComponent = input.required<any>();
-  printContainerRef = viewChild.required('printContainerRef', { read: ViewContainerRef });
-  printComponent = viewChild.required<PrintComponent>('printComp');
+  readonly dataComponent = input.required<any>();
+  readonly printContainerRef = viewChild.required('printContainerRef', { read: ViewContainerRef });
+  readonly printComponent = viewChild.required<PrintComponent>('printComp');
 
   private printSubscription: Subscription = this.requestActionReportService.printReport$
     .pipe(filter((print) => !!print))

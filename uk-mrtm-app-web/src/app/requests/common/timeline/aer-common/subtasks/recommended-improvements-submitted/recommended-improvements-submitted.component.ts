@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-recommended-improvements-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     RecommendedImprovementsSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './recommended-improvements-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,7 +18,6 @@ import { UncorrectedItemsListTemplateComponent } from '@shared/components/summar
 
 @Component({
   selector: 'mrtm-uncorrected-non-compliances-list',
-  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -27,6 +26,7 @@ import { UncorrectedItemsListTemplateComponent } from '@shared/components/summar
     ReturnToTaskOrActionPageComponent,
     UncorrectedItemsListTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './uncorrected-non-compliances-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

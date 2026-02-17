@@ -34,6 +34,7 @@ import { peerReviewDecisionTaskContent } from '@requests/timeline/peer-review-de
 import { rdeRegulatorDecisionTaskContent } from '@requests/timeline/rde-regulator-decision/rde-regulator-decision-task-content';
 import { rdeRejectedTaskContent } from '@requests/timeline/rde-rejected/rde-rejected-task-content';
 import { rdeSubmittedTaskContent } from '@requests/timeline/rde-submitted/rde-submitted-task-content';
+import { registryAccountUpdatedTaskContent } from '@requests/timeline/registry-account-updated/registry-account-updated.task-content';
 import { registryEmissionsUpdatedTaskContent } from '@requests/timeline/registry-emissions-updated/registry-emissions-updated-task-content';
 import { registrySubmittedTaskContent } from '@requests/timeline/registry-submitted/registry-submitted-task-content';
 import { rfiResponseTaskContent } from '@requests/timeline/rfi-response/rfi-response-task-content';
@@ -83,6 +84,7 @@ export const timelineContent: RequestActionPageContentFactoryMap = {
   DOE_APPLICATION_SUBMITTED: doeSubmittedTaskContent,
   EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED: registrySubmittedTaskContent,
   REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED: registryEmissionsUpdatedTaskContent,
+  REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED: registryAccountUpdatedTaskContent,
   AER_APPLICATION_SUBMITTED: aerSubmittedTaskContent,
   AER_APPLICATION_SENT_TO_VERIFIER: aerSubmittedTaskContent,
   AER_APPLICATION_VERIFICATION_SUBMITTED: aerVerificationSubmittedTaskContent,

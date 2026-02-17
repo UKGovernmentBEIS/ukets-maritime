@@ -17,7 +17,6 @@ import { WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-emission-sources-and-fuel-types-used-summary-template',
-  standalone: true,
   imports: [
     RouterLink,
     FuelOriginTitlePipe,
@@ -28,6 +27,7 @@ import { WithNeedsReview } from '@shared/types';
     MethaneSlipValuePipe,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './aer-emission-sources-and-fuel-types-used-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

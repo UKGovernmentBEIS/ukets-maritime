@@ -37,6 +37,13 @@ public class PayloadFieldsUtils {
     public static final String EMISSIONS = "Emissions";
     public static final String REGISTRY_ID = "Registry ID";
 
+    // Exempt
+    public static final String EXEMPTION_FLAG = "AccountExemptionUpdateEvent.exemptionFlag";
+
+    // Regulator notice
+    public static final String NOTIFICATION_TYPE = "type";
+    public static final String FILE_NAME = "filename";
+
     public static String asStringOrEmpty(Object obj) {
         return Optional.ofNullable(obj).map(Object::toString).filter(s -> !s.isBlank()).orElse(EMPTY);
     }

@@ -1,5 +1,14 @@
 <netz-page-heading [caption]="title">Describe the changes</netz-page-heading>
-<mrtm-variation-details-summary-template [variationDetails]="variationDetails" />
+
+<mrtm-variation-details-summary-template
+  [variationDetails]="variationDetails"
+  [isVariationRegulator]="isVariationRegulator"
+  [regulatorLedReason]="regulatorLedReason" />
+
+@if (reviewGroupDecision) {
+  <mrtm-review-decision-summary-template [reviewDecision]="reviewGroupDecision" [isPermittedUser]="isRegulator" />
+}
+
 <div>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />

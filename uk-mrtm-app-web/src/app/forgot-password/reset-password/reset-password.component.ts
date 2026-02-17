@@ -15,11 +15,11 @@ import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers';
 
 @Component({
   selector: 'mrtm-reset-password',
+  imports: [ErrorSummaryComponent, FormsModule, ReactiveFormsModule, ButtonDirective, PasswordComponent],
+  standalone: true,
   templateUrl: './reset-password.component.html',
   providers: [passwordFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [ErrorSummaryComponent, FormsModule, ReactiveFormsModule, ButtonDirective, PasswordComponent],
 })
 export class ResetPasswordComponent implements OnInit {
   readonly form = inject<UntypedFormGroup>(PASSWORD_FORM);

@@ -5,16 +5,14 @@
       <div class="govuk-grid-row">
         <div class="govuk-checkboxes govuk-checkboxes--small">
           <div class="govuk-grid-column-full">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Type</h3>
-            <div formControlName="requestTypes" govuk-checkboxes>
+            <div label="Type" labelSize="small" formControlName="requestTypes" govuk-checkboxes>
               @for (type of reportTypesMap | keyvalue: originalOrder; track type.key) {
                 <govuk-checkbox [value]="type.key" [label]="type.value" />
               }
             </div>
           </div>
           <div class="govuk-grid-column-full">
-            <h3 class="govuk-heading-s govuk-!-margin-bottom-0">Status</h3>
-            <div formControlName="requestStatuses" govuk-checkboxes>
+            <div label="Status" labelSize="small" formControlName="requestStatuses" govuk-checkboxes>
               @for (type of reportStatusMap | keyvalue: originalOrder; track type.key) {
                 <govuk-checkbox [value]="type.key" [label]="type.value" />
               }

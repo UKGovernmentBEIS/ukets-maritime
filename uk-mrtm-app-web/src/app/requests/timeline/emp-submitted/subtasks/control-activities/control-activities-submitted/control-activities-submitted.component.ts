@@ -7,28 +7,35 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { controlActivitiesMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { empSubmittedQuery } from '@requests/timeline/emp-submitted/+state';
-import { ControlActivitiesSummaryTemplateComponent } from '@shared/components';
-import { SubTaskListMap } from '@shared/types';
+import { ControlActivitiesSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
 interface ViewModel {
   controlActivities: EmpControlActivities;
   controlActivitiesMap: SubTaskListMap<EmpControlActivities>;
+  reviewGroupDecision?: EmpVariationReviewDecisionDto | null;
 }
 
 @Component({
   selector: 'mrtm-control-activities-submitted',
+  imports: [
+    PageHeadingComponent,
+    ControlActivitiesSummaryTemplateComponent,
+    ReturnToTaskOrActionPageComponent,
+    ReviewDecisionSummaryTemplateComponent,
+  ],
   standalone: true,
-  imports: [PageHeadingComponent, ControlActivitiesSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './control-activities-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       controlActivities: this.store.select(empSubmittedQuery.selectControlActivities)(),
       controlActivitiesMap: controlActivitiesMap,
+      reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('controlActivities'))(),
     };
   });
 }

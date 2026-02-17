@@ -7,26 +7,33 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { dataGapsMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { empSubmittedQuery } from '@requests/timeline/emp-submitted/+state';
-import { DataGapsSummaryTemplateComponent } from '@shared/components';
-import { SubTaskListMap } from '@shared/types';
+import { DataGapsSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
 interface ViewModel {
   dataGaps: EmpDataGaps;
   dataGapsMap: SubTaskListMap<{ dataGapsMethod: string }>;
+  reviewGroupDecision?: EmpVariationReviewDecisionDto | null;
 }
 
 @Component({
   selector: 'mrtm-data-gaps-submitted',
+  imports: [
+    PageHeadingComponent,
+    DataGapsSummaryTemplateComponent,
+    ReturnToTaskOrActionPageComponent,
+    ReviewDecisionSummaryTemplateComponent,
+  ],
   standalone: true,
-  imports: [PageHeadingComponent, DataGapsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './data-gaps-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empSubmittedQuery.selectDataGaps)(),
     dataGapsMap: dataGapsMap,
+    reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('dataGaps'))(),
   }));
 }

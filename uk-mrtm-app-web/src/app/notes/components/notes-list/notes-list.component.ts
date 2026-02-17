@@ -24,8 +24,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-notes-list',
-  templateUrl: './notes-list.component.html',
-  standalone: true,
   imports: [
     GovukDatePipe,
     MoreLessComponent,
@@ -40,6 +38,8 @@ import { AttachedFile } from '@shared/types';
     LinkDirective,
     AsyncPipe,
   ],
+  standalone: true,
+  templateUrl: './notes-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotesListComponent {

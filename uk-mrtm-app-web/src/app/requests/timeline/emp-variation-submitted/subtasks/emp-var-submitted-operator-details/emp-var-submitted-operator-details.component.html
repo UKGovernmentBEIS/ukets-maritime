@@ -1,6 +1,19 @@
 @if (vm(); as vm) {
   <netz-page-heading caption="Account details">{{ vm.operatorDetailsMap.title }}</netz-page-heading>
   <mrtm-operator-details-summary-template [operatorDetails]="vm.operatorDetails" [files]="vm.files" />
+
+  @if (vm?.reviewGroupDecision && !vm?.isVariationRegulator) {
+    <mrtm-review-decision-summary-template
+      [reviewDecision]="vm.reviewGroupDecision"
+      [isPermittedUser]="vm.isRegulator" />
+  }
+
+  @if (vm?.isVariationRegulator) {
+    <mrtm-variation-regulator-decision-partial-summary-template
+      [variationDecisionDetails]="vm.regulatorLedReason"
+      [showNotes]="vm.isRegulator" />
+  }
+
   <div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <netz-return-to-task-or-action-page />

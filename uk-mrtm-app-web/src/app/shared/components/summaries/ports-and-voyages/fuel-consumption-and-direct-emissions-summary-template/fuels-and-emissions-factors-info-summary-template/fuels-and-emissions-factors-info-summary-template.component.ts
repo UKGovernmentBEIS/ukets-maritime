@@ -17,7 +17,6 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-fuels-and-emissions-factors-info-summary-template',
-  standalone: true,
   imports: [
     DetailsComponent,
     SummaryListComponent,
@@ -28,6 +27,7 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
     FuelOriginTitlePipe,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './fuels-and-emissions-factors-info-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

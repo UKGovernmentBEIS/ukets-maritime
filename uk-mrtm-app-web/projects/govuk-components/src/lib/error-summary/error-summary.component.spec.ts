@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, viewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { FormArray, FormControl, FormGroup, FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
@@ -10,8 +10,8 @@ import { ErrorSummaryComponent } from './error-summary.component';
 
 describe('ErrorSummaryComponent', () => {
   @Component({
-    standalone: true,
     imports: [ErrorSummaryComponent, ReactiveFormsModule, TextInputComponent, FormsModule],
+    standalone: true,
     template: `
       @if (isTemplate) {
         <form #templateForm="ngForm">
@@ -49,7 +49,7 @@ describe('ErrorSummaryComponent', () => {
     `,
   })
   class TestComponent {
-    @ViewChild('templateForm') public testForm: NgForm;
+    public readonly testForm = viewChild<NgForm>('templateForm');
 
     form: FormGroup;
     isTemplate = false;

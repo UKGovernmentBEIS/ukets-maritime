@@ -14,13 +14,13 @@ import { MaterialityLevelSummaryTemplateComponent } from '@shared/components/sum
 
 @Component({
   selector: 'mrtm-materiality-level-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     MaterialityLevelSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './materiality-level-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

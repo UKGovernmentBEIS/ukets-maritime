@@ -8,8 +8,8 @@ import { PeerReviewDecisionSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-peer-review-decision',
-  standalone: true,
   imports: [PeerReviewDecisionSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './peer-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

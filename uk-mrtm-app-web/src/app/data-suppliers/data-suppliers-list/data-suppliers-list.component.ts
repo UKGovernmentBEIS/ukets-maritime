@@ -9,8 +9,8 @@ import { DATA_SUPPLIERS_LIST_COLUMNS } from '@data-suppliers/data-suppliers-list
 
 @Component({
   selector: 'mrtm-data-suppliers-list',
-  standalone: true,
   imports: [PageHeadingComponent, ButtonDirective, TableComponent, RouterLink],
+  standalone: true,
   templateUrl: './data-suppliers-list.component.html',
   styleUrl: './data-suppliers-list.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -39,7 +39,7 @@
   @if (totalItems() > pageSize) {
     <govuk-pagination
       fragment="ismShipsTable"
-      [count]="this.totalItems()"
+      [count]="totalItems()"
       [pageSize]="pageSize"
       (currentPageChange)="onPageChange($event)" />
   }

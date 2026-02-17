@@ -33,11 +33,11 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-data-gaps-variation-review-decision',
-  standalone: true,
   imports: [DataGapsSummaryTemplateComponent, WizardStepComponent, ReviewDecisionComponent, ReactiveFormsModule],
+  standalone: true,
   templateUrl: './data-gaps-variation-review-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewEmpSubtaskDecisionFormProvider(DATA_GAPS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -45,7 +45,7 @@ export class DataGapsVariationReviewDecisionComponent {
     TaskService<EmpVariationReviewTaskPayload>,
   );
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empCommonQuery.selectDataGaps)(),
     originalDataGaps: this.store.select(empVariationReviewQuery.selectOriginalDataGaps)(),
     dataGapsMap: dataGapsMap,

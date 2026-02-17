@@ -51,7 +51,6 @@ import { isAer, isLNG } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emission-sources-and-fuel-types-used-form',
-  standalone: true,
   imports: [
     ShipStepTitlePipe,
     WizardStepComponent,
@@ -69,8 +68,9 @@ import { isAer, isLNG } from '@shared/utils';
     LinkDirective,
     RouterLink,
   ],
-  providers: [emissionSourcesAndFuelTypesUsedFormProvider],
+  standalone: true,
   templateUrl: './emission-sources-and-fuel-types-used-form.component.html',
+  providers: [emissionSourcesAndFuelTypesUsedFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesAndFuelTypesUsedFormComponent {

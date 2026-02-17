@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.account.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -30,6 +31,7 @@ import java.time.Year;
 import java.util.List;
 import java.util.Map;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class MrtmAccountUpdateService {
@@ -50,6 +52,8 @@ public class MrtmAccountUpdateService {
     @AccountStatus(expression = "{#status != 'CLOSED'}")
     public void updateMaritimeAccount(Long accountId, MrtmAccountUpdateDTO mrtmAccountUpdateDTO, AppUser user) {
         MrtmAccount mrtmAccount = mrtmAccountQueryService.getAccountById(accountId);
+        boolean yearUpdated = mrtmAccount.getFirstMaritimeActivityDate().getYear()
+            != mrtmAccountUpdateDTO.getFirstMaritimeActivityDate().getYear();
 
         validateFirstMaritimeActivityDate(
             mrtmAccount.getFirstMaritimeActivityDate().getYear(),
@@ -72,7 +76,10 @@ public class MrtmAccountUpdateService {
                     .build());
         }
 
-        sendAccountUpdateToRegistry(accountId);
+        if (yearUpdated) {
+            log.info("Year updated, sending account updated event for account {}", accountId);
+            sendAccountUpdateToRegistry(accountId);
+        }
     }
 
     @Transactional

@@ -12,7 +12,6 @@ import { AuthStore, selectUser } from '@netz/common/auth';
 import {
   ConditionalContentDirective,
   GovukSelectOption,
-  LegendDirective,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -27,7 +26,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-manage-sections-type-form',
-  standalone: true,
   imports: [
     WizardStepComponent,
     RadioComponent,
@@ -38,10 +36,10 @@ import { WizardStepComponent } from '@shared/components';
     SelectComponent,
     LinkDirective,
     RouterLink,
-    LegendDirective,
   ],
-  providers: [manageSectionsTypeFormProvider],
+  standalone: true,
   templateUrl: './manage-sections-type-form.component.html',
+  providers: [manageSectionsTypeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageSectionsTypeFormComponent implements OnInit {

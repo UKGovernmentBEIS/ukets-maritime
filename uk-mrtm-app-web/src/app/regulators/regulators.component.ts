@@ -38,10 +38,6 @@ import { FormUtils } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-regulators',
-  templateUrl: './regulators.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
-  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
@@ -61,6 +57,10 @@ import { FormUtils } from '@shared/utils';
     UsersTableDirective,
     NotificationBannerComponent,
   ],
+  standalone: true,
+  templateUrl: './regulators.component.html',
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegulatorsComponent implements OnInit {
   readonly authStore = inject(AuthStore);

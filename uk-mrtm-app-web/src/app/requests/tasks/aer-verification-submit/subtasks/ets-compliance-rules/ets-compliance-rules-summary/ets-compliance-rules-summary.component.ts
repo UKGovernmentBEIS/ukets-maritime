@@ -14,13 +14,13 @@ import { EtsComplianceRulesSummaryTemplateComponent } from '@shared/components/s
 
 @Component({
   selector: 'mrtm-ets-compliance-rules-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     EtsComplianceRulesSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './ets-compliance-rules-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

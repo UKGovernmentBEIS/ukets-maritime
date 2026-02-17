@@ -27,7 +27,6 @@ import { FuelsAndEmissionsFactors, WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-fuel-consumption-and-direct-emissions-summary-template',
-  standalone: true,
   imports: [
     TabsComponent,
     TabDirective,
@@ -47,6 +46,7 @@ import { FuelsAndEmissionsFactors, WithNeedsReview } from '@shared/types';
     ButtonDirective,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './fuel-consumption-and-direct-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

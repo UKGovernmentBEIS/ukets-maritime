@@ -31,7 +31,6 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
 
 @Component({
   selector: 'mrtm-third-party-data-provider-import',
-  standalone: true,
   imports: [
     ButtonDirective,
     GovukDatePipe,
@@ -43,6 +42,7 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
     SummaryListRowValueDirective,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './third-party-data-provider-import.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

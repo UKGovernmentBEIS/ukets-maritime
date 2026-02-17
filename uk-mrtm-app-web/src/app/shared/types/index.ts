@@ -68,3 +68,4 @@ export * from './with-needs-review.dto';
 export * from './aer-aggregated-data-ship-summary.interface';
 export * from './aer-data-initial-source-type.enum';
 export * from './aer-ship-emission-table-list-item.iterface';
+export * from './registry-account-update-dto.interface';

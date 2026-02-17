@@ -8,15 +8,15 @@ import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 
 @Component({
   selector: 'mrtm-send-application-confirmation',
-  standalone: true,
   imports: [RouterLink, PanelComponent, LinkDirective],
+  standalone: true,
   templateUrl: './send-application-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendApplicationSuccessComponent {
   private readonly service: TaskService<EmpTaskPayload> = inject(TaskService<EmpTaskPayload>);
 
-  isTaskSubmitted: WritableSignal<boolean> = signal(false);
+  readonly isTaskSubmitted: WritableSignal<boolean> = signal(false);
 
   onSubmit() {
     this.service.submit().subscribe(() => {

@@ -1,16 +1,26 @@
-import { KeycloakService } from 'keycloak-angular';
-
 import { AuthoritiesService, TermsAndConditionsService, UsersService } from '@mrtm/api';
 
 import { AuthService } from '@core/services/auth.service';
 import Mock = jest.Mock;
+import { signal } from '@angular/core';
 
-export const mockKeycloakService: Partial<Record<keyof KeycloakService, Mock>> = {
+import { KeycloakService } from '@shared/services';
+
+export const mockKeycloakService: Record<keyof KeycloakService, any> = {
   login: jest.fn(),
   logout: jest.fn(),
   isLoggedIn: jest.fn(),
   loadUserProfile: jest.fn(),
-};
+  init: jest.fn(),
+  getKeycloakInstance: jest.fn(),
+  getToken: jest.fn(),
+  updateToken: jest.fn(),
+  getUserProfile: jest.fn(),
+  isTokenExpired: jest.fn(),
+  getTokenParsed: jest.fn(),
+  getRefreshTokenParsed: jest.fn(),
+  keycloakEvents: signal(null),
+} as any;
 
 export const mockAuthService: Partial<Record<keyof AuthService, Mock>> = {
   checkUser: jest.fn(),

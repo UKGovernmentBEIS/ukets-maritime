@@ -15,7 +15,6 @@ import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 
 @Component({
   selector: 'mrtm-edit',
-  standalone: true,
   imports: [
     AsyncPipe,
     NotificationBannerComponent,
@@ -24,6 +23,7 @@ import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
     UserAccountSummaryInfoComponent,
     UserFullNamePipe,
   ],
+  standalone: true,
   templateUrl: './details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

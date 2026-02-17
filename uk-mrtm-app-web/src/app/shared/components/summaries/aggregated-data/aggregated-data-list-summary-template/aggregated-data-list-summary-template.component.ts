@@ -22,7 +22,6 @@ import { AerAggregatedDataSummaryItemDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aggregated-data-list-summary-template',
-  standalone: true,
   imports: [
     PaginationComponent,
     LinkDirective,
@@ -39,6 +38,7 @@ import { AerAggregatedDataSummaryItemDto } from '@shared/types';
     InitialDataSourcePipe,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './aggregated-data-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

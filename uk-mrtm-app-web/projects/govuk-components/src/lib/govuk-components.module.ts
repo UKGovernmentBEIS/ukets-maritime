@@ -115,6 +115,11 @@ import { WarningTextComponent } from './warning-text';
     TextInputComponent,
     WarningTextComponent,
   ],
+  providers: [
+    { provide: UntypedFormBuilder, useClass: FormBuilderService },
+    { provide: FormBuilder, useClass: FormBuilderService },
+    provideHttpClient(withInterceptorsFromDi()),
+  ],
   exports: [
     AccordionComponent,
     AccordionItemComponent,
@@ -168,11 +173,6 @@ import { WarningTextComponent } from './warning-text';
     TextareaComponent,
     TextInputComponent,
     WarningTextComponent,
-  ],
-  providers: [
-    { provide: UntypedFormBuilder, useClass: FormBuilderService },
-    { provide: FormBuilder, useClass: FormBuilderService },
-    provideHttpClient(withInterceptorsFromDi()),
   ],
   schemas: [NO_ERRORS_SCHEMA],
 })

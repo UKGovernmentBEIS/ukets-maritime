@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-submit-to-regulator-success',
-  standalone: true,
   imports: [LinkDirective, PanelComponent, RouterLink],
+  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

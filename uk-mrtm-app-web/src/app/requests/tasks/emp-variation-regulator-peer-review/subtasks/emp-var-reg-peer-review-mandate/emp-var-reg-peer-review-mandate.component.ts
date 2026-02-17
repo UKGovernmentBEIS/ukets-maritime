@@ -10,13 +10,13 @@ import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shar
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-mandate',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     MandateSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-mandate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

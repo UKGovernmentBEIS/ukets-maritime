@@ -30,10 +30,10 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-select-ship',
-  standalone: true,
   imports: [WizardStepComponent, SelectComponent, ReactiveFormsModule, LinkDirective, RouterLink],
-  providers: [aerSelectShipFormGroupProvider],
+  standalone: true,
   templateUrl: './aer-select-ship.component.html',
+  providers: [aerSelectShipFormGroupProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerSelectShipComponent {

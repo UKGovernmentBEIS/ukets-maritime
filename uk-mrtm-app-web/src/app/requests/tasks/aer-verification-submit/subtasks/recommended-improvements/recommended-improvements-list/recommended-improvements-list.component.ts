@@ -18,7 +18,6 @@ import { RecommendedImprovementsListTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-recommended-improvements-list',
-  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -27,6 +26,7 @@ import { RecommendedImprovementsListTemplateComponent } from '@shared/components
     ReturnToTaskOrActionPageComponent,
     RecommendedImprovementsListTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './recommended-improvements-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

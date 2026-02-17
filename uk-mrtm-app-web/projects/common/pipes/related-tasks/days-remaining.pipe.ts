@@ -7,7 +7,10 @@ import { MrtmItemDTO } from '@mrtm/api';
 import { DAYS_REMAINING_INPUT_TRANSFORMER } from './days-remaining.providers';
 import { DaysRemainingInputTransformer } from './days-remaining.types';
 
-@Pipe({ standalone: true, name: 'daysRemaining' })
+@Pipe({
+  name: 'daysRemaining',
+  standalone: true,
+})
 export class DaysRemainingPipe implements PipeTransform {
   private readonly daysRemainingInputTransformer: DaysRemainingInputTransformer = inject(
     DAYS_REMAINING_INPUT_TRANSFORMER,

@@ -29,11 +29,11 @@ import { ReviewApplicationFormGroupModel } from '@requests/tasks/aer-review/aer-
 import { reviewApplicationFormProvider } from '@requests/tasks/aer-review/subtasks/review-application/review-application-form/review-application-form.provider';
 import { createAnotherRequiredChange } from '@requests/tasks/emp-review/components';
 import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
+import { ReviewSubtaskTitlePipe } from '@shared/pipes/review-subtask-title.pipe';
 import { RequestTaskFileService } from '@shared/services';
 
 @Component({
   selector: 'mrtm-review-application-form',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -46,9 +46,11 @@ import { RequestTaskFileService } from '@shared/services';
     FieldsetDirective,
     ButtonDirective,
     LegendDirective,
+    ReviewSubtaskTitlePipe,
   ],
-  providers: [reviewApplicationFormProvider],
+  standalone: true,
   templateUrl: './review-application-form.component.html',
+  providers: [reviewApplicationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewApplicationFormComponent {

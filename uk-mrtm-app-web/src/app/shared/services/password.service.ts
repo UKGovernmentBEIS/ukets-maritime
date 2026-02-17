@@ -2,26 +2,38 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 
-import { debounceTime, map, Observable } from 'rxjs';
+import { debounceTime, from, map, Observable, switchMap } from 'rxjs';
+import { zxcvbn } from '@zxcvbn-ts/core';
 
 import { MessageValidationErrors } from '@netz/govuk-components';
-
-import { zxcvbn } from '@zxcvbn-ts/core';
-import CryptoJS from 'crypto-js';
 
 @Injectable({ providedIn: 'root' })
 export class PasswordService {
   private readonly http = inject(HttpClient);
 
   isBlacklistedPassword(password: string): Observable<boolean> {
-    const hexString = CryptoJS.SHA1(password).toString();
-    const prefix = hexString.substring(0, 5);
-    return this.http
-      .get(`https://api.pwnedpasswords.com/range/${prefix}`, {
-        headers: new HttpHeaders({ 'Content-Type': 'text/plain' }),
-        responseType: 'text',
-      })
-      .pipe(map((v) => v.indexOf(hexString.substring(5).toUpperCase()) >= 0));
+    return from(this.generateSHA1String(password)).pipe(
+      switchMap((hexString) => {
+        const prefix = hexString.substring(0, 5);
+        const suffix = hexString.substring(5).toUpperCase();
+
+        return this.http
+          .get(`https://api.pwnedpasswords.com/range/${prefix}`, {
+            headers: new HttpHeaders({ 'Content-Type': 'text/plain' }),
+            responseType: 'text',
+          })
+          .pipe(map((response) => response.includes(suffix)));
+      }),
+    );
+  }
+
+  private async generateSHA1String(message: string): Promise<string> {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(message);
+    const hashBuffer = await window.crypto.subtle.digest('SHA-1', data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+
+    return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
   }
 
   blacklisted(control: AbstractControl): Observable<MessageValidationErrors | null> {

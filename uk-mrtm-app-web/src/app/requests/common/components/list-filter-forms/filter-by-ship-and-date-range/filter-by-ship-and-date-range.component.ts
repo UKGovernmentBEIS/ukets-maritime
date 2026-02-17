@@ -18,7 +18,6 @@ import { DatePickerComponent } from '@shared/components/date-picker';
 
 @Component({
   selector: 'mrtm-filter-by-ship-and-date-range',
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -30,6 +29,7 @@ import { DatePickerComponent } from '@shared/components/date-picker';
     RouterLink,
     FormGroupComponent,
   ],
+  standalone: true,
   templateUrl: './filter-by-ship-and-date-range.component.html',
   styleUrl: './filter-by-ship-and-date-range.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

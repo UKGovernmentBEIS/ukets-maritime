@@ -6,28 +6,24 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
-import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.netz.api.account.domain.Account;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
-import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.account.AccountUpdatingEvent;
 import uk.gov.netz.integration.model.account.AccountUpdatingEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.RESPONSE_LOG_FORMAT;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
-import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
 import static uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils.asStringOrEmpty;
 
 @Log4j2
@@ -38,8 +34,8 @@ public class AccountUpdatedResponseHandler {
     private static final String INTEGRATION_POINT_KEY = "Account updated";
 
     private final MrtmAccountQueryService accountQueryService;
-    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     private final RegistryIntegrationEmailProperties emailProperties;
+    private final NotifyRegistryEmailService notifyRegistryEmailService;
 
     private final static List<IntegrationEventError> ACTION_ERRORS = List.of(
         IntegrationEventError.ERROR_0306,
@@ -75,6 +71,7 @@ public class AccountUpdatedResponseHandler {
             if (!ObjectUtils.isEmpty(errors)) {
                 Account account = accountQueryService.getAccountByRegistryId(Integer.valueOf(event.getEvent().getAccountDetails().getRegistryId()));
                 String recipient = emailProperties.getEmail().get(account.getCompetentAuthority().getCode());
+                Map<String, String> fields = getEventFields(event.getEvent());
 
                 List<IntegrationEventErrorDetails> actionErrors = errors
                     .stream()
@@ -82,9 +79,17 @@ public class AccountUpdatedResponseHandler {
                     .toList();
 
                 if (!actionErrors.isEmpty()) {
-                    notifyRegulator(account, recipient, event, correlationId,
-                        actionErrors,
-                        MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE);
+                    notifyRegistryEmailService.notifyRegulator(
+                        NotifyRegistryEmailServiceParams.builder()
+                            .account(account)
+                            .emitterId(account.getBusinessId())
+                            .correlationId(correlationId)
+                            .errorsForMail(actionErrors)
+                            .recipient(recipient)
+                            .isFordway(false)
+                            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
+                            .integrationPoint(INTEGRATION_POINT_KEY)
+                            .fields(fields).build());
                 }
 
                 List<IntegrationEventErrorDetails> infoErrors = errors
@@ -93,8 +98,17 @@ public class AccountUpdatedResponseHandler {
                     .toList();
 
                 if (!infoErrors.isEmpty()) {
-                    notifyRegulator(account, recipient, event, correlationId, infoErrors,
-                        MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE);
+                    notifyRegistryEmailService.notifyRegulator(
+                        NotifyRegistryEmailServiceParams.builder()
+                            .account(account)
+                            .emitterId(account.getBusinessId())
+                            .correlationId(correlationId)
+                            .errorsForMail(infoErrors)
+                            .recipient(recipient)
+                            .isFordway(false)
+                            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE)
+                            .integrationPoint(INTEGRATION_POINT_KEY)
+                            .fields(fields).build());
                 }
 
                 log.info(RESPONSE_LOG_FORMAT,
@@ -113,28 +127,6 @@ public class AccountUpdatedResponseHandler {
             log.info("Successfully updated account with correlationId {} and registry ID {}",
                 correlationId, registryId);
         }
-    }
-
-    private void notifyRegulator(Account account, String recipient, AccountUpdatingEventOutcome event,
-                                 String correlationId, List<IntegrationEventErrorDetails> integrationEventErrorDetails,
-                                 String templateName) {
-
-        final Map<String, Object> templateParams = new HashMap<>();
-        templateParams.put(MrtmEmailNotificationTemplateConstants.EMITTER_ID, account.getBusinessId());
-        templateParams.put(MrtmEmailNotificationTemplateConstants.ERRORS, integrationEventErrorDetails);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.CORRELATION_ID, correlationId);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, capitalizeFirstLetter(SERVICE_KEY));
-        templateParams.put(MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, account.getName());
-        templateParams.put(MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, INTEGRATION_POINT_KEY);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.FIELDS, getEventFields(event.getEvent()));
-
-        final EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(templateName)
-                .templateParams(templateParams)
-                .build())
-            .build();
-        notificationEmailService.notifyRecipient(emailData, recipient);
     }
 
     private Map<String, String> getEventFields(AccountUpdatingEvent event) {

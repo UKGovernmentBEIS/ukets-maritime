@@ -15,12 +15,14 @@ describe('FileUploadListComponent', () => {
   let page: Page;
 
   @Component({
+    imports: [FileUploadListComponent],
+    standalone: true,
     template: `
       <mrtm-file-upload-list
         [listTitle]="listTitle"
         [files]="files"
         (fileDelete)="onDelete($any($event))"
-        [isDisabled]="isDisabled"></mrtm-file-upload-list>
+        [isDisabled]="isDisabled" />
     `,
   })
   class TestComponent {
@@ -50,9 +52,7 @@ describe('FileUploadListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FileUploadListComponent],
       providers: [provideRouter([])],
-      declarations: [TestComponent],
     }).compileComponents();
   });
 

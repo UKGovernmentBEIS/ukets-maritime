@@ -9,8 +9,8 @@ import { AerTotalEmissionsSummaryTemplateComponent } from '@shared/components/su
 
 @Component({
   selector: 'mrtm-aer-total-emissions-submitted',
-  standalone: true,
   imports: [ReturnToTaskOrActionPageComponent, PageHeadingComponent, AerTotalEmissionsSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './aer-total-emissions-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

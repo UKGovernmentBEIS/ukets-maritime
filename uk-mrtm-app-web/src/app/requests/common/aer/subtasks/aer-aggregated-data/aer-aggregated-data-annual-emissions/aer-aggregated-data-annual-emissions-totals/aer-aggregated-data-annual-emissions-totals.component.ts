@@ -8,8 +8,8 @@ import { BigNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-annual-emissions-totals',
-  standalone: true,
   imports: [BigNumberPipe],
+  standalone: true,
   templateUrl: './aer-aggregated-data-annual-emissions-totals.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

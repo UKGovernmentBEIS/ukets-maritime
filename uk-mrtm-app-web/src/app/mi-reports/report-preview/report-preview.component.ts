@@ -26,7 +26,6 @@ import { ScrollablePaneDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-report-preview',
-  standalone: true,
   imports: [
     PendingButtonDirective,
     ButtonDirective,
@@ -37,6 +36,7 @@ import { ScrollablePaneDirective } from '@shared/directives';
     NgComponentOutlet,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './report-preview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

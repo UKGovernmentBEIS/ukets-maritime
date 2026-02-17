@@ -16,7 +16,6 @@ import { EmpBatchVariationDetailsDTO } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-batch-reissue-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -26,6 +25,7 @@ import { EmpBatchVariationDetailsDTO } from '@shared/types';
     SummaryDownloadFilesComponent,
     GovukDatePipe,
   ],
+  standalone: true,
   templateUrl: './emp-batch-reissue-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

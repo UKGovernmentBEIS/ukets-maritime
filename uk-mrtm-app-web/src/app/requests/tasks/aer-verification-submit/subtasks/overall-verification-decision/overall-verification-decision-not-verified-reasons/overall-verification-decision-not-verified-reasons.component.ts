@@ -25,7 +25,6 @@ import { NotVerifiedReasonTypePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-overall-verification-decision-not-verified-reasons',
-  standalone: true,
   imports: [
     ConditionalContentDirective,
     CheckboxesComponent,
@@ -35,9 +34,10 @@ import { NotVerifiedReasonTypePipe } from '@shared/pipes';
     WizardStepComponent,
     NotVerifiedReasonTypePipe,
   ],
+  standalone: true,
   templateUrl: './overall-verification-decision-not-verified-reasons.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [overallVerificationDecisionNotVerifiedReasonsProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallVerificationDecisionNotVerifiedReasonsComponent {
   readonly map = overallVerificationDecisionMap;

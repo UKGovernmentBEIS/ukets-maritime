@@ -37,16 +37,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-abbreviations-variation-regulator-decision',
-  standalone: true,
   imports: [
     AbbreviationsSummaryTemplateComponent,
     WizardStepComponent,
     ReactiveFormsModule,
     VariationRegulatorDecisionComponent,
   ],
+  standalone: true,
   templateUrl: './abbreviations-variation-regulator-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [variationRegulatorDecisionFormProvider(ABBREVIATIONS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AbbreviationsVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -56,7 +56,7 @@ export class AbbreviationsVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     abbreviations: this.store.select(empCommonQuery.selectAbbreviations)(),
     originalAbbreviations: this.store.select(empVariationRegulatorQuery.selectOriginalAbbreviations)(),
     abbreviationsMap: abbreviationsMap,

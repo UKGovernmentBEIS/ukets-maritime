@@ -20,14 +20,14 @@ describe('VerificationBodyFormComponent', () => {
   }
 
   @Component({
+    imports: [ReactiveFormsModule, VerificationBodyFormComponent],
+    standalone: true,
     template: `
       <form [formGroup]="formGroup">
         <mrtm-verification-body-form></mrtm-verification-body-form>
       </form>
     `,
-    standalone: true,
     schemas: [NO_ERRORS_SCHEMA],
-    imports: [ReactiveFormsModule, VerificationBodyFormComponent],
   })
   class TestComponent {
     formGroup = new FormGroup<Record<string, FormControl>>({

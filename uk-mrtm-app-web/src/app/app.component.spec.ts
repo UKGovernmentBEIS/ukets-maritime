@@ -3,12 +3,12 @@ import { provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { KeycloakService } from 'keycloak-angular';
-
 import { UserStateDTO } from '@mrtm/api';
 
 import { AuthStore } from '@netz/common/auth';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
+
+import { KeycloakService } from '@shared/services';
 
 import { AppComponent } from './app.component';
 

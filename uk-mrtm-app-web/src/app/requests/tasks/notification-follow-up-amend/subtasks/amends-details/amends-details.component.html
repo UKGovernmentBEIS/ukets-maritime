@@ -8,7 +8,7 @@
     The following notes are from the regulator explaining the things you need to change.
   </span>
   <mrtm-follow-up-amends-details-summary-template [followUpReviewDecision]="followUpReviewDecision" />
-  <div formControlName="changesComplete" govuk-checkboxes>
+  <div label="Confirmation" [isLabelHidden]="true" formControlName="changesComplete" govuk-checkboxes>
     <govuk-checkbox
       [value]="true"
       label="I have made the changes and want to mark this task as complete"></govuk-checkbox>

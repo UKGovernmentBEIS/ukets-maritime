@@ -13,10 +13,10 @@ import { createTablePage, miReportTypeDescriptionMap, miReportTypeLinkMap } from
 
 @Component({
   selector: 'mrtm-mi-reports',
+  imports: [PageHeadingComponent, TableComponent, LinkDirective, RouterLink, AsyncPipe, PaginationComponent],
+  standalone: true,
   templateUrl: './mi-reports.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeadingComponent, TableComponent, LinkDirective, RouterLink, AsyncPipe, PaginationComponent],
 })
 export class MiReportsComponent {
   private readonly route = inject(ActivatedRoute);

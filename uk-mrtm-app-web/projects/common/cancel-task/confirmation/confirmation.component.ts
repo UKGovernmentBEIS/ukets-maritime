@@ -10,6 +10,7 @@ import { CANCEL_ACTION_SUCCESS_COMPONENT, CancelSuccessComponentMap } from '../c
 
 @Component({
   selector: 'netz-cancel-confirmation',
+  imports: [RouterLink, LinkDirective, PanelComponent, NgComponentOutlet],
   standalone: true,
   template: `
     @if (successComponent) {
@@ -24,7 +25,6 @@ import { CANCEL_ACTION_SUCCESS_COMPONENT, CancelSuccessComponentMap } from '../c
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, LinkDirective, PanelComponent, NgComponentOutlet],
 })
 export class ConfirmationComponent extends BaseSuccessComponent {
   private readonly successComponentMap: CancelSuccessComponentMap = inject<CancelSuccessComponentMap>(

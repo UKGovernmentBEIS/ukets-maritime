@@ -23,7 +23,6 @@ import { ReviewDecisionSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-review-application-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReviewDecisionSummaryTemplateComponent,
@@ -32,6 +31,7 @@ import { ReviewDecisionSummaryTemplateComponent } from '@shared/components';
     PendingButtonDirective,
     NgComponentOutlet,
   ],
+  standalone: true,
   templateUrl: './review-application-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

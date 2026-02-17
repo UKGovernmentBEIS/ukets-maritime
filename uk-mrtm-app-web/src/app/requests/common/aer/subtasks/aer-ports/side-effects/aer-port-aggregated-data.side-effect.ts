@@ -26,7 +26,7 @@ export class AerPortAggregatedDataSideEffect extends SideEffect {
 
           if (
             isNil(associatedPortCall) ||
-            payload.aerSectionsCompleted?.[`${this.subtask}-voyage-${associatedPortCall.uniqueIdentifier}`] !==
+            payload.aerSectionsCompleted?.[`${this.subtask}-port-${associatedPortCall.uniqueIdentifier}`] !==
               TaskItemStatus.COMPLETED
           ) {
             payload.aerSectionsCompleted[`${AER_AGGREGATED_DATA_SUB_TASK}-aggregated-data-${data.uniqueIdentifier}`] =

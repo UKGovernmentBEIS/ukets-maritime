@@ -17,10 +17,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-manage-sections-form',
-  standalone: true,
   imports: [WizardStepComponent, TextInputComponent, ReactiveFormsModule, LinkDirective, RouterLink, SelectComponent],
-  providers: [manageSectionsFormProvider],
+  standalone: true,
   templateUrl: './manage-sections-form.component.html',
+  providers: [manageSectionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageSectionsFormComponent implements OnInit {

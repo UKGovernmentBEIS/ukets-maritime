@@ -10,8 +10,8 @@ import { PaymentSuccessSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-payment-success',
-  standalone: true,
   imports: [PanelComponent, LinkDirective, RouterLink, PaymentSuccessSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './payment-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

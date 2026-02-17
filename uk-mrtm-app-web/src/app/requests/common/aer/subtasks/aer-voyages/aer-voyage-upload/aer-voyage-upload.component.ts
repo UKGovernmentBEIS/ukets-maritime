@@ -54,7 +54,6 @@ import Papa from 'papaparse';
 
 @Component({
   selector: 'mrtm-aer-voyage-upload',
-  standalone: true,
   imports: [
     DataParserWizardStepComponent,
     LinkDirective,
@@ -64,6 +63,7 @@ import Papa from 'papaparse';
     SelectOptionToTitlePipe,
     RouterLink,
   ],
+  standalone: true,
   templateUrl: './aer-voyage-upload.component.html',
   providers: [aerVoyageUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -87,8 +87,8 @@ export class AerVoyageUploadComponent {
   insertedRows = 0;
   updatedRows = 0;
   existingVoyages = this.store.select(aerCommonQuery.selectVoyageEmissions)();
-  voyages: WritableSignal<AerVoyage[] | null> = signal(null);
-  voyagesTableData: Signal<AerVoyageUploadCsvDto[]> = computed(() =>
+  readonly voyages: WritableSignal<AerVoyage[] | null> = signal(null);
+  readonly voyagesTableData: Signal<AerVoyageUploadCsvDto[]> = computed(() =>
     (this.voyages() ?? []).map((item) => ({
       imoNumber: item.imoNumber,
       departurePort: item.voyageDetails.departurePort.port,

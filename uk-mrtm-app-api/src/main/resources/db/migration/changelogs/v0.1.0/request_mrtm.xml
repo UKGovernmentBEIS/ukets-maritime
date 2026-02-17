@@ -3510,4 +3510,22 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_SET_UP_AER_IMPORT_THIRD_PARTY_DATA_APPLICATION_FOR_AER_APPLICATION_AMENDS_SUBMIT_REQUEST_TASK" author="P44065">
+        <sql>
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_IMPORT_THIRD_PARTY_DATA_APPLICATION')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_APPLICATION_AMENDS_SUBMIT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_IMPORT_THIRD_PARTY_DATA_APPLICATION');
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

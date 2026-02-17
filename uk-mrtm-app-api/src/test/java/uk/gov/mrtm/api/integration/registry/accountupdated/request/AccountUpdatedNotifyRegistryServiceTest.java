@@ -24,12 +24,13 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.Organisati
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.PartnershipOrganisation;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnum;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
-import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.account.AccountHolderMessage;
 import uk.gov.netz.integration.model.account.AccountType;
 import uk.gov.netz.integration.model.account.AccountUpdatingEvent;
@@ -65,7 +66,7 @@ class AccountUpdatedNotifyRegistryServiceTest {
     @Mock
     private MrtmAccountQueryService mrtmAccountQueryService;
     @Mock
-    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
+    private NotifyRegistryEmailService notifyRegistryEmailService;
     @Mock
     private RegistryIntegrationEmailProperties emailProperties;
     @Mock
@@ -109,7 +110,7 @@ class AccountUpdatedNotifyRegistryServiceTest {
         verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
         verify(accountUpdatedSendToRegistryProducer).produce(expectedEvent, accountUpdatedKafkaTemplate);
 
-        verifyNoInteractions(notificationEmailService, emailProperties);
+        verifyNoInteractions(notifyRegistryEmailService, emailProperties);
         verifyNoMoreInteractions(mrtmAccountQueryService, accountUpdatedSendToRegistryProducer, empQueryService);
     }
 
@@ -211,7 +212,7 @@ class AccountUpdatedNotifyRegistryServiceTest {
         verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
         verify(empQueryService).getEmpIdByAccountId(ACCOUNT_ID);
 
-        verifyNoInteractions(notificationEmailService, emailProperties, accountUpdatedSendToRegistryProducer);
+        verifyNoInteractions(notifyRegistryEmailService, emailProperties, accountUpdatedSendToRegistryProducer);
         verifyNoMoreInteractions(mrtmAccountQueryService, empQueryService);
     }
 
@@ -231,17 +232,16 @@ class AccountUpdatedNotifyRegistryServiceTest {
         AccountUpdatedSubmittedEventDetails expected = AccountUpdatedSubmittedEventDetails.builder()
             .notifiedRegistry(false)
             .build();
-        EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_ACCOUNT_UPDATE_MISSING_REGISTRY_ID_TEMPLATE)
-                .templateParams(Map.of(
-                    MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, "Account Updated",
-                    MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, "accountName",
-                    MrtmEmailNotificationTemplateConstants.EMITTER_ID, "businessId",
-                    MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, "Maritime"
-                    ))
-                .build())
+
+        NotifyRegistryEmailServiceParams emailParams = NotifyRegistryEmailServiceParams.builder()
+            .account(account)
+            .emitterId("businessId")
+            .recipient("test-email@example.com")
+            .isFordway(false)
+            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_ACCOUNT_UPDATE_MISSING_REGISTRY_ID_TEMPLATE)
+            .integrationPoint("Account Updated")
             .build();
+
 
         when(emailProperties.getEmail()).thenReturn(Map.of(CompetentAuthorityEnum.ENGLAND.getCode(), "test-email@example.com"));
         when(mrtmAccountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(account);
@@ -251,10 +251,10 @@ class AccountUpdatedNotifyRegistryServiceTest {
         assertThat(expected).isEqualTo(actual);
         verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
         verify(empQueryService).getEmpIdByAccountId(ACCOUNT_ID);
-        verify(notificationEmailService).notifyRecipient(emailData, "test-email@example.com");
+        verify(notifyRegistryEmailService).notifyRegulator(emailParams);
 
         verifyNoInteractions(accountUpdatedSendToRegistryProducer);
-        verifyNoMoreInteractions(emailProperties, notificationEmailService, mrtmAccountQueryService, empQueryService);
+        verifyNoMoreInteractions(emailProperties, notifyRegistryEmailService, mrtmAccountQueryService, empQueryService);
     }
 
     private static AccountHolderMessage getAccountHolder(boolean crnNotExist, String crnJustification,
@@ -263,7 +263,7 @@ class AccountUpdatedNotifyRegistryServiceTest {
                                                          boolean withoutAddress) {
         return AccountHolderMessage.builder()
             .accountHolderType(accountHolderType)
-            .name("accountName")
+            .name("operatorName")
             .addressLine1(withoutAddress ? null : "line1")
             .addressLine2(withoutAddress ? null : "line2")
             .townOrCity(withoutAddress ? null : "city")
@@ -283,7 +283,7 @@ class AccountUpdatedNotifyRegistryServiceTest {
             .registryId(String.valueOf(REGISTRY_ID))
             .monitoringPlanId(empId)
             .firstYearOfVerifiedEmissions(NOW.getYear())
-            .accountName("accountName")
+            .accountName("operatorName")
             .companyImoNumber(IMO_NUMBER)
             .regulator(regulator.name())
             .build();

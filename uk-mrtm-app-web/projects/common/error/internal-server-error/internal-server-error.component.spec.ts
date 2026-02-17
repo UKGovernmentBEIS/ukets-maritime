@@ -1,28 +1,27 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 
 import { GenericServiceErrorCode } from '../service-errors';
 import { InternalServerErrorComponent } from './internal-server-error.component';
 
 describe('InternalServerErrorComponent', () => {
   let component: InternalServerErrorComponent;
-  let fixture: ComponentFixture<InternalServerErrorComponent>;
+  let harness: RouterTestingHarness;
   let router: Router;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [InternalServerErrorComponent],
-      providers: [provideRouter([])],
-    }).compileComponents();
+    TestBed.configureTestingModule({
+      providers: [provideRouter([{ path: 'error', component: InternalServerErrorComponent }])],
+    });
+    router = TestBed.inject(Router);
   });
-  describe('for default error', () => {
-    beforeEach(() => {
-      router = TestBed.inject(Router);
-      router.getCurrentNavigation = jest.fn().mockReturnValue({ extras: {} });
 
-      fixture = TestBed.createComponent(InternalServerErrorComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+  describe('for default error', () => {
+    beforeEach(async () => {
+      harness = await RouterTestingHarness.create();
+      component = await harness.navigateByUrl('/error', InternalServerErrorComponent);
+      harness.detectChanges();
     });
 
     it('should create', () => {
@@ -30,7 +29,7 @@ describe('InternalServerErrorComponent', () => {
     });
 
     it('should display all HTML elements', () => {
-      const element: HTMLElement = fixture.nativeElement;
+      const element: HTMLElement = harness.routeNativeElement;
       const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
         el.textContent.trim(),
       );
@@ -44,13 +43,13 @@ describe('InternalServerErrorComponent', () => {
   describe('for custom errors', () => {
     const errorCode = GenericServiceErrorCode.INTREGACCOUNTCREATIONMRTM1007;
 
-    beforeEach(() => {
-      router = TestBed.inject(Router);
-      router.getCurrentNavigation = jest.fn().mockReturnValue({ extras: { state: { errorCode } } });
-
-      fixture = TestBed.createComponent(InternalServerErrorComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
+    beforeEach(async () => {
+      harness = await RouterTestingHarness.create();
+      await router.navigate(['/error'], { state: { errorCode } });
+      component = await harness.fixture.debugElement.query(
+        (el) => el.componentInstance instanceof InternalServerErrorComponent,
+      )?.componentInstance;
+      harness.detectChanges();
     });
 
     it('should create', () => {
@@ -58,7 +57,7 @@ describe('InternalServerErrorComponent', () => {
     });
 
     it('should display all HTML elements', () => {
-      const element: HTMLElement = fixture.nativeElement;
+      const element: HTMLElement = harness.routeNativeElement;
       const paragraphContents = Array.from(element.querySelectorAll<HTMLParagraphElement>('p')).map((el) =>
         el.textContent.trim(),
       );

@@ -7,8 +7,8 @@ import { NonComplianceCloseSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-non-compliance-closed',
-  standalone: true,
   imports: [NonComplianceCloseSummaryTemplateComponent],
+  standalone: true,
   template: `
     <mrtm-non-compliance-close-summary-template [reason]="reason()" [files]="attachedFiles()" />
   `,

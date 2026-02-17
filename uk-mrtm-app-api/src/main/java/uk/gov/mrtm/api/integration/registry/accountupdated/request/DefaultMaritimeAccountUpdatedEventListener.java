@@ -13,7 +13,7 @@ public class DefaultMaritimeAccountUpdatedEventListener implements MaritimeAccou
 
     @Override
     public AccountUpdatedSubmittedEventDetails onAccountUpdatedEvent(AccountUpdatedRegistryEvent event) {
-        log.info("Account updated integration point is disabled, skipping messaging registry...");
+        log.info("Account updated integration point is disabled, skipping messaging registry..." + event);
         return AccountUpdatedSubmittedEventDetails.builder().notifiedRegistry(false).build();
     }
 }

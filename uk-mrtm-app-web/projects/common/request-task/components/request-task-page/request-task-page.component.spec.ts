@@ -6,8 +6,7 @@ import { RouterTestingHarness } from '@angular/router/testing';
 import { TaskSection } from '@netz/common/model';
 import { TASK_STATUS_TAG_MAP, TaskStatusTagMap } from '@netz/common/pipes';
 import { RequestTaskStore } from '@netz/common/store';
-
-import { screen } from '@testing-library/angular';
+import { BasePage } from '@netz/common/testing';
 
 import { REQUEST_TASK_PAGE_CONTENT } from '../../request-task.providers';
 import { RequestTaskPageContentFactory, RequestTaskPageContentFactoryMap } from '../../request-task.types';
@@ -17,44 +16,44 @@ let dynamicSectionsFlag = true;
 
 @Component({
   selector: 'netz-test-content',
+  standalone: true,
   template: `
     <h1>Test content component</h1>
   `,
-  standalone: true,
 })
 class TestContentComponent {}
 
 @Component({
   selector: 'netz-test-pre-content',
+  standalone: true,
   template: `
     <h2>Test pre content</h2>
   `,
-  standalone: true,
 })
 class TestPreContentComponent {}
 
 @Component({
   selector: 'netz-test-post-header',
+  standalone: true,
   template: `
     <h2>Test post header content</h2>
   `,
-  standalone: true,
 })
 class TestPostHeaderComponent {}
 
 @Component({
   selector: 'netz-test-post-content',
+  standalone: true,
   template: `
     <h2>Test post content</h2>
   `,
-  standalone: true,
 })
 class TestPostContentComponent {}
 
 @Component({
   selector: 'netz-subtask',
-  template: '<h1>SUBTASK COMPONENT</h1>',
   standalone: true,
+  template: '<h1>SUBTASK COMPONENT</h1>',
 })
 class TestSubtaskComponent {}
 
@@ -116,6 +115,13 @@ describe('RequestTaskPageComponent', () => {
   let store: RequestTaskStore;
   let component: RequestTaskPageComponent;
   let harness: RouterTestingHarness;
+  let page: Page;
+
+  class Page extends BasePage<RequestTaskPageComponent> {
+    get headings2(): HTMLHeadingElement[] {
+      return this.queryAll<HTMLHeadingElement>('h2');
+    }
+  }
 
   async function createModule(content: RequestTaskPageContentFactoryMap) {
     TestBed.configureTestingModule({
@@ -134,6 +140,7 @@ describe('RequestTaskPageComponent', () => {
 
     harness = await RouterTestingHarness.create();
     component = await harness.navigateByUrl('/', RequestTaskPageComponent);
+    page = new Page(harness.fixture as any);
     harness.detectChanges();
   }
 
@@ -148,15 +155,18 @@ describe('RequestTaskPageComponent', () => {
 
   it('should show sections provided', async () => {
     await createModule(contentWithSections);
-    expect(screen.getByText('SECTION_A_TITLE')).toBeVisible();
+    expect(page.listContents).toEqual(['SECTION_A_TITLETEST_SUBTASK_A COMPLETED', 'TEST_SUBTASK_A COMPLETED']);
   });
 
   it('should show components provided', async () => {
     await createModule(contentWithComponent);
-    expect(screen.getByRole('heading', { name: 'Test content component' })).toBeVisible();
-    expect(screen.getByRole('heading', { name: 'Test pre content' })).toBeVisible();
-    expect(screen.getByRole('heading', { name: 'Test post header content' })).toBeVisible();
-    expect(screen.getByRole('heading', { name: 'Test post content' })).toBeVisible();
+    expect(page.heading1.textContent).toContain('TEST_TYPE_HEADER');
+    expect(page.queryAll('h1').map((h) => h.textContent)).toContain('Test content component');
+    expect(page.headings2.map((h) => h.textContent)).toEqual([
+      'Test post header content',
+      'Test pre content',
+      'Test post content',
+    ]);
   });
 
   it('should show changed sections for same task type after navigation', async () => {
@@ -164,6 +174,6 @@ describe('RequestTaskPageComponent', () => {
     await harness.navigateByUrl('subtask', TestSubtaskComponent);
     dynamicSectionsFlag = false;
     await harness.navigateByUrl('', RequestTaskPageComponent);
-    expect(screen.getByText('SECTION_B_TITLE')).toBeVisible();
+    expect(page.query('li').textContent).toContain('SECTION_B_TITLE');
   });
 });

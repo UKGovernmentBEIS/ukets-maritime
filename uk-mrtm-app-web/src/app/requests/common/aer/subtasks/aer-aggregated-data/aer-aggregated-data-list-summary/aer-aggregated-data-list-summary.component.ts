@@ -20,7 +20,6 @@ import { AggregatedDataListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -30,6 +29,7 @@ import { AggregatedDataListSummaryTemplateComponent } from '@shared/components';
     ButtonDirective,
     AggregatedDataListSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-list-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

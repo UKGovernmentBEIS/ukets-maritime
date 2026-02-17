@@ -48,15 +48,15 @@ describe('VariationRegulatorDecisionComponent', () => {
 
   @Component({
     selector: 'mrtm-test',
+    imports: [ReactiveFormsModule, VariationRegulatorDecisionComponent],
+    standalone: true,
     template: `
       <form [formGroup]="form">
         <mrtm-variation-regulator-decision></mrtm-variation-regulator-decision>
       </form>
     `,
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [ReactiveFormsModule, VariationRegulatorDecisionComponent],
     providers: [variationRegulatorDecisionFormProvider(ABBREVIATIONS_SUB_TASK)],
+    changeDetection: ChangeDetectionStrategy.OnPush,
   })
   class TestComponent {
     form = inject<VariationRegulatorDecisionFormModel>(VARIATION_REGULATOR_DECISION_FORM);

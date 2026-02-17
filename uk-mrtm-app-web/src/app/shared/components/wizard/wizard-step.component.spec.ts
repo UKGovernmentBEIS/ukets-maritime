@@ -16,6 +16,7 @@ describe('WizardStepComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    imports: [WizardStepComponent, GovukComponentsModule, ReactiveFormsModule],
     standalone: true,
     template: `
       <mrtm-wizard-step
@@ -27,7 +28,6 @@ describe('WizardStepComponent', () => {
         <div govuk-text-input formControlName="text" label="Text"></div>
       </mrtm-wizard-step>
     `,
-    imports: [WizardStepComponent, GovukComponentsModule, ReactiveFormsModule],
   })
   class TestComponent {
     formGroup = new FormGroup({

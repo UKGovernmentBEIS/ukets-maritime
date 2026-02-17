@@ -21,7 +21,6 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-reports-tab',
-  standalone: true,
   imports: [
     CheckboxComponent,
     CheckboxesComponent,
@@ -36,6 +35,7 @@ import BigNumber from 'bignumber.js';
     I18nSelectPipe,
     BigNumberPipe,
   ],
+  standalone: true,
   templateUrl: './reports-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -66,7 +66,7 @@ export class ReportsTabComponent {
     0,
   );
 
-  reportResults = toSignal(
+  readonly reportResults = toSignal(
     combineLatest([
       this.accountId$,
       this.selectedTypes$,
@@ -87,7 +87,7 @@ export class ReportsTabComponent {
     ),
   );
 
-  groupedReports: Signal<Array<ReportGroupType>> = computed(() => {
+  readonly groupedReports: Signal<Array<ReportGroupType>> = computed(() => {
     const reports = this.reportResults()?.requestDetails ?? [];
 
     const reducedResult = reports.reduce((result, report) => {

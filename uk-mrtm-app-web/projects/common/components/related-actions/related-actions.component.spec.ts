@@ -31,7 +31,19 @@ describe('RelatedActionsComponent', () => {
     }
   }
 
-  const createComponent = () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [
+        provideRouter([]),
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: TASK_RELATED_ACTIONS_MAP, useValue: actionsMap },
+        { provide: ActivatedRoute, useValue: constructRoute(false) },
+      ],
+    }).overrideComponent(RelatedActionsComponent, {
+      set: { host: { 'test-id': 'component-spec' } },
+    });
+
     fixture = TestBed.createComponent(RelatedActionsComponent);
     component = fixture.componentInstance;
     fixture.componentRef.setInput('showReassignAction', true);
@@ -41,23 +53,6 @@ describe('RelatedActionsComponent', () => {
     fixture.componentRef.setInput('requestTaskType', 'TEST_REQUEST');
     page = new Page(fixture);
     fixture.detectChanges();
-  };
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [RelatedActionsComponent],
-      providers: [
-        provideRouter([]),
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: TASK_RELATED_ACTIONS_MAP, useValue: actionsMap },
-        { provide: ActivatedRoute, useValue: constructRoute(false) },
-      ],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    createComponent();
   });
 
   it('should create', async () => {

@@ -1,14 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  DestroyRef,
-  EventEmitter,
-  inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input, OnInit, output } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormArray, FormGroup, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -42,7 +33,6 @@ import {
 
 @Component({
   selector: 'mrtm-verifier-users-list',
-  standalone: true,
   imports: [
     AsyncPipe,
     ButtonDirective,
@@ -55,8 +45,9 @@ import {
     PendingButtonDirective,
     DetailsComponent,
   ],
-  providers: [verifierUsersListFormProvider],
+  standalone: true,
   templateUrl: './verifier-users-list.component.html',
+  providers: [verifierUsersListFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierUsersListComponent implements OnInit {
@@ -64,17 +55,17 @@ export class VerifierUsersListComponent implements OnInit {
   public readonly verifierUserStatuses = VERIFIER_USER_STATUSES;
   public readonly verifierUsersAcceptedStatuses = VERIFIER_USER_STATUSES_ACCEPTED;
   public readonly verifierUserTypes = VERIFIER_USER_TYPES;
-  public verifierUserStatusesOptions: { [key: string]: any } = {};
-  @Input() verificationBodyId: number;
-  @Input() editable: boolean = false;
-  @Input({ required: true }) authorities: Observable<UserAuthorityInfoDTO[]>;
+
+  readonly verificationBodyId = input<number>();
+  readonly editable = input<boolean>(false);
+  readonly authorities = input.required<Observable<UserAuthorityInfoDTO[]>>();
   public readonly tableColumns = VERIFIER_USERS_LIST_COLUMNS;
   public readonly readonlyTableColumns = VERIFIER_USERS_LIST_COLUMNS.slice(0, 2);
-  @Output() readonly saveChanges = new EventEmitter<{
+  readonly saveChanges = output<{
     authoritiesToUpdate: VerifierAuthorityUpdateDTO[];
     form: FormGroup;
   }>();
-  @Output() readonly discardChanges: EventEmitter<void> = new EventEmitter<void>();
+  readonly discardChanges = output<void>();
   private readonly router = inject(Router);
   private readonly formBuilder = inject(UntypedFormBuilder);
   public readonly addNewUserForm = this.formBuilder.group({
@@ -88,15 +79,17 @@ export class VerifierUsersListComponent implements OnInit {
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
   public ngOnInit(): void {
-    this.authorities.pipe(takeUntilDestroyed(this.destroyRef)).subscribe((items) => {
-      if (isNil(this.form)) {
-        this.form = this.formCreator(items);
-      }
+    this.authorities()
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((items) => {
+        if (isNil(this.form)) {
+          this.form = this.formCreator(items);
+        }
 
-      this.form.reset({
-        verifierUsers: items,
+        this.form.reset({
+          verifierUsers: items,
+        });
       });
-    });
   }
 
   public getTempDisabledStatuses(index: number) {
@@ -130,6 +123,7 @@ export class VerifierUsersListComponent implements OnInit {
     if (!this.form.dirty) {
       return;
     }
+    // TODO: The 'emit' function requires a mandatory void argument
     this.discardChanges.emit();
   }
 

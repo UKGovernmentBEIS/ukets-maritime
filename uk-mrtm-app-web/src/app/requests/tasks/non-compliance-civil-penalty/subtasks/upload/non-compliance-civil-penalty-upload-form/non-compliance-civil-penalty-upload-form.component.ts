@@ -21,7 +21,6 @@ import { FileInputComponent, WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-upload-form',
-  standalone: true,
   imports: [
     DateInputComponent,
     FileInputComponent,
@@ -30,9 +29,10 @@ import { FileInputComponent, WizardStepComponent } from '@shared/components';
     ReactiveFormsModule,
     WizardStepComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-civil-penalty-upload-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceCivilPenaltyUploadFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceCivilPenaltyUploadFormComponent {
   private readonly route = inject(ActivatedRoute);

@@ -1,8 +1,8 @@
-@import 'base';
+@use 'govuk-frontend/dist/govuk/all' as govuk;
 
 .moj-scrollable-pane {
   // stylelint-disable scss/dollar-variable-pattern
-  $scrollableBgColor: govuk-colour("white");
+  $scrollableBgColor: govuk.govuk-colour("white");
   $scrollableTransparentColor: rgba(255, 255, 255, 0);
   $scrollableShadowColor: rgba(0, 0, 0, 0.2);
   $scrollableShadowSize: 0.75em;
@@ -12,7 +12,7 @@
   display: block;
   position: relative;
   overflow-x: auto;
-  margin-bottom: govuk-spacing(6);
+  margin-bottom: govuk.govuk-spacing(6);
 
   // DO NOT REPLACE WITH SHORTHAND
   background: linear-gradient(
@@ -38,7 +38,7 @@
   $scrollableShadowSize 100%;
 
   &:focus {
-    @include govuk-focused-box;
+    @include govuk.govuk-focused-box;
   }
 
   & .govuk-table {
@@ -46,7 +46,7 @@
   }
 }
 
-@include govuk-media-query($until: 1020px) {
+@include govuk.govuk-media-query($until: 1020px) {
   .moj-scrollable-pane .govuk-table__header,
   .moj-scrollable-pane .govuk-table__cell {
     white-space: nowrap;

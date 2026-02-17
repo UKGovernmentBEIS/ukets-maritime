@@ -1,4 +1,9 @@
-<govuk-table [columns]="tableColumns" [data]="items" description="Task list" mrtmScrollablePane ariaLabel="Task list">
+<govuk-table
+  [columns]="tableColumns()"
+  [data]="items()"
+  description="Task list"
+  mrtmScrollablePane
+  ariaLabel="Task list">
   <ng-template let-column="column" let-row="row">
     @switch (column.field) {
       @case ('taskType') {
@@ -15,7 +20,7 @@
         {{ row[column.field] | itemType }}
       }
       @case ('taskAssignee') {
-        {{ !row[column.field] ? unassignedLabel : (row[column.field] | userFullName) }}
+        {{ !row[column.field] ? unassignedLabel() : (row[column.field] | userFullName) }}
       }
       @case ('daysRemaining') {
         {{ row[column.field] | daysRemaining: getYearFromRequestId(row.requestId) : row.taskType }}

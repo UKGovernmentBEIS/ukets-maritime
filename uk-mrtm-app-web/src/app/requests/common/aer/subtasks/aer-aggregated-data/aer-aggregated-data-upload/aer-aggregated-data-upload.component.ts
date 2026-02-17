@@ -37,7 +37,6 @@ import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-upload',
-  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -48,6 +47,7 @@ import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
     PageHeadingComponent,
     PendingButtonDirective,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-upload.component.html',
   providers: [aerAggregatedDataUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -69,9 +69,9 @@ export class AerAggregatedDataUploadComponent {
   fileCtrl = this.formGroup.controls.file;
   wizardSteps = AerAggregatedDataWizardStep;
   existingAggregatedData = this.store.select(aerCommonQuery.selectAggregatedDataList);
-  xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
-  shipEmissionsList: WritableSignal<AerShipAggregatedDataSave[]> = signal([]);
-  aggregatedTableData: Signal<AerAggregatedDataUploadDto[]> = computed(() =>
+  readonly xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
+  readonly shipEmissionsList: WritableSignal<AerShipAggregatedDataSave[]> = signal([]);
+  readonly aggregatedTableData: Signal<AerAggregatedDataUploadDto[]> = computed(() =>
     this.shipEmissionsList().map((item) => ({
       imoNumber: item.imoNumber,
       name: this.store.select(aerCommonQuery.selectShipNameByImoNumber(item.imoNumber))(),

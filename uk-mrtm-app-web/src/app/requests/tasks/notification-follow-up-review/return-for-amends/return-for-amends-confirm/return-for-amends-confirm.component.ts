@@ -13,7 +13,6 @@ import { FollowUpReviewDecisionSummaryTemplateComponent } from '@shared/componen
 
 @Component({
   selector: 'mrtm-return-for-amends-confirm',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     FollowUpReviewDecisionSummaryTemplateComponent,
@@ -21,6 +20,7 @@ import { FollowUpReviewDecisionSummaryTemplateComponent } from '@shared/componen
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   template: `
     <netz-page-heading>Return for amends</netz-page-heading>
     <p class="govuk-body">Check your information before sending</p>

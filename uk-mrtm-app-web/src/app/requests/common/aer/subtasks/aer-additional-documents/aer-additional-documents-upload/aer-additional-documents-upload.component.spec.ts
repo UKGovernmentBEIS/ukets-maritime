@@ -87,9 +87,7 @@ describe('AerAdditionalDocumentsUploadComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual(
-        'Do you want to upload any additional documents or information?',
-      );
+      expect(page.heading1.textContent).toEqual('Do you want to upload any additional documents or information?');
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -127,9 +125,7 @@ describe('AerAdditionalDocumentsUploadComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual(
-        'Do you want to upload any additional documents or information?',
-      );
+      expect(page.heading1.textContent).toEqual('Do you want to upload any additional documents or information?');
       expect(page.existRadios[0].checked).toBeTruthy();
       expect(page.submitButton).toBeTruthy();
     });

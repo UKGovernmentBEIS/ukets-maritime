@@ -8,8 +8,8 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-request-not-allowed',
-  standalone: true,
   imports: [PageHeadingComponent, ButtonDirective, PendingButtonDirective, ReturnToTaskOrActionPageComponent],
+  standalone: true,
   template: `
     <netz-page-heading>You can only have one active request at any given time.</netz-page-heading>
     <button (click)="onClick()" govukSecondaryButton netzPendingButton type="button">View the active request</button>

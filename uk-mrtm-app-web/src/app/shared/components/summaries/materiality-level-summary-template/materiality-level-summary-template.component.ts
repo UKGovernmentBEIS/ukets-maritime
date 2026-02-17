@@ -20,7 +20,6 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-materiality-level-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -32,6 +31,7 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
     NotProvidedDirective,
     AccreditationReferenceDocumentTypesPipe,
   ],
+  standalone: true,
   templateUrl: './materiality-level-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

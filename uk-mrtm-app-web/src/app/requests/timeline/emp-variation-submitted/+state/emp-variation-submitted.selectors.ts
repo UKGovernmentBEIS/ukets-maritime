@@ -1,6 +1,8 @@
 import {
   AdditionalDocuments,
+  EmissionsMonitoringPlan,
   EmpAbbreviations,
+  EmpAcceptedVariationDecisionDetails,
   EmpControlActivities,
   EmpDataGaps,
   EmpEmissions,
@@ -11,23 +13,41 @@ import {
   EmpMonitoringGreenhouseGas,
   EmpOperatorDetails,
   EmpShipEmissions,
-  EmpVariationApplicationSubmittedRequestActionPayload,
+  EmpVariationApplicationApprovedRequestActionPayload,
+  EmpVariationApplicationRegulatorLedApprovedRequestActionPayload,
   EmpVariationDetails,
+  EmpVariationRegulatorLedReason,
 } from '@mrtm/api';
 
 import {
   createAggregateSelector,
   createDescendingSelector,
+  requestActionQuery,
   RequestActionState,
   StateSelector,
 } from '@netz/common/store';
 
 import { TaskItemStatus, timelineCommonQuery, timelineUtils } from '@requests/common';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { AttachedFile, ShipEmissionTableListItem } from '@shared/types';
+import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
+import {
+  AttachedFile,
+  EmpVariationReviewDecisionDto,
+  EmpVariationReviewDecisionUnion,
+  ShipEmissionTableListItem,
+} from '@shared/types';
 
-const selectPayload: StateSelector<RequestActionState, EmpVariationApplicationSubmittedRequestActionPayload> =
-  timelineCommonQuery.selectPayload<EmpVariationApplicationSubmittedRequestActionPayload>();
+const selectPayload: StateSelector<
+  RequestActionState,
+  EmpVariationApplicationRegulatorLedApprovedRequestActionPayload & EmpVariationApplicationApprovedRequestActionPayload
+> = timelineCommonQuery.selectPayload<
+  EmpVariationApplicationRegulatorLedApprovedRequestActionPayload & EmpVariationApplicationApprovedRequestActionPayload
+>();
+
+const selectIsVariationRegulator: StateSelector<RequestActionState, boolean> = createDescendingSelector(
+  requestActionQuery.selectActionType,
+  (requestTaskType) => requestTaskType === 'EMP_VARIATION_APPLICATION_REGULATOR_LED_APPROVED',
+);
 
 const selectEmpVariationDetails: StateSelector<RequestActionState, EmpVariationDetails> = createDescendingSelector(
   selectPayload,
@@ -116,7 +136,86 @@ const selectShip = (
 ): StateSelector<RequestActionState, EmpShipEmissions> =>
   createDescendingSelector(selectShips, (ships) => ships?.find((ship) => ship.uniqueIdentifier === shipId));
 
+const selectReviewAttachments: StateSelector<
+  RequestActionState,
+  EmpVariationApplicationApprovedRequestActionPayload['reviewAttachments']
+> = createDescendingSelector(selectPayload, (payload) => payload?.reviewAttachments);
+
+const selectReviewGroupDecision = (
+  subtask: keyof EmissionsMonitoringPlan,
+): StateSelector<RequestActionState, EmpVariationReviewDecisionDto | null> =>
+  createAggregateSelector(
+    selectPayload,
+    selectReviewAttachments,
+    timelineCommonQuery.selectDownloadUrl,
+    (payload, reviewAttachments, downloadUrl) => {
+      const group = subtaskReviewGroupMap[subtask];
+      const reviewGroupDecision = payload?.reviewGroupDecisions?.[group] as EmpVariationReviewDecisionUnion;
+
+      return !reviewGroupDecision
+        ? null
+        : {
+            type: reviewGroupDecision.type,
+            details: {
+              requiredChanges: reviewGroupDecision?.details?.requiredChanges?.map((change) => ({
+                reason: change?.reason,
+                files:
+                  change?.files?.map((id) => ({
+                    downloadUrl: downloadUrl + `${id}`,
+                    fileName: reviewAttachments[id],
+                  })) ?? [],
+              })),
+              variationScheduleItems: reviewGroupDecision?.details?.variationScheduleItems,
+              notes: reviewGroupDecision?.details?.notes,
+            },
+          };
+    },
+  );
+
+const selectEmpVariationDetailsReviewDecisionDTO: StateSelector<
+  RequestActionState,
+  EmpVariationReviewDecisionDto | null
+> = createAggregateSelector(
+  selectPayload,
+  selectReviewAttachments,
+  timelineCommonQuery.selectDownloadUrl,
+  (payload, reviewAttachments, downloadUrl) => {
+    const reviewDecision = payload?.empVariationDetailsReviewDecision as EmpVariationReviewDecisionUnion;
+
+    return !reviewDecision
+      ? null
+      : {
+          type: reviewDecision?.type,
+          details: {
+            requiredChanges: reviewDecision?.details?.requiredChanges?.map((change) => ({
+              reason: change?.reason,
+              files:
+                change?.files?.map((id) => ({
+                  downloadUrl: downloadUrl + `${id}`,
+                  fileName: reviewAttachments[id],
+                })) ?? [],
+            })),
+            variationScheduleItems: reviewDecision?.details?.variationScheduleItems,
+            notes: reviewDecision?.details?.notes,
+          },
+        };
+  },
+);
+
+const selectReasonRegulatorLed: StateSelector<RequestActionState, EmpVariationRegulatorLedReason> =
+  createDescendingSelector(selectPayload, (payload) => payload?.reasonRegulatorLed);
+
+const selectVariationRegulatorDecisionDetails = (
+  subtask: keyof EmissionsMonitoringPlan,
+): StateSelector<RequestActionState, EmpAcceptedVariationDecisionDetails> => {
+  return createDescendingSelector(selectPayload, (payload) => {
+    const group = subtaskReviewGroupMap[subtask];
+    return payload?.reviewGroupDecisions?.[group];
+  });
+};
+
 export const empVariationSubmittedQuery = {
+  selectIsVariationRegulator,
   selectEmpVariationDetails,
   selectAttachedFiles,
   selectOperatorDetails,
@@ -130,4 +229,8 @@ export const empVariationSubmittedQuery = {
   selectEmissionSources,
   selectShip,
   selectListOfShips,
+  selectReviewGroupDecision,
+  selectEmpVariationDetailsReviewDecisionDTO,
+  selectReasonRegulatorLed,
+  selectVariationRegulatorDecisionDetails,
 };

@@ -6,7 +6,7 @@ import {
   EmpDataGaps,
   EmpEmissions,
   EmpEmissionSources,
-  EmpIssuanceApplicationSubmittedRequestActionPayload,
+  EmpIssuanceApplicationApprovedRequestActionPayload,
   EmpManagementProcedures,
   EmpMandate,
   EmpMonitoringGreenhouseGas,
@@ -23,14 +23,20 @@ import {
 
 import { TaskItemStatus, timelineCommonQuery, timelineUtils } from '@requests/common';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
-import { AttachedFile, ShipEmissionTableListItem } from '@shared/types';
+import { subtaskReviewGroupMap } from '@requests/common/emp/utils';
+import {
+  AttachedFile,
+  EmpVariationReviewDecisionDto,
+  EmpVariationReviewDecisionUnion,
+  ShipEmissionTableListItem,
+} from '@shared/types';
 
-const selectPayload: StateSelector<RequestActionState, EmpIssuanceApplicationSubmittedRequestActionPayload> =
-  timelineCommonQuery.selectPayload<EmpIssuanceApplicationSubmittedRequestActionPayload>();
+const selectPayload: StateSelector<RequestActionState, EmpIssuanceApplicationApprovedRequestActionPayload> =
+  timelineCommonQuery.selectPayload<EmpIssuanceApplicationApprovedRequestActionPayload>();
 
 const selectEmpSectionsCompleted: StateSelector<
   RequestActionState,
-  EmpIssuanceApplicationSubmittedRequestActionPayload['empSectionsCompleted']
+  EmpIssuanceApplicationApprovedRequestActionPayload['empSectionsCompleted']
 > = createDescendingSelector(selectPayload, (payload) => payload?.empSectionsCompleted);
 
 const selectStatusForSubtask = (
@@ -128,6 +134,42 @@ const selectMandate: StateSelector<RequestActionState, EmpMandate> = createDesce
   (payload) => payload?.emissionsMonitoringPlan?.mandate,
 );
 
+const selectReviewAttachments: StateSelector<
+  RequestActionState,
+  EmpIssuanceApplicationApprovedRequestActionPayload['reviewAttachments']
+> = createDescendingSelector(selectPayload, (payload) => payload?.reviewAttachments);
+
+const selectReviewGroupDecision = (
+  subtask: keyof EmissionsMonitoringPlan,
+): StateSelector<RequestActionState, EmpVariationReviewDecisionDto | null> =>
+  createAggregateSelector(
+    selectPayload,
+    selectReviewAttachments,
+    timelineCommonQuery.selectDownloadUrl,
+    (payload, reviewAttachments, downloadUrl) => {
+      const group = subtaskReviewGroupMap[subtask];
+      const reviewGroupDecision = payload?.reviewGroupDecisions?.[group] as EmpVariationReviewDecisionUnion;
+
+      return !reviewGroupDecision
+        ? null
+        : {
+            type: reviewGroupDecision.type,
+            details: {
+              requiredChanges: reviewGroupDecision?.details?.requiredChanges?.map((change) => ({
+                reason: change?.reason,
+                files:
+                  change?.files?.map((id) => ({
+                    downloadUrl: downloadUrl + `${id}`,
+                    fileName: reviewAttachments[id],
+                  })) ?? [],
+              })),
+              variationScheduleItems: reviewGroupDecision?.details?.variationScheduleItems,
+              notes: reviewGroupDecision?.details?.notes,
+            },
+          };
+    },
+  );
+
 export const empSubmittedQuery = {
   selectIsSubtaskCompleted,
   selectStatusForSubtask,
@@ -143,4 +185,5 @@ export const empSubmittedQuery = {
   selectShip,
   selectListOfShips,
   selectMandate,
+  selectReviewGroupDecision,
 };

@@ -143,6 +143,7 @@ export const taskActionTypeToTitleMap: Record<
   // REGISTRY
   EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED: 'Sent information to the registry',
   REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED: 'Emissions figure for surrender sent to Registry',
+  REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED: 'Sent information to the registry by system',
 
   // VIR
   VIR: 'Annual verifier improvement report',

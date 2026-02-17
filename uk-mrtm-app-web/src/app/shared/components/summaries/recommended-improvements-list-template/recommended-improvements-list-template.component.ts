@@ -10,8 +10,8 @@ import { recommendedImprovementsMap } from '@requests/common/aer/subtasks/recomm
 
 @Component({
   selector: 'mrtm-recommended-improvements-list-template',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, TableComponent],
+  standalone: true,
   templateUrl: './recommended-improvements-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

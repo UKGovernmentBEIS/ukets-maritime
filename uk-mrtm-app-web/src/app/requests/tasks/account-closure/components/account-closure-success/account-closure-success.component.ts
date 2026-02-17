@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-account-closure-success',
-  standalone: true,
   imports: [PanelComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './account-closure-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

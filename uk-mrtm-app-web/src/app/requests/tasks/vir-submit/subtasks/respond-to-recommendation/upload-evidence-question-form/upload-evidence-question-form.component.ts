@@ -17,10 +17,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-upload-evidence-question-form',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, RadioComponent, RadioOptionComponent],
-  providers: [uploadEvidenceQuestionFormProvider],
+  standalone: true,
   templateUrl: './upload-evidence-question-form.component.html',
+  providers: [uploadEvidenceQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UploadEvidenceQuestionFormComponent {

@@ -17,9 +17,13 @@ import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdated
 import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDetermination;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDeterminationType;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
@@ -43,6 +47,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -201,7 +206,9 @@ class EmpVariationOfficialNoticeServiceTest {
     @ParameterizedTest
     @MethodSource("provideSendOfficialNoticeTestArgs")
     void sendOfficialNotice(FileInfoDTO officialDocFileInfoDTO, FileInfoDTO empDocFileInfoDTO,
-                            List<FileInfoDTO> attachments) {
+                            List<FileInfoDTO> attachments, String roleType,
+                            EmpVariationDetermination empVariationDetermination,
+                            int accountUpdatedRegistryListenerInvocations) {
         String requestId = "1";
         String decisionNotificationUserEmail = "operator1@email";
 
@@ -229,7 +236,9 @@ class EmpVariationOfficialNoticeServiceTest {
                         .officialNotice(officialDocFileInfoDTO)
                         .emissionsMonitoringPlan(emissionsMonitoringPlan)
                         .empDocument(empDocFileInfoDTO)
+                        .determination(empVariationDetermination)
                         .build())
+                .metadata(EmpVariationRequestMetadata.builder().initiatorRoleType(roleType).build())
                 .build();
 
         List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
@@ -241,14 +250,14 @@ class EmpVariationOfficialNoticeServiceTest {
 
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of(decisionNotificationUserEmail));
-        when(accountUpdatedRegistryListener.onAccountUpdatedEvent(accountUpdatedRegistryEvent))
+        lenient().when(accountUpdatedRegistryListener.onAccountUpdatedEvent(accountUpdatedRegistryEvent))
             .thenReturn(accountUpdatedSubmittedEventDetails);
 
         empVariationOfficialNoticeService.sendOfficialNotice(requestId);
 
         verify(requestService, times(1)).findRequestById(requestId);
-        verify(accountUpdatedRegistryListener, times(1)).onAccountUpdatedEvent(accountUpdatedRegistryEvent);
-        verify(accountUpdatedEventRequestActionService, times(1))
+        verify(accountUpdatedRegistryListener, times(accountUpdatedRegistryListenerInvocations)).onAccountUpdatedEvent(accountUpdatedRegistryEvent);
+        verify(accountUpdatedEventRequestActionService, times(accountUpdatedRegistryListenerInvocations))
             .addRequestAction(request, accountUpdatedSubmittedEventDetails, organisationStructure, null);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails);
@@ -259,9 +268,12 @@ class EmpVariationOfficialNoticeServiceTest {
         FileInfoDTO empDocFileInfoDTO = buildOfficialFileInfo();
 
         return Stream.of(
-            //when operator
-            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO, empDocFileInfoDTO)),
-            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO))
+            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO, empDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.APPROVED).build(), 1),
+            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.REJECTED).build(), 0),
+            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.DEEMED_WITHDRAWN).build(), 0),
+
+            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO, empDocFileInfoDTO), RoleTypeConstants.REGULATOR, null, 1),
+            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), RoleTypeConstants.REGULATOR, null, 1)
         );
     }
     @Test

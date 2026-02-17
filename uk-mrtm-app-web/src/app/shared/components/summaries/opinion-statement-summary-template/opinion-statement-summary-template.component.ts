@@ -32,7 +32,6 @@ import { AerSiteVisitTypeToLabelPipe, BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-opinion-statement-summary-template',
-  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -48,6 +47,7 @@ import { AerSiteVisitTypeToLabelPipe, BooleanToTextPipe } from '@shared/pipes';
     MonitoringPlanVersionSummaryTemplateComponent,
     GovukDatePipe,
   ],
+  standalone: true,
   templateUrl: './opinion-statement-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

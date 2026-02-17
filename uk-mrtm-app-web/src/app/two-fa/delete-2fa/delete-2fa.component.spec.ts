@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 
 import { UsersSecuritySetupService } from '@mrtm/api';
 
@@ -11,6 +10,7 @@ import { ErrorCodes } from '@netz/common/error';
 import { ActivatedRouteStub, mockClass } from '@netz/common/testing';
 
 import { AuthService } from '@core/services/auth.service';
+import { KeycloakService } from '@shared/services';
 import { Delete2faComponent } from '@two-fa/delete-2fa/delete-2fa.component';
 
 describe('Delete2faComponent', () => {
@@ -47,7 +47,7 @@ describe('Delete2faComponent', () => {
   });
 
   it('should logout user after successful 2fa deletion', () => {
-    usersSecuritySetupService.deleteOtpCredentials.mockReturnValue(of({}));
+    usersSecuritySetupService.deleteOtpCredentials.mockReturnValue(of({} as any));
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
     component.ngOnInit();
 

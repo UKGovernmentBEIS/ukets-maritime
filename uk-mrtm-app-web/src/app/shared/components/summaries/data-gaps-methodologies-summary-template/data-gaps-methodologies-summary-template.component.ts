@@ -19,7 +19,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-data-gaps-methodologies-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -31,6 +30,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
     RouterLink,
     BooleanToTextPipe,
   ],
+  standalone: true,
   templateUrl: './data-gaps-methodologies-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

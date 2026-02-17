@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-materiality-level-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     MaterialityLevelSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './materiality-level-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

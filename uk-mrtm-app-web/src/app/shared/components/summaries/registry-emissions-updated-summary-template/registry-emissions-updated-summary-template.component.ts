@@ -11,11 +11,11 @@ import {
 
 @Component({
   selector: 'mrtm-registry-emissions-updated-summary-template',
-  standalone: true,
   imports: [SummaryListComponent, SummaryListRowKeyDirective, SummaryListRowDirective, SummaryListRowValueDirective],
+  standalone: true,
   templateUrl: './registry-emissions-updated-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistryEmissionsUpdatedSummaryTemplateComponent {
-  data = input.required<RegistryUpdatedEmissionsEventSubmittedRequestActionPayload>();
+  readonly data = input.required<RegistryUpdatedEmissionsEventSubmittedRequestActionPayload>();
 }

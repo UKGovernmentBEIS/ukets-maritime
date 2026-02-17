@@ -12,7 +12,6 @@ import {
 
 @Component({
   selector: 'mrtm-monitoring-plan-version-summary-template',
-  standalone: true,
   imports: [
     GovukDatePipe,
     SummaryListComponent,
@@ -20,6 +19,7 @@ import {
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
   ],
+  standalone: true,
   templateUrl: './monitoring-plan-version-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

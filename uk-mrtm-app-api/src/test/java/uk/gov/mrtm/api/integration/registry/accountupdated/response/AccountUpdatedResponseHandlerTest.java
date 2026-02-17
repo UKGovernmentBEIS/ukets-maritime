@@ -7,14 +7,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
-import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
-import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.account.AccountHolderMessage;
 import uk.gov.netz.integration.model.account.AccountType;
@@ -51,7 +49,7 @@ class AccountUpdatedResponseHandlerTest {
     @Mock
     private MrtmAccountQueryService accountQueryService;
     @Mock
-    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
+    private NotifyRegistryEmailService notifyRegistryEmailService;
     @Mock
     private RegistryIntegrationEmailProperties emailProperties;
 
@@ -69,7 +67,7 @@ class AccountUpdatedResponseHandlerTest {
 
         service.handleResponse(event, CORRELATION_ID);
 
-        verifyNoInteractions(accountQueryService,  notificationEmailService, emailProperties);
+        verifyNoInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties);
     }
 
     @Test
@@ -87,7 +85,7 @@ class AccountUpdatedResponseHandlerTest {
 
         service.handleResponse(event, CORRELATION_ID);
 
-        verifyNoInteractions(accountQueryService,  notificationEmailService, emailProperties);
+        verifyNoInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties);
     }
 
     @Test
@@ -124,40 +122,33 @@ class AccountUpdatedResponseHandlerTest {
             .event(getAccountUpdatingEvent())
             .build();
 
-        Map<String, Object> infoTemplateParams = Map.of(
-            MrtmEmailNotificationTemplateConstants.EMITTER_ID, "businessId",
-            MrtmEmailNotificationTemplateConstants.ERRORS, infoErrors,
-            MrtmEmailNotificationTemplateConstants.CORRELATION_ID, CORRELATION_ID,
-            MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, "Maritime",
-            MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, "accountName",
-            MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, "Account updated",
-            MrtmEmailNotificationTemplateConstants.FIELDS, getEventFields());
-
-        Map<String, Object> actionTemplateParams = Map.of(
-            MrtmEmailNotificationTemplateConstants.EMITTER_ID, "businessId",
-            MrtmEmailNotificationTemplateConstants.ERRORS, actionErrors,
-            MrtmEmailNotificationTemplateConstants.CORRELATION_ID, CORRELATION_ID,
-            MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, "Maritime",
-            MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, "accountName",
-            MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, "Account updated",
-            MrtmEmailNotificationTemplateConstants.FIELDS, getEventFields());
-
         MrtmAccount account = MrtmAccount.builder()
             .businessId("businessId")
             .name("accountName")
             .competentAuthority(CompetentAuthorityEnum.ENGLAND)
             .build();
-        EmailData<EmailNotificationTemplateData> actionEmailData = EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
-                .templateParams(actionTemplateParams)
-                .build())
+
+        NotifyRegistryEmailServiceParams actionEmailParams = NotifyRegistryEmailServiceParams.builder()
+            .account(account)
+            .emitterId("businessId")
+            .correlationId(CORRELATION_ID)
+            .errorsForMail(actionErrors)
+            .recipient("test-email@example.com")
+            .isFordway(false)
+            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
+            .integrationPoint("Account updated")
+            .fields(getEventFields())
             .build();
-        EmailData<EmailNotificationTemplateData> infoEmailData = EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE)
-                .templateParams(infoTemplateParams)
-                .build())
+        NotifyRegistryEmailServiceParams infoEmailParams = NotifyRegistryEmailServiceParams.builder()
+            .account(account)
+            .emitterId("businessId")
+            .correlationId(CORRELATION_ID)
+            .errorsForMail(infoErrors)
+            .recipient("test-email@example.com")
+            .isFordway(false)
+            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE)
+            .integrationPoint("Account updated")
+            .fields(getEventFields())
             .build();
 
         when(accountQueryService.getAccountByRegistryId(Integer.valueOf(REGISTRY_ID))).thenReturn(account);
@@ -167,10 +158,10 @@ class AccountUpdatedResponseHandlerTest {
 
         verify(accountQueryService).getAccountByRegistryId(Integer.valueOf(REGISTRY_ID));
         verify(emailProperties).getEmail();
-        verify(notificationEmailService).notifyRecipient(actionEmailData, "test-email@example.com");
-        verify(notificationEmailService).notifyRecipient(infoEmailData, "test-email@example.com");
+        verify(notifyRegistryEmailService).notifyRegulator(actionEmailParams);
+        verify(notifyRegistryEmailService).notifyRegulator(infoEmailParams);
 
-        verifyNoMoreInteractions(accountQueryService,  notificationEmailService, emailProperties);
+        verifyNoMoreInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties);
     }
 
     private AccountUpdatingEvent getAccountUpdatingEvent() {

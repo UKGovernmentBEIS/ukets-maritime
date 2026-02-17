@@ -6,7 +6,7 @@ import {
   Component,
   ElementRef,
   inject,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -21,15 +21,15 @@ import { ADD_USER_AUTHORITY_PROVIDER, addFormProvider } from '@verifiers/add/add
 
 @Component({
   selector: 'mrtm-add',
-  standalone: true,
   imports: [WizardStepComponent, UserAccountFormComponent, ReactiveFormsModule, AsyncPipe],
-  providers: [addFormProvider],
+  standalone: true,
   templateUrl: './add.component.html',
+  providers: [addFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddComponent implements AfterViewInit {
   public readonly formGroup: FormGroup = inject<UntypedFormGroup>(ADD_USER_AUTHORITY_PROVIDER);
-  @ViewChild(WizardStepComponent, { read: ElementRef }) public wizardStep: ElementRef;
+  public readonly wizardStep = viewChild(WizardStepComponent, { read: ElementRef });
   private readonly store: VerifierUserStore = inject(VerifierUserStore);
   private readonly router: Router = inject(Router);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -63,7 +63,7 @@ export class AddComponent implements AfterViewInit {
         for (const { control, validationErrors } of submissionErrors) {
           this.formGroup.get(control).setErrors(validationErrors);
         }
-        this.wizardStep.nativeElement.querySelector('button[type="submit"]').click();
+        this.wizardStep().nativeElement.querySelector('button[type="submit"]').click();
 
         this.changeDetectorRef.detectChanges();
         this.store.setSubmissionErrors(null);

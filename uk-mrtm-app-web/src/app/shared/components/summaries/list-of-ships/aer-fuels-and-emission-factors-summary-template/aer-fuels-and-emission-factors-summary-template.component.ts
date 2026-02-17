@@ -9,7 +9,6 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-fuels-and-emission-factors-summary-template',
-  standalone: true,
   imports: [
     RouterLink,
     FuelOriginTitlePipe,
@@ -18,6 +17,7 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
     LinkDirective,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './aer-fuels-and-emission-factors-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

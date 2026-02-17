@@ -1,13 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { KeycloakService } from 'keycloak-angular';
-
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { GuidanceStore } from '@guidance/+state';
 import { GuidanceListComponent } from '@guidance/guidance-list';
 import { mockGuidanceSections } from '@guidance/testing/guidance-data.mock';
+import { KeycloakService } from '@shared/services';
 
 describe('GuidanceListComponent', () => {
   class Page extends BasePage<GuidanceListComponent> {}
@@ -44,11 +43,11 @@ describe('GuidanceListComponent', () => {
   });
 
   it('should display buttons group for regulators only', () => {
-    expect(page.query('mrtm-dropdown-button-group')).not.toBeInTheDocument();
+    expect(page.query('mrtm-dropdown-button-group')).toBeFalsy();
     guidanceStore.setIsEditable(true);
     fixture.detectChanges();
 
-    expect(page.query('mrtm-dropdown-button-group')).toBeInTheDocument();
+    expect(page.query('mrtm-dropdown-button-group')).toBeTruthy();
   });
 
   it('should display guidance sections only with documents for Operators and Verifiers', () => {

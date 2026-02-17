@@ -18,13 +18,13 @@ import { RecommendedImprovementsSummaryTemplateComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-recommended-improvements-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     RecommendedImprovementsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './recommended-improvements-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

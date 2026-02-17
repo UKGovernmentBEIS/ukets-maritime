@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { firstValueFrom, of } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 
 import {
   AuthoritiesService,
@@ -16,6 +15,7 @@ import {
 
 import {
   AuthStore,
+  initialState,
   selectIsLoggedIn,
   selectUser,
   selectUserProfile,
@@ -26,6 +26,7 @@ import { ActivatedRouteSnapshotStub, mockClass } from '@netz/common/testing';
 
 import { ConfigStore } from '@core/config';
 import { AuthService } from '@core/services/auth.service';
+import { KeycloakService } from '@shared/services';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -93,7 +94,7 @@ describe('AuthService', () => {
 
   it('should login', async () => {
     await service.login();
-    await service.loadUser();
+    service.loadUser();
 
     expect(keycloakService.login).toHaveBeenCalledTimes(1);
     expect(keycloakService.login).toHaveBeenCalledWith({});
@@ -133,7 +134,8 @@ describe('AuthService', () => {
   });
 
   it('should update all user info when checkUser is called', async () => {
-    keycloakService.isLoggedIn.mockReturnValueOnce(false);
+    expect(authStore.state).toEqual(initialState);
+    (keycloakService.isAuthenticated as any) = false;
 
     await expect(firstValueFrom(service.checkUser())).resolves.toBeUndefined();
 
@@ -155,7 +157,7 @@ describe('AuthService', () => {
 
     authStore.setIsLoggedIn(null);
     configStore.setState({ features: { terms: true } });
-    keycloakService.isLoggedIn.mockReturnValueOnce(true);
+    (keycloakService.isAuthenticated as any) = true;
 
     await expect(firstValueFrom(service.checkUser())).resolves.toBeUndefined();
 

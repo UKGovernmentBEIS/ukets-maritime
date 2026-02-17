@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-data-supplier-unappoint-success',
-  standalone: true,
   imports: [PanelComponent, LinkDirective, RouterLink],
+  standalone: true,
   templateUrl: './data-supplier-unappoint-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

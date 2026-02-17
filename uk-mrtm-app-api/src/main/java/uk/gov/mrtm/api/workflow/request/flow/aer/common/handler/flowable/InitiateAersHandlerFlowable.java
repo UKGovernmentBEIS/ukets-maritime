@@ -8,7 +8,6 @@ import org.flowable.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerCreationService;
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
-import uk.gov.netz.api.common.utils.ExceptionUtils;
 import uk.gov.netz.api.workflow.request.flow.common.constants.BpmnProcessConstants;
 
 import java.time.Year;
@@ -32,8 +31,7 @@ public class InitiateAersHandlerFlowable implements JavaDelegate {
         try {
             aerCreationService.createRequestAer(accountId, year);
         } catch (Exception ex) {
-            log.error("Could not create AER workflow for account with id '{}' failed with {}",
-                () -> accountId, () -> ExceptionUtils.getRootCause(ex).getMessage());
+            log.error("Could not create AER workflow for account with id '{}' failed with {}", accountId, ex);
         }
     }
 }

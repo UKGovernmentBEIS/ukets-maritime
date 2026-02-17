@@ -26,7 +26,6 @@ import { AerShipEmissionTableListItem, ShipEmissionTableListItem } from '@shared
 
 @Component({
   selector: 'mrtm-list-of-ships-table',
-  standalone: true,
   imports: [
     ButtonDirective,
     MultiSelectTableComponent,
@@ -42,6 +41,7 @@ import { AerShipEmissionTableListItem, ShipEmissionTableListItem } from '@shared
     InitialDataSourcePipe,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './list-of-ships-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

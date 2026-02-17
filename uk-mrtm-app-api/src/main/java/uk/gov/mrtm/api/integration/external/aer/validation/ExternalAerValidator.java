@@ -60,7 +60,7 @@ public class ExternalAerValidator {
         try {
             aerValidatorService.validateStagingAer(staging);
         } catch (Exception e) {
-            log.error("Error when validating staging AER: {}", e.getMessage());
+            log.error("Error when validating staging AER", e);
             throw new BusinessException(ErrorCode.INTERNAL_SERVER);
         }
     }

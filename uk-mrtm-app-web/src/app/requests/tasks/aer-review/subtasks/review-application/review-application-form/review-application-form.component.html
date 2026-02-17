@@ -1,6 +1,6 @@
 <mrtm-wizard-step
   [formGroup]="formGroup"
-  [heading]="title"
+  [heading]="title | reviewSubtaskTitle"
   [caption]="title"
   (formSubmit)="onSubmit()"
   [showReturnLink]="true">
@@ -21,21 +21,26 @@
           <ng-container govukConditionalContent>
             <h2 class="govuk-heading-m">Changes required by operator</h2>
             <ng-container formArrayName="requiredChanges">
-              @for (requiredChange of requiredChangesCtrl.controls; track requiredChange; let i = $index) {
-                <fieldset [formGroupName]="i" govukFieldset id="required-changes-{{ i + 1 }}">
+              @for (requiredChange of requiredChangesCtrl.controls; track requiredChange) {
+                <fieldset [formGroupName]="$index" govukFieldset id="required-changes-{{ $index + 1 }}">
                   <div class="govuk-grid-row">
                     <div class="govuk-grid-column-two-thirds">
-                      <legend govukLegend legendSize="small">Required change {{ i + 1 }}</legend>
+                      <legend govukLegend legendSize="small">Required change {{ $index + 1 }}</legend>
                     </div>
                     <div class="govuk-grid-column-one-third govuk-!-text-align-right">
                       @if (requiredChangesCtrl?.length > 1) {
-                        <button (click)="requiredChangesCtrl.removeAt(i)" govukSecondaryButton type="button">
+                        <button (click)="requiredChangesCtrl.removeAt($index)" govukSecondaryButton type="button">
                           Remove
                         </button>
                       }
                     </div>
                   </div>
-                  <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+                  <div
+                    label="Reason"
+                    [isLabelHidden]="true"
+                    govuk-textarea
+                    [maxLength]="10000"
+                    formControlName="reason"></div>
                   <br />
                   <mrtm-multiple-file-input
                     [baseDownloadUrl]="downloadUrl"

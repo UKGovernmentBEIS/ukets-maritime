@@ -6,9 +6,9 @@ import { NotProvidedDirective } from '@shared/directives';
 
 describe('NotProvidedDirective', () => {
   @Component({
-    template: '<div id="test" [notProvided]="null"></div>',
-    standalone: true,
     imports: [NotProvidedDirective],
+    standalone: true,
+    template: '<div id="test" [notProvided]="null"></div>',
   })
   class TestComponent {}
 
@@ -16,8 +16,6 @@ describe('NotProvidedDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
-
     fixture = TestBed.createComponent(TestComponent);
     fixture.detectChanges();
     directive = fixture.debugElement.query(By.directive(NotProvidedDirective)).injector.get(NotProvidedDirective);

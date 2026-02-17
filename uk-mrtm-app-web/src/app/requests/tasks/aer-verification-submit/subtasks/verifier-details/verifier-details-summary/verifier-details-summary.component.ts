@@ -15,7 +15,6 @@ import { VerifierDetailsSummaryTemplateComponent } from '@shared/components/summ
 
 @Component({
   selector: 'mrtm-verifier-details-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -23,6 +22,7 @@ import { VerifierDetailsSummaryTemplateComponent } from '@shared/components/summ
     VerifierDetailsSummaryTemplateComponent,
     PendingButtonDirective,
   ],
+  standalone: true,
   templateUrl: './verifier-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

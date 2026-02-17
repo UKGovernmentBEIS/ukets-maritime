@@ -1,17 +1,15 @@
 import { AsyncPipe } from '@angular/common';
 import {
-  AfterContentInit,
   ChangeDetectorRef,
   Component,
-  ContentChildren,
+  contentChildren,
+  effect,
   ElementRef,
   forwardRef,
-  HostBinding,
-  HostListener,
   inject,
-  Input,
+  input,
   OnInit,
-  QueryList,
+  untracked,
 } from '@angular/core';
 import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm, UntypedFormControl } from '@angular/forms';
 
@@ -22,23 +20,27 @@ import { FormService, GovukComponentsModule } from '@netz/govuk-components';
 
 import { MultiSelectItemComponent } from '@shared/components';
 import { DOCUMENT_EVENT } from '@shared/services';
-import { filter, skip, startWith, takeUntil, tap, withLatestFrom } from 'rxjs/operators';
+import { filter, skip, takeUntil, withLatestFrom } from 'rxjs/operators';
 
 /*
   eslint-disable
-  @typescript-eslint/no-unused-vars,
-  @typescript-eslint/no-empty-function,
   @angular-eslint/prefer-on-push-component-change-detection
 */
 @Component({
   selector: 'div[mrtm-multi-select]',
+  imports: [GovukComponentsModule, AsyncPipe],
   standalone: true,
   templateUrl: './multi-select.component.html',
   styleUrl: './multi-select.component.scss',
   providers: [DestroySubject],
-  imports: [GovukComponentsModule, AsyncPipe],
+  host: {
+    '[class.govuk-!-display-block]': 'govukDisplayBlock',
+    '[class.govuk-form-group]': 'govukFormGroupClass',
+    '[class.govuk-form-group--error]': 'govukFormGroupErrorClass',
+    '(keydown)': 'onKeyDown($event)',
+  },
 })
-export class MultiSelectComponent implements ControlValueAccessor, OnInit, AfterContentInit {
+export class MultiSelectComponent implements ControlValueAccessor, OnInit {
   readonly documentEvent = inject<Subject<FocusEvent | PointerEvent>>(DOCUMENT_EVENT);
   private readonly ngControl = inject(NgControl);
   private readonly formService = inject(FormService);
@@ -48,19 +50,21 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, After
   private readonly root = inject(FormGroupDirective, { optional: true })!;
   private readonly rootNgForm = inject(NgForm, { optional: true })!;
 
-  @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
-  @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;
-  @HostBinding('class.govuk-form-group--error')
+  readonly govukDisplayBlock = true;
+  readonly govukFormGroupClass = true;
+
   get govukFormGroupErrorClass(): boolean {
     return this.shouldDisplayErrors;
   }
 
-  @Input() label: string;
-  @Input() hint: string;
-  @Input() showErrors: boolean;
+  readonly label = input<string>();
+  readonly hint = input<string>();
+  readonly showErrors = input<boolean>();
 
-  @ContentChildren(forwardRef(() => MultiSelectItemComponent), { descendants: true })
-  options: QueryList<MultiSelectItemComponent>;
+  readonly options = contentChildren(
+    forwardRef(() => MultiSelectItemComponent),
+    { descendants: true },
+  );
 
   isOpen = new BehaviorSubject<boolean>(false);
   isDisabled: boolean;
@@ -71,14 +75,13 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, After
   private onChange: (value: any) => void;
 
   get shouldDisplayErrors(): boolean {
-    return this.control?.invalid && (!this.form || this.form.submitted || this.showErrors);
+    return this.control?.invalid && (!this.form || this.form.submitted || this.showErrors());
   }
 
   private get form(): FormGroupDirective | NgForm | null {
     return this.root ?? this.rootNgForm;
   }
 
-  @HostListener('keydown', ['$event'])
   onKeyDown(event: KeyboardEvent): void {
     if (event.code === 'Escape' && this.isOpen.getValue()) {
       this.isOpen.next(false);
@@ -89,6 +92,34 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, After
     const ngControl = this.ngControl;
 
     ngControl.valueAccessor = this;
+
+    effect(() => {
+      const options = this.options();
+
+      this.itemMap = options.reduce(
+        (result, option) => ({ ...result, [option.itemValue()]: option.label() }),
+        {} as { [key: string]: string },
+      );
+
+      options.forEach((option, index) => {
+        option.groupIdentifier = this.identifier;
+        option.index = index;
+
+        option.registerOnChange(() => {
+          this.currentValue = options.filter((opt) => opt.isChecked).map((opt) => opt.itemValue());
+          this.onChange(this.currentValue);
+        });
+
+        option.registerOnTouched(() => this.onBlur());
+        option.cdRef.markForCheck();
+      });
+
+      // Prevent this write/disable from creating unwanted reactive coupling
+      untracked(() => {
+        this.writeValue(this.control.value);
+        this.setDisabledState(this.control.disabled);
+      });
+    });
   }
 
   ngOnInit(): void {
@@ -130,35 +161,11 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, After
     this.isOpen.next(!this.isOpen.getValue());
   }
 
-  ngAfterContentInit(): void {
-    this.options.changes
-      .pipe(
-        takeUntil(this.destroy$),
-        startWith(this.options),
-        tap((options: QueryList<MultiSelectItemComponent>) => {
-          this.itemMap = options.reduce((result, option) => ({ ...result, [option.itemValue]: option.label }), {});
-          options.forEach((option, index) => {
-            option.groupIdentifier = this.identifier;
-            option.index = index;
-            option.registerOnChange(() => {
-              this.currentValue = options.filter((opt) => opt.isChecked).map((opt) => opt.itemValue);
-              this.onChange(this.currentValue);
-            });
-            option.registerOnTouched(() => this.onBlur());
-            option.cdRef.markForCheck();
-          });
-
-          this.writeValue(this.control.value);
-          this.setDisabledState(this.control.disabled);
-        }),
-      )
-      .subscribe();
-  }
-
   writeValue(value: any): void {
     this.currentValue = value;
-    if (this.options) {
-      this.options.forEach((option) => option.writeValue(value?.includes(option.itemValue) ?? false));
+    const options = this.options();
+    if (options) {
+      options.forEach((option) => option.writeValue(value?.includes(option.itemValue()) ?? false));
     }
   }
 
@@ -172,8 +179,9 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit, After
 
   setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
-    if (this.options) {
-      this.options.forEach((option) => option.setDisabledState(isDisabled));
+    const options = this.options();
+    if (options) {
+      options.forEach((option) => option.setDisabledState(isDisabled));
     }
   }
 }

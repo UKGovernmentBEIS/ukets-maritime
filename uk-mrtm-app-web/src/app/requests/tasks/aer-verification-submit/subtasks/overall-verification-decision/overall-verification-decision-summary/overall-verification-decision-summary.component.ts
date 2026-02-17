@@ -18,13 +18,13 @@ import { AerOverallVerificationDecisionSummaryTemplateComponent } from '@shared/
 
 @Component({
   selector: 'mrtm-overall-verification-decision-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     AerOverallVerificationDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './overall-verification-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

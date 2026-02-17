@@ -28,7 +28,6 @@ import { NON_COMPLIANCE_REASON_TYPES, NonComplianceReason } from '@shared/types'
 
 @Component({
   selector: 'mrtm-non-compliance-final-determination-details-form',
-  standalone: true,
   imports: [
     ConditionalContentDirective,
     DateInputComponent,
@@ -38,9 +37,10 @@ import { NON_COMPLIANCE_REASON_TYPES, NonComplianceReason } from '@shared/types'
     ReactiveFormsModule,
     WizardStepComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-final-determination-details-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceFinalDeterminationDetailsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceFinalDeterminationDetailsFormComponent {
   readonly map = nonComplianceFinalDeterminationDetailsMap;

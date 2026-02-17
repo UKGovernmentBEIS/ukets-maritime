@@ -16,12 +16,23 @@ export const determinationReasonFormProvider: Provider = {
     const determinationReason = store.select(doeSubmitQuery.selectDeterminationReason)();
 
     return fb.group({
-      type: fb.control<DoeDeterminationReason['type']>(determinationReason?.type ?? null, {
-        validators: [
-          GovukValidators.required(
-            'Select why are you determining the maritime emissions or emissions figure for surrender',
-          ),
-        ],
+      details: fb.group({
+        type: fb.control<DoeDeterminationReason['details']['type']>(determinationReason?.details?.type ?? null, {
+          validators: [
+            GovukValidators.required(
+              'Select why are you determining the maritime emissions or emissions figure for surrender',
+            ),
+          ],
+        }),
+        noticeText: fb.control<DoeDeterminationReason['details']['noticeText']>(
+          { value: determinationReason?.details?.noticeText ?? null, disabled: !determinationReason?.details?.type },
+          {
+            validators: [
+              GovukValidators.required('Enter a notice text'),
+              GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
+            ],
+          },
+        ),
       }),
       furtherDetails: fb.control<DoeDeterminationReason['furtherDetails']>(
         determinationReason?.furtherDetails ?? null,

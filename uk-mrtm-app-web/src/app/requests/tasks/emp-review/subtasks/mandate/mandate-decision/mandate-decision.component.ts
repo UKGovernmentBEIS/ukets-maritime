@@ -8,7 +8,7 @@ import { EmpOperatorDetails, RegisteredOwnerShipDetails } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { LinkDirective, WarningTextComponent } from '@netz/govuk-components';
+import { WarningTextComponent } from '@netz/govuk-components';
 
 import { empCommonQuery, EmpReviewTaskPayload } from '@requests/common';
 import {
@@ -31,22 +31,21 @@ import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/co
 
 @Component({
   selector: 'mrtm-mandate-decision',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
     ReviewDecisionComponent,
     WarningTextComponent,
-    LinkDirective,
     MandateSummaryTemplateComponent,
   ],
+  standalone: true,
+  templateUrl: './mandate-decision.component.html',
   providers: [
     reviewDecisionFormProvider(MANDATE_SUB_TASK, [
       validateAllIsmShipsHaveRegisteredOwner,
       hasNeedsReviewRegisteredOwners,
     ]),
   ],
-  templateUrl: './mandate-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateDecisionComponent {
@@ -64,7 +63,7 @@ export class MandateDecisionComponent {
     () => !isNil(this.mandate()?.registeredOwners.find((ro) => ro.needsReview === true)),
   );
 
-  public allShipsAssociated: Signal<boolean> = computed(() => {
+  public readonly allShipsAssociated: Signal<boolean> = computed(() => {
     const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
       (this.mandate()?.registeredOwners ?? [])

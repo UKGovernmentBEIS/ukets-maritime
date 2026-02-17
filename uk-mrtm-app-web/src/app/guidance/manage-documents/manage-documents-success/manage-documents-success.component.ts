@@ -7,8 +7,8 @@ import { guidanceQuery, GuidanceStore } from '@guidance/+state';
 
 @Component({
   selector: 'mrtm-manage-documents-success',
-  standalone: true,
   imports: [LinkDirective, PanelComponent, RouterLink],
+  standalone: true,
   templateUrl: './manage-documents-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

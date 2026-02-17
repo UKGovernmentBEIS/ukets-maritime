@@ -33,7 +33,6 @@ import { mergeDiffShips } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-list-of-ships-summary-template',
-  standalone: true,
   imports: [
     TableComponent,
     LinkDirective,
@@ -47,6 +46,7 @@ import { mergeDiffShips } from '@shared/utils';
     InitialDataSourcePipe,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './list-of-ships-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

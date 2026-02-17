@@ -4,8 +4,8 @@ import { WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-wait-regulator-determination',
-  standalone: true,
   imports: [WarningTextComponent],
+  standalone: true,
   template: `
     <govuk-warning-text [assistiveText]="null">Waiting for the regulator to make a determination</govuk-warning-text>
   `,

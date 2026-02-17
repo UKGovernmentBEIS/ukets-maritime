@@ -1,20 +1,22 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
 @Component({
   selector: 'netz-page-heading',
   standalone: true,
   template: `
-    @if (caption) {
-      <span [class]="'govuk-caption-' + size">{{ caption }}</span>
+    @if (caption(); as caption) {
+      <span [class]="captionClass()">{{ caption }}</span>
     }
-    <h1 [class]="'govuk-heading-' + size">
+    <h1 [class]="headingClass()">
       <ng-content></ng-content>
     </h1>
   `,
-  imports: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageHeadingComponent {
-  @Input() caption: string;
-  @Input() size: 'l' | 'xl' = 'l';
+  readonly caption = input<string>();
+  readonly size = input<'l' | 'xl'>('l');
+
+  readonly headingClass = computed(() => 'govuk-heading-' + this.size());
+  readonly captionClass = computed(() => 'govuk-caption-' + this.size());
 }

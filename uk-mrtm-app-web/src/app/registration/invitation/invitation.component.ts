@@ -11,6 +11,8 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
 
 @Component({
   selector: 'mrtm-invitation',
+  imports: [PanelComponent, LinkDirective, RouterLink, AsyncPipe, UserTypePipeWithArticle],
+  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -31,8 +33,6 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PanelComponent, LinkDirective, RouterLink, AsyncPipe, UserTypePipeWithArticle],
 })
 export class InvitationComponent {
   private readonly activatedRoute = inject(ActivatedRoute);

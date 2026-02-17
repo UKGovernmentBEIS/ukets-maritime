@@ -32,7 +32,6 @@ import { EmpVariationReviewDecisionDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-mandate-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
@@ -43,6 +42,7 @@ import { EmpVariationReviewDecisionDto } from '@shared/types';
     MandateSummaryTemplateComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './mandate-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

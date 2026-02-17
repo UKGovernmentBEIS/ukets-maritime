@@ -5,6 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -24,15 +25,22 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.Organisati
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
 import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
+import uk.gov.mrtm.api.integration.registry.regulatornotice.domain.MrtmRegulatorNoticeEvent;
+import uk.gov.mrtm.api.integration.registry.regulatornotice.domain.MrtmRegulatorNoticeNotificationType;
+import uk.gov.mrtm.api.integration.registry.regulatornotice.domain.RegulatorNoticeSubmittedEventDetails;
+import uk.gov.mrtm.api.integration.registry.regulatornotice.request.MaritimeRegulatorNoticeEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuanceRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.RegulatorNoticeEventAddRequestActionService;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
+import uk.gov.netz.api.files.documents.domain.FileDocument;
+import uk.gov.netz.api.files.documents.repository.FileDocumentRepository;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
@@ -43,7 +51,9 @@ import uk.gov.netz.api.workflow.request.flow.common.service.RequestAccountContac
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
+import uk.gov.netz.integration.model.regulatornotice.RegulatorNoticeEvent;
 
+import java.util.HexFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -110,6 +120,15 @@ class EmpIssuanceOfficialNoticeServiceTest {
     @Mock
     private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
 
+    @Mock
+    private MaritimeRegulatorNoticeEventListenerResolver registryNoticeEventListenerResolver;
+
+    @Mock
+    private FileDocumentRepository fileDocumentRepository;
+
+    @Mock
+    private RegulatorNoticeEventAddRequestActionService regulatorNoticeEventAddRequestActionService;
+
     @Test
     void generateGrantedOfficialNotice() throws InterruptedException, ExecutionException {
         String requestId = "1";
@@ -166,7 +185,8 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
         verify(fileDocumentGenerateServiceDelegator, times(1)).generateAndSaveFileDocumentAsync(
                 MrtmDocumentTemplateType.EMP_ISSUANCE_GRANTED, templateParams, fileName);
-        verifyNoInteractions(requestActionService);
+        verifyNoInteractions(requestActionService, fileDocumentRepository, registryNoticeEventListenerResolver,
+            regulatorNoticeEventAddRequestActionService);
     }
 
     @Test
@@ -223,7 +243,8 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(documentTemplateOfficialNoticeParamsProvider, times(1)).constructTemplateParams(documentTemplateSourceParams);
         verify(fileDocumentGenerateServiceDelegator, times(1)).generateAndSaveFileDocument(
                 MrtmDocumentTemplateType.EMP_ISSUANCE_DEEMED_WITHDRAWN, templateParams, fileName);
-        verifyNoInteractions(requestActionService);
+        verifyNoInteractions(requestActionService, fileDocumentRepository, registryNoticeEventListenerResolver,
+            regulatorNoticeEventAddRequestActionService);
         assertThat(requestPayload.getOfficialNotice()).isEqualTo(officialDocFileInfoDTO);
     }
 
@@ -299,7 +320,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
         verifyNoMoreInteractions(requestService, decisionNotificationUsersService,
             officialNoticeSendService, empQueryService, publisher, requestActionService, accountQueryService);
-
+        verifyNoInteractions(fileDocumentRepository, registryNoticeEventListenerResolver, regulatorNoticeEventAddRequestActionService);
         assertEquals(accountId, empApprovedEventArgumentCaptor.getValue().getAccountId());
         assertEquals(emissionsMonitoringPlan, empApprovedEventArgumentCaptor.getValue().getEmissionsMonitoringPlan());
     }
@@ -377,12 +398,12 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(accountUpdatedEventRequestActionService, times(accountUpdateSentToRegistryInvocations)).addRequestAction(
             request, accountUpdatedSubmittedEventDetails, organisationStructure, null);
 
-        verifyNoInteractions(requestActionService);
 
         verifyNoMoreInteractions(accountUpdatedRegistryListener, accountUpdatedEventRequestActionService,
             empQueryService, requestService, decisionNotificationUsersService, officialNoticeSendService,
             accountQueryService);
-        verifyNoInteractions(publisher);
+        verifyNoInteractions(publisher, requestActionService, fileDocumentRepository, registryNoticeEventListenerResolver,
+            regulatorNoticeEventAddRequestActionService);
     }
 
     public static Stream<Arguments> sendOfficialNoticeAlreadySentToRegistryScenarios() {
@@ -390,6 +411,72 @@ class EmpIssuanceOfficialNoticeServiceTest {
             Arguments.of(true, 0),
             Arguments.of(false, 1)
         );
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans =  {true, false})
+    void sendOfficialNotice_withdrawn(boolean notifiedRegistry) {
+        FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
+        List<FileInfoDTO> attachments = List.of(officialDocFileInfoDTO);
+        String requestId = "1";
+        Long accountId = 1L;
+        String registryEmail = "registry@pmrv.uk";
+        String decisionNotificationUserEmail = "operator1@email";
+        EmpIssuanceDeterminationType determinationType = EmpIssuanceDeterminationType.DEEMED_WITHDRAWN;
+
+        DecisionNotification decisionNotification = DecisionNotification.builder()
+            .operators(Set.of("operatorUser"))
+            .signatory("signatoryUser")
+            .build();
+
+        String regulatorReviewer = "regulatorReviewer";
+        Request request = Request.builder()
+            .id(requestId)
+            .requestResources(List.of(RequestResource.builder()
+                .resourceType(ResourceType.ACCOUNT)
+                .resourceId(accountId.toString())
+                .build()))
+            .payload(EmpIssuanceRequestPayload.builder()
+                .decisionNotification(decisionNotification)
+                .regulatorReviewer(regulatorReviewer)
+                .accountOpeningEventSentToRegistry(false)
+                .officialNotice(officialDocFileInfoDTO)
+                .build())
+            .build();
+        byte[] file = HexFormat.of().parseHex("e04fd020ea3a6910a2d808002b30309d");
+        MrtmRegulatorNoticeEvent mrtmRegulatorNoticeEvent = MrtmRegulatorNoticeEvent.builder()
+            .accountId(accountId)
+            .fileName(officialDocFileInfoDTO.getName())
+            .file(file)
+            .notificationType(MrtmRegulatorNoticeNotificationType.EMP_WITHDRAWN)
+            .build();
+        RegulatorNoticeSubmittedEventDetails submittedEventDetails = RegulatorNoticeSubmittedEventDetails.builder()
+            .notifiedRegistry(notifiedRegistry)
+            .data(RegulatorNoticeEvent.builder().registryId("321").build())
+            .build();
+
+        List<String> ccRecipientsEmails = List.of(decisionNotificationUserEmail);
+
+        when(registryNoticeEventListenerResolver.onRegulatorNoticeEvent(mrtmRegulatorNoticeEvent))
+            .thenReturn(submittedEventDetails);
+        when(requestService.findRequestById(requestId)).thenReturn(request);
+        when(registryConfig.getEmail()).thenReturn(registryEmail);
+        when(fileDocumentRepository.findByUuid(officialDocFileInfoDTO.getUuid())).thenReturn(Optional.ofNullable(FileDocument.builder().fileContent(file).build()));
+        when(decisionNotificationUsersService.findUserEmails(decisionNotification)).thenReturn(List.of(decisionNotificationUserEmail));
+
+        empIssuanceOfficialNoticeService.sendOfficialNotice(requestId, determinationType);
+
+        verify(requestService, times(1)).findRequestById(requestId);
+        verify(registryNoticeEventListenerResolver).onRegulatorNoticeEvent(mrtmRegulatorNoticeEvent);
+        verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
+        verify(fileDocumentRepository, times(1)).findByUuid(officialDocFileInfoDTO.getUuid());
+        verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
+        verify(regulatorNoticeEventAddRequestActionService)
+            .addRequestAction(request, submittedEventDetails, officialDocFileInfoDTO, MrtmRegulatorNoticeNotificationType.EMP_WITHDRAWN);
+
+        verifyNoMoreInteractions(requestService, decisionNotificationUsersService, regulatorNoticeEventAddRequestActionService,
+            officialNoticeSendService, requestActionService, fileDocumentRepository, registryNoticeEventListenerResolver);
+        verifyNoInteractions(empQueryService, publisher, accountQueryService);
     }
 
     private static Stream<Arguments> provideSendOfficialNoticeTestArgs() {

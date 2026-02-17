@@ -13,8 +13,8 @@ import {
 
 @Component({
   selector: 'mrtm-uncorrected-items-list-template',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, TableComponent],
+  standalone: true,
   templateUrl: './uncorrected-items-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

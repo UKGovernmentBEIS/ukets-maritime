@@ -1,14 +1,6 @@
 import { Component, DoCheck, effect, inject, input, InputSignal, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import {
-  ControlContainer,
-  ControlValueAccessor,
-  FormGroup,
-  NgControl,
-  ReactiveFormsModule,
-  ValidationErrors,
-  ValidatorFn,
-} from '@angular/forms';
+import { ControlValueAccessor, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { isNil } from 'lodash-es';
 
@@ -17,7 +9,6 @@ import {
   ErrorMessageComponent,
   FieldsetDirective,
   FieldsetHintDirective,
-  FormService,
   GovukValidators,
   LegendDirective,
   LegendSizeType,
@@ -37,10 +28,10 @@ import {
  */
 @Component({
   selector: 'div[mrtm-time-input]',
-  standalone: true,
   imports: [ErrorMessageComponent, ReactiveFormsModule, FieldsetHintDirective, LegendDirective, FieldsetDirective],
-  providers: [timeInputFormProvider],
+  standalone: true,
   templateUrl: './time-input.component.html',
+  providers: [timeInputFormProvider],
 })
 export class TimeInputComponent extends FormInput implements ControlValueAccessor, OnInit, DoCheck {
   private onChange: (value: Partial<TimeInputFormModel>) => void;
@@ -54,10 +45,7 @@ export class TimeInputComponent extends FormInput implements ControlValueAccesso
   public readonly isRequired: InputSignal<boolean> = input<boolean>();
 
   constructor() {
-    const ngControl = inject(NgControl, { self: true, optional: true })!;
-    const formService = inject(FormService);
-    const container = inject(ControlContainer, { optional: true })!;
-    super(ngControl, formService, container);
+    super();
 
     effect(() => {
       const value = this.currentFormValue();

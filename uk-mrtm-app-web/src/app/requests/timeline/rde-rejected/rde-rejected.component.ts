@@ -8,8 +8,8 @@ import { RdeRejectedSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-rde-rejected',
-  standalone: true,
   imports: [RdeRejectedSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './rde-rejected.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -18,13 +18,13 @@ import { NonComplianceFinalDeterminationDetailsSummaryTemplateComponent } from '
 
 @Component({
   selector: 'mrtm-non-compliance-final-determination-details-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceFinalDeterminationDetailsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-final-determination-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

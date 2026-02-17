@@ -39,7 +39,6 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-emissions-calculations',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -51,6 +50,7 @@ import BigNumber from 'bignumber.js';
     WarningTextComponent,
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './aer-emissions-calculations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -84,7 +84,7 @@ export class AerEmissionsCalculationsComponent {
     return calculations;
   });
 
-  public ship: Signal<AerShipEmissions> = computed(() =>
+  public readonly ship: Signal<AerShipEmissions> = computed(() =>
     this.store.select(this.relatedShipSelector(this.objectId()))(),
   );
 

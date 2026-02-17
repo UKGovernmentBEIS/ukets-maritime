@@ -8,9 +8,9 @@ import { existingControlContainer } from '@shared/providers';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-emp-procedure-form',
-  standalone: true,
   imports: [TextareaComponent, ReactiveFormsModule, TextInputComponent],
-  viewProviders: [existingControlContainer],
+  standalone: true,
   templateUrl: './emp-procedure-form.component.html',
+  viewProviders: [existingControlContainer],
 })
 export class EmpProcedureFormComponent {}

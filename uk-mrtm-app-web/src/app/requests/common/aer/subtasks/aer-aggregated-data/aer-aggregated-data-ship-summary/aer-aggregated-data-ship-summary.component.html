@@ -1,8 +1,6 @@
 <mrtm-notification-banner />
 <netz-page-heading
-  [caption]="
-    !aggregatedData()?.fromFetch ? wizardMap.annualAggregatedEmissions.caption + ' ' + ship()?.details?.name : undefined
-  ">
+  [caption]="!aggregatedData()?.fromFetch ? `${wizardMap.annualAggregatedEmissions.caption} ${ship()?.details?.name}` : undefined">
   @if (aggregatedData()?.fromFetch || aggregatedData()?.dataInputType === 'EXTERNAL_PROVIDER') {
     Aggregated data for {{ ship()?.details?.name }}
   } @else {

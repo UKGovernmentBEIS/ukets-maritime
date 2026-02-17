@@ -13,8 +13,8 @@ import { AerAggregatedDataShipSummaryTemplateComponent } from '@shared/component
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-ship-submitted',
-  standalone: true,
   imports: [PageHeadingComponent, RouterLink, LinkDirective, AerAggregatedDataShipSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './aer-aggregated-data-ship-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

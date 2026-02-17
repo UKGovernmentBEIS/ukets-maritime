@@ -122,6 +122,8 @@
                     {{ row[column.field] }}
                   } @else {
                     <div
+                      label="Select user type"
+                      [isLabelHidden]="true"
                       [options]="userTypes"
                       formControlName="roleCode"
                       govuk-select
@@ -135,6 +137,8 @@
                 @if (row.authorityStatus !== 'PENDING') {
                   <ng-container [formGroupName]="index">
                     <div
+                      label="Select authority status"
+                      [isLabelHidden]="true"
                       [options]="row.authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
                       formControlName="authorityStatus"
                       govuk-select

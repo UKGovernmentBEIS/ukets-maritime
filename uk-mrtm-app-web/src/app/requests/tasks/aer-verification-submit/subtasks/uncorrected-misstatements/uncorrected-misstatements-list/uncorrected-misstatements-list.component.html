@@ -5,7 +5,7 @@
 @if (issues()?.length) {
   <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
 } @else {
-  <a govukButton [routerLink]="['../' + wizardStep.ITEM_FORM_ADD]">Add new item</a>
+  <a govukButton [routerLink]="[`../${wizardStep.ITEM_FORM_ADD}`]">Add new item</a>
 }
 
 <div>

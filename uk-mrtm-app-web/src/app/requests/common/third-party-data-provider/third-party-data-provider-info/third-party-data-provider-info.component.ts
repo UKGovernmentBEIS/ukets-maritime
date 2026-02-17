@@ -18,8 +18,8 @@ import {
 
 @Component({
   selector: 'mrtm-third-party-data-provider-info',
-  standalone: true,
   imports: [ButtonDirective, DetailsComponent, GovukDatePipe, RouterLink],
+  standalone: true,
   templateUrl: './third-party-data-provider-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

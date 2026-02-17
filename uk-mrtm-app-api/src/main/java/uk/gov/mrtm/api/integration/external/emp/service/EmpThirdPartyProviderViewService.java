@@ -3,7 +3,7 @@ package uk.gov.mrtm.api.integration.external.emp.service;
 import lombok.RequiredArgsConstructor;
 import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
-import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
+import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderStagingDetailsDTO;
 import uk.gov.mrtm.api.integration.external.common.mapper.ThirdPartyDataCommonMapper;
 import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderService;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
@@ -21,7 +21,7 @@ public class EmpThirdPartyProviderViewService implements ThirdPartyProviderServi
     private final StagingEmissionsMonitoringPlanRepository stagingEmpRepository;
     private final ThirdPartyDataCommonMapper thirdPartyDataCommonMapper = Mappers.getMapper(ThirdPartyDataCommonMapper.class);
 
-    public ThirdPartyDataProviderDTO getThirdPartyDataProviderInfo(Long accountId, RequestTaskPayload requestTaskPayload) {
+    public ThirdPartyDataProviderStagingDetailsDTO getThirdPartyDataProviderInfo(Long accountId, RequestTaskPayload requestTaskPayload) {
         Optional<StagingEmissionsMonitoringPlanEntity> stagingEntity =
             stagingEmpRepository.findByAccountId(accountId);
 

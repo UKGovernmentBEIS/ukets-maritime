@@ -17,8 +17,8 @@ import { PaymentDetailsSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-payment-details',
-  standalone: true,
   imports: [PaymentDetailsSummaryTemplateComponent, ButtonDirective, RouterLink, I18nSelectPipe],
+  standalone: true,
   templateUrl: './payment-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

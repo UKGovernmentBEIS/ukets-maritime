@@ -3,7 +3,7 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
 
-import { combineLatest, filter, map, Observable, of, switchMap, takeUntil } from 'rxjs';
+import { combineLatest, filter, map, Observable, of, switchMap, take, takeUntil } from 'rxjs';
 
 import { AuthStore, selectIsLoggedIn, selectUserState } from '@netz/common/auth';
 import { BackLinkComponent, BreadcrumbsComponent } from '@netz/common/navigation';
@@ -37,9 +37,6 @@ interface Permissions {
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-root',
-  templateUrl: './app.component.html',
-  providers: [DestroySubject],
-  standalone: true,
   imports: [
     CookiesContainerComponent,
     HeaderComponent,
@@ -58,6 +55,9 @@ interface Permissions {
     AsyncPipe,
     IncorporateHeaderComponent,
   ],
+  standalone: true,
+  templateUrl: './app.component.html',
+  providers: [DestroySubject],
 })
 export class AppComponent implements OnInit {
   private readonly authStore = inject(AuthStore);
@@ -75,7 +75,10 @@ export class AppComponent implements OnInit {
   isGatewayServiceEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('serviceGatewayEnabled'));
   permissions$: Observable<null | Permissions>;
   isLoggedIn$ = this.authStore.rxSelect(selectIsLoggedIn).pipe(takeUntil(this.destroy$));
-  showCookiesBanner$ = this.cookiesService.accepted$.pipe(map((cookiesAccepted) => !cookiesAccepted));
+  showCookiesBanner$ = this.cookiesService.accepted$.pipe(
+    map((cookiesAccepted) => !cookiesAccepted),
+    take(1),
+  );
   private readonly userState$ = this.authStore.rxSelect(selectUserState).pipe(takeUntil(this.destroy$));
   private readonly roleType$ = this.userState$.pipe(
     map((userState) => userState?.roleType),

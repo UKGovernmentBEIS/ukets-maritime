@@ -14,7 +14,6 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-emissions-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ListOfShipsSummaryTemplateComponent,
@@ -23,6 +22,7 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components';
     RouterLink,
     LinkDirective,
   ],
+  standalone: true,
   templateUrl: './aer-emissions-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

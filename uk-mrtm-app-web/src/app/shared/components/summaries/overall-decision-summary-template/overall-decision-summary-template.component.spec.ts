@@ -20,12 +20,15 @@ describe('OverallDecisionSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(OverallDecisionSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.determination = {
+    fixture.componentRef.setInput('determination', {
       type: 'APPROVED',
       reason: 'Test',
-    };
-    component.wizardStep = { OVERALL_DECISION_ACTIONS: 'actions', OVERALL_DECISION_QUESTION: 'question' };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('wizardStep', {
+      OVERALL_DECISION_ACTIONS: 'actions',
+      OVERALL_DECISION_QUESTION: 'question',
+    });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });

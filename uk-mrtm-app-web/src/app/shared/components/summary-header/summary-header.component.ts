@@ -1,4 +1,4 @@
-import { Component, EventEmitter, HostBinding, Input, Output } from '@angular/core';
+import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { GovukComponentsModule } from '@netz/govuk-components';
@@ -6,12 +6,13 @@ import { GovukComponentsModule } from '@netz/govuk-components';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'h2[mrtm-summary-header]',
+  imports: [RouterLink, GovukComponentsModule],
   standalone: true,
   template: `
     <ng-content></ng-content>
-    @if (changeRoute) {
+    @if (changeRoute()) {
       <a
-        [routerLink]="changeRoute"
+        [routerLink]="changeRoute()"
         (click)="changeClick.emit($event)"
         govukLink
         class="govuk-!-font-size-19 govuk-!-font-weight-regular float-right">
@@ -19,13 +20,13 @@ import { GovukComponentsModule } from '@netz/govuk-components';
       </a>
     }
   `,
-  imports: [RouterLink, GovukComponentsModule],
+  host: { '[class.govuk-clearfix]': 'clearfix' },
 })
 export class SummaryHeaderComponent {
-  @Input() changeRoute: string | any[];
-  @Output() readonly changeClick = new EventEmitter<Event>();
+  readonly changeRoute = input<string | any[]>();
+  readonly changeClick = output<Event>();
 
-  @HostBinding('class.govuk-clearfix') get clearfix() {
+  get clearfix() {
     return true;
   }
 }

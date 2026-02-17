@@ -8,8 +8,8 @@ import { AccountClosureDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-account-closure-submitted',
-  standalone: true,
   imports: [AccountClosureSubmittedSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './account-closure-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

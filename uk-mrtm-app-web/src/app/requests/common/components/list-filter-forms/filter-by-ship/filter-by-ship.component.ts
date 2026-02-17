@@ -13,8 +13,8 @@ import { AutocompleteSelectComponent } from '@shared/components/autocomplete-sel
 
 @Component({
   selector: 'mrtm-filter-by-ship',
-  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, ButtonDirective, AutocompleteSelectComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './filter-by-ship.component.html',
   styleUrl: './filter-by-ship.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

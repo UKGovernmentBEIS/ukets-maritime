@@ -23,10 +23,10 @@ import { LocationStateFormComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-operator-details-step',
-  standalone: true,
   imports: [WizardStepComponent, TextInputComponent, ReactiveFormsModule, LocationStateFormComponent],
-  providers: [operatorDetailsStepFormProvider],
+  standalone: true,
   templateUrl: './operator-details-step.component.html',
+  providers: [operatorDetailsStepFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsStepComponent {
@@ -36,7 +36,7 @@ export class OperatorDetailsStepComponent {
   private readonly accountService = inject(MaritimeAccountsService);
 
   readonly formGroup = inject<FormGroup>(TASK_FORM);
-  readonly accountId = this.store.select(requestTaskQuery.selectRequestInfo)().accountId;
+  readonly accountId = this.store.select(requestTaskQuery.selectRequestTaskAccountId)();
   readonly operatorDetailsMap = operatorDetailsMap;
   readonly existImoNumber = toSignal<boolean>(this.imoNumberCtrl.valueChanges, {
     initialValue: this.imoNumberCtrl.value,

@@ -62,6 +62,9 @@ public class AccountCreatedNotifyRegistryService {
                 .accountHolder(buildAccountHolder(event.getEmissionsMonitoringPlan(), account.getName()))
                 .build();
 
+        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(),
+            INTEGRATION_POINT_KEY, "Sending account created event to registry " + accountOpeningEvent);
+
         accountCreatedSendToRegistryProducer.produce(accountOpeningEvent,
                 accountCreatedKafkaTemplate);
 

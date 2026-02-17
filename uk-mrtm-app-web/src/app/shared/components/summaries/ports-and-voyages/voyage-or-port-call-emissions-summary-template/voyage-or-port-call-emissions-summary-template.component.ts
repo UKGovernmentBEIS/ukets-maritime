@@ -22,7 +22,6 @@ import { AerJourneyTypeEnum, AerVoyageOrPortCalculationsSummaryItemDto } from '@
 
 @Component({
   selector: 'mrtm-voyage-or-port-call-emissions-summary-template',
-  standalone: true,
   imports: [
     TableComponent,
     BigNumberPipe,
@@ -35,6 +34,7 @@ import { AerJourneyTypeEnum, AerVoyageOrPortCalculationsSummaryItemDto } from '@
     TitleCasePipe,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './voyage-or-port-call-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

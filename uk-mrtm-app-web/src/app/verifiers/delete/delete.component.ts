@@ -18,7 +18,6 @@ import { saveNotFoundVerifierError } from '@verifiers/errors/business-error';
 
 @Component({
   selector: 'mrtm-delete',
-  standalone: true,
   imports: [
     ButtonDirective,
     LinkDirective,
@@ -29,6 +28,7 @@ import { saveNotFoundVerifierError } from '@verifiers/errors/business-error';
     AsyncPipe,
     UserFullNamePipe,
   ],
+  standalone: true,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

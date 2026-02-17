@@ -8,18 +8,18 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Operator name</dt>
       <dd govukSummaryListRowValue>{{ accountInfo.name }}</dd>
-      @if (editable) {
+      @if (editable()) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+          <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
         </dd>
       }
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>SOP ID</dt>
       <dd govukSummaryListRowValue>{{ accountInfo.sopId }}</dd>
-      @if (editable) {
+      @if (editable()) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+          <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
         </dd>
       }
     </div>
@@ -41,9 +41,9 @@
         <div>{{ accountInfo.postcode }}</div>
         <div>{{ accountInfo.country | country }}</div>
       </dd>
-      @if (editable) {
+      @if (editable()) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+          <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
         </dd>
       }
     </div>
@@ -67,9 +67,9 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>First year of reporting obligation</dt>
       <dd govukSummaryListRowValue>{{ accountInfo.firstMaritimeActivityDate | govukDate }}</dd>
-      @if (editable) {
+      @if (editable()) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+          <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
         </dd>
       }
     </div>

@@ -24,7 +24,6 @@ import { ReductionClaimDetailsListItemDto, SubTaskListMap, WithNeedsReview } fro
 
 @Component({
   selector: 'mrtm-reduction-claim-details',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -34,6 +33,7 @@ import { ReductionClaimDetailsListItemDto, SubTaskListMap, WithNeedsReview } fro
     WarningTextComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './reduction-claim-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
-import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
 
 import { ForgotPasswordService } from '@mrtm/api';
 
@@ -62,7 +61,6 @@ describe('ResetPasswordComponent', () => {
         ResetPasswordStore,
         { provide: ForgotPasswordService, useValue: forgotPasswordService },
         { provide: PasswordService, useValue: passwordService },
-        provideZxvbnServiceForPSM(),
       ],
     }).compileComponents();
   });
@@ -88,7 +86,7 @@ describe('ResetPasswordComponent', () => {
   });
 
   it('should get password from store', () => {
-    forgotPasswordService.verifyToken.mockReturnValue(of({ email: 'test@mail.com' }));
+    forgotPasswordService.verifyToken.mockReturnValue(of({ email: 'test@mail.com' } as any));
 
     component.ngOnInit();
     fixture.detectChanges();

@@ -43,14 +43,14 @@ describe('VariationDetailsSummaryFormComponent', () => {
     expect(page.heading1.textContent).toEqual(
       'Enter a summary of the changes for emissions monitoring plan variation log',
     );
-    expect(page.errorSummary).not.toBeInTheDocument();
+    expect(page.errorSummary).toBeFalsy();
   });
 
   it('Should display correct validations', () => {
     page.submitButton.click();
     fixture.detectChanges();
 
-    expect(page.errorSummary).toBeInTheDocument();
+    expect(page.errorSummary).toBeTruthy();
     expect(page.errorSummaryListContents).toEqual(['Enter a summary']);
   });
 

@@ -10,8 +10,8 @@ import { BigNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-aer-total-emissions-summary-template',
-  standalone: true,
   imports: [TableComponent, BigNumberPipe],
+  standalone: true,
   templateUrl: './aer-total-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

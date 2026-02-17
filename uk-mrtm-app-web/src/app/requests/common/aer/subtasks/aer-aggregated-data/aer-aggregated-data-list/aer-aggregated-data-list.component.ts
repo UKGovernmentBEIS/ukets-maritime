@@ -29,7 +29,6 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -43,6 +42,7 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
     WarningTextComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

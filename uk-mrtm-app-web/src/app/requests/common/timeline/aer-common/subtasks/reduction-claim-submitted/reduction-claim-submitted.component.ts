@@ -13,7 +13,6 @@ import {
 
 @Component({
   selector: 'mrtm-reduction-claim-submitted',
-  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
@@ -21,6 +20,7 @@ import {
     ReductionClaimDetailsSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './reduction-claim-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

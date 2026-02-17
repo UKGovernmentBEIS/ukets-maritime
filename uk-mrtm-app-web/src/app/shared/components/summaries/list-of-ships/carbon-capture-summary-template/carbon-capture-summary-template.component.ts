@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpShipEmissions } from '@mrtm/api';
@@ -18,7 +18,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-carbon-capture-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     LinkDirective,
@@ -30,13 +29,14 @@ import { AttachedFile } from '@shared/types';
     BooleanToTextPipe,
     SummaryDownloadFilesComponent,
   ],
+  standalone: true,
   templateUrl: './carbon-capture-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarbonCaptureSummaryTemplateComponent {
-  @Input({ required: true }) data: EmpShipEmissions['carbonCapture'];
-  @Input() changeLink: string;
-  @Input() isEditable: boolean = false;
-  @Input() queryParams: Params = {};
-  @Input() files: AttachedFile[];
+  readonly data = input.required<EmpShipEmissions['carbonCapture']>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input<boolean>(false);
+  readonly queryParams = input<Params>({});
+  readonly files = input<AttachedFile[]>();
 }

@@ -4,6 +4,17 @@
   </netz-page-heading>
 </div>
 <mrtm-list-of-ships-summary-template [data]="ships" editUrl="./ships" />
+
+@if (reviewGroupDecision(); as reviewGroupDecision) {
+  <mrtm-review-decision-summary-template [reviewDecision]="reviewGroupDecision" [isPermittedUser]="isRegulator()" />
+}
+
+@if (isVariationRegulator()) {
+  <mrtm-variation-regulator-decision-partial-summary-template
+    [variationDecisionDetails]="regulatorLedReason()"
+    [showNotes]="isRegulator()" />
+}
+
 <div>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />

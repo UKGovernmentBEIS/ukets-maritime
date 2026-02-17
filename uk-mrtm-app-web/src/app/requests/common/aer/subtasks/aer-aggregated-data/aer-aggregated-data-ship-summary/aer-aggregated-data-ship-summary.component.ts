@@ -29,7 +29,6 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-ship-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -40,6 +39,7 @@ import BigNumber from 'bignumber.js';
     WarningTextComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-ship-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

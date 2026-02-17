@@ -19,10 +19,10 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
 
 @Component({
   selector: 'mrtm-data-supplier-appoint',
-  standalone: true,
   imports: [WizardStepComponent, SelectComponent, ReactiveFormsModule],
-  providers: [provideDataSupplierAppointForm],
+  standalone: true,
   templateUrl: './data-supplier-appoint.component.html',
+  providers: [provideDataSupplierAppointForm],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataSupplierAppointComponent {

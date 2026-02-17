@@ -9,7 +9,7 @@
       [reviewDecision]="amendsDecision.decision" />
   }
 
-  <div govuk-checkboxes formControlName="accepted">
+  <div label="Confirmation" [isLabelHidden]="true" govuk-checkboxes formControlName="accepted">
     <govuk-checkbox label="I have made the changes and want to mark this task as complete"></govuk-checkbox>
   </div>
 </mrtm-wizard-step>

@@ -7,6 +7,8 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
 
 @Component({
   selector: 'mrtm-success',
+  imports: [PanelComponent, ButtonDirective],
+  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -23,8 +25,6 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PanelComponent, ButtonDirective],
 })
 export class SuccessComponent {
   readonly authService = inject(AuthService);

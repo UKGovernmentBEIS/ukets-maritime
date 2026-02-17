@@ -20,20 +20,20 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-greenhouse-gas',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     GreenhousesSummaryTemplateComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-greenhouse-gas.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewGreenhouseGasComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     greenhouseGas: this.store.select(empCommonQuery.selectGreenhouseGas)(),
     originalGreenhouseGas: this.store.select(
       empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan,

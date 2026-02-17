@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { of } from 'rxjs';
@@ -35,7 +35,8 @@ describe('CountiesDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    template: '<div govuk-select mrtmCounties [formControl]="county" label="County"> </div>',
+    imports: [SelectComponent, CountiesDirective, ReactiveFormsModule],
+    template: '<div govuk-select mrtmCounties [formControl]="county" label="County"></div>',
   })
   class TestComponent {
     county = new FormControl();
@@ -43,9 +44,7 @@ describe('CountiesDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, SelectComponent, CountiesDirective],
-      declarations: [TestComponent],
-      providers: [{ provide: CountyService, useValue: mockCountyService }],
+      providers: [{ provide: CountyService, useValue: mockCountyService }, ControlContainer],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

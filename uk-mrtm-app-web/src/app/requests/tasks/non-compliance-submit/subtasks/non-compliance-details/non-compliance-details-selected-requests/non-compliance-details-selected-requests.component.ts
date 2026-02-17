@@ -23,11 +23,11 @@ import { RequestNamePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-non-compliance-details-selected-requests',
-  standalone: true,
   imports: [ButtonDirective, SelectComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './non-compliance-details-selected-requests.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceDetailsSelectedRequestsProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceDetailsSelectedRequestsComponent {
   readonly map = nonComplianceDetailsMap;

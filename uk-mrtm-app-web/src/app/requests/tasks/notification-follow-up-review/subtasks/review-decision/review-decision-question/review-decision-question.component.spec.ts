@@ -90,7 +90,7 @@ describe('ReviewDecisionQuestionComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual('Review follow-up response');
+      expect(page.heading1.textContent).toEqual('Review follow-up response');
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -118,7 +118,7 @@ describe('ReviewDecisionQuestionComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual('Review follow-up response');
+      expect(page.heading1.textContent).toEqual('Review follow-up response');
       expect(page.typeRadios[1].checked).toBeTruthy();
       expect(page.submitButton).toBeTruthy();
     });

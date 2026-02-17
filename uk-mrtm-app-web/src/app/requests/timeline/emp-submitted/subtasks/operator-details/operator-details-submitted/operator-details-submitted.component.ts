@@ -7,26 +7,32 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { identifyMaritimeOperatorMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { empSubmittedQuery } from '@requests/timeline/emp-submitted/+state';
-import { OperatorDetailsSummaryTemplateComponent } from '@shared/components';
-import { AttachedFile, SubTaskListMap } from '@shared/types';
+import { OperatorDetailsSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { AttachedFile, EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
 interface ViewModel {
   operatorDetails: EmpOperatorDetails;
   operatorDetailsMap: SubTaskListMap<{ operatorDetails: string }>;
+  reviewGroupDecision?: EmpVariationReviewDecisionDto | null;
   files: AttachedFile[];
 }
 
 @Component({
   selector: 'mrtm-operator-details-submitted',
+  imports: [
+    PageHeadingComponent,
+    OperatorDetailsSummaryTemplateComponent,
+    ReturnToTaskOrActionPageComponent,
+    ReviewDecisionSummaryTemplateComponent,
+  ],
   standalone: true,
-  imports: [PageHeadingComponent, OperatorDetailsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './operator-details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const empOperatorDetails = this.store.select(empSubmittedQuery.selectOperatorDetails)();
 
     return {
@@ -37,6 +43,7 @@ export class OperatorDetailsSubmittedComponent {
           (empOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
         ),
       )(),
+      reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('operatorDetails'))(),
     };
   });
 }

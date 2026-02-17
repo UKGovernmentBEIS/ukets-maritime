@@ -14,10 +14,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-undertaken-activities',
-  standalone: true,
   imports: [FormsModule, ReactiveFormsModule, WizardStepComponent, TextareaComponent],
-  providers: [undertakenActivitiesFormProvider],
+  standalone: true,
   templateUrl: './undertaken-activities.component.html',
+  providers: [undertakenActivitiesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UndertakenActivitiesComponent {

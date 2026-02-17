@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { TaskSuperSection } from '@netz/common/model';
 
@@ -6,11 +6,11 @@ import { TaskListComponent } from '../task-list';
 
 @Component({
   selector: 'netz-task-superlist',
-  templateUrl: './task-superlist.component.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [TaskListComponent],
+  standalone: true,
+  templateUrl: './task-superlist.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskSuperListComponent {
-  @Input() superSections: TaskSuperSection[];
+  readonly superSections = input<TaskSuperSection[]>();
 }

@@ -1,7 +1,7 @@
 <div>
   <h2 class="govuk-heading-m">Check your answers</h2>
   <mrtm-operator-account-summary-info
-    [formRouterLink]="'../'"
+    formRouterLink="../"
     [summaryInfo]="info$ | async"></mrtm-operator-account-summary-info>
   <button (click)="handleSubmit()" govukButton netzPendingButton type="button">Confirm and complete</button>
 </div>

@@ -28,7 +28,6 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
 
 @Component({
   selector: 'mrtm-emp-emission-sources-and-fuel-types-used-list',
-  standalone: true,
   imports: [
     EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent,
     PageHeadingComponent,
@@ -38,6 +37,7 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
     XmlErrorSummaryComponent,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './emission-sources-and-fuel-types-used-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

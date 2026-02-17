@@ -6,7 +6,7 @@
   [showReturnLink]="true"
   [isTwoThirds]="true">
   <div formControlName="complianceRestored" govuk-radio [legend]="map.complianceRestored.title" legendSize="medium">
-    <govuk-radio-option [value]="'YES'" label="Yes">
+    <govuk-radio-option value="YES" label="Yes">
       <ng-container govukConditionalContent>
         <div
           govuk-date-input
@@ -16,9 +16,9 @@
           hint="This date cannot be in the future"></div>
       </ng-container>
     </govuk-radio-option>
-    <govuk-radio-option [value]="'NO'" label="No" />
+    <govuk-radio-option value="NO" label="No" />
     <govuk-radio-option
-      [value]="'NOT_APPLICABLE'"
+      value="NOT_APPLICABLE"
       label="Not applicable"
       hint="Select this option if it is not possible for the operator to restore compliance, for example failure to surrender sufficient allowances" />
   </div>

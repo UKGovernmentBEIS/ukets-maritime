@@ -51,7 +51,6 @@ import Papa from 'papaparse';
 
 @Component({
   selector: 'mrtm-aer-ports-upload',
-  standalone: true,
   imports: [
     DataParserWizardStepComponent,
     LinkDirective,
@@ -61,6 +60,7 @@ import Papa from 'papaparse';
     SelectOptionToTitlePipe,
     RouterLink,
   ],
+  standalone: true,
   templateUrl: './aer-ports-upload.component.html',
   providers: [aerPortsUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,8 +85,8 @@ export class AerPortsUploadComponent {
   insertedRows = 0;
   updatedRows = 0;
   existingPorts = this.store.select(aerCommonQuery.selectPortEmissions)();
-  ports: WritableSignal<AerPort[] | null> = signal(null);
-  portsTableData: Signal<AerPortUploadCsvDto[]> = computed(() =>
+  readonly ports: WritableSignal<AerPort[] | null> = signal(null);
+  readonly portsTableData: Signal<AerPortUploadCsvDto[]> = computed(() =>
     (this.ports() ?? []).map((item) => ({
       imoNumber: item.imoNumber,
       country: item.portDetails.visit.country,

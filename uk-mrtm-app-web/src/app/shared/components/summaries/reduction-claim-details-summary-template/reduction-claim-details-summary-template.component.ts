@@ -10,7 +10,6 @@ import { ReductionClaimDetailsListItemDto, WithNeedsReview } from '@shared/types
 
 @Component({
   selector: 'mrtm-reduction-claim-details-summary-template',
-  standalone: true,
   imports: [
     TableComponent,
     FuelOriginTitlePipe,
@@ -20,6 +19,7 @@ import { ReductionClaimDetailsListItemDto, WithNeedsReview } from '@shared/types
     RouterLink,
     InitialDataSourcePipe,
   ],
+  standalone: true,
   templateUrl: './reduction-claim-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

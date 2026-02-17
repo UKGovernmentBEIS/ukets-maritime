@@ -12,10 +12,10 @@ import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-reset-two-fa',
+  imports: [PageHeadingComponent, PendingButtonDirective, ButtonDirective, LinkDirective, RouterLink, AsyncPipe],
+  standalone: true,
   templateUrl: './reset-two-fa.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeadingComponent, PendingButtonDirective, ButtonDirective, LinkDirective, RouterLink, AsyncPipe],
 })
 export class ResetTwoFaComponent {
   readonly location = inject(Location);
@@ -24,10 +24,10 @@ export class ResetTwoFaComponent {
   private readonly operatorUsersService = inject(OperatorUsersService);
   private readonly route = inject(ActivatedRoute);
 
-  userId$ = this.route.paramMap.pipe(map(() => window.history.state['userId']));
-  accountId$ = this.route.paramMap.pipe(map(() => window.history.state['accountId']));
-  userName$ = this.route.paramMap.pipe(map(() => window.history.state['userName']));
-  role$ = this.route.paramMap.pipe(map(() => window.history.state['role']));
+  userId$ = this.route.paramMap.pipe(map(() => window.history.state?.['userId']));
+  accountId$ = this.route.paramMap.pipe(map(() => window.history.state?.['accountId']));
+  userName$ = this.route.paramMap.pipe(map(() => window.history.state?.['userName']));
+  role$ = this.route.paramMap.pipe(map(() => window.history.state?.['role']));
 
   reset() {
     combineLatest([this.userId$, this.accountId$, this.role$])

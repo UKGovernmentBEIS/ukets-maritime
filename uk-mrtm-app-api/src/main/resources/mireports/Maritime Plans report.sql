@@ -1,6 +1,6 @@
 WITH sectionOperatorDetails
 AS (
-SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID",
+SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMP ID", stg.provider_name "Data supplier", stg.updated_on "Date data received from data supplier", stg.imported_on "Date data import was requested",
 CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
 WHEN 'LIMITED_COMPANY'
 THEN 'Limited Company'
@@ -19,6 +19,9 @@ ON p.account_id = a.id
 LEFT
 JOIN account_reporting_status ars
 ON a.id = ars.account_id
+LEFT
+JOIN emp_staging stg
+ON a.id = stg.account_id
 WHERE (ars.account_id, ars.year) IN (
 SELECT account_id, MAX(year)
 FROM account_reporting_status
@@ -98,7 +101,7 @@ THEN 'Yes'
 ELSE 'No'
 END exemptionConditionsExist, "exemptionConditions" ->> 'minVoyages' minVoyages
 FROM shipEmissions)
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 0 sectionId, 'Account details' section, null "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 0 sectionId, 'Account details' section, null "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
@@ -107,7 +110,7 @@ AS numeric) "Methane slip (%)", null "Monitoring Method", null "Approach used", 
 AS numeric) "Uncertainty value (%)", null "Name of measurement device", null "Emission source this device is used for", null "Are carbon capture and storage technologies being applied ?", null "Describe the technology used for carbon capture and storage", null "Emission source this technology is applied to", null "Uploaded files", null "Exemption of conditions exist", null "Minimum number of expected voyages during the reporting period"
 FROM sectionOperatorDetails o
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 1 sectionId, 'Ship details' section, imoShip "IMO Ship", name "Ship Name", type "Ship Type", cast(grossTonnage
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 1 sectionId, 'Ship details' section, imoShip "IMO Ship", name "Ship Name", type "Ship Type", cast(grossTonnage
 AS numeric) "Gross Tonage", flagState "Flag State", iceClass "Ice class", natureOfReportingResponsibility "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
@@ -118,7 +121,7 @@ FROM sectionOperatorDetails o
 JOIN shipDetailsSection d
 ON o.account_id = d.account_id
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 2 sectionId, 'Fuels and emission factors' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 2 sectionId, 'Fuels and emission factors' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", origin "Origin", type "Type", name "Name", cast("carbonDioxide"
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(methane
 AS numeric) "Tank to Wake emission factor for methane", cast("nitrousOxide"
@@ -129,7 +132,7 @@ FROM sectionOperatorDetails o
 JOIN fuelsEmissionsFactorsSection d
 ON o.account_id = d.account_id
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 3 sectionId, 'Emission sources' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 3 sectionId, 'Emission sources' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
@@ -139,7 +142,7 @@ FROM sectionOperatorDetails o
 JOIN emissionsSourcesSection s
 ON o.account_id = s.account_id
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 4 sectionId, 'Uncertainty level' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 4 sectionId, 'Uncertainty level' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
@@ -149,7 +152,7 @@ FROM sectionOperatorDetails o
 JOIN uncertaintyLevelSection s
 ON o.account_id = s.account_id
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 5 sectionId, 'Measurement' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 5 sectionId, 'Measurement' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
@@ -160,7 +163,7 @@ FROM sectionOperatorDetails o
 JOIN measurementsSection s
 ON o.account_id = s.account_id
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 6 sectionId, 'Carbon capture' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 6 sectionId, 'Carbon capture' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null
@@ -171,7 +174,7 @@ FROM sectionOperatorDetails o
 JOIN carbonCaptureSection s
 ON o.account_id = s.account_id
 UNION ALL
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", 7 sectionId, 'Exemption of conditions' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
+SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting status", "EMP ID", o.legalStatus "Legal status", "Data supplier", "Date data received from data supplier", "Date data import was requested", 7 sectionId, 'Exemption of conditions' section, imoShip "IMO Ship", null "Ship Name", null "Ship Type", cast(null
 AS numeric) "Gross Tonage", null "Flag State", null "Ice class", null "Nature of reporting responsibility", null "Origin", null "Type", null "Name", cast(null
 AS numeric) "Tank to Wake emission factor for carbon dioxide", cast(null
 AS numeric) "Tank to Wake emission factor for methane", cast(null

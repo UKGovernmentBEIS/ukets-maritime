@@ -9,8 +9,8 @@ import { uncorrectedNonConformitiesMap, UncorrectedNonConformitiesStep } from '@
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-prior-year-list-template',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, TableComponent],
+  standalone: true,
   templateUrl: './uncorrected-non-conformities-prior-year-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

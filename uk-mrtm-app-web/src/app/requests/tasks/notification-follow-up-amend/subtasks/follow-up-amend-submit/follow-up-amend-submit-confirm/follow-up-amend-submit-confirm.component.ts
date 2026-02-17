@@ -10,8 +10,8 @@ import { FollowUpAmendTaskPayload } from '@requests/tasks/notification-follow-up
 
 @Component({
   selector: 'mrtm-follow-up-amend-submit-confirm',
-  standalone: true,
   imports: [PageHeadingComponent, ButtonDirective, PendingButtonDirective, ReturnToTaskOrActionPageComponent],
+  standalone: true,
   template: `
     <netz-page-heading size="xl">Submit to regulator</netz-page-heading>
     <p class="govuk-heading-m">Your Notification will be sent directly to your regulator</p>

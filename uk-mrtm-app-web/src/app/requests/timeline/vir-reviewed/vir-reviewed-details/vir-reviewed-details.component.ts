@@ -18,7 +18,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-vir-reviewed-details',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -29,6 +28,7 @@ import { AttachedFile } from '@shared/types';
     NotProvidedDirective,
     UserInfoResolverPipe,
   ],
+  standalone: true,
   templateUrl: './vir-reviewed-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,11 +36,11 @@ export class VirReviewedDetailsComponent {
   private readonly store = inject(RequestActionStore);
   public readonly data = this.store.select(virReviewedQuery.selectPayload);
 
-  recipientIds = computed(() =>
+  readonly recipientIds = computed(() =>
     Object.keys(this.data().usersInfo).filter((userId) => userId !== this.data()?.decisionNotification?.signatory),
   );
 
-  officialNotice: Signal<AttachedFile> = computed(() => {
+  readonly officialNotice: Signal<AttachedFile> = computed(() => {
     const data = this.data();
     const downloadUrl = this.store.select(timelineCommonQuery.selectDownloadUrl)();
 

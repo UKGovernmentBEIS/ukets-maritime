@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.account.domain.AccountReportingStatus;
 
 import java.time.Year;
+import java.util.List;
 
 @Repository
 public interface AccountReportingStatusRepository extends JpaRepository<AccountReportingStatus, Long> {
@@ -17,6 +18,9 @@ public interface AccountReportingStatusRepository extends JpaRepository<AccountR
 
     @Transactional(readOnly = true)
     AccountReportingStatus findByAccountIdAndYear(Long accountId, Year year);
+
+    @Transactional(readOnly = true)
+    List<AccountReportingStatus> findByAccountIdOrderByYearDesc(Long accountId);
 
     @Transactional(readOnly = true)
     boolean existsByAccountIdAndYear(Long accountId, Year year);

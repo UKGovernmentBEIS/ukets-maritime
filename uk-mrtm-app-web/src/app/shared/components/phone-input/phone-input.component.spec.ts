@@ -17,6 +17,8 @@ describe('PhoneInputComponent', () => {
   let page: Page;
 
   @Component({
+    imports: [PhoneInputComponent, ReactiveFormsModule],
+    standalone: true,
     template: `
       <form [formGroup]="form">
         <div mrtm-phone-input formControlName="firstPhone"></div>
@@ -73,7 +75,6 @@ describe('PhoneInputComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ReactiveFormsModule, GovukComponentsModule, PhoneInputComponent],
-      declarations: [TestComponent],
       providers: [{ provide: CountryService, useClass: CountryServiceStub }],
     }).compileComponents();
   });

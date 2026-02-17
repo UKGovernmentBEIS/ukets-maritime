@@ -16,7 +16,6 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
 
 @Component({
   selector: 'mrtm-aer-fetch-ships-from-emp',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     WarningTextComponent,
@@ -25,6 +24,7 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
     RouterLink,
     LinkDirective,
   ],
+  standalone: true,
   templateUrl: './aer-fetch-ships-from-emp.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

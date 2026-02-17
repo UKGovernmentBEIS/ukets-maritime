@@ -1,4 +1,4 @@
-import { Directive, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Directive, inject, OnDestroy, OnInit } from '@angular/core';
 import {
   ControlContainer,
   ControlValueAccessor,
@@ -12,22 +12,29 @@ import { Subject, takeUntil } from 'rxjs';
 
 import { FormService } from './form.service';
 
-@Directive()
+@Directive({
+  host: {
+    '[class.govuk-!-display-block]': 'govukDisplayBlock',
+    '[class.govuk-form-group]': 'govukFormGroupClass',
+    '[class.govuk-form-group--error]': 'govukFormGroupErrorClass',
+  },
+})
 export abstract class FormInput implements ControlValueAccessor, OnInit, OnDestroy {
-  @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
-  @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;
+  private readonly ngControl = inject(NgControl);
+  private readonly formService = inject(FormService);
+  private readonly container = inject(ControlContainer);
+  private readonly cdr = inject(ChangeDetectorRef);
+
+  readonly govukDisplayBlock = true;
+  readonly govukFormGroupClass = true;
   protected readonly destroy$ = new Subject<void>();
   private isSubmitted = false;
 
-  protected constructor(
-    private readonly ngControl: NgControl,
-    private readonly formService: FormService,
-    private readonly container: ControlContainer,
-  ) {
-    ngControl.valueAccessor = this;
+  protected constructor() {
+    this.ngControl.valueAccessor = this;
   }
 
-  @HostBinding('class.govuk-form-group--error') get govukFormGroupErrorClass(): boolean {
+  get govukFormGroupErrorClass(): boolean {
     return this.shouldDisplayErrors;
   }
 
@@ -51,7 +58,10 @@ export abstract class FormInput implements ControlValueAccessor, OnInit, OnDestr
   }
 
   ngOnInit(): void {
-    this.form?.ngSubmit.pipe(takeUntil(this.destroy$)).subscribe(() => (this.isSubmitted = true));
+    this.form?.ngSubmit.pipe(takeUntil(this.destroy$)).subscribe(() => {
+      this.isSubmitted = true;
+      this.cdr?.markForCheck();
+    });
   }
 
   ngOnDestroy(): void {

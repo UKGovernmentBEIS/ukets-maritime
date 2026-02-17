@@ -22,7 +22,6 @@ import { VerificationBodySummaryComponent } from '@verification-bodies/component
 
 @Component({
   selector: 'mrtm-verification-body-details',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
@@ -32,6 +31,7 @@ import { VerificationBodySummaryComponent } from '@verification-bodies/component
     NotificationBannerComponent,
     VerifierUsersListComponent,
   ],
+  standalone: true,
   templateUrl: './verification-body-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

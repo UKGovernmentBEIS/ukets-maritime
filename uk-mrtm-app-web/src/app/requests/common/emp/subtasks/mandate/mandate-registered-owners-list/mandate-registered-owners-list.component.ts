@@ -23,7 +23,6 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-list',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -36,6 +35,7 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
     NotificationBannerComponent,
     LinkDirective,
   ],
+  standalone: true,
   templateUrl: './mandate-registered-owners-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -60,7 +60,7 @@ export class MandateRegisteredOwnersListComponent {
     () => !isNil(this.data().find((ro) => ro.needsReview === true)),
   );
 
-  public allShipsAssociated: Signal<boolean> = computed(() => {
+  public readonly allShipsAssociated: Signal<boolean> = computed(() => {
     const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
       this.data()

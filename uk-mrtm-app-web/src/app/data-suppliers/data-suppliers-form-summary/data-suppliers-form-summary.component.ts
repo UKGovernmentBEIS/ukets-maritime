@@ -19,7 +19,6 @@ import { DataSuppliersService } from '@data-suppliers/services/data-suppliers.se
 
 @Component({
   selector: 'mrtm-data-suppliers-form-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     LinkDirective,
@@ -32,6 +31,7 @@ import { DataSuppliersService } from '@data-suppliers/services/data-suppliers.se
     PendingButtonDirective,
     SummaryListRowValueDirective,
   ],
+  standalone: true,
   templateUrl: './data-suppliers-form-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

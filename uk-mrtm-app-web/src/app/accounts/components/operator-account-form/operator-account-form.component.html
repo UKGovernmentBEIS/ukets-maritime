@@ -1,4 +1,4 @@
-@if (formMode === 'NEW') {
+@if (formMode() === 'NEW') {
   <div
     formControlName="imoNumber"
     govuk-text-input
@@ -7,7 +7,7 @@
     widthClass="govuk-!-width-one-quarter"></div>
 }
 <div formControlName="name" govuk-text-input label="Operator name" widthClass="govuk-!-width-two-thirds"></div>
-@if (formMode === 'EDIT') {
+@if (formMode() === 'EDIT') {
   <div formControlName="sopId" govuk-text-input label="SOP ID (optional)" widthClass="govuk-!-width-one-quarter"></div>
 }
 <mrtm-location-state-form legendLabel="Contact address" />

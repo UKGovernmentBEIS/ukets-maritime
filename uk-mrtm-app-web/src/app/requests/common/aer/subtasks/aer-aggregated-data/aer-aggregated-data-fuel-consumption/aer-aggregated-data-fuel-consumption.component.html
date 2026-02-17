@@ -9,13 +9,13 @@
     Ireland, and within port. Do not include EU or international voyages.
   </p>
   <ng-container formArrayName="fuelConsumptions">
-    @for (consumption of fuelConsumptionsFormArray.controls; track consumption; let i = $index) {
-      <fieldset govukFieldset [formGroupName]="i">
-        <legend govukLegend legendSize="small">
-          Fuel type {{ fuelConsumptionsFormArray.controls.length === 1 ? '' : i + 1 }}
-        </legend>
-        @if (fuelConsumptionsFormArray.controls.length > 1) {
-          <button (click)="onRemoveFuelConsumption(i)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
+    @for (consumption of fuelConsumptionsFormArray.controls; track consumption) {
+      <fieldset govukFieldset [formGroupName]="$index">
+        <legend govukLegend legendSize="small">Fuel type {{ $count === 1 ? '' : $index + 1 }}</legend>
+        @if ($count > 1) {
+          <button (click)="onRemoveFuelConsumption($index)" mrtmAddAnother govukSecondaryButton type="button">
+            Remove
+          </button>
         }
         <div class="govuk-grid-row">
           <div
@@ -23,7 +23,7 @@
             class="govuk-grid-column-one-third"
             widthClass="govuk-!-width-one-quarter"
             formControlName="fuelOriginTypeName"
-            [options]="fuelTypeSelectItems()[i]"
+            [options]="fuelTypeSelectItems()[$index]"
             label="Fuel type"></div>
           <div
             govuk-text-input

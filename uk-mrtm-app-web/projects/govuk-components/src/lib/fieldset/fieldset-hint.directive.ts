@@ -1,6 +1,6 @@
-import { Directive, HostBinding } from '@angular/core';
+import { Directive } from '@angular/core';
 
-@Directive({ selector: 'div[govukFieldsetHint]', standalone: true })
+@Directive({ selector: 'div[govukFieldsetHint]', standalone: true, host: { '[class.govuk-hint]': 'hintClass' } })
 export class FieldsetHintDirective {
-  @HostBinding('class.govuk-hint') readonly hintClass = true;
+  readonly hintClass = true;
 }

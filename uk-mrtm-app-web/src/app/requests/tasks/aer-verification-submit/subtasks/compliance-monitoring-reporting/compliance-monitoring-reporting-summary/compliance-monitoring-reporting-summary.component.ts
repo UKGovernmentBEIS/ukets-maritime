@@ -18,13 +18,13 @@ import { ComplianceMonitoringReportingSummaryTemplateComponent } from '@shared/c
 
 @Component({
   selector: 'mrtm-compliance-monitoring-reporting-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     ComplianceMonitoringReportingSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './compliance-monitoring-reporting-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

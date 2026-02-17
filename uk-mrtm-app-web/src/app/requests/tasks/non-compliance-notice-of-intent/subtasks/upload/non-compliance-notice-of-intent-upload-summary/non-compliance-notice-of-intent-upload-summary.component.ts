@@ -19,13 +19,13 @@ import { NonComplianceNoticeOfIntentUploadSummaryTemplateComponent } from '@shar
 
 @Component({
   selector: 'mrtm-non-compliance-notice-of-intent-upload-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceNoticeOfIntentUploadSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-notice-of-intent-upload-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

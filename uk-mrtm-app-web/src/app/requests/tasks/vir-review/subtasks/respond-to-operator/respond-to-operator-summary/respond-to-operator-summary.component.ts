@@ -23,7 +23,6 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-respond-to-operator-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     VirVerifierRecommendationSummaryTemplateComponent,
@@ -33,6 +32,7 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './respond-to-operator-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

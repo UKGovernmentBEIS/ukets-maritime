@@ -24,7 +24,6 @@ import { PortCallSummaryTemplateComponent } from '@shared/components/summaries';
 
 @Component({
   selector: 'mrtm-aer-port-call-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -34,6 +33,7 @@ import { PortCallSummaryTemplateComponent } from '@shared/components/summaries';
     PendingButtonDirective,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-port-call-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

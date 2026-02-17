@@ -63,10 +63,6 @@ interface RegulatorTableRow {
 
 @Component({
   selector: 'mrtm-details',
-  templateUrl: './details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
-  standalone: true,
   imports: [
     ErrorSummaryComponent,
     PageHeadingComponent,
@@ -86,6 +82,10 @@ interface RegulatorTableRow {
     TwoFaLinkComponent,
     SubmitIfEmptyPipe,
   ],
+  standalone: true,
+  templateUrl: './details.component.html',
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);

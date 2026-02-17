@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
-import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
@@ -17,19 +16,15 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.Organisati
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationStructure;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnum;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
-import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.account.AccountHolderMessage;
 import uk.gov.netz.integration.model.account.AccountType;
 import uk.gov.netz.integration.model.account.AccountUpdatingEvent;
 import uk.gov.netz.integration.model.account.UpdateAccountDetailsMessage;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapAccountHolderType;
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapCompanyRegistrationNumber;
@@ -37,7 +32,6 @@ import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryM
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapWithRegistryCountryCodes;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
-import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
 
 @Log4j2
 @Service
@@ -50,7 +44,7 @@ public class AccountUpdatedNotifyRegistryService {
     private final AccountUpdatedSendToRegistryProducer accountUpdatedSendToRegistryProducer;
     private final KafkaTemplate<String, AccountUpdatingEvent> accountUpdatedKafkaTemplate;
     private final MrtmAccountQueryService mrtmAccountQueryService;
-    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
+    private final NotifyRegistryEmailService notifyRegistryEmailService;
     private final RegistryIntegrationEmailProperties emailProperties;
     private final EmissionsMonitoringPlanQueryService empQueryService;
 
@@ -71,6 +65,10 @@ public class AccountUpdatedNotifyRegistryService {
         }
 
         AccountUpdatingEvent accountUpdatingEvent = buildAccountUpdatingPayload(account, emp, empId);
+
+        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(),
+            INTEGRATION_POINT_KEY, "Sending account updated event to registry " + accountUpdatingEvent);
+
         accountUpdatedSendToRegistryProducer.produce(accountUpdatingEvent, accountUpdatedKafkaTemplate);
 
         log.info(REQUEST_LOG_FORMAT, NotifyRegistryUtils.SERVICE_KEY, event.getAccountId(),
@@ -84,19 +82,18 @@ public class AccountUpdatedNotifyRegistryService {
             INTEGRATION_POINT_KEY,
             "Cannot send update message to ETS Registry because account doesn't have a registry id");
 
-        final Map<String, Object> templateParams = new HashMap<>();
-        templateParams.put(MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, INTEGRATION_POINT_KEY);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, account.getName());
-        templateParams.put(MrtmEmailNotificationTemplateConstants.EMITTER_ID, account.getBusinessId());
-        templateParams.put(MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, capitalizeFirstLetter(SERVICE_KEY));
+        String recipient = emailProperties.getEmail().get(account.getCompetentAuthority().getCode());
 
-        final EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
+        notifyRegistryEmailService.notifyRegulator(
+            NotifyRegistryEmailServiceParams.builder()
+                .account(account)
+                .emitterId(account.getBusinessId())
+                .recipient(recipient)
+                .isFordway(false)
                 .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_ACCOUNT_UPDATE_MISSING_REGISTRY_ID_TEMPLATE)
-                .templateParams(templateParams)
-                .build())
-            .build();
-        notificationEmailService.notifyRecipient(emailData, emailProperties.getEmail().get(account.getCompetentAuthority().getCode()));
+                .integrationPoint(INTEGRATION_POINT_KEY)
+                .build()
+        );
     }
 
     private AccountUpdatingEvent buildAccountUpdatingPayload(MrtmAccount account,
@@ -108,7 +105,7 @@ public class AccountUpdatedNotifyRegistryService {
             .registryId(String.valueOf(account.getRegistryId()))
             .monitoringPlanId(empId)
             .firstYearOfVerifiedEmissions(account.getFirstMaritimeActivityDate().getYear())
-            .accountName(account.getName())
+            .accountName(emp.getOperatorDetails().getOperatorName())
             .companyImoNumber(account.getImoNumber())
             .regulator(RegistryCompetentAuthorityEnum.getCompetentAuthorityEnum(account.getCompetentAuthority()).name())
             .build();
@@ -117,7 +114,7 @@ public class AccountUpdatedNotifyRegistryService {
 
         if (emp.getOperatorDetails() != null && emp.getOperatorDetails().getOrganisationStructure() != null) {
             OrganisationStructure organisationStructure = emp.getOperatorDetails().getOrganisationStructure();
-            accountHolderMessage.setName(account.getName());
+            accountHolderMessage.setName(emp.getOperatorDetails().getOperatorName());
             accountHolderMessage.setCompanyRegistrationNumber(mapCompanyRegistrationNumber(organisationStructure));
             accountHolderMessage.setCrnJustification(mapCrnJustification(organisationStructure));
 

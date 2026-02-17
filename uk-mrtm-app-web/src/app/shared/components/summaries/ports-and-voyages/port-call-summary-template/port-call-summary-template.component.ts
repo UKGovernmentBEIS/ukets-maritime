@@ -22,7 +22,6 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-port-call-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -37,6 +36,7 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
     VoyageOrPortCallEmissionsSummaryTemplateComponent,
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './port-call-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

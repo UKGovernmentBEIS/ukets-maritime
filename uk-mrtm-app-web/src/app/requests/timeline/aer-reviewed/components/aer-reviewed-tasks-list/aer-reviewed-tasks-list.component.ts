@@ -13,8 +13,8 @@ import { AER_REVIEWED_ROUTE_PREFIX } from '@requests/timeline/aer-reviewed';
 
 @Component({
   selector: 'mrtm-aer-reviewed-tasks-list',
-  standalone: true,
   imports: [TaskSuperListComponent],
+  standalone: true,
   templateUrl: './aer-reviewed-tasks-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

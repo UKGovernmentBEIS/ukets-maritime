@@ -18,13 +18,13 @@ import { DataGapsMethodologiesSummaryTemplateComponent } from '@shared/component
 
 @Component({
   selector: 'mrtm-data-gaps-methodologies-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     DataGapsMethodologiesSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './data-gaps-methodologies-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

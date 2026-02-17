@@ -20,7 +20,6 @@ import { mergeDiffRegisteredOwners } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-list-summary-template',
-  standalone: true,
   imports: [
     TableComponent,
     GovukDatePipe,
@@ -28,6 +27,7 @@ import { mergeDiffRegisteredOwners } from '@shared/utils';
     HtmlDiffDirective,
     SummaryRegisteredOwnerShipDetailsComponent,
   ],
+  standalone: true,
   templateUrl: './mandate-registered-owners-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

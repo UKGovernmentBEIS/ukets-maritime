@@ -16,7 +16,6 @@ import { FileInputComponent, WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-manage-documents-form',
-  standalone: true,
   imports: [
     WizardStepComponent,
     TextInputComponent,
@@ -26,8 +25,9 @@ import { FileInputComponent, WizardStepComponent } from '@shared/components';
     SelectComponent,
     FileInputComponent,
   ],
-  providers: [manageDocumentsFormProvider],
+  standalone: true,
   templateUrl: './manage-documents-form.component.html',
+  providers: [manageDocumentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageDocumentsFormComponent implements OnInit {

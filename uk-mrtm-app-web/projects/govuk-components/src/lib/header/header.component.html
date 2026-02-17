@@ -20,7 +20,7 @@
     </div>
     <div class="govuk-header__content">
       <a [routerLink]="['/']" class="govuk-header__link govuk-header__service-name">
-        {{ title }}
+        {{ title() }}
       </a>
       <ng-content select="govuk-header-actions-list"></ng-content>
       <ng-content select="govuk-header-nav-list"></ng-content>

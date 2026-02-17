@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import {
   GREENHOUSE_GAS_SUB_TASK,
@@ -16,12 +16,12 @@ import { greenhouseGasMap } from '@requests/common/emp/subtasks/subtask-list.map
 import { mockGreenhouseGas, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { screen } from '@testing-library/angular';
 
 describe('GreenhouseGasSummaryComponent', () => {
   let fixture: ComponentFixture<GreenhouseGasSummaryComponent>;
   let component: GreenhouseGasSummaryComponent;
   let store: RequestTaskStore;
+  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<unknown>> = {
@@ -30,22 +30,21 @@ describe('GreenhouseGasSummaryComponent', () => {
 
   const taskServiceSpy = jest.spyOn(taskServiceMock, 'submitSubtask');
 
-  const createComponent = () => {
-    fixture = TestBed.createComponent(GreenhouseGasSummaryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    jest.clearAllMocks();
-  };
+  class Page extends BasePage<GreenhouseGasSummaryComponent> {
+    get summaryListTerms(): string[] {
+      return this.queryAll('dt').map((dt) => dt.textContent.trim());
+    }
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [GreenhouseGasSummaryComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    }).compileComponents();
+    });
 
     store = TestBed.inject(RequestTaskStore);
     store.setState(
@@ -58,7 +57,12 @@ describe('GreenhouseGasSummaryComponent', () => {
         },
       ),
     );
-    createComponent();
+
+    fixture = TestBed.createComponent(GreenhouseGasSummaryComponent);
+    component = fixture.componentInstance;
+    page = new Page(fixture);
+    fixture.detectChanges();
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
@@ -66,14 +70,9 @@ describe('GreenhouseGasSummaryComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(screen.getAllByRole('heading')[0].textContent).toEqual('Check your answers');
+    expect(page.heading1.textContent).toEqual('Check your answers');
 
-    const summarySections = screen
-      .getAllByRole('heading')
-      .slice(1)
-      .map((section) => section.textContent);
-
-    expect(summarySections).toEqual([
+    expect(page.queryAll('h2').map((item) => item.textContent.trim())).toEqual([
       greenhouseGasMap.fuel.title,
       greenhouseGasMap.crossChecks.title,
       greenhouseGasMap.information.title,
@@ -81,7 +80,7 @@ describe('GreenhouseGasSummaryComponent', () => {
       greenhouseGasMap.voyages.title,
     ]);
 
-    expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
+    expect([...new Set(page.summaryListTerms)]).toEqual([
       'Procedure reference',
       'Procedure version',
       'Description of procedure',
@@ -92,7 +91,7 @@ describe('GreenhouseGasSummaryComponent', () => {
   });
 
   it('should submit subtask', () => {
-    screen.getByRole('button', { name: 'Confirm and continue' }).click();
+    page.standardButton.click();
 
     expect(taskServiceSpy).toHaveBeenCalledWith(
       GREENHOUSE_GAS_SUB_TASK,

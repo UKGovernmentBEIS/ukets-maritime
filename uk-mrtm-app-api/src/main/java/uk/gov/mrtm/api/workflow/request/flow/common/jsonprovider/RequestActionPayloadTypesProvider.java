@@ -38,6 +38,7 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceF
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.domain.RegistryAccountUpdatedEventSubmittedRequestActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.registry.domain.RegistryRegulatorNoticeEventSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.domain.RegistryUpdatedEmissionsEventSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirApplicationRespondedToRegulatorCommentsRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirApplicationReviewedRequestActionPayload;
@@ -92,6 +93,7 @@ import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequest
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.NON_COMPLIANCE_NOTICE_OF_INTENT_APPLICATION_SUBMITTED_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_DECISION_SUBMITTED_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType.VIR_APPLICATION_RESPONDED_TO_REGULATOR_COMMENTS_PAYLOAD;
@@ -160,6 +162,7 @@ public class RequestActionPayloadTypesProvider implements JsonSubTypesProvider {
 				//Registry
 				new NamedType(RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class, REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED_PAYLOAD),
 				new NamedType(RegistryAccountUpdatedEventSubmittedRequestActionPayload.class, REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED_PAYLOAD),
+				new NamedType(RegistryRegulatorNoticeEventSubmittedRequestActionPayload.class, REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED_PAYLOAD),
 
 				//NON_COMPLIANCE
 				new NamedType(NonComplianceApplicationSubmittedRequestActionPayload.class, NON_COMPLIANCE_APPLICATION_SUBMITTED_PAYLOAD),

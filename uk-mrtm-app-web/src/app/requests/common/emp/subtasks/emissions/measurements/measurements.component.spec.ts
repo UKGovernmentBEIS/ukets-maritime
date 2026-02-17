@@ -82,7 +82,7 @@ describe('MeasurementsComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual('Description of the measurement instruments involved');
+      expect(page.heading1.textContent).toEqual('Description of the measurement instruments involved');
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -113,7 +113,7 @@ describe('MeasurementsComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual('Description of the measurement instruments involved');
+      expect(page.heading1.textContent).toEqual('Description of the measurement instruments involved');
       expect(page.submitButton).toBeTruthy();
     });
 

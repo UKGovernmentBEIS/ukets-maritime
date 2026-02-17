@@ -15,11 +15,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-materiality-level-details',
-  standalone: true,
   imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './materiality-level-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [materialityLevelDetailsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialityLevelDetailsComponent {
   readonly map = materialityLevelMap;

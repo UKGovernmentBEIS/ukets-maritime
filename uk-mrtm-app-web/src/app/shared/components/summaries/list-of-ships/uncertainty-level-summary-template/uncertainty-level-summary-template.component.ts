@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { isNil } from 'lodash-es';
@@ -19,7 +19,6 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-uncertainty-level-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -30,6 +29,7 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
     RouterLink,
     SelectOptionToTitlePipe,
   ],
+  standalone: true,
   templateUrl: './uncertainty-level-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -38,8 +38,8 @@ export class UncertaintyLevelSummaryTemplateComponent {
   public readonly methodApproachSelectOptions = METHOD_APPROACH_SELECT_OPTIONS;
   readonly isNil = isNil;
 
-  @Input({ required: true }) data: UncertaintyLevel[];
-  @Input() changeLink: string;
-  @Input() isEditable: boolean = false;
-  @Input() queryParams: Params = {};
+  readonly data = input.required<UncertaintyLevel[]>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input<boolean>(false);
+  readonly queryParams = input<Params>({});
 }

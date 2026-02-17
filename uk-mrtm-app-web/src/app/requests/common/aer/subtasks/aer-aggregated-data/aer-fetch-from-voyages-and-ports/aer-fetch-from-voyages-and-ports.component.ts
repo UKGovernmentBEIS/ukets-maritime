@@ -23,7 +23,6 @@ import { AerJourneyTypeEnum } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-fetch-from-voyages-and-ports',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     WarningTextComponent,
@@ -33,6 +32,7 @@ import { AerJourneyTypeEnum } from '@shared/types';
     PendingButtonDirective,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-fetch-from-voyages-and-ports.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,45 +1,45 @@
 <div class="govuk-tabs">
-  @if (title) {
+  @if (title(); as title) {
     <h2 class="govuk-tabs__title">{{ title }}</h2>
   }
   <ul class="govuk-tabs__list" role="tablist">
-    @for (tabItem of tabList; track tabItem; let i = $index) {
+    @for (tabItem of tabList(); track tabItem) {
       <li
         [class.govuk-tabs__list-item--selected]="(tabItem.isSelected | async) === true"
         class="govuk-tabs__list-item"
         role="presentation">
         <a
           #anchor
-          (keydown)="anchorKeydown($event, i)"
-          [attr.aria-controls]="tabItem.id"
+          (keydown)="anchorKeydown($event, $index)"
+          [attr.aria-controls]="tabItem.id()"
           [attr.aria-selected]="tabItem.isSelected | async"
-          [fragment]="tabItem.id"
-          [id]="'tab_' + tabItem.id"
+          [fragment]="tabItem.id()"
+          [id]="`tab_${tabItem.id()}`"
           [routerLink]="[]"
           [state]="getState()"
           [tabIndex]="(tabItem.isSelected | async) ? 0 : -1"
           class="govuk-tabs__tab"
-          queryParamsHandling="preserve"
+          [queryParamsHandling]="queryParamsHandling()"
           role="tab">
-          {{ tabItem.label }}
+          {{ tabItem.label() }}
         </a>
       </li>
     }
   </ul>
-  @for (tab of tabEagerList; track tab) {
+  @for (tab of tabEagerList(); track tab) {
     <div
-      [attr.aria-labelledby]="'tab_' + tab.id"
+      [attr.aria-labelledby]="`tab_${tab.id()}`"
       [class.govuk-tabs__panel--hidden]="(tab.isSelected | async) === false"
-      [id]="tab.id"
+      [id]="tab.id()"
       class="govuk-tabs__panel"
       role="tabpanel">
-      <ng-template [ngTemplateOutlet]="tab.templateRef"></ng-template>
+      <ng-template [ngTemplateOutlet]="tab.templateRef" />
     </div>
   }
-  @for (tab of tabLazyList; track tab) {
+  @for (tab of tabLazyList(); track tab) {
     @if (tab.isSelected | async) {
-      <div [attr.aria-labelledby]="'tab_' + tab.id" [id]="tab.id" class="govuk-tabs__panel" role="tabpanel">
-        <ng-template [ngTemplateOutlet]="tab.templateRef"></ng-template>
+      <div [attr.aria-labelledby]="`tab_${tab.id()}`" [id]="tab.id()" class="govuk-tabs__panel" role="tabpanel">
+        <ng-template [ngTemplateOutlet]="tab.templateRef" />
       </div>
     }
   }

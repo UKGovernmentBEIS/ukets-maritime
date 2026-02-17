@@ -24,7 +24,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-data-gaps-methodologies-conservative',
-  standalone: true,
   imports: [
     ConditionalContentDirective,
     RadioComponent,
@@ -33,9 +32,10 @@ import { WizardStepComponent } from '@shared/components';
     TextareaComponent,
     WizardStepComponent,
   ],
+  standalone: true,
   templateUrl: './data-gaps-methodologies-conservative.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [dataGapsMethodologiesConservativeProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsMethodologiesConservativeComponent {
   readonly map = dataGapsMethodologiesMap;

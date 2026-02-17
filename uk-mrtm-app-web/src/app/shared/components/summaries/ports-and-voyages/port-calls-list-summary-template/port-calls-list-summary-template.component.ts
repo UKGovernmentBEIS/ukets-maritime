@@ -32,7 +32,6 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-port-calls-list-summary-template',
-  standalone: true,
   imports: [
     PaginationComponent,
     LinkDirective,
@@ -55,6 +54,7 @@ import BigNumber from 'bignumber.js';
     WarningTextComponent,
     ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './port-calls-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

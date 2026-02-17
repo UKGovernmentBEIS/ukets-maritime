@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { GovukDatePipe } from '@netz/common/pipes';
@@ -17,7 +17,6 @@ import { FollowUpAmends } from '@shared/types/follow-up-amends.interface';
 
 @Component({
   selector: 'mrtm-follow-up-response-and-decision-summary-template',
-  standalone: true,
   imports: [
     SummaryDownloadFilesComponent,
     SummaryListComponent,
@@ -30,12 +29,13 @@ import { FollowUpAmends } from '@shared/types/follow-up-amends.interface';
     RouterLink,
     LinkDirective,
   ],
+  standalone: true,
   templateUrl: './follow-up-response-and-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpResponseAndDecisionSummaryTemplateComponent {
-  @Input({ required: true }) followUpAmends: FollowUpAmends;
-  @Input() changeLink: string;
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly followUpAmends = input.required<FollowUpAmends>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

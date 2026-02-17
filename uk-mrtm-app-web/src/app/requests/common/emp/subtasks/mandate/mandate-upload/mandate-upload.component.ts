@@ -32,7 +32,6 @@ import Papa from 'papaparse';
 
 @Component({
   selector: 'mrtm-mandate-upload',
-  standalone: true,
   imports: [
     LinkDirective,
     ButtonDirective,
@@ -43,6 +42,7 @@ import Papa from 'papaparse';
     PageHeadingComponent,
     PendingButtonDirective,
   ],
+  standalone: true,
   templateUrl: './mandate-upload.component.html',
   providers: [mandateUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -61,7 +61,7 @@ export class MandateUploadComponent {
   wizardMap = mandateMap;
   showConfirmation = false;
   existingOwners = this.store.select(empCommonQuery.selectMandateRegisteredOwnersList);
-  owners: WritableSignal<EmpRegisteredOwner[] | null> = signal(null);
+  readonly owners: WritableSignal<EmpRegisteredOwner[] | null> = signal(null);
   ownersCtrl = this.form.controls.owners;
   columnsCtrl = this.form.controls.columns;
   fileCtrl = this.form.controls.file;

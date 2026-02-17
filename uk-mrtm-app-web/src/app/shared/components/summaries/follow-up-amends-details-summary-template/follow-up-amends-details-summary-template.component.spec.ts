@@ -13,6 +13,7 @@ describe('FollowUpAmendsDetailsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(FollowUpAmendsDetailsSummaryTemplateComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('followUpReviewDecision', { type: 'ACCEPTED' });
     fixture.detectChanges();
   });
 

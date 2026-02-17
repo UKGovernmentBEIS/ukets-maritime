@@ -22,7 +22,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-variation-details-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     VariationDetailsSummaryTemplateComponent,
@@ -30,6 +29,7 @@ import { SubTaskListMap } from '@shared/types';
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './variation-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

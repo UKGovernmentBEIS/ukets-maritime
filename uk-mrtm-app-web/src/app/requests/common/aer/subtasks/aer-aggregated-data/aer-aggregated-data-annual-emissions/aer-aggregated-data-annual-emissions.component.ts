@@ -39,7 +39,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-annual-emissions',
-  standalone: true,
   imports: [
     WizardStepComponent,
     RouterLink,
@@ -48,8 +47,9 @@ import { WizardStepComponent } from '@shared/components';
     ReactiveFormsModule,
     AerAggregatedDataAnnualEmissionsTotalsComponent,
   ],
-  providers: [aerAggregatedDataAnnualEmissionsFormProvider],
+  standalone: true,
   templateUrl: './aer-aggregated-data-annual-emissions.component.html',
+  providers: [aerAggregatedDataAnnualEmissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataAnnualEmissionsComponent implements OnInit {

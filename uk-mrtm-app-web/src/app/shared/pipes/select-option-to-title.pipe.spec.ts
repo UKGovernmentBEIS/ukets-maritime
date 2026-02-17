@@ -19,4 +19,3 @@ describe('SelectOptionToTitlePipe', () => {
     expect(pipe.transform(true, data)).toEqual('Boolean value true');
   });
 });
-``;

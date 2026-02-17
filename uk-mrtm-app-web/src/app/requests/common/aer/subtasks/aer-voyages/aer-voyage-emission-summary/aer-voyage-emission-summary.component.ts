@@ -26,7 +26,6 @@ import { VoyageSummaryTemplateComponent } from '@shared/components/summaries';
 
 @Component({
   selector: 'mrtm-aer-voyage-emission-summary',
-  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -36,6 +35,7 @@ import { VoyageSummaryTemplateComponent } from '@shared/components/summaries';
     VoyageSummaryTemplateComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-voyage-emission-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

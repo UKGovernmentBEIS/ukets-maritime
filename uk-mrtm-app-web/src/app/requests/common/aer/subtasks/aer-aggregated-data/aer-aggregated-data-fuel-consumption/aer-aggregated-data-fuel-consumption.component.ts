@@ -38,7 +38,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-fuel-consumption',
-  standalone: true,
   imports: [
     ButtonDirective,
     WizardStepComponent,
@@ -51,9 +50,10 @@ import { SubTaskListMap } from '@shared/types';
     LegendDirective,
     AddAnotherDirective,
   ],
-  providers: [aerAggregatedDataFuelConsumptionFormProvider],
+  standalone: true,
   templateUrl: './aer-aggregated-data-fuel-consumption.component.html',
   styleUrl: './aer-aggregated-data-fuel-consumption.component.scss',
+  providers: [aerAggregatedDataFuelConsumptionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataFuelConsumptionComponent {

@@ -2,10 +2,10 @@
   {{ taskMap.fuelsAndEmissionsFactors.title }}
 </netz-page-heading>
 
-@for (fuel of fuelsAndFactors(); track fuel; let i = $index) {
+@for (fuel of fuelsAndFactors(); track fuel) {
   <mrtm-fuels-and-emission-factors-summary-template
     [isDeletable]="true"
-    [index]="i"
+    [index]="$index"
     [data]="fuel"
     (delete)="handleDelete($event)"
     [isEditable]="isEditable" />

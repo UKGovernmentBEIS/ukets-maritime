@@ -3,6 +3,19 @@
   <mrtm-emission-sources-summary-template
     [emissionSources]="vm.emissionSources"
     [emissionSourcesMap]="vm.emissionSourcesMap" />
+
+  @if (vm?.reviewGroupDecision && !vm?.isVariationRegulator) {
+    <mrtm-review-decision-summary-template
+      [reviewDecision]="vm.reviewGroupDecision"
+      [isPermittedUser]="vm.isRegulator" />
+  }
+
+  @if (vm?.isVariationRegulator) {
+    <mrtm-variation-regulator-decision-partial-summary-template
+      [variationDecisionDetails]="vm.regulatorLedReason"
+      [showNotes]="vm.isRegulator" />
+  }
+
   <div>
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <netz-return-to-task-or-action-page />

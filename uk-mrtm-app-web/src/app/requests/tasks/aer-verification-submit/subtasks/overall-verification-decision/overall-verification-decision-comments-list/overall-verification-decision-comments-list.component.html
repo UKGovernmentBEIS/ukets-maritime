@@ -4,7 +4,7 @@
 
 @if (reasons()?.length) {
   <h2 class="govuk-heading-m">{{ reasons()?.length > 1 ? 'Reasons' : 'Reason' }}</h2>
-  @for (reason of reasons(); track i; let i = $index) {
+  @for (reason of reasons(); track $index) {
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <div class="flex-space-between govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-1">
       <div class="pre-wrap">{{ reason }}</div>
@@ -13,13 +13,13 @@
           <a
             govukLink
             class="govuk-link--no-visited-state"
-            [routerLink]="['../' + i + '/' + wizardStep.VERIFIED_WITH_COMMENTS_FORM_EDIT]">
+            [routerLink]="[`../${$index}/${wizardStep.VERIFIED_WITH_COMMENTS_FORM_EDIT}`]">
             Change
           </a>
           <a
             govukLink
             class="govuk-link--no-visited-state"
-            [routerLink]="['../' + i + '/' + wizardStep.VERIFIED_WITH_COMMENTS_DELETE]">
+            [routerLink]="[`../${$index}/${wizardStep.VERIFIED_WITH_COMMENTS_DELETE}`]">
             Remove
           </a>
         </div>
@@ -30,13 +30,13 @@
 
   @if (isEditable()) {
     <div class="govuk-!-margin-bottom-6">
-      <a govukSecondaryButton [routerLink]="['../' + wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD]">Add another item</a>
+      <a govukSecondaryButton [routerLink]="[`../${wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD}`]">Add another item</a>
     </div>
   }
 
   <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
 } @else {
-  <a govukButton [routerLink]="['../' + wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD]">Add a reason</a>
+  <a govukButton [routerLink]="[`../${wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD}`]">Add a reason</a>
 }
 
 <div>

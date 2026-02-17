@@ -20,7 +20,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-skip-review-form',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ConditionalContentDirective,
@@ -29,8 +28,9 @@ import { WizardStepComponent } from '@shared/components';
     TextareaComponent,
     ReactiveFormsModule,
   ],
-  providers: [provideSkipReviewForm],
+  standalone: true,
   templateUrl: './skip-review-form.component.html',
+  providers: [provideSkipReviewForm],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SkipReviewFormComponent {

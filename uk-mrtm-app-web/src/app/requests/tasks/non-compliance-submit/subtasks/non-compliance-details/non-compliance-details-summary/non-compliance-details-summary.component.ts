@@ -18,13 +18,13 @@ import { NonComplianceDetailsSummaryTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-non-compliance-details-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceDetailsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

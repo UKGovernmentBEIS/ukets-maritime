@@ -46,7 +46,11 @@
       [registeredOwnerItems]="registeredOwners()" />
   </details>
 
-  <div formControlName="responsibilityDeclaration" govuk-checkboxes>
+  <div
+    label="Responsibility declaration"
+    [isLabelHidden]="true"
+    formControlName="responsibilityDeclaration"
+    govuk-checkboxes>
     <govuk-checkbox [value]="true">
       <ng-container govukLabel>
         <strong>

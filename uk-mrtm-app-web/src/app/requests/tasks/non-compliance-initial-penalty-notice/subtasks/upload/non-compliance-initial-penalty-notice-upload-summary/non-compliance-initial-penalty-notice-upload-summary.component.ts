@@ -19,13 +19,13 @@ import { NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent } from 
 
 @Component({
   selector: 'mrtm-non-compliance-initial-penalty-notice-upload-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-initial-penalty-notice-upload-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

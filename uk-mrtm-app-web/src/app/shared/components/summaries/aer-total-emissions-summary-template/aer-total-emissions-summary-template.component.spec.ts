@@ -66,7 +66,7 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
     expect(tableElements.length).toEqual(1);
 
     const totalEmissionsTable = page.query('table[aria-label="Emission calculations"]');
-    expect(totalEmissionsTable).toBeInTheDocument();
+    expect(totalEmissionsTable).toBeTruthy();
 
     expect(
       Array.from(totalEmissionsTable.querySelectorAll('thead th').values())
@@ -82,7 +82,7 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
   });
 
   it('should display total emissions table', () => {
-    expect(page.totalEmissionsTableElement).toBeInTheDocument();
+    expect(page.totalEmissionsTableElement).toBeTruthy();
     expect(
       Array.from(page.totalEmissionsTableElement.querySelectorAll('thead th'))
         .map((col) => col.textContent.trim())

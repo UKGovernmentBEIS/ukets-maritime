@@ -20,17 +20,17 @@ describe('DataGapsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(DataGapsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.dataGaps = {
+    fixture.componentRef.setInput('dataGaps', {
       fuelConsumptionEstimationMethod: 'some description',
       responsiblePersonOrPosition: 'person',
       dataSources: 'data sources',
       recordsLocation: 'location',
       itSystemUsed: 'it',
-    };
-    component.wizardStep = {
+    });
+    fixture.componentRef.setInput('wizardStep', {
       DATA_GAPS_METHOD: 'data-gaps-method',
-    };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });

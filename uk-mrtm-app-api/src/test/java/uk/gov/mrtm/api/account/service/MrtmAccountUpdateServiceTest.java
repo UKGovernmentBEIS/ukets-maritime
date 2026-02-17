@@ -45,7 +45,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.within;
 import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -92,7 +94,8 @@ class MrtmAccountUpdateServiceTest {
     @MethodSource("createRemainingReportingYearsScenarios")
     void updateMaritimeAccount_publish_account_updated_event(LocalDate currentFirstMaritimeActivity,
                                                              LocalDate newFirstMaritimeActivity,
-                                                             List<Year> expectedYears) throws IllegalAccessException, NoSuchFieldException {
+                                                             List<Year> expectedYears,
+                                                             int accountUpdateInvocations) throws IllegalAccessException, NoSuchFieldException {
         String name = "name";
         AppUser appUser = AppUser.builder().userId("userId").build();
 
@@ -108,15 +111,15 @@ class MrtmAccountUpdateServiceTest {
         when(mrtmAccountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(mrtmAccount);
         when(mrtmAccount.getFirstMaritimeActivityDate()).thenReturn(currentFirstMaritimeActivity);
         when(mrtmAccountUpdateDTO.getFirstMaritimeActivityDate()).thenReturn(newFirstMaritimeActivity);
-        when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID))
+        lenient().when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID))
             .thenReturn(emissionsMonitoringPlan);
 
         mrtmAccountUpdateService.updateMaritimeAccount(ACCOUNT_ID, mrtmAccountUpdateDTO, appUser);
 
         verify(mrtmAccountQueryService).getAccountById(ACCOUNT_ID);
         verify(mrtmAccountMapper).updateMrtmAccount(mrtmAccount, mrtmAccountUpdateDTO);
-        verify(emissionsMonitoringPlanQueryService).getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
-        verify(accountUpdatedRegistryListener).onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
+        verify(emissionsMonitoringPlanQueryService, times(accountUpdateInvocations)).getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
+        verify(accountUpdatedRegistryListener, times(accountUpdateInvocations)).onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
             .accountId(ACCOUNT_ID)
             .emissionsMonitoringPlan(emissionsMonitoringPlan)
             .build());
@@ -133,9 +136,9 @@ class MrtmAccountUpdateServiceTest {
 
     private static Stream<Arguments> createRemainingReportingYearsScenarios() {
         return Stream.of(
-            Arguments.of(LocalDate.now(), LocalDate.now(), List.of(Year.now())),
-            Arguments.of(LocalDate.now().plusYears(1), LocalDate.now().plusYears(1), List.of(Year.now())),
-            Arguments.of(LocalDate.now(), LocalDate.now().minusYears(1), List.of(Year.now().minusYears(1), Year.now()))
+            Arguments.of(LocalDate.now(), LocalDate.now(), List.of(Year.now()), 0),
+            Arguments.of(LocalDate.now().plusYears(1), LocalDate.now().plusYears(1), List.of(Year.now()), 0),
+            Arguments.of(LocalDate.now(), LocalDate.now().minusYears(1), List.of(Year.now().minusYears(1), Year.now()), 1)
         );
     }
 

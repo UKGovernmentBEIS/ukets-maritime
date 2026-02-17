@@ -43,6 +43,7 @@ public enum MrtmErrorCode implements NetzErrorCode {
     INTEGRATION_REGISTRY_EMISSIONS_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGACCOUNTCREATIONMRTM1007", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because kafka message queue is not available"),
     INTEGRATION_REGISTRY_ACCOUNT_CREATION_REGISTRY_ID_EXISTS("INTREGACCOUNTCREATIONMRTM1008", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because Operator Id already exists"),
     INTEGRATION_REGISTRY_EMISSIONS_AER_NOT_FOUND("INTREGEMISSIONSMRTM1006", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because no aer request has been found"),
+    INTEGRATION_REGISTRY_ACCOUNT_CONTACTS_INVALID_ROLE("INTREGACCOUNTCONTACTSMRTM1006", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send account contacts to ETS Registry because role type cannot be mapped to registry role type"),
 
     /**
      * VIR

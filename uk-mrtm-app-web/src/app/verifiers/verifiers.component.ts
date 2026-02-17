@@ -22,7 +22,6 @@ import { SiteContactsComponent } from '@verifiers/components';
 
 @Component({
   selector: 'mrtm-verifiers',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
@@ -32,6 +31,7 @@ import { SiteContactsComponent } from '@verifiers/components';
     NotificationBannerComponent,
     SiteContactsComponent,
   ],
+  standalone: true,
   templateUrl: './verifiers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -140,6 +140,7 @@ export * from './doe';
 export * from './doeApplicationSubmitRequestTaskPayload';
 export * from './doeApplicationSubmittedRequestActionPayload';
 export * from './doeDeterminationReason';
+export * from './doeDeterminationReasonDetails';
 export * from './doeFeeDetails';
 export * from './doeMaritimeEmissions';
 export * from './doeRequestMetadata';

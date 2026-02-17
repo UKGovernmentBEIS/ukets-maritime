@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, HostBinding, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { TaskItem } from '@netz/common/model';
 
@@ -7,8 +7,10 @@ import { TaskItemComponent } from '../task-item';
 /* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: 'ul[netz-task-item-list]',
+  imports: [TaskItemComponent],
+  standalone: true,
   template: `
-    @for (task of taskItems; track i; let i = $index) {
+    @for (task of taskItems(); track $index) {
       <li
         netz-task-item
         [link]="task.link"
@@ -21,12 +23,11 @@ import { TaskItemComponent } from '../task-item';
     }
     <ng-content></ng-content>
   `,
-  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [TaskItemComponent],
+  host: { '[class.app-task-list__items]': 'taskListItems' },
 })
 export class TaskItemListComponent {
-  @Input() taskItems: TaskItem[];
+  readonly taskItems = input<TaskItem[]>();
 
-  @HostBinding('class.app-task-list__items') readonly taskListItems = true;
+  readonly taskListItems = true;
 }

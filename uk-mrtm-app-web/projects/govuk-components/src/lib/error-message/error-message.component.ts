@@ -1,16 +1,16 @@
 import { KeyValuePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, model } from '@angular/core';
 
 import { MessageValidationErrors } from './message-validation-errors';
 
 @Component({
   selector: 'govuk-error-message',
-  standalone: true,
   imports: [KeyValuePipe],
+  standalone: true,
   templateUrl: './error-message.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ErrorMessageComponent {
-  @Input() identifier: string;
-  @Input() errors: MessageValidationErrors;
+  readonly identifier = model<string>();
+  readonly errors = model<MessageValidationErrors>();
 }

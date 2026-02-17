@@ -41,6 +41,7 @@ export interface FileDownloadInfo {
 
 @Component({
   selector: 'mrtm-file-download',
+  imports: [LinkDirective, LoadingSpinnerComponent],
   standalone: true,
   template: `
     @if (downloadProcessing()) {
@@ -52,7 +53,6 @@ export interface FileDownloadInfo {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [LinkDirective, LoadingSpinnerComponent],
 })
 export class FileDownloadComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -67,15 +67,15 @@ export class FileDownloadComponent implements OnInit {
   private readonly fileDocumentsService = inject(FileDocumentsService);
   private readonly fileGuidanceService = inject(FileGuidanceService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  downloadProcessing: WritableSignal<boolean> = signal(true);
-  anchor = viewChild<ElementRef<HTMLAnchorElement>>('anchor');
+  readonly downloadProcessing: WritableSignal<boolean> = signal(true);
+  readonly anchor = viewChild<ElementRef<HTMLAnchorElement>>('anchor');
 
   private hasDownloadedOnce = false;
   private readonly fileDownloadAttachmentPath = `${this.fileAttachmentsService.configuration.basePath}/v1.0/file-attachments/`;
   private readonly fileDownloadDocumentPath = `${this.fileDocumentsService.configuration.basePath}/v1.0/file-documents/`;
   private readonly fileDownloadGuidancePath = `${this.fileGuidanceService.configuration.basePath}/v1.0/file-guidance/`;
 
-  url = toSignal(
+  readonly url = toSignal(
     this.route.paramMap.pipe(
       map((params): FileDownloadInfo => {
         if (params.has('actionId')) {

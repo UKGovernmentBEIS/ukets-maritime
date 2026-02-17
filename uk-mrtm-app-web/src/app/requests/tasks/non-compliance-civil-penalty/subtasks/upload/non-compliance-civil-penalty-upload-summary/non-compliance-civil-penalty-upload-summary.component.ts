@@ -19,13 +19,13 @@ import { NonComplianceCivilPenaltyUploadSummaryTemplateComponent } from '@shared
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-upload-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceCivilPenaltyUploadSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-civil-penalty-upload-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

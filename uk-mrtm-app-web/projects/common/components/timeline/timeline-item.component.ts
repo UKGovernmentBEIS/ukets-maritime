@@ -9,6 +9,7 @@ import { LinkDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'netz-timeline-item',
+  imports: [ItemActionHeaderPipe, GovukDatePipe, RouterLink, LinkDirective],
   standalone: true,
   template: `
     <div class="govuk-body govuk-!-margin-bottom-0">
@@ -23,17 +24,16 @@ import { LinkDirective } from '@netz/govuk-components';
     <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ItemActionHeaderPipe, GovukDatePipe, RouterLink, LinkDirective],
 })
 export class TimelineItemComponent {
   protected readonly route = inject(ActivatedRoute);
   private readonly itemActionsMap = inject<ItemActionsMap>(ITEM_ACTIONS_MAP);
 
-  action = input<RequestActionInfoDTO>();
-  link = input<any[]>();
-  state = input<any>();
-  requestId = input<string>();
-  isLinkable = computed(() => this.itemActionsMap[this.action().type]?.linkable);
+  readonly action = input<RequestActionInfoDTO>();
+  readonly link = input<any[]>();
+  readonly state = input<any>();
+  readonly requestId = input<string>();
+  readonly isLinkable = computed(() => this.itemActionsMap[this.action().type]?.linkable);
 
   readonly getYearFromRequestId = getYearFromRequestId;
 }

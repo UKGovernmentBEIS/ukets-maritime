@@ -46,7 +46,6 @@ import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-fuels-and-emission-factors-form',
-  standalone: true,
   imports: [
     ShipStepTitleCustomPipe,
     WizardStepComponent,
@@ -62,8 +61,9 @@ import { isAer } from '@shared/utils';
     LinkDirective,
     RouterLink,
   ],
-  providers: [fuelsAndEmissionFactorsFormProvider],
+  standalone: true,
   templateUrl: './fuels-and-emissions-factors-form.component.html',
+  providers: [fuelsAndEmissionFactorsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelsAndEmissionsFactorsFormComponent implements OnInit {

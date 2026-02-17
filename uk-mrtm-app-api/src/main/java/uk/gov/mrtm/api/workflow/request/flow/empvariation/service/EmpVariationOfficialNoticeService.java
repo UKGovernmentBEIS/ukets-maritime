@@ -8,8 +8,11 @@ import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdated
 import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDeterminationType;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
@@ -80,22 +83,28 @@ public class EmpVariationOfficialNoticeService {
     public void sendOfficialNotice(final String requestId) {
         final Request request = requestService.findRequestById(requestId);
         final EmpVariationRequestPayload requestPayload = (EmpVariationRequestPayload) request.getPayload();
+        final EmpVariationRequestMetadata requestMetadata = (EmpVariationRequestMetadata) request.getMetadata();
+
         final List<String> ccRecipientsEmails = decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification());
         final List<FileInfoDTO> attachments = requestPayload.getEmpDocument() != null ?
             List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
             List.of(requestPayload.getOfficialNotice());
         officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
 
-        AccountUpdatedSubmittedEventDetails updatedSubmittedEventDetails = accountUpdatedRegistryListener.onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
-            .accountId(request.getAccountId())
-            .emissionsMonitoringPlan(requestPayload.getEmissionsMonitoringPlan())
-            .build());
+        boolean sentAccountUpdateEvent = RoleTypeConstants.REGULATOR.equals(requestMetadata.getInitiatorRoleType())
+                || requestPayload.getDetermination().getType().equals(EmpVariationDeterminationType.APPROVED);
+        if (sentAccountUpdateEvent) {
+            AccountUpdatedSubmittedEventDetails updatedSubmittedEventDetails = accountUpdatedRegistryListener.onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
+                .accountId(request.getAccountId())
+                .emissionsMonitoringPlan(requestPayload.getEmissionsMonitoringPlan())
+                .build());
 
-        accountUpdatedEventRequestActionService.addRequestAction(
-            request,
-            updatedSubmittedEventDetails,
-            requestPayload.getEmissionsMonitoringPlan().getOperatorDetails().getOrganisationStructure(),
-            null);
+            accountUpdatedEventRequestActionService.addRequestAction(
+                request,
+                updatedSubmittedEventDetails,
+                requestPayload.getEmissionsMonitoringPlan().getOperatorDetails().getOrganisationStructure(),
+                null);
+        }
     }
 
     @Transactional

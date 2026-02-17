@@ -86,7 +86,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-aer-verification-submitted-report',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     VerifierDetailsSummaryTemplateComponent,
@@ -103,6 +102,7 @@ interface ViewModel {
     MaterialityLevelSummaryTemplateComponent,
     AerSubmittedReportComponent,
   ],
+  standalone: true,
   templateUrl: './aer-verification-submitted-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -110,7 +110,7 @@ export class AerVerificationSubmittedReportComponent implements AfterViewInit {
   private readonly store = inject(RequestActionStore);
   private readonly requestActionReportService = inject(RequestActionReportService);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const requestActionDTO = this.store.select(requestActionQuery.selectAction)();
     const reportingYear = this.store.select(timelineCommonQuery.selectReportingYear)();
     const title = itemActionToTitleTransformer(requestActionDTO?.type, reportingYear, requestActionDTO?.submitter);

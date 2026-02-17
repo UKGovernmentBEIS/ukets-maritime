@@ -10,10 +10,10 @@ import { ButtonDirective, GovukTableColumn, LinkDirective, SortEvent, TableCompo
 
 @Component({
   selector: 'mrtm-external-contacts',
+  imports: [ButtonDirective, TableComponent, LinkDirective, RouterLink, AsyncPipe],
+  standalone: true,
   templateUrl: './external-contacts.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [ButtonDirective, TableComponent, LinkDirective, RouterLink, AsyncPipe],
 })
 export class ExternalContactsComponent implements OnInit {
   readonly router = inject(Router);

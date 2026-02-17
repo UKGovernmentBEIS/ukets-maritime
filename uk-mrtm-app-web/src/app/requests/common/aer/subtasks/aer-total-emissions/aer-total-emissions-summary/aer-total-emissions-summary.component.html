@@ -1,5 +1,5 @@
 <mrtm-notification-banner />
-<netz-page-heading>Check emissions summary for all ships</netz-page-heading>
+<netz-page-heading [caption]="map.title">Check your answers</netz-page-heading>
 @if (warningText()) {
   <govuk-warning-text class="pre-wrap" [assistiveText]="warningText()" />
 }

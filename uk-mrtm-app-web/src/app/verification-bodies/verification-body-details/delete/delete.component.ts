@@ -13,7 +13,6 @@ import { saveNotFoundVerificationBodyError } from '@verification-bodies/errors/b
 
 @Component({
   selector: 'mrtm-delete',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     WarningTextComponent,
@@ -22,6 +21,7 @@ import { saveNotFoundVerificationBodyError } from '@verification-bodies/errors/b
     PendingButtonDirective,
     RouterLink,
   ],
+  standalone: true,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

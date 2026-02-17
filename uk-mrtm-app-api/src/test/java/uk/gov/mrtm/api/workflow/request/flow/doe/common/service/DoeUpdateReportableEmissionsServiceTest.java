@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsSaveParams;
 import uk.gov.mrtm.api.reporting.service.ReportableEmissionsService;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
+import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestMetadata;
@@ -64,7 +65,10 @@ class DoeUpdateReportableEmissionsServiceTest {
                                 .calculationApproach("calculationApproach").build())
                             .chargeOperator(false)
                         .determinationReason(DoeDeterminationReason.builder()
-                                .type(DoeDeterminationReasonType.IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER)
+                                .details(DoeDeterminationReasonDetails.builder()
+                                    .type(DoeDeterminationReasonType.IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER)
+                                    .noticeText("noticeText")
+                                    .build())
                                 .furtherDetails("furtherDetails")
                                 .build())
                     .build())

@@ -7,26 +7,33 @@ import { RequestActionStore } from '@netz/common/store';
 
 import { greenhouseGasMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { empSubmittedQuery } from '@requests/timeline/emp-submitted/+state';
-import { GreenhousesSummaryTemplateComponent } from '@shared/components';
-import { SubTaskListMap } from '@shared/types';
+import { GreenhousesSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent } from '@shared/components';
+import { EmpVariationReviewDecisionDto, SubTaskListMap } from '@shared/types';
 
 interface ViewModel {
   greenhouseGas: EmpMonitoringGreenhouseGas;
   greenhouseGasMap: SubTaskListMap<EmpMonitoringGreenhouseGas>;
+  reviewGroupDecision?: EmpVariationReviewDecisionDto | null;
 }
 
 @Component({
   selector: 'mrtm-greenhouse-gas-submitted',
+  imports: [
+    PageHeadingComponent,
+    ReturnToTaskOrActionPageComponent,
+    GreenhousesSummaryTemplateComponent,
+    ReviewDecisionSummaryTemplateComponent,
+  ],
   standalone: true,
-  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, GreenhousesSummaryTemplateComponent],
   templateUrl: './greenhouse-gas-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GreenhouseGasSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     greenhouseGas: this.store.select(empSubmittedQuery.selectGreenhouseGas)(),
     greenhouseGasMap: greenhouseGasMap,
+    reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('greenhouseGas'))(),
   }));
 }

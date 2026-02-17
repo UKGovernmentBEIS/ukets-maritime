@@ -14,13 +14,13 @@ import { OpinionStatementSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-opinion-statement-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     OpinionStatementSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './opinion-statement-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

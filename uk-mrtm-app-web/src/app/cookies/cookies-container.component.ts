@@ -8,16 +8,17 @@ import { AnalyticsService } from '@core/services/analytics.service';
 
 @Component({
   selector: 'mrtm-cookies-container',
+  imports: [CookiesPopUpComponent, AsyncPipe],
   standalone: true,
   template: `
     <govuk-cookies-pop-up
       cookiesExpirationTime="1"
       [areBrowserCookiesEnabled]="cookiesEnabled"
       [cookiesAccepted]="cookiesAccepted$ | async"
+      (cookiesRejectedEmitter)="rejectCookies($event)"
       (cookiesAcceptedEmitter)="acceptCookies($event)"></govuk-cookies-pop-up>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [CookiesPopUpComponent, AsyncPipe],
 })
 export class CookiesContainerComponent {
   private readonly cookiesService = inject(CookiesService);
@@ -28,5 +29,9 @@ export class CookiesContainerComponent {
   acceptCookies(expired: string) {
     this.cookiesService.acceptAllCookies(+expired);
     this.analyticsService.enableGoogleTagManager();
+  }
+
+  rejectCookies(expired: string) {
+    this.cookiesService.rejectAllCookies(+expired);
   }
 }

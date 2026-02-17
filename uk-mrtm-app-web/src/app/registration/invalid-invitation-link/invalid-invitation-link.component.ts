@@ -10,6 +10,8 @@ import { ErrorCodes } from '@netz/common/error';
 
 @Component({
   selector: 'mrtm-invalid-invitation-link',
+  imports: [PageHeadingComponent, AsyncPipe],
+  standalone: true,
   template: `
     <netz-page-heading>{{ title$ | async }}</netz-page-heading>
 
@@ -23,8 +25,6 @@ import { ErrorCodes } from '@netz/common/error';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeadingComponent, AsyncPipe],
 })
 export class InvalidInvitationLinkComponent {
   private readonly activatedRoute = inject(ActivatedRoute);

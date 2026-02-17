@@ -11,6 +11,8 @@ describe('RelatedContentComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    imports: [RelatedContentComponent, GovukComponentsModule],
+    standalone: true,
     template: `
       <mrtm-related-content header="Related content header">
         <li>
@@ -21,8 +23,6 @@ describe('RelatedContentComponent', () => {
         </li>
       </mrtm-related-content>
     `,
-    standalone: true,
-    imports: [RelatedContentComponent, GovukComponentsModule],
   })
   class TestComponent {}
 

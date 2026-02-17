@@ -23,7 +23,6 @@ import { AerJourneyTypeEnum } from '@shared/types';
 
 @Component({
   selector: 'mrtm-voyage-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -38,6 +37,7 @@ import { AerJourneyTypeEnum } from '@shared/types';
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
     VoyageOrPortCallEmissionsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './voyage-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

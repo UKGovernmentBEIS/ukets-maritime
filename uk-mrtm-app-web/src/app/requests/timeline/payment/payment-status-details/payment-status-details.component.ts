@@ -7,8 +7,8 @@ import { PaymentCancelledSummaryTemplateComponent, PaymentDetailsSummaryTemplate
 
 @Component({
   selector: 'mrtm-payment-status-details',
-  standalone: true,
   imports: [PaymentDetailsSummaryTemplateComponent, PaymentCancelledSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './payment-status-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

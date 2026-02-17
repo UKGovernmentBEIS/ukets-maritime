@@ -17,7 +17,6 @@ import { empSubtaskToTitle } from '@shared/constants';
 
 @Component({
   selector: 'mrtm-operator-amends',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
@@ -25,6 +24,7 @@ import { empSubtaskToTitle } from '@shared/constants';
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './return-for-amends-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

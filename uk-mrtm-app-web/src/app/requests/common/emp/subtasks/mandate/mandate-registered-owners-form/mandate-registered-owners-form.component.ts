@@ -34,7 +34,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-form',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -45,8 +44,9 @@ import { SubTaskListMap } from '@shared/types';
     LinkDirective,
     RouterLink,
   ],
-  providers: [mandateRegisteredOwnersFormProvider],
+  standalone: true,
   templateUrl: './mandate-registered-owners-form.component.html',
+  providers: [mandateRegisteredOwnersFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateRegisteredOwnersFormComponent {

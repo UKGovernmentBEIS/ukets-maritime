@@ -8,8 +8,8 @@ import { GovukTableColumn, SortEvent } from './table.interface';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 describe('TableComponent', () => {
   @Component({
-    standalone: true,
     imports: [TableComponent],
+    standalone: true,
     template: `
       <govuk-table
         [columns]="columns"
@@ -32,8 +32,8 @@ describe('TableComponent', () => {
   }
 
   @Component({
-    standalone: true,
     imports: [TableComponent],
+    standalone: true,
     template: `
       <govuk-table [columns]="columns" [data]="data" [caption]="caption" (sort)="onSort($event)">
         <ng-template let-column="column" let-row="row">

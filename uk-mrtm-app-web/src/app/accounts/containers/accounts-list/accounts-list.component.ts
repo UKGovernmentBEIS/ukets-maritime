@@ -1,5 +1,5 @@
 import { TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { AccountSearchResultInfoDTO } from '@mrtm/api';
@@ -10,11 +10,11 @@ import { OperatorAccountsStatusColorPipe } from '@accounts/pipes/operator-accoun
 
 @Component({
   selector: 'mrtm-accounts-list',
+  imports: [LinkDirective, RouterLink, TitleCasePipe, OperatorAccountsStatusColorPipe, TagComponent],
+  standalone: true,
   templateUrl: './accounts-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [LinkDirective, RouterLink, TitleCasePipe, OperatorAccountsStatusColorPipe, TagComponent],
 })
 export class AccountsListComponent {
-  @Input() accounts: AccountSearchResultInfoDTO[];
+  readonly accounts = input<AccountSearchResultInfoDTO[]>();
 }
