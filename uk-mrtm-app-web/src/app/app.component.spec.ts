@@ -1,14 +1,15 @@
 import { APP_BASE_HREF } from '@angular/common';
 import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
+
+import { KeycloakService } from 'keycloak-angular';
 
 import { UserStateDTO } from '@mrtm/api';
 
 import { AuthStore } from '@netz/common/auth';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
-
-import { KeycloakService } from '@shared/services';
 
 import { AppComponent } from './app.component';
 
@@ -41,12 +42,20 @@ describe('AppComponent', () => {
       return this.query<HTMLAnchorElement>('a[href="/maritime/dashboard"]');
     }
 
+    get accountsLink() {
+      return this.query<HTMLAnchorElement>('a[href="/maritime/accounts"]');
+    }
+
     get regulatorsLink() {
       return this.query<HTMLAnchorElement>('a[href="/maritime/user/regulators"]');
     }
 
     get verificationBodiesLink() {
       return this.query<HTMLAnchorElement>('a[href="/maritime/verification-bodies"]');
+    }
+
+    get templatesLink() {
+      return this.query<HTMLAnchorElement>('a[href="/maritime/templates"]');
     }
 
     get navList() {
@@ -72,6 +81,7 @@ describe('AppComponent', () => {
       providers: [
         KeycloakService,
         provideHttpClient(),
+        provideHttpClientTesting(),
         {
           provide: ActivatedRoute,
           useValue: new ActivatedRouteStub(),
@@ -120,7 +130,7 @@ describe('AppComponent', () => {
 
     expect(page.regulatorsLink).toBeFalsy();
 
-    setUser('REGULATOR');
+    setUser('REGULATOR', 'ENABLED');
 
     expect(page.regulatorsLink).toBeTruthy();
   });
@@ -130,38 +140,38 @@ describe('AppComponent', () => {
 
     expect(page.verificationBodiesLink).toBeFalsy();
 
-    setUser('REGULATOR');
+    setUser('REGULATOR', 'ENABLED');
 
     expect(page.verificationBodiesLink).toBeTruthy();
   });
 
-  // it('should render the accounts link only if the user is regulator, verifier or authorized operator', () => {
-  //   setUser('OPERATOR', 'NO_AUTHORITY');
-  //
-  //   expect(page.accountsLink).toBeFalsy();
-  //
-  //   setUser('REGULATOR');
-  //
-  //   expect(page.accountsLink).toBeTruthy();
-  //
-  //   setUser('OPERATOR', 'ENABLED');
-  //
-  //   expect(page.accountsLink).toBeTruthy();
-  // });
+  it('should render the accounts link only if the user is regulator, verifier or authorized operator', () => {
+    setUser('OPERATOR', 'NO_AUTHORITY');
 
-  // it('should render the templates link only if the user is a regulator', () => {
-  //   setUser('OPERATOR');
+    expect(page.accountsLink).toBeFalsy();
 
-  //   expect(page.templatesLink).toBeFalsy();
+    setUser('REGULATOR', 'ENABLED');
 
-  //   setUser('VERIFIER');
+    expect(page.accountsLink).toBeTruthy();
 
-  //   expect(page.templatesLink).toBeFalsy();
+    setUser('OPERATOR', 'ENABLED');
 
-  //   setUser('REGULATOR');
+    expect(page.accountsLink).toBeTruthy();
+  });
 
-  //   expect(page.templatesLink).toBeTruthy();
-  // });
+  it('should render the templates link only if the user is a regulator', () => {
+    setUser('OPERATOR', 'ENABLED');
+
+    expect(page.templatesLink).toBeFalsy();
+
+    setUser('VERIFIER', 'ENABLED');
+
+    expect(page.templatesLink).toBeFalsy();
+
+    setUser('REGULATOR', 'ENABLED');
+
+    expect(page.templatesLink).toBeTruthy();
+  });
 
   it('should not render the nav list if user is disabled', () => {
     setUser('REGULATOR', 'ENABLED');

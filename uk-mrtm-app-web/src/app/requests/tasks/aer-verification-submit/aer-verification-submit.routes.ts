@@ -45,6 +45,7 @@ import {
 } from '@requests/tasks/aer-verification-submit/aer-verification-submit.providers';
 import { canActivateReturnToOperatorForChanges } from '@requests/tasks/aer-verification-submit/return-to-operator-for-changes/return-to-operator-for-changes.guard';
 import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-verification-submit/subtasks/send-report/send-report.helpers';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
   {
@@ -57,6 +58,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       provideAerVerificationSubmitTaskServices(),
       provideAerVerificationSubmitStepFlowManagers(),
     ],
+    canActivate: [resetPersistableStateGuard],
     children: [
       // Verifier assessment
       {

@@ -4,7 +4,6 @@ import { FormGroup, ReactiveFormsModule, UntypedFormControl } from '@angular/for
 import { ActivatedRoute } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { MaritimeAccountsService } from '@mrtm/api';
 
@@ -20,6 +19,7 @@ import {
 import { operatorDetailsStepFormProvider } from '@requests/common/components/operator-details/operator-details-step/operator-details-step.form-provider';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { LocationStateFormComponent, WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-operator-details-step',

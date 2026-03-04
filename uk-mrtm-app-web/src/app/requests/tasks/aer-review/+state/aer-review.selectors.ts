@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { AerDataReviewDecision, AerSaveReviewGroupDecisionRequestTaskActionPayload } from '@mrtm/api';
 
 import {
@@ -19,6 +17,7 @@ import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK } from '@requests/comm
 import { REPORTING_OBLIGATION_SUB_TASK } from '@requests/common/aer/subtasks/reporting-obligation';
 import { AerReviewTaskPayload } from '@requests/tasks/aer-review/aer-review.types';
 import { ReviewDecisionDto } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const selectPayload: StateSelector<RequestTaskState, AerReviewTaskPayload> = createDescendingSelector(
   requestTaskQuery.selectRequestTaskPayload,

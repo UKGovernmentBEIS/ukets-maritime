@@ -16,9 +16,9 @@ export const FOLLOW_UP_RESPONSE_ROUTES: Routes = [
     resolve: { backlink: followUpResponseBacklinkResolver(FollowUpResponseWizardStep.SUMMARY) },
     canActivate: [canActivateFollowUpResponseSummary],
     loadComponent: () =>
-      import(
-        '@requests/tasks/notification-follow-up/subtasks/follow-up-response/follow-up-response-summary/follow-up-response-summary.component'
-      ).then((c) => c.FollowUpResponseSummaryComponent),
+      import('@requests/tasks/notification-follow-up/subtasks/follow-up-response/follow-up-response-summary/follow-up-response-summary.component').then(
+        (c) => c.FollowUpResponseSummaryComponent,
+      ),
   },
   {
     path: FollowUpResponseWizardStep.FOLLOW_UP_RESPONSE,
@@ -27,8 +27,8 @@ export const FOLLOW_UP_RESPONSE_ROUTES: Routes = [
     resolve: { backlink: followUpResponseBacklinkResolver(FollowUpResponseWizardStep.FOLLOW_UP_RESPONSE) },
     canActivate: [canActivateFollowUpResponseStep],
     loadComponent: () =>
-      import(
-        '@requests/tasks/notification-follow-up/subtasks/follow-up-response/follow-up-response/follow-up-response.component'
-      ).then((c) => c.FollowUpResponseComponent),
+      import('@requests/tasks/notification-follow-up/subtasks/follow-up-response/follow-up-response/follow-up-response.component').then(
+        (c) => c.FollowUpResponseComponent,
+      ),
   },
 ];

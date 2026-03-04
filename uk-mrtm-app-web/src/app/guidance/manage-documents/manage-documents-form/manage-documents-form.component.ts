@@ -3,8 +3,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { GovukSelectOption, LinkDirective, SelectComponent, TextInputComponent } from '@netz/govuk-components';
 
 import { guidanceQuery, GuidanceStore } from '@guidance/+state';
@@ -13,6 +11,7 @@ import { ManageGuidanceDocumentDTO } from '@guidance/guidance.types';
 import { manageDocumentsFormProvider } from '@guidance/manage-documents/manage-documents-form/manage-documents-form.provider';
 import { ManageDocumentsFormGroupModel } from '@guidance/manage-documents/manage-documents-form/manage-documents-form.types';
 import { FileInputComponent, WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-manage-documents-form',

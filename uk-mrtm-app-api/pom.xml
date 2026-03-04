@@ -32,7 +32,7 @@
         <uk-netz-app-api-alert.version>1.1.0</uk-netz-app-api-alert.version>
         <uk-netz-app-api-rest-logging.version>1.5.0</uk-netz-app-api-rest-logging.version>
         <uk-netz-app-api-user.version>1.8.0</uk-netz-app-api-user.version>
-        <uk-netz-app-api-request.version>1.27.0</uk-netz-app-api-request.version>
+        <uk-netz-app-api-request.version>1.28.0</uk-netz-app-api-request.version>
         <uk-netz-app-api-swagger.version>1.2.0</uk-netz-app-api-swagger.version>
         <uk-netz-app-api-feedback.version>1.2.0</uk-netz-app-api-feedback.version>
         <uk-netz-app-api-security.version>1.5.0</uk-netz-app-api-security.version>

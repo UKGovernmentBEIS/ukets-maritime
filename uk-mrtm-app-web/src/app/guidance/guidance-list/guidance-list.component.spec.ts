@@ -6,7 +6,6 @@ import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 import { GuidanceStore } from '@guidance/+state';
 import { GuidanceListComponent } from '@guidance/guidance-list';
 import { mockGuidanceSections } from '@guidance/testing/guidance-data.mock';
-import { KeycloakService } from '@shared/services';
 
 describe('GuidanceListComponent', () => {
   class Page extends BasePage<GuidanceListComponent> {}
@@ -19,7 +18,7 @@ describe('GuidanceListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [GuidanceListComponent],
-      providers: [KeycloakService, { provide: ActivatedRoute, useValue: new ActivatedRouteStub() }],
+      providers: [{ provide: ActivatedRoute, useValue: new ActivatedRouteStub() }],
     }).compileComponents();
 
     guidanceStore = TestBed.inject(GuidanceStore);

@@ -12,9 +12,9 @@ import { FormGroup, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { filter, map, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { UserAccountFormComponent, WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 import { selectSubmissionErrors } from '@verifiers/+state/verifier-user.selectors';
 import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 import { ADD_USER_AUTHORITY_PROVIDER, addFormProvider } from '@verifiers/add/add.form-provider';

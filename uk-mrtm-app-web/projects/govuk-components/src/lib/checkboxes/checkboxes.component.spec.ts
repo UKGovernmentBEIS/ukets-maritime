@@ -164,7 +164,7 @@ describe('CheckboxesComponent', () => {
     hostComponent.form.get('checkboxes').setValidators(GovukValidators.builder('Error', () => ({ required: true })));
     hostComponent.form.get('checkboxes').updateValueAndValidity();
     const element: HTMLElement = fixture.nativeElement;
-    element.querySelector('form').submit();
+    element.querySelector('form').dispatchEvent(new Event('submit'));
     fixture.detectChanges();
 
     expect(findErrorMessage()).toBeTruthy();

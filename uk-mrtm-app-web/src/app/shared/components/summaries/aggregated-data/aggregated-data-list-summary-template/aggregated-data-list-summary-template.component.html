@@ -6,6 +6,9 @@
     }
 
     <mrtm-multi-select-table
+      id="aggregated-data"
+      targetFragment="aggregated-data"
+      [pageSize]="pageSize()"
       [columns]="columns"
       [data]="rows"
       [description]="header()"
@@ -32,7 +35,7 @@
       </ng-template>
     </govuk-table>
   }
-  @if (totalItems() > pageSize()) {
+  @if (!editable() && totalItems() > pageSize()) {
     <govuk-pagination
       fragment="aggregated-data"
       [count]="totalItems()"

@@ -119,6 +119,7 @@ describe('ErrorSummaryComponent', () => {
       expect(Array.from(errors).map((error) => error.href)).toEqual([
         'http://localhost/#l.topLevelFirst',
         'http://localhost/#l.topLevelFirst',
+        'http://localhost/#l.topLevelLast',
         'http://localhost/#l.secondLevelTopGroup.secondLevelFirst',
         'http://localhost/#l.secondLevelTopGroup.secondLevelSecond',
         'http://localhost/#l.secondLevelSimpleArrayTop.0',
@@ -126,13 +127,13 @@ describe('ErrorSummaryComponent', () => {
         'http://localhost/#l.secondLevelMixedArrayTop.0.nestedArrayControl1',
         'http://localhost/#l.secondLevelMixedArrayTop.1',
         'http://localhost/#l.secondLevelMixedArrayTop.2.nestedArrayControl2',
-        'http://localhost/#l.topLevelLast',
       ]);
 
       expect(errors.length).toEqual(10);
       expect(Array.from(errors).map((error) => error.textContent.trim())).toEqual([
         'Must be a positive number',
         'Enter topLevelFirst',
+        'Enter topLevelLast',
         'Enter secondLevelFirst',
         'Enter secondLevelSecond',
         'Enter 2ndLevelSimpleArray control 0',
@@ -140,7 +141,6 @@ describe('ErrorSummaryComponent', () => {
         'Enter 2ndLevelMixedArray 0 nestedControl1',
         'Enter 2ndLevelMixedArray 1 arrayControl',
         'Enter 2ndLevelMixedArray 2 nestedControl2',
-        'Enter topLevelLast',
       ]);
     });
 

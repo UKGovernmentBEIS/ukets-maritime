@@ -11,9 +11,9 @@ import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { filter, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { LocationStateFormComponent, UserAccountFormComponent, WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 import { selectSubmissionErrors } from '@verification-bodies/+state/verification-bodies.selectors';
 import { VerificationBodiesStoreService } from '@verification-bodies/+state/verification-bodies-store.service';
 import { VerificationBodyFormComponent } from '@verification-bodies/components/verification-body-form/verification-body-form.component';

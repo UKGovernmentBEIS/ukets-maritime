@@ -3,7 +3,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerShipEmissions } from '@mrtm/api';
 
@@ -21,6 +20,7 @@ import { aerPortsMap } from '@requests/common/aer/subtasks/aer-ports/aer-ports-s
 import { validateIfUsedFuelsExistInEmissionsValidator } from '@requests/common/aer/subtasks/utils';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
 import { PortCallSummaryTemplateComponent } from '@shared/components/summaries';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-port-call-summary',

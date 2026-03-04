@@ -14,7 +14,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { expand, map, Observable, switchMap, tap, timer } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AccountNotesService, FileNotesService, FileToken, RequestNotesService } from '@mrtm/api';
 
@@ -22,6 +21,7 @@ import { BreadcrumbService } from '@netz/common/navigation';
 import { LinkDirective } from '@netz/govuk-components';
 
 import { LoadingSpinnerComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-note-file-download',

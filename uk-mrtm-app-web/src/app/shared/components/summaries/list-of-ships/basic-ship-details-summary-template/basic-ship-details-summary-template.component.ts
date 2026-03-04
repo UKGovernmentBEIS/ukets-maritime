@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { AerShipEmissions, EmpShipEmissions } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
@@ -22,6 +20,7 @@ import {
   SHIP_TYPE_SELECT_ITEMS,
 } from '@shared/constants';
 import { SelectOptionToTitlePipe } from '@shared/pipes';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-basic-ship-details-summary-template',

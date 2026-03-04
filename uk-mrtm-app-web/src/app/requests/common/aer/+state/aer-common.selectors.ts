@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import {
   AdditionalDocuments,
   Aer,
@@ -62,7 +60,7 @@ import {
   ShipEmissionTableListItem,
   WithNeedsReview,
 } from '@shared/types';
-import { isLNG } from '@shared/utils';
+import { isLNG, isNil } from '@shared/utils';
 
 const selectReportingYear: StateSelector<RequestTaskState, string> = createDescendingSelector(
   requestTaskQuery.selectRequestId,

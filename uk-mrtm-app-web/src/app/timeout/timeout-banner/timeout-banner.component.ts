@@ -1,15 +1,20 @@
+import { AsyncPipe } from '@angular/common';
 import {
+  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   DOCUMENT,
-  effect,
   ElementRef,
   inject,
+  input,
   Renderer2,
   viewChild,
 } from '@angular/core';
 
+import { takeUntil } from 'rxjs';
+
 import { PageHeadingComponent } from '@netz/common/components';
+import { DestroySubject } from '@netz/common/services';
 import { ButtonDirective } from '@netz/govuk-components';
 
 import { SecondsToMinutesPipe } from '@shared/pipes';
@@ -17,70 +22,73 @@ import { TimeoutBannerService } from '@timeout/timeout-banner/timeout-banner.ser
 
 @Component({
   selector: 'mrtm-timeout-banner',
-  imports: [PageHeadingComponent, SecondsToMinutesPipe, ButtonDirective],
+  imports: [PageHeadingComponent, AsyncPipe, SecondsToMinutesPipe, ButtonDirective],
   standalone: true,
   templateUrl: './timeout-banner.component.html',
   styleUrl: './timeout-banner.component.scss',
+  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TimeoutBannerComponent {
+export class TimeoutBannerComponent implements AfterViewInit {
+  private readonly document = inject<Document>(DOCUMENT);
+  readonly timeoutBannerService = inject(TimeoutBannerService);
   private readonly renderer = inject(Renderer2);
-  protected readonly timeoutBannerService = inject(TimeoutBannerService);
-  private readonly document = inject(DOCUMENT);
+  private readonly destroy$ = inject(DestroySubject);
 
+  readonly timeOffsetSeconds = input<number>();
   readonly modal = viewChild<ElementRef<HTMLDialogElement>>('modal');
 
   private overlayClass = 'govuk-timeout-warning-overlay';
   private lastFocusedElement = null;
 
-  constructor() {
-    effect(() => {
-      const isVisible = this.timeoutBannerService.isVisible();
+  ngAfterViewInit(): void {
+    this.timeoutBannerService.isVisible$.pipe(takeUntil(this.destroy$)).subscribe((isVisible) => {
       isVisible ? this.showDialog() : this.hideDialog();
     });
   }
 
-  isDialogOpen() {
-    return this.modal().nativeElement && this.modal().nativeElement.getAttribute('open') === '';
+  isDialogOpen(): boolean {
+    const modal = this.modal();
+    return modal && modal.nativeElement.getAttribute('open') === '';
   }
 
-  showDialog() {
+  showDialog(): void {
     if (!this.isDialogOpen()) {
       this.renderer.addClass(this.document.body, this.overlayClass);
       this.saveLastFocusedElement();
-      this.modal().nativeElement.showModal();
+      (<any>this.modal().nativeElement).showModal();
       this.modal().nativeElement.setAttribute('tabindex', '-1');
       this.modal().nativeElement.focus();
     }
   }
 
-  hideDialog() {
+  hideDialog(): void {
     if (this.isDialogOpen()) {
       this.renderer.removeClass(this.document.body, this.overlayClass);
       this.modal().nativeElement.removeAttribute('tabindex');
-      this.modal().nativeElement.close();
+      (<any>this.modal().nativeElement).close();
       this.setFocusOnLastFocusedElement();
     }
   }
 
-  saveLastFocusedElement() {
+  saveLastFocusedElement(): void {
     this.lastFocusedElement =
       this.document.activeElement && this.document.activeElement !== this.document.body
         ? this.document.activeElement
         : this.document.querySelector(':focus');
   }
 
-  setFocusOnLastFocusedElement() {
+  setFocusOnLastFocusedElement(): void {
     if (this.lastFocusedElement) {
       this.lastFocusedElement.focus();
     }
   }
 
-  continue() {
+  continue(): void {
     this.timeoutBannerService.extendSession();
   }
 
-  signOut() {
+  signOut(): void {
     this.timeoutBannerService.signOut();
   }
 }

@@ -5,7 +5,6 @@ import { FormArray, FormGroup, ReactiveFormsModule, UntypedFormBuilder, UntypedF
 import { Router, RouterLink } from '@angular/router';
 
 import { Observable } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { UserAuthorityInfoDTO, VerifierAuthorityUpdateDTO } from '@mrtm/api';
 
@@ -30,6 +29,7 @@ import {
   VERIFIER_USER_TYPES,
   VERIFIER_USERS_LIST_COLUMNS,
 } from '@shared/components/verifier-users-list/verifier-users-list.constants';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-verifier-users-list',

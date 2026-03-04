@@ -16,9 +16,9 @@ export const UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
     canActivate: [canActivateUncorrectedMisstatementsSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-summary'
-      ).then((c) => c.UncorrectedMisstatementsSummaryComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-summary').then(
+        (c) => c.UncorrectedMisstatementsSummaryComponent,
+      ),
   },
   {
     path: UncorrectedMisstatementsStep.EXIST_FORM,
@@ -29,9 +29,9 @@ export const UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedMisstatementsStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-exist'
-      ).then((c) => c.UncorrectedMisstatementsExistComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-exist').then(
+        (c) => c.UncorrectedMisstatementsExistComponent,
+      ),
   },
   {
     path: UncorrectedMisstatementsStep.ITEMS_LIST,
@@ -42,9 +42,9 @@ export const UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedMisstatementsStep.SUMMARY, UncorrectedMisstatementsStep.EXIST_FORM),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-list'
-      ).then((c) => c.UncorrectedMisstatementsListComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-list').then(
+        (c) => c.UncorrectedMisstatementsListComponent,
+      ),
   },
   {
     path: UncorrectedMisstatementsStep.ITEM_FORM_ADD,
@@ -55,9 +55,9 @@ export const UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedMisstatementsStep.SUMMARY, UncorrectedMisstatementsStep.ITEMS_LIST),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-item-form'
-      ).then((c) => c.UncorrectedMisstatementsItemFormComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-item-form').then(
+        (c) => c.UncorrectedMisstatementsItemFormComponent,
+      ),
   },
   {
     path: `:reference/${UncorrectedMisstatementsStep.ITEM_FORM_EDIT}`,
@@ -71,9 +71,9 @@ export const UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-item-form'
-      ).then((c) => c.UncorrectedMisstatementsItemFormComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-item-form').then(
+        (c) => c.UncorrectedMisstatementsItemFormComponent,
+      ),
   },
   {
     path: `:reference/${UncorrectedMisstatementsStep.ITEM_DELETE}`,
@@ -87,8 +87,8 @@ export const UNCORRECTED_MISSTATEMENTS_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-item-delete'
-      ).then((c) => c.UncorrectedMisstatementsItemDeleteComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-misstatements/uncorrected-misstatements-item-delete').then(
+        (c) => c.UncorrectedMisstatementsItemDeleteComponent,
+      ),
   },
 ];

@@ -4,7 +4,6 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil, isNumber } from 'lodash-es';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -23,7 +22,7 @@ import { TASK_FORM } from '@requests/common/task-form.token';
 import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
 import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
-import { bigNumberUtils } from '@shared/utils';
+import { bigNumberUtils, isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
@@ -86,8 +85,8 @@ export class ReductionClaimFuelPurchaseComponent {
       if (
         isNil(smfMass) ||
         isNil(co2EmissionFactor) ||
-        !isNumber(+smfMass) ||
-        !isNumber(+co2EmissionFactor) ||
+        typeof +smfMass === 'number' ||
+        typeof +co2EmissionFactor === 'number' ||
         new BigNumber(smfMass).isNaN() ||
         new BigNumber(co2EmissionFactor).isNaN()
       ) {

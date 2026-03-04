@@ -4,7 +4,6 @@ import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { map, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
@@ -35,6 +34,7 @@ import {
 } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerJourneyTypeEnum, FuelsAndEmissionsFactors } from '@shared/types';
+import { isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({

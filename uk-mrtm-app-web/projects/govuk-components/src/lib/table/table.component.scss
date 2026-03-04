@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use 'govuk-frontend/dist/govuk/all' as govuk;
+@use 'govuk-frontend/dist/govuk/index' as govuk;
 
 [aria-sort] button,
 [aria-sort] button:hover {

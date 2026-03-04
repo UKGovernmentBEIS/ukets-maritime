@@ -43,13 +43,15 @@ public class RegulatorNoticeNotifyRegistryService {
 
         RegulatorNoticeEvent regulatorNoticeEvent = getRegulatorNoticeEvent(account, event);
 
-        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(),
-            INTEGRATION_POINT_KEY, "Sending regulator notice event to registry " + regulatorNoticeEvent);
+        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(), INTEGRATION_POINT_KEY,
+            "Sending regulator notice event of type " + regulatorNoticeEvent.getType() +
+            " for account with registry id " + regulatorNoticeEvent.getRegistryId() + " to registry");
 
         regulatorNoticeSendToRegistryProducer.produce(regulatorNoticeEvent, regulatorNoticeKafkaTemplate);
 
-        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(),
-            INTEGRATION_POINT_KEY, "Regulator notice event sent to registry " + regulatorNoticeEvent);
+        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(), INTEGRATION_POINT_KEY,
+            "Sent regulator notice event of type " + regulatorNoticeEvent.getType() +
+           " for account with registry id " + regulatorNoticeEvent.getRegistryId() + " to registry");
 
         return RegulatorNoticeSubmittedEventDetails.builder().notifiedRegistry(true).data(regulatorNoticeEvent).build();
     }

@@ -3,6 +3,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <mrtm-filter-by-ship
+          [initialFilterState]="$any(this.currentPersistableComponentState()?.activeFilters ?? null)"
           [ships]="dataSource()"
           filterByShipLabel="Find a ship"
           (filterChanged)="onFilterChanged($event)" />
@@ -21,6 +22,8 @@
     }
     <mrtm-multi-select-table
       id="listOfShips"
+      targetFragment="listOfShips"
+      [pageSize]="pageSize()"
       [columns]="columns()"
       [data]="tableData"
       emptyTableText="No items to display"
@@ -50,12 +53,5 @@
         }
       </ng-template>
     </mrtm-multi-select-table>
-    @if (totalItems() > pageSize()) {
-      <govuk-pagination
-        fragment="listOfShips"
-        [count]="totalItems()"
-        [pageSize]="pageSize()"
-        (currentPageChange)="onPageChange($event)" />
-    }
   </section>
 }

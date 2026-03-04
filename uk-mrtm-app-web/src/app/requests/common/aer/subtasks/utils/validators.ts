@@ -1,12 +1,11 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
 import { isAfter, isBefore } from 'date-fns';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
 import { AllFuelOriginTypeName } from '@shared/types';
-import { mergeDatesToDate } from '@shared/utils';
+import { isNil, mergeDatesToDate } from '@shared/utils';
 
 export const arrivalDepartureDateValidator =
   (type: 'ports' | 'voyages'): ValidatorFn =>

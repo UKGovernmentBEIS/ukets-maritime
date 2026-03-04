@@ -1,11 +1,10 @@
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import {
   AER_AGGREGATED_DATA_PARAM,
   AerAggregatedDataWizardStep,
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
+import { isNil } from '@shared/utils';
 
 const selectShipBacklinkResolver = (returnToSummary: boolean, activatedRoute: ActivatedRouteSnapshot): string => {
   const dataId = activatedRoute.params?.[AER_AGGREGATED_DATA_PARAM];

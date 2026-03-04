@@ -14,7 +14,6 @@ import { AuthService } from '@core/services/auth.service';
 import { ResetPasswordStore } from '@forgot-password/store/reset-password.store';
 import { SubmitOtpComponent } from '@forgot-password/submit-otp/submit-otp.component';
 import { BackToTopComponent, WizardStepComponent } from '@shared/components';
-import { KeycloakService } from '@shared/services';
 
 describe('SubmitOtpComponent', () => {
   let component: SubmitOtpComponent;
@@ -41,7 +40,6 @@ describe('SubmitOtpComponent', () => {
       imports: [SubmitOtpComponent, WizardStepComponent, BackToTopComponent],
       providers: [
         provideRouter([]),
-        KeycloakService,
         { provide: AuthService, useValue: authService },
         { provide: ForgotPasswordService, useValue: forgotPasswordService },
         { provide: APP_BASE_HREF, useValue: '/maritime/' },

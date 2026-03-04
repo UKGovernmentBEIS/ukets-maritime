@@ -1,12 +1,12 @@
 import { Component, input, output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { GovukComponentsModule } from '@netz/govuk-components';
+import { LinkDirective } from '@netz/govuk-components';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'h2[mrtm-summary-header]',
-  imports: [RouterLink, GovukComponentsModule],
+  imports: [RouterLink, LinkDirective],
   standalone: true,
   template: `
     <ng-content></ng-content>

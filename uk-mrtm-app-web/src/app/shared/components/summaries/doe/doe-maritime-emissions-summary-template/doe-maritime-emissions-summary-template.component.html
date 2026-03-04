@@ -65,7 +65,8 @@
         [notProvided]="
           maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions
             ? `${maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions} tCO2e`
-            : maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions"></dd>
+            : maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions
+        "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
@@ -95,7 +96,11 @@
       <dt govukSummaryListRowKey>{{ doeTotalMaritimeEmissionsMap().surrenderEmissions.title }}</dt>
       <dd
         govukSummaryListRowValue
-        [notProvided]="maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions ? `${maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions} tCO2e` : maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions"></dd>
+        [notProvided]="
+          maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions
+            ? `${maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions} tCO2e`
+            : maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions
+        "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="[wizardStep().TOTAL_MARITIME_EMISSIONS]" [queryParams]="{ change: true }">
@@ -151,7 +156,11 @@
         <dt govukSummaryListRowKey>Billable hours</dt>
         <dd
           govukSummaryListRowValue
-          [notProvided]="maritimeEmissions?.feeDetails?.totalBillableHours ? `${maritimeEmissions?.feeDetails?.totalBillableHours} hours` : maritimeEmissions?.feeDetails?.totalBillableHours"></dd>
+          [notProvided]="
+            maritimeEmissions?.feeDetails?.totalBillableHours
+              ? `${maritimeEmissions?.feeDetails?.totalBillableHours} hours`
+              : maritimeEmissions?.feeDetails?.totalBillableHours
+          "></dd>
         @if (isEditable()) {
           <dd govukSummaryListRowActions>
             <a govukLink [routerLink]="[wizardStep().FEE_DETAILS]" [queryParams]="{ change: true }">Change</a>
@@ -163,7 +172,9 @@
         <dd
           govukSummaryListRowValue
           [notProvided]="
-            maritimeEmissions?.feeDetails?.hourlyRate ? `${maritimeEmissions?.feeDetails?.hourlyRate | currency: 'GBP' : 'symbol' : '.0'} per hour` : maritimeEmissions?.feeDetails?.hourlyRate
+            maritimeEmissions?.feeDetails?.hourlyRate
+              ? `${(maritimeEmissions?.feeDetails?.hourlyRate | currency: 'GBP' : 'symbol' : '.0')} per hour`
+              : maritimeEmissions?.feeDetails?.hourlyRate
           "></dd>
         @if (isEditable()) {
           <dd govukSummaryListRowActions>

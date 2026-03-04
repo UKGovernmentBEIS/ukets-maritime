@@ -33,6 +33,7 @@ import { AerAggregatedDataXmlService } from '@requests/common/aer/subtasks/aer-a
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { DataParserWizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { PersistablePaginationService } from '@shared/services';
 import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
 
 @Component({
@@ -54,6 +55,7 @@ import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
 })
 export class AerAggregatedDataUploadComponent {
   protected readonly formGroup = inject<UntypedFormGroup>(TASK_FORM);
+  private readonly persistablePaginationService = inject(PersistablePaginationService);
   private readonly store = inject(RequestTaskStore);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly service = inject(TaskService<AerSubmitTaskPayload>);
@@ -126,6 +128,7 @@ export class AerAggregatedDataUploadComponent {
     } else if (this.existingAggregatedData()?.length && !this.showConfirmation && !this.xmlErrors()?.length) {
       this.toggleConfirmation(true);
     } else if (this.shipEmissionsList()?.length) {
+      this.persistablePaginationService.reset();
       this.service
         .saveSubtask(
           AER_AGGREGATED_DATA_SUB_TASK,

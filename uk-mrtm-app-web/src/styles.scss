@@ -1,5 +1,5 @@
 @use 'theming/asset-helpers';
-@use 'govuk-frontend/dist/govuk/all' as govuk with (
+@use 'govuk-frontend/dist/govuk/index' as govuk with (
   $govuk-page-width: 1200px,
   $govuk-suppressed-warnings: ie8,
   $govuk-image-url-function: 'image-url',

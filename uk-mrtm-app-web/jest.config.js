@@ -39,7 +39,6 @@ module.exports = {
     '^@verifiers/(.*)': '<rootDir>/src/app/verifiers/$1',
     '^@version/(.*)': '<rootDir>/src/app/version/$1',
     '^@environments/(.*)': '<rootDir>/src/environments/$1',
-    '^lodash-es$': 'lodash',
   },
   modulePathIgnorePatterns: ['<rootDir>/dist'],
   setupFilesAfterEnv: ['<rootDir>/setup-jest.ts'],
@@ -50,6 +49,8 @@ module.exports = {
       'jest-preset-angular',
       {
         ...defaultTransformerOptions,
+        tsconfig: '<rootDir>/tsconfig.spec.json',
+        stringifyContentPathRegex: '\\.(html|svg)$',
       },
     ],
   },

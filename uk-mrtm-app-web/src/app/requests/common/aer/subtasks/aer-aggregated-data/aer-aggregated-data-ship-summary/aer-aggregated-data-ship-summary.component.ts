@@ -3,7 +3,6 @@ import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
@@ -25,6 +24,7 @@ import { TaskItemStatus } from '@requests/common/task-item-status';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataShipSummaryTemplateComponent } from '@shared/components/summaries';
 import { AerAggregatedDataShipSummary, AerPortSummaryItemDto, AerVoyageSummaryItemDto } from '@shared/types';
+import { isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({

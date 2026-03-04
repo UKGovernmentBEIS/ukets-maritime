@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NonComplianceInitialPenaltyNoticeRequestTaskPayload } from '@mrtm/api';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
@@ -24,6 +25,7 @@ import { NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent } from 
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent,
+    PendingButtonDirective,
   ],
   standalone: true,
   templateUrl: './non-compliance-initial-penalty-notice-upload-summary.component.html',

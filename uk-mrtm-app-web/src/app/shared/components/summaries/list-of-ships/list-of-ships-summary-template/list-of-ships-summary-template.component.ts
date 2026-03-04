@@ -26,8 +26,10 @@ import {
 } from '@requests/common/components/emissions/list-of-ships-table/list-of-ships-table.constants';
 import { ShipTaskStatusPipe, ShipTypePipe } from '@requests/common/components/emissions/pipes';
 import { sortDiffPaginateListWithShipNameAndStatus } from '@requests/common/utils';
+import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { HTML_DIFF, HtmlDiffDirective, ScrollablePaneDirective } from '@shared/directives';
 import { InitialDataSourcePipe } from '@shared/pipes';
+import { PersistablePaginationState } from '@shared/services';
 import { AerShipEmissionTableListItem, DiffItem, ShipEmissionTableListItem } from '@shared/types';
 import { mergeDiffShips } from '@shared/utils';
 
@@ -50,7 +52,7 @@ import { mergeDiffShips } from '@shared/utils';
   templateUrl: './list-of-ships-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListOfShipsSummaryTemplateComponent {
+export class ListOfShipsSummaryTemplateComponent extends PaginationStatePersistableComponent {
   hasHtmlDiff = inject(HTML_DIFF, { optional: true });
   readonly data = input.required<(ShipEmissionTableListItem | AerShipEmissionTableListItem)[]>();
   readonly originalShips = input<(ShipEmissionTableListItem | AerShipEmissionTableListItem)[]>();
@@ -72,8 +74,10 @@ export class ListOfShipsSummaryTemplateComponent {
   );
   readonly pageSize: Signal<number> = computed(() => (this.withPagination() ? 10 : Number.MAX_VALUE));
   readonly totalItems: Signal<number> = computed(() => this.combinedShips()?.length ?? 0);
-  readonly currentPage: WritableSignal<number> = signal<number>(1);
-  readonly sort = signal<SortEvent>(null);
+  readonly currentPage: WritableSignal<number> = signal<number>(
+    this.currentPersistableComponentState().currentPage ?? 1,
+  );
+  readonly sort = signal<SortEvent>(this.currentPersistableComponentState()?.currentSorting ?? null);
   readonly paginatedData = computed<DiffItem<ShipEmissionTableListItem>[]>(() => {
     return sortDiffPaginateListWithShipNameAndStatus(
       this.sort(),
@@ -85,5 +89,11 @@ export class ListOfShipsSummaryTemplateComponent {
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
+  }
+
+  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
+    return {
+      currentSorting: this.sort(),
+    };
   }
 }

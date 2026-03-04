@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
+import uk.gov.mrtm.api.common.config.RegistryConfig;
 import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdatedSubmittedEventDetails;
 import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
@@ -42,6 +43,7 @@ public class EmpVariationOfficialNoticeService {
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
     private final OfficialNoticeSendService officialNoticeSendService;
     private final MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
+    private final RegistryConfig registryConfig;
 
     @Transactional
     public CompletableFuture<FileInfoDTO> generateApprovedOfficialNotice(final String requestId) {
@@ -89,11 +91,13 @@ public class EmpVariationOfficialNoticeService {
         final List<FileInfoDTO> attachments = requestPayload.getEmpDocument() != null ?
             List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
             List.of(requestPayload.getOfficialNotice());
-        officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
 
-        boolean sentAccountUpdateEvent = RoleTypeConstants.REGULATOR.equals(requestMetadata.getInitiatorRoleType())
+        boolean isApproved = RoleTypeConstants.REGULATOR.equals(requestMetadata.getInitiatorRoleType())
                 || requestPayload.getDetermination().getType().equals(EmpVariationDeterminationType.APPROVED);
-        if (sentAccountUpdateEvent) {
+
+        if (isApproved) {
+            officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryConfig.getEmail()));
+
             AccountUpdatedSubmittedEventDetails updatedSubmittedEventDetails = accountUpdatedRegistryListener.onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
                 .accountId(request.getAccountId())
                 .emissionsMonitoringPlan(requestPayload.getEmissionsMonitoringPlan())
@@ -104,6 +108,8 @@ public class EmpVariationOfficialNoticeService {
                 updatedSubmittedEventDetails,
                 requestPayload.getEmissionsMonitoringPlan().getOperatorDetails().getOrganisationStructure(),
                 null);
+        } else {
+            officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails);
         }
     }
 

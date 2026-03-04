@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import {
   Aer,
   AerFuelConsumption,
@@ -19,6 +17,8 @@ import {
   AerVoyage,
   AerVoyageSave,
 } from '@mrtm/api';
+
+import { isNil } from '@shared/utils';
 
 const mapFuelConsumptions = (fuelConsumptions: Array<AerFuelConsumption>): Array<AerFuelConsumptionSave> =>
   (fuelConsumptions ?? []).map<AerFuelConsumptionSave>(({ totalConsumption, ...fuel }) => fuel);

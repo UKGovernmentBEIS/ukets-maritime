@@ -4,11 +4,25 @@ import { Router, RouterLink } from '@angular/router';
 import { NotificationTemplateDTO } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
-import { GovukComponentsModule } from '@netz/govuk-components';
+import {
+  LinkDirective,
+  SummaryListComponent,
+  SummaryListRowDirective,
+  SummaryListRowKeyDirective,
+  SummaryListRowValueDirective,
+} from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-email-template-details-template',
-  imports: [GovukComponentsModule, GovukDatePipe, RouterLink],
+  imports: [
+    GovukDatePipe,
+    RouterLink,
+    SummaryListComponent,
+    SummaryListRowDirective,
+    SummaryListRowKeyDirective,
+    SummaryListRowValueDirective,
+    LinkDirective,
+  ],
   standalone: true,
   templateUrl: './email-template-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

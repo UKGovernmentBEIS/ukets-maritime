@@ -2,14 +2,14 @@
   <div
     govuk-date-input
     label="Propose an extension date"
-    legendSize="medium"
+    labelSize="medium"
     [isRequired]="true"
     formControlName="extensionDate"
-    [hint]="`The date must be after the determination deadline date, which is ${deadlineDate | govukDate }`"></div>
+    [hint]="`The date must be after the determination deadline date, which is ${(deadlineDate | govukDate)}`"></div>
   <div
     govuk-date-input
     label="Set a deadline to receive a reply"
-    legendSize="medium"
+    labelSize="medium"
     [isRequired]="true"
     formControlName="deadline"
     hint="The date must be before the proposed extension date"></div>

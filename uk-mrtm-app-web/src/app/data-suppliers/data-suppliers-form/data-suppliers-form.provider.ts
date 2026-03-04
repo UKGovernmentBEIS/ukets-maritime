@@ -13,7 +13,7 @@ import { DataSuppliersFormGroup } from '@data-suppliers/data-suppliers-form/data
 const dataSupplierValueExistExistValidator =
   (items: Array<DataSupplierItem>, key: keyof ThirdPartyDataProviderCreateDTO, message: string): ValidatorFn =>
   (control: AbstractControl): ValidationErrors | null => {
-    const values = items.map((item) => item[key]?.toLowerCase());
+    const values = items.map((item) => item[key]?.toLowerCase()).filter((value) => value?.length > 0);
 
     return values.includes(control.value?.toLowerCase())
       ? {

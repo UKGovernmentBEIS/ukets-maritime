@@ -1,17 +1,29 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, contentChild, input, output, TemplateRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  contentChild,
+  input,
+  output,
+  signal,
+  TemplateRef,
+} from '@angular/core';
 
-import { GovukTableColumn, SortEvent } from '@netz/govuk-components';
+import { GovukTableColumn, PaginationComponent, SortEvent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-multi-select-table',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, PaginationComponent],
   standalone: true,
   templateUrl: './multi-select-table.component.html',
   styleUrl: './multi-select-table.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MultiSelectTableComponent<T extends { isSelected?: boolean }> {
+  readonly currentPage = signal<number>(1);
+  readonly targetFragment = input<string | null>(null);
+  readonly pageSize = input<number>(Number.MAX_VALUE);
   readonly caption = input<string>();
   readonly description = input<string>();
   readonly emptyTableText = input<string>();
@@ -22,6 +34,16 @@ export class MultiSelectTableComponent<T extends { isSelected?: boolean }> {
   readonly selectionChanged = output<Pick<T, GovukTableColumn<T>['field']>[]>();
 
   readonly template = contentChild(TemplateRef);
+
+  readonly rows = computed(() => {
+    const data = this.data();
+    const pageSize = this.pageSize();
+    const currentPage = this.currentPage();
+    const firstIndex = (currentPage - 1) * pageSize;
+    const lastIndex = Math.min(firstIndex + pageSize, data.length);
+
+    return data?.length > firstIndex ? data.slice(firstIndex, lastIndex) : [];
+  });
 
   sortedField: GovukTableColumn<T>['field'];
   sortedColumn: GovukTableColumn<T>['header'];

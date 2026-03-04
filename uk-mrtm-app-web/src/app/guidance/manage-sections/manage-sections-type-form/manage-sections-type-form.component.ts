@@ -4,8 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { GuidanceSectionDTO, RegulatorCurrentUserDTO } from '@mrtm/api';
 
 import { AuthStore, selectUser } from '@netz/common/auth';
@@ -23,6 +21,7 @@ import { MANAGE_GUIDANCE_FORM } from '@guidance/guidance.constants';
 import { manageSectionsTypeFormProvider } from '@guidance/manage-sections/manage-sections-type-form/manage-sections-type-form.provider';
 import { ManageSectionsFromModel } from '@guidance/manage-sections/manage-sections-type-form/manage-sections-type-form.types';
 import { WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-manage-sections-type-form',

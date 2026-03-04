@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { BasePage } from '@netz/common/testing';
-import { GovukComponentsModule, GovukValidators } from '@netz/govuk-components';
+import { GovukValidators } from '@netz/govuk-components';
 
 import { CountryService } from '@core/services/country.service';
 import { CountryServiceStub } from '@registration/testing/country-service-stub';
@@ -74,7 +74,7 @@ describe('PhoneInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, GovukComponentsModule, PhoneInputComponent],
+      imports: [ReactiveFormsModule, PhoneInputComponent],
       providers: [{ provide: CountryService, useClass: CountryServiceStub }],
     }).compileComponents();
   });

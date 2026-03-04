@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 import { RequestActionStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
+import { BasePage } from '@netz/common/testing';
 
 import { CountryService } from '@core/services';
 import { CountryServiceStub } from '@registration/testing/country-service-stub';
@@ -109,11 +109,7 @@ describe('AerVerificationSubmittedReportComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AerVerificationSubmittedReportComponent],
-      providers: [
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        { provide: CountryService, useClass: CountryServiceStub },
-        ...actionProviders,
-      ],
+      providers: [provideRouter([]), { provide: CountryService, useClass: CountryServiceStub }, ...actionProviders],
     }).compileComponents();
 
     store = TestBed.inject(RequestActionStore);

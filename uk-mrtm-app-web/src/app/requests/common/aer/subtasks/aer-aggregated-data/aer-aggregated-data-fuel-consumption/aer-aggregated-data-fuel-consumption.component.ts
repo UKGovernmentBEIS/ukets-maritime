@@ -4,7 +4,6 @@ import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerShipAggregatedData } from '@mrtm/api';
 
@@ -35,6 +34,7 @@ import { WizardStepComponent } from '@shared/components';
 import { AddAnotherDirective } from '@shared/directives';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { SubTaskListMap } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-fuel-consumption',

@@ -10,7 +10,6 @@ import { ErrorCodes } from '@netz/common/error';
 import { ActivatedRouteStub, mockClass } from '@netz/common/testing';
 
 import { AuthService } from '@core/services/auth.service';
-import { KeycloakService } from '@shared/services';
 import { Delete2faComponent } from '@two-fa/delete-2fa/delete-2fa.component';
 
 describe('Delete2faComponent', () => {
@@ -26,7 +25,6 @@ describe('Delete2faComponent', () => {
     await TestBed.configureTestingModule({
       imports: [Delete2faComponent],
       providers: [
-        KeycloakService,
         { provide: AuthService, useValue: authService },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         { provide: UsersSecuritySetupService, useValue: usersSecuritySetupService },

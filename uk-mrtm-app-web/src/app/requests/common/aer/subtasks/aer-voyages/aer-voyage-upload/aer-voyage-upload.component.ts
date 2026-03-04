@@ -48,6 +48,7 @@ import { DataParserWizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AER_PORT_CODE_SELECT_ITEMS } from '@shared/constants';
 import { SelectOptionToTitlePipe } from '@shared/pipes';
+import { PersistablePaginationService } from '@shared/services';
 import { AerFuel, AerVoyageUploadCsvDto } from '@shared/types';
 import { bigNumberUtils } from '@shared/utils';
 import Papa from 'papaparse';
@@ -70,6 +71,7 @@ import Papa from 'papaparse';
 })
 export class AerVoyageUploadComponent {
   protected readonly form = inject<FormGroup<AerVoyageUploadCSVFormModel>>(TASK_FORM);
+  private readonly persistablePaginationService = inject(PersistablePaginationService);
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -299,6 +301,7 @@ export class AerVoyageUploadComponent {
   }
 
   onSubmit() {
+    this.persistablePaginationService.reset();
     this.taskService
       .saveSubtask(AER_VOYAGES_SUB_TASK, AerVoyagesWizardStep.UPLOAD_VOYAGES, this.activatedRoute, this.voyages())
       .subscribe(() => {

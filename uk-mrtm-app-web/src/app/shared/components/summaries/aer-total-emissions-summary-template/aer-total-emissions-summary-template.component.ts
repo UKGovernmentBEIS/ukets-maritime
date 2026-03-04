@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-import { isNil } from 'lodash-es';
-
 import { AerTotalEmissions } from '@mrtm/api';
 
 import { GovukTableColumn, TableComponent } from '@netz/govuk-components';
 
 import { BigNumberPipe } from '@shared/pipes';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-total-emissions-summary-template',

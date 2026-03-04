@@ -15,7 +15,6 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import {
   AuthoritiesService,
@@ -54,6 +53,7 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
 import { FileType } from '@shared/constants';
 import { IncludesPipe, SubmitIfEmptyPipe } from '@shared/pipes';
 import { UuidFilePair } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 interface RegulatorTableRow {
   permission: string;

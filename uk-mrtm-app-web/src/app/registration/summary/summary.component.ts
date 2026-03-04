@@ -11,7 +11,7 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 import { UserRegistrationStore } from '@registration/store/user-registration.store';
 import { SummaryHeaderComponent, UserInputSummaryTemplateComponent } from '@shared/components';
-import cleanDeep from 'clean-deep';
+import { cleanDeep } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-summary',

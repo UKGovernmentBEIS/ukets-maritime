@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 import { TaskService } from '@netz/common/forms';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { MockType } from '@netz/common/testing';
 
 import { AerPortsSummaryComponent } from '@requests/common/aer/subtasks/aer-ports/aer-ports-summary';
 import { taskProviders } from '@requests/common/task.providers';
@@ -15,11 +15,7 @@ describe('AerPortsSummaryComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AerPortsSummaryComponent],
-      providers: [
-        { provide: TaskService, useValue: taskServiceMock },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        ...taskProviders,
-      ],
+      providers: [{ provide: TaskService, useValue: taskServiceMock }, provideRouter([]), ...taskProviders],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AerPortsSummaryComponent);

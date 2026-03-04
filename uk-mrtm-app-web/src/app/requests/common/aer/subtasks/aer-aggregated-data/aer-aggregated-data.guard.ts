@@ -46,6 +46,7 @@ export const canActivateAggregatedDataSummary: CanActivateFn = (route: Activated
 
 export const canActivateAggregatedDataEdit: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const dataId = route.params?.dataId;
+
   if (!dataId) {
     return false;
   }

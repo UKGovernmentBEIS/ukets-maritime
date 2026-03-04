@@ -2,8 +2,6 @@ import { inject, Provider } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { EmpFuelsAndEmissionsFactors } from '@mrtm/api';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -20,7 +18,7 @@ import {
 } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { FuelsAndEmissionsFactors } from '@shared/types';
-import { isAer } from '@shared/utils';
+import { isAer, isNil } from '@shared/utils';
 
 export const getNitrousOxideValidators = (): ValidatorFn[] => [
   GovukValidators.required('Enter emission factor for nitrous oxide'),

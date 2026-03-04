@@ -1,7 +1,7 @@
 /**
 Helper classes that were not covered through govuk-components
  */
-@use 'govuk-frontend/dist/govuk/all' as govuk;
+@use 'govuk-frontend/dist/govuk/index' as govuk;
 
 main {
   &:focus,

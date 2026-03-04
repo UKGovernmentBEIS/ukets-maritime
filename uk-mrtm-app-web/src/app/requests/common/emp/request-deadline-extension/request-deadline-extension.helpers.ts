@@ -1,6 +1,6 @@
-import { isNil } from 'lodash-es';
-
 import { RdePayload } from '@mrtm/api';
+
+import { isNil } from '@shared/utils';
 
 export const isRdeFormCompleted = (rdePayload: RdePayload): boolean =>
   !isNil(rdePayload?.deadline) && !isNil(rdePayload?.extensionDate);

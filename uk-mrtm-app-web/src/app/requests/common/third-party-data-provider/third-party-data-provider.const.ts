@@ -11,6 +11,7 @@ export const IMPORT_THIRD_PARTY_DATA_PROVIDER_SUB_TASK = 'importThirdPartyDataPr
 export const SUBTASKS_AFFECTED_BY_IMPORT = new InjectionToken<Array<string>>('SUBTASKS_AFFECTED_BY_IMPORT');
 export const TASK_ROUTE_PREFIX_MAP: Record<string, string> = {
   AER_APPLICATION_SUBMIT: 'aer',
+  AER_APPLICATION_AMENDS_SUBMIT: 'aer',
   EMP_ISSUANCE_APPLICATION_SUBMIT: 'emp',
 };
 

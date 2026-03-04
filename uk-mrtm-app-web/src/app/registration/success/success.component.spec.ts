@@ -9,7 +9,6 @@ import { AuthService } from '@core/services/auth.service';
 import { initialState } from '@registration/store/user-registration.state';
 import { UserRegistrationStore } from '@registration/store/user-registration.store';
 import { SuccessComponent } from '@registration/success/success.component';
-import { KeycloakService } from '@shared/services';
 
 describe('SuccessComponent', () => {
   let component: SuccessComponent;
@@ -24,11 +23,7 @@ describe('SuccessComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SuccessComponent],
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: mockClass(AuthService) },
-        { provide: KeycloakService, useValue: mockClass(KeycloakService) },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockClass(AuthService) }],
     }).compileComponents();
 
     TestBed.inject(UserRegistrationStore).setState({

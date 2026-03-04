@@ -2,8 +2,6 @@ import { I18nSelectPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
 
@@ -14,6 +12,7 @@ import { CANCEL_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/ca
 import { MAKE_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/make';
 import { MARK_AS_RECEIVED_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/mark-as-received';
 import { PaymentDetailsSummaryTemplateComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-payment-details',

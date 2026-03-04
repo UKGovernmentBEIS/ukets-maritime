@@ -1,8 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { isNil } from 'lodash-es';
-
-import { bigNumberUtils } from '@shared/utils/bignumber.utils';
+import { bigNumberUtils, isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Pipe({
@@ -10,7 +8,7 @@ import BigNumber from 'bignumber.js';
   standalone: true,
 })
 export class BigNumberPipe implements PipeTransform {
-  transform(value: string | number, maxDecimals = 2): string {
-    return isNil(value) ? value : bigNumberUtils.format(new BigNumber(value), maxDecimals);
+  transform(value: string | number, maxDecimals = 2): string | null {
+    return isNil(value) ? (value as null) : bigNumberUtils.format(new BigNumber(value), maxDecimals);
   }
 }

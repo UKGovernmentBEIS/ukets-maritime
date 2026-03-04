@@ -30,9 +30,9 @@ export const NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_ROUTES: Routes = [
         title: nonComplianceCivilPenaltyMap.caption,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import(
-            '@requests/tasks/non-compliance-civil-penalty-peer-review/subtasks/upload/non-compliance-civil-penalty-upload-summary-review'
-          ).then((c) => c.NonComplianceCivilPenaltyUploadSummaryReviewComponent),
+          import('@requests/tasks/non-compliance-civil-penalty-peer-review/subtasks/upload/non-compliance-civil-penalty-upload-summary-review').then(
+            (c) => c.NonComplianceCivilPenaltyUploadSummaryReviewComponent,
+          ),
       },
       {
         path: 'review-decision',

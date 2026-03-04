@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 
 Object.defineProperty(document, 'doctype', {
   value: '<!DOCTYPE html>',
+  configurable: true,
 });
 
 /**
@@ -9,24 +10,33 @@ Object.defineProperty(document, 'doctype', {
  * Workaround for JSDOM missing transform property
  */
 Object.defineProperty(document.body.style, 'transform', {
-  value: () => {
-    return {
-      enumerable: true,
-      configurable: true,
-    };
-  },
-});
-
-Object.defineProperty(HTMLElement.prototype, 'scrollIntoView', {
+  value: '',
+  writable: true,
+  enumerable: true,
   configurable: true,
-  value: jest.fn(),
 });
 
-HTMLCanvasElement.prototype.getContext = jest.fn() as typeof HTMLCanvasElement.prototype.getContext;
-HTMLDialogElement.prototype.show = jest.fn(function () {
+// Polyfill Modern Browser APIs
+window.structuredClone = window.structuredClone || jest.fn((val: unknown) => JSON.parse(JSON.stringify(val)));
+
+Object.assign(HTMLElement.prototype, {
+  scrollIntoView: jest.fn(),
+});
+
+Object.assign(HTMLCanvasElement.prototype, {
+  getContext: jest.fn(),
+});
+
+const mockShow = jest.fn(function (this: HTMLDialogElement) {
   this.open = true;
 });
-HTMLDialogElement.prototype.close = jest.fn(function () {
+
+const mockClose = jest.fn(function (this: HTMLDialogElement) {
   this.open = false;
 });
-HTMLDialogElement.prototype.showModal = HTMLDialogElement.prototype.show;
+
+Object.defineProperties(HTMLDialogElement.prototype, {
+  show: { value: mockShow, writable: true },
+  showModal: { value: mockShow, writable: true },
+  close: { value: mockClose, writable: true },
+});

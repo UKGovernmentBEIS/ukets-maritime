@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -19,6 +19,7 @@ import {
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
 import { NotificationBannerComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { PersistablePaginationService } from '@shared/services';
 import { AerJourneyTypeEnum } from '@shared/types';
 
 @Component({
@@ -40,11 +41,16 @@ export class AerFetchFromVoyagesAndPortsComponent {
   public readonly wizardMap = aerAggregatedDataSubtasksListMap;
   public readonly wizardStep = AerAggregatedDataWizardStep;
 
+  private readonly persistablePaginationService = inject(PersistablePaginationService);
   private readonly store = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly form: UntypedFormGroup = new UntypedFormGroup({});
+
+  public readonly hasAggregatedData = computed(
+    () => this.store.select(aerCommonQuery.selectAggregatedDataList)().length > 0,
+  );
 
   public onSubmit(): void {
     this.notificationBannerStore.reset();
@@ -55,6 +61,7 @@ export class AerFetchFromVoyagesAndPortsComponent {
       return;
     }
 
+    this.persistablePaginationService.reset();
     this.service
       .saveSubtask(
         AER_AGGREGATED_DATA_SUB_TASK,

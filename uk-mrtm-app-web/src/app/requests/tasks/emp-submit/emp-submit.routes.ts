@@ -11,6 +11,7 @@ import {
   provideEmpSubmitTaskServices,
   provideThirdPartyConfigurations,
 } from '@requests/tasks/emp-submit/emp-submit.providers';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_SUBMIT_ROUTES: Routes = [
   {
@@ -24,6 +25,7 @@ export const EMP_SUBMIT_ROUTES: Routes = [
       provideEmpSubmitStepFlowManagers(),
       provideThirdPartyConfigurations(),
     ],
+    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'operator-details',

@@ -14,9 +14,9 @@ export const COMPLIANCE_MONITORING_REPORTING_ROUTES: Routes = [
     canActivate: [canActivateComplianceMonitoringReportingSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-summary'
-      ).then((c) => c.ComplianceMonitoringReportingSummaryComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-summary').then(
+        (c) => c.ComplianceMonitoringReportingSummaryComponent,
+      ),
   },
   {
     path: ComplianceMonitoringReportingStep.ACCURACY,
@@ -27,9 +27,9 @@ export const COMPLIANCE_MONITORING_REPORTING_ROUTES: Routes = [
       backlink: backlinkResolver(ComplianceMonitoringReportingStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-accuracy'
-      ).then((c) => c.ComplianceMonitoringReportingAccuracyComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-accuracy').then(
+        (c) => c.ComplianceMonitoringReportingAccuracyComponent,
+      ),
   },
   {
     path: ComplianceMonitoringReportingStep.COMPLETENESS,
@@ -40,9 +40,9 @@ export const COMPLIANCE_MONITORING_REPORTING_ROUTES: Routes = [
       backlink: backlinkResolver(ComplianceMonitoringReportingStep.SUMMARY, ComplianceMonitoringReportingStep.ACCURACY),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-completeness'
-      ).then((c) => c.ComplianceMonitoringReportingCompletenessComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-completeness').then(
+        (c) => c.ComplianceMonitoringReportingCompletenessComponent,
+      ),
   },
   {
     path: ComplianceMonitoringReportingStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY,
@@ -56,9 +56,9 @@ export const COMPLIANCE_MONITORING_REPORTING_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-cct'
-      ).then((c) => c.ComplianceMonitoringReportingCctComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-cct').then(
+        (c) => c.ComplianceMonitoringReportingCctComponent,
+      ),
   },
   {
     path: ComplianceMonitoringReportingStep.INTEGRITY,
@@ -72,8 +72,8 @@ export const COMPLIANCE_MONITORING_REPORTING_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-integrity'
-      ).then((c) => c.ComplianceMonitoringReportingIntegrityComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting-integrity').then(
+        (c) => c.ComplianceMonitoringReportingIntegrityComponent,
+      ),
   },
 ];

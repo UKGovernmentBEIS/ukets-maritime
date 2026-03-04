@@ -1,6 +1,6 @@
-import { isNil } from 'lodash-es';
-
 import { AerSmf } from '@mrtm/api';
+
+import { isNil } from '@shared/utils';
 
 export const AER_REDUCTION_CLAIM_SUB_TASK = 'smf';
 

@@ -4,7 +4,6 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRouteSnapshot, Data, NavigationEnd, Route, Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, filter } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { BreadcrumbsComponent as GovukBreadcrumbsComponent, LinkDirective } from '@netz/govuk-components';
 
@@ -53,7 +52,7 @@ export class BreadcrumbsComponent {
         if (this.hasBreadcrumb(activeRoute.data)) {
           const breadcrumbs: BreadcrumbItem[] = [];
           this.addBreadcrumb(root, [], breadcrumbs);
-          this.breadcrumbs$.next(breadcrumbs.filter((b) => !isNil(b.link)));
+          this.breadcrumbs$.next(breadcrumbs.filter((b) => b.link != null));
         } else {
           this.breadcrumbs$.next(null);
         }

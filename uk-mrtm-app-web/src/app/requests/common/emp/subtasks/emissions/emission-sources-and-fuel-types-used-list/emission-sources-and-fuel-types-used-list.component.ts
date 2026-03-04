@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal, Wr
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { EmpEmissionsSources } from '@mrtm/api';
 
@@ -25,6 +24,7 @@ import { findNotAssociatedFuelFactors } from '@requests/common/utils/emissions';
 import { EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent, XmlErrorSummaryComponent } from '@shared/components';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emp-emission-sources-and-fuel-types-used-list',

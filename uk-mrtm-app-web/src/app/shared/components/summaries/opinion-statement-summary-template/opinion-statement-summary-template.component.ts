@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import {
   AerInPersonSiteVisit,
   AerMonitoringPlanChanges,
@@ -29,6 +27,7 @@ import {
 } from '@shared/components/summaries';
 import { NotProvidedDirective } from '@shared/directives';
 import { AerSiteVisitTypeToLabelPipe, BooleanToTextPipe } from '@shared/pipes';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-opinion-statement-summary-template',

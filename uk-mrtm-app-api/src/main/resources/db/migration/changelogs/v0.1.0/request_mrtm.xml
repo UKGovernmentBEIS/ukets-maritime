@@ -3509,6 +3509,12 @@
             </sql>
         </rollback>
     </changeSet>
+    
+    <changeSet id="0_1_0_update_request_task_type_supporting_col_for_emp_variaton_reg_led_make_payment_type_to_null" author="P35066">
+        <sql>
+            UPDATE public.request_task_type SET supporting = null WHERE code = 'EMP_VARIATION_REGULATOR_LED_MAKE_PAYMENT';
+        </sql>
+    </changeSet>
 
     <changeSet id="0_1_0_SET_UP_AER_IMPORT_THIRD_PARTY_DATA_APPLICATION_FOR_AER_APPLICATION_AMENDS_SUBMIT_REQUEST_TASK" author="P44065">
         <sql>

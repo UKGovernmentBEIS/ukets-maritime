@@ -1,7 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
 
-import { isNil } from 'lodash-es';
-
 import { GovukDatePipe } from '@netz/common/pipes';
 import {
   SummaryListComponent,
@@ -13,6 +11,7 @@ import {
 import { SummaryDownloadFilesComponent } from '@shared/components';
 import { NotProvidedDirective } from '@shared/directives';
 import { EmpBatchVariationDetailsDTO } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emp-batch-reissue-summary-template',

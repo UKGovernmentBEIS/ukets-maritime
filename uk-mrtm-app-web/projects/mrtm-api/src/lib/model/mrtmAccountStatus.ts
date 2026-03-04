@@ -10,7 +10,10 @@
 
 export enum MrtmAccountStatus {
   NEW = 'NEW',
+
   LIVE = 'LIVE',
+
   CLOSED = 'CLOSED',
+
   WITHDRAWN = 'WITHDRAWN',
 }

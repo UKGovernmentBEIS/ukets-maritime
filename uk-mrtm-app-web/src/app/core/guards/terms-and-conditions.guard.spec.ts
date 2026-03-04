@@ -12,14 +12,12 @@ import { ConfigStore } from '@core/config';
 import {
   mockAuthorityService,
   mockAuthService,
-  mockKeycloakService,
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/core-guards.mock';
 import { TermsAndConditionsGuard } from '@core/guards/terms-and-conditions.guard';
 import { AuthService } from '@core/services/auth.service';
 import { LatestTermsStore } from '@core/store/latest-terms/latest-terms.store';
-import { KeycloakService } from '@shared/services';
 
 describe('TermsAndConditionsGuard', () => {
   let guard: TermsAndConditionsGuard;
@@ -35,7 +33,6 @@ describe('TermsAndConditionsGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
-        { provide: KeycloakService, useValue: mockKeycloakService },
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },

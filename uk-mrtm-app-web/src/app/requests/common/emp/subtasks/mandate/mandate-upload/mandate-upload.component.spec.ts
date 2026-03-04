@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { BasePage, MockType } from '@netz/common/testing';
 
 import { TaskItemStatus } from '@requests/common';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
@@ -23,8 +23,8 @@ describe('MandateUploadComponent', () => {
   let fixture: ComponentFixture<MandateUploadComponent>;
   let page: Page;
   let store: RequestTaskStore;
+  let route: ActivatedRoute;
 
-  const route = new ActivatedRouteStub();
   const taskService: MockType<TaskService<any>> = {
     saveSubtask: jest.fn().mockReturnValue(of({})),
   };
@@ -48,13 +48,14 @@ describe('MandateUploadComponent', () => {
       imports: [MandateUploadComponent],
       providers: [
         RequestTaskStore,
-        { provide: ActivatedRoute, useValue: route },
+        provideRouter([]),
         { provide: TaskService, useValue: taskService },
         ...taskProviders,
       ],
     }).compileComponents();
 
     store = TestBed.inject(RequestTaskStore);
+    route = TestBed.inject(ActivatedRoute);
     store.setState(mockStateBuild({ emissions: emissionsMock }, { emissions: TaskItemStatus.COMPLETED }));
     fixture = TestBed.createComponent(MandateUploadComponent);
     component = fixture.componentInstance;

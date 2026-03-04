@@ -2,8 +2,6 @@ import { Component, DoCheck, effect, inject, input, InputSignal, OnInit } from '
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ControlValueAccessor, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { FormInput } from '@netz/govuk-components';
 import {
   ErrorMessageComponent,
@@ -21,6 +19,7 @@ import {
   TimeInputFormGroupModel,
   TimeInputFormModel,
 } from '@shared/components/time-input/time-input.types';
+import { isNil } from '@shared/utils';
 
 /*
   eslint-disable

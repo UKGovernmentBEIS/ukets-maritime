@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { UncertaintyLevel } from '@mrtm/api';
 
 import {
@@ -16,6 +14,7 @@ import {
 
 import { METHOD_APPROACH_SELECT_OPTIONS, monitoringMethodMap } from '@shared/constants';
 import { SelectOptionToTitlePipe } from '@shared/pipes';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-uncertainty-level-summary-template',

@@ -3,7 +3,6 @@ import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerShipAggregatedData } from '@mrtm/api';
 
@@ -26,6 +25,7 @@ import { AggregatedDataListSummaryTemplateComponent, NotificationBannerComponent
 import { DropdownButtonGroupComponent, DropdownButtonItemComponent } from '@shared/components/dropdown-button-group';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list',

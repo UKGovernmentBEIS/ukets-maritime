@@ -42,7 +42,7 @@ public class MrtmSwaggerConfig {
             .url("https://manage-emissions-reporting.service.gov.uk/maritime/api")
             .description("Production environment");
         Server uatServer = new Server()
-                .url("https://uat1.ukpmrv.net/maritime/api")
+                .url("https://qa1.manage-emissions-reporting.service.gov.uk/maritime/api")
                 .description("UAT environment");
 
         return GroupedOpenApi.builder()

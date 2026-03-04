@@ -1,6 +1,5 @@
 import { FormControl, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
 import { areIntervalsOverlapping, isBefore } from 'date-fns';
 
 import { RequestTaskStore } from '@netz/common/store';
@@ -13,6 +12,7 @@ import {
   generatePortUuidFromFlattened,
   getVoyagePortUuidProperties,
 } from '@requests/common/aer/subtasks/utils';
+import { isNil } from '@shared/utils';
 
 interface PortDateOverlapDto {
   index?: number;

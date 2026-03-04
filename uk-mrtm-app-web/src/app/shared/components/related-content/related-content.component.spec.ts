@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GovukComponentsModule } from '@netz/govuk-components';
+import { LinkDirective } from '@netz/govuk-components';
 
 import { RelatedContentComponent } from '@shared/components';
 
@@ -11,7 +11,7 @@ describe('RelatedContentComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    imports: [RelatedContentComponent, GovukComponentsModule],
+    imports: [RelatedContentComponent, LinkDirective],
     standalone: true,
     template: `
       <mrtm-related-content header="Related content header">

@@ -31,6 +31,7 @@ import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { DataParserWizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { PersistablePaginationService } from '@shared/services';
 import { ShipEmissionTableListItem, XmlValidationError } from '@shared/types';
 import { isAer } from '@shared/utils';
 
@@ -55,6 +56,7 @@ import { isAer } from '@shared/utils';
 export class UploadShipsComponent {
   protected readonly formGroup = inject<UntypedFormGroup>(TASK_FORM);
   private readonly store = inject(RequestTaskStore);
+  private readonly persistablePaginationService = inject(PersistablePaginationService);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly service = inject(TaskService);
   private readonly xmlService = inject(UPLOAD_SHIPS_XML_SERVICE);
@@ -138,6 +140,7 @@ export class UploadShipsComponent {
     } else if (this.existingShips()?.length && !this.showConfirmation && !this.xmlErrors()?.length) {
       this.toggleConfirmation(true);
     } else if (this.listOfShips()?.length) {
+      this.persistablePaginationService.reset();
       this.service
         .saveSubtask(EMISSIONS_SUB_TASK, UPLOAD_SHIPS_STEP, this.activatedRoute, this.listOfShips())
         .subscribe(() => {

@@ -1,6 +1,5 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { OperatorImprovementResponse } from '@mrtm/api';
 
@@ -11,6 +10,7 @@ import { RESPOND_TO_RECOMMENDATION_SUBTASK } from '@requests/common/vir';
 import { VirRespondToRecommendationWizardStep } from '@requests/tasks/vir-submit/subtasks/respond-to-recommendation';
 import { RespondToRecommendationFormModel } from '@requests/tasks/vir-submit/subtasks/respond-to-recommendation/respond-to-recommendation-form/respond-to-recommendation-form.types';
 import { VirSubmitTaskPayload } from '@requests/tasks/vir-submit/vir-submit.types';
+import { isNil } from '@shared/utils';
 
 export class RespondToRecommendationFormPayloadMutator extends PayloadMutator {
   subtask: string = RESPOND_TO_RECOMMENDATION_SUBTASK;

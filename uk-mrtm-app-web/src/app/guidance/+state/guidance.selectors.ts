@@ -1,10 +1,9 @@
-import { isNil } from 'lodash-es';
-
 import { GuidanceDocumentDTO, GuidanceSectionDTO } from '@mrtm/api';
 
 import { createDescendingSelector, createSelector, StateSelector } from '@netz/common/store';
 
 import { GuidanceState, ManageGuidanceDocumentDTO, ManageGuidanceDTO } from '@guidance/guidance.types';
+import { isNil } from '@shared/utils';
 
 const selectIsEditable: StateSelector<GuidanceState, boolean> = createSelector(
   (state: GuidanceState) => state.editable,

@@ -11,15 +11,15 @@
       @switch (data?.legalStatusType) {
         @case ('INDIVIDUAL') {
           <dt govukSummaryListRowKey>Full name</dt>
-          <dd govukSummaryListRowValue>{{ $any(data)?.fullName }}</dd>
+          <dd govukSummaryListRowValue [notProvided]="$any(data)?.fullName"></dd>
         }
         @case ('LIMITED_COMPANY') {
           <dt govukSummaryListRowKey>Company registration number</dt>
-          <dd govukSummaryListRowValue>{{ $any(data)?.registrationNumber }}</dd>
+          <dd govukSummaryListRowValue [notProvided]="$any(data)?.registrationNumber"></dd>
         }
         @case ('PARTNERSHIP') {
           <dt govukSummaryListRowKey>Name of the partnership</dt>
-          <dd govukSummaryListRowValue>{{ $any(data)?.partnershipName }}</dd>
+          <dd govukSummaryListRowValue [notProvided]="$any(data)?.partnershipName"></dd>
         }
       }
     </div>

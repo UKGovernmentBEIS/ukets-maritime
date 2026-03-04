@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@a
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { RegisteredOwnerShipDetails } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
@@ -29,6 +27,7 @@ import {
 } from '@requests/tasks/emp-variation-review/components/review-decision';
 import { EmpVariationReviewService } from '@requests/tasks/emp-variation-review/services';
 import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-variation-review-decision',

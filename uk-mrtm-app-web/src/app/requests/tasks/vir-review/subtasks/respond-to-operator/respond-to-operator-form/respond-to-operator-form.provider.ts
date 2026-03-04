@@ -2,7 +2,6 @@ import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
 import { isAfter } from 'date-fns';
 
 import { RequestTaskStore } from '@netz/common/store';
@@ -14,6 +13,7 @@ import {
   RespondToOperatorFormGroupModel,
   RespondToOperatorFormModel,
 } from '@requests/tasks/vir-review/subtasks/respond-to-operator/respond-to-operator-form/respond-to-operator-form.types';
+import { isNil } from '@shared/utils';
 
 const futureDateValidator: ValidatorFn = (control: AbstractControl) => {
   const value = control.value;

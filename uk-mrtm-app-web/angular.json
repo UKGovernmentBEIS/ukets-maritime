@@ -50,11 +50,8 @@
             },
             "scripts": [],
             "allowedCommonJsDependencies": [
-              "clean-deep",
-              "base64-js",
               "js-sha256",
               "google-libphonenumber",
-              "fast-xml-parser",
               "papaparse"
             ]
           },

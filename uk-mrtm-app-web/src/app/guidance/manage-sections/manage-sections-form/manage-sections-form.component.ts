@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, OnInit, Signal } 
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { RegulatorCurrentUserDTO, SaveGuidanceSectionDTO } from '@mrtm/api';
 
 import { AuthStore, selectUser } from '@netz/common/auth';
@@ -14,6 +12,7 @@ import { MANAGE_GUIDANCE_FORM } from '@guidance/guidance.constants';
 import { manageSectionsFormProvider } from '@guidance/manage-sections/manage-sections-form/manage-sections-form.provider';
 import { ManageSectionsFormGroupModel } from '@guidance/manage-sections/manage-sections-form/manage-sections-form.types';
 import { WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-manage-sections-form',

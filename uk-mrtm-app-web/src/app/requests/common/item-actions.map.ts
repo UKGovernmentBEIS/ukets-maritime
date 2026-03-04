@@ -461,4 +461,9 @@ export const itemActionsMap: Record<
     transformed: true,
     linkable: true,
   },
+  REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED: {
+    text: 'Sent information to the registry by system',
+    transformed: false,
+    linkable: true,
+  },
 };

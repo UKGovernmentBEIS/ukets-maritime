@@ -9,6 +9,7 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
+import { NotProvidedDirective } from '@shared/directives';
 import { CountryPipe, LegalStatusTypeDisplayTextPipe, OrganisationDetailsAddressTitlePipe } from '@shared/pipes';
 
 @Component({
@@ -21,6 +22,7 @@ import { CountryPipe, LegalStatusTypeDisplayTextPipe, OrganisationDetailsAddress
     LegalStatusTypeDisplayTextPipe,
     CountryPipe,
     OrganisationDetailsAddressTitlePipe,
+    NotProvidedDirective,
   ],
   standalone: true,
   templateUrl: './registry-organisation-structure-summary-template.component.html',

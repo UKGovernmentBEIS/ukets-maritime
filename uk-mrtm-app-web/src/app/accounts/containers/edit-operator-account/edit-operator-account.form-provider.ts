@@ -2,8 +2,6 @@ import { InjectionToken, Provider } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { MrtmAccountUpdateDTO } from '@mrtm/api';
 
 import { GovukValidators } from '@netz/govuk-components';
@@ -12,6 +10,7 @@ import { commencementDateValidator } from '@accounts/components/operator-account
 import { OperatorAccountsStore } from '@accounts/store';
 import { ConfigService } from '@core/config';
 import { getLocationStateFormGroup } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 export const EDIT_OPERATOR_ACCOUNT_FORM: InjectionToken<string> = new InjectionToken('Edit operator account form');
 

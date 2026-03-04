@@ -60,6 +60,8 @@ describe('RegistryAccountUpdatedSummaryTemplateComponent', () => {
       'UK-E-MA-00066',
       'Company IMO number',
       '2901476',
+      'Operator name',
+      'feed',
       'First year of reporting obligation',
       '2024',
       'Regulator',

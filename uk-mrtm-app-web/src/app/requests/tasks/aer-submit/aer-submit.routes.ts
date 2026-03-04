@@ -33,6 +33,7 @@ import {
   provideThirdPartyConfigurations,
 } from '@requests/tasks/aer-submit/aer-submit.providers';
 import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-submit/subtasks/send-report/send-report.helpers';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const AER_SUBMIT_ROUTES: Routes = [
   {
@@ -46,7 +47,7 @@ export const AER_SUBMIT_ROUTES: Routes = [
       provideAerSubmitTaskServices(),
       provideAerSubmitStepFlowManagers(),
     ],
-    canActivateChild: [],
+    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: REPORTING_OBLIGATION_SUB_TASK_PATH,

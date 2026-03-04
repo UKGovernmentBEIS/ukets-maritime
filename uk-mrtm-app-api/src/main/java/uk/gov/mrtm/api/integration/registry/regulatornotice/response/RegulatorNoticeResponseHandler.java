@@ -50,8 +50,8 @@ public class RegulatorNoticeResponseHandler {
     public void handleResponse(RegulatorNoticeEventOutcome event, String correlationId) {
         String registryId = event.getEvent().getRegistryId();
 
-        log.info("Received regulator notice outcome with correlationId {}, registry ID {} and data {}",
-            correlationId, registryId, event);
+        log.info("Received regulator notice outcome with correlationId {}, registry ID {} and event type {}",
+            correlationId, registryId, event.getEvent().getType());
 
         if (event.getOutcome() == IntegrationEventOutcome.ERROR) {
 

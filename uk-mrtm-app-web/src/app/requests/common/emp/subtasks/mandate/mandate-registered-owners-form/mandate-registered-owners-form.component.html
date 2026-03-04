@@ -27,8 +27,10 @@
     registered owner has been added yet.
   </p>
   <mrtm-multi-select-table
+    targetFragment="ismShipsTable"
+    [pageSize]="pageSize"
     [columns]="columns"
-    [data]="page()"
+    [data]="availableShips()"
     (selectionChanged)="onShipsSelectionChanged()"
     emptyTableText="No items to display"
     description="Select ships to associate">
@@ -36,13 +38,6 @@
       {{ row[column.field] }}
     </ng-template>
   </mrtm-multi-select-table>
-  @if (totalItems() > pageSize) {
-    <govuk-pagination
-      fragment="ismShipsTable"
-      [count]="totalItems()"
-      [pageSize]="pageSize"
-      (currentPageChange)="onPageChange($event)" />
-  }
 </mrtm-wizard-step>
 <div>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />

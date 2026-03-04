@@ -13,7 +13,6 @@ import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { map, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
@@ -39,7 +38,7 @@ import { WizardStepComponent } from '@shared/components';
 import { AER_PORT_MEASURING_UNIT_SELECT_ITEMS } from '@shared/constants';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { AllFuels } from '@shared/types';
-import { bigNumberUtils, isLNG } from '@shared/utils';
+import { bigNumberUtils, isLNG, isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({

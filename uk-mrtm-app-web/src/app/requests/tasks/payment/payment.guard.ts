@@ -1,8 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
@@ -11,6 +9,7 @@ import { paymentQuery } from '@requests/tasks/payment/+state';
 import { PAYMENT_TASKS } from '@requests/tasks/payment/payment.constants';
 import { PaymentService } from '@requests/tasks/payment/services';
 import { MAKE_PAYMENT_ROUTE_PREFIX } from '@requests/tasks/payment/subtasks/make';
+import { isNil } from '@shared/utils';
 
 export const canActivatePayment: CanActivateFn = (activatedRouteSnapshot: ActivatedRouteSnapshot) => {
   const store = inject(RequestTaskStore);

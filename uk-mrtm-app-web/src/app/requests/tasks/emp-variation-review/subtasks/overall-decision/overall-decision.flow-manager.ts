@@ -1,10 +1,10 @@
 import { Observable, of } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { WizardFlowManager } from '@netz/common/forms';
 
 import { empVariationReviewQuery, EmpVariationReviewTaskPayload } from '@requests/common';
 import { OVERALL_DECISION_SUB_TASK, OverallDecisionWizardStep } from '@requests/common/emp/subtasks/overall-decision';
+import { isNil } from '@shared/utils';
 
 export class OverallDecisionFlowManager extends WizardFlowManager {
   override subtask = OVERALL_DECISION_SUB_TASK;

@@ -20,7 +20,7 @@ import { FileUuidDTO } from '@mrtm/api';
 
 import { MessageValidationErrors } from '@netz/govuk-components';
 
-import { FileValidators } from '@shared/components';
+import { FileValidators } from '@shared/components/file-input/file-validators';
 import { FileUploadEvent } from '@shared/types';
 
 export type FileUploadRequest<T = FileUuidDTO> = (file: File) => Observable<HttpEvent<T>>;

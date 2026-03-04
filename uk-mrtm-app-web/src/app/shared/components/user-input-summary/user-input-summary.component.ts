@@ -3,13 +3,29 @@ import { ActivatedRoute, Params, RouterLink } from '@angular/router';
 
 import { OperatorUserRegistrationDTO } from '@mrtm/api';
 
-import { GovukComponentsModule } from '@netz/govuk-components';
+import {
+  LinkDirective,
+  SummaryListComponent,
+  SummaryListRowActionsDirective,
+  SummaryListRowDirective,
+  SummaryListRowKeyDirective,
+  SummaryListRowValueDirective,
+} from '@netz/govuk-components';
 
 import { PhoneNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-user-input-summary-template',
-  imports: [GovukComponentsModule, RouterLink, PhoneNumberPipe],
+  imports: [
+    RouterLink,
+    PhoneNumberPipe,
+    SummaryListRowDirective,
+    SummaryListRowKeyDirective,
+    SummaryListRowValueDirective,
+    SummaryListRowActionsDirective,
+    LinkDirective,
+    SummaryListComponent,
+  ],
   standalone: true,
   templateUrl: './user-input-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

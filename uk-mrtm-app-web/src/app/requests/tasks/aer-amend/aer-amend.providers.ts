@@ -2,12 +2,13 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
-import { aerCommonSubtaskStepsProvider } from '@requests/common/aer/+state';
+import { aerCommonQuery, aerCommonSubtaskStepsProvider } from '@requests/common/aer/+state';
 import {
   AerAdditionalDocumentsSummarySideEffect,
   AerAdditionalDocumentsUploadPayloadMutator,
 } from '@requests/common/aer/subtasks/aer-additional-documents';
 import {
+  AER_AGGREGATED_DATA_SUB_TASK,
   AerAggregatedDataAnnualEmissionsPayloadMutator,
   AerAggregatedDataDeletePayloadMutator,
   AerAggregatedDataFlowManager,
@@ -86,6 +87,7 @@ import {
   MonitoringPlanChangesSummarySideEffect,
 } from '@requests/common/aer/subtasks/monitoring-plan-changes';
 import {
+  AER_REDUCTION_CLAIM_SUB_TASK,
   AerTotalEmissionsNeedsReviewOnReductionClaimChangeSideEffect,
   ReductionClaimDetailsPayloadMutator,
   ReductionClaimExistPayloadMutator,
@@ -100,8 +102,10 @@ import {
   ReportingObligationFormPayloadMutator,
   ReportingObligationSummarySideEffect,
 } from '@requests/common/aer/subtasks/reporting-obligation';
+import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships';
 import { RETURN_FOR_AMENDS_SERVICE } from '@requests/common/emp/return-for-amends';
+import { SECTIONS_COMPLETED_SELECTOR, SUBTASKS_AFFECTED_BY_IMPORT } from '@requests/common/third-party-data-provider';
 import { AdditionalDocumentsFlowManager } from '@requests/common/utils/additional-documents';
 import { AerAmendApiService, AerAmendService } from '@requests/tasks/aer-amend/services';
 import {
@@ -247,5 +251,18 @@ export function provideAerSubmitStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ReductionClaimFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: AerTotalEmissionsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: AerRequestedChangesFlowManager },
+  ]);
+}
+
+export function provideThirdPartyConfigurations(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    {
+      provide: SUBTASKS_AFFECTED_BY_IMPORT,
+      useValue: [EMISSIONS_SUB_TASK, AER_AGGREGATED_DATA_SUB_TASK, AER_REDUCTION_CLAIM_SUB_TASK],
+    },
+    {
+      provide: SECTIONS_COMPLETED_SELECTOR,
+      useValue: aerCommonQuery.selectAerSectionsCompleted,
+    },
   ]);
 }

@@ -14,7 +14,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { combineLatest, expand, map, Observable, of, switchMap, take, tap, timer } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import {
   DocumentPreviewService,
@@ -33,6 +32,7 @@ import { BreadcrumbService } from '@netz/common/navigation';
 import { LinkDirective } from '@netz/govuk-components';
 
 import { LoadingSpinnerComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 export interface FileDownloadInfo {
   request: Observable<Partial<FileToken> & { fileUrl?: string }>;

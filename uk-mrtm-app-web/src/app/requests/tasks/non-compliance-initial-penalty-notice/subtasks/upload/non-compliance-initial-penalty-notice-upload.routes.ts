@@ -17,9 +17,9 @@ export const NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_UPLOAD_ROUTES: Routes = [
     canActivate: [canActivateNonComplianceInitialPenaltyNoticeUploadSummary],
     data: { breadcrumb: false, backlink: '../' },
     loadComponent: () =>
-      import(
-        '@requests/tasks/non-compliance-initial-penalty-notice/subtasks/upload/non-compliance-initial-penalty-notice-upload-summary'
-      ).then((c) => c.NonComplianceInitialPenaltyNoticeUploadSummaryComponent),
+      import('@requests/tasks/non-compliance-initial-penalty-notice/subtasks/upload/non-compliance-initial-penalty-notice-upload-summary').then(
+        (c) => c.NonComplianceInitialPenaltyNoticeUploadSummaryComponent,
+      ),
   },
   {
     path: NonComplianceInitialPenaltyNoticeUploadStep.UPLOAD_FORM,
@@ -30,8 +30,8 @@ export const NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_UPLOAD_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceInitialPenaltyNoticeUploadStep.SUMMARY, '../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/non-compliance-initial-penalty-notice/subtasks/upload/non-compliance-initial-penalty-notice-upload-form'
-      ).then((c) => c.NonComplianceInitialPenaltyNoticeUploadFormComponent),
+      import('@requests/tasks/non-compliance-initial-penalty-notice/subtasks/upload/non-compliance-initial-penalty-notice-upload-form').then(
+        (c) => c.NonComplianceInitialPenaltyNoticeUploadFormComponent,
+      ),
   },
 ];

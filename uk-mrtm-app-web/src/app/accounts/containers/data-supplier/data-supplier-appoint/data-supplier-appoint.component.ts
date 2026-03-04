@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, filter, map, switchMap, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AccountThirdPartyDataProvidersService, ThirdPartyDataProviderNameInfoDTO } from '@mrtm/api';
 
@@ -16,6 +15,7 @@ import { APPOINT_DATA_SUPPLIER_FORM } from '@accounts/containers/data-supplier';
 import { provideDataSupplierAppointForm } from '@accounts/containers/data-supplier/data-supplier-appoint/data-supplier-appoint.provider';
 import { WizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-data-supplier-appoint',

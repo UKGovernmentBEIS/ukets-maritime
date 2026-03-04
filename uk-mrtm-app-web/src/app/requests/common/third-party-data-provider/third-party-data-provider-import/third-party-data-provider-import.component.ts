@@ -28,6 +28,7 @@ import {
   SUBTASKS_AFFECTED_BY_IMPORT,
 } from '@requests/common/third-party-data-provider/third-party-data-provider.const';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-third-party-data-provider-import',
@@ -54,6 +55,7 @@ export class ThirdPartyDataProviderImportComponent {
   private readonly thirdPartyDataProviderStore = inject(ThirdPartyDataProviderStore);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId);
+  private readonly requestTaskType = this.store.select(requestTaskQuery.selectRequestTaskType);
   private readonly sectionsCompleted = this.store.select(this.sectionsCompletedSelector);
   private readonly affectedSubtasks = inject(SUBTASKS_AFFECTED_BY_IMPORT);
 
@@ -69,6 +71,12 @@ export class ThirdPartyDataProviderImportComponent {
         sectionsCompleted?.[subtask] != null &&
         sectionsCompleted[subtask] !== TaskItemStatus.NOT_STARTED,
     );
+  });
+
+  readonly taskType = computed(() => {
+    const taskType = this.requestTaskType();
+
+    return isAer(taskType) ? 'report' : 'application';
   });
 
   constructor() {

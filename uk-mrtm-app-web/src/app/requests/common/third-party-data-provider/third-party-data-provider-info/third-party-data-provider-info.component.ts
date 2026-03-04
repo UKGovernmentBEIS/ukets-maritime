@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
@@ -15,6 +15,7 @@ import {
   IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
   TASK_ROUTE_PREFIX_MAP,
 } from '@requests/common/third-party-data-provider/third-party-data-provider.const';
+import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-third-party-data-provider-info',
@@ -32,6 +33,12 @@ export class ThirdPartyDataProviderInfoComponent {
     thirdPartyDataProviderQuery.selectThirdPartyDataProviderInfo,
   );
   readonly importPagePath = `./${TASK_ROUTE_PREFIX_MAP[this.requestTaskType()]}/${IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH}`;
+
+  readonly taskType = computed(() => {
+    const taskType = this.requestTaskType();
+
+    return isAer(taskType) ? 'report' : 'application';
+  });
 
   constructor() {
     effect(() => {

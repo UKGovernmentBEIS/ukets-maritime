@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, provideRouter } from '@angular/router';
@@ -10,7 +12,6 @@ import { AuthStore } from '@netz/common/auth';
 import { PageHeadingComponent } from '@netz/common/components';
 import { BusinessErrorComponent } from '@netz/common/error';
 import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
-import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { AccountsListComponent } from '@accounts/containers/accounts-list';
 import { OperatorAccountsStore } from '@accounts/store';
@@ -63,14 +64,10 @@ describe('AccountsPageComponent', () => {
 
   const createModule = async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        GovukComponentsModule,
-        AccountsPageComponent,
-        AccountsListComponent,
-        PageHeadingComponent,
-      ],
+      imports: [ReactiveFormsModule, AccountsPageComponent, AccountsListComponent, PageHeadingComponent],
       providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
         OperatorAccountsStore,
         provideRouter([{ path: 'error/business', component: BusinessErrorComponent }]),
         { provide: MaritimeAccountsService, useValue: maritimeAccountsService },
@@ -192,14 +189,10 @@ describe('AccountsPageComponent', () => {
     });
     beforeEach(async () => {
       await TestBed.configureTestingModule({
-        imports: [
-          ReactiveFormsModule,
-          GovukComponentsModule,
-          AccountsPageComponent,
-          AccountsListComponent,
-          PageHeadingComponent,
-        ],
+        imports: [ReactiveFormsModule, AccountsPageComponent, AccountsListComponent, PageHeadingComponent],
         providers: [
+          provideHttpClient(),
+          provideHttpClientTesting(),
           OperatorAccountsStore,
           { provide: ActivatedRoute, useValue: activatedRouteStub },
           { provide: MaritimeAccountsService, useValue: maritimeAccountsService },

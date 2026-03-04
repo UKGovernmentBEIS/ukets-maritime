@@ -6,7 +6,6 @@ import {
   ButtonDirective,
   GovukTableColumn,
   LinkDirective,
-  PaginationComponent,
   SortEvent,
   TagComponent,
   WarningTextComponent,
@@ -19,9 +18,11 @@ import {
 import { ShipTaskStatusPipe, ShipTypePipe } from '@requests/common/components/emissions/pipes';
 import { FilterByShip, FilterByShipComponent } from '@requests/common/components/list-filter-forms/filter-by-ship';
 import { sortAndPaginateListWithShipNameAndStatus } from '@requests/common/utils/sort-and-paginate-list-with-ship-name-and-status';
+import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { MultiSelectedItem, MultiSelectTableComponent } from '@shared/components';
 import { ScrollablePaneDirective } from '@shared/directives';
 import { InitialDataSourcePipe } from '@shared/pipes';
+import { PersistablePaginationState } from '@shared/services';
 import { AerShipEmissionTableListItem, ShipEmissionTableListItem } from '@shared/types';
 
 @Component({
@@ -36,7 +37,6 @@ import { AerShipEmissionTableListItem, ShipEmissionTableListItem } from '@shared
     StatusTagColorPipe,
     ShipTaskStatusPipe,
     FilterByShipComponent,
-    PaginationComponent,
     WarningTextComponent,
     InitialDataSourcePipe,
     ScrollablePaneDirective,
@@ -45,18 +45,21 @@ import { AerShipEmissionTableListItem, ShipEmissionTableListItem } from '@shared
   templateUrl: './list-of-ships-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListOfShipsTableComponent {
+export class ListOfShipsTableComponent extends PaginationStatePersistableComponent {
   readonly removeShips = output<MultiSelectedItem<ShipEmissionTableListItem | AerShipEmissionTableListItem>[]>();
 
   readonly editUrl = input.required<string>();
   readonly dataSource = input.required<(ShipEmissionTableListItem | AerShipEmissionTableListItem)[]>();
   readonly notCompletedWarningMessage = input<string>();
 
-  readonly filter = signal<FilterByShip>(null);
-  readonly sort = signal<SortEvent>({ column: 'status', direction: 'descending' });
+  readonly filter = signal<FilterByShip>((this.currentPersistableComponentState()?.activeFilters as any) ?? null);
+  readonly sort = signal<SortEvent>(
+    this.currentPersistableComponentState()?.currentSorting ?? {
+      column: 'status',
+      direction: 'descending',
+    },
+  );
   readonly pageSize = signal<number>(10);
-  readonly currentPage = signal<number>(1);
-  readonly totalItems = computed<number>(() => this.filteredData()?.length ?? 0);
 
   private readonly filteredData = computed<ShipEmissionTableListItem[]>(() => {
     const imoNumber = this.filter()?.imoNumber;
@@ -84,8 +87,8 @@ export class ListOfShipsTableComponent {
     sortAndPaginateListWithShipNameAndStatus(
       [this.sort(), { column: 'name', direction: 'ascending' }],
       this.filteredData() ?? [],
-      this.currentPage(),
-      this.pageSize(),
+      1,
+      Number.MAX_VALUE,
     ),
   );
 
@@ -93,11 +96,14 @@ export class ListOfShipsTableComponent {
     this.removeShips.emit(ships.filter((item) => item.isSelected));
   }
 
-  onPageChange(page: number): void {
-    this.currentPage.set(page);
-  }
-
   onFilterChanged(filterValue: FilterByShip) {
     this.filter.set(filterValue);
+  }
+
+  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
+    return {
+      currentSorting: this.sort(),
+      activeFilters: this.filter(),
+    };
   }
 }

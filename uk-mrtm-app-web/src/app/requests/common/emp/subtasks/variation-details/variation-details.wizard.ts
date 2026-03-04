@@ -1,6 +1,6 @@
-import { isNil } from 'lodash-es';
-
 import { EmpVariationDetails, EmpVariationRegulatorLedReason } from '@mrtm/api';
+
+import { isNil } from '@shared/utils';
 
 export const isVariationDetailsWizardCompleted = (details: EmpVariationDetails): boolean =>
   !isNil(details?.reason) && details?.changes?.length > 0;

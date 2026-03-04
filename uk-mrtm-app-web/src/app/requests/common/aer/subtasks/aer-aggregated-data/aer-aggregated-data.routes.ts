@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 
 import {
-  canActivateAggregatedDataEdit,
   canActivateAggregatedDataListSummary,
   canActivateAggregatedDataSummary,
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.guard';
@@ -70,7 +69,7 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
             resolve: {
               backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.SELECT_SHIP),
             },
-            canActivate: [canActivateAggregatedDataEdit],
+            // canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
               import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
           },
@@ -80,7 +79,7 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
             resolve: {
               backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.FUEL_CONSUMPTION),
             },
-            canActivate: [canActivateAggregatedDataEdit],
+            // canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-fuel-consumption').then(
                 (c) => c.AerAggregatedDataFuelConsumptionComponent,
@@ -93,7 +92,7 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
             resolve: {
               backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.ANNUAL_EMISSIONS),
             },
-            canActivate: [canActivateAggregatedDataEdit],
+            // canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions').then(
                 (c) => c.AerAggregatedDataAnnualEmissionsComponent,
@@ -106,11 +105,11 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
             resolve: {
               backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.SHIP_EMISSIONS),
             },
-            canActivate: [canActivateAggregatedDataEdit],
+            // canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
-              import(
-                '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-ship-emissions-calculated'
-              ).then((c) => c.AerAggregatedDataShipEmissionsCalculatedComponent),
+              import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-ship-emissions-calculated').then(
+                (c) => c.AerAggregatedDataShipEmissionsCalculatedComponent,
+              ),
           },
         ],
       },

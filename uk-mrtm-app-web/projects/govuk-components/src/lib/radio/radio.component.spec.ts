@@ -98,7 +98,7 @@ describe('RadioComponent', () => {
     expect(hostComponent.form.value).toEqual({ radio: null });
     expect(element.querySelector('.govuk-error-message')).toBeFalsy();
 
-    element.querySelector('form').submit();
+    element.querySelector('form').dispatchEvent(new Event('submit'));
     fixture.detectChanges();
 
     expect(hostComponent.form.get('radio').errors).toBeTruthy();

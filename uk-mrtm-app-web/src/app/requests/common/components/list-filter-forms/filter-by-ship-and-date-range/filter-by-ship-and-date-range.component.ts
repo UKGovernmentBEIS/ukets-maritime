@@ -90,6 +90,19 @@ export class FilterByShipAndDateRangeComponent
     };
   }
 
+  setFilterState(filterState: FilterByShipAndDateRange) {
+    this.formGroup.setValue({
+      filterByShip: {
+        data: filterState?.imoNumber ?? ALL_SHIPS_VALUE.data,
+        text: filterState?.shipName ?? '',
+      },
+      dates: {
+        arrivalDate: filterState?.arrivalDate ?? null,
+        departureDate: filterState?.departureDate ?? null,
+      },
+    });
+  }
+
   protected override runPostSubmitSideEffects(): void {
     this.openDetailsOnRerender.set(this.detailsRef().isOpen);
   }

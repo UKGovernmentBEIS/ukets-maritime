@@ -1,10 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { provideRouter } from '@angular/router';
 
 import { TaskService } from '@netz/common/forms';
 import { mockRequestTask } from '@netz/common/request-task';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { BasePage, MockType } from '@netz/common/testing';
 
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data';
 import { AerAggregatedDataListComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-list/aer-aggregated-data-list.component';
@@ -22,11 +22,7 @@ describe('AerAggregatedDataListComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AerAggregatedDataListComponent],
-      providers: [
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        { provide: TaskService, useValue: taskServiceMock },
-        ...taskProviders,
-      ],
+      providers: [provideRouter([]), { provide: TaskService, useValue: taskServiceMock }, ...taskProviders],
     }).compileComponents();
 
     store = TestBed.inject(RequestTaskStore);

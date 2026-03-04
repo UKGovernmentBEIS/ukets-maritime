@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import {
   AdditionalDocuments,
   AerApplicationAmendsSubmitRequestTaskPayload,
@@ -55,6 +53,7 @@ import {
   ReviewDecisionDto,
   ReviewDecisionUnion,
 } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const selectPayload: StateSelector<
   RequestActionState,

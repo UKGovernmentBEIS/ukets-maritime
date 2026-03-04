@@ -1,11 +1,10 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { isNil } from 'lodash-es';
-
 import { AerAggregatedDataFuelOriginTypeName, FuelOriginTypeName } from '@mrtm/api';
 
 import { FUEL_ORIGIN_TITLE, FUEL_TYPES_BY_ORIGIN } from '@shared/constants';
 import { FossilFuels, FuelsAndEmissionsFactors } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Pipe({
   name: 'fuelOriginTitle',

@@ -24,7 +24,7 @@ import {
 
 import { AutocompleteSelectOption } from '@shared/components/autocomplete-select/autocomplete-select.interface';
 import { AutocompleteSelectInputScrollSyncDirective } from '@shared/components/autocomplete-select/autocomplete-select-input-scroll-sync.directive';
-import { valuesAreEqual } from '@shared/utils';
+import { isEqual } from '@shared/utils';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
@@ -347,7 +347,7 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
        * Autoselects an option if the queryString matches `text` of a valid option.
        * It will autocorrect queryString case if different from `option.text`.
        */
-      if (!valuesAreEqual(this.control.value, queryMatchingOption)) {
+      if (!isEqual(this.control.value, queryMatchingOption)) {
         this.setControlValue(queryMatchingOption);
       }
     } else if (this.autoselectOnBlur()) {

@@ -26,9 +26,9 @@ export const NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_PEER_REVIEW_ROUTES: Routes = 
         path: NON_COMPLIANCE_INITIAL_PENALTY_NOTICE_ROUTE_PREFIX,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import(
-            '@requests/tasks/non-compliance-initial-penalty-notice-peer-review/subtasks/upload/non-compliance-initial-penalty-notice-upload-summary-review'
-          ).then((c) => c.NonComplianceInitialPenaltyNoticeUploadSummaryReviewComponent),
+          import('@requests/tasks/non-compliance-initial-penalty-notice-peer-review/subtasks/upload/non-compliance-initial-penalty-notice-upload-summary-review').then(
+            (c) => c.NonComplianceInitialPenaltyNoticeUploadSummaryReviewComponent,
+          ),
       },
       {
         path: 'review-decision',

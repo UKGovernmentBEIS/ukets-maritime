@@ -68,8 +68,8 @@ module.exports = tseslint.config(
             [
               '(rxjs$)',
               '(^immer)',
-              '(^lodash-es)',
               '(^date-fns)',
+              '(^keycloak-angular)',
               '(^keycloak-js)',
               '(^@zxcvbn-ts)',
               '(^google-libphonenumber)',

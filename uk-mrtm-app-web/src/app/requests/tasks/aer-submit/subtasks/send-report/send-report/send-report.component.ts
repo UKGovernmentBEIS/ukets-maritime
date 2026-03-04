@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, effect, inject, signal, WritableSig
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { of, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AccountVerificationBodyService, VerificationBodyNameInfoDTO } from '@mrtm/api';
 
@@ -19,6 +18,7 @@ import { AerCommonService } from '@requests/common/aer/services';
 import { aerSubmitQuery } from '@requests/tasks/aer-submit/+state';
 import { SendReportSuccessStore } from '@requests/tasks/aer-submit/subtasks/send-report/send-report-success-message/+state/send-report-success-store.service';
 import { CompetentAuthorityPipe } from '@shared/pipes';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-send-report',
