@@ -6,8 +6,6 @@ import { LinkDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'netz-page-not-found',
-  imports: [PageHeadingComponent, LinkDirective, RouterLink],
-  standalone: true,
   template: `
     <netz-page-heading size="xl">Page Not Found</netz-page-heading>
     <p class="govuk-body">If you typed the web address, check it is correct.</p>
@@ -19,5 +17,7 @@ import { LinkDirective } from '@netz/govuk-components';
     </p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PageHeadingComponent, LinkDirective, RouterLink],
 })
 export class PageNotFoundComponent {}

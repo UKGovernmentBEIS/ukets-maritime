@@ -8,8 +8,8 @@ import { AerAggregatedDataEmissionDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-emissions-calculations-summary-template',
-  imports: [TableComponent, BigNumberPipe],
   standalone: true,
+  imports: [TableComponent, BigNumberPipe],
   templateUrl: './aer-aggregated-data-emissions-calculations-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

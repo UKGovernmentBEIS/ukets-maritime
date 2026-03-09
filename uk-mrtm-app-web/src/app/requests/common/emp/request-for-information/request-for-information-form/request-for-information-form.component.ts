@@ -20,22 +20,24 @@ import {
 import { RequestForInformationStore } from '@requests/common/emp/request-for-information/services';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
+import { AddAnotherDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-request-for-information-form',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
     MultipleFileInputComponent,
     DateInputComponent,
     TextareaComponent,
+    AddAnotherDirective,
     ButtonDirective,
     FieldsetDirective,
     LegendDirective,
   ],
-  standalone: true,
-  templateUrl: './request-for-information-form.component.html',
   providers: [requestForInformationFormProvider],
+  templateUrl: './request-for-information-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestForInformationFormComponent {

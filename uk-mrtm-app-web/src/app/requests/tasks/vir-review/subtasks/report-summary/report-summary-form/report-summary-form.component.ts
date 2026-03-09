@@ -15,10 +15,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-report-summary-form',
-  imports: [WizardStepComponent, TextareaComponent, ReactiveFormsModule],
   standalone: true,
-  templateUrl: './report-summary-form.component.html',
+  imports: [WizardStepComponent, TextareaComponent, ReactiveFormsModule],
   providers: [reportSummaryFormProvider],
+  templateUrl: './report-summary-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportSummaryFormComponent {

@@ -37,5 +37,3 @@ export * from './summaries';
 export * from './time-input';
 export * from './loading-spinner';
 export * from './autocomplete-select';
-export * from './password-strength-meter';
-export * from './progress-bar';

@@ -12,13 +12,13 @@ import { RecipientsPartialSummaryTemplateComponent } from '@shared/components/su
 
 @Component({
   selector: 'mrtm-doe-submitted',
+  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
     DoeMaritimeEmissionsSummaryTemplateComponent,
     RecipientsPartialSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './doe-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -20,6 +20,11 @@ describe('LandingPageGuard', () => {
   let latestTermsStore: LatestTermsStore;
   let configStore: ConfigStore;
 
+  const mockLocation = {
+    href: 'http://localhost/',
+    origin: 'http://localhost',
+  };
+
   const authService: MockType<AuthService> = {
     checkUser: jest.fn(() => of(undefined)),
   };
@@ -27,6 +32,11 @@ describe('LandingPageGuard', () => {
   const callGuard: () => Observable<boolean | UrlTree> = () => TestBed.runInInjectionContext(() => landingPageGuard());
 
   beforeEach(() => {
+    Object.defineProperty(window, 'location', {
+      value: mockLocation,
+      writable: true,
+    });
+
     TestBed.configureTestingModule({
       providers: [provideRouter([]), { provide: AuthService, useValue: authService }],
     });

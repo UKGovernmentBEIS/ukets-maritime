@@ -10,8 +10,8 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-submit-confirmation',
-  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, ButtonDirective, PendingButtonDirective],
   standalone: true,
+  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, ButtonDirective, PendingButtonDirective],
   templateUrl: './complete-review-confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

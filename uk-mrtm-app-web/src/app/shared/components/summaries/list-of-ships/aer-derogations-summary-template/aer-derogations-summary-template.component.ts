@@ -17,6 +17,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-aer-derogations-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -27,7 +28,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
     RouterLink,
     BooleanToTextPipe,
   ],
-  standalone: true,
   templateUrl: './aer-derogations-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

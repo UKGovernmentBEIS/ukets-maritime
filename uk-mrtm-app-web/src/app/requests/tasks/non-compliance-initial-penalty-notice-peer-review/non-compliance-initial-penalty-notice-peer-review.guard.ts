@@ -1,10 +1,10 @@
 import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { AuthStore, selectUserId } from '@netz/common/auth';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-
-import { isNil } from '@shared/utils';
 
 export const canActivatePeerReviewDecision: CanActivateFn = () => {
   const store = inject(RequestTaskStore);

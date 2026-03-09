@@ -31,6 +31,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-review-variation-details-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     VariationDetailsSummaryTemplateComponent,
@@ -39,7 +40,6 @@ interface ViewModel {
     ReturnToTaskOrActionPageComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './variation-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -48,7 +48,7 @@ export class VariationDetailsSummaryComponent {
     TaskService<EmpVariationReviewTaskPayload>,
   );
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const empVariationDetails = this.store.select(empVariationQuery.selectEmpVariationDetails)();
 
     return {

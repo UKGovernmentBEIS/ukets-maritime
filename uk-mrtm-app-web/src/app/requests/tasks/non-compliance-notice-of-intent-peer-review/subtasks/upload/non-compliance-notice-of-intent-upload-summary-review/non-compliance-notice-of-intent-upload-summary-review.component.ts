@@ -10,12 +10,12 @@ import { NonComplianceNoticeOfIntentUploadSummaryTemplateComponent } from '@shar
 
 @Component({
   selector: 'mrtm-non-compliance-notice-of-intent-upload-summary-review',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceNoticeOfIntentUploadSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './non-compliance-notice-of-intent-upload-summary-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

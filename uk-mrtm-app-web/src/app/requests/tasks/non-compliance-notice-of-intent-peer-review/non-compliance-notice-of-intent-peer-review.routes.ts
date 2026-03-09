@@ -26,9 +26,9 @@ export const NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_ROUTES: Routes = [
         path: NON_COMPLIANCE_NOTICE_OF_INTENT_ROUTE_PREFIX,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/non-compliance-notice-of-intent-peer-review/subtasks/upload/non-compliance-notice-of-intent-upload-summary-review').then(
-            (c) => c.NonComplianceNoticeOfIntentUploadSummaryReviewComponent,
-          ),
+          import(
+            '@requests/tasks/non-compliance-notice-of-intent-peer-review/subtasks/upload/non-compliance-notice-of-intent-upload-summary-review'
+          ).then((c) => c.NonComplianceNoticeOfIntentUploadSummaryReviewComponent),
       },
       {
         path: 'review-decision',

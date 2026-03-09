@@ -38,6 +38,7 @@ import { FollowUpResponseDTO } from '@shared/types';
 
 @Component({
   selector: 'mrtm-review-decision-question',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -52,7 +53,6 @@ import { FollowUpResponseDTO } from '@shared/types';
     DateInputComponent,
     FollowUpResponseRegulatorSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './review-decision-question.component.html',
   providers: [reviewDecisionQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,9 +66,7 @@ export class ReviewDecisionQuestionComponent {
 
   protected readonly reviewDecisionMap = followUpReviewDecisionMap;
   downloadUrl = this.store.select(empCommonQuery.selectTasksDownloadUrl)();
-  readonly followUpResponseDTO: Signal<FollowUpResponseDTO> = this.store.select(
-    followUpReviewQuery.selectFollowUpResponseDTO,
-  );
+  followUpResponseDTO: Signal<FollowUpResponseDTO> = this.store.select(followUpReviewQuery.selectFollowUpResponseDTO);
   readonly minDueDate = computed(() => {
     const auxDate = new Date(this.followUpResponseDTO().followUpResponseExpirationDate);
     return new Date(auxDate.setDate(auxDate.getDate() + 1));

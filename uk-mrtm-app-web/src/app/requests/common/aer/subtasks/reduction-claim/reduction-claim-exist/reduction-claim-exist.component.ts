@@ -24,6 +24,7 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-reduction-claim-exist',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReturnToTaskOrActionPageComponent,
@@ -31,9 +32,8 @@ import { SubTaskListMap } from '@shared/types';
     RadioComponent,
     RadioOptionComponent,
   ],
-  standalone: true,
-  templateUrl: './reduction-claim-exist.component.html',
   providers: [reductionClaimExistFormProvider],
+  templateUrl: './reduction-claim-exist.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReductionClaimExistComponent {

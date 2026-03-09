@@ -2,24 +2,24 @@
   <p class="govuk-body">The emissions have been calculated by using the following essential information:</p>
 
   <h4 class="govuk-heading-s">Emission factors</h4>
-  <govuk-table
-    [columns]="columns"
-    [data]="data()"
-    emptyTableText="No items to display"
-    description="Emission factors"
-    mrtmScrollablePane
-    ariaLabel="Emission factors">
-    <ng-template let-row="row" let-column="column">
-      @switch (column?.field) {
-        @case ('origin') {
-          {{ row | fuelOriginTitle }}
+  <div class="overflow-auto overflow-auto-table">
+    <govuk-table
+      [columns]="columns"
+      [data]="data()"
+      emptyTableText="No items to display"
+      description="Emission factors">
+      <ng-template let-row="row" let-column="column">
+        @switch (column?.field) {
+          @case ('origin') {
+            {{ row | fuelOriginTitle }}
+          }
+          @default {
+            {{ row[column?.field] }}
+          }
         }
-        @default {
-          {{ row[column?.field] }}
-        }
-      }
-    </ng-template>
-  </govuk-table>
+      </ng-template>
+    </govuk-table>
+  </div>
 
   <h4 class="govuk-heading-s">Global warming potentials values</h4>
   <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="false">

@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-additional-documents-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     AdditionalDocumentsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './additional-documents-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

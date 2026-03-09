@@ -10,11 +10,11 @@ import {
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-submitted',
+  standalone: true,
   imports: [
     NonComplianceCivilPenaltyUploadSummaryTemplateComponent,
     NonComplianceNotifiedUsersSummaryTemplateComponent,
   ],
-  standalone: true,
   template: `
     <h2 class="govuk-heading-m">Details</h2>
     <mrtm-non-compliance-civil-penalty-upload-summary-template [data]="data()" [files]="files()" [isTimeline]="true" />

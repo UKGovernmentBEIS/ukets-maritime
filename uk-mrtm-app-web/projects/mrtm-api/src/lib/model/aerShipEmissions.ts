@@ -20,5 +20,4 @@ export interface AerShipEmissions {
   emissionsSources: Array<EmissionsSources>;
   uncertaintyLevel: Array<UncertaintyLevel>;
   derogations: AerDerogations;
-  dataInputType: 'MANUAL' | 'EXTERNAL_PROVIDER' | 'FETCH_FROM_EMP';
 }

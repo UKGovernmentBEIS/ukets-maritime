@@ -9,10 +9,8 @@ import { mergeDiffArray } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-summary-download-files',
-  imports: [LinkDirective, RouterLink, HtmlDiffDirective],
-  standalone: true,
   template: `
-    @for (file of combinedFiles(); track file) {
+    @for (file of combinedFiles(); track file; let isLast = $last) {
       <!-- eslint-disable-next-line @angular-eslint/template/elements-content-->
       <a
         [routerLink]="file?.current?.downloadUrl"
@@ -22,7 +20,7 @@ import { mergeDiffArray } from '@shared/utils';
         [isFiles]="true"
         [current]="file?.current?.fileName"
         [previous]="file?.previous?.fileName"></a>
-      @if (!$last && combinedFiles()?.length > 1) {
+      @if (!isLast && combinedFiles()?.length > 1) {
         <br />
       }
     } @empty {
@@ -30,10 +28,12 @@ import { mergeDiffArray } from '@shared/utils';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [LinkDirective, RouterLink, HtmlDiffDirective],
 })
 export class SummaryDownloadFilesComponent {
-  readonly files = input.required<AttachedFile[]>();
-  readonly originalFiles = input<AttachedFile[]>(null);
+  files = input.required<AttachedFile[]>();
+  originalFiles = input<AttachedFile[]>(null);
 
-  readonly combinedFiles = computed(() => mergeDiffArray<AttachedFile>(this.files(), this.originalFiles()));
+  combinedFiles = computed(() => mergeDiffArray<AttachedFile>(this.files(), this.originalFiles()));
 }

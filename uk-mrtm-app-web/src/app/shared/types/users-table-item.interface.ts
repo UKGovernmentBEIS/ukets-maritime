@@ -1,4 +1,4 @@
-export interface UsersTableItem {
+export interface UsersTableItemInterface {
   authorityCreationDate?: string;
   authorityStatus?: 'ACCEPTED' | 'ACTIVE' | 'DISABLED' | 'PENDING' | 'TEMP_DISABLED' | 'TEMP_DISABLED_PENDING';
   firstName?: string;

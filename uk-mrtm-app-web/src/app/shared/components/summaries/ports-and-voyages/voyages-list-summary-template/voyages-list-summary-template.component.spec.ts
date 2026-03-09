@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
+import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { VoyagesListSummaryTemplateComponent } from '@shared/components/summaries/ports-and-voyages/voyages-list-summary-template';
 
@@ -10,7 +12,7 @@ describe('VoyagesListSummaryTemplateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [VoyagesListSummaryTemplateComponent],
-      providers: [provideRouter([])],
+      providers: [{ provide: ActivatedRoute, useValue: new ActivatedRouteStub() }],
     }).compileComponents();
 
     fixture = TestBed.createComponent(VoyagesListSummaryTemplateComponent);

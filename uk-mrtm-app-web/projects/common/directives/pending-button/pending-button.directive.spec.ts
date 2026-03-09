@@ -6,7 +6,7 @@ import { timer } from 'rxjs';
 
 import { PendingRequestService } from '@netz/common/services';
 import { BasePage } from '@netz/common/testing';
-import { ButtonDirective } from '@netz/govuk-components';
+import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { PendingButtonDirective } from './pending-button.directive';
 
@@ -16,7 +16,6 @@ describe('PendingButtonDirective', () => {
   let page: Page;
 
   @Component({
-    imports: [PendingButtonDirective, ButtonDirective],
     template: `
       <button netzPendingButton govukButton type="submit" (click)="startRequest()">Submit</button>
     `,
@@ -35,6 +34,13 @@ describe('PendingButtonDirective', () => {
       return this.query('button');
     }
   }
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      declarations: [TestComponent],
+      imports: [GovukComponentsModule, PendingButtonDirective],
+    }).compileComponents();
+  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

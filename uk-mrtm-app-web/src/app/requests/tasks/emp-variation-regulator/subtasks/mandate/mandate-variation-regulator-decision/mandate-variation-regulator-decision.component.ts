@@ -21,16 +21,16 @@ import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/co
 
 @Component({
   selector: 'mrtm-mandate-variation-regulator-decision',
+  standalone: true,
   imports: [
     VariationRegulatorDecisionComponent,
     WizardStepComponent,
     MandateSummaryTemplateComponent,
     ReactiveFormsModule,
   ],
-  standalone: true,
   templateUrl: './mandate-variation-regulator-decision.component.html',
-  providers: [variationRegulatorDecisionFormProvider(MANDATE_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [variationRegulatorDecisionFormProvider(MANDATE_SUB_TASK)],
 })
 export class MandateVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);

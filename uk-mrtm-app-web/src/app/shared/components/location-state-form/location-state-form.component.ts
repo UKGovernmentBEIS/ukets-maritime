@@ -21,6 +21,9 @@ type LocationModelType = AddressDTO & { state?: string };
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-location-state-form',
+  templateUrl: './location-state-form.component.html',
+  viewProviders: [existingControlContainer],
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     TextInputComponent,
@@ -32,9 +35,6 @@ type LocationModelType = AddressDTO & { state?: string };
     FieldsetHintDirective,
     NotProvidedDirective,
   ],
-  standalone: true,
-  templateUrl: './location-state-form.component.html',
-  viewProviders: [existingControlContainer],
 })
 export class LocationStateFormComponent {
   public readonly controlContainer = inject(ControlContainer);

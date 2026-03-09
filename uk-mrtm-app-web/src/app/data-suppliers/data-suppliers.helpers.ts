@@ -1,6 +1,6 @@
-import { ThirdPartyDataProviderCreateDTO } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { ThirdPartyDataProviderCreateDTO } from '@mrtm/api';
 
 export const isDataSupplierValid = (dataSupplier: ThirdPartyDataProviderCreateDTO): boolean =>
   !isNil(dataSupplier?.name);

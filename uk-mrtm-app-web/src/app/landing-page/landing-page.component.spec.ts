@@ -26,6 +26,10 @@ describe('LandingPageComponent', () => {
   let page: Page;
 
   class Page extends BasePage<LandingPageComponent> {
+    get notLoggedInLandingPageLinks() {
+      return this.queryAll<HTMLAnchorElement>('.govuk-button--start');
+    }
+
     get pageHeadingContent() {
       return this.query<HTMLElement>('netz-page-heading').textContent.trim();
     }

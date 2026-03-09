@@ -11,8 +11,8 @@ import { VerificationBodiesStoreService } from '@verification-bodies/+state/veri
 
 @Component({
   selector: 'mrtm-success',
-  imports: [AsyncPipe, LinkDirective, PanelComponent, RouterLink],
   standalone: true,
+  imports: [AsyncPipe, LinkDirective, PanelComponent, RouterLink],
   templateUrl: './success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

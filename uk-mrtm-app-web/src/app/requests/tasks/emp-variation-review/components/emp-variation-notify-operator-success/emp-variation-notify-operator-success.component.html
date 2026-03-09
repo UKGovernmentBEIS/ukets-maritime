@@ -1,13 +1,12 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <govuk-panel [title]="`Variation ${variationDeterminationStatus()}`" />
-    <p class="govuk-body">
-      You have {{ variationDeterminationStatus() }} the operator’s emissions monitoring plan variation.
-    </p>
-    <p class="govuk-body">The selected users will receive an email notification of your decision.</p>
+    <govuk-panel [title]="'Variation ' + variationDeterminationStatus()" />
   </div>
 </div>
-<div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
-  <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
-</div>
+
+<p class="govuk-body">
+  You have {{ variationDeterminationStatus() }} the operator’s emissions monitoring plan variation.
+</p>
+<p class="govuk-body">The selected users will receive an email notification of your decision.</p>
+
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

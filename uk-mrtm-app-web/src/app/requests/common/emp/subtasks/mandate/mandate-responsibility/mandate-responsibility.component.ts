@@ -26,6 +26,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-mandate-responsibility',
+  standalone: true,
   imports: [
     WizardStepComponent,
     FormsModule,
@@ -38,9 +39,8 @@ import { WizardStepComponent } from '@shared/components';
     LinkDirective,
     ButtonDirective,
   ],
-  standalone: true,
-  templateUrl: './mandate-responsibility.component.html',
   providers: [mandateResponsibilityFormProvider],
+  templateUrl: './mandate-responsibility.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateResponsibilityComponent {

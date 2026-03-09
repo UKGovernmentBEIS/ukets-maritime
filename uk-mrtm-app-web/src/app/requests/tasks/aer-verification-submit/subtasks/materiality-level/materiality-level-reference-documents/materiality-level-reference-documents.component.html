@@ -8,8 +8,8 @@
   <div
     formControlName="accreditationReferenceDocumentTypes"
     govuk-checkboxes
-    label="For UK Emissions Trading Scheme (ETS)"
-    labelSize="medium"
+    legend="For UK Emissions Trading Scheme (ETS)"
+    legendSize="medium"
     hint="The listed documents include all modifications and amendments made to relevant legislation, unless otherwise stated.">
     @for (type of referenceDocumentTypes; track type) {
       <govuk-checkbox [value]="type" [label]="type | accreditationReferenceDocumentTypes">

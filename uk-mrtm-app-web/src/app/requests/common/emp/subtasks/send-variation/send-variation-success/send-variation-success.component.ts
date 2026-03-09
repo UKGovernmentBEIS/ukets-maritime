@@ -5,8 +5,8 @@ import { SEND_VARIATION_SUCCESS_COMPONENT } from '@requests/common/emp/subtasks/
 
 @Component({
   selector: 'mrtm-send-variation-success',
-  imports: [NgComponentOutlet],
   standalone: true,
+  imports: [NgComponentOutlet],
   templateUrl: './send-variation-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

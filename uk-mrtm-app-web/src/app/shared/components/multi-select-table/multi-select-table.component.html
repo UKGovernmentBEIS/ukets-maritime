@@ -1,12 +1,12 @@
-<table class="govuk-table" [attr.aria-label]="description() ?? null">
-  @if (caption()) {
+<table class="govuk-table" [attr.aria-label]="description ?? null">
+  @if (caption) {
     <caption class="govuk-table__caption">
-      {{ caption() }}
+      {{ caption }}
     </caption>
   }
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      @if (rows()?.length > 0) {
+      @if (data?.length > 0) {
         <th class="govuk-table__header mrtm-multi-select__checkbox-cell" scope="col" id="select-all">
           <div class="govuk-checkboxes__item govuk-checkboxes--small">
             <input
@@ -22,7 +22,7 @@
           </div>
         </th>
       }
-      @for (column of columns(); track $index) {
+      @for (column of columns; track $index) {
         <th
           [attr.aria-sort]="!column.isSortable ? null : sortedField === column.field ? sortingDirection : 'none'"
           [class.govuk-table__header]="true"
@@ -30,11 +30,7 @@
           [class]="column.widthClass"
           scope="col">
           @if (!column.isSortable) {
-            @if (column.hiddenHeader) {
-              <span class="govuk-visually-hidden">{{ column.header }}</span>
-            } @else {
-              {{ column.header }}
-            }
+            {{ column.header }}
           } @else {
             <button (click)="sortBy(column.field)" type="button">
               {{ column.header }}
@@ -53,25 +49,25 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    @for (row of rows(); track rowIndex; let rowIndex = $index) {
+    @for (row of data; track rowIndex; let rowIndex = $index) {
       <tr class="govuk-table__row">
         <td class="govuk-table__cell mrtm-multi-select__checkbox-cell">
           <div class="govuk-checkboxes__item govuk-checkboxes--small">
             <input
               type="checkbox"
               class="govuk-checkboxes__input"
-              id="{{ `${rowIndex}-multi-select-checkbox` }}"
+              id="{{ rowIndex + '-multi-select-checkbox' }}"
               (change)="toggle(row)"
               [checked]="row.isSelected" />
-            <label class="govuk-label govuk-checkboxes__label" for="{{ `${rowIndex}-multi-select-checkbox` }}">
-              <span class="govuk-visually-hidden">Select {{ row[columns()?.[0]?.field] }}</span>
+            <label class="govuk-label govuk-checkboxes__label" for="{{ rowIndex + '-multi-select-checkbox' }}">
+              <span class="govuk-visually-hidden">Select {{ row[columns?.[0]?.field] }}</span>
             </label>
           </div>
         </td>
-        @for (column of columns(); track $index) {
+        @for (column of columns; track $index) {
           <td [class.govuk-table__cell--numeric]="column?.isNumeric" class="govuk-table__cell">
-            @if (template()) {
-              <ng-container *ngTemplateOutlet="template(); context: { column: column, row: row, index: rowIndex }" />
+            @if (template) {
+              <ng-container *ngTemplateOutlet="template; context: { column: column, row: row, index: rowIndex }" />
             } @else {
               {{ row[column.field] }}
             }
@@ -79,8 +75,8 @@
         }
       </tr>
     } @empty {
-      <td class="govuk-table__cell govuk-table__cell--empty--no-bottom-border" [attr.colspan]="columns().length">
-        {{ emptyTableText() }}
+      <td class="govuk-table__cell govuk-table__cell--empty--no-bottom-border" [attr.colspan]="columns.length">
+        {{ emptyTableText }}
       </td>
     }
   </tbody>
@@ -127,13 +123,3 @@
     <path d="M13.7344 12.0781L10.9609 17.6211L8.1875 12.0781H13.7344Z" fill="currentColor" />
   </svg>
 </ng-template>
-
-@if (data()?.length > pageSize()) {
-  <div class="govuk-grid-column-full govuk-!-margin-top-6">
-    <govuk-pagination
-      [fragment]="targetFragment()"
-      [count]="data().length"
-      [pageSize]="pageSize()"
-      (currentPageChange)="currentPage.set($event)" />
-  </div>
-}

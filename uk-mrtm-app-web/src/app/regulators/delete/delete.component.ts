@@ -17,6 +17,9 @@ import { saveNotFoundRegulatorError } from '@regulators/errors/business-error';
 
 @Component({
   selector: 'mrtm-delete',
+  templateUrl: './delete.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     WarningTextComponent,
     PendingButtonDirective,
@@ -27,9 +30,6 @@ import { saveNotFoundRegulatorError } from '@regulators/errors/business-error';
     AsyncPipe,
     UserFullNamePipe,
   ],
-  standalone: true,
-  templateUrl: './delete.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent {
   private readonly authStore = inject(AuthStore);

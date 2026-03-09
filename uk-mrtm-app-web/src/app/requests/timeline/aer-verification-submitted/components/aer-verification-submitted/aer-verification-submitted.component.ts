@@ -13,8 +13,8 @@ import { AER_VERIFICATION_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/aer-
 
 @Component({
   selector: 'mrtm-aer-verification-submitted',
-  imports: [TaskSuperListComponent],
   standalone: true,
+  imports: [TaskSuperListComponent],
   templateUrl: './aer-verification-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

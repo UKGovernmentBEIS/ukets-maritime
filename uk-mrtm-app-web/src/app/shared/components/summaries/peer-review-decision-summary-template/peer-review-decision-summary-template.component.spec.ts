@@ -13,16 +13,16 @@ describe('PeerReviewDecisionSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(PeerReviewDecisionSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('decision', {
+    component.decision = {
       type: 'AGREE',
       notes: 'notes',
-    });
-    fixture.componentRef.setInput('peerReviewer', 'peer reviewer');
-    fixture.componentRef.setInput('map', {
+    };
+    component.peerReviewer = 'peer reviewer';
+    component.map = {
       caption: 'Peer review response',
       decision: 'Peer review decision',
       notes: 'Supporting notes',
-    });
+    };
     fixture.detectChanges();
   });
 

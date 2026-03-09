@@ -17,15 +17,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.mrtm.api.web.orchestrator.authorization.service.OperatorUserAuthorityUpdateOrchestrator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.user.operator.domain.OperatorUserDTO;
 import uk.gov.netz.api.user.operator.domain.OperatorUserStatusDTO;
+import uk.gov.netz.api.user.operator.service.OperatorUserManagementService;
 import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
 import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.security.AuthorizedRole;
-import uk.gov.netz.api.user.operator.service.OperatorUserManagementService;
 
 import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 
@@ -35,7 +34,6 @@ import static uk.gov.netz.api.common.constants.RoleTypeConstants.OPERATOR;
 @RequiredArgsConstructor
 public class OperatorUserManagementController {
 
-    private final OperatorUserAuthorityUpdateOrchestrator operatorUserAuthorityUpdateOrchestrator;
     private final OperatorUserManagementService operatorUserManagementService;
 
     /**
@@ -87,7 +85,7 @@ public class OperatorUserManagementController {
     public ResponseEntity<OperatorUserDTO> updateCurrentOperatorUser(
             @Parameter(hidden = true) AppUser appUser,
             @RequestBody @Valid @Parameter(description = "The modified operator user", required = true) OperatorUserDTO operatorUserDTO) {
-        operatorUserAuthorityUpdateOrchestrator.updateOperatorUser(appUser, operatorUserDTO);
+        operatorUserManagementService.updateOperatorUser(appUser, operatorUserDTO);
         return new ResponseEntity<>(operatorUserDTO, HttpStatus.OK);
     }
 
@@ -116,7 +114,7 @@ public class OperatorUserManagementController {
             @PathVariable("accountId") @Parameter(description = "The account id") Long accountId,
             @PathVariable("userId") @Parameter(description = "The operator user id") String userId,
             @RequestBody @Valid @Parameter(description = "The modified operator user", required = true) OperatorUserDTO operatorUserDTO) {
-        operatorUserAuthorityUpdateOrchestrator.updateOperatorUserByAccountAndId(accountId, userId, operatorUserDTO);
+        operatorUserManagementService.updateOperatorUserByAccountAndId(accountId, userId, operatorUserDTO);
         return new ResponseEntity<>(operatorUserDTO, HttpStatus.OK);
     }
     

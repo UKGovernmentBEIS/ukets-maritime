@@ -9,8 +9,8 @@ import { CapitalizeFirstPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-send-report-success-message',
-  imports: [PanelComponent, CapitalizeFirstPipe, LinkDirective, RouterLink],
   standalone: true,
+  imports: [PanelComponent, CapitalizeFirstPipe, LinkDirective, RouterLink],
   templateUrl: './send-report-success-message.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

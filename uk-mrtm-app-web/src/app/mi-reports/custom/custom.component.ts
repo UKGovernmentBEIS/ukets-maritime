@@ -16,11 +16,11 @@ import { manipulateResultsAndExportToExcel } from '@mi-reports/core/mi-report';
 
 @Component({
   selector: 'mrtm-custom',
-  imports: [PageHeadingComponent, FormsModule, ReactiveFormsModule, TextareaComponent, ButtonDirective, AsyncPipe],
-  standalone: true,
   templateUrl: './custom.component.html',
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
+  standalone: true,
+  imports: [PageHeadingComponent, FormsModule, ReactiveFormsModule, TextareaComponent, ButtonDirective, AsyncPipe],
 })
 export class CustomReportComponent {
   private readonly fb = inject(FormBuilder);

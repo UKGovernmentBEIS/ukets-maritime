@@ -14,6 +14,9 @@ import { saveNotFoundExternalContactError } from '@regulators/errors/business-er
 
 @Component({
   selector: 'mrtm-delete',
+  templateUrl: './delete.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     WarningTextComponent,
     ButtonDirective,
@@ -23,9 +26,6 @@ import { saveNotFoundExternalContactError } from '@regulators/errors/business-er
     PanelComponent,
     AsyncPipe,
   ],
-  standalone: true,
-  templateUrl: './delete.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteComponent {
   private readonly externalContactsService = inject(CaExternalContactsService);

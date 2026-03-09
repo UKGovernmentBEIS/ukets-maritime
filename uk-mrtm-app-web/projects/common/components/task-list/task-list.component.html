@@ -1,6 +1,6 @@
 <ul class="app-task-list app-task-list__items">
-  @for (section of sections(); track $index) {
-    <li netz-task-section [title]="section.title" [titleElement]="titleElement()" [tasks]="section.tasks"></li>
+  @for (section of sections; track $index) {
+    <li netz-task-section [title]="section.title" [titleElement]="titleElement" [tasks]="section.tasks"></li>
   }
   <ng-content></ng-content>
 </ul>

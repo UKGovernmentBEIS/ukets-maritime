@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Params, RouterLink } from '@angular/router';
 
 import { AerPort } from '@mrtm/api';
 
@@ -22,6 +22,7 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-port-call-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -36,24 +37,14 @@ import { SelectOptionToTitlePipe } from '@shared/pipes';
     VoyageOrPortCallEmissionsSummaryTemplateComponent,
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './port-call-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PortCallSummaryTemplateComponent {
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
-
   readonly data = input<AerPort>();
   readonly editable = input<boolean>(false);
   readonly editQueryParams = input<Params>({ change: true });
   readonly countries = AER_PORT_COUNTRY_SELECT_ITEMS;
   readonly ports = AER_PORT_CODE_SELECT_ITEMS;
   readonly wizardStep = AerPortsWizardStep;
-
-  public onAddDirectEmissions(): void {
-    this.router.navigate([this.wizardStep.IN_PORT_EMISSIONS, this.wizardStep.DIRECT_EMISSIONS], {
-      relativeTo: this.activatedRoute,
-    });
-  }
 }

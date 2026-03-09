@@ -1,6 +1,6 @@
-import { EmpBatchReissueRequestCreateActionPayload } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { EmpBatchReissueRequestCreateActionPayload } from '@mrtm/api';
 
 export const isSummaryCompleted = (batchVariation?: EmpBatchReissueRequestCreateActionPayload): boolean =>
   !isNil(batchVariation?.summary);

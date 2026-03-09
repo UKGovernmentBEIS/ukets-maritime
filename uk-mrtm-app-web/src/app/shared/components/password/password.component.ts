@@ -1,13 +1,16 @@
-import { Component, inject, input, signal } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { ControlContainer, FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonDirective, TagComponent, TextInputComponent } from '@netz/govuk-components';
+import { PasswordStrengthMeterComponent } from 'angular-password-strength-meter';
 
-import { PasswordStrengthMeterComponent } from '@shared/components/password-strength-meter';
+import { ButtonDirective, TagComponent, TextInputComponent } from '@netz/govuk-components';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-password',
+  templateUrl: './password.component.html',
+  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
+  standalone: true,
   imports: [
     TextInputComponent,
     FormsModule,
@@ -16,28 +19,24 @@ import { PasswordStrengthMeterComponent } from '@shared/components/password-stre
     PasswordStrengthMeterComponent,
     TagComponent,
   ],
-  standalone: true,
-  templateUrl: './password.component.html',
-  viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })
 export class PasswordComponent {
   readonly formGroupDirective = inject(FormGroupDirective);
 
-  readonly passwordLabel = input('Password');
-  readonly confirmPasswordLabel = input('Re-enter your password');
-  readonly includeActivationMessage = input(true);
-
-  protected readonly showLabel = signal<'Show' | 'Hide'>('Show');
-  protected readonly passwordInputType = signal<'password' | 'text'>('password');
-  protected readonly passwordStrength = signal<number | null>(null);
+  passwordLabel = input('Password');
+  confirmPasswordLabel = input('Re-enter your password');
+  includeActivationMessage = input(true);
+  showLabel: 'Show' | 'Hide' = 'Show';
+  passwordInputType: 'password' | 'text' = 'password';
+  passwordStrength: number;
 
   togglePassword() {
-    if (this.showLabel() === 'Show') {
-      this.showLabel.set('Hide');
-      this.passwordInputType.set('text');
+    if (this.showLabel === 'Show') {
+      this.showLabel = 'Hide';
+      this.passwordInputType = 'text';
     } else {
-      this.showLabel.set('Show');
-      this.passwordInputType.set('password');
+      this.showLabel = 'Show';
+      this.passwordInputType = 'password';
     }
   }
 }

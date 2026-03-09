@@ -5,42 +5,39 @@
   <ng-template govukTab id="fuelConsumption" label="Fuel consumption">
     <h3 class="govuk-heading-m">Fuel consumption</h3>
     @if (fuelConsumptions()?.length) {
-      <govuk-table
-        [columns]="columns"
-        [data]="fuelConsumptions()"
-        [rowCssClasses]="onDefineRowAdditionalStyle"
-        mrtmScrollablePane
-        ariaLabel="Fuel consumption">
-        <ng-template let-column="column" let-row="row">
-          @switch (column?.field) {
-            @case ('fuelOriginTypeName') {
-              {{ row?.[column?.field] | fuelOriginTitle: false }}
-            }
-            @case ('methaneSlip') {
-              {{ row?.['fuelOriginTypeName']?.['methaneSlip'] | methaneSlipValue: row.methaneSlipValueType }}
-            }
-            @case ('measuringUnit') {
-              {{ row?.[column?.field] | selectOptionToTitle: measurementUnits }}
-            }
-            @case ('name') {
-              {{ row?.[column.field] }}
-            }
-            @case (null) {
-              @if (editable() && !row?.isSummary) {
-                <div class="control-row justify-content-end">
-                  <a govukLink [routerLink]="[fuelConsumptionsEditPath(), row['uniqueIdentifier']]">Change</a>
-                  @if (deletable()) {
-                    <a govukLink routerLink="." preserveFragment (click)="removeFuelConsumption.emit(row)">Remove</a>
-                  }
-                </div>
+      <div class="overflow-auto overflow-auto-table">
+        <govuk-table [columns]="columns" [data]="fuelConsumptions()" [rowCssClasses]="onDefineRowAdditionalStyle">
+          <ng-template let-column="column" let-row="row">
+            @switch (column?.field) {
+              @case ('fuelOriginTypeName') {
+                {{ row?.[column?.field] | fuelOriginTitle: false }}
+              }
+              @case ('methaneSlip') {
+                {{ row?.['fuelOriginTypeName']?.['methaneSlip'] | methaneSlipValue: row.methaneSlipValueType }}
+              }
+              @case ('measuringUnit') {
+                {{ row?.[column?.field] | selectOptionToTitle: measurementUnits }}
+              }
+              @case ('name') {
+                {{ row?.[column.field] }}
+              }
+              @case (null) {
+                @if (editable() && !row?.isSummary) {
+                  <div class="control-row justify-content-end">
+                    <a govukLink [routerLink]="[fuelConsumptionsEditPath(), row['uniqueIdentifier']]">Change</a>
+                    @if (deletable()) {
+                      <a govukLink routerLink="." preserveFragment (click)="removeFuelConsumption.emit(row)">Remove</a>
+                    }
+                  </div>
+                }
+              }
+              @default {
+                {{ row?.[column.field] | bigNumber: 7 }}
               }
             }
-            @default {
-              {{ row?.[column.field] | bigNumber: 7 }}
-            }
-          }
-        </ng-template>
-      </govuk-table>
+          </ng-template>
+        </govuk-table>
+      </div>
       @if (editable() && emissionFactors()) {
         <mrtm-fuels-and-emissions-factors-info-summary-template [data]="emissionFactors()" />
       }
@@ -105,9 +102,7 @@
     } @else {
       <h3 class="govuk-heading-m">Direct emissions</h3>
       <p class="govuk-body">No emissions to display</p>
-      @if (editable()) {
-        <button govukSecondaryButton type="button" (click)="onAddDirectEmission()">Add direct emissions</button>
-      }
+      <button govukSecondaryButton type="button" (click)="onAddDirectEmission()">Add direct emissions</button>
     }
   </ng-template>
 </govuk-tabs>

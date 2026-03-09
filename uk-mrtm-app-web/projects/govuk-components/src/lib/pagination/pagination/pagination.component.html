@@ -7,7 +7,7 @@
             <div class="govuk-pagination__prev">
               <a
                 class="govuk-link govuk-pagination__link"
-                [fragment]="(route.fragment | async) || fragment()"
+                [fragment]="(route.fragment | async) || fragment"
                 [queryParams]="{ page: page > 2 ? page - 1 : 1 }"
                 [state]="{ scrollSkip: true }"
                 queryParamsHandling="merge"
@@ -31,19 +31,19 @@
               </a>
             </div>
           }
-          @if (!hideNumbers()) {
+          @if (!hideNumbers) {
             <ul class="govuk-pagination__list">
-              @for (pageNumber of pageNumbers; track pageNumber) {
-                @if ($first || $last || isDisplayed(pageNumber, page)) {
+              @for (pageNumber of pageNumbers; track pageNumber; let isFirst = $first; let isLast = $last) {
+                @if (isFirst || isLast || isDisplayed(pageNumber, page)) {
                   <li class="govuk-pagination__item" [class.govuk-pagination__item--current]="page === pageNumber">
                     <a
                       class="govuk-link govuk-pagination__link"
-                      [fragment]="(route.fragment | async) || fragment()"
+                      [fragment]="(route.fragment | async) || fragment"
                       [queryParams]="{ page: pageNumber }"
                       [state]="{ scrollSkip: true }"
                       queryParamsHandling="merge"
                       [routerLink]="[]"
-                      [attr.aria-label]="`Page ${pageNumber}`"
+                      [attr.aria-label]="'Page ' + pageNumber"
                       [attr.aria-current]="page === pageNumber ? 'page' : null">
                       {{ pageNumber }}
                     </a>
@@ -59,7 +59,7 @@
             <div class="govuk-pagination__next">
               <a
                 class="govuk-link govuk-pagination__link"
-                [fragment]="(route.fragment | async) || fragment()"
+                [fragment]="(route.fragment | async) || fragment"
                 [queryParams]="{ page: page < totalPages ? page + 1 : totalPages }"
                 [state]="{ scrollSkip: true }"
                 queryParamsHandling="merge"
@@ -87,14 +87,14 @@
       }
     </div>
     <div class="govuk-grid-column-one-third">
-      @if (!hideResultCount() && count()) {
+      @if (!hideResultCount && count) {
         <p class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-2 govuk-!-text-align-right">
           Showing
-          <strong>{{ (page - 1) * pageSize() + 1 }}</strong>
+          <strong>{{ (page - 1) * pageSize + 1 }}</strong>
           to
-          <strong>{{ page * pageSize() < count() ? page * pageSize() : count() }}</strong>
+          <strong>{{ page * pageSize < count ? page * pageSize : count }}</strong>
           of
-          <strong>{{ count() }}</strong>
+          <strong>{{ count }}</strong>
           results
         </p>
       }

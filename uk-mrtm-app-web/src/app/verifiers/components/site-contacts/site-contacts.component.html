@@ -6,8 +6,6 @@
           @case ('user') {
             @if (isEditable$ | async) {
               <div
-                label="Assign to"
-                [isLabelHidden]="true"
                 [options]="assigneeOptions$ | async"
                 formControlName="userId"
                 govuk-select

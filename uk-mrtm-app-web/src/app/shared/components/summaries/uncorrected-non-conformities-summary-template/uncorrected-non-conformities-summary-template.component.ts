@@ -20,6 +20,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -33,7 +34,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
     UncorrectedItemsListTemplateComponent,
     UncorrectedNonConformitiesPriorYearListTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './uncorrected-non-conformities-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

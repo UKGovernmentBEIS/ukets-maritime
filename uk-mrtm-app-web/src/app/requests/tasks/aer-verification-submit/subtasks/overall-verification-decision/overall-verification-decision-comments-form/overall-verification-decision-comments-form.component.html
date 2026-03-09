@@ -5,10 +5,5 @@
   [heading]="isEditMode ? map.commentsFormEdit.title : map.commentsFormAdd.title"
   [showReturnLink]="true"
   [isTwoThirds]="true">
-  <div
-    [label]="isEditMode ? map.commentsFormEdit.title : map.commentsFormAdd.title"
-    [isLabelHidden]="true"
-    formControlName="reason"
-    govuk-textarea
-    [maxLength]="10000"></div>
+  <div formControlName="reason" govuk-textarea [maxLength]="10000"></div>
 </mrtm-wizard-step>

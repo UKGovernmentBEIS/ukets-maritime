@@ -8,8 +8,8 @@ import { aerReviewQuery } from '@requests/tasks/aer-review/+state';
 
 @Component({
   selector: 'mrtm-aer-review-action-buttons',
-  imports: [RouterLink, ButtonDirective],
   standalone: true,
+  imports: [RouterLink, ButtonDirective],
   templateUrl: './aer-review-action-buttons.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

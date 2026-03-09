@@ -28,7 +28,7 @@ public class AccountCreatedSendToRegistryProducer {
         try {
             kafkaTemplate.send(topicName, String.valueOf(event.getAccountDetails().getEmitterId()), event);
         } catch (Exception e) {
-            log.error("Error when kafka producing", e);
+            log.error("Error when kafka producing: {}", e.getMessage());
             throw new BusinessException(MrtmErrorCode.INTEGRATION_REGISTRY_EMISSIONS_KAFKA_QUEUE_CONNECTION_ISSUE,
                     event);
         }

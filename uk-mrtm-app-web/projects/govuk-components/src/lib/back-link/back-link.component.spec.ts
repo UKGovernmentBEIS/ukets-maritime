@@ -6,8 +6,8 @@ import { BackLinkComponent } from './back-link.component';
 
 describe('BackLinkComponent', () => {
   @Component({
-    imports: [BackLinkComponent],
     standalone: true,
+    imports: [BackLinkComponent],
     template: '<govuk-back-link [link]="link" [route]="route"  [inverse]="inverse"></govuk-back-link>',
   })
   class MockParentComponent {

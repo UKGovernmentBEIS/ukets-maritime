@@ -13,6 +13,7 @@ import { OfficialNoticeInfo } from '@shared/types';
 
 @Component({
   selector: 'mrtm-recipients-partial-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -21,10 +22,9 @@ import { OfficialNoticeInfo } from '@shared/types';
     NotProvidedDirective,
     SummaryDownloadFilesComponent,
   ],
-  standalone: true,
   templateUrl: './recipients-partial-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecipientsPartialSummaryTemplateComponent {
-  readonly officialNoticeInfo = input.required<OfficialNoticeInfo>();
+  officialNoticeInfo = input.required<OfficialNoticeInfo>();
 }

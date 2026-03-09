@@ -1,14 +1,14 @@
 import { Component, DebugElement } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { DateInputComponent } from './date-input.component';
 
 describe('DateInputComponent', () => {
   @Component({
-    imports: [DateInputComponent, ReactiveFormsModule],
     standalone: true,
+    imports: [DateInputComponent, ReactiveFormsModule],
     template: '<div govuk-date-input [formControl]="control" [min]="min" [max]="max"></div>',
   })
   class TestComponent {
@@ -18,8 +18,8 @@ describe('DateInputComponent', () => {
   }
 
   @Component({
-    imports: [DateInputComponent, ReactiveFormsModule],
     standalone: true,
+    imports: [DateInputComponent, ReactiveFormsModule],
     template: '<div govuk-date-input [formControl]="control"></div>',
   })
   class Test2Component {
@@ -40,7 +40,7 @@ describe('DateInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [ControlContainer],
+      imports: [ReactiveFormsModule, TestComponent, Test2Component],
     }).compileComponents();
   });
 

@@ -260,11 +260,6 @@ export const itemActionsMap: Record<
     transformed: true,
     linkable: true,
   },
-  REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED: {
-    text: 'Sent information to the registry by system',
-    transformed: false,
-    linkable: true,
-  },
   AER_APPLICATION_CANCELLED_DUE_TO_EXEMPT: {
     text: 'Complete annual emissions report cancelled due to exempt reporting status',
     transformed: false,
@@ -459,11 +454,6 @@ export const itemActionsMap: Record<
   NON_COMPLIANCE_DETAILS_AMENDED: {
     text: 'Non-compliance details updated',
     transformed: true,
-    linkable: true,
-  },
-  REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED: {
-    text: 'Sent information to the registry by system',
-    transformed: false,
     linkable: true,
   },
 };

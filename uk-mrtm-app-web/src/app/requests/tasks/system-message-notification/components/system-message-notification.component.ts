@@ -9,8 +9,8 @@ import { SystemMessageNotificationRequestTaskPayload } from '@requests/tasks/sys
 
 @Component({
   selector: 'mrtm-system-message-notification',
-  imports: [ButtonDirective, LinkDirective, WarningTextComponent, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, LinkDirective, WarningTextComponent, RouterLink],
   template: `
     <div class="govuk-!-margin-top-4">
       <govuk-warning-text [assistiveText]="warningText" />

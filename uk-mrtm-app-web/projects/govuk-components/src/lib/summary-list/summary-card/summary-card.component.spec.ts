@@ -11,8 +11,8 @@ describe('SummaryCardComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [SummaryCardComponent, LinkDirective, RouterLink],
     standalone: true,
+    imports: [SummaryCardComponent, LinkDirective, RouterLink],
     template: `
       <div govuk-summary-card [title]="title">
         <ng-template #actions>
@@ -27,11 +27,11 @@ describe('SummaryCardComponent', () => {
     title = 'University of Gloucestershire';
   }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       providers: [provideRouter([])],
-    }).overrideComponent(SummaryCardComponent, { set: { host: { 'data-test-id': 'summary-card-spec' } } });
-
+      imports: [SummaryCardComponent, TestComponent],
+    }).compileComponents();
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.debugElement.componentInstance;
     fixture.detectChanges();

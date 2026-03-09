@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-recommended-improvements-improvement-form',
-  imports: [ReactiveFormsModule, TextareaComponent, WizardStepComponent],
   standalone: true,
+  imports: [ReactiveFormsModule, TextareaComponent, WizardStepComponent],
   templateUrl: './recommended-improvements-improvement-form.component.html',
-  providers: [recommendedImprovementsImprovementFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [recommendedImprovementsImprovementFormProvider],
 })
 export class RecommendedImprovementsImprovementFormComponent {
   readonly map = recommendedImprovementsMap;

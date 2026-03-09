@@ -11,8 +11,8 @@
     Task_list.doc
   </p>
   <div formControlName="exist" govuk-radio [isInline]="true">
-    <govuk-radio-option [value]="true" label="Yes" />
-    <govuk-radio-option [value]="false" label="No" />
+    <govuk-radio-option [value]="true" [label]="'Yes'" />
+    <govuk-radio-option [value]="false" [label]="'No'" />
   </div>
 
   @if (existCtrl.value) {

@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-non-compliance-close-success',
-  imports: [RouterLink, PanelComponent, LinkDirective],
   standalone: true,
+  imports: [RouterLink, PanelComponent, LinkDirective],
   templateUrl: './non-compliance-close-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

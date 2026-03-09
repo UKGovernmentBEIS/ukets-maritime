@@ -19,6 +19,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-fee-details',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -27,7 +28,6 @@ import { WizardStepComponent } from '@shared/components';
     TextareaComponent,
     CurrencyPipe,
   ],
-  standalone: true,
   templateUrl: './fee-details.component.html',
   providers: [feeDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -38,13 +38,13 @@ export class FeeDetailsComponent {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
   protected readonly maritimeEmissionsMap = maritimeEmissionsMap;
 
-  private readonly totalBillableHours = toSignal(this.form.controls.totalBillableHours.valueChanges, {
+  private totalBillableHours = toSignal(this.form.controls.totalBillableHours.valueChanges, {
     initialValue: this.form.controls.totalBillableHours.value,
   });
-  private readonly totalHourlyRate = toSignal(this.form.controls.hourlyRate.valueChanges, {
+  private totalHourlyRate = toSignal(this.form.controls.hourlyRate.valueChanges, {
     initialValue: this.form.controls.hourlyRate.value,
   });
-  readonly totalOperatorFee = computed(() => this.totalBillableHours() * this.totalHourlyRate());
+  totalOperatorFee = computed(() => this.totalBillableHours() * this.totalHourlyRate());
 
   onSubmit() {
     this.service

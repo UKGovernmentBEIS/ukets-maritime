@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { AdditionalDocuments } from '@mrtm/api';
@@ -19,6 +19,7 @@ import { AttachedFile, SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-additional-documents-summary-template',
+  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -31,23 +32,16 @@ import { AttachedFile, SubTaskListMap } from '@shared/types';
     RouterLink,
     HtmlDiffDirective,
   ],
-  standalone: true,
   templateUrl: './additional-documents-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdditionalDocumentsSummaryTemplateComponent {
-  readonly additionalDocuments = input.required<AdditionalDocuments>();
-  readonly originalAdditionalDocuments = input<AdditionalDocuments>();
-  readonly additionalDocumentsMap = input.required<
-    SubTaskListMap<{
-      additionalDocumentsUpload: string;
-    }>
-  >();
-  readonly files = input.required<AttachedFile[]>();
-  readonly originalFiles = input<AttachedFile[]>();
-  readonly wizardStep = input<{
-    [s: string]: string;
-  }>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) additionalDocuments: AdditionalDocuments;
+  @Input() originalAdditionalDocuments: AdditionalDocuments;
+  @Input({ required: true }) additionalDocumentsMap: SubTaskListMap<{ additionalDocumentsUpload: string }>;
+  @Input({ required: true }) files: AttachedFile[];
+  @Input() originalFiles: AttachedFile[];
+  @Input() wizardStep: { [s: string]: string };
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 }

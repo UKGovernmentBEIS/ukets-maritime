@@ -7,8 +7,8 @@ import { NON_COMPLIANCE_NOTICE_OF_INTENT_PEER_REVIEW_ROUTE_PREFIX } from '@reque
 
 @Component({
   selector: 'mrtm-non-compliance-notice-of-intent-peer-review-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     <div class="govuk-button-group">
       <a govukButton [routerLink]="[routePath, 'review-decision']">Peer review decision</a>

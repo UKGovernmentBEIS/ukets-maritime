@@ -1,26 +1,18 @@
-# Maritime Data Provider Emulator
-
-**This application is intended for testing and development purposes only. It should NOT be used in production environments.**
-
-This emulator contains operations that are only suitable for controlled test environments.
-
 # Overview
 This is a Spring Boot emulator for end-to-end testing of Private Key JWTClient Authentication flow with Keycloak.
 This emulator exposes two HTTP endpoints used by tests and other services:
 
 - GET /data-emulator/jwks — returns the public JWK Set (JWKS) containing the public keys used to verify JWTs issued by this emulator.
 - GET /data-emulator/retrieve-access-token/{client-id} — generates and signs a client-assertion JWT for the given client id, posts it to the configured Keycloak token endpoint and returns Keycloak's token response.
-- GET /data-emulator/jwks/{key-pair-no} — returns the public JWK Set (JWKS) for a specific key pair number.
-- GET /data-emulator/retrieve-access-token/{key-pair-no}/{client-id} — generates and signs a client-assertion JWT using the specified key pair for the given client id, posts it to the configured Keycloak token endpoint and returns Keycloak's token response.
 
 
 The following environment variables must be configured for running the application.
 
-- KEYCLOAK_BASE_URL the base url of the Keycloak server
-- KEYCLOAK_AUDIENCE_URL the audience url for the client-assertion JWT
+- KEYCLOAK_BASE_URL the base url of the Keycloak server (e.g. in e2e https://authentication.e2e.aws-dev.ukpmrv.net)
+- KEYCLOAK_AUDIENCE_URL the audience url for the client-assertion JWT (e.g. in e2e https://authentication.e2e.aws-dev.ukpmrv.net/auth/realms/uk-pmrv)
 - JWK_SET the JWK Set (JWKS) in JSON format containing the private keys used to sign the client-assertion JWTs.
-- USERNAME the username for basic authentication to access the /retrieve-access-token/* endpoint.
-- PASSWORD the password for basic authentication to access the /retrieve-access-token/* endpoint.
+- USERNAME the username for basic authentication to access the /retrieve-access-token/{client-id} endpoint.
+- PASSWORD the password for basic authentication to access the /retrieve-access-token/{client-id} endpoint.
 
 
 
@@ -66,5 +58,5 @@ docker-compose up -d uk-mrtm-app-data-provider-emulator
 ```
 ## Step 4: Setup a data provider in keycloak using as JWKS URL: http://uk-mrtm-app-data-provider-emulator:9109/data-emulator/jwks
 
-## Step 5: Send an HTTP GET request to http://localhost:9109/data-emulator/retrieve-access-token/{key-pair-no}/{clientID}
-using basic authentication with username and password configured in application.properties file. Replace {key-pair-no} with the key pair number (e.g., 0, 1, 2) and {clientID} with your client ID.
+## Step 5: Send a an http get request to http://localhost:9109/data-emulator/retrieve-access-token/clientID
+using basic authentication with username and password what is configured in application.properties file.

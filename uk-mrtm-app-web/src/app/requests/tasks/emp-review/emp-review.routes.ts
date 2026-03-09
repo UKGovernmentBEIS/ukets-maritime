@@ -15,7 +15,6 @@ import {
   canActivateEmpReviewActions,
   canActivateEmpReviewOperatorAmendsAction,
 } from '@requests/tasks/emp-review/guards';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_REVIEW_ROUTES: Routes = [
   {
@@ -28,7 +27,6 @@ export const EMP_REVIEW_ROUTES: Routes = [
       provideEmpReviewTaskServices(),
       provideEmpReviewStepFlowManagers(),
     ],
-    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'operator-details',

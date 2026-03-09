@@ -21,11 +21,11 @@ import { DeterminationTypePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-overall-decision-question',
-  imports: [WizardStepComponent, DeterminationTypePipe, ReactiveFormsModule, TextareaComponent],
   standalone: true,
+  imports: [WizardStepComponent, DeterminationTypePipe, ReactiveFormsModule, TextareaComponent],
   templateUrl: './overall-decision-variation-log.component.html',
-  providers: [overallDecisionVariationLogFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [overallDecisionVariationLogFormProvider],
 })
 export class OverallDecisionVariationLogComponent {
   protected readonly form = inject(TASK_FORM);

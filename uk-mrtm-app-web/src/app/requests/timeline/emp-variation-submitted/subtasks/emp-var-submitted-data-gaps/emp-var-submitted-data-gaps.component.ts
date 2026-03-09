@@ -37,7 +37,7 @@ export class EmpVarSubmittedDataGapsComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empVariationSubmittedQuery.selectDataGaps)(),
     dataGapsMap: dataGapsMap,
     reviewGroupDecision: this.store.select(empVariationSubmittedQuery.selectReviewGroupDecision('dataGaps'))(),

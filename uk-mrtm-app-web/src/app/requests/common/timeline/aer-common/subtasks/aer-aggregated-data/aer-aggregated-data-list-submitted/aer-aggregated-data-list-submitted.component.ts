@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     AggregatedDataListSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './aer-aggregated-data-list-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

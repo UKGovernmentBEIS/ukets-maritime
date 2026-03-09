@@ -34,8 +34,6 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceD
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceFinalDeterminationApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceInitialPenaltyNoticeApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceNoticeOfIntentApplicationSubmittedRequestActionPayload;
-import uk.gov.mrtm.api.workflow.request.flow.registry.domain.RegistryAccountUpdatedEventSubmittedRequestActionPayload;
-import uk.gov.mrtm.api.workflow.request.flow.registry.domain.RegistryRegulatorNoticeEventSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.domain.RegistryUpdatedEmissionsEventSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirApplicationReviewedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirApplicationSubmittedRequestActionPayload;
@@ -137,10 +135,6 @@ public class RequestActionPayloadSchemasProvider extends SwaggerSchemasAbstractP
 		//Registry
 		addResolvedShemas(RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class.getSimpleName(),
 			RegistryUpdatedEmissionsEventSubmittedRequestActionPayload.class);
-		addResolvedShemas(RegistryAccountUpdatedEventSubmittedRequestActionPayload.class.getSimpleName(),
-			RegistryAccountUpdatedEventSubmittedRequestActionPayload.class);
-		addResolvedShemas(RegistryRegulatorNoticeEventSubmittedRequestActionPayload.class.getSimpleName(),
-			RegistryRegulatorNoticeEventSubmittedRequestActionPayload.class);
 
 		//NON_COMPLIANCE
 		addResolvedShemas(NonComplianceApplicationSubmittedRequestActionPayload.class.getSimpleName(),

@@ -17,6 +17,7 @@ import { AerSiteVisitTypeToLabelPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-opinion-statement-site-visit-type',
+  standalone: true,
   imports: [
     AerSiteVisitTypeToLabelPipe,
     RadioComponent,
@@ -24,10 +25,9 @@ import { AerSiteVisitTypeToLabelPipe } from '@shared/pipes';
     ReactiveFormsModule,
     WizardStepComponent,
   ],
-  standalone: true,
   templateUrl: './opinion-statement-site-visit-type.component.html',
-  providers: [opinionStatementSiteVisitTypeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [opinionStatementSiteVisitTypeFormProvider],
 })
 export class OpinionStatementSiteVisitTypeComponent {
   readonly map = opinionStatementMap;

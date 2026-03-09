@@ -14,8 +14,8 @@
       <dt govukSummaryListRowKey>{{ map.accreditationReferenceDocumentTypes.title }}</dt>
       <dd govukSummaryListRowValue>
         <ul class="govuk-list govuk-list--bullet">
-          @for (type of accreditationReferenceDocumentTypes(); track $index) {
-            <li [class.govuk-!-margin-top-5]="!$first">{{ type | accreditationReferenceDocumentTypes }}</li>
+          @for (type of accreditationReferenceDocumentTypes(); track i; let i = $index) {
+            <li [class.govuk-!-margin-top-5]="i > 0">{{ type | accreditationReferenceDocumentTypes }}</li>
           }
         </ul>
       </dd>

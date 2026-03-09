@@ -83,7 +83,7 @@ describe('FeeDetailsComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Calculate the operator’s fee');
+      expect(page.heading1.textContent.trim()).toEqual('Calculate the operator’s fee');
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -120,7 +120,7 @@ describe('FeeDetailsComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Calculate the operator’s fee');
+      expect(page.heading1.textContent.trim()).toEqual('Calculate the operator’s fee');
       expect(page.submitButton).toBeTruthy();
     });
 

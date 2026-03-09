@@ -70,7 +70,7 @@
       @for (option of nitrousOxideOptions; track option) {
         <option [value]="option">{{ option }}</option>
       }
-      <option value="OTHER">Other</option>
+      <option [value]="'OTHER'">Other</option>
     </div>
   } @else {
     <div
@@ -111,7 +111,7 @@
 
 @if (isAer()) {
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
     <a govukLink routerLink="../list">Return to: {{ returnToLabel() }}</a>
   </div>
 } @else {

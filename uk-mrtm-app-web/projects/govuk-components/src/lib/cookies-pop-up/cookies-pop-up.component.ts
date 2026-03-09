@@ -1,37 +1,31 @@
 import { APP_BASE_HREF } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input, InputSignal, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'govuk-cookies-pop-up',
-  imports: [RouterLink],
   standalone: true,
+  imports: [RouterLink],
   templateUrl: './cookies-pop-up.component.html',
   styleUrl: './cookies-pop-up.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CookiesPopUpComponent {
   private readonly baseHref = inject<string>(APP_BASE_HREF, { optional: true });
-  readonly cookiesExpirationTime: InputSignal<string> = input<string>();
-  readonly cookiesAccepted: InputSignal<boolean> = input<boolean>();
-  readonly areBrowserCookiesEnabled: InputSignal<boolean> = input<boolean>();
-  readonly cookiesAcceptedEmitter = output<string>();
-  readonly cookiesRejectedEmitter = output<string>();
+  @Input() cookiesExpirationTime: string;
+  @Input() cookiesAccepted: boolean;
+  @Input() areBrowserCookiesEnabled: boolean;
+  @Output() readonly cookiesAcceptedEmitter = new EventEmitter<string>();
 
   show = false;
 
   cookiesNotAccepted() {
-    return this.cookiesAccepted() === false;
+    return this.cookiesAccepted === false;
   }
 
   acceptCookies() {
     this.show = true;
-    this.cookiesAcceptedEmitter.emit(this.cookiesExpirationTime());
-  }
-
-  rejectCookies() {
-    this.show = true;
-    this.cookiesRejectedEmitter.emit(this.cookiesExpirationTime());
+    this.cookiesAcceptedEmitter.emit(this.cookiesExpirationTime);
   }
 
   hideCookieMessage() {

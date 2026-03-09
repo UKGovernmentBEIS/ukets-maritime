@@ -32,6 +32,7 @@ import { OrganisationDetailsAddressTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-organisation-details',
+  standalone: true,
   imports: [
     LocationStateFormComponent,
     ReactiveFormsModule,
@@ -47,9 +48,8 @@ import { OrganisationDetailsAddressTitlePipe } from '@shared/pipes';
     CheckboxComponent,
     CheckboxesComponent,
   ],
-  standalone: true,
-  templateUrl: './organisation-details.component.html',
   providers: [organisationDetailsFormProvider],
+  templateUrl: './organisation-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OrganisationDetailsComponent implements OnInit {

@@ -9,8 +9,6 @@ import { BusinessErrorService } from './business-error.service';
 
 @Component({
   selector: 'netz-business-error',
-  imports: [LinkDirective, RouterLink, AsyncPipe, ErrorPageComponent],
-  standalone: true,
   template: `
     @if (businessErrorService.error$ | async; as error) {
       <netz-error-page [heading]="error.heading">
@@ -21,6 +19,8 @@ import { BusinessErrorService } from './business-error.service';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [LinkDirective, RouterLink, AsyncPipe, ErrorPageComponent],
 })
 export class BusinessErrorComponent implements OnDestroy {
   readonly businessErrorService = inject(BusinessErrorService);

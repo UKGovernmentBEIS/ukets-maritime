@@ -1,28 +1,24 @@
-import { Directive, inject, input, OnInit } from '@angular/core';
+import { Directive, HostBinding, inject, Input, OnInit } from '@angular/core';
 
 import { SummaryListComponent } from '@netz/govuk-components';
 
 @Directive({
   selector: '[govuk-summary-list][mrtmGroupedSummaryList]',
   standalone: true,
-  host: {
-    '[class.summary-list--edge-border]': 'edgeBorder',
-    '[class.summary-list--no-bottom-border]': 'noBottomBorder',
-  },
 })
 export class GroupedSummaryListDirective implements OnInit {
   private readonly summaryList = inject(SummaryListComponent);
 
-  readonly hasBottomBorder = input(true);
+  @Input() hasBottomBorder = true;
 
-  get edgeBorder() {
+  @HostBinding('class.summary-list--edge-border') get edgeBorder() {
     return true;
   }
-  get noBottomBorder() {
-    return !this.hasBottomBorder();
+  @HostBinding('class.summary-list--no-bottom-border') get noBottomBorder() {
+    return !this.hasBottomBorder;
   }
 
   ngOnInit(): void {
-    this.summaryList.hasBorders.set(false);
+    this.summaryList.hasBorders = false;
   }
 }

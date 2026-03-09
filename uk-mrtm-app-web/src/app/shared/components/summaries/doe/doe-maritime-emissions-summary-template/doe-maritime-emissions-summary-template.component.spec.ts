@@ -54,8 +54,6 @@ describe('DoeMaritimeEmissionsSummaryTemplateComponent', () => {
       expect(page.summariesContents).toEqual([
         'Why are you determining the maritime emissions or emissions figure for surrender?',
         'Not provided',
-        'Notice text',
-        'Not provided',
         'Select whether you are determining maritime emissions or only the emissions figure for surrender',
         'Not provided',
         'Total maritime emissions',
@@ -86,8 +84,6 @@ describe('DoeMaritimeEmissionsSummaryTemplateComponent', () => {
     it('should display all HTMLElements', () => {
       expect(page.summariesContents).toEqual([
         'Why are you determining the maritime emissions or emissions figure for surrender?',
-        'Not provided',
-        'Notice text',
         'Not provided',
         'Further details',
         'Not provided',

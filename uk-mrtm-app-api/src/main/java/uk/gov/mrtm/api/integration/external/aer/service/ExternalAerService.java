@@ -45,7 +45,7 @@ public class ExternalAerService {
                               Year year, AppUser appUser) {
 
         StagingAer staging = mapper.toStagingAer(external);
-        validator.validate(staging, year);
+        validator.validate(staging);
 
         MrtmAccount account = mrtmAccountRepository
             .findByImoNumber(companyImoNumber)

@@ -3,7 +3,9 @@ import { AerPort, AerPortDetails, AerPortEmissionsMeasurement, AerPortVisit } fr
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 export interface AerPortSummaryItemDto
-  extends Pick<AerPort, 'imoNumber' | 'uniqueIdentifier'>, Omit<AerPortDetails, 'visit'>, AerPortVisit {
+  extends Pick<AerPort, 'imoNumber' | 'uniqueIdentifier'>,
+    Omit<AerPortDetails, 'visit'>,
+    AerPortVisit {
   surrenderEmissions: AerPortEmissionsMeasurement['total'];
   totalEmissions: AerPortEmissionsMeasurement['total'];
   status: TaskItemStatus;

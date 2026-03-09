@@ -17,9 +17,9 @@ export const NON_COMPLIANCE_FINAL_DETERMINATION_DETAILS_ROUTES: Routes = [
     canActivate: [canActivateNonComplianceFinalDeterminationDetailsSummary],
     data: { breadcrumb: false, backlink: '../' },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-final-determination/subtasks/non-compliance-final-determination-details/non-compliance-final-determination-details-summary').then(
-        (c) => c.NonComplianceFinalDeterminationDetailsSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-final-determination/subtasks/non-compliance-final-determination-details/non-compliance-final-determination-details-summary'
+      ).then((c) => c.NonComplianceFinalDeterminationDetailsSummaryComponent),
   },
   {
     path: NonComplianceFinalDeterminationDetailsStep.DETAILS_FORM,
@@ -30,8 +30,8 @@ export const NON_COMPLIANCE_FINAL_DETERMINATION_DETAILS_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceFinalDeterminationDetailsStep.SUMMARY, '../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-final-determination/subtasks/non-compliance-final-determination-details/non-compliance-final-determination-details-form').then(
-        (c) => c.NonComplianceFinalDeterminationDetailsFormComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-final-determination/subtasks/non-compliance-final-determination-details/non-compliance-final-determination-details-form'
+      ).then((c) => c.NonComplianceFinalDeterminationDetailsFormComponent),
   },
 ];

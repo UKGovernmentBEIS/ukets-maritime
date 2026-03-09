@@ -18,14 +18,14 @@
 
     @if (allOperatorsInfo?.otherOperators; as otherOperatorsInfo) {
       <div class="govuk-!-margin-bottom-6">
+        <h2 class="govuk-heading-m">{{ config()?.otherUsersHeader }}</h2>
         @if ((otherOperatorsInfo | keyvalue)?.length > 0) {
-          <div [label]="config()?.otherUsersHeader" labelSize="medium" govuk-checkboxes formControlName="operators">
+          <div govuk-checkboxes formControlName="operators">
             @for (user of otherOperatorsInfo | keyvalue; track user) {
               <govuk-checkbox [value]="user.key" [label]="user.key | userInfoResolver: otherOperatorsInfo" />
             }
           </div>
         } @else {
-          <h2 class="govuk-heading-m">{{ config()?.otherUsersHeader }}</h2>
           <p class="govuk-body">No additional users exist</p>
         }
       </div>
@@ -34,18 +34,14 @@
 
   @if (externalContacts(); as contacts) {
     <div class="govuk-!-margin-bottom-6">
+      <h2 class="govuk-heading-m">{{ config()?.externalContactsHeader }}</h2>
       @if (contacts.length > 0) {
-        <div
-          [label]="config()?.externalContactsHeader"
-          labelSize="medium"
-          govuk-checkboxes
-          formControlName="externalContacts">
+        <div govuk-checkboxes formControlName="externalContacts">
           @for (contact of contacts; track contact) {
             <govuk-checkbox [value]="contact.id.toString()" [label]="contact.email" />
           }
         </div>
       } @else {
-        <h2 class="govuk-heading-m">{{ config()?.externalContactsHeader }}</h2>
         <p class="govuk-body">No external contacts exist</p>
       }
     </div>
@@ -53,9 +49,8 @@
 
   @if (config()?.hasSignatoryField && form.get('signatory')) {
     <div class="govuk-!-margin-bottom-6">
+      <h2 class="govuk-heading-m">{{ config()?.signatoryHeader }}</h2>
       <div
-        [label]="config()?.signatoryHeader"
-        labelSize="medium"
         class="govuk-body"
         [options]="assignees()"
         formControlName="signatory"

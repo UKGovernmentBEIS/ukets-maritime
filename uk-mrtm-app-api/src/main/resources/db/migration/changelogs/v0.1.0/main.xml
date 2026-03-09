@@ -26,5 +26,4 @@
     <include file="changelog_migrate_from_camunda_to_flowable.xml" relativeToChangelogFile="true" />
     <include file="third_party_data.xml" relativeToChangelogFile="true" />
     <include file="changelog_staging_payload_modifications.xml" relativeToChangelogFile="true"/>
-    <include file="changelog_migrate_au_rule_on_request_type.xml" relativeToChangelogFile="true"/>
 </databaseChangeLog>

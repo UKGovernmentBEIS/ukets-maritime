@@ -24,7 +24,7 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(OperatorDetailsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('operatorDetails', {
+    component.operatorDetails = {
       operatorName: 'OOperatorAccount13',
       imoNumber: '1333333',
       contactAddress: {
@@ -46,16 +46,16 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
         registrationNumber: '111111',
       } as OrganisationStructure,
       activityDescription: 'some activities',
-    });
-    fixture.componentRef.setInput('files', []);
-    fixture.componentRef.setInput('wizardStep', {
+    };
+    component.files = [];
+    component.wizardStep = {
       OPERATOR_DETAILS_OPERATOR_FORM: 'operator',
       OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES: 'undertaken-activities',
       OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION: 'legal-status-of-organisation',
       OPERATOR_DETAILS_ORGANISATION_DETAILS: 'organisation-details',
-    });
+    };
 
-    fixture.componentRef.setInput('isEditable', true);
+    component.isEditable = true;
     page = new Page(fixture);
     fixture.detectChanges();
   });

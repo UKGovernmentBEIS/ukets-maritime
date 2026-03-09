@@ -40,7 +40,7 @@ type ViewModel = {
   pageTopComponent: Type<unknown> | null;
   contentComponent: Type<unknown> | null;
   postHeaderComponent: Type<unknown> | null;
-  preContentComponents: Array<Type<unknown>> | null;
+  preContentComponent: Type<unknown> | null;
   postContentComponent: Type<unknown> | null;
   relatedTasks: ItemDTO[];
   hasRelatedTasks: boolean;
@@ -55,6 +55,10 @@ type ViewModel = {
 /* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'netz-request-task-page',
+  templateUrl: './request-task-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  encapsulation: ViewEncapsulation.None,
   imports: [
     PageHeadingComponent,
     TaskHeaderInfoComponent,
@@ -65,10 +69,6 @@ type ViewModel = {
     RelatedActionsComponent,
     TaskListComponent,
   ],
-  standalone: true,
-  templateUrl: './request-task-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
 })
 export class RequestTaskPageComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
@@ -79,7 +79,7 @@ export class RequestTaskPageComponent {
   private readonly injector: Injector = inject(Injector);
   private readonly relatedActionsHiddenFromSidebar = ['SYSTEM_MESSAGE_DISMISS'];
 
-  readonly vm = computed<ViewModel>(() => {
+  vm = computed<ViewModel>(() => {
     const requestTask = this.store.select(requestTaskQuery.selectRequestTask)();
     if (!requestTask) {
       return null;
@@ -117,7 +117,7 @@ export class RequestTaskPageComponent {
       pageTopComponent,
       contentComponent,
       postHeaderComponent,
-      preContentComponents: preContentComponent ? [preContentComponent].flat() : null,
+      preContentComponent,
       postContentComponent,
       relatedTasks,
       timeline,

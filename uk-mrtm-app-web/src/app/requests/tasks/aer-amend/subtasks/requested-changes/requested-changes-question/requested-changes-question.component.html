@@ -11,14 +11,14 @@
   }
 
   @if (isEditable()) {
-    <div label="confirmation" [isLabelHidden]="true" govuk-checkboxes formControlName="accepted">
+    <div govuk-checkboxes formControlName="accepted">
       <govuk-checkbox label="I have made changes and want to mark this task as complete"></govuk-checkbox>
     </div>
   }
 </mrtm-wizard-step>
 <div>
   @if (isEditable()) {
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   }
   <netz-return-to-task-or-action-page />
 </div>

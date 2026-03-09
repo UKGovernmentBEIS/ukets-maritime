@@ -8,8 +8,8 @@ import { RegistryEmissionsUpdatedSummaryTemplateComponent } from '@shared/compon
 
 @Component({
   selector: 'mrtm-registry-emissions-updated',
-  imports: [RegistryEmissionsUpdatedSummaryTemplateComponent],
   standalone: true,
+  imports: [RegistryEmissionsUpdatedSummaryTemplateComponent],
   template: `
     <mrtm-registry-emissions-updated-summary-template [data]="registryUpdatedEmissionsData" />
   `,

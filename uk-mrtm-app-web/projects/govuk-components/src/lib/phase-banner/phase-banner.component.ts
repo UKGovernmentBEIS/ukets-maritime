@@ -1,15 +1,15 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'govuk-phase-banner',
-  imports: [],
   standalone: true,
+  imports: [],
   templateUrl: './phase-banner.component.html',
-  styleUrl: './phase-banner.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './phase-banner.component.scss',
 })
 export class PhaseBannerComponent {
-  readonly phase = input<string>();
-  readonly tagColor = input<string>();
-  readonly tagAlign = input<'right' | 'left'>('left');
+  @Input() phase: string;
+  @Input() tagColor: string;
+  @Input() tagAlign: 'right' | 'left' = 'left';
 }

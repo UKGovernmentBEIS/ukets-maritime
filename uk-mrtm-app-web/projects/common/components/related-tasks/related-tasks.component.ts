@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { ItemDTO } from '@mrtm/api';
@@ -8,17 +8,17 @@ import { getYearFromRequestId } from '@netz/common/utils';
 
 @Component({
   selector: 'netz-related-tasks',
-  imports: [RouterLink, ItemNamePipe, ItemLinkPipe, DaysRemainingPipe],
   standalone: true,
   templateUrl: './related-tasks.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [RouterLink, ItemNamePipe, ItemLinkPipe, DaysRemainingPipe],
 })
 export class RelatedTasksComponent {
   readonly router = inject(Router);
 
-  readonly items = input<ItemDTO[]>();
-  readonly heading = input('Related tasks');
-  readonly noBorders = input(false);
+  @Input() items: ItemDTO[];
+  @Input() heading = 'Related tasks';
+  @Input() noBorders = false;
 
   readonly getYearFromRequestId = getYearFromRequestId;
 }

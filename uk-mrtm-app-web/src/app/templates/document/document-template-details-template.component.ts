@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 
 import { DocumentTemplateDTO } from '@mrtm/api';
@@ -14,6 +14,8 @@ import {
 
 @Component({
   selector: 'mrtm-document-template-details-template',
+  templateUrl: './document-template-details-template.component.html',
+  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -23,14 +25,12 @@ import {
     SummaryListRowKeyDirective,
     GovukDatePipe,
   ],
-  standalone: true,
-  templateUrl: './document-template-details-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentTemplateDetailsTemplateComponent {
   private readonly router = inject(Router);
 
-  readonly documentTemplate = input<DocumentTemplateDTO>();
+  @Input() documentTemplate: DocumentTemplateDTO;
 
   navigateToEmailTemplate(id: number): void {
     this.router.navigateByUrl(`templates/email/${id}`);

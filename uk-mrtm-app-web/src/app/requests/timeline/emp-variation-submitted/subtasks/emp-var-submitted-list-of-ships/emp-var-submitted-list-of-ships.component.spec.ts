@@ -1,5 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
+import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { taskProviders } from '@requests/common/task.providers';
 import { EmpVarSubmittedListOfShipsComponent } from '@requests/timeline/emp-variation-submitted/subtasks/emp-var-submitted-list-of-ships';
@@ -7,11 +9,12 @@ import { EmpVarSubmittedListOfShipsComponent } from '@requests/timeline/emp-vari
 describe('EmpVarSubmittedListOfShipsComponent', () => {
   let component: EmpVarSubmittedListOfShipsComponent;
   let fixture: ComponentFixture<EmpVarSubmittedListOfShipsComponent>;
+  const route = new ActivatedRouteStub();
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [EmpVarSubmittedListOfShipsComponent],
-      providers: [provideRouter([]), ...taskProviders],
+      providers: [{ provide: ActivatedRoute, useValue: route }, ...taskProviders],
     }).compileComponents();
 
     fixture = TestBed.createComponent(EmpVarSubmittedListOfShipsComponent);

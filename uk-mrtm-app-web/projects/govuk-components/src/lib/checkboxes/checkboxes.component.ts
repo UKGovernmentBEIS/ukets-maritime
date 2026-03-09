@@ -1,12 +1,13 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { AfterContentInit, Component, contentChildren, input } from '@angular/core';
-import { ControlValueAccessor } from '@angular/forms';
+import { AfterContentInit, Component, ContentChildren, inject, Input, QueryList } from '@angular/core';
+import { ControlContainer, ControlValueAccessor, NgControl } from '@angular/forms';
 
 import { ErrorMessageComponent } from '../error-message';
-import { FieldsetDirective, FieldsetHintDirective, LegendDirective } from '../fieldset';
+import { FieldsetDirective, FieldsetHintDirective, LegendDirective, LegendSizeType } from '../fieldset';
+import { FormService } from '../form';
 import { FormInput } from '../form/form-input';
-import { LabelSizeType } from '../text-input';
 import { CheckboxComponent } from './checkbox/checkbox.component';
+
 /*
   eslint-disable
   @angular-eslint/prefer-on-push-component-change-detection,
@@ -14,35 +15,34 @@ import { CheckboxComponent } from './checkbox/checkbox.component';
  */
 @Component({
   selector: 'div[govuk-checkboxes]',
-  imports: [ErrorMessageComponent, NgTemplateOutlet, LegendDirective, FieldsetHintDirective, FieldsetDirective],
   standalone: true,
   templateUrl: './checkboxes.component.html',
+  imports: [ErrorMessageComponent, NgTemplateOutlet, LegendDirective, FieldsetHintDirective, FieldsetDirective],
 })
 export class CheckboxesComponent<T> extends FormInput implements AfterContentInit, ControlValueAccessor {
-  readonly label = input<string>();
-  readonly labelSize = input<LabelSizeType>('normal');
-  readonly isLabelHidden = input(false);
-  readonly hint = input<string>();
-  readonly size = input<'small'>();
-
-  readonly options = contentChildren(CheckboxComponent);
-
+  @Input() legend?: string;
+  @Input() legendSize?: LegendSizeType = 'large';
+  @Input() hint?: string;
+  @Input() size?: 'small';
+  @ContentChildren(CheckboxComponent) readonly options: QueryList<CheckboxComponent<T>>;
   private onBlur: () => any;
   private onChange: (value: T[]) => void;
   private currentValue: T[] = [];
 
   constructor() {
-    super();
+    const ngControl = inject(NgControl, { self: true, optional: true })!;
+    const formService = inject(FormService);
+    const container = inject(ControlContainer, { optional: true })!;
+
+    super(ngControl, formService, container);
   }
 
   ngAfterContentInit(): void {
-    this.options().forEach((option, index) => {
+    this.options.forEach((option, index) => {
       option.groupIdentifier = this.identifier;
       option.index = index;
       option.registerOnChange(() => {
-        this.currentValue = this.options()
-          .filter((option) => option.isChecked)
-          .map((option) => option.value());
+        this.currentValue = this.options.filter((option) => option.isChecked).map((option) => option.value);
         this.onChange(this.currentValue);
       });
       option.registerOnTouched(() => this.onInputBlur());
@@ -55,7 +55,7 @@ export class CheckboxesComponent<T> extends FormInput implements AfterContentIni
 
   writeValue(value: T[]): void {
     this.currentValue = value;
-    this.options()?.forEach((option) => option.writeValue(value?.includes(option.value()) ?? false));
+    this.options?.forEach((option) => option.writeValue(value?.includes(option.value) ?? false));
   }
 
   registerOnChange(fn: (value: T[]) => void) {
@@ -67,12 +67,11 @@ export class CheckboxesComponent<T> extends FormInput implements AfterContentIni
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.options()?.forEach((option) => option.setDisabledState(isDisabled));
+    this.options?.forEach((option) => option.setDisabledState(isDisabled));
   }
 
   onInputBlur(): void {
-    const options = this.options();
-    if (!options || Array.from(options).every((option) => option.isTouched)) {
+    if (!this.options || Array.from(this.options).every((option) => option.isTouched)) {
       this.onBlur();
     }
   }

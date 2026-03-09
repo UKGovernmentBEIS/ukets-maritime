@@ -20,6 +20,7 @@ import { VoyagesListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-voyages-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -30,7 +31,6 @@ import { VoyagesListSummaryTemplateComponent } from '@shared/components';
     ReactiveFormsModule,
     PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './aer-voyages-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

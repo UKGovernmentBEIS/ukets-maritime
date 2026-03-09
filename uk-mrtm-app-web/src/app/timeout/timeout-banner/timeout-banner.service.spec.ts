@@ -2,9 +2,10 @@ import { TestBed } from '@angular/core/testing';
 
 import { firstValueFrom, Subject } from 'rxjs';
 import { KeycloakEvent, KeycloakEventType, KeycloakService } from 'keycloak-angular';
-import Keycloak from 'keycloak-js';
+import { KeycloakInstance } from 'keycloak-js';
 
-import { mockClass, testSchedulerFactory } from '@netz/common/testing';
+import { mockClass } from '@netz/common/testing';
+import { testSchedulerFactory } from '@netz/common/testing/marble-helpers';
 
 import { AuthService } from '@core/services';
 import { TimeoutBannerService } from '@timeout/timeout-banner/timeout-banner.service';
@@ -70,7 +71,7 @@ describe('TimeoutBannerService', () => {
       jest.setSystemTime(testScheduler.now());
       keycloakService.getKeycloakInstance.mockReturnValue({
         refreshTokenParsed: mockRefreshTokenParsedNoExtension,
-      } as Keycloak);
+      } as KeycloakInstance);
       cold('-a- 200s', { a: { type: KeycloakEventType.OnAuthRefreshSuccess } }).subscribe((event) => {
         jest.setSystemTime(testScheduler.now());
         keycloakService.keycloakEvents$.next(event);

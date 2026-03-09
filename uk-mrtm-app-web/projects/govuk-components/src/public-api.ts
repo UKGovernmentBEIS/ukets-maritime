@@ -34,4 +34,5 @@ export * from './lib/textarea';
 export * from './lib/text-input';
 export * from './lib/types';
 export * from './lib/warning-text';
+export * from './lib/govuk-components.module';
 export * from './lib/pipes';

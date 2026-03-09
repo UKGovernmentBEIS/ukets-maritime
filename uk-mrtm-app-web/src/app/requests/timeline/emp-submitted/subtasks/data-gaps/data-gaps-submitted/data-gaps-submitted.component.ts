@@ -31,7 +31,7 @@ interface ViewModel {
 export class DataGapsSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empSubmittedQuery.selectDataGaps)(),
     dataGapsMap: dataGapsMap,
     reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('dataGaps'))(),

@@ -1,5 +1,5 @@
 @if (showConfirmation) {
-  <netz-page-heading>{{ taskMap.uploadShipsConfirmation.title }}</netz-page-heading>
+  <netz-page-heading>Are you sure you want to replace the data?</netz-page-heading>
   <govuk-warning-text assistiveText="All previously entered data will be overwritten by the new file." />
   <div class="govuk-button-group">
     <button govukWarnButton netzPendingButton type="button" (click)="onSubmit()">Yes, replace data</button>
@@ -71,6 +71,6 @@
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <a [routerLink]="['../', listOfShipsStep]" govukLink>Return to: {{ taskMap.ships.title }}</a>
 </div>

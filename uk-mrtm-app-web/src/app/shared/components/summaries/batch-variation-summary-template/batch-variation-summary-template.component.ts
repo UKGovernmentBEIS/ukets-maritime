@@ -15,6 +15,7 @@ import { BatchVariationSummaryModel } from '@shared/types';
 
 @Component({
   selector: 'mrtm-batch-variation-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -25,7 +26,6 @@ import { BatchVariationSummaryModel } from '@shared/types';
     RouterLink,
     NotProvidedDirective,
   ],
-  standalone: true,
   templateUrl: './batch-variation-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

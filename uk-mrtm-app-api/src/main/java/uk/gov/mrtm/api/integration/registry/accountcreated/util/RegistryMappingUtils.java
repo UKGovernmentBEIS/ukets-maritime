@@ -1,9 +1,11 @@
 package uk.gov.mrtm.api.integration.registry.accountcreated.util;
 
 import lombok.experimental.UtilityClass;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.IndividualOrganisation;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.LimitedCompanyOrganisation;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationLegalStatusType;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationStructure;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.PartnershipOrganisation;
 
 import java.util.List;
 
@@ -21,6 +23,17 @@ public class RegistryMappingUtils {
 
     public static String mapWithRegistryCountryCodes(String countryCode) {
         return List.of(GB, GB_ENG, GB_NIR, GB_SCT, GB_WLS).contains(countryCode) ? UK : countryCode;
+    }
+
+    public static String mapAccountHolderName(OrganisationStructure organisationStructure, String accountName) {
+        if (OrganisationLegalStatusType.LIMITED_COMPANY.equals(organisationStructure.getLegalStatusType())) {
+            return accountName;
+        } else if (OrganisationLegalStatusType.INDIVIDUAL.equals(organisationStructure.getLegalStatusType())) {
+            return ((IndividualOrganisation) organisationStructure).getFullName();
+        } else {
+            final String partnershipName = ((PartnershipOrganisation) organisationStructure).getPartnershipName();
+            return partnershipName != null ? partnershipName : accountName;
+        }
     }
 
     public static String mapCrnJustification(OrganisationStructure organisationStructure) {

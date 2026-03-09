@@ -25,7 +25,7 @@ describe('ConfirmationSharedComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmationSharedComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('title', 'The notification has been recalled');
+    component.title = 'The notification has been recalled';
     page = new Page(fixture);
     fixture.detectChanges();
   });

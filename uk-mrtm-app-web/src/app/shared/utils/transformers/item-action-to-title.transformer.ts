@@ -3,7 +3,9 @@ import { RequestActionDTO } from '@mrtm/api';
 import { ItemActionTransformer } from '@netz/common/pipes';
 
 import { itemActionsMap } from '@requests/common/item-actions.map';
-import { isAer, isDoe, isVir } from '@shared/utils';
+import { isVir } from '@shared/utils';
+import { isAer } from '@shared/utils/is-aer';
+import { isDoe } from '@shared/utils/is-doe';
 
 export const itemActionToTitleTransformer: ItemActionTransformer = (
   actionType: RequestActionDTO['type'],

@@ -4,12 +4,15 @@ import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { GuidanceDocumentDTO, GuidanceSectionDTO, RegulatorCurrentUserDTO } from '@mrtm/api';
 
 import { AuthStore, selectUser } from '@netz/common/auth';
 import {
   ConditionalContentDirective,
   GovukSelectOption,
+  LegendDirective,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -20,10 +23,10 @@ import { guidanceQuery, GuidanceStore } from '@guidance/+state';
 import { MANAGE_GUIDANCE_FORM } from '@guidance/guidance.constants';
 import { manageDocumentsTypeFormProvider } from '@guidance/manage-documents/manage-documents-type-form/manage-documents-type-form.provider';
 import { WizardStepComponent } from '@shared/components';
-import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-manage-documents-type-form',
+  standalone: true,
   imports: [
     WizardStepComponent,
     RadioComponent,
@@ -34,10 +37,10 @@ import { isNil } from '@shared/utils';
     SelectComponent,
     LinkDirective,
     RouterLink,
+    LegendDirective,
   ],
-  standalone: true,
-  templateUrl: './manage-documents-type-form.component.html',
   providers: [manageDocumentsTypeFormProvider],
+  templateUrl: './manage-documents-type-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageDocumentsTypeFormComponent implements OnInit {

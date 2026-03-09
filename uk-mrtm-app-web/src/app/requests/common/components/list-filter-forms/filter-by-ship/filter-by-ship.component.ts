@@ -13,8 +13,8 @@ import { AutocompleteSelectComponent } from '@shared/components/autocomplete-sel
 
 @Component({
   selector: 'mrtm-filter-by-ship',
-  imports: [FormsModule, ReactiveFormsModule, ButtonDirective, AutocompleteSelectComponent, RouterLink, LinkDirective],
   standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, ButtonDirective, AutocompleteSelectComponent, RouterLink, LinkDirective],
   templateUrl: './filter-by-ship.component.html',
   styleUrl: './filter-by-ship.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -22,7 +22,7 @@ import { AutocompleteSelectComponent } from '@shared/components/autocomplete-sel
 export class FilterByShipComponent extends ListFilterFormsCommon<FilterByShip | null> {
   protected readonly EMPTY_FORM_STATE = { filterByShip: ALL_SHIPS_VALUE };
   protected readonly EMPTY_FILTER_STATE: FilterByShip = { imoNumber: null, shipName: '' };
-  protected readonly filterState = signal<FilterByShip>(this.initialFilterState() ?? this.EMPTY_FILTER_STATE);
+  protected readonly filterState = signal<FilterByShip>(this.EMPTY_FILTER_STATE);
 
   readonly formGroup = new FormGroup({ filterByShip: this.filterByShip });
 
@@ -30,14 +30,5 @@ export class FilterByShipComponent extends ListFilterFormsCommon<FilterByShip | 
     const imoNumber = this.filterByShip.value?.data;
     const shipName = this.filterByShip.value?.text ?? '';
     return { imoNumber, shipName };
-  }
-
-  setFilterState(filterState: FilterByShip) {
-    this.formGroup.setValue({
-      filterByShip: {
-        data: filterState?.imoNumber ?? ALL_SHIPS_VALUE.data,
-        text: filterState?.shipName ?? '',
-      },
-    });
   }
 }

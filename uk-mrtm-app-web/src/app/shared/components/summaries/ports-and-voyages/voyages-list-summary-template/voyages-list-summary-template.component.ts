@@ -22,18 +22,16 @@ import {
 } from '@netz/govuk-components';
 
 import { sortAndPaginateListWithShipNameAndStatus } from '@requests/common/utils/sort-and-paginate-list-with-ship-name-and-status';
-import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { MultiSelectedItem, MultiSelectTableComponent } from '@shared/components';
 import { VOYAGES_SUMMARY_COLUMNS } from '@shared/components/summaries/ports-and-voyages/voyages-list-summary-template/voyages-list-summary-template.consts';
 import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shared/constants';
-import { ScrollablePaneDirective } from '@shared/directives';
 import { AerPortVoyageAggregatedStatusPipe, BigNumberPipe, SelectOptionToTitlePipe } from '@shared/pipes';
-import { PersistablePaginationState } from '@shared/services';
 import { AerVoyageSummaryItemDto } from '@shared/types';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-voyages-list-summary-template',
+  standalone: true,
   imports: [
     PaginationComponent,
     LinkDirective,
@@ -54,18 +52,15 @@ import BigNumber from 'bignumber.js';
     AerPortVoyageAggregatedStatusPipe,
     GovukDatePipe,
     WarningTextComponent,
-    ScrollablePaneDirective,
   ],
-  standalone: true,
   templateUrl: './voyages-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class VoyagesListSummaryTemplateComponent extends PaginationStatePersistableComponent {
+export class VoyagesListSummaryTemplateComponent {
   readonly deleteItems = output<AerVoyageSummaryItemDto[]>();
   readonly data = input.required<Array<MultiSelectedItem<AerVoyageSummaryItemDto>>>();
-  readonly withPagination = input<boolean>(true);
   readonly editable = input<boolean>(false);
-  readonly pageSize: Signal<number> = computed(() => (this.withPagination() ? 10 : Number.MAX_VALUE));
+  readonly pageSize = input<number>(10);
   readonly editPath = input<string>();
   readonly emptyTableText = input<string>('No items to display');
   readonly warningMessages = input<string[]>([]);
@@ -74,10 +69,8 @@ export class VoyagesListSummaryTemplateComponent extends PaginationStatePersista
   readonly portSelectItems: Array<GovukSelectOption<AerPortVisit['port']>> = AER_PORT_CODE_SELECT_ITEMS;
 
   readonly totalItems: Signal<number> = computed(() => this.data()?.length ?? 0);
-  readonly currentPage = signal<number>(this.currentPersistableComponentState()?.currentPage ?? 1);
-  readonly sort = signal<SortEvent>(
-    this.currentPersistableComponentState()?.currentSorting ?? { column: 'status', direction: 'descending' },
-  );
+  readonly currentPage = signal<number>(1);
+  readonly sort = signal<SortEvent>({ column: 'status', direction: 'descending' });
   readonly totalEmissionsSummary: Signal<Pick<AerVoyageSummaryItemDto, 'totalEmissions' | 'surrenderEmissions'>> =
     computed(() => {
       const allItems = this.data() ?? [];
@@ -96,13 +89,13 @@ export class VoyagesListSummaryTemplateComponent extends PaginationStatePersista
   readonly rows = computed<Array<MultiSelectedItem<AerVoyageSummaryItemDto>>>(() =>
     sortAndPaginateListWithShipNameAndStatus(
       [
-        this.sort(),
         { column: 'shipName', direction: 'ascending' },
+        this.sort(),
         { column: 'departureTime', direction: 'descending' },
       ],
       this.data() ?? [],
-      this.editable() ? 1 : this.currentPage(),
-      this.editable() ? Number.MAX_VALUE : this.pageSize(),
+      this.currentPage(),
+      this.pageSize(),
     ),
   );
 
@@ -112,11 +105,5 @@ export class VoyagesListSummaryTemplateComponent extends PaginationStatePersista
 
   onDelete(rows: Array<MultiSelectedItem<AerVoyageSummaryItemDto>>): void {
     this.deleteItems.emit(rows.filter((row) => row.isSelected));
-  }
-
-  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
-    return {
-      currentSorting: this.sort(),
-    };
   }
 }

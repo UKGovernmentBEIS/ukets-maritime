@@ -15,10 +15,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-mark-as-received-form',
-  imports: [WizardStepComponent, DateInputComponent, ReactiveFormsModule],
   standalone: true,
-  templateUrl: './mark-as-received-form.component.html',
+  imports: [WizardStepComponent, DateInputComponent, ReactiveFormsModule],
   providers: [markAsReceivedFormProvider],
+  templateUrl: './mark-as-received-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MarkAsReceivedFormComponent {

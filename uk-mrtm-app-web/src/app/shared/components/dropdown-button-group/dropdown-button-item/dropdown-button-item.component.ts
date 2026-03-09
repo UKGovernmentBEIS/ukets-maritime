@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostBinding, inject } from '@angular/core';
 
 import { DROPDOWN_BUTTON_GROUP_COMPONENT } from '@shared/components/dropdown-button-group/dropdown-button-group.token';
 
@@ -8,12 +8,11 @@ import { DROPDOWN_BUTTON_GROUP_COMPONENT } from '@shared/components/dropdown-but
   templateUrl: './dropdown-button-item.component.html',
   styleUrl: './dropdown-button-item.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { '[attr.tabindex]': 'tabindex' },
 })
 export class DropdownButtonItemComponent {
   private parent = inject(DROPDOWN_BUTTON_GROUP_COMPONENT);
 
-  get tabindex(): string {
+  @HostBinding('attr.tabindex') get tabindex(): string {
     return '-1';
   }
 

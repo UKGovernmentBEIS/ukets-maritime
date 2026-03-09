@@ -28,6 +28,7 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-respond-to-operator-form',
+  standalone: true,
   imports: [
     WizardStepComponent,
     UpperCasePipe,
@@ -42,9 +43,8 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
     TextareaComponent,
     ReactiveFormsModule,
   ],
-  standalone: true,
-  templateUrl: './respond-to-operator-form.component.html',
   providers: [respondToOperatorFormProvider],
+  templateUrl: './respond-to-operator-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RespondToOperatorFormComponent {

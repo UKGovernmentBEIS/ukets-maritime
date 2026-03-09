@@ -7,13 +7,14 @@ import { provideRouter, withComponentInputBinding, withInMemoryScrolling, withRo
 import { firstValueFrom } from 'rxjs';
 import { KeycloakAngularModule, KeycloakOptions, KeycloakService } from 'keycloak-angular';
 import { KeycloakConfig } from 'keycloak-js';
+import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
 
 import { ApiModule, Configuration } from '@mrtm/api';
 
 import { ConfigService } from '@core/config';
 import { httpErrorInterceptor, pendingRequestInterceptor } from '@core/interceptors';
 import { AuthService, GlobalErrorHandlingService } from '@core/services';
-import { LatestTermsService } from '@core/services/latest-terms.service';
+import { LatestTermsService } from '@core/services/ latest-terms.service';
 import { environment } from '@environments/environment';
 
 import { APP_ROUTES, routerOptions } from './app.routes';
@@ -40,6 +41,7 @@ export const appConfig: ApplicationConfig = {
       ApiModule.forRoot(() => new Configuration({ basePath: environment.apiOptions.baseUrl })),
       KeycloakAngularModule,
     ),
+    provideZxvbnServiceForPSM(),
     {
       provide: ErrorHandler,
       useClass: GlobalErrorHandlingService,

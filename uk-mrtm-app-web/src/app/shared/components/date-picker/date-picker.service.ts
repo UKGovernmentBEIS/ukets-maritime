@@ -15,13 +15,13 @@ import { formatDateFromString } from '@shared/utils';
  */
 @Injectable()
 export class DatePickerService {
-  readonly dialogTitle: WritableSignal<string> = signal('');
-  readonly isDialogOpen: WritableSignal<boolean> = signal(false);
-  readonly calendarDates: WritableSignal<CalendarDate[]> = signal([]);
-  readonly inputDate: WritableSignal<Date | null> = signal(null);
-  readonly dayLabels: WritableSignal<DayOfWeek[]> = signal(dayLabels);
-  readonly excludedDates: WritableSignal<Date[] | null> = signal(null);
-  readonly excludedDays: WritableSignal<number[] | null> = signal(null);
+  dialogTitle: WritableSignal<string> = signal('');
+  isDialogOpen: WritableSignal<boolean> = signal(false);
+  calendarDates: WritableSignal<CalendarDate[]> = signal([]);
+  inputDate: WritableSignal<Date | null> = signal(null);
+  dayLabels: WritableSignal<DayOfWeek[]> = signal(dayLabels);
+  excludedDates: WritableSignal<Date[] | null> = signal(null);
+  excludedDays: WritableSignal<number[] | null> = signal(null);
 
   private config!: DatePickerConfig;
   private elementRef: ElementRef;
@@ -430,7 +430,7 @@ export class DatePickerService {
    * Use with events on DatePickerComponent.
    * @param event - KeyboardEvent that was triggered
    */
-  onDateKeyPress(event: KeyboardEvent): void {
+  onDateKeyPress(event: KeyboardEvent) {
     let calendarNavKey = true;
 
     switch (event.key) {

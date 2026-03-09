@@ -5,11 +5,11 @@ import { SkipLinkFocusDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-user-registration',
-  imports: [RouterOutlet, SkipLinkFocusDirective],
-  standalone: true,
   template: `
     <router-outlet mrtmSkipLinkFocus></router-outlet>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [RouterOutlet, SkipLinkFocusDirective],
 })
 export class UserRegistrationComponent {}

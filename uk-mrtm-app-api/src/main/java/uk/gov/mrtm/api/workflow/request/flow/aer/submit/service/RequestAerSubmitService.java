@@ -15,7 +15,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestPayload
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.utils.AerEmissionsUtils;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.mapper.AerSubmitMapper;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
@@ -29,7 +29,7 @@ public class RequestAerSubmitService {
     private final AerValidatorService aerValidatorService;
     private final RequestService requestService;
     private final ReportableEmissionsService reportableEmissionsService;
-    private final EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
+    private final SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
     private final AerSubmitMapper aerSubmitMapper;
 
     public void sendToVerifier(RequestTask requestTask, AppUser appUser) {
@@ -125,7 +125,7 @@ public class RequestAerSubmitService {
         ReportableEmissionsUpdatedSubmittedEventDetails eventDetails = reportableEmissionsService.updateReportableEmissions(
             totalReportableEmissions, aerContainer.getReportingYear(), request.getAccountId(), false);
 
-        emissionsUpdatedEventAddRequestActionService.addRequestAction(request, eventDetails, userId);
+        sendRegistryUpdatedEventAddRequestActionService.addRequestAction(request, eventDetails, userId);
 
         AerRequestMetadata metadata = (AerRequestMetadata) request.getMetadata();
         metadata.setEmissions(totalReportableEmissions);

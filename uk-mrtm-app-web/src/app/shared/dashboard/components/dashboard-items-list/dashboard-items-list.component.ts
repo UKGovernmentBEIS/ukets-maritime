@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { MrtmItemDTO } from '@mrtm/api';
@@ -8,10 +8,12 @@ import { getYearFromRequestId } from '@netz/common/utils';
 import { GovukTableColumn, LinkDirective, TableComponent, TagComponent } from '@netz/govuk-components';
 
 import { ItemTypePipe } from '@shared/dashboard/pipes/item-type.pipe';
-import { ScrollablePaneDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-dashboard-items-list',
+  templateUrl: './dashboard-items-list.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     TableComponent,
     LinkDirective,
@@ -22,16 +24,12 @@ import { ScrollablePaneDirective } from '@shared/directives';
     UserFullNamePipe,
     ItemTypePipe,
     DaysRemainingPipe,
-    ScrollablePaneDirective,
   ],
-  standalone: true,
-  templateUrl: './dashboard-items-list.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardItemsListComponent {
-  readonly items = input<MrtmItemDTO[]>();
-  readonly tableColumns = input<GovukTableColumn<MrtmItemDTO>[]>();
-  readonly unassignedLabel = input<string>();
+  @Input() items: MrtmItemDTO[];
+  @Input() tableColumns: GovukTableColumn<MrtmItemDTO>[];
+  @Input() unassignedLabel: string;
 
   readonly getYearFromRequestId = getYearFromRequestId;
 }

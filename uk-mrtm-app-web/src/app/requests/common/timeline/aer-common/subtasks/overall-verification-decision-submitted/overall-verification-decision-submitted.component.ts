@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-overall-verification-decision-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     AerOverallVerificationDecisionSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './overall-verification-decision-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

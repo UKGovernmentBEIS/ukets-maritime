@@ -32,6 +32,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-details-change-summary',
+  standalone: true,
   imports: [
     NotificationDetailsOfChangeSummaryTemplateComponent,
     NotificationReviewDecisionSummaryTemplateComponent,
@@ -40,7 +41,6 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './details-change-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -49,7 +49,7 @@ export class DetailsChangeSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const detailsOfChange = this.store.select(nocReviewQuery.selectEmpNotificationDetailsOfChange)();
     return {
       detailsOfChange: detailsOfChange,

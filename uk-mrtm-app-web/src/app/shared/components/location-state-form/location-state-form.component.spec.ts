@@ -1,49 +1,37 @@
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
 
 import { MrtmAccountUpdateDTO } from '@mrtm/api';
 
 import { LocationStateFormComponent } from '@shared/components';
+import { render } from '@testing-library/angular';
 
 describe('LocationStateFormComponent', () => {
-  let component: LocationStateFormComponent;
-  let fixture: ComponentFixture<TestComponent>;
-
-  @Component({
-    imports: [LocationStateFormComponent, ReactiveFormsModule],
-    standalone: true,
-    template: `
-      <form [formGroup]="form"><mrtm-location-state-form legendLabel="Test legend"></mrtm-location-state-form></form>
-    `,
-  })
-  class TestComponent {
-    form = new FormGroup({
-      line1: new FormControl<MrtmAccountUpdateDTO['line1'] | null>(null),
-      line2: new FormControl<MrtmAccountUpdateDTO['line2'] | null>(null),
-      city: new FormControl<MrtmAccountUpdateDTO['city'] | null>(null),
-      state: new FormControl<MrtmAccountUpdateDTO['state'] | null>(null),
-      postcode: new FormControl<MrtmAccountUpdateDTO['postcode'] | null>(null),
-      country: new FormControl<MrtmAccountUpdateDTO['country'] | null>(null),
-    });
-  }
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
-    }).compileComponents();
-  });
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(TestComponent);
-    component = fixture.debugElement.query(By.directive(LocationStateFormComponent)).componentInstance;
+  const renderComponent = async () => {
+    const { fixture, detectChanges } = await render(
+      `<form [formGroup]="form"><mrtm-location-state-form legendLabel="Test legend"></mrtm-location-state-form></form>`,
+      {
+        imports: [ReactiveFormsModule, LocationStateFormComponent],
+        providers: [provideHttpClient()],
+        componentProperties: {
+          form: new FormGroup({
+            line1: new FormControl<MrtmAccountUpdateDTO['line1'] | null>(null),
+            line2: new FormControl<MrtmAccountUpdateDTO['line2'] | null>(null),
+            city: new FormControl<MrtmAccountUpdateDTO['city'] | null>(null),
+            state: new FormControl<MrtmAccountUpdateDTO['state'] | null>(null),
+            postcode: new FormControl<MrtmAccountUpdateDTO['postcode'] | null>(null),
+            country: new FormControl<MrtmAccountUpdateDTO['country'] | null>(null),
+          }),
+        },
+      },
+    );
     fixture.detectChanges();
-  });
 
-  it('should create', () => {
+    return { component: fixture.componentInstance, detectChanges };
+  };
+
+  it('should create', async () => {
+    const { component } = await renderComponent();
     expect(component).toBeTruthy();
   });
 });

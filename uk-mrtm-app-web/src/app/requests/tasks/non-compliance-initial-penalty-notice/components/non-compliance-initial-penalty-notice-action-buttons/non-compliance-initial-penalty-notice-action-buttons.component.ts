@@ -11,8 +11,8 @@ import { nonComplianceInitialPenaltyNoticeCommonQuery } from '@requests/common/n
 
 @Component({
   selector: 'mrtm-non-compliance-initial-penalty-notice-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     @if (canBeDisplayed()) {
       <div class="govuk-button-group">

@@ -42,16 +42,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-operator-details-variation-regulator-decision',
+  standalone: true,
   imports: [
     OperatorDetailsSummaryTemplateComponent,
     WizardStepComponent,
     ReactiveFormsModule,
     VariationRegulatorDecisionComponent,
   ],
-  standalone: true,
   templateUrl: './operator-details-variation-regulator-decision.component.html',
-  providers: [variationRegulatorDecisionFormProvider(OPERATOR_DETAILS_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [variationRegulatorDecisionFormProvider(OPERATOR_DETAILS_SUB_TASK)],
 })
 export class OperatorDetailsVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -61,7 +61,7 @@ export class OperatorDetailsVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const empOperatorDetails = this.store.select(empCommonQuery.selectOperatorDetails)();
     const originalOperatorDetails = this.store.select(empVariationRegulatorQuery.selectOriginalOperatorDetails)();
 

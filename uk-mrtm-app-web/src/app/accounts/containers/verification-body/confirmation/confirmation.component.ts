@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { map } from 'rxjs';
@@ -7,13 +7,13 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-confirmation',
-  imports: [PanelComponent, RouterLink, LinkDirective],
-  standalone: true,
   templateUrl: './confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PanelComponent, RouterLink, LinkDirective],
 })
 export class ConfirmationComponent {
-  readonly verificationAccount = input.required<string>();
+  @Input({ required: true }) verificationAccount: string;
   private readonly route = inject(ActivatedRoute);
   accountId$ = this.route.paramMap.pipe(map((paramMap) => Number(paramMap.get('accountId'))));
 }

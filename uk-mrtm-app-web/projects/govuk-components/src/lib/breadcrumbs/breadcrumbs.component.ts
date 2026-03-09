@@ -1,10 +1,10 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'govuk-breadcrumbs',
   standalone: true,
   template: `
-    <div class="govuk-breadcrumbs govuk-breadcrumbs--collapse-on-mobile" [class.govuk-breadcrumbs--inverse]="inverse()">
+    <div class="govuk-breadcrumbs govuk-breadcrumbs--collapse-on-mobile" [class.govuk-breadcrumbs--inverse]="inverse">
       <ol class="govuk-breadcrumbs__list">
         <ng-content></ng-content>
       </ol>
@@ -13,5 +13,5 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BreadcrumbsComponent {
-  readonly inverse = input(false);
+  @Input() inverse = false;
 }

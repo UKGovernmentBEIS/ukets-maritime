@@ -18,6 +18,7 @@ import { MonitoringPlanChangesSummaryTemplateComponent } from '@shared/component
 
 @Component({
   selector: 'mrtm-monitoring-plan-changes-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -25,7 +26,6 @@ import { MonitoringPlanChangesSummaryTemplateComponent } from '@shared/component
     MonitoringPlanChangesSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './monitoring-plan-changes-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

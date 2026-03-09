@@ -1,4 +1,4 @@
-<netz-page-heading>Voyage for {{ ship()?.details?.name }}</netz-page-heading>
+<netz-page-heading [caption]="map.caption">Voyage for {{ ship()?.details?.name }}</netz-page-heading>
 
 <mrtm-voyage-summary-template [data]="voyage()" />
 

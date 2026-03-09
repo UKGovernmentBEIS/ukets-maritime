@@ -19,9 +19,9 @@ export const canActivateRegistry = (route: ActivatedRouteSnapshot): UrlTree | Ob
   if (!taskActions.includes(REGISTRY_INTEGRATION_TASK_NAME)) {
     return createUrlTreeFromSnapshot(route, ['/dashboard']);
   }
-  return requestTaskStore.rxSelect(requestTaskQuery.selectRequestTaskAccountId).pipe(
-    switchMap((requestTaskAccountId) => {
-      return maritimeAccountsService.getMaritimeAccount(requestTaskAccountId).pipe(
+  return requestTaskStore.rxSelect(requestTaskQuery.selectRequestInfo).pipe(
+    switchMap((requestInfo) => {
+      return maritimeAccountsService.getMaritimeAccount(requestInfo.accountId).pipe(
         tap((account) => operatorAccountsStore.setCurrentAccount(account)),
         map((account) => !!account),
       );

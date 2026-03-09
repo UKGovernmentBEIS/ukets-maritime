@@ -11,13 +11,13 @@ import {
 
 @Component({
   selector: 'mrtm-aer-total-emissions-submitted',
+  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
     AerTotalEmissionsSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './aer-total-emissions-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

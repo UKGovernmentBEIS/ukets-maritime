@@ -21,6 +21,7 @@ import { BooleanToTextPipe, NonComplianceReasonPipe, RequestNamePipe } from '@sh
 
 @Component({
   selector: 'mrtm-non-compliance-details-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -35,7 +36,6 @@ import { BooleanToTextPipe, NonComplianceReasonPipe, RequestNamePipe } from '@sh
     NonComplianceReasonPipe,
     RequestNamePipe,
   ],
-  standalone: true,
   templateUrl: './non-compliance-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

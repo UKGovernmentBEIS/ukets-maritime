@@ -19,6 +19,7 @@ import { ComplianceToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-compliance-monitoring-reporting-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -30,7 +31,6 @@ import { ComplianceToTextPipe } from '@shared/pipes';
     NotProvidedDirective,
     ComplianceToTextPipe,
   ],
-  standalone: true,
   templateUrl: './compliance-monitoring-reporting-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

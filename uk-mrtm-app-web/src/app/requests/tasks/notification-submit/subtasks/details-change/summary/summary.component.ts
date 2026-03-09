@@ -19,6 +19,7 @@ import { NotificationDetailsOfChangeSummaryTemplateComponent } from '@shared/com
 
 @Component({
   selector: 'mrtm-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     NotificationDetailsOfChangeSummaryTemplateComponent,
@@ -26,7 +27,6 @@ import { NotificationDetailsOfChangeSummaryTemplateComponent } from '@shared/com
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -14,9 +14,9 @@ export const NON_COMPLIANCE_CIVIL_PENALTY_UPLOAD_ROUTES: Routes = [
     canActivate: [canActivateNonComplianceCivilPenaltyUploadSummary],
     data: { breadcrumb: false, backlink: '../' },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-civil-penalty/subtasks/upload/non-compliance-civil-penalty-upload-summary').then(
-        (c) => c.NonComplianceCivilPenaltyUploadSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-civil-penalty/subtasks/upload/non-compliance-civil-penalty-upload-summary'
+      ).then((c) => c.NonComplianceCivilPenaltyUploadSummaryComponent),
   },
   {
     path: NonComplianceCivilPenaltyUploadStep.UPLOAD_FORM,
@@ -27,8 +27,8 @@ export const NON_COMPLIANCE_CIVIL_PENALTY_UPLOAD_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceCivilPenaltyUploadStep.SUMMARY, '../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-civil-penalty/subtasks/upload/non-compliance-civil-penalty-upload-form').then(
-        (c) => c.NonComplianceCivilPenaltyUploadFormComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-civil-penalty/subtasks/upload/non-compliance-civil-penalty-upload-form'
+      ).then((c) => c.NonComplianceCivilPenaltyUploadFormComponent),
   },
 ];

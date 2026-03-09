@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayload
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
+import uk.gov.netz.api.account.service.AccountContactQueryService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
@@ -26,12 +27,15 @@ import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestParams;
 import java.util.HashMap;
 import java.util.Map;
 
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+
 @Component
 @RequiredArgsConstructor
 public class EmpVariationCreateActionHandler implements RequestAccountCreateActionHandler<RequestCreateActionEmptyPayload> {
 
 	private final StartProcessRequestService startProcessRequestService;
 	private final EmissionsMonitoringPlanQueryService empQueryService;
+	private final AccountContactQueryService accountContactQueryService;
 
 	@Value("${govuk-pay.empVariationPaymentIsActive}")
 	private boolean empVariationPaymentIsActive;
@@ -56,7 +60,13 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
     	if(RoleTypeConstants.OPERATOR.equals(currentUserRoleType)) {
     		requestPayload.setOperatorAssignee(appUser.getUserId());
     	} else if (RoleTypeConstants.REGULATOR.equals(currentUserRoleType)) {
+
+			String accountPrimaryContactOptional = this.accountContactQueryService.findPrimaryContactByAccount(accountId)
+				.orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+
+			requestPayload.setOperatorAssignee(accountPrimaryContactOptional);
 			requestPayload.setRegulatorAssignee(appUser.getUserId());
+
 			processVars.put(BpmnProcessConstants.SKIP_PAYMENT, !empVariationPaymentIsActive);
 
     	} else {

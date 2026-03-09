@@ -124,7 +124,7 @@
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-full">
         <h2 class="govuk-heading-s">Customise Permissions</h2>
-        <div formGroupName="permissions">
+        <div [formGroupName]="'permissions'">
           <govuk-table [columns]="tableColumns" [data]="tableRows">
             <ng-template let-column="column" let-row="row">
               @if (column.field === 'task' || column.field === 'type') {
@@ -147,7 +147,7 @@
               } @else {
                 @if (userPermissions$ | async; as userPermissions) {
                   @if (userPermissions[row.permission] === column.field) {
-                    <div [id]="`check-${row.permission}-${column.field}`">
+                    <div [id]="'check-' + row.permission + '-' + column.field">
                       <strong>&#10004;</strong>
                     </div>
                   }
@@ -159,13 +159,13 @@
       </div>
     </div>
     @if (isLoggedUser$ | async) {
-      <mrtm-two-fa-link [link]="['2fa', 'change']" title="Change two factor authentication"></mrtm-two-fa-link>
+      <mrtm-two-fa-link [link]="['2fa', 'change']" [title]="'Change two factor authentication'"></mrtm-two-fa-link>
     } @else {
       @if ((allowEditPermissions$ | async) && (userId$ | async)) {
         <mrtm-two-fa-link
           [link]="['2fa', 'reset-2fa']"
-          role="REGULATOR"
-          title="Reset two-factor authentication"
+          [role]="'REGULATOR'"
+          [title]="'Reset two-factor authentication'"
           [userId]="userId$ | async"
           [userName]="userFullName"></mrtm-two-fa-link>
       }

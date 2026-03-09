@@ -8,18 +8,12 @@
     </div>
   }
 </div>
-@if (hasExternalSystemData()) {
-  <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
-}
-<mrtm-list-of-ships-summary-template
-  [data]="ships()"
-  [dataSupplierName]="thirdPartyDataProviderName()"
-  editUrl="./ships"
-  [queryParams]="{ change: true }" />
+
+<mrtm-list-of-ships-summary-template [data]="ships()" editUrl="./ships" [queryParams]="{ change: true }" />
 
 @if (isEditable() && !isSubTaskCompleted) {
   <button (click)="onSubmit()" govukButton type="button">Confirm and continue</button>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
 }
 
 <netz-return-to-task-or-action-page />

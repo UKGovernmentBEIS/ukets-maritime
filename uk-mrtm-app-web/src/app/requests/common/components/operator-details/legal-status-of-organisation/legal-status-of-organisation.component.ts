@@ -17,10 +17,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-legal-status-of-organisation',
-  imports: [FormsModule, ReactiveFormsModule, WizardStepComponent, RadioComponent, RadioOptionComponent],
   standalone: true,
-  templateUrl: './legal-status-of-organisation.component.html',
+  imports: [FormsModule, ReactiveFormsModule, WizardStepComponent, RadioComponent, RadioOptionComponent],
   providers: [legalStatusOfOrganisationFormProvider],
+  templateUrl: './legal-status-of-organisation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LegalStatusOfOrganisationComponent {

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderStagingDetailsDTO;
+import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
 import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
@@ -46,7 +46,7 @@ class EmpThirdPartyProviderViewServiceTest {
             .updatedOn(now.minusDays(1))
             .createdOn(now.minusDays(2))
             .build();
-        ThirdPartyDataProviderStagingDetailsDTO expectedResponse = ThirdPartyDataProviderStagingDetailsDTO.builder()
+        ThirdPartyDataProviderDTO expectedResponse = ThirdPartyDataProviderDTO.builder()
             .providerName("name")
             .receivedOn(now.minusDays(1))
             .payload(payload)
@@ -56,7 +56,7 @@ class EmpThirdPartyProviderViewServiceTest {
         when(stagingEmpRepository.findByAccountId(ACCOUNT_ID))
             .thenReturn(Optional.ofNullable(stagingEmissionsMonitoringPlan));
 
-        ThirdPartyDataProviderStagingDetailsDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID, null);
+        ThirdPartyDataProviderDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID, null);
 
         assertEquals(expectedResponse, actualResponse);
         verify(stagingEmpRepository).findByAccountId(ACCOUNT_ID);
@@ -67,7 +67,7 @@ class EmpThirdPartyProviderViewServiceTest {
     void getThirdPartyDataProviderInfo_staging_emp_not_exists() {
         when(stagingEmpRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.empty());
 
-        ThirdPartyDataProviderStagingDetailsDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID, null);
+        ThirdPartyDataProviderDTO actualResponse = service.getThirdPartyDataProviderInfo(ACCOUNT_ID, null);
 
         assertNull(actualResponse);
         verify(stagingEmpRepository).findByAccountId(ACCOUNT_ID);

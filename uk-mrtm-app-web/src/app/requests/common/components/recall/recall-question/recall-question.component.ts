@@ -21,6 +21,7 @@ import { recallActionsMap } from '@requests/common/recall-actions.map';
 
 @Component({
   selector: 'mrtm-recall-question',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -29,7 +30,6 @@ import { recallActionsMap } from '@requests/common/recall-actions.map';
     RouterLink,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './recall-question.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

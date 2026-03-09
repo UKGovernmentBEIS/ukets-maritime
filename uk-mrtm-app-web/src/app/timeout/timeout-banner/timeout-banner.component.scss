@@ -1,18 +1,18 @@
-@use 'base' as govuk;
+@import 'base';
 
 .govuk-timeout-warning {
   display: none;
+  @include govuk-responsive-padding(6);
   // Setting width allows IE to center dialog vertically
   width: 100%;
+
   // To do: allow this to be customised
   max-width: 500px;
 
-  @include govuk.govuk-responsive-padding(6);
-
   .govuk-button {
-    margin: 0 govuk.govuk-spacing(2) govuk.govuk-spacing(3) 0;
-    @include govuk.govuk-media-query($from: tablet) {
-      margin-bottom: govuk.govuk-spacing(0);
+    margin: 0 govuk-spacing(2) govuk-spacing(3) 0;
+    @include govuk-media-query($from: tablet) {
+      margin-bottom: govuk-spacing(0);
     }
   }
 
@@ -45,5 +45,5 @@
 }
 
 .tabular-numbers {
-  font-family: govuk.$govuk-font-family;
+  font-family: $govuk-font-family;
 }

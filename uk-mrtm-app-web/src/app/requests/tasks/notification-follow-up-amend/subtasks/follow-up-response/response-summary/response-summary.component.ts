@@ -18,6 +18,7 @@ import { FollowUpResponse } from '@shared/types/follow-up-response.interface';
 
 @Component({
   selector: 'mrtm-response-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     PendingButtonDirective,
@@ -25,7 +26,6 @@ import { FollowUpResponse } from '@shared/types/follow-up-response.interface';
     ReturnToTaskOrActionPageComponent,
     FollowUpResponseSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './response-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -43,7 +43,7 @@ export class ResponseSummaryComponent {
     )(),
   }));
 
-  readonly isStatusSetByDefault = computed(() => {
+  isStatusSetByDefault = computed(() => {
     return !this.store.select(followUpAmendQuery.selectPayload)().sectionsCompleted['followUpResponse'];
   });
 

@@ -27,7 +27,7 @@ export const canActivateReductionClaimSummary: CanActivateFn = (route: Activated
   return (
     !isEditable ||
     (isEditable && (status === TaskItemStatus.COMPLETED || isWizardCompleted(reductionClaim))) ||
-    createUrlTreeFromSnapshot(route, ['./', ReductionClaimWizardStep.DETAILS])
+    createUrlTreeFromSnapshot(route, ['./', ReductionClaimWizardStep.EXIST])
   );
 };
 

@@ -13,10 +13,5 @@
     <br />
     This will be sent to the operator when you return the report
   </p>
-  <div
-    label="Changes required by the operator"
-    [isLabelHidden]="true"
-    govuk-textarea
-    formControlName="changesRequired"
-    [maxLength]="10000"></div>
+  <div govuk-textarea formControlName="changesRequired" [maxLength]="10000"></div>
 </mrtm-wizard-step>

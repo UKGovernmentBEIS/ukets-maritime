@@ -9,10 +9,10 @@ import { NotesService } from '@notes/services';
 
 @Component({
   selector: 'mrtm-delete-note',
-  imports: [PageHeadingComponent, PendingButtonDirective, RouterLink, ButtonDirective, LinkDirective],
-  standalone: true,
   templateUrl: './delete-note.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [PageHeadingComponent, PendingButtonDirective, RouterLink, ButtonDirective, LinkDirective],
 })
 export class DeleteNoteComponent {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);

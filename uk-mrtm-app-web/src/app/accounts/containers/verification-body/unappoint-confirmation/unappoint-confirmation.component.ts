@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-unappoint-confirmation',
-  imports: [LinkDirective, PanelComponent, RouterLink],
   standalone: true,
+  imports: [LinkDirective, PanelComponent, RouterLink],
   templateUrl: './unappoint-confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

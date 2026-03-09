@@ -22,7 +22,6 @@ import {
 import { REPORTING_OBLIGATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/reporting-obligation/reporting-obligation.helpers';
 import { EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
 import { OPERATOR_DETAILS_SUB_TASK_PATH } from '@requests/common/components/operator-details';
-import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/common/third-party-data-provider';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK_PATH } from '@requests/common/utils/additional-documents';
 import { canActivateAerAmendSendReportAction } from '@requests/tasks/aer-amend/aer-amend.guard';
 import {
@@ -30,16 +29,12 @@ import {
   provideAerSubmitSideEffects,
   provideAerSubmitStepFlowManagers,
   provideAerSubmitTaskServices,
-  provideThirdPartyConfigurations,
 } from '@requests/tasks/aer-amend/aer-amend.providers';
-import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-submit/subtasks/send-report/send-report.helpers';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const AER_AMEND_ROUTES: Routes = [
   {
     path: '',
     providers: [
-      provideThirdPartyConfigurations(),
       PayloadMutatorsHandler,
       provideAerSubmitPayloadMutators(),
       SideEffectsHandler,
@@ -47,7 +42,7 @@ export const AER_AMEND_ROUTES: Routes = [
       provideAerSubmitTaskServices(),
       provideAerSubmitStepFlowManagers(),
     ],
-    canActivate: [resetPersistableStateGuard],
+    canActivateChild: [],
     children: [
       {
         path: REPORTING_OBLIGATION_SUB_TASK_PATH,
@@ -112,7 +107,7 @@ export const AER_AMEND_ROUTES: Routes = [
           import('@requests/common/aer/subtasks/aer-total-emissions').then((r) => r.AER_TOTAL_EMISSIONS_ROUTES),
       },
       {
-        path: SEND_REPORT_SUB_TASK_PATH,
+        path: 'send-report',
         canActivate: [canActivateAerAmendSendReportAction],
         loadChildren: () => import('@requests/tasks/aer-amend/subtasks/send-report').then((r) => r.SEND_REPORT_ROUTES),
       },
@@ -120,15 +115,6 @@ export const AER_AMEND_ROUTES: Routes = [
         path: 'requested-changes',
         loadChildren: () =>
           import('@requests/tasks/aer-amend/subtasks/requested-changes').then((r) => r.REQUEST_CHANGES_ROUTES),
-      },
-      {
-        path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
-        title: 'Import data from a data supplier',
-        data: { backlink: '../../', breadcrumb: false },
-        loadComponent: () =>
-          import('@requests/common/third-party-data-provider/third-party-data-provider-import').then(
-            (c) => c.ThirdPartyDataProviderImportComponent,
-          ),
       },
     ],
   },

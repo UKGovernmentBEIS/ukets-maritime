@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpAbbreviationDefinition, EmpAbbreviations } from '@mrtm/api';
@@ -19,6 +19,7 @@ import { mergeDiffArray } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-abbreviations-summary-template',
+  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -30,28 +31,21 @@ import { mergeDiffArray } from '@shared/utils';
     RouterLink,
     HtmlDiffDirective,
   ],
-  standalone: true,
   templateUrl: './abbreviations-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AbbreviationsSummaryTemplateComponent {
-  readonly abbreviations = input.required<EmpAbbreviations>();
-  readonly originalAbbreviations = input<EmpAbbreviations>();
-  readonly abbreviationsMap = input.required<
-    SubTaskListMap<{
-      abbreviationsQuestion: string;
-    }>
-  >();
-  readonly wizardStep = input<{
-    [s: string]: string;
-  }>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) abbreviations: EmpAbbreviations;
+  @Input() originalAbbreviations: EmpAbbreviations;
+  @Input({ required: true }) abbreviationsMap: SubTaskListMap<{ abbreviationsQuestion: string }>;
+  @Input() wizardStep: { [s: string]: string };
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 
-  readonly combinedAbbreviationDefinitions = computed(() =>
+  combinedAbbreviationDefinitions = computed(() =>
     mergeDiffArray<EmpAbbreviationDefinition>(
-      this.abbreviations()?.abbreviationDefinitions,
-      this.originalAbbreviations()?.abbreviationDefinitions,
+      this.abbreviations?.abbreviationDefinitions,
+      this.originalAbbreviations?.abbreviationDefinitions,
     ),
   );
 }

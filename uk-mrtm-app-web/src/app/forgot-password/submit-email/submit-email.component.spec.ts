@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
@@ -24,7 +24,7 @@ describe('SubmitEmailComponent', () => {
     template: '<p>Mock template</p>',
   })
   class MockEmailSentComponent {
-    readonly email = input<string>();
+    @Input() email: string;
   }
 
   class Page extends BasePage<SubmitEmailComponent> {

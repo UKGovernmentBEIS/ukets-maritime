@@ -20,6 +20,7 @@ import { GuidanceService } from '@guidance/services';
 
 @Component({
   selector: 'mrtm-manage-documents-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     LinkDirective,
@@ -33,7 +34,6 @@ import { GuidanceService } from '@guidance/services';
     PendingButtonDirective,
     ManageGuidanceDocumentTypePipe,
   ],
-  standalone: true,
   templateUrl: './manage-documents-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

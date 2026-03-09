@@ -12,6 +12,7 @@ import { PaymentBankAccountDetailsDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-payment-bank-transfer-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -19,7 +20,6 @@ import { PaymentBankAccountDetailsDto } from '@shared/types';
     SummaryListRowValueDirective,
     CurrencyPipe,
   ],
-  standalone: true,
   templateUrl: './payment-bank-transfer-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

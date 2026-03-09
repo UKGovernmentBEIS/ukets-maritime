@@ -14,9 +14,9 @@ export const NON_COMPLIANCE_NOTICE_OF_INTENT_UPLOAD_ROUTES: Routes = [
     canActivate: [canActivateNonComplianceNoticeOfIntentUploadSummary],
     data: { breadcrumb: false, backlink: '../' },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-notice-of-intent/subtasks/upload/non-compliance-notice-of-intent-upload-summary').then(
-        (c) => c.NonComplianceNoticeOfIntentUploadSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-notice-of-intent/subtasks/upload/non-compliance-notice-of-intent-upload-summary'
+      ).then((c) => c.NonComplianceNoticeOfIntentUploadSummaryComponent),
   },
   {
     path: NonComplianceNoticeOfIntentUploadStep.UPLOAD_FORM,
@@ -27,8 +27,8 @@ export const NON_COMPLIANCE_NOTICE_OF_INTENT_UPLOAD_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceNoticeOfIntentUploadStep.SUMMARY, '../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-notice-of-intent/subtasks/upload/non-compliance-notice-of-intent-upload-form').then(
-        (c) => c.NonComplianceNoticeOfIntentUploadFormComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-notice-of-intent/subtasks/upload/non-compliance-notice-of-intent-upload-form'
+      ).then((c) => c.NonComplianceNoticeOfIntentUploadFormComponent),
   },
 ];

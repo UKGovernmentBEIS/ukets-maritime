@@ -7,10 +7,8 @@ import {
   VirApplicationSubmittedRequestActionPayload,
 } from '@mrtm/api';
 
-export interface VirFollowUpActionPayload extends Pick<
-  VirApplicationSubmittedRequestActionPayload,
-  'reportingYear' | 'payloadType' | 'virAttachments'
-> {
+export interface VirFollowUpActionPayload
+  extends Pick<VirApplicationSubmittedRequestActionPayload, 'reportingYear' | 'payloadType' | 'virAttachments'> {
   verifierComment?: VerifierComment;
   verifierUncorrectedItem?: UncorrectedItem;
   operatorImprovementResponse?: OperatorImprovementResponse;

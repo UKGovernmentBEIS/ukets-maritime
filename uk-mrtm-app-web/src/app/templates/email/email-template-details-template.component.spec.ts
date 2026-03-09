@@ -17,11 +17,11 @@ describe('EmailTemplateDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    imports: [EmailTemplateDetailsTemplateComponent],
-    standalone: true,
     template: `
       <mrtm-email-template-details-template [emailTemplate]="emailTemplate"></mrtm-email-template-details-template>
     `,
+    standalone: true,
+    imports: [EmailTemplateDetailsTemplateComponent],
   })
   class TestComponent {
     emailTemplate: NotificationTemplateDTO;

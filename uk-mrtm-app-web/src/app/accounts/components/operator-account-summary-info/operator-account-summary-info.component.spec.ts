@@ -1,20 +1,16 @@
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { Component } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
 
 import { MrtmAccountViewDTO } from '@mrtm/api';
 
-import { ActivatedRouteStub } from '@netz/common/testing';
+import { GovukDatePipe } from '@netz/common/pipes';
 
 import { OperatorAccountSummaryInfoComponent } from '@accounts/components';
 
 @Component({
   selector: 'mrtm-test-parent',
-  imports: [OperatorAccountSummaryInfoComponent],
   template: `
-    <mrtm-operator-account-summary-info [summaryInfo]="summaryInfo"></mrtm-operator-account-summary-info>
+    <netz-create-operator-account-summary [summaryInfo]="summaryInfo"></netz-create-operator-account-summary>
   `,
 })
 class TestParentComponent {
@@ -34,11 +30,9 @@ describe('OperatorAccountSummaryInfoComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-      ],
+      declarations: [TestParentComponent],
+      imports: [GovukDatePipe, OperatorAccountSummaryInfoComponent],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestParentComponent);

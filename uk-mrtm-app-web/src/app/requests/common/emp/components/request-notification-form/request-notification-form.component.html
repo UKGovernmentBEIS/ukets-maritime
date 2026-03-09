@@ -16,18 +16,14 @@
 
     @if (operatorsInfo?.otherOperators; as otherOperatorsInfo) {
       <div class="govuk-!-margin-bottom-6">
+        <h2 class="govuk-heading-m">Select the users you want to notify</h2>
         @if ((otherOperatorsInfo | keyvalue)?.length > 0) {
-          <div
-            label="Select the users you want to notify"
-            labelSize="medium"
-            govuk-checkboxes
-            formControlName="operators">
+          <div govuk-checkboxes formControlName="operators">
             @for (user of otherOperatorsInfo | keyvalue; track user) {
               <govuk-checkbox [value]="user.key" [label]="user.key | userInfoResolver: otherOperatorsInfo" />
             }
           </div>
         } @else {
-          <h2 class="govuk-heading-m">Select the users you want to notify</h2>
           <p class="govuk-body">No additional users exist</p>
         }
       </div>
@@ -37,8 +33,7 @@
   <div class="govuk-!-margin-bottom-6">
     <h2 class="govuk-heading-m">Select the name and signature that will be shown on the official notice document</h2>
     <div
-      label="Select signatory"
-      [isLabelHidden]="true"
+      class="govuk-body"
       [options]="assignees()"
       formControlName="signatory"
       govuk-select

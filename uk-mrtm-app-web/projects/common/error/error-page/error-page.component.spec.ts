@@ -10,7 +10,6 @@ describe('ErrorPageComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    imports: [ErrorPageComponent],
     template: `
       <netz-error-page heading="Test heading">
         <p class="govuk-body">Some text</p>
@@ -19,11 +18,15 @@ describe('ErrorPageComponent', () => {
   })
   class TestComponent {}
 
-  beforeEach(() => {
-    fixture = TestBed.overrideComponent(ErrorPageComponent, {
-      set: { host: { 'test-id': 'component-spec' } },
-    }).createComponent(TestComponent);
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [ErrorPageComponent],
+      declarations: [TestComponent],
+    }).compileComponents();
+  });
 
+  beforeEach(() => {
+    fixture = TestBed.createComponent(TestComponent);
     component = fixture.debugElement.query(By.directive(ErrorPageComponent)).componentInstance;
     element = fixture.nativeElement;
     fixture.detectChanges();

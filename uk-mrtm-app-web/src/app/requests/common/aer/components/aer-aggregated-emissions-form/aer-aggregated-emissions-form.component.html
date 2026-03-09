@@ -1,7 +1,7 @@
 <fieldset govukFieldset>
   <legend govukLegend legendSize="medium">{{ header() }}</legend>
   @if (hint(); as hint) {
-    <div class="govuk-body">{{ hint }}</div>
+    <div class="govuk-hint">{{ hint }}</div>
   }
   <div govuk-text-input formControlName="co2" label="CO2 emissions (t)" widthClass="govuk-!-width-one-third"></div>
   <div govuk-text-input formControlName="ch4" label="CH4 emissions (tCO2e)" widthClass="govuk-!-width-one-third"></div>

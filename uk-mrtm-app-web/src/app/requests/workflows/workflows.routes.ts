@@ -10,6 +10,7 @@ import {
   TASK_STATUS_TAG_MAP,
 } from '@netz/common/pipes';
 
+import { NoteFileDownloadComponent } from '@notes/components';
 import { itemActionsMap } from '@requests/common/item-actions.map';
 import { relatedActionsMap } from '@requests/common/related-actions.map';
 import { statusTagMap } from '@requests/common/status-tag.map';
@@ -48,11 +49,7 @@ export const WORKFLOWS_ROUTES: Route[] = [
         path: 'create-action',
         loadChildren: () => import('@requests/workflows/create-action').then((r) => r.CREATE_ACTION_ROUTES),
       },
-      {
-        path: 'file-download/:uuid',
-        title: 'Download file',
-        loadComponent: () => import('@notes/components').then((c) => c.NoteFileDownloadComponent),
-      },
+      { path: 'file-download/:uuid', component: NoteFileDownloadComponent },
     ],
   },
 ];

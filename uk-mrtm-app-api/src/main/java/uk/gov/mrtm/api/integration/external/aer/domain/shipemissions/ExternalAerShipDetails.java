@@ -24,13 +24,9 @@ import java.time.LocalDate;
 @SuperBuilder
 @NoArgsConstructor
 @AllArgsConstructor
-@SpELExpression(expression = "{(T(java.lang.Boolean).TRUE.equals(#allYear) && #from == null && #to == null) " +
-    "|| (T(java.lang.Boolean).FALSE.equals(#allYear) && #from != null && #to != null)}",
+@SpELExpression(expression = "{(#allYear && #from == null && #to == null) " +
+    "|| (!#allYear && #from != null && #to != null && T(java.time.LocalDate).parse(#from).isBefore(T(java.time.LocalDate).parse(#to)))}",
     message = "aer.external.ship.details.all.year.exist")
-@SpELExpression(expression = "{(#from == null || #to == null) || " +
-    "T(java.time.LocalDate).parse(#from).isBefore(T(java.time.LocalDate).parse(#to))}",
-    message = "aer.external.ship.details.from.to"
-)
 public class ExternalAerShipDetails {
 
     @NotBlank

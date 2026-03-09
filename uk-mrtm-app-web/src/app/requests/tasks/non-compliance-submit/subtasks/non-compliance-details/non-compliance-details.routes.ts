@@ -15,9 +15,9 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
     canActivate: [canActivateNonComplianceDetailsSummary],
     data: { breadcrumb: false, backlink: '../' },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-summary').then(
-        (c) => c.NonComplianceDetailsSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-summary'
+      ).then((c) => c.NonComplianceDetailsSummaryComponent),
   },
   {
     path: NonComplianceDetailsStep.DETAILS_FORM,
@@ -41,9 +41,9 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceDetailsStep.SUMMARY, NonComplianceDetailsStep.DETAILS_FORM),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-selected-requests').then(
-        (c) => c.NonComplianceDetailsSelectedRequestsComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-selected-requests'
+      ).then((c) => c.NonComplianceDetailsSelectedRequestsComponent),
   },
   {
     path: NonComplianceDetailsStep.CIVIL_PENALTY,
@@ -54,9 +54,9 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceDetailsStep.SUMMARY, NonComplianceDetailsStep.SELECTED_REQUESTS),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-civil-penalty').then(
-        (c) => c.NonComplianceDetailsCivilPenaltyComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-civil-penalty'
+      ).then((c) => c.NonComplianceDetailsCivilPenaltyComponent),
   },
   {
     path: NonComplianceDetailsStep.NOTICE_OF_INTENT,
@@ -67,9 +67,9 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceDetailsStep.SUMMARY, NonComplianceDetailsStep.CIVIL_PENALTY),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-notice-of-intent').then(
-        (c) => c.NonComplianceDetailsNoticeOfIntentComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-notice-of-intent'
+      ).then((c) => c.NonComplianceDetailsNoticeOfIntentComponent),
   },
   {
     path: NonComplianceDetailsStep.INITIAL_PENALTY,
@@ -80,8 +80,8 @@ export const NON_COMPLIANCE_DETAILS_ROUTES: Routes = [
       backlink: backlinkResolver(NonComplianceDetailsStep.SUMMARY, NonComplianceDetailsStep.NOTICE_OF_INTENT),
     },
     loadComponent: () =>
-      import('@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-initial-penalty').then(
-        (c) => c.NonComplianceDetailsInitialPenaltyComponent,
-      ),
+      import(
+        '@requests/tasks/non-compliance-submit/subtasks/non-compliance-details/non-compliance-details-initial-penalty'
+      ).then((c) => c.NonComplianceDetailsInitialPenaltyComponent),
   },
 ];

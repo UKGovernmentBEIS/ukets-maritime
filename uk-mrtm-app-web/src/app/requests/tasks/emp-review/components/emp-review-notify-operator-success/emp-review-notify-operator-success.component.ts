@@ -9,8 +9,8 @@ import { empReviewNotifyOperatorStatusMap } from '@requests/tasks/emp-review/com
 
 @Component({
   selector: 'mrtm-review-notify-operator-success',
-  imports: [PanelComponent, RouterLink, LinkDirective],
   standalone: true,
+  imports: [PanelComponent, RouterLink, LinkDirective],
   templateUrl: './emp-review-notify-operator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

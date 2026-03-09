@@ -1,26 +1,35 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input, OnChanges, output, SimpleChanges } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { distinctUntilChanged, map, tap } from 'rxjs';
 
 @Component({
   selector: 'govuk-pagination',
-  imports: [AsyncPipe, RouterLink],
-  standalone: true,
   templateUrl: './pagination.component.html',
+  standalone: true,
+  imports: [AsyncPipe, RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaginationComponent implements OnChanges {
   readonly route = inject(ActivatedRoute);
 
-  readonly fragment = input<string>();
-  readonly pageSize = input.required<number>();
-  readonly count = input.required<number>();
-  readonly hideResultCount = input(false);
-  readonly hideNumbers = input(false);
+  @Input() fragment: string;
+  @Input({ required: true }) pageSize: number;
+  @Input({ required: true }) count: number;
+  @Input() hideResultCount = false;
+  @Input() hideNumbers = false;
 
-  readonly currentPageChange = output<number>();
+  @Output() readonly currentPageChange = new EventEmitter<number>();
 
   totalPages = 1;
   pageNumbers = [1];
@@ -38,7 +47,7 @@ export class PaginationComponent implements OnChanges {
   }
 
   private calculatePageCount(): void {
-    this.totalPages = Math.ceil((this.count() || 1) / (this.pageSize() || 1));
+    this.totalPages = Math.ceil((this.count || 1) / (this.pageSize || 1));
     this.pageNumbers = Array(this.totalPages)
       .fill(0)
       .map((_, i) => i + 1);

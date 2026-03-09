@@ -1,6 +1,6 @@
-<div class="govuk-panel govuk-panel--confirmation" role="alert" aria-live="polite">
-  @if (title()) {
-    <h1 class="govuk-panel__title govuk-!-margin-bottom-0">{{ title() }}</h1>
+<div class="govuk-panel govuk-panel--confirmation">
+  @if (title) {
+    <h1 class="govuk-panel__title govuk-!-margin-bottom-0">{{ title }}</h1>
   }
-  <div class="govuk-panel__body" [class.govuk-!-margin-top-6]="title()"><ng-content></ng-content></div>
+  <div class="govuk-panel__body" [class.govuk-!-margin-top-6]="title"><ng-content></ng-content></div>
 </div>

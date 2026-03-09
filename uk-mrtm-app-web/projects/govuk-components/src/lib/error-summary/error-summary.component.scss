@@ -1,5 +1,5 @@
-@use 'govuk-frontend/dist/govuk/index' as govuk;
+@import 'govuk-frontend/dist/govuk/settings/_colours-applied.scss';
 
 .govuk-error-summary__message-without-path {
-  color: govuk.$govuk-error-colour;
+  color: $govuk-error-colour;
 }

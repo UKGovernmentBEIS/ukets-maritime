@@ -14,14 +14,12 @@ import {
 } from '@requests/common/aer/subtasks/reporting-obligation';
 import { REQUESTED_CHANGES_SUB_TASK } from '@requests/common/emp/subtasks/requested-changes';
 import { regulatorCommentsSubtaskMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { ThirdPartyDataProviderInfoComponent } from '@requests/common/third-party-data-provider';
 import { aerAmendQuery } from '@requests/tasks/aer-amend/+state';
 import { getCanSubmitAmendAer } from '@requests/tasks/aer-amend/aer-amend.helpers';
 import {
   SEND_REPORT_SUB_TASK,
   SEND_REPORT_SUB_TASK_PATH,
 } from '@requests/tasks/aer-amend/subtasks/send-report/send-report.helpers';
-import { NotificationBannerComponent } from '@shared/components';
 import { taskActionTypeToTitleTransformer } from '@shared/utils';
 
 export const aerAmendsTaskContent: RequestTaskPageContentFactory = () => {
@@ -29,8 +27,6 @@ export const aerAmendsTaskContent: RequestTaskPageContentFactory = () => {
   const requestTaskType = store.select(requestTaskQuery.selectRequestTaskType)();
   const year = store.select(aerCommonQuery.selectReportingYear)();
   const requestedChangesStatus = store.select(aerAmendQuery.selectStatusForSubtask(REQUESTED_CHANGES_SUB_TASK))();
-  const allowedRequestTaskActions = store.select(requestTaskQuery.selectAllowedRequestTaskActions)();
-  const hasReportingObligation = store.select(aerCommonQuery.selectHasReportingObligation)();
   const canSubmitAmendAer = getCanSubmitAmendAer();
 
   const warnings: Record<string, string> | undefined =
@@ -45,13 +41,7 @@ export const aerAmendsTaskContent: RequestTaskPageContentFactory = () => {
       : undefined;
 
   return {
-    pageTopComponent: NotificationBannerComponent,
     header: taskActionTypeToTitleTransformer(requestTaskType, year),
-    preContentComponent: [
-      allowedRequestTaskActions.includes('AER_IMPORT_THIRD_PARTY_DATA_APPLICATION') && hasReportingObligation
-        ? ThirdPartyDataProviderInfoComponent
-        : null,
-    ],
     sections: [
       {
         title: regulatorCommentsSubtaskMap.title,

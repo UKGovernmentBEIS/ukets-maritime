@@ -18,6 +18,7 @@ import { FollowUpResponse } from '@shared/types/follow-up-response.interface';
 
 @Component({
   selector: 'mrtm-follow-up-response-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     PendingButtonDirective,
@@ -25,7 +26,6 @@ import { FollowUpResponse } from '@shared/types/follow-up-response.interface';
     ReturnToTaskOrActionPageComponent,
     FollowUpResponseSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './follow-up-response-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -24,6 +24,7 @@ import { ShipEmissionTableListItem } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-list-of-ships',
+  standalone: true,
   imports: [
     ListOfShipsTableComponent,
     PendingButtonDirective,
@@ -34,7 +35,6 @@ import { ShipEmissionTableListItem } from '@shared/types';
     DropdownButtonGroupComponent,
     DropdownButtonItemComponent,
   ],
-  standalone: true,
   templateUrl: './aer-list-of-ships.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -46,7 +46,7 @@ export class AerListOfShipsComponent {
   private readonly router = inject(Router);
   private readonly accountService = inject(MaritimeAccountsService);
 
-  private readonly accountId = this.store.select(requestTaskQuery.selectRequestTaskAccountId);
+  private readonly accountId = computed(() => this.store.select(requestTaskQuery.selectRequestInfo)()?.accountId);
   private readonly accountStatus: Signal<MrtmAccountViewDTO['status']> = toSignal(
     (this.accountId() ? this.accountService.getMaritimeAccount(this.accountId()) : of(null)).pipe(
       map((response) => response.account?.status),
@@ -58,7 +58,6 @@ export class AerListOfShipsComponent {
   readonly map = aerEmissionsMap;
   readonly listOfShips = this.store.select(aerCommonQuery.selectListOfShips);
   readonly canContinue = computed(() => this.listOfShips()?.length);
-  readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
 
   readonly notCompletedMessage = computed<string>(() => {
     const notCompleted: boolean = this.listOfShips()?.some((ship) => ship.status !== TaskItemStatus.COMPLETED);

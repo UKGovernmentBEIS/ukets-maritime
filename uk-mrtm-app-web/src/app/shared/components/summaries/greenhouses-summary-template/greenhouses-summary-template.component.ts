@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params } from '@angular/router';
 
 import { EmpMonitoringGreenhouseGas } from '@mrtm/api';
@@ -8,18 +8,16 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-greenhouses-summary-template',
-  imports: [ProcedureFormPartialSummaryTemplateComponent],
   standalone: true,
+  imports: [ProcedureFormPartialSummaryTemplateComponent],
   templateUrl: './greenhouses-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GreenhousesSummaryTemplateComponent {
-  readonly greenhouseGas = input.required<EmpMonitoringGreenhouseGas>();
-  readonly originalGreenhouseGas = input<EmpMonitoringGreenhouseGas>();
-  readonly greenhouseGasMap = input.required<SubTaskListMap<EmpMonitoringGreenhouseGas>>();
-  readonly wizardStep = input<{
-    [s: string]: string;
-  }>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) greenhouseGas: EmpMonitoringGreenhouseGas;
+  @Input() originalGreenhouseGas: EmpMonitoringGreenhouseGas;
+  @Input({ required: true }) greenhouseGasMap: SubTaskListMap<EmpMonitoringGreenhouseGas>;
+  @Input() wizardStep: { [s: string]: string };
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 }

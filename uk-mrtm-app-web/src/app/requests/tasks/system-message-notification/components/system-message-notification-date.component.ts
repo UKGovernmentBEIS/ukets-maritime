@@ -5,8 +5,8 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 @Component({
   selector: 'mrtm-system-message-notification-date',
-  imports: [GovukDatePipe],
   standalone: true,
+  imports: [GovukDatePipe],
   template: `
     <div class="govuk-body govuk-!-margin-top-2 govuk-!-margin-bottom-0">
       <strong>Date:</strong>
@@ -17,5 +17,5 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 })
 export class SystemMessageNotificationDateComponent {
   store = inject(RequestTaskStore);
-  readonly startDate = computed(() => this.store.select(requestTaskQuery.selectRequestTask)()?.startDate);
+  startDate = computed(() => this.store.select(requestTaskQuery.selectRequestTask)()?.startDate);
 }

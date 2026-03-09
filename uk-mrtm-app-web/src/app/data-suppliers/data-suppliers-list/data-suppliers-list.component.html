@@ -1,3 +1,6 @@
+<!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
+<!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
+
 <netz-page-heading size="xl">Manage data suppliers</netz-page-heading>
 @if (isEditable()) {
   <a govukButton [routerLink]="['add']">Add a new data supplier</a>
@@ -5,6 +8,21 @@
 
 <govuk-table [columns]="columns" [data]="data()" emptyTableText="No items to display">
   <ng-template let-column="column" let-row="row">
-    {{ row[column.field] }}
+    @switch (column.field) {
+      @case ('clientSecret') {
+        <span
+          [ngClass]="{
+            secret: !visibleSecrets.has(row.id),
+          }">
+          {{ row[column.field] }}
+        </span>
+      }
+      @case ('actions') {
+        <a class="govuk-link" (click)="toggleShow(row.id)">{{ visibleSecrets.has(row.id) ? 'Hide' : 'Show' }}</a>
+      }
+      @default {
+        {{ row[column.field] }}
+      }
+    }
   </ng-template>
 </govuk-table>

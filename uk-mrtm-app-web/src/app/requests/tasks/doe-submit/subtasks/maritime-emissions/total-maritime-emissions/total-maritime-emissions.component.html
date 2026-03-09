@@ -24,7 +24,7 @@
     [label]="doeTotalMaritimeEmissionsMap.totalReportableEmissions.title"
     labelSize="small"
     suffix="tCO2e"
-    widthClass="govuk-input--width-10"></div>
+    [widthClass]="'govuk-input--width-10'"></div>
   <div
     formControlName="lessVoyagesInNorthernIrelandDeduction"
     govuk-text-input
@@ -32,7 +32,7 @@
     [label]="doeTotalMaritimeEmissionsMap.lessVoyagesInNorthernIrelandDeduction.title"
     labelSize="small"
     suffix="tCO2e"
-    widthClass="govuk-input--width-10"></div>
+    [widthClass]="'govuk-input--width-10'"></div>
   <div
     formControlName="surrenderEmissions"
     govuk-text-input
@@ -40,7 +40,7 @@
     [label]="doeTotalMaritimeEmissionsMap.surrenderEmissions.title"
     labelSize="small"
     suffix="tCO2e"
-    widthClass="govuk-input--width-10"></div>
+    [widthClass]="'govuk-input--width-10'"></div>
   <div
     formControlName="calculationApproach"
     govuk-textarea

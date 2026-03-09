@@ -1,11 +1,8 @@
-<govuk-table
-  [columns]="editable() ? editableColumns : readonlyColumns"
-  [data]="data()"
-  formArrayName="verificationBodies">
+<govuk-table [columns]="editable ? editableColumns : readonlyColumns" [data]="data" formArrayName="verificationBodies">
   <ng-template let-column="column" let-index="index" let-row="row">
     @switch (column.field) {
       @case ('name') {
-        @if (editable()) {
+        @if (editable) {
           <a [routerLink]="[row.id]" govukLink>{{ row.name }}</a>
         } @else {
           {{ row.name }}
@@ -13,12 +10,10 @@
       }
       @case ('status') {
         <ng-container [formGroupName]="index">
-          @if (row.status === 'PENDING' || !editable()) {
+          @if (row.status === 'PENDING' || !editable) {
             {{ row.status | verificationBodyStatus }}
           } @else {
             <div
-              label="Change status"
-              [isLabelHidden]="true"
               [options]="verificationBodyStatuses"
               formControlName="status"
               govuk-select

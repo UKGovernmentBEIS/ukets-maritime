@@ -6,9 +6,9 @@ import { LinkDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-request-two-fa-reset',
-  imports: [PageHeadingComponent, RouterLink, LinkDirective],
-  standalone: true,
   templateUrl: './request-two-fa-reset.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PageHeadingComponent, RouterLink, LinkDirective],
 })
 export class RequestTwoFaResetComponent {}

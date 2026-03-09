@@ -1,15 +1,15 @@
-import { AsyncPipe, KeyValuePipe } from '@angular/common';
+import { AsyncPipe, DOCUMENT, KeyValuePipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  DOCUMENT,
   ElementRef,
   inject,
-  input,
+  Input,
   OnChanges,
-  viewChild,
-  viewChildren,
+  QueryList,
+  ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { AbstractControl, FormControlStatus, NgForm, UntypedFormArray, UntypedFormGroup } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -22,8 +22,8 @@ import { FlatSummaryError, NestedMessageValidationErrors } from './nested-messag
 
 @Component({
   selector: 'govuk-error-summary',
-  imports: [RouterLink, KeyValuePipe, AsyncPipe],
   standalone: true,
+  imports: [RouterLink, KeyValuePipe, AsyncPipe],
   templateUrl: './error-summary.component.html',
   styleUrl: './error-summary.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,22 +33,21 @@ export class ErrorSummaryComponent implements OnChanges, AfterViewInit {
   private readonly formService = inject(FormService);
   private readonly title = inject(Title);
 
-  readonly form = input<UntypedFormGroup | NgForm>();
+  @Input() form: UntypedFormGroup | NgForm;
 
-  readonly inputs = viewChildren('anchor', { read: ElementRef });
-  readonly container = viewChild('container', { read: ElementRef });
+  @ViewChildren('anchor', { read: ElementRef }) inputs: QueryList<ElementRef<HTMLAnchorElement>>;
+  @ViewChild('container', { read: ElementRef }) container: ElementRef<HTMLDivElement>;
 
   errorList$: Observable<FlatSummaryError[]>;
 
   private formGroup: UntypedFormGroup;
 
   ngOnChanges(): void {
-    const form = this.form();
-    this.formGroup = form instanceof UntypedFormGroup ? form : form.control;
+    this.formGroup = this.form instanceof UntypedFormGroup ? this.form : this.form.control;
 
-    const statusChanges: Observable<FormControlStatus> = this.form().statusChanges;
+    const statusChanges: Observable<FormControlStatus> = this.form.statusChanges;
     this.errorList$ = statusChanges.pipe(
-      startWith(this.form().status),
+      startWith(this.form.status),
       map((status) => status === 'INVALID' && this.getAbstractControlErrors(this.formGroup)),
       map((errors) => this.flattenErrors(errors).sort(this.sortByPosition)),
       map((errors) => (errors.length ? errors : null)),
@@ -66,12 +65,11 @@ export class ErrorSummaryComponent implements OnChanges, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    const container = this.container();
-    if (container?.nativeElement?.scrollIntoView) {
-      container.nativeElement.scrollIntoView();
+    if (this.container?.nativeElement?.scrollIntoView) {
+      this.container.nativeElement.scrollIntoView();
     }
-    if (container?.nativeElement?.focus) {
-      container.nativeElement.focus();
+    if (this.container?.nativeElement?.focus) {
+      this.container.nativeElement.focus();
     }
   }
 

@@ -12,6 +12,5 @@ export const provideReductionClaimDetailsSummaryColumns = (
     { field: 'co2EmissionFactor', header: 'CO2 EF t/t', isNumeric: true },
     { field: 'co2Emissions', header: 'CO2 emissions (t)', isNumeric: true },
     { field: 'evidenceFiles', header: 'Supporting evidence' },
-    { field: 'dataInputType', header: 'Initial source' },
-    editable ? { field: 'actions', header: 'Actions', hiddenHeader: true } : undefined,
+    editable ? { field: 'actions', header: undefined } : undefined,
   ].filter(Boolean) as Array<GovukTableColumn<ReductionClaimDetailsListItemDto>>;

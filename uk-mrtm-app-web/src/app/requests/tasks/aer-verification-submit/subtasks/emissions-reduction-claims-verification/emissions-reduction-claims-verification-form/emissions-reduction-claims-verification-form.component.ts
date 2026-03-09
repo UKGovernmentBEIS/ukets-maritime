@@ -24,6 +24,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-emissions-reduction-claims-verification-form',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -32,9 +33,8 @@ import { WizardStepComponent } from '@shared/components';
     TextareaComponent,
     ConditionalContentDirective,
   ],
-  standalone: true,
-  templateUrl: './emissions-reduction-claims-verification-form.component.html',
   providers: [emissionsReductionClaimsVerificationFormProvider],
+  templateUrl: './emissions-reduction-claims-verification-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsReductionClaimsVerificationFormComponent {

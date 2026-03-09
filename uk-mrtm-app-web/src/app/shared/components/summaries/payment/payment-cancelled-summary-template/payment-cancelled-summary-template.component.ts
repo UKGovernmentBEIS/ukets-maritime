@@ -12,6 +12,7 @@ import { PaymentDetailsDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-payment-cancelled-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -19,7 +20,6 @@ import { PaymentDetailsDto } from '@shared/types';
     SummaryListRowValueDirective,
     PaymentStatusPipe,
   ],
-  standalone: true,
   templateUrl: './payment-cancelled-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

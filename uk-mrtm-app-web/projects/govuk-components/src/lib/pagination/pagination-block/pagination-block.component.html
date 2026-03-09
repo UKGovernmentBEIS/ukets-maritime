@@ -1,8 +1,8 @@
-@if (previous() || next()) {
+@if (previous || next) {
   <nav class="govuk-pagination govuk-pagination--block" aria-label="Pagination">
-    @if (previous()) {
+    @if (previous) {
       <div class="govuk-pagination__prev">
-        <a class="govuk-link govuk-pagination__link" [routerLink]="previous().href" rel="prev">
+        <a class="govuk-link govuk-pagination__link" [routerLink]="previous.href" rel="prev">
           <svg
             class="govuk-pagination__icon govuk-pagination__icon--prev"
             xmlns="http://www.w3.org/2000/svg"
@@ -19,13 +19,13 @@
             <span class="govuk-visually-hidden">page</span>
           </span>
           <span class="govuk-visually-hidden">:</span>
-          <span class="govuk-pagination__link-label">{{ previous().labelText }}</span>
+          <span class="govuk-pagination__link-label">{{ previous.labelText }}</span>
         </a>
       </div>
     }
-    @if (next()) {
+    @if (next) {
       <div class="govuk-pagination__next">
-        <a class="govuk-link govuk-pagination__link" [routerLink]="next().href" rel="next">
+        <a class="govuk-link govuk-pagination__link" [routerLink]="next.href" rel="next">
           <svg
             class="govuk-pagination__icon govuk-pagination__icon--next"
             xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,7 @@
             <span class="govuk-visually-hidden">page</span>
           </span>
           <span class="govuk-visually-hidden">:</span>
-          <span class="govuk-pagination__link-label">{{ next().labelText }}</span>
+          <span class="govuk-pagination__link-label">{{ next.labelText }}</span>
         </a>
       </div>
     }

@@ -12,6 +12,7 @@ import {
 
 @Component({
   selector: 'mrtm-vir-regulator-response-operator-side-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -19,7 +20,6 @@ import {
     SummaryListRowValueDirective,
     GovukDatePipe,
   ],
-  standalone: true,
   templateUrl: './vir-regulator-response-operator-side-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

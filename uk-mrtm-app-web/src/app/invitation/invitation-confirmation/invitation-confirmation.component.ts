@@ -7,8 +7,6 @@ import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'mrtm-regulator-confirmation',
-  imports: [PanelComponent, LinkDirective, RouterLink],
-  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -24,6 +22,8 @@ import { AuthService } from '@core/services/auth.service';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PanelComponent, LinkDirective, RouterLink],
 })
 export class InvitationConfirmationComponent {
   readonly authService = inject(AuthService);

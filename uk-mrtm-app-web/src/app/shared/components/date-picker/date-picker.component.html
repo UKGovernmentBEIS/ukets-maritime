@@ -1,16 +1,16 @@
 <label
-  [class.govuk-visually-hidden]="!templateLabel() && isLabelHidden()"
+  [class.govuk-visually-hidden]="!templateLabel() && isLabelHidden"
   [for]="identifier"
-  [id]="`l.${identifier}`"
-  [class]="currentLabelSize()">
+  [id]="'l.' + identifier"
+  [class]="currentLabelSize">
   @if (!templateLabel()) {
-    {{ label() }}
+    {{ currentLabel }}
   } @else {
     <ng-content select="[govukLabel]"></ng-content>
   }
 </label>
 @if (hint()) {
-  <div [id]="`${identifier}-hint`" class="govuk-hint">
+  <div [id]="identifier + '-hint'" class="govuk-hint">
     {{ hint() }}
   </div>
 }
@@ -24,7 +24,7 @@
       #input
       (change)="onChange(getInputValue($event))"
       (blur)="onChange(getInputValue($event))"
-      [attr.aria-describedby]="hint() ? `${identifier}-hint` : null"
+      [attr.aria-describedby]="hint() ? identifier + '-hint' : null"
       type="text"
       [id]="identifier"
       [name]="identifier"

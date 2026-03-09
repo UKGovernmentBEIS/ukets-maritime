@@ -346,6 +346,7 @@ export class HtmlDiffService {
     let position = 0;
     const length = content.length;
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       if (position >= length) {
         break;

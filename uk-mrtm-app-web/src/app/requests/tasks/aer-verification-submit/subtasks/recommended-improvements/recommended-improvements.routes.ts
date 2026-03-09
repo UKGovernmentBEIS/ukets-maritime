@@ -16,9 +16,9 @@ export const RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
     canActivate: [canActivateRecommendedImprovementsSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-summary').then(
-        (c) => c.RecommendedImprovementsSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-summary'
+      ).then((c) => c.RecommendedImprovementsSummaryComponent),
   },
   {
     path: RecommendedImprovementsStep.EXIST_FORM,
@@ -29,9 +29,9 @@ export const RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
       backlink: backlinkResolver(RecommendedImprovementsStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-exist').then(
-        (c) => c.RecommendedImprovementsExistComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-exist'
+      ).then((c) => c.RecommendedImprovementsExistComponent),
   },
 
   {
@@ -43,9 +43,9 @@ export const RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
       backlink: backlinkResolver(RecommendedImprovementsStep.SUMMARY, RecommendedImprovementsStep.EXIST_FORM),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-list').then(
-        (c) => c.RecommendedImprovementsListComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-list'
+      ).then((c) => c.RecommendedImprovementsListComponent),
   },
   {
     path: RecommendedImprovementsStep.ITEM_FORM_ADD,
@@ -56,9 +56,9 @@ export const RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
       backlink: backlinkResolver(RecommendedImprovementsStep.SUMMARY, RecommendedImprovementsStep.ITEMS_LIST),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-improvement-form').then(
-        (c) => c.RecommendedImprovementsImprovementFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-improvement-form'
+      ).then((c) => c.RecommendedImprovementsImprovementFormComponent),
   },
   {
     path: `:reference/${RecommendedImprovementsStep.ITEM_FORM_EDIT}`,
@@ -72,9 +72,9 @@ export const RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-improvement-form').then(
-        (c) => c.RecommendedImprovementsImprovementFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-improvement-form'
+      ).then((c) => c.RecommendedImprovementsImprovementFormComponent),
   },
   {
     path: `:reference/${RecommendedImprovementsStep.ITEM_DELETE}`,
@@ -88,8 +88,8 @@ export const RECOMMENDED_IMPROVEMENTS_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-improvement-delete').then(
-        (c) => c.RecommendedImprovementsImprovementDeleteComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/recommended-improvements/recommended-improvements-improvement-delete'
+      ).then((c) => c.RecommendedImprovementsImprovementDeleteComponent),
   },
 ];

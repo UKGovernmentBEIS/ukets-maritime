@@ -9,8 +9,8 @@ import { PortCallsListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-list-of-port-calls-submitted',
-  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, PortCallsListSummaryTemplateComponent],
   standalone: true,
+  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, PortCallsListSummaryTemplateComponent],
   templateUrl: './aer-list-of-port-calls-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

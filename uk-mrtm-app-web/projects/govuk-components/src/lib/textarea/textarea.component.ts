@@ -1,10 +1,10 @@
-import { AfterViewInit, Component, computed, contentChild, input } from '@angular/core';
-import { ControlValueAccessor, ReactiveFormsModule } from '@angular/forms';
+import { AfterViewInit, Component, inject, Input } from '@angular/core';
+import { ControlContainer, ControlValueAccessor, NgControl, ReactiveFormsModule } from '@angular/forms';
 
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs';
 
-import { LabelDirective } from '../directives';
 import { ErrorMessageComponent } from '../error-message';
+import { FormService } from '../form';
 import { FormInput } from '../form/form-input';
 import { SafeHtmlPipe } from '../pipes/safe-html.pipe';
 import { LabelSizeType } from './label-size.type';
@@ -12,43 +12,54 @@ import { LabelSizeType } from './label-size.type';
 /*
   eslint-disable
   @angular-eslint/prefer-on-push-component-change-detection,
+  @typescript-eslint/no-empty-function,
   @angular-eslint/component-selector
 */
 @Component({
   selector: 'div[govuk-textarea]',
-  imports: [ReactiveFormsModule, ErrorMessageComponent, SafeHtmlPipe],
   standalone: true,
+  imports: [ReactiveFormsModule, ErrorMessageComponent, SafeHtmlPipe],
   templateUrl: './textarea.component.html',
 })
 export class TextareaComponent extends FormInput implements ControlValueAccessor, AfterViewInit {
   private static readonly WARNING_PERCENTAGE = 0.9;
 
-  readonly label = input<string>();
-  readonly labelSize = input<LabelSizeType>('normal');
-  readonly isLabelHidden = input(false);
-  readonly hint = input<string>();
-  readonly rows = input('5');
-  readonly maxLength = input<number>();
-
-  readonly templateLabel = contentChild(LabelDirective);
-
-  readonly currentLabelSize = computed(() => {
-    switch (this.labelSize()) {
-      case 'small':
-        return 'govuk-label govuk-label--s';
-      case 'medium':
-        return 'govuk-label govuk-label--m';
-      case 'large':
-        return 'govuk-label govuk-label--l';
-      default:
-        return 'govuk-label';
-    }
-  });
-
+  @Input() hint: string;
+  @Input() rows = '5';
+  @Input() maxLength: number;
+  currentLabel = 'Insert text details';
+  currentLabelSize = 'govuk-label';
+  isLabelHidden = true;
   onBlur: (_: any) => any;
 
   constructor() {
-    super();
+    const ngControl = inject(NgControl, { self: true, optional: true })!;
+    const formService = inject(FormService);
+    const container = inject(ControlContainer, { optional: true })!;
+
+    super(ngControl, formService, container);
+  }
+
+  @Input() set label(label: string) {
+    this.currentLabel = label;
+    this.isLabelHidden = false;
+  }
+
+  @Input() set labelSize(size: LabelSizeType) {
+    switch (size) {
+      case 'small':
+        this.currentLabelSize = 'govuk-label govuk-label--s';
+        break;
+      case 'medium':
+        this.currentLabelSize = 'govuk-label govuk-label--m';
+        break;
+      case 'large':
+        this.currentLabelSize = 'govuk-label govuk-label--l';
+        break;
+      default:
+        this.currentLabelSize = 'govuk-label';
+        break;
+    }
   }
 
   writeValue(): void {}
@@ -70,11 +81,11 @@ export class TextareaComponent extends FormInput implements ControlValueAccessor
   }
 
   exceedsMaxLength(length: number): boolean {
-    return length > this.maxLength();
+    return length > this.maxLength;
   }
 
   approachesMaxLength(length: number): boolean {
-    return !this.exceedsMaxLength(length) && length >= this.maxLength() * TextareaComponent.WARNING_PERCENTAGE;
+    return !this.exceedsMaxLength(length) && length >= this.maxLength * TextareaComponent.WARNING_PERCENTAGE;
   }
 
   ngAfterViewInit(): void {

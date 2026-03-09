@@ -9,14 +9,14 @@ describe('VerificationBodiesListComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [ReactiveFormsModule, VerificationBodiesListComponent],
-    standalone: true,
     template: `
       <form [formGroup]="formGroup">
         <mrtm-verification-bodies-list></mrtm-verification-bodies-list>
       </form>
     `,
+    standalone: true,
     schemas: [NO_ERRORS_SCHEMA],
+    imports: [ReactiveFormsModule, VerificationBodiesListComponent],
   })
   class TestComponent {
     formGroup = new FormGroup<Record<string, FormControl | FormArray>>({

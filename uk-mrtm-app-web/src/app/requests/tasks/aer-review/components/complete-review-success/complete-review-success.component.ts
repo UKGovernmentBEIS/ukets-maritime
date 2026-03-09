@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-submit-success',
-  imports: [RouterLink, LinkDirective, PanelComponent],
   standalone: true,
+  imports: [RouterLink, LinkDirective, PanelComponent],
   templateUrl: './complete-review-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

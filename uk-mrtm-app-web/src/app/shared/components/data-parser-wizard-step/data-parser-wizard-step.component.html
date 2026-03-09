@@ -1,28 +1,28 @@
-<form (ngSubmit)="onSubmit()" [formGroup]="formGroup()">
+<form (ngSubmit)="onSubmit()" [formGroup]="formGroup">
   <div class="govuk-grid-row">
-    <div [class]="isTwoThirds() ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
+    <div [class]="isTwoThirds ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
       @if (isSummaryDisplayedSubject | async) {
-        <mrtm-csv-error-summary [form]="formGroup()"></mrtm-csv-error-summary>
-        <mrtm-xml-error-summary [xmlErrors]="xmlErrors()"></mrtm-xml-error-summary>
+        <mrtm-csv-error-summary [form]="formGroup"></mrtm-csv-error-summary>
+        <mrtm-xml-error-summary [xmlErrors]="xmlErrors"></mrtm-xml-error-summary>
       }
-      <netz-page-heading [caption]="caption()">{{ heading() }}</netz-page-heading>
+      <netz-page-heading [caption]="caption">{{ heading }}</netz-page-heading>
       <ng-content></ng-content>
     </div>
   </div>
   <ng-content select="[slot=fullWidthContent]"></ng-content>
-  @if (!hideSubmit()) {
-    <button netzPendingButton govukButton type="submit">{{ submitText() }}</button>
+  @if (!hideSubmit) {
+    <button netzPendingButton govukButton type="submit">{{ submitText }}</button>
   }
-  @if (showCancelLink()) {
+  @if (showCancelLink) {
     <div>
-      <a govukLink [routerLink]="cancelLinkPath()">Cancel</a>
+      <a govukLink [routerLink]="cancelLinkPath">Cancel</a>
     </div>
   }
 </form>
 
-@if (showReturnLink()) {
+@if (showReturnLink) {
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
     <netz-return-to-task-or-action-page />
   </div>
 }

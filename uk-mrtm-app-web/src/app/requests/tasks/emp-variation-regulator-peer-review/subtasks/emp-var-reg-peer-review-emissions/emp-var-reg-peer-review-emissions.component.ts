@@ -18,20 +18,20 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-emissions',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ListOfShipsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './emp-var-reg-peer-review-emissions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewEmissionsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       ships: this.store.select(empCommonQuery.selectListOfShips)(),
       variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[

@@ -2,6 +2,8 @@ import { Provider } from '@angular/core';
 import { FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { AerShipAggregatedData } from '@mrtm/api';
 
 import { RequestTaskStore } from '@netz/common/store';
@@ -15,7 +17,6 @@ import { AER_AGGREGATED_DATA_PARAM } from '@requests/common/aer/subtasks/aer-agg
 import { aerAggregatedDataValidators } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.validators';
 import { AerAggregatedDataAnnualEmissionsFormGroupModel } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions/aer-aggregated-data-annual-emissions.types';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { isNil } from '@shared/utils';
 
 const emissionsGroupValidator =
   (validationMessage: string): ValidatorFn =>

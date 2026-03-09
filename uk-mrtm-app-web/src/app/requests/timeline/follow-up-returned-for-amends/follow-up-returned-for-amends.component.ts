@@ -7,8 +7,8 @@ import { FollowUpReturnedForAmendsSummaryTemplateComponent } from '@shared/compo
 
 @Component({
   selector: 'mrtm-follow-up-returned-for-amends',
-  imports: [FollowUpReturnedForAmendsSummaryTemplateComponent],
   standalone: true,
+  imports: [FollowUpReturnedForAmendsSummaryTemplateComponent],
   templateUrl: './follow-up-returned-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

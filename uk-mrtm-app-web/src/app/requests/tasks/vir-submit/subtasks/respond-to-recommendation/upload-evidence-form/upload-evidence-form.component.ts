@@ -16,10 +16,10 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-upload-evidence-form',
-  imports: [WizardStepComponent, MultipleFileInputComponent, ReactiveFormsModule],
   standalone: true,
-  templateUrl: './upload-evidence-form.component.html',
+  imports: [WizardStepComponent, MultipleFileInputComponent, ReactiveFormsModule],
   providers: [uploadEvidenceFormProvider],
+  templateUrl: './upload-evidence-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UploadEvidenceFormComponent {

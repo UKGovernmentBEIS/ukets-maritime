@@ -8,8 +8,8 @@ describe('PhaseBannerComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [PhaseBannerComponent],
     standalone: true,
+    imports: [PhaseBannerComponent],
     template: `
       <govuk-phase-banner [phase]="phase">Test content</govuk-phase-banner>
     `,

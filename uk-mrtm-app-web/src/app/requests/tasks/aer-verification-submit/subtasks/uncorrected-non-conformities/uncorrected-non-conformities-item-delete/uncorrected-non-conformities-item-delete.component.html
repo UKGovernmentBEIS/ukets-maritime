@@ -5,6 +5,6 @@
 
   <div class="govuk-button-group">
     <button type="button" (click)="onSubmit()" netzPendingButton govukWarnButton>Yes, delete</button>
-    <a govukLink class="govuk-link--no-visited-state" [routerLink]="[`../../${wizardStep.ITEMS_LIST}`]">Cancel</a>
+    <a govukLink class="govuk-link--no-visited-state" [routerLink]="['../../' + wizardStep.ITEMS_LIST]">Cancel</a>
   </div>
 </div>

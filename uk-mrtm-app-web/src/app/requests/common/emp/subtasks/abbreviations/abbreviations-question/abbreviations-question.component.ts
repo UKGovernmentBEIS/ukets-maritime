@@ -25,6 +25,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-abbreviations-question',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -35,7 +36,6 @@ import { WizardStepComponent } from '@shared/components';
     LegendDirective,
     ButtonDirective,
   ],
-  standalone: true,
   templateUrl: './abbreviations-question.component.html',
   providers: [abbreviationsQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -47,7 +47,7 @@ export class AbbreviationsQuestionComponent {
   private readonly wizardStepComponent = viewChild.required(WizardStepComponent);
 
   protected readonly abbreviationsMap = abbreviationsMap;
-  readonly existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
+  existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
     initialValue: this.existCtrl.value,
   });
 

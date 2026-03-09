@@ -5,11 +5,12 @@ import { LinkDirective, TableComponent } from '@netz/govuk-components';
 
 import { SummaryDownloadFilesComponent } from '@shared/components';
 import { provideReductionClaimDetailsSummaryColumns } from '@shared/components/summaries/reduction-claim-details-summary-template/reduction-claim-details-summary-template.consts';
-import { BigNumberPipe, FuelOriginTitlePipe, InitialDataSourcePipe } from '@shared/pipes';
-import { ReductionClaimDetailsListItemDto, WithNeedsReview } from '@shared/types';
+import { BigNumberPipe, FuelOriginTitlePipe } from '@shared/pipes';
+import { ReductionClaimDetailsListItemDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-reduction-claim-details-summary-template',
+  standalone: true,
   imports: [
     TableComponent,
     FuelOriginTitlePipe,
@@ -17,16 +18,13 @@ import { ReductionClaimDetailsListItemDto, WithNeedsReview } from '@shared/types
     SummaryDownloadFilesComponent,
     LinkDirective,
     RouterLink,
-    InitialDataSourcePipe,
   ],
-  standalone: true,
   templateUrl: './reduction-claim-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReductionClaimDetailsSummaryTemplateComponent {
   public readonly editable = input<boolean>(false);
-  public readonly data = input<Array<WithNeedsReview<ReductionClaimDetailsListItemDto>>>();
-  public readonly dataSupplierName = input<string>();
+  public readonly data = input<Array<ReductionClaimDetailsListItemDto>>();
   public readonly columns = computed(() => provideReductionClaimDetailsSummaryColumns(this.editable()));
   public readonly handleChange = output<ReductionClaimDetailsListItemDto>();
   public readonly handleDelete = output<ReductionClaimDetailsListItemDto>();
@@ -39,9 +37,5 @@ export class ReductionClaimDetailsSummaryTemplateComponent {
   public onChange(event: Event, item: ReductionClaimDetailsListItemDto): void {
     event.preventDefault();
     this.handleChange.emit(item);
-  }
-
-  onDefineRowAdditionalStyle(item: WithNeedsReview<ReductionClaimDetailsListItemDto>): string | string[] | undefined {
-    return item?.needsReview ? 'needs-review' : undefined;
   }
 }

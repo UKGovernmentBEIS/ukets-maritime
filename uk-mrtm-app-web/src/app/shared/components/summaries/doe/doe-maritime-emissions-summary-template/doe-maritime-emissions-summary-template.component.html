@@ -5,19 +5,7 @@
       <dt govukSummaryListRowKey>Why are you determining the maritime emissions or emissions figure for surrender?</dt>
       <dd
         govukSummaryListRowValue
-        [notProvided]="maritimeEmissions?.determinationReason?.details?.type | i18nSelect: determineReasonTypeMap"></dd>
-      @if (isEditable()) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep().DETERMINATION_REASON]" [queryParams]="{ change: true }">Change</a>
-        </dd>
-      }
-    </div>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Notice text</dt>
-      <dd
-        govukSummaryListRowValue
-        class="pre-wrap"
-        [notProvided]="maritimeEmissions?.determinationReason?.details?.noticeText"></dd>
+        [notProvided]="maritimeEmissions?.determinationReason?.type | i18nSelect: determineReasonTypeMap"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="[wizardStep().DETERMINATION_REASON]" [queryParams]="{ change: true }">Change</a>
@@ -64,7 +52,7 @@
         govukSummaryListRowValue
         [notProvided]="
           maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions
-            ? `${maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions} tCO2e`
+            ? maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions + ' tCO2e'
             : maritimeEmissions?.totalMaritimeEmissions?.totalReportableEmissions
         "></dd>
       @if (isEditable()) {
@@ -81,7 +69,7 @@
         govukSummaryListRowValue
         [notProvided]="
           maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction
-            ? `${maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction} tCO2e`
+            ? maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction + ' tCO2e'
             : maritimeEmissions?.totalMaritimeEmissions?.lessVoyagesInNorthernIrelandDeduction
         "></dd>
       @if (isEditable()) {
@@ -98,7 +86,7 @@
         govukSummaryListRowValue
         [notProvided]="
           maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions
-            ? `${maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions} tCO2e`
+            ? maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions + ' tCO2e'
             : maritimeEmissions?.totalMaritimeEmissions?.surrenderEmissions
         "></dd>
       @if (isEditable()) {
@@ -158,7 +146,7 @@
           govukSummaryListRowValue
           [notProvided]="
             maritimeEmissions?.feeDetails?.totalBillableHours
-              ? `${maritimeEmissions?.feeDetails?.totalBillableHours} hours`
+              ? maritimeEmissions?.feeDetails?.totalBillableHours + ' hours'
               : maritimeEmissions?.feeDetails?.totalBillableHours
           "></dd>
         @if (isEditable()) {
@@ -173,7 +161,7 @@
           govukSummaryListRowValue
           [notProvided]="
             maritimeEmissions?.feeDetails?.hourlyRate
-              ? `${(maritimeEmissions?.feeDetails?.hourlyRate | currency: 'GBP' : 'symbol' : '.0')} per hour`
+              ? (maritimeEmissions?.feeDetails?.hourlyRate | currency: 'GBP' : 'symbol' : '.0') + ' per hour'
               : maritimeEmissions?.feeDetails?.hourlyRate
           "></dd>
         @if (isEditable()) {

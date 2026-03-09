@@ -20,7 +20,7 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(EmissionSourcesSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('emissionSources', {
+    component.emissionSources = {
       listCompletion: {
         reference: 'list completion ref',
         version: 'list completion  version',
@@ -43,8 +43,8 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
       emissionCompliance: {
         exist: false,
       },
-    });
-    fixture.componentRef.setInput('emissionSourcesMap', {
+    };
+    component.emissionSourcesMap = {
       title: 'Procedures related to emissions sources and emissions factors',
       listCompletion: {
         title: 'Manage the completeness of the list of ships and emission sources',
@@ -56,13 +56,13 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
         title: 'Emissions reduction claim',
         caption: 'Will you be making an emissions reduction claim relating to eligible fuels?',
       },
-    });
-    fixture.componentRef.setInput('wizardStep', {
+    };
+    component.wizardStep = {
       LIST_COMPLETION: 'completion',
       EMISSION_FACTORS: 'factors',
       EMISSION_COMPLIANCE: 'compliance',
-    });
-    fixture.componentRef.setInput('isEditable', true);
+    };
+    component.isEditable = true;
     page = new Page(fixture);
     fixture.detectChanges();
   });

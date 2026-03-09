@@ -63,18 +63,6 @@ export class BasePage<C> {
     return this.query<HTMLHeadingElement>('h3');
   }
 
-  get heading4(): HTMLHeadingElement {
-    return this.query<HTMLHeadingElement>('h4');
-  }
-
-  get paragraph(): HTMLParagraphElement {
-    return this.query<HTMLParagraphElement>('p');
-  }
-
-  get paragraphs(): HTMLParagraphElement[] {
-    return this.queryAll<HTMLParagraphElement>('p');
-  }
-
   get fileDeleteButtons(): HTMLButtonElement[] {
     return this.queryAll<HTMLButtonElement>('.moj-multi-file-upload__delete');
   }
@@ -107,14 +95,6 @@ export class BasePage<C> {
     return Array.from(this.errorSummary.querySelectorAll<HTMLAnchorElement>('a')).map((anchor) =>
       anchor.textContent.trim(),
     );
-  }
-
-  get link(): HTMLAnchorElement {
-    return this.query<HTMLAnchorElement>('a.govuk-link');
-  }
-
-  get standardButton(): HTMLButtonElement {
-    return this.query<HTMLButtonElement>('button[type="button"]');
   }
 
   get submitButton(): HTMLButtonElement {

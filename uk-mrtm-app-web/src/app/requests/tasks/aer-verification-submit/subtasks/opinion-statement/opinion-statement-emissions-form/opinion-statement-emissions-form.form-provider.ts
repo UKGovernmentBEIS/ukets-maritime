@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
+import { clone, isEmpty } from 'lodash-es';
+
 import { AerOpinionStatement } from '@mrtm/api';
 
 import { RequestTaskStore } from '@netz/common/store';
@@ -8,7 +10,6 @@ import { GovukValidators } from '@netz/govuk-components';
 
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-submit/+state/aer-verification-submit.selectors';
-import { isEmpty } from '@shared/utils';
 
 export type AerOpinionStatementTotalEmissionsFormModel = Record<
   keyof Pick<
@@ -39,7 +40,7 @@ const niDeductionLessThanTotalEmissionsValidator = (): ValidatorFn => {
     } else {
       if (niDeductionCtrl.errors?.invalidLessVoyagesInNorthernIrelandDeduction) {
         delete niDeductionCtrl.errors.invalidLessVoyagesInNorthernIrelandDeduction;
-        const existingErrors = structuredClone(niDeductionCtrl.errors);
+        const existingErrors = clone(niDeductionCtrl.errors);
         // Workaround to trigger the UI refresh on `govuk-error-message`
         // Sets it to null, then sets it to previous errors if they exist
         niDeductionCtrl.setErrors(null);
@@ -71,7 +72,7 @@ const surrenderEmissionsLessThanNIDeductionValidator = (): ValidatorFn => {
     } else {
       if (surrenderEmissionsCtrl.errors?.invalidSurrenderEmissions) {
         delete surrenderEmissionsCtrl.errors.invalidSurrenderEmissions;
-        const existingErrors = structuredClone(surrenderEmissionsCtrl.errors);
+        const existingErrors = clone(surrenderEmissionsCtrl.errors);
         // Workaround to trigger the UI refresh on `govuk-error-message`
         // Sets it to null, then sets it to previous errors if they exist
         surrenderEmissionsCtrl.setErrors(null);

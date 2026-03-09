@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class MrtmSwaggerConfig {
     private final BuildProperties buildProperties;
-    private static final String EXTERNAL_API_VERSION = "2.0.0";
+    private static final String EXTERNAL_API_VERSION = "1.3.0";
 
     public MrtmSwaggerConfig(BuildProperties buildProperties) {
         this.buildProperties = buildProperties;
@@ -42,7 +42,7 @@ public class MrtmSwaggerConfig {
             .url("https://manage-emissions-reporting.service.gov.uk/maritime/api")
             .description("Production environment");
         Server uatServer = new Server()
-                .url("https://qa1.manage-emissions-reporting.service.gov.uk/maritime/api")
+                .url("https://uat1.ukpmrv.net/maritime/api")
                 .description("UAT environment");
 
         return GroupedOpenApi.builder()

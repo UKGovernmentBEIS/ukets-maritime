@@ -23,6 +23,7 @@ import { determinationTypeMap } from '@shared/types/maritime-emissions.types';
 
 @Component({
   selector: 'mrtm-total-maritime-emissions',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -33,10 +34,9 @@ import { determinationTypeMap } from '@shared/types/maritime-emissions.types';
     MultipleFileInputComponent,
     I18nSelectPipe,
   ],
-  standalone: true,
   templateUrl: './total-maritime-emissions.component.html',
-  providers: [totalMaritimeEmissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [totalMaritimeEmissionsFormProvider],
 })
 export class TotalMaritimeEmissionsComponent {
   protected readonly form: FormGroup<TotalMaritimeEmissionsFormModel> = inject(TASK_FORM);

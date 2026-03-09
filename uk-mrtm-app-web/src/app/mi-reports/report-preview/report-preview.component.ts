@@ -22,10 +22,10 @@ import { MI_REPORT_FORM_COMPONENT, MI_REPORT_FORM_GROUP } from '@mi-reports/core
 import { MiReportType } from '@mi-reports/core/mi-report-type.enum';
 import { MI_REPORT_USE_CASE_SERVICE, MiReportUseCaseService } from '@mi-reports/use-cases/common';
 import { WizardStepComponent } from '@shared/components';
-import { ScrollablePaneDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-report-preview',
+  standalone: true,
   imports: [
     PendingButtonDirective,
     ButtonDirective,
@@ -34,9 +34,7 @@ import { ScrollablePaneDirective } from '@shared/directives';
     WizardStepComponent,
     ReactiveFormsModule,
     NgComponentOutlet,
-    ScrollablePaneDirective,
   ],
-  standalone: true,
   templateUrl: './report-preview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

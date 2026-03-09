@@ -1,6 +1,6 @@
-import { OperatorImprovementResponse } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { OperatorImprovementResponse } from '@mrtm/api';
 
 export enum VirRespondToRecommendationWizardStep {
   SUMMARY = '../',

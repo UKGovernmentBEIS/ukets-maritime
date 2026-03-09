@@ -16,7 +16,7 @@ import org.springframework.http.converter.json.MappingJackson2HttpMessageConvert
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderStagingDetailsDTO;
+import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
 import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderViewServiceDelegator;
 import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
 import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
@@ -252,7 +252,7 @@ class RequestTaskControllerTest {
     void getThirdPartyDataProviderInfoByRequestId_with_content() throws Exception {
         AppUser appUser = AppUser.builder().userId("id").build();
         Long requestTaskId = 1L;
-        ThirdPartyDataProviderStagingDetailsDTO response = ThirdPartyDataProviderStagingDetailsDTO.builder()
+        ThirdPartyDataProviderDTO response = ThirdPartyDataProviderDTO.builder()
             .providerName("provider name")
             .build();
 

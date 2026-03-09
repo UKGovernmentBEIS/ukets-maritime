@@ -10,10 +10,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-greenhouse-gas-cross-checks',
-  imports: [WizardStepComponent, AboutProcedureDetailsComponent, EmpProcedureFormComponent, ReactiveFormsModule],
   standalone: true,
-  templateUrl: './greenhouse-gas-cross-checks.component.html',
+  imports: [WizardStepComponent, AboutProcedureDetailsComponent, EmpProcedureFormComponent, ReactiveFormsModule],
   providers: [greenhouseGasCrossChecksFormProvider],
+  templateUrl: './greenhouse-gas-cross-checks.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GreenhouseGasCrossChecksComponent extends EmpProcedureWizardStepAbstract {

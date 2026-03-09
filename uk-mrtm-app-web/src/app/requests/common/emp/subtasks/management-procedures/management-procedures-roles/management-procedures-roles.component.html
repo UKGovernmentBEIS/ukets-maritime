@@ -11,17 +11,17 @@
     holders or their roles perform.
   </p>
   <div formArrayName="monitoringReportingRoles">
-    @for (control of rolesCtrl.controls; track control) {
-      <fieldset govukFieldset [formGroupName]="$index">
+    @for (control of rolesCtrl.controls; track control; let i = $index) {
+      <fieldset govukFieldset [formGroupName]="i">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <legend legendSize="medium" govukLegend>Role {{ $index + 1 }}</legend>
+            <legend legendSize="medium" govukLegend>Role {{ i + 1 }}</legend>
           </div>
           <div class="govuk-grid-column-one-third govuk-!-text-align-right">
             @if (rolesCtrl.length > 1) {
               <button
                 govukSecondaryButton
-                (click)="removeManagementProceduresRole($index)"
+                (click)="removeManagementProceduresRole(i)"
                 type="button"
                 class="govuk-!-margin-bottom-0">
                 Remove

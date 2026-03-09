@@ -1,13 +1,13 @@
 import { Provider } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+import { isNil } from 'lodash-es';
 import { isBefore } from 'date-fns';
 
 import { DateInputValidators, GovukValidators } from '@netz/govuk-components';
 
 import { CompleteWorkFormGroupModel } from '@mi-reports/components/completed-work-form/completed-work-form.types';
 import { MI_REPORT_FORM_GROUP } from '@mi-reports/core/mi-report.providers';
-import { isNil } from '@shared/utils';
 import { todayOrPastDateValidator } from '@shared/validators';
 
 const datePeriodValidator: ValidatorFn = (group: FormGroup<CompleteWorkFormGroupModel>): ValidationErrors => {

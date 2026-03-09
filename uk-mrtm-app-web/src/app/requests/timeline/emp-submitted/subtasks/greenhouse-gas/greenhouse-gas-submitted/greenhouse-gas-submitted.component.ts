@@ -31,7 +31,7 @@ interface ViewModel {
 export class GreenhouseGasSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     greenhouseGas: this.store.select(empSubmittedQuery.selectGreenhouseGas)(),
     greenhouseGasMap: greenhouseGasMap,
     reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('greenhouseGas'))(),

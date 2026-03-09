@@ -1,6 +1,6 @@
-import { buildSavePartiallyNotFoundError, BusinessError } from '@netz/common/error';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { buildSavePartiallyNotFoundError, BusinessError } from '@netz/common/error';
 
 const verificationBodyBusinessLink = (
   verificationBodyId: number,

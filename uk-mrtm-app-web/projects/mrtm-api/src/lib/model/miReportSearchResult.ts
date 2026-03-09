@@ -9,6 +9,6 @@
  */
 
 export interface MiReportSearchResult {
-  miReportType?: string;
   id?: number;
+  miReportType?: string;
 }

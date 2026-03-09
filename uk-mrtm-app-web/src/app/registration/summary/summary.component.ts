@@ -11,10 +11,12 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 import { UserRegistrationStore } from '@registration/store/user-registration.store';
 import { SummaryHeaderComponent, UserInputSummaryTemplateComponent } from '@shared/components';
-import { cleanDeep } from '@shared/utils';
+import cleanDeep from 'clean-deep';
 
 @Component({
   selector: 'mrtm-summary',
+  templateUrl: './summary.component.html',
+  standalone: true,
   imports: [
     AsyncPipe,
     ButtonDirective,
@@ -22,8 +24,6 @@ import { cleanDeep } from '@shared/utils';
     SummaryHeaderComponent,
     UserInputSummaryTemplateComponent,
   ],
-  standalone: true,
-  templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryComponent {

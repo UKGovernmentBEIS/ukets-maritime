@@ -24,7 +24,7 @@
       "prefix": "mrtm",
       "architect": {
         "build": {
-          "builder": "@angular/build:application",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/uk-mrtm-app-web",
             "index": "src/index.html",
@@ -44,14 +44,19 @@
                 "output": "/assets/"
               }
             ],
-            "styles": ["src/styles.scss"],
+            "styles": ["src/styles.scss", "node_modules/dialog-polyfill/dialog-polyfill.css"],
             "stylePreprocessorOptions": {
               "includePaths": ["node_modules/govuk-frontend/dist/govuk/"]
             },
             "scripts": [],
             "allowedCommonJsDependencies": [
+              "keycloak-js",
+              "clean-deep",
+              "crypto-js",
+              "base64-js",
               "js-sha256",
               "google-libphonenumber",
+              "fast-xml-parser",
               "papaparse"
             ]
           },
@@ -87,7 +92,7 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "builder": "@angular/build:dev-server",
+          "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
               "buildTarget": "uk-mrtm-app-web:build:production"
@@ -103,7 +108,7 @@
           }
         },
         "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
+          "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "buildTarget": "uk-mrtm-app-web:build"
           }
@@ -134,7 +139,7 @@
       },
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "project": "projects/govuk-components/ng-package.json"
           },
@@ -158,8 +163,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/govuk-components/**/*.ts", "projects/govuk-components/**/*.html"],
-            "eslintConfig": "projects/govuk-components/eslint.config.js"
+            "lintFilePatterns": ["projects/govuk-components/**/*.ts", "projects/govuk-components/**/*.html"]
           }
         }
       }
@@ -171,7 +175,7 @@
       "prefix": "lib",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "project": "projects/mrtm-api/ng-package.json"
           },
@@ -188,8 +192,7 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/mrtm-api/**/*.ts"],
-            "eslintConfig": "projects/mrtm-api/eslint.config.js"
+            "lintFilePatterns": ["projects/mrtm-api/**/*.ts"]
           }
         }
       }
@@ -201,7 +204,7 @@
       "prefix": "netz",
       "architect": {
         "build": {
-          "builder": "@angular/build:ng-packagr",
+          "builder": "@angular-devkit/build-angular:ng-packagr",
           "options": {
             "project": "projects/common/ng-package.json"
           },
@@ -216,7 +219,7 @@
           "defaultConfiguration": "production"
         },
         "test": {
-          "builder": "@angular/build:karma",
+          "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "tsConfig": "projects/common/tsconfig.spec.json",
             "polyfills": ["zone.js", "zone.js/testing"]
@@ -225,41 +228,14 @@
         "lint": {
           "builder": "@angular-eslint/builder:lint",
           "options": {
-            "lintFilePatterns": ["projects/common/**/*.ts", "projects/common/**/*.html"],
-            "eslintConfig": "projects/common/eslint.config.js"
+            "lintFilePatterns": ["projects/common/**/*.ts", "projects/common/**/*.html"]
           }
         }
       }
     }
   },
   "cli": {
-    "schematicCollections": ["angular-eslint"],
+    "schematicCollections": ["@angular-eslint/schematics"],
     "analytics": false
-  },
-  "schematics": {
-    "@schematics/angular:component": {
-      "type": "component"
-    },
-    "@schematics/angular:directive": {
-      "type": "directive"
-    },
-    "@schematics/angular:service": {
-      "type": "service"
-    },
-    "@schematics/angular:guard": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:interceptor": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:module": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:pipe": {
-      "typeSeparator": "."
-    },
-    "@schematics/angular:resolver": {
-      "typeSeparator": "."
-    }
   }
 }

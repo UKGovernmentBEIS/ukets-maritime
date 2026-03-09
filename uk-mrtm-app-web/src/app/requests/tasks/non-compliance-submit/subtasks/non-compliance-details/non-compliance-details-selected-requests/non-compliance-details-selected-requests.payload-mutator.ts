@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
+import { isNil } from 'lodash-es';
 
 import { PayloadMutator } from '@netz/common/forms';
 
@@ -8,7 +9,6 @@ import {
   NonComplianceDetailsStep,
   NonComplianceSubmitTaskPayload,
 } from '@requests/common/non-compliance';
-import { isNil } from '@shared/utils';
 
 export class NonComplianceDetailsSelectedRequestsPayloadMutator extends PayloadMutator {
   readonly subtask = NON_COMPLIANCE_DETAILS_SUB_TASK;

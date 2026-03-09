@@ -33,11 +33,11 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emission-sources-variation-review-decision',
-  imports: [EmissionSourcesSummaryTemplateComponent, ReactiveFormsModule, WizardStepComponent, ReviewDecisionComponent],
   standalone: true,
+  imports: [EmissionSourcesSummaryTemplateComponent, ReactiveFormsModule, WizardStepComponent, ReviewDecisionComponent],
   templateUrl: './emission-sources-variation-review-decision.component.html',
-  providers: [reviewEmpSubtaskDecisionFormProvider(EMISSION_SOURCES_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reviewEmpSubtaskDecisionFormProvider(EMISSION_SOURCES_SUB_TASK)],
 })
 export class EmissionSourcesVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -47,7 +47,7 @@ export class EmissionSourcesVariationReviewDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       emissionSources: this.store.select(empCommonQuery.selectEmissionSources)(),
       originalEmissionSources: this.store.select(empVariationReviewQuery.selectOriginalEmissionSources)(),

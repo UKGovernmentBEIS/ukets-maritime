@@ -1,14 +1,8 @@
-<div
-  [formControlName]="controlName()"
-  [hint]="hint()"
-  [isInline]="true"
-  [legend]="legend()"
-  legendSize="medium"
-  govuk-radio>
-  <govuk-radio-option [value]="positiveValue()" [label]="positiveLabel()"></govuk-radio-option>
-  <govuk-radio-option [value]="negativeValue()" [label]="negativeLabel()"></govuk-radio-option>
+<div [formControlName]="controlName" [hint]="hint" [isInline]="true" [legend]="legend" legendSize="medium" govuk-radio>
+  <govuk-radio-option [value]="positiveValue" [label]="positiveLabel"></govuk-radio-option>
+  <govuk-radio-option [value]="negativeValue" [label]="negativeLabel"></govuk-radio-option>
 </div>
 
-<div [class.govuk-radios__conditional--hidden]="(value$ | async) !== positiveValue()" [id]="conditionalId">
+<div [class.govuk-radios__conditional--hidden]="(value$ | async) !== positiveValue" [id]="conditionalId">
   <ng-content select="[govukConditionalContent]"></ng-content>
 </div>

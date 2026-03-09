@@ -90,7 +90,7 @@ describe('SendForPeerReviewComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Send for peer review');
+      expect(page.heading1.textContent.trim()).toEqual('Send for peer review');
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -130,7 +130,7 @@ describe('SendForPeerReviewComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Send for peer review');
+      expect(page.heading1.textContent.trim()).toEqual('Send for peer review');
       expect(page.submitButton).toBeTruthy();
     });
 

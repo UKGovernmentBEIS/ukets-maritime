@@ -27,5 +27,4 @@ export interface Aer {
   aggregatedData: AerAggregatedData;
   smf: AerSmf;
   totalEmissions: AerTotalEmissions;
-  thirdPartyDataProviderName?: string;
 }

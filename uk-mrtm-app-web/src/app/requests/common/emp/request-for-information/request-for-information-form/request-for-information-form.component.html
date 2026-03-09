@@ -5,24 +5,19 @@
   [isTwoThirds]="true"
   [showReturnLink]="true">
   <ng-container formArrayName="questions">
-    @for (control of questionsCtr.controls; track control) {
-      <fieldset govukFieldset id="question-{{ $index }}">
+    @for (control of questionsCtr.controls; track control; let i = $index) {
+      <fieldset govukFieldset id="question-{{ i }}">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <legend govukLegend legendSize="medium">Question {{ !$first ? $index + 1 : '' }}</legend>
+            <legend govukLegend legendSize="medium">Question {{ i > 0 ? i + 1 : '' }}</legend>
           </div>
           <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-            @if ($count > 1) {
-              <button (click)="removeQuestion($index)" govukSecondaryButton type="button">Remove</button>
+            @if (questionsCtr.controls.length > 1) {
+              <button (click)="removeQuestion(i)" govukSecondaryButton type="button">Remove</button>
             }
           </div>
         </div>
-        <div
-          [label]="`Question ${$index + 1}`"
-          [isLabelHidden]="true"
-          govuk-textarea
-          [maxLength]="10000"
-          [formControlName]="$index"></div>
+        <div govuk-textarea [maxLength]="10000" [formControlName]="i"></div>
       </fieldset>
     }
   </ng-container>
@@ -37,7 +32,7 @@
   <div
     govuk-date-input
     label="Set response deadline"
-    labelSize="medium"
+    legendSize="medium"
     formControlName="deadline"
     hint="For example, 27 3 2022"></div>
 </mrtm-wizard-step>

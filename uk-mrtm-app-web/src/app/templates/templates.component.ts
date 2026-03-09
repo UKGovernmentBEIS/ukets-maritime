@@ -40,6 +40,10 @@ import {
 
 @Component({
   selector: 'mrtm-templates',
+  templateUrl: './templates.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  providers: [DestroySubject],
   imports: [
     AsyncPipe,
     ButtonDirective,
@@ -56,10 +60,6 @@ import {
     TableComponent,
     PaginationComponent,
   ],
-  standalone: true,
-  templateUrl: './templates.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TemplatesComponent {
   private readonly fb = inject(UntypedFormBuilder);

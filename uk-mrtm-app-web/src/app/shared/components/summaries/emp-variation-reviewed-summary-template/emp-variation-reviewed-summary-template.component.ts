@@ -17,6 +17,7 @@ import { EmpVariationReviewedDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-variation-reviewed-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -28,7 +29,6 @@ import { EmpVariationReviewedDto } from '@shared/types';
     SummaryDownloadFilesComponent,
     RouterLink,
   ],
-  standalone: true,
   templateUrl: './emp-variation-reviewed-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

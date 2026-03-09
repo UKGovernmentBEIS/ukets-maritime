@@ -8,15 +8,15 @@ import { NotificationCompleted } from '@shared/types/notification-completed.inte
 
 @Component({
   selector: 'mrtm-notification-completed',
-  imports: [NotificationCompletedSummaryTemplateComponent],
   standalone: true,
+  imports: [NotificationCompletedSummaryTemplateComponent],
   templateUrl: './notification-completed.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationCompletedComponent {
   private readonly store = inject(RequestActionStore);
 
-  readonly vm: Signal<NotificationCompleted> = computed(() => {
+  vm: Signal<NotificationCompleted> = computed(() => {
     return {
       request: this.store.select(notificationCompletedQuery.selectRequest)(),
       response: this.store.select(notificationCompletedQuery.selectResponse)(),

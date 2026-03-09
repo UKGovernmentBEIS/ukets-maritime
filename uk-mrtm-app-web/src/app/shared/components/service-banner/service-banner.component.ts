@@ -7,9 +7,9 @@ import { UIConfigurationService } from '@mrtm/api';
 
 @Component({
   selector: 'mrtm-service-banner',
-  imports: [AsyncPipe],
   standalone: true,
   templateUrl: './service-banner.component.html',
+  imports: [AsyncPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ServiceBannerComponent {

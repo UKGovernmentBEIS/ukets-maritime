@@ -7,8 +7,8 @@ import { PEER_REVIEW_DECISION_TEXT_MAP } from '@requests/common/subtasks/peer-re
 
 @Component({
   selector: 'mrtm-emp-peer-review-decision-success',
-  imports: [PanelComponent, RouterLink, LinkDirective],
   standalone: true,
+  imports: [PanelComponent, RouterLink, LinkDirective],
   templateUrl: './peer-review-decision-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

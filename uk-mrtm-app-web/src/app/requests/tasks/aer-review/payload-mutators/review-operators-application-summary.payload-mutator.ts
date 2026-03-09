@@ -2,6 +2,7 @@ import { Provider } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
+import { isNil } from 'lodash-es';
 
 import { AerDataReviewDecision } from '@mrtm/api';
 
@@ -11,7 +12,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { TaskItemStatus } from '@requests/common';
 import { AerReviewWizardSteps } from '@requests/tasks/aer-review';
 import { AerReviewTaskPayload, ReviewApplicationFormModel } from '@requests/tasks/aer-review/aer-review.types';
-import { isNil } from '@shared/utils';
 
 export const reviewOperatorsApplicationSummarySubtaskPayloadMutator = (
   subtask: keyof AerReviewTaskPayload['aer'] | string,

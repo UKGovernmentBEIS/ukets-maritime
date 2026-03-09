@@ -18,6 +18,7 @@ import { VirRegulatorReportSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-report-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -25,7 +26,6 @@ import { VirRegulatorReportSummaryTemplateComponent } from '@shared/components';
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './report-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

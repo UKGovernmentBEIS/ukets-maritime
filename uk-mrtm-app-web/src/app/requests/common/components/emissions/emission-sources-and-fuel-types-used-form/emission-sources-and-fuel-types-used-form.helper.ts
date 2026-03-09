@@ -1,6 +1,6 @@
-import { FuelOriginTypeName } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { FuelOriginTypeName } from '@mrtm/api';
 
 export const EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP = 'emission-sources-and-fuel-types';
 

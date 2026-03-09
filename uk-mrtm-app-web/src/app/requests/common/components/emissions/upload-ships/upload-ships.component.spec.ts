@@ -234,7 +234,6 @@ describe('UploadShipsComponent', () => {
 
   const expectedValidAerEmissions = [
     {
-      dataInputType: 'MANUAL',
       derogations: {
         exceptionFromPerVoyageMonitoring: false,
       },
@@ -329,7 +328,6 @@ describe('UploadShipsComponent', () => {
       uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
     },
     {
-      dataInputType: 'MANUAL',
       derogations: {
         exceptionFromPerVoyageMonitoring: true,
       },
@@ -409,8 +407,8 @@ describe('UploadShipsComponent', () => {
   };
 
   describe('for EMP', () => {
-    beforeEach(() => {
-      createComponent(
+    beforeEach(async () => {
+      await createComponent(
         [
           { provide: REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY, useValue: empCommonSubtaskStepsQuery },
           { provide: UPLOAD_SHIPS_XML_SERVICE, useClass: EmpShipsXmlService },
@@ -426,7 +424,7 @@ describe('UploadShipsComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Upload the ships and emission details file');
+      expect(page.heading1.textContent.trim()).toEqual('Upload the ships and emission details file');
       expect(page.errorSummary).toBeFalsy();
       expect(page.uploadFileButton).toBeTruthy();
       expect(page.submitButton).toBeTruthy();
@@ -492,7 +490,7 @@ describe('UploadShipsComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Upload the ships and emission details file');
+      expect(page.heading1.textContent.trim()).toEqual('Upload the ships and emission details file');
       expect(page.errorSummary).toBeFalsy();
       expect(page.uploadFileButton).toBeTruthy();
       expect(page.submitButton).toBeTruthy();

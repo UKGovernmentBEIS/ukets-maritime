@@ -1,3 +1,4 @@
+import { ChangeDetectionStrategy } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
@@ -13,6 +14,10 @@ describe('PaginationBlockComponent', () => {
 
     constructor(protected readonly fixture: ComponentFixture<PaginationBlockComponent>) {
       this.element = fixture.nativeElement;
+    }
+
+    get paginationBlock() {
+      return this.element.querySelector<HTMLElement>('.govuk-pagination--block');
     }
 
     get previousLink() {
@@ -40,6 +45,8 @@ describe('PaginationBlockComponent', () => {
           useValue: {},
         },
       ],
+    }).overrideComponent(PaginationBlockComponent, {
+      set: { changeDetection: ChangeDetectionStrategy.Default },
     });
 
     fixture = TestBed.createComponent(PaginationBlockComponent);
@@ -58,10 +65,10 @@ describe('PaginationBlockComponent', () => {
   });
 
   it('should only display previous link when previous is set', async () => {
-    fixture.componentRef.setInput('previous', {
+    component.previous = {
       labelText: 'PreviousLabel',
       href: ['/previous'],
-    });
+    };
     fixture.detectChanges();
 
     expect(page.previousLink).toBeTruthy();
@@ -71,10 +78,10 @@ describe('PaginationBlockComponent', () => {
   });
 
   it('should only display next link when next is set', async () => {
-    fixture.componentRef.setInput('next', {
+    component.next = {
       labelText: 'NextLabel',
       href: ['/next'],
-    });
+    };
     fixture.detectChanges();
 
     expect(page.previousLink).toBeFalsy();

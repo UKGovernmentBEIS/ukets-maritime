@@ -23,6 +23,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-control-activities-outsourced-activities',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     AboutProcedureDetailsComponent,
@@ -31,9 +32,8 @@ import { WizardStepComponent } from '@shared/components';
     RadioComponent,
     RadioOptionComponent,
   ],
-  standalone: true,
-  templateUrl: './control-activities-outsourced-activities.component.html',
   providers: [controlActivitiesOutsourcedActivitiesFormProvider],
+  templateUrl: './control-activities-outsourced-activities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesOutsourcedActivitiesComponent {
@@ -42,7 +42,7 @@ export class ControlActivitiesOutsourcedActivitiesComponent {
   private readonly route = inject(ActivatedRoute);
 
   controlActivitiesMap = controlActivitiesMap;
-  readonly existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
+  existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
     initialValue: this.existCtrl.value,
   });
 

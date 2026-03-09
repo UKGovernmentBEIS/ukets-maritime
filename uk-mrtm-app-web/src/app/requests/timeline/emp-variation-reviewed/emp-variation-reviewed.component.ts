@@ -7,8 +7,8 @@ import { EmpVariationReviewedSummaryTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-emp-variation-reviewed',
-  imports: [EmpVariationReviewedSummaryTemplateComponent],
   standalone: true,
+  imports: [EmpVariationReviewedSummaryTemplateComponent],
   template: '<mrtm-emp-variation-reviewed-summary-template [data]="vm()"/>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

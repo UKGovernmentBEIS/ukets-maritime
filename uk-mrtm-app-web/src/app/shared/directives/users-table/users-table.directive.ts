@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Directive, inject, input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Directive, inject, Input, OnInit } from '@angular/core';
 import { UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 
 import { BehaviorSubject, combineLatest, map, Observable, shareReplay, takeUntil, tap } from 'rxjs';
@@ -7,36 +7,36 @@ import { UserFullNamePipe } from '@netz/common/pipes';
 import { DestroySubject } from '@netz/common/services';
 import { SortEvent, TableComponent } from '@netz/govuk-components';
 
-import { UsersTableItem } from '@shared/types';
+import { UsersTableItemInterface } from '@shared/types';
 
 @Directive({
   selector: 'govuk-table[mrtmUsersTable]',
-  standalone: true,
   providers: [UserFullNamePipe, DestroySubject],
+  standalone: true,
 })
 export class UsersTableDirective implements OnInit {
-  private readonly host = inject<TableComponent<UsersTableItem>>(TableComponent);
+  private readonly host = inject<TableComponent<UsersTableItemInterface>>(TableComponent);
   private readonly fb = inject(UntypedFormBuilder);
   private readonly destroy$ = inject(DestroySubject);
   private readonly userFullNamePipe = inject(UserFullNamePipe);
   private readonly cdRef = inject(ChangeDetectorRef);
 
-  readonly users = input<Observable<UsersTableItem[]>>(undefined);
-  readonly form = input<UntypedFormGroup>(undefined);
+  @Input() users: Observable<UsersTableItemInterface[]>;
+  @Input() form: UntypedFormGroup;
 
   private sorting$ = new BehaviorSubject<SortEvent>({ column: 'createdDate', direction: 'descending' });
 
   private get formArray(): UntypedFormArray {
-    return this.form().get(this.formArrayName) as UntypedFormArray;
+    return this.form.get(this.formArrayName) as UntypedFormArray;
   }
 
   private get formArrayName(): string {
-    return Object.keys(this.form().controls).find((key) => this.form().get(key) instanceof UntypedFormArray);
+    return Object.keys(this.form.controls).find((key) => this.form.get(key) instanceof UntypedFormArray);
   }
 
   ngOnInit(): void {
     combineLatest([
-      this.users().pipe(
+      this.users.pipe(
         map((users) =>
           users.slice().map((userAuthority) =>
             this.fb.group(
@@ -64,8 +64,8 @@ export class UsersTableDirective implements OnInit {
         tap(() => this.cdRef.markForCheck()),
         shareReplay({ bufferSize: 1, refCount: false }),
       )
-      .subscribe((data) => this.host.data.set(data));
-    this.host.sort.subscribe((event: SortEvent) => this.sorting$.next(event));
+      .subscribe((data) => (this.host.data = data));
+    this.host.sort.pipe(takeUntil(this.destroy$)).subscribe((event: SortEvent) => this.sorting$.next(event));
   }
 
   private createSorterByColumn({ column, direction }: SortEvent): (a: UntypedFormGroup, b: UntypedFormGroup) => number {
@@ -89,6 +89,6 @@ export class UsersTableDirective implements OnInit {
   }
 
   private setFormArray(controls: UntypedFormGroup[]): void {
-    this.form().setControl(this.formArrayName, this.fb.array(controls, { validators: this.formArray.validator }));
+    this.form.setControl(this.formArrayName, this.fb.array(controls, { validators: this.formArray.validator }));
   }
 }

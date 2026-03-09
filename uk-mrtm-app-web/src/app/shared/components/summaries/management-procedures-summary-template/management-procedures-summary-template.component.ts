@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpManagementProcedures, EmpMonitoringReportingRole } from '@mrtm/api';
@@ -20,6 +20,7 @@ import { mergeDiffArray } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-management-procedures-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -32,28 +33,25 @@ import { mergeDiffArray } from '@shared/utils';
     ProcedureFormPartialSummaryTemplateComponent,
     HtmlDiffDirective,
   ],
-  standalone: true,
   templateUrl: './management-procedures-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresSummaryTemplateComponent {
-  readonly managementProcedures = input.required<EmpManagementProcedures>();
-  readonly originalManagementProcedures = input<EmpManagementProcedures>();
-  readonly managementProceduresMap = input.required<SubTaskListMap<EmpManagementProcedures>>();
-  readonly dataFlowFiles = input.required<AttachedFile[]>();
-  readonly originalDataFlowFiles = input<AttachedFile[]>();
-  readonly riskAssessmentFiles = input.required<AttachedFile[]>();
-  readonly originalRiskAssessmentFiles = input<AttachedFile[]>();
-  readonly wizardStep = input<{
-    [s: string]: string;
-  }>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) managementProcedures: EmpManagementProcedures;
+  @Input() originalManagementProcedures: EmpManagementProcedures;
+  @Input({ required: true }) managementProceduresMap: SubTaskListMap<EmpManagementProcedures>;
+  @Input({ required: true }) dataFlowFiles: AttachedFile[];
+  @Input() originalDataFlowFiles: AttachedFile[];
+  @Input({ required: true }) riskAssessmentFiles: AttachedFile[];
+  @Input() originalRiskAssessmentFiles: AttachedFile[];
+  @Input() wizardStep: { [s: string]: string };
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 
-  readonly combinedMonitoringReportingRoles = computed(() =>
+  combinedMonitoringReportingRoles = computed(() =>
     mergeDiffArray<EmpMonitoringReportingRole>(
-      this.managementProcedures()?.monitoringReportingRoles,
-      this.originalManagementProcedures()?.monitoringReportingRoles,
+      this.managementProcedures?.monitoringReportingRoles,
+      this.originalManagementProcedures?.monitoringReportingRoles,
     ),
   );
 }

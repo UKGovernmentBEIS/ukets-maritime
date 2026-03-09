@@ -13,7 +13,6 @@ import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.event.EmpApprovedEvent;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationLegalStatusType;
-import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnum;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.integration.model.account.AccountDetailsMessage;
@@ -21,6 +20,7 @@ import uk.gov.netz.integration.model.account.AccountHolderMessage;
 import uk.gov.netz.integration.model.account.AccountOpeningEvent;
 import uk.gov.netz.integration.model.account.AccountType;
 
+import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapAccountHolderName;
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapAccountHolderType;
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapCompanyRegistrationNumber;
 import static uk.gov.mrtm.api.integration.registry.accountcreated.util.RegistryMappingUtils.mapCrnJustification;
@@ -39,7 +39,6 @@ public class AccountCreatedNotifyRegistryService {
 
     private final MrtmAccountQueryService accountQueryService;
     private final AccountCreatedSendToRegistryProducer accountCreatedSendToRegistryProducer;
-    private final EmissionsMonitoringPlanQueryService empQueryService;
     private final KafkaTemplate<String, AccountOpeningEvent> accountCreatedKafkaTemplate;
 
 
@@ -49,7 +48,7 @@ public class AccountCreatedNotifyRegistryService {
         final MrtmAccount account = accountQueryService.getAccountById(accountId);
 
         if (!ObjectUtils.isEmpty(account.getRegistryId())) {
-            log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, accountId,
+            log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
                     INTEGRATION_POINT_KEY,
                     "Cannot send emissions to ETS Registry because Operator Id already exists");
 
@@ -58,24 +57,19 @@ public class AccountCreatedNotifyRegistryService {
 
         final AccountOpeningEvent accountOpeningEvent = AccountOpeningEvent.builder()
                 .accountType(AccountType.MARITIME_OPERATOR_HOLDING_ACCOUNT)
-                .accountDetails(buildAccountDetails(account))
+                .accountDetails(buildAccountDetails(account, event.getEmpId()))
                 .accountHolder(buildAccountHolder(event.getEmissionsMonitoringPlan(), account.getName()))
                 .build();
-
-        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(),
-            INTEGRATION_POINT_KEY, "Sending account created event to registry " + accountOpeningEvent);
 
         accountCreatedSendToRegistryProducer.produce(accountOpeningEvent,
                 accountCreatedKafkaTemplate);
 
-        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, accountId,
+        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, event.getAccountId(),
                 INTEGRATION_POINT_KEY, "Account created event sent to registry " + accountOpeningEvent);
     }
 
 
-    private AccountDetailsMessage buildAccountDetails(MrtmAccount account) {
-        final String empId = empQueryService.getEmpIdByAccountId(account.getId()).orElse(null);
-
+    private AccountDetailsMessage buildAccountDetails(MrtmAccount account, String empId) {
         return AccountDetailsMessage.builder()
                 .emitterId(account.getBusinessId())
                 .accountName(account.getName())
@@ -90,7 +84,7 @@ public class AccountCreatedNotifyRegistryService {
         AddressStateDTO registeredAddress = emp.getOperatorDetails().getOrganisationStructure().getRegisteredAddress();
         return AccountHolderMessage.builder()
                 .accountHolderType(mapAccountHolderType(emp.getOperatorDetails().getOrganisationStructure().getLegalStatusType()))
-                .name(accountName)
+                .name(mapAccountHolderName(emp.getOperatorDetails().getOrganisationStructure(), accountName))
                 .addressLine1(registeredAddress.getLine1())
                 .addressLine2(registeredAddress.getLine2())
                 .townOrCity(registeredAddress.getCity())

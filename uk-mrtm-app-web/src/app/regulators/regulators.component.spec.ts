@@ -4,6 +4,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
+import { cloneDeep } from 'lodash-es';
 
 import { RegulatorAuthoritiesService } from '@mrtm/api';
 
@@ -80,7 +81,7 @@ describe('RegulatorsComponent', () => {
       ),
     );
 
-  const activatedRouteStub = new ActivatedRouteStub(null, null, structuredClone(mockRegulatorsRouteData));
+  const activatedRouteStub = new ActivatedRouteStub(null, null, cloneDeep(mockRegulatorsRouteData));
 
   const createComponent = () => {
     jest.clearAllMocks();
@@ -128,7 +129,7 @@ describe('RegulatorsComponent', () => {
   it('should display the add new user button if applicable', () => {
     expect(page.addRegulatorButton).toBeTruthy();
 
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = false;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -138,7 +139,7 @@ describe('RegulatorsComponent', () => {
 
   it('should navigate to add regulator form when clicking the add button', () => {
     const navigateSpy = jest.spyOn(router, 'navigateByUrl').mockImplementation();
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
 
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -150,7 +151,7 @@ describe('RegulatorsComponent', () => {
   });
 
   it('should render a save changes button', () => {
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = true;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -166,7 +167,7 @@ describe('RegulatorsComponent', () => {
   });
 
   it('should display correct dropdown values in regulators table', () => {
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = true;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -193,7 +194,7 @@ describe('RegulatorsComponent', () => {
   });
 
   it('should hide account status column if non-editable view', () => {
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = false;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -213,7 +214,7 @@ describe('RegulatorsComponent', () => {
   });
 
   it('should post only changed values on save', () => {
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = true;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -233,7 +234,7 @@ describe('RegulatorsComponent', () => {
   });
 
   it('should post only changed values on save after sort', () => {
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = true;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -256,7 +257,7 @@ describe('RegulatorsComponent', () => {
   });
 
   it('should have link only on user if no permission to edit', () => {
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = false;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();
@@ -270,7 +271,7 @@ describe('RegulatorsComponent', () => {
       throwError(() => new HttpErrorResponse({ error: { code: ErrorCodes.AUTHORITY1003 }, status: 400 })),
     );
 
-    const testData = structuredClone(mockRegulatorsRouteData);
+    const testData = cloneDeep(mockRegulatorsRouteData);
     testData.regulators.editable = true;
     activatedRouteStub.setResolveMap(testData);
     fixture.detectChanges();

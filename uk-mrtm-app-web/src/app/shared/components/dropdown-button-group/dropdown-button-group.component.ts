@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, input, signal, viewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, HostListener, input, signal, viewChild } from '@angular/core';
 
 import { DROPDOWN_BUTTON_GROUP_COMPONENT } from '@shared/components/dropdown-button-group/dropdown-button-group.token';
 
@@ -7,9 +7,8 @@ import { DROPDOWN_BUTTON_GROUP_COMPONENT } from '@shared/components/dropdown-but
   standalone: true,
   templateUrl: './dropdown-button-group.component.html',
   styleUrl: './dropdown-button-group.component.scss',
-  providers: [{ provide: DROPDOWN_BUTTON_GROUP_COMPONENT, useExisting: DropdownButtonGroupComponent }],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { '(window:resize)': 'onResize()' },
+  providers: [{ provide: DROPDOWN_BUTTON_GROUP_COMPONENT, useExisting: DropdownButtonGroupComponent }],
 })
 export class DropdownButtonGroupComponent {
   private static instanceCounter = 0;
@@ -21,6 +20,7 @@ export class DropdownButtonGroupComponent {
   readonly label = input.required<string>();
   readonly isPopoverOpen = signal(false);
 
+  @HostListener('window:resize')
   onResize() {
     this.hidePopover();
   }

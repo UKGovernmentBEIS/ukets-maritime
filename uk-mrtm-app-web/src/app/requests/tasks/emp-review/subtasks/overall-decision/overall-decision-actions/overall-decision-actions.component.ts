@@ -19,8 +19,8 @@ import { EmpReviewService } from '@requests/tasks/emp-review/services';
 
 @Component({
   selector: 'mrtm-overall-decision-actions',
-  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, ButtonDirective, PendingButtonDirective],
   standalone: true,
+  imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, ButtonDirective, PendingButtonDirective],
   templateUrl: './overall-decision-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

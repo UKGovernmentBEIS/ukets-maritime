@@ -1,5 +1,5 @@
 import { NgTemplateOutlet, TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { OperatorUserDTO, OperatorUserInvitationDTO } from '@mrtm/api';
@@ -18,6 +18,7 @@ import { PhoneNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-user-account-summary-info',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -31,13 +32,12 @@ import { PhoneNumberPipe } from '@shared/pipes';
     PhoneNumberPipe,
     NgTemplateOutlet,
   ],
-  standalone: true,
   templateUrl: './user-account-summary-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserAccountSummaryInfoComponent {
-  readonly summaryInfo = input<OperatorUserInvitationDTO & OperatorUserDTO>();
-  readonly formRouterLink = input('edit');
-  readonly viewMode = input<'CREATE' | 'VIEW'>('CREATE');
-  readonly editable = input(true);
+  @Input() summaryInfo: OperatorUserInvitationDTO & OperatorUserDTO;
+  @Input() formRouterLink = 'edit';
+  @Input() viewMode: 'CREATE' | 'VIEW' = 'CREATE';
+  @Input() editable = true;
 }

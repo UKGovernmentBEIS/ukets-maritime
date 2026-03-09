@@ -42,7 +42,7 @@ public class ExternalAerController {
     private final ExternalAerService externalAerService;
 
     @PutMapping(path = "/{company-imo-number}/aer/{year}", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Saves or updates maritime annual emissions report data. This endpoint will be available from 1 July 2026 in production environment")
+    @Operation(summary = "Saves or updates maritime annual emissions report data")
     @ApiResponse(responseCode = "204", description = NO_CONTENT)
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.EXTERNAL_SAVE_AER_BAD_REQUEST,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExternalErrorResponse.class))})

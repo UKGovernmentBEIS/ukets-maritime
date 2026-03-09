@@ -8,8 +8,8 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
 
 @Component({
   selector: 'mrtm-list-of-ships-submitted',
-  imports: [PageHeadingComponent, ListOfShipsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   standalone: true,
+  imports: [PageHeadingComponent, ListOfShipsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './list-of-ships-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

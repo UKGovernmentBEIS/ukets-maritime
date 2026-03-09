@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'mrtm-operator-admin-info',
-  imports: [],
   standalone: true,
+  imports: [],
   templateUrl: './operator-admin-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

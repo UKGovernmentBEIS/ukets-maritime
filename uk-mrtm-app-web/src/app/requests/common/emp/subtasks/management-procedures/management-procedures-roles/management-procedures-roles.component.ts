@@ -24,6 +24,8 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-management-procedures-roles',
+  templateUrl: './management-procedures-roles.component.html',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -33,10 +35,8 @@ import { WizardStepComponent } from '@shared/components';
     TextInputComponent,
     TextareaComponent,
   ],
-  standalone: true,
-  templateUrl: './management-procedures-roles.component.html',
-  providers: [managementProceduresRolesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [managementProceduresRolesFormProvider],
 })
 export class ManagementProceduresRolesComponent {
   private route = inject(ActivatedRoute);

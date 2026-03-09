@@ -32,11 +32,11 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-data-gaps-decision',
-  imports: [DataGapsSummaryTemplateComponent, WizardStepComponent, ReviewDecisionComponent, ReactiveFormsModule],
   standalone: true,
+  imports: [DataGapsSummaryTemplateComponent, WizardStepComponent, ReviewDecisionComponent, ReactiveFormsModule],
   templateUrl: './data-gaps-decision.component.html',
-  providers: [reviewDecisionFormProvider(DATA_GAPS_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reviewDecisionFormProvider(DATA_GAPS_SUB_TASK)],
 })
 export class DataGapsDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(REVIEW_DECISION_FORM);
@@ -44,7 +44,7 @@ export class DataGapsDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empCommonQuery.selectDataGaps)(),
     dataGapsMap: dataGapsMap,
     isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),

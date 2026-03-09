@@ -17,5 +17,4 @@ export interface AerSmfPurchase {
   co2Emissions: string;
   evidenceFiles?: Array<string>;
   uniqueIdentifier: string;
-  dataInputType: 'MANUAL' | 'EXTERNAL_PROVIDER' | 'FETCH_FROM_EMP';
 }

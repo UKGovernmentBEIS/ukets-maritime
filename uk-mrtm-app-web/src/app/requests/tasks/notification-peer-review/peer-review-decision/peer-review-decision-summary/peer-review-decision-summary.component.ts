@@ -27,6 +27,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-peer-review-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     PendingButtonDirective,
@@ -41,7 +42,6 @@ interface ViewModel {
     ReturnToTaskOrActionPageComponent,
     PeerReviewDecisionPipe,
   ],
-  standalone: true,
   templateUrl: './peer-review-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,7 +52,7 @@ export class PeerReviewDecisionSummaryComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     peerReviewDecision: this.peerReviewStore.select(peerReviewDecisionQuery.selectDecision)(),
     isSubTaskCompleted: false,
   }));

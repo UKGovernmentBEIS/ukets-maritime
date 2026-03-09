@@ -25,8 +25,8 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-summary',
-  imports: [PageHeadingComponent, BatchVariationSummaryTemplateComponent, PendingButtonDirective, ButtonDirective],
   standalone: true,
+  imports: [PageHeadingComponent, BatchVariationSummaryTemplateComponent, PendingButtonDirective, ButtonDirective],
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

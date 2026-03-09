@@ -8,8 +8,8 @@ import { BreadcrumbsComponent } from './breadcrumbs.component';
 
 describe('BreadcrumbsComponent', () => {
   @Component({
-    imports: [BreadcrumbsComponent, LinkDirective],
     standalone: true,
+    imports: [BreadcrumbsComponent, LinkDirective],
     template: `
       <govuk-breadcrumbs [inverse]="inverse">
         <a govukLink="breadcrumb" href="#">Home</a>

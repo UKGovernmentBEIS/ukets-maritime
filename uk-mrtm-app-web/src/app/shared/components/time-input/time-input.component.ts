@@ -1,12 +1,23 @@
 import { Component, DoCheck, effect, inject, input, InputSignal, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { ControlValueAccessor, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn } from '@angular/forms';
+import {
+  ControlContainer,
+  ControlValueAccessor,
+  FormGroup,
+  NgControl,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+} from '@angular/forms';
+
+import { isNil } from 'lodash-es';
 
 import { FormInput } from '@netz/govuk-components';
 import {
   ErrorMessageComponent,
   FieldsetDirective,
   FieldsetHintDirective,
+  FormService,
   GovukValidators,
   LegendDirective,
   LegendSizeType,
@@ -19,7 +30,6 @@ import {
   TimeInputFormGroupModel,
   TimeInputFormModel,
 } from '@shared/components/time-input/time-input.types';
-import { isNil } from '@shared/utils';
 
 /*
   eslint-disable
@@ -27,10 +37,10 @@ import { isNil } from '@shared/utils';
  */
 @Component({
   selector: 'div[mrtm-time-input]',
-  imports: [ErrorMessageComponent, ReactiveFormsModule, FieldsetHintDirective, LegendDirective, FieldsetDirective],
   standalone: true,
-  templateUrl: './time-input.component.html',
+  imports: [ErrorMessageComponent, ReactiveFormsModule, FieldsetHintDirective, LegendDirective, FieldsetDirective],
   providers: [timeInputFormProvider],
+  templateUrl: './time-input.component.html',
 })
 export class TimeInputComponent extends FormInput implements ControlValueAccessor, OnInit, DoCheck {
   private onChange: (value: Partial<TimeInputFormModel>) => void;
@@ -44,7 +54,10 @@ export class TimeInputComponent extends FormInput implements ControlValueAccesso
   public readonly isRequired: InputSignal<boolean> = input<boolean>();
 
   constructor() {
-    super();
+    const ngControl = inject(NgControl, { self: true, optional: true })!;
+    const formService = inject(FormService);
+    const container = inject(ControlContainer, { optional: true })!;
+    super(ngControl, formService, container);
 
     effect(() => {
       const value = this.currentFormValue();

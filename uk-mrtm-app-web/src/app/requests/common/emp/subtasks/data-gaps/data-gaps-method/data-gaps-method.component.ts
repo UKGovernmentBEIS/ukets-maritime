@@ -14,8 +14,8 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-data-gaps-method',
-  imports: [WizardStepComponent, ReactiveFormsModule, TextareaComponent, TextInputComponent],
   standalone: true,
+  imports: [WizardStepComponent, ReactiveFormsModule, TextareaComponent, TextInputComponent],
   templateUrl: './data-gaps-method.component.html',
   providers: [dataGapsMethodFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

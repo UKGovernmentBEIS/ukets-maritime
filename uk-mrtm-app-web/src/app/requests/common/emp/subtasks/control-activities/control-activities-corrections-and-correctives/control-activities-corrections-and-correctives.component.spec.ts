@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import {
   CONTROL_ACTIVITIES_SUB_TASK,
@@ -20,22 +20,12 @@ import {
 } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { fireEvent, screen, within } from '@testing-library/angular';
 
 describe('ControlActivitiesCorrectivesComponent', () => {
   let fixture: ComponentFixture<ControlActivitiesCorrectionsAndCorrectivesComponent>;
   let component: ControlActivitiesCorrectionsAndCorrectivesComponent;
-  let page: Page;
   let store: RequestTaskStore;
-
-  class Page extends BasePage<ControlActivitiesCorrectionsAndCorrectivesComponent> {
-    get textboxes() {
-      return this.queryAll<HTMLInputElement>('input[type="text"], textarea');
-    }
-
-    get errorSummaryLinks() {
-      return Array.from(this.errorSummary.querySelectorAll('a'));
-    }
-  }
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<any>> = {
@@ -47,24 +37,23 @@ describe('ControlActivitiesCorrectivesComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(ControlActivitiesCorrectionsAndCorrectivesComponent);
     component = fixture.componentInstance;
-    page = new Page(fixture);
     fixture.detectChanges();
     jest.clearAllMocks();
   };
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [ControlActivitiesCorrectionsAndCorrectivesComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    });
+    }).compileComponents();
   });
 
   describe('for new emission source', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(mockEmpIssuanceSubmitRequestTask);
       createComponent();
@@ -75,19 +64,21 @@ describe('ControlActivitiesCorrectivesComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(page.heading1.textContent).toEqual('Corrections and corrective actions');
-      expect(page.submitButton).toBeTruthy();
-      expect(page.errorSummary).toBeFalsy();
-      expect(page.textboxes).toHaveLength(6);
+      expect(screen.getByRole('heading', { name: 'Corrections and corrective actions' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
+      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
+      expect(screen.getAllByRole('textbox')).toHaveLength(6);
     });
 
     it('should display error on empty form submit', () => {
-      page.submitButton.click();
+      screen.getByRole('button', { name: 'Continue' }).click();
       fixture.detectChanges();
+      const summaryBox = screen.queryByRole('alert', { name: 'There is a problem' });
+      expect(summaryBox).toBeInTheDocument();
 
-      expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryLinks).toHaveLength(4);
-      expect(page.errorSummaryLinks.map((anchor) => anchor.textContent.trim())).toEqual([
+      const summaryErrors = within(summaryBox).getAllByRole('link');
+      expect(summaryErrors).toHaveLength(4);
+      expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
         'Enter a procedure reference',
         'Enter a description for the procedure',
         'Enter the name of the person or position responsible for this procedure',
@@ -97,7 +88,7 @@ describe('ControlActivitiesCorrectivesComponent', () => {
   });
 
   describe('for existing emission source', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(
         mockStateBuild(
@@ -115,16 +106,21 @@ describe('ControlActivitiesCorrectivesComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(page.heading1.textContent).toEqual('Corrections and corrective actions');
-      expect(page.submitButton).toBeTruthy();
-      expect(page.errorSummary).toBeFalsy();
-      expect(page.textboxes).toHaveLength(6);
+      expect(screen.getByRole('heading', { name: 'Corrections and corrective actions' })).toBeTruthy();
+      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
+      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
+      expect(screen.getAllByRole('textbox')).toHaveLength(6);
     });
 
     it('should edit and submit a valid form', async () => {
-      page.setInputValue('input[name="version"]', 'test new value');
+      const input = screen.getByRole('textbox', { name: /version/i });
+      fireEvent.input(input, {
+        target: {
+          value: 'test new value',
+        },
+      });
 
-      page.submitButton.click();
+      screen.getByRole('button', { name: 'Continue' }).click();
       fixture.detectChanges();
 
       expect(taskServiceSpy).toHaveBeenCalledWith(
@@ -139,10 +135,10 @@ describe('ControlActivitiesCorrectivesComponent', () => {
     });
 
     it('should submit a valid form', async () => {
-      page.submitButton.click();
+      screen.getByRole('button', { name: 'Continue' }).click();
       fixture.detectChanges();
 
-      expect(page.errorSummary).toBeFalsy();
+      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
       expect(taskServiceSpy).toHaveBeenCalledWith(
         CONTROL_ACTIVITIES_SUB_TASK,
         ControlActivitiesWizardStep.CORRECTIONS,

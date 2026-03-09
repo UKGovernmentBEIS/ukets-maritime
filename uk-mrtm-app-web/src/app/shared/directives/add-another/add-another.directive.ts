@@ -1,15 +1,25 @@
-import { AfterViewInit, Directive, ElementRef, inject, input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  AfterViewInit,
+  Directive,
+  ElementRef,
+  HostBinding,
+  HostListener,
+  inject,
+  Input,
+  OnChanges,
+  SimpleChanges,
+} from '@angular/core';
 
 @Directive({
   selector: '[mrtmAddAnother]',
   standalone: true,
-  host: { '[class.moj-add-another__remove-button]': 'addAnotherRemoveButtonClass', '(click)': 'onRemoveButtonClick()' },
 })
 export class AddAnotherDirective implements AfterViewInit, OnChanges {
   private readonly element = inject(ElementRef);
 
-  readonly heading = input<HTMLElement>(undefined);
+  @Input() heading: HTMLElement;
 
+  @HostBinding('class.moj-add-another__remove-button')
   readonly addAnotherRemoveButtonClass = true;
 
   private get nativeElement(): HTMLElement {
@@ -18,8 +28,8 @@ export class AddAnotherDirective implements AfterViewInit, OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.heading) {
-      this.heading().tabIndex = -1;
-      this.heading().classList.add('moj-add-another__heading');
+      this.heading.tabIndex = -1;
+      this.heading.classList.add('moj-add-another__heading');
     }
   }
 
@@ -28,11 +38,12 @@ export class AddAnotherDirective implements AfterViewInit, OnChanges {
     this.nativeElement.parentElement.querySelector('legend')?.classList?.add('moj-add-another__title');
   }
 
+  @HostListener('click')
   onRemoveButtonClick(): void {
     this.focusHeading();
   }
 
   focusHeading(): void {
-    this.heading()?.focus();
+    this.heading?.focus();
   }
 }

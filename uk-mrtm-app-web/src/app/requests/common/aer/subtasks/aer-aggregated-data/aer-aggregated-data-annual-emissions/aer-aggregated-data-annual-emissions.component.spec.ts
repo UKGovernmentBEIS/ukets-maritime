@@ -44,7 +44,7 @@ describe('AerAggregatedDataAnnualEmissionsComponent', () => {
   it('should display all HTMLElements and form with 0 errors', () => {
     expect(page.errorSummary).toBeFalsy();
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent).toEqual('Annual aggregated emissions');
+    expect(page.heading1.textContent.trim()).toEqual('Annual aggregated emissions');
     expect(page.heading3.textContent.trim()).toEqual('Total aggregated greenhouse gas emitted');
     expect(page.queryAll('fieldset>legend').map((item) => item.textContent.trim())).toEqual([
       'Aggregated greenhouse gas emissions which occurred within UK ports',

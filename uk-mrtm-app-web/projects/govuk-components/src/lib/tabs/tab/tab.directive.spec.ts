@@ -14,8 +14,8 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     @Component({
-      imports: [AsyncPipe, TabDirective, TabsComponent],
       standalone: true,
+      imports: [AsyncPipe, TabDirective, TabsComponent],
       template: `
         <govuk-tabs>
           @for (tab of tabs$ | async; track tab) {
@@ -76,8 +76,8 @@ describe('TabDirective', () => {
     let fixture: ComponentFixture<TestComponent>;
 
     @Component({
-      imports: [TabsComponent, TabDirective, AsyncPipe],
       standalone: true,
+      imports: [TabsComponent, TabDirective, AsyncPipe],
       template: `
         <govuk-tabs>
           @for (tab of tabs$ | async; track tab) {

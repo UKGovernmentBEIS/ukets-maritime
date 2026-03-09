@@ -10,8 +10,8 @@ import { EmpVariationTaskPayload } from '@requests/common/emp/emp.types';
 
 @Component({
   selector: 'mrtm-send-variation-confirmation',
-  imports: [ButtonDirective, PageHeadingComponent, PendingButtonDirective, ReturnToTaskOrActionPageComponent],
   standalone: true,
+  imports: [ButtonDirective, PageHeadingComponent, PendingButtonDirective, ReturnToTaskOrActionPageComponent],
   templateUrl: './send-variation-confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

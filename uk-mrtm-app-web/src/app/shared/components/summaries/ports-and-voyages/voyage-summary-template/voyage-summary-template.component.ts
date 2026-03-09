@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { Params, RouterLink } from '@angular/router';
 
 import { AerVoyage } from '@mrtm/api';
 
@@ -23,6 +23,7 @@ import { AerJourneyTypeEnum } from '@shared/types';
 
 @Component({
   selector: 'mrtm-voyage-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -37,14 +38,10 @@ import { AerJourneyTypeEnum } from '@shared/types';
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
     VoyageOrPortCallEmissionsSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './voyage-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VoyageSummaryTemplateComponent {
-  private readonly router = inject(Router);
-  private readonly activatedRoute = inject(ActivatedRoute);
-
   readonly data = input<AerVoyage & { journeyType?: AerJourneyTypeEnum }>();
   readonly editable = input<boolean>(false);
 
@@ -52,10 +49,4 @@ export class VoyageSummaryTemplateComponent {
   readonly editQueryParams = input<Params>();
   readonly countries = AER_PORT_COUNTRY_SELECT_ITEMS;
   readonly ports = AER_PORT_CODE_SELECT_ITEMS;
-
-  public onAddDirectEmissions(): void {
-    this.router.navigate([this.wizardStep.FUEL_EMISSIONS, this.wizardStep.DIRECT_EMISSIONS], {
-      relativeTo: this.activatedRoute,
-    });
-  }
 }

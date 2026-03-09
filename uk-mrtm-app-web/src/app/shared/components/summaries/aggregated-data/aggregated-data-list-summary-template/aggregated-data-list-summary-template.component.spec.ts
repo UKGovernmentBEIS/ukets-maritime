@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
 
 import { AggregatedDataListSummaryTemplateComponent } from '@shared/components/summaries/aggregated-data/aggregated-data-list-summary-template/aggregated-data-list-summary-template.component';
 
@@ -10,7 +9,6 @@ describe('AggregatedDataListSummaryTemplateComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [AggregatedDataListSummaryTemplateComponent],
-      providers: [provideRouter([])],
     }).compileComponents();
 
     fixture = TestBed.createComponent(AggregatedDataListSummaryTemplateComponent);

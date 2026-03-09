@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Params } from '@angular/router';
 
 import { EmpEmissionsSources, EmpFuelsAndEmissionsFactors, EmpShipEmissions } from '@mrtm/api';
@@ -14,6 +14,7 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-ship-summary-template',
+  standalone: true,
   imports: [
     BasicShipDetailsSummaryTemplateComponent,
     FuelsAndEmissionFactorsListSummaryTemplateComponent,
@@ -23,28 +24,27 @@ import { AttachedFile } from '@shared/types';
     CarbonCaptureSummaryTemplateComponent,
     ExemptionConditionsSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './ship-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShipSummaryTemplateComponent {
-  readonly data = input.required<EmpShipEmissions>();
-  readonly isEditable = input<boolean>(false);
-  readonly carbonCaptureFiles = input<AttachedFile[]>();
-  readonly changeLinks = input<
-    Partial<
-      Record<
-        keyof Omit<EmpShipEmissions, 'uniqueIdentifier'>,
-        {
-          link: string;
-          queryParams: Params;
-        }
-      >
+  @Input({ required: true }) data: EmpShipEmissions;
+  @Input() isEditable: boolean = false;
+  @Input() carbonCaptureFiles: AttachedFile[];
+  @Input() changeLinks: Partial<
+    Record<
+      keyof Omit<EmpShipEmissions, 'uniqueIdentifier'>,
+      {
+        link: string;
+        queryParams: Params;
+      }
     >
-  >();
+  >;
 
-  public readonly deleteFuelsAndEmissionsFactor = output<EmpFuelsAndEmissionsFactors>();
-  public readonly deleteEmissionsSource = output<EmpEmissionsSources>();
+  @Output() public readonly deleteFuelsAndEmissionsFactor: EventEmitter<EmpFuelsAndEmissionsFactors> =
+    new EventEmitter<EmpFuelsAndEmissionsFactors>();
+  @Output() public readonly deleteEmissionsSource: EventEmitter<EmpEmissionsSources> =
+    new EventEmitter<EmpEmissionsSources>();
 
   public onDeleteFuelsAndEmissionsFactor(factor: EmpFuelsAndEmissionsFactors) {
     this.deleteFuelsAndEmissionsFactor.emit(factor);

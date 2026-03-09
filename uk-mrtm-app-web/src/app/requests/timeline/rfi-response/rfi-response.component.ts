@@ -9,8 +9,8 @@ import { RfiResponseSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-rfi-response',
-  imports: [RfiResponseSummaryTemplateComponent, LinkDirective, RouterLink],
   standalone: true,
+  imports: [RfiResponseSummaryTemplateComponent, LinkDirective, RouterLink],
   templateUrl: './rfi-response.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
