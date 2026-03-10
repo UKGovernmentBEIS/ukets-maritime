@@ -43,7 +43,11 @@
     <dt govukSummaryListRowKey>
       {{ emissionSourcesMap.emissionCompliance.caption }}
     </dt>
-    <dd govukSummaryListRowValue [notProvided]="emissionSources?.emissionCompliance?.exist | booleanToText"></dd>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="emissionSources?.emissionCompliance?.exist | booleanToText"
+      [previous]="originalEmissionSources?.emissionCompliance?.exist | booleanToText"></dd>
     @if (isEditable) {
       <dd govukSummaryListRowActions>
         <a govukLink [routerLink]="[wizardStep?.EMISSION_COMPLIANCE]" [queryParams]="queryParams">Change</a>
@@ -54,6 +58,7 @@
 @if (emissionSources?.emissionCompliance?.exist === true) {
   <mrtm-procedure-form-partial-summary-template
     [procedureForm]="emissionSources?.emissionCompliance?.criteria"
+    [originalProcedureForm]="originalEmissionSources?.emissionCompliance?.criteria"
     [currentWizardStep]="wizardStep?.EMISSION_COMPLIANCE"
     [queryParams]="queryParams"
     [isEditable]="isEditable" />

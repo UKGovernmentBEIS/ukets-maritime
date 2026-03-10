@@ -36,6 +36,7 @@ import {
   EMISSION_SOURCES_SUB_TASK,
   EmissionSourceFlowManager,
   EmissionSourcesCompletionPayloadMutator,
+  EmissionSourcesCompliancePayloadMutator,
   EmissionSourcesFactorsPayloadMutator,
   EmissionSourcesSummarySideEffect,
 } from '@requests/common/emp/subtasks/emission-sources';
@@ -122,6 +123,7 @@ export function provideEmpVariationAmendPayloadMutators(): EnvironmentProviders 
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: GreenhouseGasInformationPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
     ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: VariationDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: RequestedChangesQuestionPayloadMutator },

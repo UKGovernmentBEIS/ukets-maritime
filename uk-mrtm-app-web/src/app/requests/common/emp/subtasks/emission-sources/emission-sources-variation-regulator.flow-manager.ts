@@ -17,6 +17,8 @@ export class EmissionSourcesVariationRegulatorFlowManager extends WizardFlowMana
       case EmissionSourcesWizardStep.LIST_COMPLETION:
         return of(`../${EmissionSourcesWizardStep.EMISSION_FACTORS}`);
       case EmissionSourcesWizardStep.EMISSION_FACTORS:
+        return of(`../${EmissionSourcesWizardStep.EMISSION_COMPLIANCE}`);
+      case EmissionSourcesWizardStep.EMISSION_COMPLIANCE:
         return of(`../${EmissionSourcesWizardStep.VARIATION_REGULATOR_DECISION}`);
       case EmissionSourcesWizardStep.VARIATION_REGULATOR_DECISION:
         return of(EmissionSourcesWizardStep.SUMMARY);

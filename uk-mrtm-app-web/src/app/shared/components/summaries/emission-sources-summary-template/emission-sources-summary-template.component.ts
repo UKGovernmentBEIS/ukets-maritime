@@ -13,7 +13,7 @@ import {
 } from '@netz/govuk-components';
 
 import { ProcedureFormPartialSummaryTemplateComponent } from '@shared/components/summaries/procedure-form-partial-summary-template';
-import { HtmlDiffDirective, NotProvidedDirective } from '@shared/directives';
+import { HtmlDiffDirective } from '@shared/directives';
 import { BooleanToTextPipe } from '@shared/pipes';
 import { SubTaskListMap } from '@shared/types';
 
@@ -31,7 +31,6 @@ import { SubTaskListMap } from '@shared/types';
     SummaryListRowActionsDirective,
     ProcedureFormPartialSummaryTemplateComponent,
     HtmlDiffDirective,
-    NotProvidedDirective,
   ],
   templateUrl: './emission-sources-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

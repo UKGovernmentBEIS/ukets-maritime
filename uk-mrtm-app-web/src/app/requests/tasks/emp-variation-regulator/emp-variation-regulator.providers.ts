@@ -30,6 +30,7 @@ import {
 } from '@requests/common/emp/subtasks/data-gaps';
 import {
   EmissionSourcesCompletionPayloadMutator,
+  EmissionSourcesCompliancePayloadMutator,
   EmissionSourcesFactorsPayloadMutator,
   EmissionSourcesSummarySideEffect,
   EmissionSourcesVariationRegulatorFlowManager,
@@ -110,6 +111,7 @@ export function provideEmpVariationRegulatorPayloadMutators(): EnvironmentProvid
     // Emission sources
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesVariationRegulatorDecisionPayloadMutator },
 
     // Greenhouse gas
