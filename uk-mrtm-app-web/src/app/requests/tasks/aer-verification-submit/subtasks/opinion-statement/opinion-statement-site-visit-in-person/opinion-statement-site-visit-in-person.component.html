@@ -6,28 +6,28 @@
   [showReturnLink]="true"
   [isTwoThirds]="true">
   <ng-container formArrayName="visitDates">
-    @for (visitDateFormGroup of visitDatesFormArray.controls; track i; let i = $index) {
+    @for (visitDateFormGroup of visitDatesFormArray.controls; track $index) {
       <div class="flex-space-between govuk-!-margin-bottom-4">
         <div
           govuk-form-group
-          [formGroupName]="i"
-          [legend]="'Site visit ' + (visitDatesFormArray.controls.length === 1 ? '' : i + 1)"
+          [formGroupName]="$index"
+          [legend]="`Site visit ${$count === 1 ? '' : $index + 1}`"
           legendSize="medium">
           <div
             formControlName="startDate"
             govuk-date-input
             label="When did the site visit begin?"
-            legendSize="normal"></div>
+            labelSize="normal"></div>
           <div
             formControlName="numberOfDays"
             govuk-text-input
             inputType="number"
             label="How many days were your team on site?"
             labelSize="normal"
-            [widthClass]="'govuk-input--width-5'"></div>
+            widthClass="govuk-input--width-5"></div>
         </div>
-        @if (visitDatesFormArray.controls.length > 1) {
-          <button (click)="onRemoveSiteVisit(i)" govukSecondaryButton type="button">Remove</button>
+        @if ($count > 1) {
+          <button (click)="onRemoveSiteVisit($index)" govukSecondaryButton type="button">Remove</button>
         }
       </div>
     }
@@ -41,9 +41,7 @@
     formControlName="teamMembers"
     [label]="map.siteVisitDetailsInPersonTeamMembers.title"
     labelSize="medium"
-    [hint]="
-      'Include the names of the lead auditors and any technical experts involved.&lt;br&gt;Separate the names with a comma, for example John Smith, Jane Smith.'
-    "
+    hint="Include the names of the lead auditors and any technical experts involved.<br>Separate the names with a comma, for example John Smith, Jane Smith."
     govuk-textarea
     [maxLength]="10000"></div>
 </mrtm-wizard-step>

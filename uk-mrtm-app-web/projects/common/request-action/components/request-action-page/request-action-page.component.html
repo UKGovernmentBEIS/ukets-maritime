@@ -10,9 +10,9 @@
       </netz-page-heading>
 
       @if (vm.component; as component) {
-        <ng-container *ngComponentOutlet="component"></ng-container>
+        <ng-container *ngComponentOutlet="component" />
       } @else {
-        <netz-task-list [sections]="vm.sections"></netz-task-list>
+        <netz-task-list [sections]="vm.sections" />
       }
     </div>
     @if (vm.printableComponent) {

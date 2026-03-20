@@ -2,7 +2,11 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import { RequestActionInfoDTO } from '@mrtm/api';
 
-@Pipe({ name: 'timelineItemLink', pure: true, standalone: true })
+@Pipe({
+  name: 'timelineItemLink',
+  standalone: true,
+  pure: true,
+})
 export class TimelineItemLinkPipe implements PipeTransform {
   transform(value: RequestActionInfoDTO, isWorkflow?: boolean): any[] {
     const routerLooks = isWorkflow ? './' : '/';

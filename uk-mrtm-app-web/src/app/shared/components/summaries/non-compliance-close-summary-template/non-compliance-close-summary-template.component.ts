@@ -13,7 +13,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-non-compliance-close-summary-template',
-  standalone: true,
   imports: [
     NotProvidedDirective,
     SummaryDownloadFilesComponent,
@@ -22,6 +21,7 @@ import { AttachedFile } from '@shared/types';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
   ],
+  standalone: true,
   template: `
     <dl govuk-summary-list>
       <div govukSummaryListRow>

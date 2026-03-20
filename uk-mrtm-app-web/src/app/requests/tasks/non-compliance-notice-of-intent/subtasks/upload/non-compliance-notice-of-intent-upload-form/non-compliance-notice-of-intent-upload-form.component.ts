@@ -21,11 +21,11 @@ import { FileInputComponent, WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-non-compliance-notice-of-intent-upload-form',
-  standalone: true,
   imports: [FileInputComponent, TextareaComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './non-compliance-notice-of-intent-upload-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceNoticeOfIntentUploadFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceNoticeOfIntentUploadFormComponent {
   private readonly route = inject(ActivatedRoute);

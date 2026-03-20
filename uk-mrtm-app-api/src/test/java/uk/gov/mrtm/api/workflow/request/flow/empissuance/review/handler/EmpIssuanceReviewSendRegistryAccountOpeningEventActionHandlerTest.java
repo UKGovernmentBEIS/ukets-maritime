@@ -9,7 +9,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.context.ApplicationEventPublisher;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.event.EmpApprovedEvent;
-import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanIdentifierGenerator;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.EmissionsMonitoringPlanFactory;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
@@ -44,8 +43,6 @@ class EmpIssuanceReviewSendRegistryAccountOpeningEventActionHandlerTest {
     @Mock
     private ApplicationEventPublisher publisher;
     @Mock
-    private EmissionsMonitoringPlanIdentifierGenerator empIdentifierGenerator;
-    @Mock
     private EmpIssuanceSendRegistryAccountOpeningAddRequestActionService addRequestActionService;
 
     @Test
@@ -79,7 +76,6 @@ class EmpIssuanceReviewSendRegistryAccountOpeningEventActionHandlerTest {
             .build();
 
         when(requestTaskService.findTaskById(1L)).thenReturn(requestTask);
-        when(empIdentifierGenerator.generate(accountId)).thenReturn(empId);
 
         RequestTaskPayload requestTaskPayload = handler.process(requestTask.getId(),
             MrtmRequestTaskActionType.EMP_ISSUANCE_SEND_REGISTRY_ACCOUNT_OPENING_EVENT,
@@ -88,19 +84,16 @@ class EmpIssuanceReviewSendRegistryAccountOpeningEventActionHandlerTest {
 
         assertThat(requestTaskPayload).isEqualTo(expectedRequestTaskPayload);
         verify(requestTaskService).findTaskById(requestTask.getId());
-        verify(empIdentifierGenerator).generate(accountId);
         verify(addRequestActionService).addRequestAction(
             request,
             emissionsMonitoringPlan.getOperatorDetails().getOrganisationStructure(),
             userId);
         verify(publisher).publishEvent(EmpApprovedEvent.builder()
             .accountId(requestTask.getRequest().getAccountId())
-            .empId(empId)
             .emissionsMonitoringPlan(emissionsMonitoringPlan)
             .build());
 
-        verifyNoMoreInteractions(publisher, requestTaskService, empIdentifierGenerator,
-            addRequestActionService);
+        verifyNoMoreInteractions(publisher, requestTaskService, addRequestActionService);
     }
 
     @Test
@@ -128,7 +121,7 @@ class EmpIssuanceReviewSendRegistryAccountOpeningEventActionHandlerTest {
         verify(requestTaskService).findTaskById(requestTask.getId());
 
         verifyNoMoreInteractions(requestTaskService);
-        verifyNoInteractions(publisher, empIdentifierGenerator, addRequestActionService);
+        verifyNoInteractions(publisher, addRequestActionService);
     }
 
     @Test

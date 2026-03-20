@@ -58,7 +58,7 @@ public class AccountThirdPartyDataProviderController {
     }
 
     @GetMapping(path = "/{id}/third-party-data-providers")
-    @Operation(summary = "Get all third party data providers")
+    @Operation(summary = "Get all third party data providers for account")
     @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK,
         content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ThirdPartyDataProviderNameInfoDTO.class))))
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN,

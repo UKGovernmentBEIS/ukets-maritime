@@ -14,9 +14,9 @@ import { OperatorAccountsStore, selectCurrentAccount } from '@accounts/store';
 
 @Component({
   selector: 'mrtm-incorporate-header',
-  templateUrl: './incorporate-header.component.html',
-  standalone: true,
   imports: [RouterLink, AsyncPipe, LinkDirective, TagComponent, TitleCasePipe, OperatorAccountsStatusColorPipe],
+  standalone: true,
+  templateUrl: './incorporate-header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IncorporateHeaderComponent {
@@ -26,9 +26,7 @@ export class IncorporateHeaderComponent {
   private readonly operatorAccountsStore = inject(OperatorAccountsStore);
 
   accountDetails$: Observable<MrtmAccountEmpDTO> = combineLatest([
-    this.requestTaskStore
-      .rxSelect(requestTaskQuery.selectRequestInfo)
-      .pipe(map((requestInfo) => requestInfo?.accountId)),
+    this.requestTaskStore.rxSelect(requestTaskQuery.selectRequestTaskAccountId),
     this.requestActionStore.rxSelect(requestActionQuery.selectAction).pipe(map((action) => action?.requestAccountId)),
     this.operatorAccountsStore.pipe(selectCurrentAccount),
   ]).pipe(
@@ -37,7 +35,7 @@ export class IncorporateHeaderComponent {
         requestTaskAccountId ?? requestActionAccountId ?? currentAccount?.account?.id,
     ),
     switchMap((accountId) => {
-      return (accountId ? this.maritimeAccountsService.getMaritimeAccount(accountId) : of(null)).pipe(
+      return (accountId ? this.maritimeAccountsService.getMaritimeAccount(Number(accountId)) : of(null)).pipe(
         catchError(() => EMPTY),
       );
     }),

@@ -9,8 +9,8 @@ import { RdeRegulatorDecisionSummaryTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-rde-regulator-decision',
-  standalone: true,
   imports: [RdeRegulatorDecisionSummaryTemplateComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './rde-regulator-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

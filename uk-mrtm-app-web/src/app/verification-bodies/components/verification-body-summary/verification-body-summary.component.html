@@ -1,19 +1,19 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Name of verification body organisation</dt>
-    <dd govukSummaryListRowValue>{{ summaryInfo?.name }}</dd>
-    @if (editable) {
+    <dd govukSummaryListRowValue>{{ summaryInfo()?.name }}</dd>
+    @if (editable()) {
       <dd govukSummaryListRowActions>
-        <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Accreditation reference number</dt>
-    <dd govukSummaryListRowValue>{{ summaryInfo?.accreditationReferenceNumber }}</dd>
-    @if (editable) {
+    <dd govukSummaryListRowValue>{{ summaryInfo()?.accreditationReferenceNumber }}</dd>
+    @if (editable()) {
       <dd govukSummaryListRowActions>
-        <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
       </dd>
     }
   </div>
@@ -21,18 +21,18 @@
     <dt govukSummaryListRowKey>Address</dt>
     <dd govukSummaryListRowValue>
       <div>
-        {{ summaryInfo?.address?.line1 }}
-        @if (summaryInfo?.address?.line2) {
-          , {{ summaryInfo?.address?.line2 }}
+        {{ summaryInfo()?.address?.line1 }}
+        @if (summaryInfo()?.address?.line2) {
+          , {{ summaryInfo()?.address?.line2 }}
         }
       </div>
-      <div>{{ summaryInfo?.address?.city }}</div>
-      <div>{{ summaryInfo?.address?.postcode }}</div>
-      <div>{{ summaryInfo?.address?.country | country }}</div>
+      <div>{{ summaryInfo()?.address?.city }}</div>
+      <div>{{ summaryInfo()?.address?.postcode }}</div>
+      <div>{{ summaryInfo()?.address?.country | country }}</div>
     </dd>
-    @if (editable) {
+    @if (editable()) {
       <dd govukSummaryListRowActions>
-        <a [routerLink]="[formRouterLink]" govukLink>Change</a>
+        <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
       </dd>
     }
   </div>

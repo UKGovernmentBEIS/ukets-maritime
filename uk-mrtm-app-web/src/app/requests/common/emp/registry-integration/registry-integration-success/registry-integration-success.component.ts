@@ -5,8 +5,8 @@ import { PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-registry-integration-success',
-  standalone: true,
   imports: [PanelComponent, ReturnToTaskOrActionPageComponent],
+  standalone: true,
   templateUrl: './registry-integration-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -25,11 +25,12 @@ import {
   COMPLETE_REVIEW_ROUTE_PREFIX,
 } from '@requests/tasks/aer-review/subtasks/complete-review';
 import { canActivateSkipReview, SKIP_REVIEW_ROUTE_PREFIX } from '@requests/tasks/aer-review/subtasks/skip-review';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const AER_REVIEW_ROUTES: Routes = [
   {
     path: '',
-    canActivate: [canActivateAerReviewSubtasks],
+    canActivate: [canActivateAerReviewSubtasks, resetPersistableStateGuard],
     providers: [
       PayloadMutatorsHandler,
       SideEffectsHandler,

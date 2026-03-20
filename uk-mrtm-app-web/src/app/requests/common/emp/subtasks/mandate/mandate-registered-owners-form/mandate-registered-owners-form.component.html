@@ -10,7 +10,8 @@
       govuk-text-input
       formControlName="imoNumber"
       widthClass="govuk-!-width-one-third"
-      label="IMO unique company and registered owner identification number"></div>
+      label="IMO unique company and registered owner identification number"
+      hint="Must be 7 digits long"></div>
     <div govuk-text-input formControlName="contactName" label="Contact name"></div>
     <div govuk-text-input formControlName="email" label="Contact email"></div>
     <div
@@ -26,8 +27,10 @@
     registered owner has been added yet.
   </p>
   <mrtm-multi-select-table
+    targetFragment="ismShipsTable"
+    [pageSize]="pageSize"
     [columns]="columns"
-    [data]="page()"
+    [data]="availableShips()"
     (selectionChanged)="onShipsSelectionChanged()"
     emptyTableText="No items to display"
     description="Select ships to associate">
@@ -35,15 +38,8 @@
       {{ row[column.field] }}
     </ng-template>
   </mrtm-multi-select-table>
-  @if (totalItems() > pageSize) {
-    <govuk-pagination
-      fragment="ismShipsTable"
-      [count]="this.totalItems()"
-      [pageSize]="pageSize"
-      (currentPageChange)="onPageChange($event)" />
-  }
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="isEdit ? ['../../'] : ['../']">Return to: {{ returnToLabel }}</a>
 </div>

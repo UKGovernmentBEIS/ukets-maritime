@@ -29,9 +29,9 @@ import { MrtmRequestType } from '@shared/types';
 
 @Component({
   selector: 'mrtm-process-actions',
-  templateUrl: './process-actions.component.html',
-  standalone: true,
   imports: [AsyncPipe, PageHeadingComponent, PendingButtonDirective, ButtonDirective],
+  standalone: true,
+  templateUrl: './process-actions.component.html',
   providers: [
     { provide: ITEM_LINK_REQUEST_TYPES_WHITELIST, useValue: requestTypesWhitelistForItemLinkPipe },
     ItemLinkPipe,

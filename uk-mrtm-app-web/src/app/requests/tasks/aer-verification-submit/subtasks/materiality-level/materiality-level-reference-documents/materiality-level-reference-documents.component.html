@@ -1,15 +1,15 @@
 <mrtm-wizard-step
   (formSubmit)="onSubmit()"
-  [caption]="map.caption"
+  [caption]="materialityLevelMap.title"
   [formGroup]="formGroup"
-  [heading]="map.accreditationReferenceDocumentTypes.description"
+  [heading]="materialityLevelMap.accreditationReferenceDocumentTypes.title"
   [showReturnLink]="true"
   [isTwoThirds]="true">
   <div
     formControlName="accreditationReferenceDocumentTypes"
     govuk-checkboxes
-    legend="For UK Emissions Trading Scheme (ETS)"
-    legendSize="medium"
+    label="For UK Emissions Trading Scheme (ETS)"
+    labelSize="medium"
     hint="The listed documents include all modifications and amendments made to relevant legislation, unless otherwise stated.">
     @for (type of referenceDocumentTypes; track type) {
       <govuk-checkbox [value]="type" [label]="type | accreditationReferenceDocumentTypes">
@@ -18,7 +18,7 @@
             <div
               formControlName="otherReference"
               govuk-textarea
-              [label]="map.otherReference.title"
+              label="Reference details"
               labelSize="normal"
               [maxLength]="10000"></div>
           </ng-container>

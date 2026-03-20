@@ -12,8 +12,11 @@
 } @else {
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <govuk-panel title="The user account of {{ regulator$ | async | userFullName }} has been deleted"></govuk-panel>
-      <a fragment="regulator-users" govukLink [routerLink]="['/user/regulators']">Return to: Regulator users page</a>
+      <govuk-panel title="The user account of {{ regulator$ | async | userFullName }} has been deleted" />
     </div>
+  </div>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <a fragment="regulator-users" govukLink [routerLink]="['/user/regulators']">Return to: Regulator users page</a>
   </div>
 }

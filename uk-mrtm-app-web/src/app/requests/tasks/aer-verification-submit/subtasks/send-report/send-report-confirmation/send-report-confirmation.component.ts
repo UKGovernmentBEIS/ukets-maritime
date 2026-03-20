@@ -8,8 +8,8 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-send-report-confirmation',
-  standalone: true,
   imports: [ButtonDirective, PageHeadingComponent, PendingButtonDirective, ReturnToTaskOrActionPageComponent],
+  standalone: true,
   templateUrl: './send-report-confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

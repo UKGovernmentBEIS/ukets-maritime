@@ -13,13 +13,13 @@ import {
 
 @Component({
   selector: 'mrtm-reporting-obligation-submitted',
-  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     ReportingObligationSummaryTemplateComponent,
     PageHeadingComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './reporting-obligation-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

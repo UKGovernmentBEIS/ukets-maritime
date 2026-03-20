@@ -1,4 +1,4 @@
-<mrtm-service-banner></mrtm-service-banner>
+<mrtm-service-banner />
 
 @if (vm(); as vm) {
   @if (!vm.isLoggedIn) {
@@ -24,7 +24,7 @@
     </div>
 
     <div class="govuk-!-margin-bottom-9"></div>
-    <mrtm-back-to-top></mrtm-back-to-top>
+    <mrtm-back-to-top />
   } @else {
     @if (vm.roleType) {
       @switch (vm.status) {

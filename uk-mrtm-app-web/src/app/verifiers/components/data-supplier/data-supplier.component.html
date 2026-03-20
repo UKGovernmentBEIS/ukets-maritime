@@ -1,0 +1,9 @@
+<h2 class="govuk-heading-m">Data supplier details</h2>
+@if (userRole() === 'VERIFIER' && editable() && data().length === 0) {
+  <button govukButton type="button" (click)="appointDataSupplier()">Appoint a data supplier</button>
+}
+
+<mrtm-va-data-supplier-details-table
+  [editable]="editable()"
+  [routePrefix]="DATA_SUPPLIER_ROUTE_PREFIX"
+  [data]="data()" />

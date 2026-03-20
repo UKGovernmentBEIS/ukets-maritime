@@ -20,7 +20,7 @@ describe('NotificationDetailsOfChangeSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(NotificationDetailsOfChangeSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.detailsOfChange = {
+    fixture.componentRef.setInput('detailsOfChange', {
       description: 'description the non-significant change',
       justification: 'some justification',
       startDate: '2020-04-01',
@@ -30,8 +30,8 @@ describe('NotificationDetailsOfChangeSummaryTemplateComponent', () => {
         '22222222-2222-4222-a222-222222222222',
         '33333333-3333-4333-a333-333333333333',
       ],
-    };
-    component.notificationFiles = [
+    });
+    fixture.componentRef.setInput('notificationFiles', [
       {
         downloadUrl: '/tasks/61/file-download/11111111-1111-4111-a111-111111111111',
         fileName: '1.png',
@@ -44,7 +44,7 @@ describe('NotificationDetailsOfChangeSummaryTemplateComponent', () => {
         downloadUrl: '/tasks/61/file-download/33333333-3333-4333-a333-333333333333',
         fileName: '3.png',
       },
-    ];
+    ]);
     page = new Page(fixture);
     fixture.detectChanges();
   });

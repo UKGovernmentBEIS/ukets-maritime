@@ -13,6 +13,10 @@ describe('VariationRegulatorDecisionPartialSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(VariationRegulatorDecisionPartialSummaryTemplateComponent);
     component = fixture.componentInstance;
+    fixture.componentRef.setInput('variationDecisionDetails', {
+      notes: 'some text',
+      variationScheduleItems: [],
+    });
     fixture.detectChanges();
   });
 

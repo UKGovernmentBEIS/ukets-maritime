@@ -1,8 +1,11 @@
 import { Provider } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { AerDataReviewDecision, AerSaveReviewGroupDecisionRequestTaskActionPayload } from '@mrtm/api';
-import { ReviewDecisionRequiredChange } from '@mrtm/api';
+import {
+  AerDataReviewDecision,
+  AerSaveReviewGroupDecisionRequestTaskActionPayload,
+  ReviewDecisionRequiredChange,
+} from '@mrtm/api';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';

@@ -18,6 +18,7 @@ import uk.gov.mrtm.api.account.repository.AccountReportingStatusRepository;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.account.service.reportingstatus.AccountReportingStatusHistoryCreationService;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
+import uk.gov.mrtm.api.integration.registry.accountexempt.domain.AccountExemptEvent;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -61,6 +62,11 @@ class AccountReportingStatusHistoryCreationServiceTest {
                 .builder().status(MrtmAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
         final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
         AccountReportingStatus accountReportingStatus = AccountReportingStatus.builder().build();
+        AccountExemptEvent accountExemptEvent = AccountExemptEvent.builder()
+            .accountId(accountId)
+            .isExempt(false)
+            .year(year)
+            .build();
 
         when(reportingStatusRepository.findByAccountIdAndYear(accountId, year))
                 .thenReturn(accountReportingStatus);
@@ -84,6 +90,8 @@ class AccountReportingStatusHistoryCreationServiceTest {
         );
         verify(reportingStatusRepository).findByAccountIdAndYear(accountId, year);
         verify(reportingStatusRepository).save(accountReportingStatus);
+        verify(publisher).publishEvent(accountExemptEvent);
+
         verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher);
     }
 
@@ -95,6 +103,11 @@ class AccountReportingStatusHistoryCreationServiceTest {
         final AccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO = AccountReportingStatusHistoryCreationDTO
             .builder().status(MrtmAccountReportingStatus.EXEMPT).reason("reason").build();
         final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
+        AccountExemptEvent accountExemptEvent = AccountExemptEvent.builder()
+            .accountId(accountId)
+            .isExempt(true)
+            .year(year)
+            .build();
         AccountReportingStatus accountReportingStatus = AccountReportingStatus.builder().status(MrtmAccountReportingStatus.REQUIRED_TO_REPORT).build();
 
         when(reportingStatusRepository.findByAccountIdAndYear(accountId, year))
@@ -118,6 +131,7 @@ class AccountReportingStatusHistoryCreationServiceTest {
         );
         verify(reportingStatusRepository).findByAccountIdAndYear(accountId, year);
         verify(reportingStatusRepository).save(accountReportingStatus);
+        verify(publisher).publishEvent(accountExemptEvent);
         verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher);
     }
 

@@ -19,10 +19,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import uk.gov.mrtm.api.workflow.request.core.service.MrtmRequestQueryService;
-import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.workflow.request.core.domain.dto.RequestCreateActionProcessDTO;
 import uk.gov.netz.api.workflow.request.core.domain.dto.RequestCreateActionProcessResponseDTO;
@@ -44,7 +43,6 @@ public class RequestController {
 
     private final RequestCreateActionResourceTypeDelegator requestCreateActionResourceTypeDelegator;
     private final RequestQueryService requestQueryService;
-    private final MrtmRequestQueryService mrtmRequestQueryService;
 
     @PostMapping
     @SuppressWarnings("unchecked")
@@ -99,6 +97,6 @@ public class RequestController {
     public ResponseEntity<RequestDetailsSearchResults> getRequestDetailsByResource(
             @Parameter(hidden = true) AppUser appUser,
             @RequestBody @Valid @Parameter(description = "The search criteria", required = true) RequestSearchCriteria criteria) {
-        return new ResponseEntity<>(mrtmRequestQueryService.findRequestDetailsBySearchCriteria(criteria, appUser), HttpStatus.OK);
+        return new ResponseEntity<>(requestQueryService.findRequestDetailsBySearchCriteria(criteria, appUser), HttpStatus.OK);
     }
 }

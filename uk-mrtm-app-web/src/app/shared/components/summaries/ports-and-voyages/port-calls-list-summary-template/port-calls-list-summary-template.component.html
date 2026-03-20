@@ -19,10 +19,8 @@
       </dl>
     }
 
-    @for (warningMessage of warningMessages(); track i; let i = $index) {
-      <govuk-warning-text
-        [assistiveText]="warningMessage"
-        [bottomSpacing]="i + 1 === warningMessages().length ? 7 : 0" />
+    @for (warningMessage of warningMessages(); track $index) {
+      <govuk-warning-text [assistiveText]="warningMessage" [bottomSpacing]="$last ? 7 : 0" />
     }
     @if (editable()) {
       <button type="button" govukSecondaryButton netzPendingButton (click)="onDelete(rows)">Delete</button>
@@ -31,11 +29,15 @@
   @if (editable()) {
     <mrtm-multi-select-table
       id="port-calls"
+      targetFragment="port-calls"
+      [pageSize]="pageSize()"
       [columns]="columns"
       [data]="rows"
       (sort)="sort.set($event)"
       [emptyTableText]="emptyTableText()"
-      description="Port calls of all ships">
+      description="Port calls of all ships"
+      mrtmScrollablePane
+      ariaLabel="Port calls of all ships">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>
@@ -47,14 +49,16 @@
       [data]="rows"
       (sort)="sort.set($event)"
       [emptyTableText]="emptyTableText()"
-      description="Port calls of all ships">
+      description="Port calls of all ships"
+      mrtmScrollablePane
+      ariaLabel="Port calls of all ships">
       <ng-template let-row="row" let-column="column">
         <ng-container [ngTemplateOutlet]="tableContent" [ngTemplateOutletContext]="{ row, column }" />
       </ng-template>
     </govuk-table>
   }
 
-  @if (totalItems() > pageSize()) {
+  @if (!editable() && totalItems() > pageSize()) {
     <govuk-pagination
       fragment="port-calls"
       [count]="this.totalItems()"

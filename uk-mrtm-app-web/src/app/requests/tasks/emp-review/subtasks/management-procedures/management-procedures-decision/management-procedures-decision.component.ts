@@ -36,16 +36,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-management-procedures-decision',
-  standalone: true,
   imports: [
     ManagementProceduresSummaryTemplateComponent,
     ReactiveFormsModule,
     WizardStepComponent,
     ReviewDecisionComponent,
   ],
+  standalone: true,
   templateUrl: './management-procedures-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewDecisionFormProvider(MANAGEMENT_PROCEDURES_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(REVIEW_DECISION_FORM);
@@ -53,7 +53,7 @@ export class ManagementProceduresDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empCommonQuery.selectManagementProcedures)();
     return {
       managementProcedures: managementProcedures,

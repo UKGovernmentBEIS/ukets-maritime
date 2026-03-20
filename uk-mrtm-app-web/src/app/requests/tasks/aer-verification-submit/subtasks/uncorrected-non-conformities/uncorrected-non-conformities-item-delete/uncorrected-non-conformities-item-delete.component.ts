@@ -15,8 +15,8 @@ import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-item-delete',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, PageHeadingComponent, PendingButtonDirective],
+  standalone: true,
   templateUrl: './uncorrected-non-conformities-item-delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

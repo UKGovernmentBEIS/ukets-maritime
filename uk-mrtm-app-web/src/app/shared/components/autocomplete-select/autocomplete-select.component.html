@@ -1,13 +1,13 @@
 <!-- eslint-disable @angular-eslint/template/click-events-have-key-events -->
 <!-- eslint-disable @angular-eslint/template/interactive-supports-focus -->
-<!-- 
-  <label> must not have tabIndex="-1" because it causes a bug with angular anchorScrolling: 'enabled' by 
+<!--
+  <label> must not have tabIndex="-1" because it causes a bug with angular anchorScrolling: 'enabled' by
   preventing focus on the input field after clicking the error message in the error summary component
  -->
 <label
   [class.govuk-visually-hidden]="isLabelHidden() || (!templateLabel() && !label())"
   [for]="identifier"
-  [id]="'l.' + identifier"
+  [id]="`l.${identifier}`"
   class="autocomplete-select__label"
   [ngClass]="labelSizeClasses()"
   (click)="handleLabelClick($event)">
@@ -19,7 +19,7 @@
 </label>
 
 @if (hint()) {
-  <div [id]="identifier + '__hint'" class="govuk-hint">
+  <div [id]="`${identifier}__hint`" class="govuk-hint">
     {{ hint() }}
   </div>
 }
@@ -44,11 +44,11 @@
     [attr.type]="inputFieldType()"
     role="combobox"
     aria-autocomplete="list"
-    [attr.aria-describedby]="hint() ? identifier + '__hint' : null"
+    [attr.aria-describedby]="hint() ? `${identifier}__hint` : null"
     [attr.aria-expanded]="isMenuOpen() && !!(filteredOptions().length || showNoOptionsFound())"
-    [attr.aria-controls]="identifier + '__listbox'"
+    [attr.aria-controls]="`${identifier}__listbox`"
     [attr.aria-activedescendant]="
-      markedIndex() !== null && markedIndex() >= 0 ? identifier + '__option--' + markedIndex() : null
+      markedIndex() !== null && markedIndex() >= 0 ? `${identifier}__option--${markedIndex()}` : null
     "
     autocomplete="off"
     [id]="identifier"
@@ -60,40 +60,40 @@
     (blur)="handleInputBlur($event)"
     (input)="handleInputFieldInput()"
     (click)="handleInputClick()" />
-  <!-- 
+  <!--
     Listbox and all elements in the listbox must have tabindex="-1". Without it there is a bug when tabbing between
     form fields. If the list of options is too long and has a vertical scrollbar - pressing tab on the keyboard will
     blur the autocomplete-select input field but it will not focus the next tabbable element.
    -->
   <ul
     #listbox
-    [id]="identifier + '__listbox'"
+    [id]="`${identifier}__listbox`"
     role="listbox"
     tabindex="-1"
     class="autocomplete-select__menu"
     [class.autocomplete-select__menu--visible]="isMenuOpen()"
     [class.autocomplete-select__menu--hidden]="!isMenuOpen()"
-    [attr.aria-labelledby]="'l.' + identifier"
+    [attr.aria-labelledby]="`l.${identifier}`"
     (blur)="handleListboxBlur($event)"
     (mouseleave)="handleListMouseLeave()">
-    @for (option of filteredOptions(); track i; let i = $index) {
+    @for (option of filteredOptions(); track $index) {
       <li
         #option
-        [id]="identifier + '__option--' + i"
+        [id]="`${identifier}__option--${$index}`"
         class="autocomplete-select__option"
-        [class.autocomplete-select__option--odd]="i % 2"
+        [class.autocomplete-select__option--odd]="$index % 2"
         [class.autocomplete-select__option--focused]="
-          hoveredIndex() === null && (focusedIndex() === -1 ? markedIndex() === i : focusedIndex() === i)
+          hoveredIndex() === null && (focusedIndex() === -1 ? markedIndex() === $index : focusedIndex() === $index)
         "
         role="option"
         tabindex="-1"
-        [attr.aria-posinset]="i + 1"
-        [attr.aria-setsize]="filteredOptions().length"
-        [attr.aria-selected]="focusedIndex() === i"
-        (click)="handleOptionClick(i)"
-        (blur)="handleOptionBlur($event, i)"
+        [attr.aria-posinset]="$index + 1"
+        [attr.aria-setsize]="$count"
+        [attr.aria-selected]="focusedIndex() === $index"
+        (click)="handleOptionClick($index)"
+        (blur)="handleOptionBlur($event, $index)"
         (mousedown)="handleOptionMouseDown($event)"
-        (mouseenter)="handleOptionMouseEnter(i)">
+        (mouseenter)="handleOptionMouseEnter($index)">
         {{ option.text }}
       </li>
     } @empty {

@@ -95,5 +95,6 @@
     [editable]="editable()"
     [editQueryParams]="editQueryParams()"
     [directEmissions]="voyage?.directEmissions"
-    [fuelConsumptions]="voyage?.fuelConsumptions" />
+    [fuelConsumptions]="voyage?.fuelConsumptions"
+    (addDirectEmission)="onAddDirectEmissions()" />
 }

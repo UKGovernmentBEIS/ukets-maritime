@@ -8,7 +8,7 @@ export const isWizardCompleted = (maritimeEmissions: DoeMaritimeEmissions) => {
 
   const feeDetailsValid = !!feeDetails?.totalBillableHours && !!feeDetails?.hourlyRate && !!feeDetails?.dueDate;
 
-  const isDeterminationReasonValid = !!maritimeEmissions?.determinationReason?.type;
+  const isDeterminationReasonValid = !!maritimeEmissions?.determinationReason?.details?.type;
   const isTotalMaritimeEmissionsValid =
     new BigNumber(totalMaritimeEmissions?.totalReportableEmissions).gte(0) &&
     new BigNumber(totalMaritimeEmissions?.surrenderEmissions).gte(0) &&

@@ -20,7 +20,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-exemption-conditions',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ShipStepTitleCustomPipe,
@@ -31,8 +30,9 @@ import { WizardStepComponent } from '@shared/components';
     TextInputComponent,
     ReturnToShipsListTableComponent,
   ],
-  providers: [exemptionConditionsFormProvider],
+  standalone: true,
   templateUrl: './exemption-conditions.component.html',
+  providers: [exemptionConditionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExemptionConditionsComponent {

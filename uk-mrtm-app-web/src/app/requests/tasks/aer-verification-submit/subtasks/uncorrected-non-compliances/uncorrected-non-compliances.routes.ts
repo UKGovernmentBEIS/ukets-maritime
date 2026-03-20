@@ -16,9 +16,9 @@ export const UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
     canActivate: [canActivateUncorrectedNonCompliancesSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-summary'
-      ).then((c) => c.UncorrectedNonCompliancesSummaryComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-summary').then(
+        (c) => c.UncorrectedNonCompliancesSummaryComponent,
+      ),
   },
   {
     path: UncorrectedNonCompliancesStep.EXIST_FORM,
@@ -29,9 +29,9 @@ export const UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonCompliancesStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-exist'
-      ).then((c) => c.UncorrectedNonCompliancesExistComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-exist').then(
+        (c) => c.UncorrectedNonCompliancesExistComponent,
+      ),
   },
   {
     path: UncorrectedNonCompliancesStep.ITEMS_LIST,
@@ -42,9 +42,9 @@ export const UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonCompliancesStep.SUMMARY, UncorrectedNonCompliancesStep.EXIST_FORM),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-list'
-      ).then((c) => c.UncorrectedNonCompliancesListComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-list').then(
+        (c) => c.UncorrectedNonCompliancesListComponent,
+      ),
   },
   {
     path: UncorrectedNonCompliancesStep.ITEM_FORM_ADD,
@@ -55,9 +55,9 @@ export const UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonCompliancesStep.SUMMARY, UncorrectedNonCompliancesStep.ITEMS_LIST),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-item-form'
-      ).then((c) => c.UncorrectedNonCompliancesItemFormComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-item-form').then(
+        (c) => c.UncorrectedNonCompliancesItemFormComponent,
+      ),
   },
   {
     path: `:reference/${UncorrectedNonCompliancesStep.ITEM_FORM_EDIT}`,
@@ -71,9 +71,9 @@ export const UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-item-form'
-      ).then((c) => c.UncorrectedNonCompliancesItemFormComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-item-form').then(
+        (c) => c.UncorrectedNonCompliancesItemFormComponent,
+      ),
   },
   {
     path: `:reference/${UncorrectedNonCompliancesStep.ITEM_DELETE}`,
@@ -87,8 +87,8 @@ export const UNCORRECTED_NON_COMPLIANCES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-item-delete'
-      ).then((c) => c.UncorrectedNonCompliancesItemDeleteComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-compliances/uncorrected-non-compliances-item-delete').then(
+        (c) => c.UncorrectedNonCompliancesItemDeleteComponent,
+      ),
   },
 ];

@@ -2,34 +2,33 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { RequestActionStore } from '@netz/common/store';
-import { ActivatedRouteStub } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { actionProviders } from '@requests/common/action.providers';
 import { controlActivitiesMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
 import { mockEmpControlActivities } from '@requests/common/emp/testing/emp-data.mock';
 import { ControlActivitiesSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/control-activities';
-import { screen } from '@testing-library/angular';
 
 describe('ControlActivitiesSubmittedComponent', () => {
   let fixture: ComponentFixture<ControlActivitiesSubmittedComponent>;
   let component: ControlActivitiesSubmittedComponent;
   let store: RequestActionStore;
+  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
 
-  const createComponent = () => {
-    fixture = TestBed.createComponent(ControlActivitiesSubmittedComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    jest.clearAllMocks();
-  };
+  class Page extends BasePage<ControlActivitiesSubmittedComponent> {
+    get summaryListTerms(): string[] {
+      return this.queryAll('dt').map((dt) => dt.textContent.trim());
+    }
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [ControlActivitiesSubmittedComponent],
       providers: [{ provide: ActivatedRoute, useValue: activatedRouteStub }, ...actionProviders],
-    }).compileComponents();
+    });
 
     store = TestBed.inject(RequestActionStore);
     store.setState(
@@ -37,7 +36,11 @@ describe('ControlActivitiesSubmittedComponent', () => {
         controlActivities: mockEmpControlActivities,
       }),
     );
-    createComponent();
+    fixture = TestBed.createComponent(ControlActivitiesSubmittedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    page = new Page(fixture);
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
@@ -45,14 +48,9 @@ describe('ControlActivitiesSubmittedComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(screen.getAllByRole('heading')[0].textContent).toEqual('Control activities');
+    expect(page.heading1.textContent).toEqual('Control activities');
 
-    const summarySections = screen
-      .getAllByRole('heading')
-      .slice(1)
-      .map((section) => section.textContent);
-
-    expect(summarySections).toEqual([
+    expect(page.queryAll('h2').map((item) => item.textContent.trim())).toEqual([
       controlActivitiesMap.qualityAssurance.title,
       controlActivitiesMap.internalReviews.title,
       controlActivitiesMap.corrections.title,
@@ -60,7 +58,7 @@ describe('ControlActivitiesSubmittedComponent', () => {
       controlActivitiesMap.documentation.title,
     ]);
 
-    expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
+    expect([...new Set(page.summaryListTerms)]).toEqual([
       'Procedure reference',
       'Procedure version',
       'Description of procedure',

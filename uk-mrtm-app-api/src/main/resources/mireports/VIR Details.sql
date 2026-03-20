@@ -44,7 +44,7 @@ with parameters as (select 2022 as reportingYear),
                 from account a
                          join account_mrtm am on am.id = a.id
                          left join account_reporting_status ars on a.id = ars.account_id
-                         join emp p on p.account_id = a.id
+                         left join emp p on p.account_id = a.id
                          join request_resource rr on (rr.resource_type = 'ACCOUNT' and rr.resource_id = a.id::VARCHAR)
                          join latest_aer_submission aer on aer.request_id = rr.request_id
                 where verification_performed = 'true'

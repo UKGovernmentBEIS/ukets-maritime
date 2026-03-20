@@ -16,14 +16,14 @@ describe('UserAccountFormComponent', () => {
   }
 
   @Component({
+    imports: [ReactiveFormsModule, UserAccountFormComponent],
+    standalone: true,
     template: `
       <form [formGroup]="formGroup">
-        <mrtm-user-account-form></mrtm-user-account-form>
+        <mrtm-user-account-form />
       </form>
     `,
-    standalone: true,
     schemas: [NO_ERRORS_SCHEMA],
-    imports: [ReactiveFormsModule, UserAccountFormComponent],
   })
   class TestComponent {
     formGroup = new FormGroup<Record<keyof Omit<OperatorUserInvitationDTO, 'roleCode'>, FormControl>>({
@@ -38,8 +38,6 @@ describe('UserAccountFormComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
-
     fixture = TestBed.createComponent(TestComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);

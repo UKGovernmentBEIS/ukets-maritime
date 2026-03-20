@@ -13,8 +13,8 @@ import {
 
 @Component({
   selector: 'mrtm-uncorrected-items-list-template',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, TableComponent],
+  standalone: true,
   templateUrl: './uncorrected-items-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,6 +32,6 @@ export class UncorrectedItemsListTemplateComponent {
     { field: 'reference', header: 'Reference', widthClass: 'app-column-width-15-per' },
     { field: 'explanation', header: 'Explanation' },
     { field: 'materialEffect', header: 'Impact', widthClass: 'app-column-width-15-per' },
-    { field: 'actionLinks', header: '' },
+    { field: 'actionLinks', header: 'Actions', hiddenHeader: true },
   ];
 }

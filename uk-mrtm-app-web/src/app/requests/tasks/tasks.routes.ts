@@ -33,6 +33,7 @@ import {
 import { taskProviders } from '@requests/common/task.providers';
 import { AER_REVIEW_ROUTE_PREFIX } from '@requests/tasks/aer-review';
 import { EMP_SUBMIT_ROUTE_PREFIX } from '@requests/tasks/emp-submit/emp-submit.const';
+import { canActivatePendingPaymentProcess } from '@requests/tasks/payment/payment.guard';
 import { tasksContent } from '@requests/tasks/tasks-content';
 import { VIR_RESPOND_TO_REGULATOR_COMMENTS_PREFIX } from '@requests/tasks/vir-respond-to-regulator-comments';
 import { VIR_REVIEW_PREFIX } from '@requests/tasks/vir-review';
@@ -48,6 +49,7 @@ export const TASKS_ROUTES: Routes = [
     children: [
       {
         path: '',
+        canActivate: [canActivatePendingPaymentProcess],
         providers: [
           {
             provide: REQUEST_TASK_PAGE_CONTENT,

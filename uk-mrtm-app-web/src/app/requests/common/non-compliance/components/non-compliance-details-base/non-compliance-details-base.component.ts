@@ -23,11 +23,11 @@ import { NON_COMPLIANCE_REASON_TYPES, NonComplianceReason } from '@shared/types'
 
 @Component({
   selector: 'mrtm-non-compliance-details-base',
-  standalone: true,
   imports: [DateInputComponent, SelectComponent, TextareaComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './non-compliance-details-base.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceDetailsBaseProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceDetailsBaseComponent {
   readonly map = nonComplianceDetailsMap;

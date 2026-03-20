@@ -16,11 +16,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-edit-operator-account',
-  templateUrl: './edit-operator-account.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [ReactiveFormsModule, WizardStepComponent, RouterLink, OperatorAccountFormComponent, LinkDirective],
+  standalone: true,
+  templateUrl: './edit-operator-account.component.html',
   providers: [editOperatorAccountFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditOperatorAccountComponent {
   public form = inject<FormGroup>(EDIT_OPERATOR_ACCOUNT_FORM);

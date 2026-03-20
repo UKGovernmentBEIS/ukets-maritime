@@ -21,8 +21,6 @@ import { DocumentTemplateDetailsTemplateComponent } from '@templates/document/do
 
 @Component({
   selector: 'mrtm-document-template-overview',
-  templateUrl: './document-template-overview.component.html',
-  standalone: true,
   imports: [
     AsyncPipe,
     LinkDirective,
@@ -36,12 +34,14 @@ import { DocumentTemplateDetailsTemplateComponent } from '@templates/document/do
     SummaryListRowValueDirective,
     DocumentTemplateDetailsTemplateComponent,
   ],
+  standalone: true,
+  templateUrl: './document-template-overview.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentTemplateOverviewComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  notification = this.router.getCurrentNavigation()?.extras.state?.notification;
+  notification = this.router.currentNavigation()?.extras.state?.notification;
   documentTemplate$: Observable<DocumentTemplateDTO> = this.route.data.pipe(map((data) => data?.documentTemplate));
 }

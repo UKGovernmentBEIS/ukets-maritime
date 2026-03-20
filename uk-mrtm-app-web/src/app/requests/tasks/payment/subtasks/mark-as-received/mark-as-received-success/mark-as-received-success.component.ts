@@ -9,8 +9,8 @@ import { PaymentDetailsSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-mark-as-received-success',
-  standalone: true,
   imports: [PanelComponent, LinkDirective, RouterLink, PaymentDetailsSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './mark-as-received-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

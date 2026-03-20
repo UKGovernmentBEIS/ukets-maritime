@@ -15,7 +15,6 @@ import {
 
 @Component({
   selector: 'mrtm-request-deadline-extension-decision-details-summary-template',
-  standalone: true,
   imports: [
     RouterLink,
     LinkDirective,
@@ -26,12 +25,13 @@ import {
     SummaryListRowValueDirective,
     GovukDatePipe,
   ],
+  standalone: true,
   templateUrl: './request-deadline-extension-decision-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestDeadlineExtensionDecisionDetailsSummaryTemplateComponent {
-  data = input.required<RdeResponsePayload>();
-  isEditable = input<boolean>();
-  changeLink = input<string>();
-  queryParams = input<Params>();
+  readonly data = input.required<RdeResponsePayload>();
+  readonly isEditable = input<boolean>();
+  readonly changeLink = input<string>();
+  readonly queryParams = input<Params>();
 }

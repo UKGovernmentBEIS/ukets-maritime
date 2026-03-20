@@ -10,7 +10,7 @@ import { MiReportUseCaseService } from '@mi-reports/use-cases/common';
 
 export class ListOfVerificationBodyUsersUseCaseService extends MiReportUseCaseService {
   reportType: MiReportType = MiReportType.LIST_OF_VERIFICATION_BODY_USERS;
-  tableColumns: Signal<Array<GovukTableColumn>> = signal([
+  readonly tableColumns: Signal<Array<GovukTableColumn>> = signal([
     { field: 'Verification body name', header: 'Verification body name' },
     { field: 'Account status', header: 'Account status' },
     { field: 'Accreditation reference number', header: 'Accreditation reference number' },

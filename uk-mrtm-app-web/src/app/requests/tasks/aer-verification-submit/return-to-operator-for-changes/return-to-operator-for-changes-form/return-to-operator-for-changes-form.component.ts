@@ -11,8 +11,8 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-return-to-operator-for-changes-form',
-  standalone: true,
   imports: [ReactiveFormsModule, WizardStepComponent, TextareaComponent],
+  standalone: true,
   templateUrl: './return-to-operator-for-changes-form.component.html',
   styleUrl: './return-to-operator-for-changes-form.component.scss',
   providers: [returnToOperatorForChangesFormProvider],

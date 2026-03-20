@@ -32,7 +32,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestPayload
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.EmpOriginatedData;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.service.RequestAerSubmitService;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
@@ -82,7 +82,7 @@ class RequestAerSubmitServiceTest {
     private ReportableEmissionsService reportableEmissionsService;
 
     @Mock
-    private SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
+    private EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
@@ -292,7 +292,7 @@ class RequestAerSubmitServiceTest {
         verify(reportableEmissionsService, times(updateReportableEmissionsInvocations)).calculateTotalReportableEmissions(aerContainer);
         verify(reportableEmissionsService, times(updateReportableEmissionsInvocations))
             .updateReportableEmissions(totalReportableEmissions, reportingYear, accountId, false);
-        verify(sendRegistryUpdatedEventAddRequestActionService, times(updateReportableEmissionsInvocations))
+        verify(emissionsUpdatedEventAddRequestActionService, times(updateReportableEmissionsInvocations))
             .addRequestAction(request, eventDetails, userId);
 
         verifyNoMoreInteractions(aerSubmitMapper, aerValidator, requestService, reportableEmissionsService);

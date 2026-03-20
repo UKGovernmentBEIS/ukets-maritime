@@ -18,9 +18,7 @@
 
 @if (hasNeedsReviewItems()) {
   <govuk-warning-text
-    [assistiveText]="
-      'The highlighted registered owners have been updated due to changes to the list of ships. Review the information for each highlighted registered owner, then select Continue.'
-    " />
+    assistiveText="The highlighted registered owners have been updated due to changes to the list of ships. Review the information for each highlighted registered owner, then select Continue." />
 }
 
 <mrtm-mandate-registered-owners-table
@@ -34,6 +32,6 @@
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />
 </div>

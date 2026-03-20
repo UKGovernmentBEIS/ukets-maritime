@@ -1,15 +1,15 @@
-@if (data?.length) {
+@if (data()?.length) {
   <h2 class="govuk-heading-m">Level of uncertainty associated with the fuel monitoring methods</h2>
-  @for (item of data; track item.monitoringMethod) {
+  @for (item of data(); track item.monitoringMethod) {
     <h3 class="govuk-heading-s">{{ monitoringMethodMap[item.monitoringMethod].text }}</h3>
     <dl [hasBorders]="true" govuk-summary-list>
       @if (item.methodApproach) {
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Approach used</dt>
           <dd govukSummaryListRowValue>{{ item.methodApproach | selectOptionToTitle: methodApproachSelectOptions }}</dd>
-          @if (isEditable && item.monitoringMethod !== 'DIRECT') {
+          @if (isEditable() && item.monitoringMethod !== 'DIRECT') {
             <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
             </dd>
           }
         </div>
@@ -23,9 +23,9 @@
             }
             {{ item.value }}
           </dd>
-          @if (isEditable && item.methodApproach !== 'DEFAULT') {
+          @if (isEditable() && item.methodApproach !== 'DEFAULT') {
             <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
             </dd>
           }
         </div>

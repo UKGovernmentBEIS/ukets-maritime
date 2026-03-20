@@ -10,8 +10,8 @@ import { NotificationTaskPayload } from '@requests/tasks/notification-submit/not
 
 @Component({
   selector: 'mrtm-submit-to-regulator-confirm',
-  standalone: true,
   imports: [PendingButtonDirective, ButtonDirective, PageHeadingComponent, ReturnToTaskOrActionPageComponent],
+  standalone: true,
   template: `
     <netz-page-heading size="xl">Submit to regulator</netz-page-heading>
     <p class="govuk-heading-m">Your Notification will be sent directly to your regulator</p>
@@ -25,7 +25,7 @@ import { NotificationTaskPayload } from '@requests/tasks/notification-submit/not
       <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and send</button>
     </div>
     <div>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
       <netz-return-to-task-or-action-page />
     </div>
   `,

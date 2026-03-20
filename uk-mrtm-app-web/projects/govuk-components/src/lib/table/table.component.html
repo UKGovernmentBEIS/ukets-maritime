@@ -1,12 +1,12 @@
-<table class="govuk-table" [attr.aria-label]="description ?? null">
-  @if (caption) {
+<table class="govuk-table" [attr.aria-label]="description() ?? null">
+  @if (caption()) {
     <caption class="govuk-table__caption">
-      {{ caption }}
+      {{ caption() }}
     </caption>
   }
   <thead class="govuk-table__head">
     <tr class="govuk-table__row">
-      @for (column of columns; track $index) {
+      @for (column of columns(); track $index) {
         <th
           [attr.aria-sort]="!column.isSortable ? null : sortedField === column.field ? sortingDirection : 'none'"
           [class.govuk-table__header]="true"
@@ -14,7 +14,11 @@
           [class]="column.widthClass"
           scope="col">
           @if (!column.isSortable) {
-            {{ column.header }}
+            @if (column.hiddenHeader) {
+              <span class="govuk-visually-hidden">{{ column.header }}</span>
+            } @else {
+              {{ column.header }}
+            }
           } @else {
             <button (click)="sortBy(column.field)" type="button">
               {{ column.header }}
@@ -25,7 +29,7 @@
                       ? sortAscending
                       : sortDescending
                     : sortNone
-                "></ng-container>
+                " />
             </button>
           }
         </th>
@@ -33,22 +37,21 @@
     </tr>
   </thead>
   <tbody class="govuk-table__body">
-    @for (row of data; track i; let i = $index) {
-      <tr class="govuk-table__row {{ rowCssClasses ? [rowCssClasses(row)].flat().join(' ') : '' }}">
-        @for (column of columns; track column.field) {
+    @for (row of data(); track i; let i = $index) {
+      <tr class="govuk-table__row {{ rowCssClasses() ? [rowCssClasses()(row)].flat().join(' ') : '' }}">
+        @for (column of columns(); track column.field) {
           @if (column.isHeader) {
             <th class="govuk-table__header" scope="row">
-              <ng-container *ngTemplateOutlet="cell"></ng-container>
+              <ng-container *ngTemplateOutlet="cell" />
             </th>
           } @else {
             <td [class.govuk-table__cell--numeric]="column?.isNumeric" class="govuk-table__cell">
-              <ng-container *ngTemplateOutlet="cell"></ng-container>
+              <ng-container *ngTemplateOutlet="cell" />
             </td>
           }
           <ng-template #cell>
-            @if (template) {
-              <ng-container
-                *ngTemplateOutlet="template; context: { column: column, row: row, index: i }"></ng-container>
+            @if (template()) {
+              <ng-container *ngTemplateOutlet="template(); context: { column: column, row: row, index: i }" />
             } @else {
               {{ row[column.field] }}
             }
@@ -56,9 +59,9 @@
         }
       </tr>
     } @empty {
-      @if (emptyTableText) {
-        <td class="govuk-table__cell govuk-table__cell--empty--no-bottom-border" [attr.colspan]="columns.length">
-          {{ emptyTableText }}
+      @if (emptyTableText()) {
+        <td class="govuk-table__cell govuk-table__cell--empty--no-bottom-border" [attr.colspan]="columns().length">
+          {{ emptyTableText() }}
         </td>
       }
     }

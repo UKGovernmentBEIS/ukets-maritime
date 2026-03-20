@@ -38,7 +38,7 @@ export class EmpVarSubmittedGreenhouseGasComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     greenhouseGas: this.store.select(empVariationSubmittedQuery.selectGreenhouseGas)(),
     greenhouseGasMap: greenhouseGasMap,
     reviewGroupDecision: this.store.select(empVariationSubmittedQuery.selectReviewGroupDecision('greenhouseGas'))(),

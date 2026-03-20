@@ -3,7 +3,6 @@ import { UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerShipEmissions } from '@mrtm/api';
 
@@ -23,10 +22,10 @@ import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voy
 import { validateIfUsedFuelsExistInEmissionsValidator } from '@requests/common/aer/subtasks/utils';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
 import { VoyageSummaryTemplateComponent } from '@shared/components/summaries';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-voyage-emission-summary',
-  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -36,6 +35,7 @@ import { VoyageSummaryTemplateComponent } from '@shared/components/summaries';
     VoyageSummaryTemplateComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-voyage-emission-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

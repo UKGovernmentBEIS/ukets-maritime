@@ -24,10 +24,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-landing-page',
-  standalone: true,
-  templateUrl: './landing-page.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -37,9 +33,13 @@ interface ViewModel {
     ServiceBannerComponent,
     LinkDirective,
   ],
+  standalone: true,
+  templateUrl: './landing-page.component.html',
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LandingPageComponent implements OnInit {
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       isLoggedIn: this.authStore.select(selectIsLoggedIn)(),
       userProfile: this.authStore.select(selectUserProfile)(),

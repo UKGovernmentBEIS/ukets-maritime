@@ -9,6 +9,8 @@ import { MultiSelectComponent, MultiSelectItemComponent } from '@shared/componen
 
 describe('MultiSelectComponent', () => {
   @Component({
+    imports: [ReactiveFormsModule, MultiSelectComponent, forwardRef(() => MultiSelectItemComponent)],
+    standalone: true,
     template: `
       <form [formGroup]="form">
         <div mrtm-multi-select formControlName="test" label="Test label">
@@ -17,8 +19,6 @@ describe('MultiSelectComponent', () => {
         </div>
       </form>
     `,
-    standalone: true,
-    imports: [ReactiveFormsModule, MultiSelectComponent, forwardRef(() => MultiSelectItemComponent)],
   })
   class TestComponent {
     form: FormGroup = new FormGroup({

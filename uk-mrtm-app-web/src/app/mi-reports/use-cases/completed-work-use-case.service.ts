@@ -3,7 +3,7 @@ import { signal, WritableSignal } from '@angular/core';
 import { Observable } from 'rxjs';
 import { format, subDays } from 'date-fns';
 
-import { MiReportParams, MrtmAccountStatus } from '@mrtm/api';
+import { MiReportSystemParams, MrtmAccountStatus } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
 import { GovukTableColumn } from '@netz/govuk-components';
@@ -59,6 +59,6 @@ export class CompletedWorkUseCaseService extends MiReportUseCaseService<Complete
           : option === 'ANNUAL'
             ? format(new Date(Number(year) + 1, 0, 1), 'yyyy-MM-dd')
             : undefined,
-    } as MiReportParams);
+    } as MiReportSystemParams);
   }
 }

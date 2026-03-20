@@ -13,40 +13,40 @@
   @if (journeyType(); as journeyType) {
     <dl govuk-summary-list [hasBorders]="true" [hasBottomMargin]="false" class="govuk-!-margin-bottom-7">
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey><strong>Journey type</strong></dt>
-        <dd govukSummaryListRowValue>{{ journeyType | uppercase }}</dd>
+        <dt govukSummaryListRowKey><strong>Voyage type</strong></dt>
+        <dd govukSummaryListRowValue>{{ journeyType | titlecase }}</dd>
       </div>
     </dl>
   }
 
-  <div class="overflow-auto overflow-auto-table">
-    <govuk-table
-      [data]="data()"
-      [columns]="columns"
-      emptyTableText="No emissions to display"
-      [description]="!journeyType() ? 'Voyages calculations' : 'Port calculations'">
-      <ng-template let-row="row" let-column="column">
-        @switch (column.field) {
-          @case ('emission') {
-            <strong>
-              {{
-                row?.[column.field] === 'TOTAL'
-                  ? journeyType()
-                    ? 'Total emissions from voyage'
-                    : 'Total in port emissions'
-                  : 'Emissions figure for surrender'
-              }}
-            </strong>
-          }
-          @default {
-            @if (row['emission'] === 'SURRENDER' && ['International', 'EU'].includes(journeyType())) {
-              Not applicable
-            } @else {
-              {{ row?.[column?.field] | bigNumber: 7 }}
-            }
+  <govuk-table
+    [data]="data()"
+    [columns]="columns"
+    emptyTableText="No emissions to display"
+    [description]="!journeyType() ? 'Voyages calculations' : 'Port calculations'"
+    mrtmScrollablePane
+    [ariaLabel]="!journeyType() ? 'Voyages calculations' : 'Port calculations'">
+    <ng-template let-row="row" let-column="column">
+      @switch (column.field) {
+        @case ('emission') {
+          <strong>
+            {{
+              row?.[column.field] === 'TOTAL'
+                ? journeyType()
+                  ? 'Total emissions from voyage'
+                  : 'Total in port emissions'
+                : 'Emissions figure for surrender'
+            }}
+          </strong>
+        }
+        @default {
+          @if (row['emission'] === 'SURRENDER' && ['International', 'European Economic Area'].includes(journeyType())) {
+            Not applicable
+          } @else {
+            {{ row?.[column?.field] | bigNumber: 7 }}
           }
         }
-      </ng-template>
-    </govuk-table>
-  </div>
+      }
+    </ng-template>
+  </govuk-table>
 </div>

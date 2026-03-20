@@ -17,7 +17,6 @@ import { FollowUpAmendsDetailsSummaryTemplateComponent, WizardStepComponent } fr
 
 @Component({
   selector: 'mrtm-amends-details',
-  standalone: true,
   imports: [
     FollowUpAmendsDetailsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
@@ -26,8 +25,9 @@ import { FollowUpAmendsDetailsSummaryTemplateComponent, WizardStepComponent } fr
     CheckboxesComponent,
     WizardStepComponent,
   ],
-  providers: [amendsDetailsFormProvider],
+  standalone: true,
   templateUrl: './amends-details.component.html',
+  providers: [amendsDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AmendsDetailsComponent {

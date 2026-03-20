@@ -9,8 +9,8 @@ import { BatchVariationService } from '@batch-variations/services/batch-variatio
 
 @Component({
   selector: 'mrtm-success',
-  standalone: true,
   imports: [PanelComponent, LinkDirective, RouterLink],
+  standalone: true,
   templateUrl: './success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

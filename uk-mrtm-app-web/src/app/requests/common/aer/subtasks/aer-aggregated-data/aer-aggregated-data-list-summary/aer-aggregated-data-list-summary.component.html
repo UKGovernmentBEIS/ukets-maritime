@@ -16,14 +16,19 @@
     </div>
   }
 </div>
-
-<mrtm-aggregated-data-list-summary-template [data]="aggregatedData()" [editPath]="wizardStep.LIST_OF_AGGREGATED_DATA" />
+@if (hasExternalSystemData()) {
+  <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
+}
+<mrtm-aggregated-data-list-summary-template
+  [data]="aggregatedData()"
+  [dataSupplierName]="thirdPartyDataProviderName()"
+  [editPath]="wizardStep.LIST_OF_AGGREGATED_DATA" />
 
 @if (canSubmit()) {
   <button (click)="onSubmit()" govukButton netzPendingButton type="button">Confirm and continue</button>
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />
 </div>

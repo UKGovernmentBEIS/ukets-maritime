@@ -9,13 +9,13 @@ import { MI_REPORT_FORM_GROUP } from '@mi-reports/core/mi-report.providers';
 
 describe('CompletedWorkFormComponent', () => {
   @Component({
+    imports: [CompletedWorkFormComponent, ReactiveFormsModule],
+    standalone: true,
     template: `
       <form [formGroup]="formGroup()"><mrtm-completed-work-form /></form>
     `,
-    standalone: true,
-    changeDetection: ChangeDetectionStrategy.OnPush,
     providers: [completedWorkFormProvider],
-    imports: [CompletedWorkFormComponent, ReactiveFormsModule],
+    changeDetection: ChangeDetectionStrategy.OnPush,
   })
   class TestComponent {
     readonly formGroup: () => FormGroup | UntypedFormGroup = inject(MI_REPORT_FORM_GROUP);

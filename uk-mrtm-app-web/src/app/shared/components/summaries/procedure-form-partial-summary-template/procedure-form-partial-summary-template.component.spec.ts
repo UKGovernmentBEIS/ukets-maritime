@@ -20,15 +20,15 @@ describe('ProcedureFormPartialSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(ProcedureFormPartialSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.procedureForm = {
+    fixture.componentRef.setInput('procedureForm', {
       reference: 'ca ref',
       version: 'ca ver',
       description: 'ca descr',
       responsiblePersonOrPosition: 'ca person',
       recordsLocation: 'ca loc',
       itSystemUsed: null,
-    };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });

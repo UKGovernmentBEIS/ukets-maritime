@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { BasePage } from '@netz/common/testing';
-import { GovukComponentsModule } from '@netz/govuk-components';
+import { ConditionalContentDirective, RadioComponent } from '@netz/govuk-components';
 
 import { BooleanRadioGroupComponent } from '@shared/components';
 
@@ -15,6 +15,8 @@ describe('BooleanRadioGroupComponent', () => {
   let page: Page;
 
   @Component({
+    imports: [ReactiveFormsModule, BooleanRadioGroupComponent, RadioComponent, ConditionalContentDirective],
+    standalone: true,
     template: `
       <form [formGroup]="form">
         <mrtm-boolean-radio-group controlName="flag">
@@ -42,13 +44,6 @@ describe('BooleanRadioGroupComponent', () => {
       return this.query<HTMLDivElement>('.govuk-radios__conditional--hidden');
     }
   }
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [GovukComponentsModule, ReactiveFormsModule, BooleanRadioGroupComponent],
-      declarations: [TestComponent],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

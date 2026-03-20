@@ -6,8 +6,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-aer-re-initiate-success',
-  standalone: true,
   imports: [RouterLink, LinkDirective, PanelComponent],
+  standalone: true,
   templateUrl: './aer-re-initiate-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -23,7 +23,10 @@ describe('SubmitToRegulatorConfirmComponent', () => {
   };
   const taskServiceSpy = jest.spyOn(taskService, 'submit');
 
-  @Component({ template: '', standalone: true })
+  @Component({
+    standalone: true,
+    template: '',
+  })
   class NoopComponent {}
 
   class Page extends BasePage<SubmitToRegulatorConfirmComponent> {
@@ -61,7 +64,7 @@ describe('SubmitToRegulatorConfirmComponent', () => {
 
   it('should display all HTMLElements', () => {
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent.trim()).toEqual('Submit to regulator');
+    expect(page.heading1.textContent).toEqual('Submit to regulator');
     expect(page.paragraphs).toHaveLength(2);
   });
 

@@ -13,14 +13,15 @@ import { GovukDatePipe } from '@netz/common/pipes';
 import { GovukTableColumn, PaginationComponent, TableComponent } from '@netz/govuk-components';
 
 import { MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS } from '@requests/common/components/mandate';
+import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { SummaryRegisteredOwnerShipDetailsComponent } from '@shared/components';
 import { HTML_DIFF, HtmlDiffDirective } from '@shared/directives';
+import { PersistablePaginationState } from '@shared/services';
 import { DiffItem, MandateRegisteredOwnerTableListItem } from '@shared/types';
 import { mergeDiffRegisteredOwners } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-list-summary-template',
-  standalone: true,
   imports: [
     TableComponent,
     GovukDatePipe,
@@ -28,10 +29,11 @@ import { mergeDiffRegisteredOwners } from '@shared/utils';
     HtmlDiffDirective,
     SummaryRegisteredOwnerShipDetailsComponent,
   ],
+  standalone: true,
   templateUrl: './mandate-registered-owners-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MandateRegisteredOwnersListSummaryTemplateComponent {
+export class MandateRegisteredOwnersListSummaryTemplateComponent extends PaginationStatePersistableComponent {
   private readonly hasHtmlDiff = inject(HTML_DIFF, { optional: true });
 
   readonly registeredOwnerItems = input.required<Array<MandateRegisteredOwnerTableListItem>>();
@@ -46,7 +48,9 @@ export class MandateRegisteredOwnersListSummaryTemplateComponent {
   );
   readonly pageSize: number = 10;
   readonly totalItems: Signal<number> = computed(() => this.combinedOwners()?.length ?? 0);
-  readonly currentPage: WritableSignal<number> = signal<number>(1);
+  readonly currentPage: WritableSignal<number> = signal<number>(
+    this.currentPersistableComponentState().currentPage ?? 1,
+  );
   readonly page: Signal<DiffItem<MandateRegisteredOwnerTableListItem>[]> = computed(() => {
     const tableData = [...(this.combinedOwners() ?? [])].sort((a, b) =>
       a?.current?.name?.localeCompare(b?.current?.name, 'en', { sensitivity: 'base', numeric: true }),
@@ -65,5 +69,9 @@ export class MandateRegisteredOwnersListSummaryTemplateComponent {
 
   onDefineRowAdditionalStyle(item: DiffItem<MandateRegisteredOwnerTableListItem>): string | string[] | undefined {
     return item?.current?.needsReview ? 'needs-review' : undefined;
+  }
+
+  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
+    return {};
   }
 }

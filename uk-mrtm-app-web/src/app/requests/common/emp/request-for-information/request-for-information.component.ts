@@ -2,8 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'mrtm-request-for-information',
-  standalone: true,
   imports: [],
+  standalone: true,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

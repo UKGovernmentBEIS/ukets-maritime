@@ -9,7 +9,10 @@ import { TaskItemStatus } from '@requests/common/task-item-status';
 import { DoeTaskPayload } from '@requests/tasks/doe-submit/doe-submit.types';
 
 export const mockDoeMaritimeEmissions: DoeMaritimeEmissions = {
-  determinationReason: { type: 'CORRECTING_NON_MATERIAL_MISSTATEMENT', furtherDetails: 'test further details' },
+  determinationReason: {
+    details: { type: 'CORRECTING_NON_MATERIAL_MISSTATEMENT', noticeText: 'test notice text' },
+    furtherDetails: 'test further details',
+  },
   totalMaritimeEmissions: {
     determinationType: 'MARITIME_EMISSIONS',
     totalReportableEmissions: 1,

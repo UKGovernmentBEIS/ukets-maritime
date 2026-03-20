@@ -24,7 +24,6 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.netz.api.thirdpartydataprovider.domain.ThirdPartyDataProviderCreateDTO;
-import uk.gov.netz.api.thirdpartydataprovider.domain.ThirdPartyDataProviderDTO;
 import uk.gov.netz.api.thirdpartydataprovider.domain.ThirdPartyDataProvidersResponseDTO;
 import uk.gov.netz.api.thirdpartydataprovider.service.ThirdPartyDataProviderOrchestrator;
 import uk.gov.netz.api.thirdpartydataprovider.service.ThirdPartyDataProviderService;
@@ -68,7 +67,7 @@ public class ThirdPartyDataProviderController {
     @GetMapping
     @Operation(summary = "Get all third party data providers")
     @ApiResponse(responseCode = "200", description = OK,
-        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ThirdPartyDataProviderDTO.class))))
+        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = ThirdPartyDataProvidersResponseDTO.class))))
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND,

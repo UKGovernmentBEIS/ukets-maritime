@@ -6,7 +6,7 @@ import { ChangeDetectionStrategy, Component, ElementRef, inject, RendererFactory
   template: `
     <div class="printable-content-wrapper">
       <div class="printable-content">
-        <ng-content></ng-content>
+        <ng-content />
       </div>
     </div>
   `,
@@ -42,6 +42,7 @@ export class PrintComponent {
 
           .printable-content-wrapper * {
             visibility: visible;
+            max-width: 100%;
           }
 
           .printable-content {
@@ -78,6 +79,10 @@ export class PrintComponent {
 
   printContent(): void {
     const printableContent = this.el.nativeElement.querySelector('.printable-content-wrapper');
+
+    for (const anchor of printableContent.querySelectorAll('a[href]')) {
+      anchor.removeAttribute('href');
+    }
 
     const clonedElement = printableContent.cloneNode(true);
     this.renderer.appendChild(document.body, clonedElement);

@@ -9,8 +9,8 @@ import { DETAILS_CHANGE_SUB_TASK } from '@requests/tasks/notification-review/sub
 
 @Component({
   selector: 'mrtm-review-action-buttons',
-  standalone: true,
   imports: [ButtonDirective, RouterLink],
+  standalone: true,
   template: `
     @if (canBeDisplayed) {
       <div class="govuk-button-group">

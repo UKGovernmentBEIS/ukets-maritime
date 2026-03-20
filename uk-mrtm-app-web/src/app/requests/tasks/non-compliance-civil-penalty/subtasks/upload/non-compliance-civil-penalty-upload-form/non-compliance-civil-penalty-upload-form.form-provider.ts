@@ -1,8 +1,6 @@
 import { Provider } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { NonComplianceCivilPenaltyRequestTaskPayload } from '@mrtm/api';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -13,6 +11,7 @@ import { nonComplianceCivilPenaltyCommonQuery } from '@requests/common/non-compl
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { taskActionTypeToUploadSectionTaskActionTypeMap } from '@shared/constants/upload-attachment-request-task-action-type.map';
 import { RequestTaskFileService } from '@shared/services';
+import { isNil } from '@shared/utils';
 import { futureDateValidator } from '@shared/validators';
 
 export const nonComplianceCivilPenaltyUploadFormProvider: Provider = {

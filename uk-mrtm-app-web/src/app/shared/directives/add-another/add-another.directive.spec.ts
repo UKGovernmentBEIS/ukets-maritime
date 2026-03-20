@@ -10,13 +10,15 @@ describe('AddAnotherDirective', () => {
   let element: HTMLElement;
 
   @Component({
+    imports: [AddAnotherDirective],
+    standalone: true,
     template: `
       <div>
         <h1 #ref>Heading</h1>
-        @for (fieldset of fieldsets; track fieldset; let i = $index) {
+        @for (fieldset of fieldsets; track fieldset) {
           <fieldset>
             <legend>Legend</legend>
-            <button type="button" mrtmAddAnother [heading]="ref" (click)="fieldsets.splice(i, 1)">Remove</button>
+            <button type="button" mrtmAddAnother [heading]="ref" (click)="fieldsets.splice($index, 1)">Remove</button>
           </fieldset>
         }
 
@@ -27,13 +29,6 @@ describe('AddAnotherDirective', () => {
   class TestComponent {
     fieldsets = Array(1);
   }
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [AddAnotherDirective],
-      declarations: [TestComponent],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

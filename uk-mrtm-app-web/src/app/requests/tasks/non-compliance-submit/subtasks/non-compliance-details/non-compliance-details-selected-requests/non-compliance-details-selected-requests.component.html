@@ -8,19 +8,21 @@
   <p class="govuk-hint">Select the relevant item to which this non-compliance applies.</p>
 
   <ng-container formArrayName="selectedRequests">
-    @for (requestId of selectedRequestsFormArray.controls; track requestId; let i = $index) {
+    @for (requestId of selectedRequestsFormArray.controls; track requestId) {
       <div class="control-row align-items-end">
         <div
           class="flex-grow-1 govuk-!-margin-bottom-0"
-          [formControlName]="i"
+          [formControlName]="$index"
           govuk-select
-          [options]="availableRequestsOptions()?.[i]"
-          label="Task {{ i + 1 }}"
+          [options]="availableRequestsOptions()?.[$index]"
+          label="Task {{ $index + 1 }}"
           labelSize="normal"
           widthClass="govuk-!-width-full"></div>
-        <button govukSecondaryButton type="button" class="govuk-!-margin-bottom-0" (click)="onRemove(i)">Remove</button>
+        <button govukSecondaryButton type="button" class="govuk-!-margin-bottom-0" (click)="onRemove($index)">
+          Remove
+        </button>
       </div>
-      <hr class="govuk-!-margin-top-3 govuk-!-margin-bottom-2" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     }
   </ng-container>
 

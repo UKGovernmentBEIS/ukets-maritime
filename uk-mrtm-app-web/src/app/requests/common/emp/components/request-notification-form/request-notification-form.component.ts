@@ -23,7 +23,6 @@ import { NotifyUsersService } from '@shared/services';
 
 @Component({
   selector: 'mrtm-request-notification-form',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -33,8 +32,9 @@ import { NotifyUsersService } from '@shared/services';
     CheckboxComponent,
     SelectComponent,
   ],
-  providers: [requestNotificationFormProvider],
+  standalone: true,
   templateUrl: './request-notification-form.component.html',
+  providers: [requestNotificationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestNotificationFormComponent {
@@ -46,11 +46,11 @@ export class RequestNotificationFormComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly notifyUsersService: NotifyUsersService = inject(NotifyUsersService);
 
-  accountId = this.taskStore.select(requestTaskQuery.selectRequestInfo)().accountId;
-  requestTaskId = this.taskStore.select(requestTaskQuery.selectRequestTaskId)();
+  readonly accountId = this.taskStore.select(requestTaskQuery.selectRequestTaskAccountId)();
+  readonly requestTaskId = this.taskStore.select(requestTaskQuery.selectRequestTaskId)();
 
-  allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
-  assignees = toSignal(this.notifyUsersService.getAssignees(this.requestTaskId));
+  readonly allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
+  readonly assignees = toSignal(this.notifyUsersService.getAssignees(this.requestTaskId));
 
   onSubmit(): void {
     this.service.setNotification(this.formGroup.value as RequestNotificationModel);

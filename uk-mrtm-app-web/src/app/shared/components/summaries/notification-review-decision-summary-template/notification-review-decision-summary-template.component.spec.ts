@@ -21,7 +21,7 @@ describe('ReviewDecisionSummaryTemplateComponent', () => {
     fixture = TestBed.createComponent(NotificationReviewDecisionSummaryTemplateComponent);
     component = fixture.componentInstance;
 
-    component.reviewDecision = {
+    fixture.componentRef.setInput('reviewDecision', {
       type: 'ACCEPTED',
       details: {
         notes: 'some notes',
@@ -32,7 +32,8 @@ describe('ReviewDecisionSummaryTemplateComponent', () => {
           followUpResponseExpirationDate: '2025-01-01',
         },
       },
-    };
+    });
+
     page = new Page(fixture);
     fixture.detectChanges();
   });

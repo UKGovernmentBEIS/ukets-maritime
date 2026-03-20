@@ -34,7 +34,7 @@ describe('SubmitNotificationToRegulatorSuccessComponent', () => {
 
   it('should display all HTMLElements', () => {
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent.trim()).toEqual('Notification sent to regulator');
+    expect(page.heading1.textContent).toEqual('Notification sent to regulator');
     expect(page.heading3).toBeTruthy();
     expect(page.heading3.textContent.trim()).toEqual('What happens next');
     expect(page.paragraphs).toHaveLength(2);

@@ -25,7 +25,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-opinion-statement-site-visit-in-person',
-  standalone: true,
   imports: [
     ButtonDirective,
     DateInputComponent,
@@ -35,9 +34,10 @@ import { WizardStepComponent } from '@shared/components';
     WizardStepComponent,
     FormGroupComponent,
   ],
+  standalone: true,
   templateUrl: './opinion-statement-site-visit-in-person.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [opinionStatementSiteVisitInPersonFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpinionStatementSiteVisitInPersonComponent {
   private readonly destroyRef = inject(DestroyRef);

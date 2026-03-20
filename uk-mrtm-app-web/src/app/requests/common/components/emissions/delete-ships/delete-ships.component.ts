@@ -14,8 +14,8 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
 
 @Component({
   selector: 'mrtm-delete-ships-confirmation',
-  standalone: true,
   imports: [PageHeadingComponent, ButtonDirective, LinkDirective, PendingButtonDirective, RouterLink],
+  standalone: true,
   templateUrl: './delete-ships.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,7 +29,7 @@ export class DeleteShipsComponent {
   private readonly ships: Array<(AerShipEmissions | EmpShipEmissions)['uniqueIdentifier']>;
 
   constructor() {
-    this.ships = this.router.getCurrentNavigation()?.extras?.state?.ships;
+    this.ships = this.router.currentNavigation()?.extras?.state?.ships;
   }
 
   onConfirm() {

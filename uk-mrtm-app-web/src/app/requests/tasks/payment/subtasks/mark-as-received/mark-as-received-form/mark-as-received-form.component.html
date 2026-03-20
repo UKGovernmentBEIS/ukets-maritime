@@ -5,5 +5,9 @@
   [isTwoThirds]="true"
   [showReturnLink]="true"
   submitText="Confirm and complete">
-  <div govuk-date-input formControlName="receivedDate"></div>
+  <div
+    label="When was the payment received?"
+    [isLabelHidden]="true"
+    govuk-date-input
+    formControlName="receivedDate"></div>
 </mrtm-wizard-step>

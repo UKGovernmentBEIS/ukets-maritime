@@ -2,7 +2,6 @@ import { HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
 import { map, Observable, switchMap, tap } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import {
   VerificationBodiesService,
@@ -20,6 +19,7 @@ import { PendingRequestService } from '@netz/common/services';
 
 import { Store } from '@core/store';
 import { SubmissionError } from '@shared/types';
+import { isNil } from '@shared/utils';
 import {
   initialVerificationBodiesState,
   initialVerificationBodiesUpdateState,

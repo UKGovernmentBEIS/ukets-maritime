@@ -22,13 +22,13 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-fuels-and-emissions-factors-list',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AerFuelsAndEmissionFactorsSummaryTemplateComponent,
     ButtonDirective,
     ReturnToShipsListTableComponent,
   ],
+  standalone: true,
   templateUrl: './aer-fuels-and-emissions-factors-list.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

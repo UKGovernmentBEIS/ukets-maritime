@@ -3,21 +3,21 @@
   @if (isPermittedUser()) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Decision status</dt>
-      <dd [notProvided]="reviewDecision?.type | reviewDecisionType" govukSummaryListRowValue></dd>
-      @if (isEditable) {
+      <dd [notProvided]="reviewDecision()?.type | reviewDecisionType" govukSummaryListRowValue></dd>
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
         </dd>
       }
     </div>
   }
-  @if (!isPermittedUser() || reviewDecision?.details?.variationScheduleItems?.length > 0) {
+  @if (!isPermittedUser() || reviewDecision()?.details?.variationScheduleItems?.length > 0) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Changes added to the variation schedule</dt>
       <dd govukSummaryListRowValue class="pre-wrap">
-        @if (reviewDecision?.details?.variationScheduleItems?.length) {
+        @if (reviewDecision()?.details?.variationScheduleItems?.length) {
           <ul class="govuk-list govuk-list--number">
-            @for (change of reviewDecision?.details?.variationScheduleItems; track change) {
+            @for (change of reviewDecision()?.details?.variationScheduleItems; track change) {
               <li>{{ change }}</li>
             }
           </ul>
@@ -25,20 +25,20 @@
           <span class="govuk-hint">Not provided</span>
         }
       </dd>
-      @if (isEditable) {
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
         </dd>
       }
     </div>
   }
   @if (isPermittedUser()) {
-    @if (reviewDecision?.details?.requiredChanges?.length > 0) {
+    @if (reviewDecision()?.details?.requiredChanges?.length > 0) {
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Changes required by operator</dt>
         <dd govukSummaryListRowValue class="pre-wrap">
           <ul class="govuk-list govuk-list--number">
-            @for (change of reviewDecision?.details?.requiredChanges; track change) {
+            @for (change of reviewDecision()?.details?.requiredChanges; track change) {
               <li>
                 {{ change?.reason }}
                 <br />
@@ -50,9 +50,9 @@
             }
           </ul>
         </dd>
-        @if (isEditable) {
+        @if (isEditable()) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
           </dd>
         }
       </div>
@@ -60,10 +60,10 @@
 
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Notes</dt>
-      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="reviewDecision?.details?.notes"></dd>
-      @if (isEditable) {
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="reviewDecision()?.details?.notes"></dd>
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
         </dd>
       }
     </div>

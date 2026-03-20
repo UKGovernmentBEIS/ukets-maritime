@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import {
   EmpCarbonCapture,
   EmpEmissionsSources,
@@ -12,7 +10,7 @@ import {
 
 import { EmpFuelsAndEmissionsFactorsExtended } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
 import { AllFuelOriginTypeName } from '@shared/types';
-import { isLNG } from '@shared/utils';
+import { isLNG, isNil } from '@shared/utils';
 
 type shipEmissionKeys = keyof Omit<EmpShipEmissions, 'uniqueIdentifier'>;
 

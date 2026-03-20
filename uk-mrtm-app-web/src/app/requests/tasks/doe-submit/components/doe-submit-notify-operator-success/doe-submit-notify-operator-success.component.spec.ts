@@ -1,16 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { ActivatedRouteStub } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { DoeSubmitNotifyOperatorSuccessComponent } from '@requests/tasks/doe-submit/components';
-import { screen } from '@testing-library/dom';
 
 describe('DoeSubmitNotifyOperatorSuccessComponent', () => {
   let component: DoeSubmitNotifyOperatorSuccessComponent;
   let fixture: ComponentFixture<DoeSubmitNotifyOperatorSuccessComponent>;
+  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
+
+  class Page extends BasePage<DoeSubmitNotifyOperatorSuccessComponent> {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,6 +22,7 @@ describe('DoeSubmitNotifyOperatorSuccessComponent', () => {
 
     fixture = TestBed.createComponent(DoeSubmitNotifyOperatorSuccessComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -28,10 +31,10 @@ describe('DoeSubmitNotifyOperatorSuccessComponent', () => {
   });
 
   it('should display correct HTML Content', () => {
-    expect(screen.getByRole('heading').textContent).toEqual('Emissions approved');
-    expect(screen.getByRole('paragraph').textContent).toEqual(
+    expect(page.heading1.textContent).toEqual('Emissions approved');
+    expect(page.paragraph.textContent).toEqual(
       'The selected users will receive an email notification of your decision.',
     );
-    expect(screen.getByRole('link').textContent).toEqual('Return to: Dashboard');
+    expect(page.link.textContent).toEqual('Return to: Dashboard');
   });
 });

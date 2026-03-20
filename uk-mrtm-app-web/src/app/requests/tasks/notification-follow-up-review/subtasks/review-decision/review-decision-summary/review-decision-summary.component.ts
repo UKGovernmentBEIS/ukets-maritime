@@ -32,7 +32,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-review-decision-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     FollowUpResponseRegulatorSummaryTemplateComponent,
@@ -42,6 +41,7 @@ interface ViewModel {
     ButtonDirective,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './review-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,7 +50,7 @@ export class ReviewDecisionSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     followUpReviewDecisionDTO: this.store.select(followUpReviewQuery.selectFollowUpReviewDecisionDTO)(),
     followUpResponseDTO: this.store.select(followUpReviewQuery.selectFollowUpResponseDTO)(),
     isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),

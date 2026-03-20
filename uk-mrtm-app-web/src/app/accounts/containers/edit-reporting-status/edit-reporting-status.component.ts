@@ -17,9 +17,6 @@ interface FormModel {
 
 @Component({
   selector: 'mrtm-edit-reporting-status',
-  templateUrl: './edit-reporting-status.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     WizardStepComponent,
     TextareaComponent,
@@ -28,6 +25,9 @@ interface FormModel {
     ReactiveFormsModule,
     WarningTextComponent,
   ],
+  standalone: true,
+  templateUrl: './edit-reporting-status.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditReportingStatusComponent {
   private readonly store = inject(OperatorAccountsStore);

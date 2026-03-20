@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { AerFuelsAndEmissionsFactors, EmissionsSources } from '@mrtm/api';
 
 import {
@@ -18,7 +16,7 @@ import {
 import { getFuelKey } from '@requests/common/utils/emissions';
 import { EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS } from '@shared/constants';
 import { AllFuelOriginTypeName, AllFuels, XmlResult } from '@shared/types';
-import { isLNG } from '@shared/utils';
+import { isLNG, isNil } from '@shared/utils';
 import { XmlValidator } from '@shared/validators';
 
 export class AerEmissionSourceEditDtoValidator {

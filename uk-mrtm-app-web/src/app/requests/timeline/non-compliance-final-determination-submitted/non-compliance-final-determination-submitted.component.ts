@@ -7,8 +7,8 @@ import { NonComplianceFinalDeterminationDetailsSummaryTemplateComponent } from '
 
 @Component({
   selector: 'mrtm-non-compliance-final-determination-submitted',
-  standalone: true,
   imports: [NonComplianceFinalDeterminationDetailsSummaryTemplateComponent],
+  standalone: true,
   template: `
     <mrtm-non-compliance-final-determination-details-summary-template [data]="nonComplianceFinalDetermination()" />
   `,

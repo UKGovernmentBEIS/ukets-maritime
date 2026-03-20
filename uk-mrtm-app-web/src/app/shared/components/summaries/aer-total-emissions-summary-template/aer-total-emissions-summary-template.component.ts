@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 
-import { isNil } from 'lodash-es';
-
 import { AerTotalEmissions } from '@mrtm/api';
 
 import { GovukTableColumn, TableComponent } from '@netz/govuk-components';
 
 import { BigNumberPipe } from '@shared/pipes';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-total-emissions-summary-template',
-  standalone: true,
   imports: [TableComponent, BigNumberPipe],
+  standalone: true,
   templateUrl: './aer-total-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -22,7 +21,7 @@ export class AerTotalEmissionsSummaryTemplateComponent {
   readonly surrenderHeading = 'Emissions figure for surrender';
 
   readonly columns: GovukTableColumn[] = [
-    { field: 'emissionLabel', header: undefined, widthClass: 'app-column-width-20-per' },
+    { field: 'emissionLabel', header: 'Emission type', hiddenHeader: true, widthClass: 'app-column-width-20-per' },
     { field: 'co2', header: 'CO2 emissions (t)', widthClass: 'app-column-width-15-per', isNumeric: true },
     { field: 'ch4', header: 'CH4 emissions (tCO2e)', widthClass: 'app-column-width-15-per', isNumeric: true },
     { field: 'n2o', header: 'N2O emissions (tCO2e)', widthClass: 'app-column-width-15-per', isNumeric: true },

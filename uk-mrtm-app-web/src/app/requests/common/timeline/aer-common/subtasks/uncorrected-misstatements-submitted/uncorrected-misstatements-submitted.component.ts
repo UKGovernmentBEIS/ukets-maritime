@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-uncorrected-misstatements-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     UncorrectedMisstatementsSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './uncorrected-misstatements-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

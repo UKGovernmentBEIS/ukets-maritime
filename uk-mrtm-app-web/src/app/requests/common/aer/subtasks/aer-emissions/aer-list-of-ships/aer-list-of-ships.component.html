@@ -19,13 +19,14 @@
   <mrtm-list-of-ships-table
     editUrl="../ships"
     [dataSource]="listOfShips()"
+    [dataSupplierName]="thirdPartyDataProviderName()"
     [notCompletedWarningMessage]="notCompletedMessage()"
     (removeShips)="onDeleteShips($event)" />
 </div>
 
 @if (canContinue()) {
   <button netzPendingButton govukButton type="submit" (click)="onContinue()">Continue</button>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
 }
 
 <netz-return-to-task-or-action-page />

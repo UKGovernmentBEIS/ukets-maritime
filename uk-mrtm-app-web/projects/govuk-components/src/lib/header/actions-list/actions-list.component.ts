@@ -5,7 +5,7 @@ import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/
   standalone: true,
   template: `
     <div class="header-actions">
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
   styles: `

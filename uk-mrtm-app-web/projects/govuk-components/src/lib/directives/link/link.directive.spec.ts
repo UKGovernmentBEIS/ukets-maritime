@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { provideRouter, RouterLink } from '@angular/router';
@@ -8,8 +8,8 @@ import { LinkDirective } from './link.directive';
 
 describe('LinkDirective', () => {
   @Component({
-    standalone: true,
     imports: [LinkDirective, RouterLink, NotificationBannerComponent],
+    standalone: true,
     template: `
       <a #meta govukLink="meta" href="#">Test Meta Link</a>
       <a #header govukLink="header" [routerLink]="['test']">Test Header Link</a>
@@ -26,12 +26,12 @@ describe('LinkDirective', () => {
     `,
   })
   class TestComponent {
-    @ViewChild('meta') metaLink: ElementRef<HTMLAnchorElement>;
-    @ViewChild('header') headerLink: ElementRef<HTMLAnchorElement>;
-    @ViewChild('footer') footerLink: ElementRef<HTMLAnchorElement>;
-    @ViewChild('breadcrumb') breadcrumbLink: ElementRef<HTMLAnchorElement>;
-    @ViewChild('simple') simpleLink: ElementRef<HTMLAnchorElement>;
-    @ViewChild('notification') notificationLink: ElementRef<HTMLAnchorElement>;
+    readonly metaLink = viewChild<ElementRef<HTMLAnchorElement>>('meta');
+    readonly headerLink = viewChild<ElementRef<HTMLAnchorElement>>('header');
+    readonly footerLink = viewChild<ElementRef<HTMLAnchorElement>>('footer');
+    readonly breadcrumbLink = viewChild<ElementRef<HTMLAnchorElement>>('breadcrumb');
+    readonly simpleLink = viewChild<ElementRef<HTMLAnchorElement>>('simple');
+    readonly notificationLink = viewChild<ElementRef<HTMLAnchorElement>>('notification');
   }
 
   let directive: LinkDirective;
@@ -55,43 +55,43 @@ describe('LinkDirective', () => {
   });
 
   it('should add navigation link class (meta link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.metaLink.nativeElement;
+    const testElement: HTMLElement = fixture.componentInstance.metaLink().nativeElement;
     expect(testElement.classList).toContain('govuk-footer__link');
   });
 
   it('should add anchor inside li element (meta link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.metaLink.nativeElement;
+    const testElement: HTMLElement = fixture.componentInstance.metaLink().nativeElement;
     const parentElement: HTMLElement = testElement.parentElement;
     expect(parentElement.tagName).toEqual('LI');
     expect(parentElement.classList).toContain('govuk-footer__inline-list-item');
   });
 
   it('should add navigation link class (header link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.headerLink.nativeElement;
+    const testElement: HTMLElement = fixture.componentInstance.headerLink().nativeElement;
     expect(testElement.classList).toContain('govuk-header__link');
   });
 
   it('should add anchor inside li element (header link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.headerLink.nativeElement;
+    const testElement: HTMLElement = fixture.componentInstance.headerLink().nativeElement;
     const parentElement: HTMLElement = testElement.parentElement;
     expect(parentElement.tagName).toEqual('LI');
     expect(parentElement.classList).toContain('govuk-header__navigation-item');
   });
 
   it('should add navigation link class (footer link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.footerLink.nativeElement;
+    const testElement: HTMLElement = fixture.componentInstance.footerLink().nativeElement;
     expect(testElement.classList).toContain('govuk-footer__link');
   });
 
   it('should add anchor inside li element (footer link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.footerLink.nativeElement;
+    const testElement: HTMLElement = fixture.componentInstance.footerLink().nativeElement;
     const parentElement: HTMLElement = testElement.parentElement;
     expect(parentElement.tagName).toEqual('LI');
     expect(parentElement.classList).toContain('govuk-footer__list-item');
   });
 
   it('should add navigation li element and link class (breadcrumb link)', () => {
-    const breadcrumbLinkElement: HTMLElement = fixture.componentInstance.breadcrumbLink.nativeElement;
+    const breadcrumbLinkElement: HTMLElement = fixture.componentInstance.breadcrumbLink().nativeElement;
     const parentElement: HTMLElement = breadcrumbLinkElement.parentElement;
 
     expect(breadcrumbLinkElement.classList).toContain('govuk-breadcrumbs__link');
@@ -104,7 +104,7 @@ describe('LinkDirective', () => {
 
     expect(element.querySelector('.govuk-header__navigation-item--active')).toBeFalsy();
 
-    hostComponent.headerLink.nativeElement.click();
+    hostComponent.headerLink().nativeElement.click();
 
     fixture.detectChanges();
 
@@ -112,15 +112,15 @@ describe('LinkDirective', () => {
   });
 
   it('should apply the link class to simple links', () => {
-    expect(fixture.componentInstance.simpleLink.nativeElement.classList).toContain('govuk-link');
+    expect(fixture.componentInstance.simpleLink().nativeElement.classList).toContain('govuk-link');
   });
 
   it('should not wrap simple links with list elements', () => {
-    expect(fixture.componentInstance.simpleLink.nativeElement.parentElement.tagName).not.toEqual('LI');
+    expect(fixture.componentInstance.simpleLink().nativeElement.parentElement.tagName).not.toEqual('LI');
   });
 
   it('should apply the notification link class in links inside the notification banner', () => {
-    expect(fixture.componentInstance.notificationLink.nativeElement.className).toEqual(
+    expect(fixture.componentInstance.notificationLink().nativeElement.className).toEqual(
       'govuk-notification-banner__link',
     );
   });

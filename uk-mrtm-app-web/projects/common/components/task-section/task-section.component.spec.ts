@@ -20,8 +20,8 @@ describe('TaskSectionComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskSectionComponent);
     component = fixture.componentInstance;
-    component.title = 'Test title';
-    component.tasks = tasks;
+    fixture.componentRef.setInput('title', 'Test title');
+    fixture.componentRef.setInput('tasks', tasks);
     fixture.detectChanges();
   });
 

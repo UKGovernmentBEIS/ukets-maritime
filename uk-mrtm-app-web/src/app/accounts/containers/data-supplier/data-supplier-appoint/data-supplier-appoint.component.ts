@@ -4,32 +4,31 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EMPTY, filter, map, switchMap, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AccountThirdPartyDataProvidersService, ThirdPartyDataProviderNameInfoDTO } from '@mrtm/api';
 
-import { BusinessErrorService, catchBadRequest, ErrorCodes } from '@netz/common/error';
+import { catchBadRequest, ErrorCodes } from '@netz/common/error';
 import { PendingRequestService } from '@netz/common/services';
-import { GovukSelectOption, SelectComponent, WarningTextComponent } from '@netz/govuk-components';
+import { GovukSelectOption, SelectComponent } from '@netz/govuk-components';
 
 import { APPOINT_DATA_SUPPLIER_FORM } from '@accounts/containers/data-supplier';
 import { provideDataSupplierAppointForm } from '@accounts/containers/data-supplier/data-supplier-appoint/data-supplier-appoint.provider';
 import { WizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-data-supplier-appoint',
+  imports: [WizardStepComponent, SelectComponent, ReactiveFormsModule],
   standalone: true,
-  imports: [WizardStepComponent, WarningTextComponent, SelectComponent, ReactiveFormsModule],
-  providers: [provideDataSupplierAppointForm],
   templateUrl: './data-supplier-appoint.component.html',
+  providers: [provideDataSupplierAppointForm],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataSupplierAppointComponent {
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly accountThirdPartyDataProvidersService = inject(AccountThirdPartyDataProvidersService);
   private readonly pendingRequestService = inject(PendingRequestService);
-  private readonly businessErrorService = inject(BusinessErrorService);
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
 

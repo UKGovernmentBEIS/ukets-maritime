@@ -16,10 +16,6 @@ import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers';
 
 @Component({
   selector: 'mrtm-choose-password',
-  templateUrl: './choose-password.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject, passwordFormProvider],
-  standalone: true,
   imports: [
     ErrorSummaryComponent,
     PageHeadingComponent,
@@ -28,6 +24,10 @@ import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers';
     ButtonDirective,
     PasswordComponent,
   ],
+  standalone: true,
+  templateUrl: './choose-password.component.html',
+  providers: [DestroySubject, passwordFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChoosePasswordComponent implements OnInit {
   private readonly router = inject(Router);

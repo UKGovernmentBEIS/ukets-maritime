@@ -19,7 +19,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-monitoring-plan-changes-summary-template',
-  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -32,6 +31,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
     MonitoringPlanVersionSummaryTemplateComponent,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './monitoring-plan-changes-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

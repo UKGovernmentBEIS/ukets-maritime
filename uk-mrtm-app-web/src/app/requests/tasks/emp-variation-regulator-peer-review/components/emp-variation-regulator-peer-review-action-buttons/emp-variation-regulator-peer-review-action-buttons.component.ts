@@ -7,8 +7,8 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-emp-variation-regulator-peer-review-action-buttons',
-  standalone: true,
   imports: [ButtonDirective, RouterLink],
+  standalone: true,
   template: `
     @if (canBeDisplayed) {
       <div class="govuk-button-group">

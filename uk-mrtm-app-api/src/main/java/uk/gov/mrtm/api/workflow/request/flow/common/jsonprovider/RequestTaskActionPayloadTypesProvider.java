@@ -9,6 +9,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSaveReviewGrou
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerImportThirdPartyDataRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerSaveApplicationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.verify.domain.AerSaveApplicationVerificationRequestTaskActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.aer.verify.domain.AerVerificationImportThirdPartyDataRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.verify.domain.AerVerificationReturnToOperatorRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.doe.submit.domain.DoeSaveApplicationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceNotifyOperatorForDecisionRequestTaskActionPayload;
@@ -57,6 +58,7 @@ import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequest
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.AER_SAVE_APPLICATION_VERIFICATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.AER_SAVE_REVIEW_GROUP_DECISION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.AER_SKIP_REVIEW_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.AER_VERIFICATION_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.AER_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.DOE_REQUEST_PEER_REVIEW_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.DOE_SAVE_APPLICATION_PAYLOAD;
@@ -167,6 +169,7 @@ public class RequestTaskActionPayloadTypesProvider implements JsonSubTypesProvid
                 //AER
                 new NamedType(AerSaveApplicationRequestTaskActionPayload.class, AER_SAVE_APPLICATION_PAYLOAD),
                 new NamedType(AerImportThirdPartyDataRequestTaskActionPayload.class, AER_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD),
+                new NamedType(AerVerificationImportThirdPartyDataRequestTaskActionPayload.class, AER_VERIFICATION_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD),
                 new NamedType(AerSaveApplicationVerificationRequestTaskActionPayload.class, AER_SAVE_APPLICATION_VERIFICATION_PAYLOAD),
                 new NamedType(AerVerificationReturnToOperatorRequestTaskActionPayload.class, AER_VERIFICATION_RETURN_TO_OPERATOR_PAYLOAD),
                 new NamedType(AerSaveReviewGroupDecisionRequestTaskActionPayload.class, AER_SAVE_REVIEW_GROUP_DECISION_PAYLOAD),

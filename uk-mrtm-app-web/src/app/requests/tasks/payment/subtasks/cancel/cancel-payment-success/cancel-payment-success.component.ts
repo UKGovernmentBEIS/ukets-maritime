@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-cancel-payment-success',
-  standalone: true,
   imports: [PanelComponent, LinkDirective, RouterLink],
+  standalone: true,
   templateUrl: './cancel-payment-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

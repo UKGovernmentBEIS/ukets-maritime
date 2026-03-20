@@ -20,21 +20,24 @@ describe('AdditionalDocumentsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(AdditionalDocumentsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.additionalDocuments = {
+    fixture.componentRef.setInput('additionalDocuments', {
       exist: true,
       documents: ['11111111-1111-4111-a111-111111111111'],
-    };
-    component.additionalDocumentsMap = {
+    });
+    fixture.componentRef.setInput('additionalDocumentsMap', {
       title: 'Additional information',
       additionalDocumentsUpload: {
         title: 'Do you want to upload any additional documents or information to support your application?',
       },
-    };
-    component.files = [
+    });
+    fixture.componentRef.setInput('files', [
       { downloadUrl: '/tasks/64/file-download/11111111-1111-4111-a111-111111111111', fileName: '1.png' },
-    ];
-    component.wizardStep = { ADDITIONAL_DOCUMENTS_UPLOAD: 'additional-documents-upload', SUMMARY: '../' };
-    component.isEditable = true;
+    ]);
+    fixture.componentRef.setInput('wizardStep', {
+      ADDITIONAL_DOCUMENTS_UPLOAD: 'additional-documents-upload',
+      SUMMARY: '../',
+    });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });

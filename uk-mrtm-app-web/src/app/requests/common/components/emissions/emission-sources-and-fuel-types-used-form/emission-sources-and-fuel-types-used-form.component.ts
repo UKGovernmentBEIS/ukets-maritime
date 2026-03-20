@@ -3,8 +3,6 @@ import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/c
 import { FormArray, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
-import { isNumber } from 'lodash-es';
-
 import { FuelOriginTypeName } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
@@ -51,7 +49,6 @@ import { isAer, isLNG } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emission-sources-and-fuel-types-used-form',
-  standalone: true,
   imports: [
     ShipStepTitlePipe,
     WizardStepComponent,
@@ -69,8 +66,9 @@ import { isAer, isLNG } from '@shared/utils';
     LinkDirective,
     RouterLink,
   ],
-  providers: [emissionSourcesAndFuelTypesUsedFormProvider],
+  standalone: true,
   templateUrl: './emission-sources-and-fuel-types-used-form.component.html',
+  providers: [emissionSourcesAndFuelTypesUsedFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesAndFuelTypesUsedFormComponent {
@@ -87,7 +85,9 @@ export class EmissionSourcesAndFuelTypesUsedFormComponent {
   readonly methaneSlipOptions: GovukSelectOption<
     FuelOriginTypeName['methaneSlip'] | FuelOriginTypeName['methaneSlipValueType']
   >[] = EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS.sort((a, b) =>
-    (isNumber(a) && isNumber(b) && a.value > b.value) || 'OTHER' === (a as any) ? -1 : 1,
+    (typeof a?.value === 'number' && typeof b?.value === 'number' && a.value > b.value) || 'OTHER' === (a as any)
+      ? -1
+      : 1,
   );
   readonly monitoringMethodMap = monitoringMethodMap;
   readonly sortMonitoringMethodsByText = sortMonitoringMethodsByText;

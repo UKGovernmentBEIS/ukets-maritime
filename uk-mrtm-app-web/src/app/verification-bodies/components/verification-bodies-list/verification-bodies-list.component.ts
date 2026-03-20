@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -21,7 +21,6 @@ import { VerificationBodyStatusPipe } from '@verification-bodies/pipes/verificat
 
 @Component({
   selector: 'mrtm-verification-bodies-list',
-  standalone: true,
   imports: [
     TableComponent,
     LinkDirective,
@@ -31,14 +30,16 @@ import { VerificationBodyStatusPipe } from '@verification-bodies/pipes/verificat
     SelectComponent,
     VerificationBodyStatusPipe,
   ],
-  viewProviders: [existingControlContainer],
+  standalone: true,
   templateUrl: './verification-bodies-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  viewProviders: [existingControlContainer],
 })
 export class VerificationBodiesListComponent {
+  readonly data = input<VerificationBodyDTO[]>();
+  readonly editable = input<boolean>(true);
+
   readonly editableColumns: GovukTableColumn[] = VERIFICATION_BODIES_LIST_COLUMNS;
   readonly readonlyColumns: GovukTableColumn[] = VERIFICATION_BODIES_LIST_COLUMNS.slice(0, 2);
   readonly verificationBodyStatuses: GovukSelectOption<VerificationBodyDTO['status']>[] = VERIFICATION_BODY_STATUSES;
-  @Input() data: VerificationBodyDTO[];
-  @Input() editable: boolean = true;
 }

@@ -30,7 +30,7 @@ export class CountiesDirective implements OnInit {
         ),
       )
       .subscribe((res) => {
-        this.selectComponent.options = res;
+        this.selectComponent.options.set(res);
         this.changeDetectorRef.markForCheck();
       });
   }

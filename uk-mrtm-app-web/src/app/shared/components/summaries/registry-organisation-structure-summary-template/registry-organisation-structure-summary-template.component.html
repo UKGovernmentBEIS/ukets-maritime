@@ -1,0 +1,40 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Organisation details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Organisation legal status</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.legalStatusType | legalStatusTypeDisplayText }}
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      @switch (data?.legalStatusType) {
+        @case ('INDIVIDUAL') {
+          <dt govukSummaryListRowKey>Full name</dt>
+          <dd govukSummaryListRowValue [notProvided]="$any(data)?.fullName"></dd>
+        }
+        @case ('LIMITED_COMPANY') {
+          <dt govukSummaryListRowKey>Company registration number</dt>
+          <dd govukSummaryListRowValue [notProvided]="$any(data)?.registrationNumber"></dd>
+        }
+        @case ('PARTNERSHIP') {
+          <dt govukSummaryListRowKey>Name of the partnership</dt>
+          <dd govukSummaryListRowValue [notProvided]="$any(data)?.partnershipName"></dd>
+        }
+      }
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>
+        {{ data?.legalStatusType | organisationDetailsAddressTitle }}
+      </dt>
+      <dd govukSummaryListRowValue>
+        <div>{{ data?.registeredAddress?.line1 }}</div>
+        <div>{{ data?.registeredAddress?.line2 }}</div>
+        <div>{{ data?.registeredAddress?.city }}</div>
+        <div>{{ data?.registeredAddress?.state }}</div>
+        <div>{{ data?.registeredAddress?.postcode }}</div>
+        <div>{{ data?.registeredAddress?.country | country }}</div>
+      </dd>
+    </div>
+  </dl>
+}

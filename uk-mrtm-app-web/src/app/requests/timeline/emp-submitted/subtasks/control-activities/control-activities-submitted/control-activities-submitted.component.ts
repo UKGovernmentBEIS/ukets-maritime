@@ -31,7 +31,7 @@ interface ViewModel {
 export class ControlActivitiesSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       controlActivities: this.store.select(empSubmittedQuery.selectControlActivities)(),
       controlActivitiesMap: controlActivitiesMap,

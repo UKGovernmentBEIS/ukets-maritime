@@ -30,10 +30,10 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-select-ship',
-  standalone: true,
   imports: [WizardStepComponent, SelectComponent, ReactiveFormsModule, LinkDirective, RouterLink],
-  providers: [aerSelectShipFormGroupProvider],
+  standalone: true,
   templateUrl: './aer-select-ship.component.html',
+  providers: [aerSelectShipFormGroupProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerSelectShipComponent {
@@ -67,8 +67,10 @@ export class AerSelectShipComponent {
       .saveSubtask(this.subtask, AER_SELECT_SHIP_STEP, this.activatedRoute, this.form.value)
       .pipe(take(1))
       .subscribe(() => {
+        const objectId = this.objectId();
+
         this.router.navigate(
-          this.objectId() ? ['../', this.submitStep] : ['../', this.form.value.uniqueIdentifier, this.submitStep],
+          objectId ? ['../', this.submitStep] : ['../', this.form.value.uniqueIdentifier, this.submitStep],
           {
             relativeTo: this.activatedRoute,
           },

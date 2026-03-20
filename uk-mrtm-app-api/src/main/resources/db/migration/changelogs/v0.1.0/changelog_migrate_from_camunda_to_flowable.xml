@@ -3,11 +3,10 @@
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
 
-    <changeSet id="0_1_0_remove_camunda_aer_initiate_job" author="P44065">
+    <changeSet id="0_1_0_remove_camunda_aer_initiate_job_due_to_deploy_due_to_not_moving_into_archived" author="P44065">
         <sql>
             delete from public.act_ru_job where process_def_key_ = 'PROCESS_AER_INITIATE';
         </sql>
         <rollback />
     </changeSet>
-    
 </databaseChangeLog>

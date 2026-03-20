@@ -8,14 +8,14 @@ import { GenericServiceErrorCode } from '../service-errors';
 
 @Component({
   selector: 'netz-internal-server-error',
+  imports: [PageHeadingComponent, LinkDirective, RouterLink],
+  standalone: true,
   templateUrl: './internal-server-error.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeadingComponent, LinkDirective, RouterLink],
 })
 export class InternalServerErrorComponent {
   private readonly router = inject(Router);
 
-  errorCode = this.router.getCurrentNavigation().extras?.state?.errorCode;
+  errorCode = this.router.currentNavigation()?.extras?.state?.errorCode;
   genericServiceErrorCode = GenericServiceErrorCode;
 }

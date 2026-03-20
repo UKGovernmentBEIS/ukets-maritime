@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import {
@@ -16,7 +16,6 @@ import { FollowUpResponse } from '@shared/types/follow-up-response.interface';
 
 @Component({
   selector: 'mrtm-follow-up-response-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -28,12 +27,13 @@ import { FollowUpResponse } from '@shared/types/follow-up-response.interface';
     SummaryDownloadFilesComponent,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './follow-up-response-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpResponseSummaryTemplateComponent {
-  @Input({ required: true }) followUpResponse: FollowUpResponse;
-  @Input() changeLink: string;
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly followUpResponse = input.required<FollowUpResponse>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

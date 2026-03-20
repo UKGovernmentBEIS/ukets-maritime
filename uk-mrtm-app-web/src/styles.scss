@@ -1,38 +1,14 @@
-@use 'sass:string';
-@use 'sass:list';
-
-$govuk-page-width: 1200px;
-
-// Flags for support of IE8
-$govuk-if-ie8: false;
-$govuk-suppressed-warnings: ie8;
-
-// Workaround for wrong assets relative url resolution
-// @TODO :: Check this
-@function image-url($filename) {
-  $filePaths: string.split($filename, '/');
-  $filePath: list.nth($filePaths, list.length($filePaths));
-  @return url('/maritime/assets/images/' + $filePath);
-}
-
-@function font-url($filename) {
-  $filePaths: string.split($filename, '/');
-  $filePath: list.nth($filePaths, list.length($filePaths));
-  @return url('/maritime/assets/fonts/#{$filePath}');
-}
-
-$govuk-image-url-function: 'image-url';
-$govuk-font-url-function: 'font-url';
-
-$needs-review-background-color: #FFE5CC;
-
-@import 'all';
-@import 'theming/tables';
-@import 'theming/shared';
-@import 'theming/task-list';
-@import 'theming/lists';
-@import 'theming/helpers';
-@import 'theming/panels';
-@import 'theming/print';
-@import 'theming/header';
-@import 'theming/diff';
+@use 'govuk-frontend/dist/govuk/index' with (
+  $govuk-page-width: 1200px,
+  $govuk-suppressed-warnings: ie8,
+  $govuk-assets-path: '/maritime/assets/',
+);
+@use 'theming/tables';
+@use 'theming/shared';
+@use 'theming/task-list';
+@use 'theming/lists';
+@use 'theming/helpers';
+@use 'theming/panels';
+@use 'theming/print';
+@use 'theming/header';
+@use 'theming/diff';

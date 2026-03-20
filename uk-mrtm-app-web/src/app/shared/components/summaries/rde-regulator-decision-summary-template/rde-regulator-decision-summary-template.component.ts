@@ -14,7 +14,6 @@ import { RdeForceDecision } from '@shared/types';
 
 @Component({
   selector: 'mrtm-rde-regulator-decision-summary-template',
-  standalone: true,
   imports: [
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
@@ -24,9 +23,10 @@ import { RdeForceDecision } from '@shared/types';
     SummaryDownloadFilesComponent,
     TitleCasePipe,
   ],
+  standalone: true,
   templateUrl: './rde-regulator-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdeRegulatorDecisionSummaryTemplateComponent {
-  data = input.required<RdeForceDecision>();
+  readonly data = input.required<RdeForceDecision>();
 }

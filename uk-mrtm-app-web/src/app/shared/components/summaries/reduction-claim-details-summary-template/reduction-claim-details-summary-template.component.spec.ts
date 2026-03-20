@@ -39,6 +39,7 @@ describe('ReductionClaimDetailsSummaryTemplateComponent', () => {
       'CO2 EF t/t',
       'CO2 emissions (t)',
       'Supporting evidence',
+      'Initial source',
     ]);
   });
 });

@@ -1,10 +1,9 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRouteSnapshot, Data, NavigationEnd, Route, Router, RouterLink } from '@angular/router';
 
 import { BehaviorSubject, filter } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { BreadcrumbsComponent as GovukBreadcrumbsComponent, LinkDirective } from '@netz/govuk-components';
 
@@ -14,11 +13,12 @@ import { BreadcrumbItem, RouteBreadcrumb } from './breadcrumbs.interface';
 
 @Component({
   selector: 'netz-breadcrumbs',
+  imports: [GovukBreadcrumbsComponent, AsyncPipe, LinkDirective, RouterLink],
   standalone: true,
   template: `
     @if (breadcrumbs$ | async; as breadcrumbs) {
-      <govuk-breadcrumbs [inverse]="inverse">
-        @for (breadcrumb of breadcrumbs; track i; let i = $index) {
+      <govuk-breadcrumbs [inverse]="inverse()">
+        @for (breadcrumb of breadcrumbs; track $index) {
           @if (breadcrumb.link) {
             <a govukLink="breadcrumb" [routerLink]="breadcrumb.link" [queryParams]="breadcrumb.queryParams">
               {{ breadcrumb.text }}
@@ -29,14 +29,13 @@ import { BreadcrumbItem, RouteBreadcrumb } from './breadcrumbs.interface';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [GovukBreadcrumbsComponent, AsyncPipe, LinkDirective, RouterLink],
 })
 export class BreadcrumbsComponent {
   readonly router = inject(Router);
   private readonly destroy$ = inject(DestroyRef);
   protected breadcrumbs$ = inject<BehaviorSubject<BreadcrumbItem[]>>(BREADCRUMB_ITEMS);
 
-  @Input() inverse = false;
+  readonly inverse = input(false);
 
   constructor() {
     const router = this.router;
@@ -53,7 +52,7 @@ export class BreadcrumbsComponent {
         if (this.hasBreadcrumb(activeRoute.data)) {
           const breadcrumbs: BreadcrumbItem[] = [];
           this.addBreadcrumb(root, [], breadcrumbs);
-          this.breadcrumbs$.next(breadcrumbs.filter((b) => !isNil(b.link)));
+          this.breadcrumbs$.next(breadcrumbs.filter((b) => b.link != null));
         } else {
           this.breadcrumbs$.next(null);
         }

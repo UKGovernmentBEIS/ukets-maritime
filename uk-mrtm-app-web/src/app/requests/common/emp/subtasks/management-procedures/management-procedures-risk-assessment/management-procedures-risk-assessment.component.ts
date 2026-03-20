@@ -18,11 +18,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-management-procedures-risk-assessment',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, DetailsComponent, EmpProcedureFormWithFilesComponent],
+  standalone: true,
   templateUrl: './management-procedures-risk-assessment.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [managementProceduresRiskAssessmentFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresRiskAssessmentComponent {
   protected readonly form: UntypedFormGroup = inject(TASK_FORM);

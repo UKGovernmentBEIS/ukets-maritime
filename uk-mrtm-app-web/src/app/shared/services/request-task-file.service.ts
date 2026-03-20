@@ -12,7 +12,7 @@ import {
   requestTaskReassignedError,
 } from '@netz/common/error';
 
-import { createCommonFileValidators } from '@shared/components';
+import { createCommonFileValidators } from '@shared/components/file-input/file-validators';
 import { FileUploadService } from '@shared/services';
 import { FileUploadEvent } from '@shared/types';
 

@@ -13,7 +13,7 @@
   label="Last name"
   widthClass="govuk-!-width-one-half"></div>
 
-@if (hasJobTitle) {
+@if (hasJobTitle()) {
   <div
     autoComplete="job-title"
     formControlName="jobTitle"
@@ -23,7 +23,7 @@
     widthClass="govuk-!-width-three-quarters"></div>
 }
 
-@switch (phoneType) {
+@switch (phoneType()) {
   @case ('full') {
     <div mrtm-phone-input formControlName="phoneNumber" label="Phone number 1" class="govuk-!-margin-bottom-1"></div>
     <div mrtm-phone-input formControlName="mobileNumber" label="Phone number 2 (optional)"></div>
@@ -45,7 +45,7 @@
       widthClass="govuk-!-width-one-third"></div>
   }
 }
-@if (!isNotification) {
+@if (!isNotification()) {
   <div>
     <div
       autoComplete="email"

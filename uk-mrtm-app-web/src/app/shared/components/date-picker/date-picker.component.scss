@@ -1,4 +1,4 @@
-@import 'base';
+@use 'base' as govuk;
 
 // Custom colour required for passing WCAG 2.2 AA contrast text/background and
 // background/surrounding
@@ -6,7 +6,7 @@ $moj-datepicker-mid-grey: #949494;
 
 .moj-datepicker {
   position: relative;
-  @include govuk-font(16);
+  @include govuk.govuk-font(16);
 }
 
 .moj-datepicker__dialog {
@@ -15,12 +15,12 @@ $moj-datepicker-mid-grey: #949494;
   z-index: 2;
   top: 0;
   min-width: 280px;
-  padding: govuk-spacing(4);
   transition: background-color 0.2s,
   outline-color 0.2s;
-  outline: 2px solid $govuk-text-colour;
+  outline: 2px solid govuk.$govuk-text-colour;
   outline-offset: -2px;
-  background-color: govuk-colour("white");
+  background-color: govuk.govuk-colour("white");
+  @include govuk.govuk-responsive-padding(4);
 }
 
 .moj-datepicker__dialog--open {
@@ -30,16 +30,15 @@ $moj-datepicker-mid-grey: #949494;
 .moj-datepicker__dialog-header {
   display: flex;
   position: relative;
-  margin-bottom: govuk-spacing(2);
+  margin-bottom: govuk.govuk-spacing(2);
   align-items: center;
   justify-content: space-between;
 }
 
 .moj-datepicker__dialog-title {
-  @include govuk-font(16);
   margin-top: 0;
   margin-bottom: 0;
-  font-weight: bold;
+  @include govuk.govuk-font(16, bold);
 }
 
 .moj-datepicker__dialog-navbuttons {
@@ -48,11 +47,11 @@ $moj-datepicker-mid-grey: #949494;
 }
 
 .moj-datepicker__calendar {
-  margin-bottom: govuk-spacing(4);
+  margin-bottom: govuk.govuk-spacing(4);
   border-collapse: collapse;
 
   tbody:focus-within {
-    outline: 2px solid $govuk-focus-colour;
+    outline: 2px solid govuk.$govuk-focus-colour;
   }
 
   td {
@@ -63,9 +62,8 @@ $moj-datepicker-mid-grey: #949494;
   }
 
   th {
-    @include govuk-font(16);
-    color: $govuk-text-colour;
-    font-weight: bold;
+    color: govuk.$govuk-text-colour;
+    @include govuk.govuk-font(16, bold);
   }
 }
 
@@ -78,7 +76,6 @@ $moj-datepicker-mid-grey: #949494;
 }
 
 .moj-datepicker__button {
-  @include govuk-font(16);
   position: relative;
   width: 44px;
   height: 40px;
@@ -87,8 +84,9 @@ $moj-datepicker-mid-grey: #949494;
   border-width: 0;
   outline: 2px solid rgba(0, 0, 0, 0);
   outline-offset: -2px;
-  color: $govuk-text-colour;
+  color: govuk.$govuk-text-colour;
   background-color: transparent;
+  @include govuk.govuk-font(16);
 
   @media (forced-colors: active) {
     // Don't show the bottom bar in forced-color modes as it blocks the outline
@@ -109,14 +107,14 @@ $moj-datepicker-mid-grey: #949494;
 
   &[aria-disabled="true"],
   &[aria-disabled="true"]:hover {
-    color: $govuk-text-colour;
-    background-color: govuk-colour("light-grey");
+    color: govuk.$govuk-text-colour;
+    background-color: govuk.govuk-colour("light-grey");
     text-decoration: line-through;
     cursor: not-allowed;
   }
 
   &:hover {
-    color: $govuk-text-colour;
+    color: govuk.$govuk-text-colour;
     background-color: $moj-datepicker-mid-grey;
     text-decoration: none;
     box-decoration-break: clone;
@@ -125,17 +123,17 @@ $moj-datepicker-mid-grey: #949494;
 
   &:focus {
     outline-color: transparent;
-    color: $govuk-text-colour;
-    background-color: $govuk-focus-colour;
+    color: govuk.$govuk-text-colour;
+    background-color: govuk.$govuk-focus-colour;
     box-decoration-break: clone;
 
     &::after {
-      background-color: $govuk-text-colour;
+      background-color: govuk.$govuk-text-colour;
     }
   }
 
   &:focus:hover {
-    outline-color: $govuk-focus-colour;
+    outline-color: govuk.$govuk-focus-colour;
     background-color: $moj-datepicker-mid-grey;
 
     &::after {
@@ -144,12 +142,12 @@ $moj-datepicker-mid-grey: #949494;
   }
 
   &--current:not(:focus) {
-    outline-color: $govuk-link-colour;
-    color: govuk-colour("white");
-    background-color: $govuk-link-colour;
+    outline-color: govuk.$govuk-link-colour;
+    color: govuk.govuk-colour("white");
+    background-color: govuk.$govuk-link-colour;
 
     &::after {
-      background-color: $govuk-link-colour;
+      background-color: govuk.$govuk-link-colour;
     }
   }
 
@@ -164,20 +162,20 @@ $moj-datepicker-mid-grey: #949494;
   }
 
   &--today {
-    border: 2px solid $govuk-text-colour;
+    border: 2px solid govuk.$govuk-text-colour;
   }
 
   &--selected:not(:focus) {
-    color: govuk-colour("white");
-    background-color: $govuk-link-colour;
+    color: govuk.govuk-colour("white");
+    background-color: govuk.$govuk-link-colour;
 
     &::after {
-      background-color: $govuk-link-colour;
+      background-color: govuk.$govuk-link-colour;
     }
 
     &:hover {
-      outline-color: $govuk-link-colour;
-      color: $govuk-text-colour;
+      outline-color: govuk.$govuk-link-colour;
+      color: govuk.$govuk-text-colour;
       background-color: $moj-datepicker-mid-grey;
 
       &::after {
@@ -215,7 +213,7 @@ $moj-datepicker-mid-grey: #949494;
     width: 100% !important;
     max-width: none;
 
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       // stylelint-disable-next-line declaration-no-important
       width: 75% !important;
     }
@@ -226,7 +224,7 @@ $moj-datepicker-mid-grey: #949494;
     width: 100% !important;
     max-width: none;
 
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       // stylelint-disable-next-line declaration-no-important
       width: 66.66% !important;
     }
@@ -237,7 +235,7 @@ $moj-datepicker-mid-grey: #949494;
     width: 100% !important;
     max-width: none;
 
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       // stylelint-disable-next-line declaration-no-important
       width: 50% !important;
     }
@@ -248,7 +246,7 @@ $moj-datepicker-mid-grey: #949494;
     width: 100% !important;
     max-width: none;
 
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       // stylelint-disable-next-line declaration-no-important
       width: 33.33% !important;
     }
@@ -259,7 +257,7 @@ $moj-datepicker-mid-grey: #949494;
     width: 100% !important;
     max-width: none;
 
-    @include govuk-media-query($from: tablet) {
+    @include govuk.govuk-media-query($from: tablet) {
       // stylelint-disable-next-line declaration-no-important
       width: 25% !important;
     }
@@ -285,25 +283,25 @@ $moj-datepicker-mid-grey: #949494;
   border-bottom: 4px solid rgba(0, 0, 0, 0);
   outline: 3px solid rgba(0, 0, 0, 0);
   outline-offset: -3px;
-  color: govuk-colour("white");
-  background-color: $govuk-text-colour;
+  color: govuk.govuk-colour("white");
+  background-color: govuk.$govuk-text-colour;
   cursor: pointer;
 
   &:focus {
-    border-bottom: 4px solid $govuk-text-colour;
-    color: $govuk-text-colour;
-    background-color: $govuk-focus-colour;
+    border-bottom: 4px solid govuk.$govuk-text-colour;
+    color: govuk.$govuk-text-colour;
+    background-color: govuk.$govuk-focus-colour;
   }
 
   &:hover {
     border-bottom: 4px solid $moj-datepicker-mid-grey;
-    color: $govuk-text-colour;
+    color: govuk.$govuk-text-colour;
     background-color: $moj-datepicker-mid-grey;
   }
 
   &:focus:hover {
-    border-bottom: 4px solid $govuk-text-colour;
-    color: $govuk-text-colour;
+    border-bottom: 4px solid govuk.$govuk-text-colour;
+    color: govuk.$govuk-text-colour;
     background-color: $moj-datepicker-mid-grey;
   }
 

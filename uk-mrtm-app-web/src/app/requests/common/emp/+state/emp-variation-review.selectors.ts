@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import {
   AdditionalDocuments,
   EmissionsMonitoringPlan,
@@ -33,6 +31,7 @@ import {
   ReviewDecisionUnion,
   ShipEmissionTableListItem,
 } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const allowedStatuses: TaskItemStatus[] = [
   TaskItemStatus.APPROVED,

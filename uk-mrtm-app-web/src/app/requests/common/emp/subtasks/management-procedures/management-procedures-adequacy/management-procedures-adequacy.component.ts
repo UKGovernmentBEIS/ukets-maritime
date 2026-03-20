@@ -18,8 +18,8 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-management-procedures-adequacy',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, DetailsComponent, EmpProcedureFormComponent],
+  standalone: true,
   templateUrl: './management-procedures-adequacy.component.html',
   providers: [managementProceduresAdequacyFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

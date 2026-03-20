@@ -4,13 +4,17 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
+import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
+import { TaskItemStatus } from '@requests/common';
 import {
   AER_AGGREGATED_DATA_SUB_TASK,
   AerAggregatedDataWizardStep,
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { AerFetchFromVoyagesAndPortsComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-fetch-from-voyages-and-ports/aer-fetch-from-voyages-and-ports.component';
+import { mockAerStateBuild } from '@requests/common/aer/testing';
+import { mockAerSubmittedPayload } from '@requests/common/aer/testing/aer-submitted.mock';
 import { taskProviders } from '@requests/common/task.providers';
 
 describe('AerFetchFromVoyagesAndPortsComponent', () => {
@@ -19,6 +23,7 @@ describe('AerFetchFromVoyagesAndPortsComponent', () => {
   let component: AerFetchFromVoyagesAndPortsComponent;
   let fixture: ComponentFixture<AerFetchFromVoyagesAndPortsComponent>;
   let page: Page;
+  let store: RequestTaskStore;
   const taskServiceMock: MockType<TaskService<any>> = {
     saveSubtask: jest.fn().mockReturnValue(of({})),
   };
@@ -36,6 +41,8 @@ describe('AerFetchFromVoyagesAndPortsComponent', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(AerFetchFromVoyagesAndPortsComponent);
+    store = TestBed.inject(RequestTaskStore);
+    store.setState(mockAerStateBuild({ ...mockAerSubmittedPayload?.aer }, { emissions: TaskItemStatus.COMPLETED }));
     component = fixture.componentInstance;
     page = new Page(fixture);
     fixture.detectChanges();

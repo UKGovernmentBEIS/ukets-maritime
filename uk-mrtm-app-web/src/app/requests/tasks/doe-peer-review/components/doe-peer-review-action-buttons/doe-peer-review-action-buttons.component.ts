@@ -5,8 +5,8 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-doe-peer-review-action-buttons',
-  standalone: true,
   imports: [ButtonDirective, RouterLink],
+  standalone: true,
   template: `
     <div class="govuk-button-group">
       <a govukButton [routerLink]="['doe-peer-review', 'review-decision']">Peer review decision</a>

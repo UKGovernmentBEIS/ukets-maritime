@@ -1,6 +1,6 @@
 @if (emailTemplate$ | async; as emailTemplate) {
   @if (displayErrorSummary$ | async) {
-    <govuk-error-summary [form]="form$ | async"></govuk-error-summary>
+    <govuk-error-summary [form]="form$ | async" />
   }
   <netz-page-heading>Edit {{ emailTemplate.name }}</netz-page-heading>
   <h1 class="govuk-heading-m">Template Content</h1>
@@ -11,5 +11,5 @@
       <button netzPendingButton govukButton type="submit">Confirm and complete</button>
     </form>
   }
-  <mrtm-email-template-details-template [emailTemplate]="emailTemplate"></mrtm-email-template-details-template>
+  <mrtm-email-template-details-template [emailTemplate]="emailTemplate" />
 }

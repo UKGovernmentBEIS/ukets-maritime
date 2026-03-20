@@ -2,8 +2,6 @@ import { inject, Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { AerFuelsAndEmissionsFactors, EmissionsSources, EmpEmissionsSources, FuelOriginTypeName } from '@mrtm/api';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -20,7 +18,7 @@ import {
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS } from '@shared/constants';
 import { AllFuels, FuelsAndEmissionsFactors } from '@shared/types';
-import { isAer, isLNG } from '@shared/utils';
+import { isAer, isLNG, isNil } from '@shared/utils';
 
 const uniqueNameValidation =
   (emissionsSources: EmissionsSources[], sourceId: EmissionsSources['uniqueIdentifier']): ValidatorFn =>

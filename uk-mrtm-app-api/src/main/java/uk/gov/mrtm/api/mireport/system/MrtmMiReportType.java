@@ -1,0 +1,9 @@
+package uk.gov.mrtm.api.mireport.system;
+
+import lombok.experimental.UtilityClass;
+
+@UtilityClass
+public class MrtmMiReportType {
+
+    public static final String LIST_OF_VERIFICATION_BODY_USERS = "LIST_OF_VERIFICATION_BODY_USERS";
+}

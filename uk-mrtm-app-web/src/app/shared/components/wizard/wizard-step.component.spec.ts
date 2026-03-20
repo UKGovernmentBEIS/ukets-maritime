@@ -5,7 +5,7 @@ import { By } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
 
 import { PageHeadingComponent } from '@netz/common/components';
-import { GovukComponentsModule } from '@netz/govuk-components';
+import { TextInputComponent } from '@netz/govuk-components';
 
 import { WizardStepComponent } from '@shared/components';
 
@@ -16,6 +16,7 @@ describe('WizardStepComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    imports: [WizardStepComponent, ReactiveFormsModule, TextInputComponent],
     standalone: true,
     template: `
       <mrtm-wizard-step
@@ -27,7 +28,6 @@ describe('WizardStepComponent', () => {
         <div govuk-text-input formControlName="text" label="Text"></div>
       </mrtm-wizard-step>
     `,
-    imports: [WizardStepComponent, GovukComponentsModule, ReactiveFormsModule],
   })
   class TestComponent {
     formGroup = new FormGroup({

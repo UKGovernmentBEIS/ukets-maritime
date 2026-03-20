@@ -11,12 +11,12 @@ import {
 } from '@netz/govuk-components';
 
 import { AER_GWP_VALUES } from '@shared/constants';
+import { ScrollablePaneDirective } from '@shared/directives';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-fuels-and-emissions-factors-info-summary-template',
-  standalone: true,
   imports: [
     DetailsComponent,
     SummaryListComponent,
@@ -25,7 +25,9 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
     SummaryListRowValueDirective,
     TableComponent,
     FuelOriginTitlePipe,
+    ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './fuels-and-emissions-factors-info-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

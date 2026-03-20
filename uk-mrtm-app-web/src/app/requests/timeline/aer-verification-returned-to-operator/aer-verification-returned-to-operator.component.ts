@@ -12,8 +12,8 @@ import { aerVerificationReturnedToOperatorQuery } from '@requests/timeline/aer-v
 
 @Component({
   selector: 'mrtm-aer-verification-returned-to-operator',
-  standalone: true,
   imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
+  standalone: true,
   templateUrl: './aer-verification-returned-to-operator.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

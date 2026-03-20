@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import {
@@ -21,12 +21,22 @@ import {
 } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { fireEvent, screen, within } from '@testing-library/angular';
 
 describe('EmissionSourcesComplianceComponent', () => {
   let fixture: ComponentFixture<EmissionSourcesComplianceComponent>;
   let component: EmissionSourcesComplianceComponent;
+  let page: Page;
   let store: RequestTaskStore;
+
+  class Page extends BasePage<EmissionSourcesComplianceComponent> {
+    get radios() {
+      return this.queryAll<HTMLInputElement>('input[type="radio"]');
+    }
+
+    get errorSummaryLinks() {
+      return Array.from(this.errorSummary.querySelectorAll('a'));
+    }
+  }
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<EmpTaskPayload>> = {
@@ -38,6 +48,7 @@ describe('EmissionSourcesComplianceComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(EmissionSourcesComplianceComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
     jest.clearAllMocks();
   };
@@ -54,7 +65,7 @@ describe('EmissionSourcesComplianceComponent', () => {
   });
 
   describe('for new emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(mockEmpIssuanceSubmitRequestTask);
       createComponent();
@@ -65,27 +76,25 @@ describe('EmissionSourcesComplianceComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('radio')).toHaveLength(2);
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.radios).toHaveLength(2);
     });
 
     it('should display error on empty form submit', () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
-      const summaryBox = screen.queryByRole('alert', { name: 'There is a problem' });
-      expect(summaryBox).toBeInTheDocument();
 
-      const summaryErrors = within(summaryBox).getAllByRole('link');
-      expect(summaryErrors).toHaveLength(1);
-      expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorSummaryLinks).toHaveLength(1);
+      expect(page.errorSummaryLinks.map((anchor) => anchor.textContent.trim())).toEqual([
         'Select yes if you will be making an emissions reduction claim relating to eligible fuels',
       ]);
     });
   });
 
   describe('for existing emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(
         mockStateBuild(
@@ -103,16 +112,16 @@ describe('EmissionSourcesComplianceComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('radio')).toHaveLength(2);
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.radios).toHaveLength(2);
     });
 
     it('should edit and submit a valid form without `criteria` section', async () => {
-      const input = screen.getByRole('radio', { name: /no/i });
-      fireEvent.click(input);
+      page.radios[1].click();
+      fixture.detectChanges();
 
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
       expect(taskServiceSpy).toHaveBeenCalledWith(
@@ -126,10 +135,10 @@ describe('EmissionSourcesComplianceComponent', () => {
     });
 
     it('should submit a valid form', async () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
+      expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(
         EMISSION_SOURCES_SUB_TASK,
         EmissionSourcesWizardStep.EMISSION_COMPLIANCE,

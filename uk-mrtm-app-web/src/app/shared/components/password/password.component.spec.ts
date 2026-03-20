@@ -6,11 +6,8 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { of } from 'rxjs';
-import { PasswordStrengthMeterComponent } from 'angular-password-strength-meter';
-import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
 
 import { BasePage, changeInputValue } from '@netz/common/testing';
-import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { PasswordComponent } from '@shared/components';
 import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers/password.form-provider';
@@ -23,9 +20,11 @@ describe('PasswordComponent', () => {
   let passwordService: PasswordService;
 
   @Component({
+    imports: [ReactiveFormsModule, PasswordComponent],
+    standalone: true,
     template: `
       <form [formGroup]="form">
-        <mrtm-password></mrtm-password>
+        <mrtm-password />
         <button type="submit">Submit</button>
       </form>
     `,
@@ -59,9 +58,7 @@ describe('PasswordComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, GovukComponentsModule, PasswordStrengthMeterComponent, PasswordComponent],
-      declarations: [TestComponent],
-      providers: [provideHttpClient(), provideHttpClientTesting(), PasswordService, provideZxvbnServiceForPSM()],
+      providers: [provideHttpClient(), provideHttpClientTesting(), PasswordService],
     }).compileComponents();
   });
 

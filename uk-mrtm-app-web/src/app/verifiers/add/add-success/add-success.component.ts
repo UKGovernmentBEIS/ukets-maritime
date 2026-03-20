@@ -11,8 +11,8 @@ import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 
 @Component({
   selector: 'mrtm-add-success',
-  standalone: true,
   imports: [AsyncPipe, LinkDirective, PanelComponent, RouterLink],
+  standalone: true,
   templateUrl: './add-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

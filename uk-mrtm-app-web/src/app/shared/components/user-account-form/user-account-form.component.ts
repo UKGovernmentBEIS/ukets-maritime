@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { TextInputComponent } from '@netz/govuk-components';
@@ -9,13 +9,13 @@ import { existingControlContainer } from '@shared/providers/control-container.fa
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'mrtm-user-account-form',
-  standalone: true,
   imports: [ReactiveFormsModule, TextInputComponent, PhoneInputComponent],
-  viewProviders: [existingControlContainer],
+  standalone: true,
   templateUrl: './user-account-form.component.html',
+  viewProviders: [existingControlContainer],
 })
 export class UserAccountFormComponent {
-  @Input() formMode: 'CREATE' | 'EDIT' = 'CREATE';
-  @Input() emailHint: string;
-  @Input() phoneType: 'full' | 'national';
+  readonly formMode = input<'CREATE' | 'EDIT'>('CREATE');
+  readonly emailHint = input<string>();
+  readonly phoneType = input<'full' | 'national'>();
 }

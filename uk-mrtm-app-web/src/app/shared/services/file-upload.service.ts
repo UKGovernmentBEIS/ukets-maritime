@@ -20,7 +20,7 @@ import { FileUuidDTO } from '@mrtm/api';
 
 import { MessageValidationErrors } from '@netz/govuk-components';
 
-import { FileValidators } from '@shared/components';
+import { FileValidators } from '@shared/components/file-input/file-validators';
 import { FileUploadEvent } from '@shared/types';
 
 export type FileUploadRequest<T = FileUuidDTO> = (file: File) => Observable<HttpEvent<T>>;
@@ -47,25 +47,29 @@ export class FileUploadService {
     const attempts = new WeakMap<File, Observable<MessageValidationErrors>>();
 
     return ({ value }: AbstractControl) =>
-      forkJoin(
-        ((value ?? []) as FileUploadEvent[]).map((fileEvent) => {
-          if (!attempts.has(fileEvent.file)) {
-            attempts.set(
-              fileEvent.file,
-              iif(
-                () =>
-                  !this.isFileAlreadyUploaded(fileEvent) &&
-                  !this.isFileEmpty(fileEvent) &&
-                  !this.isFileLarge(fileEvent),
-                requestUpload(fileEvent.file),
-                of(null),
-              ).pipe(shareReplay({ bufferSize: 1, refCount: false })),
-            );
-          }
+      iif(
+        () => (value ?? []).map((file) => this.isFileAlreadyUploaded(file)).filter((val) => !val).length > 10,
+        of({ toManyFiles: 'You can only select up to 10 files at the same time' }),
+        forkJoin(
+          ((value ?? []) as FileUploadEvent[]).map((fileEvent) => {
+            if (!attempts.has(fileEvent.file)) {
+              attempts.set(
+                fileEvent.file,
+                iif(
+                  () =>
+                    !this.isFileAlreadyUploaded(fileEvent) &&
+                    !this.isFileEmpty(fileEvent) &&
+                    !this.isFileLarge(fileEvent),
+                  requestUpload(fileEvent.file),
+                  of(null),
+                ).pipe(shareReplay({ bufferSize: 1, refCount: false })),
+              );
+            }
 
-          return attempts.get(fileEvent.file);
-        }),
-      ).pipe(map(FileValidators.concatenateErrors), defaultIfEmpty(null));
+            return attempts.get(fileEvent.file);
+          }),
+        ).pipe(map(FileValidators.concatenateErrors), defaultIfEmpty(null)),
+      );
   }
 
   private requestUpload(request: FileUploadRequest): (file: File) => Observable<MessageValidationErrors | null> {

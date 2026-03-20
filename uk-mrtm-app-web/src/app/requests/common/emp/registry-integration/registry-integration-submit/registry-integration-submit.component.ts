@@ -16,7 +16,6 @@ import { RegistryOperatorDetailsSummaryTemplateComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-registry-integration-submit',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -24,6 +23,7 @@ import { RegistryOperatorDetailsSummaryTemplateComponent } from '@shared/compone
     ReturnToTaskOrActionPageComponent,
     RegistryOperatorDetailsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './registry-integration-submit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -35,7 +35,7 @@ export class RegistryIntegrationSubmitComponent {
   private readonly route = inject(ActivatedRoute);
 
   operatorDetails = this.requestTaskStore.select(empCommonQuery.selectOperatorDetails)();
-  account = toSignal(
+  readonly account = toSignal(
     this.operatorAccountsStore.pipe(
       selectCurrentAccount,
       map((account) => account.account),

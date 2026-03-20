@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import { TaskItem } from '@netz/common/model';
 
@@ -7,25 +7,25 @@ import { TaskItemListComponent } from '../task-item-list';
 /* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: 'li[netz-task-section]',
+  imports: [TaskItemListComponent],
+  standalone: true,
   template: `
-    @if (title) {
-      @if (titleElement === 'h2') {
-        <h2 class="app-task-list__section">{{ title }}</h2>
+    @if (title()) {
+      @if (titleElement() === 'h2') {
+        <h2 class="app-task-list__section">{{ title() }}</h2>
       } @else {
-        <h3 class="app-task-list__section">{{ title }}</h3>
+        <h3 class="app-task-list__section">{{ title() }}</h3>
       }
     }
-    @if (tasks) {
-      <ul netz-task-item-list [taskItems]="tasks"></ul>
+    @if (tasks()) {
+      <ul netz-task-item-list [taskItems]="tasks()"></ul>
     }
-    <ng-content></ng-content>
+    <ng-content />
   `,
-  standalone: true,
-  imports: [TaskItemListComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskSectionComponent {
-  @Input() title: string;
-  @Input() titleElement: 'h2' | 'h3' = 'h2';
-  @Input() tasks: TaskItem[];
+  readonly title = input<string>();
+  readonly titleElement = input<'h2' | 'h3'>('h2');
+  readonly tasks = input<TaskItem[]>();
 }

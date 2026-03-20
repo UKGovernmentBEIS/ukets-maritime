@@ -6,8 +6,8 @@ import { TASK_STATUS_TAG_MAP, TaskStatusTagMap } from '../status-tag.providers';
 
 @Pipe({
   name: 'statusTagColor',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class StatusTagColorPipe implements PipeTransform {
   private statusMap = inject<TaskStatusTagMap>(TASK_STATUS_TAG_MAP, { optional: true })!;

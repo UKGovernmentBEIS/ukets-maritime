@@ -10,8 +10,8 @@ import { AerShipSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-ship-submitted',
-  standalone: true,
   imports: [AerShipSummaryTemplateComponent, ReturnToShipsListTableComponent, PageHeadingComponent],
+  standalone: true,
   templateUrl: './ship-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

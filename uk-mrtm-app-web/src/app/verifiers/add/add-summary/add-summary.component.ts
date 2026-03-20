@@ -19,8 +19,8 @@ import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 
 @Component({
   selector: 'mrtm-add-summary',
-  standalone: true,
   imports: [UserAccountSummaryInfoComponent, AsyncPipe, PageHeadingComponent, ButtonDirective, PendingButtonDirective],
+  standalone: true,
   templateUrl: './add-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

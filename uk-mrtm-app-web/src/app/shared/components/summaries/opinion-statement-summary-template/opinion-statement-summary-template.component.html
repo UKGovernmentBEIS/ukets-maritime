@@ -18,7 +18,7 @@
         [notProvided]="
           isNil(opinionStatement()?.manuallyProvidedTotalEmissions)
             ? opinionStatement()?.manuallyProvidedTotalEmissions
-            : opinionStatement()?.manuallyProvidedTotalEmissions + ' tCO2e'
+            : `${opinionStatement()?.manuallyProvidedTotalEmissions} tCO2e`
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
@@ -33,7 +33,7 @@
         [notProvided]="
           isNil(opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction)
             ? opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction
-            : opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction + ' tCO2e'
+            : `${opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction} tCO2e`
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
@@ -48,7 +48,7 @@
         [notProvided]="
           isNil(opinionStatement()?.manuallyProvidedSurrenderEmissions)
             ? opinionStatement()?.manuallyProvidedSurrenderEmissions
-            : opinionStatement()?.manuallyProvidedSurrenderEmissions + ' tCO2e'
+            : `${opinionStatement()?.manuallyProvidedSurrenderEmissions} tCO2e`
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>

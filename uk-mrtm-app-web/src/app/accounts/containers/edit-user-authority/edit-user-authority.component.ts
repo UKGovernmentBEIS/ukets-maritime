@@ -15,16 +15,16 @@ import { UserAccountFormComponent, WizardStepComponent } from '@shared/component
 
 @Component({
   selector: 'mrtm-edit-user-authority',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, UserAccountFormComponent],
-  providers: [editUserAuthorityFormProvider],
+  standalone: true,
   templateUrl: './edit-user-authority.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .break-line {
       white-space: pre-line;
     }
   `,
+  providers: [editUserAuthorityFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditUserAuthorityComponent {
   readonly form = inject<FormGroup>(EDIT_USER_AUTHORITY_FORM);

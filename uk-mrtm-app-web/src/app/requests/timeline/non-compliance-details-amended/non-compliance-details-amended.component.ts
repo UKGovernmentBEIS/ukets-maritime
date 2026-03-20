@@ -16,7 +16,6 @@ import { NonComplianceReasonPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-non-compliance-details-amended',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -26,6 +25,7 @@ import { NonComplianceReasonPipe } from '@shared/pipes';
     GovukDatePipe,
     NonComplianceReasonPipe,
   ],
+  standalone: true,
   templateUrl: './non-compliance-details-amended.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

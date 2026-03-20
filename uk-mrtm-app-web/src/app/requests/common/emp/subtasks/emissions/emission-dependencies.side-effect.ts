@@ -2,7 +2,6 @@ import { Provider } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { EmpShipEmissions } from '@mrtm/api';
 
@@ -14,6 +13,7 @@ import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AllFuels } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const sourcesDependencyCheck = (
   currentPayload: EmpShipEmissions,

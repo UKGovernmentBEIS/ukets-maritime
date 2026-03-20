@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-non-compliance-details-initial-penalty',
-  standalone: true,
   imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './non-compliance-details-initial-penalty.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceDetailsInitialPenaltyProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceDetailsInitialPenaltyComponent {
   readonly map = nonComplianceDetailsMap;

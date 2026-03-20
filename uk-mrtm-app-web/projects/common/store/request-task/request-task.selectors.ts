@@ -35,6 +35,20 @@ const selectRequestInfo: StateSelector<RequestTaskState, RequestInfoDTO> = creat
   (state) => state?.requestInfo,
 );
 
+const selectRequestTaskAccountId: StateSelector<RequestTaskState, number> = createDescendingSelector(
+  selectRequestInfo,
+  (requestInfo) => {
+    const accountId = requestInfo?.resources[requestInfo?.resourceType];
+
+    return accountId ? parseInt(accountId) : undefined;
+  },
+);
+
+const selectRequestTaskCompetentAuthority: StateSelector<RequestTaskState, string> = createDescendingSelector(
+  selectRequestInfo,
+  (requestInfo) => requestInfo?.resources['CA'],
+);
+
 const selectRequestId: StateSelector<RequestTaskState, string> = createDescendingSelector(
   selectRequestInfo,
   (state) => state?.id,
@@ -145,4 +159,6 @@ export const requestTaskQuery = {
   selectIsEditable,
   selectMetadata,
   selectTasksDownloadUrl,
+  selectRequestTaskAccountId,
+  selectRequestTaskCompetentAuthority,
 };

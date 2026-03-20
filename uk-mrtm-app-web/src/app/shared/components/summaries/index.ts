@@ -80,3 +80,5 @@ export * from './non-compliance-notified-users-summary-template';
 export * from './non-compliance-close-summary-template';
 export * from './emp';
 export * from './emissions-reduction-claims-verification-summary-template';
+export * from './registry-account-updated-summary-template';
+export * from './registry-notice-event-submitted-summary-template';

@@ -2,48 +2,48 @@
 <dl govuk-summary-list [hasBorders]="true">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Request from the regulator</dt>
-    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpResponseDTO?.followUpRequest"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpResponseDTO()?.followUpRequest"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Due date</dt>
-    <dd govukSummaryListRowValue [notProvided]="followUpResponseDTO?.followUpResponseExpirationDate | govukDate"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue [notProvided]="followUpResponseDTO()?.followUpResponseExpirationDate | govukDate"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Submission date</dt>
-    <dd govukSummaryListRowValue [notProvided]="followUpResponseDTO?.submissionDate | govukDate"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue [notProvided]="followUpResponseDTO()?.submissionDate | govukDate"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Operator's response</dt>
-    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpResponseDTO?.followUpResponse"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpResponseDTO()?.followUpResponse"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Supporting documents</dt>
     <dd govukSummaryListRowValue>
-      <mrtm-summary-download-files [files]="followUpResponseDTO?.attachments" />
+      <mrtm-summary-download-files [files]="followUpResponseDTO()?.attachments" />
     </dd>
-    @if (isEditable) {
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>

@@ -1,6 +1,5 @@
 import { Observable, of } from 'rxjs';
 import { produce, WritableDraft } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { AerShipEmissions, EmissionsSources } from '@mrtm/api';
 
@@ -23,6 +22,7 @@ import {
   getVoyagesSectionKey,
 } from '@requests/common/utils/section-key-builder.helper';
 import { AllFuelOriginTypeName } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 export class AerShipSummaryPayloadMutator extends PayloadMutator {
   subtask = EMISSIONS_SUB_TASK;

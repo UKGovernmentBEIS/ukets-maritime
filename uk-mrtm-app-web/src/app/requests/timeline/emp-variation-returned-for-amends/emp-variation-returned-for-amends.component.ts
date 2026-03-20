@@ -8,8 +8,8 @@ import { empSubtaskToTitle } from '@shared/constants';
 
 @Component({
   selector: 'mrtm-emp-variation-returned-for-amends',
-  standalone: true,
   imports: [ReviewReturnForAmendsSubtaskSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './emp-variation-returned-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

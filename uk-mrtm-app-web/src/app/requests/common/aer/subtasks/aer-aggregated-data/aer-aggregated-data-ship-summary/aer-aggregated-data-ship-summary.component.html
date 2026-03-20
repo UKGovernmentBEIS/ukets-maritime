@@ -1,14 +1,17 @@
 <mrtm-notification-banner />
 <netz-page-heading
   [caption]="
-    !aggregatedData()?.fromFetch ? wizardMap.annualAggregatedEmissions.caption + ' ' + ship()?.details?.name : undefined
+    !aggregatedData()?.fromFetch ? `${wizardMap.annualAggregatedEmissions.caption} ${ship()?.details?.name}` : undefined
   ">
-  @if (aggregatedData()?.fromFetch) {
+  @if (aggregatedData()?.fromFetch || aggregatedData()?.dataInputType === 'EXTERNAL_PROVIDER') {
     Aggregated data for {{ ship()?.details?.name }}
   } @else {
     Check your answers
   }
 </netz-page-heading>
+@if (aggregatedData()?.dataInputType === 'EXTERNAL_PROVIDER') {
+  <div class="govuk-inset-text">Data imported from external system cannot be edited.</div>
+}
 @if (warningMessages()?.length) {
   <div class="govuk-!-width-two-thirds">
     @for (warningMessage of warningMessages(); track warningMessage) {
@@ -26,6 +29,6 @@
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../']">Return to: {{ wizardMap.title }}</a>
 </div>

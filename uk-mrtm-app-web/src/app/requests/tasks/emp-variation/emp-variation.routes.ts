@@ -10,6 +10,7 @@ import {
   provideEmpVariationStepFlowManagers,
   provideEmpVariationTaskServices,
 } from '@requests/tasks/emp-variation/emp-variation.providers';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_VARIATION_ROUTES: Routes = [
   {
@@ -22,6 +23,7 @@ export const EMP_VARIATION_ROUTES: Routes = [
       provideEmpVariationTaskServices(),
       provideEmpVariationStepFlowManagers(),
     ],
+    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'variation-details',

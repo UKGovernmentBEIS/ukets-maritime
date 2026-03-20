@@ -1,5 +1,3 @@
-import { GovukTableColumn } from '@netz/govuk-components';
-
 import { ExtendedMiReportResult } from '@mi-reports/core/mi-interfaces';
 import { MiReportType } from '@mi-reports/core/mi-report-type.enum';
 import { utils, writeFileXLSX } from 'xlsx';
@@ -29,10 +27,6 @@ export const createTablePage = (currentPage: number, pageSize: number, data: any
   const lastIndex = Math.min(firstIndex + pageSize, data?.length);
 
   return data?.length > firstIndex ? data.slice(firstIndex, lastIndex) : [];
-};
-
-export const createTableColumns = (columns: string[]): GovukTableColumn<any>[] => {
-  return columns.map((column) => ({ field: column, header: column }));
 };
 
 export const manipulateResultsAndExportToExcel = (

@@ -6,8 +6,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-return-for-amends-success',
-  standalone: true,
   imports: [LinkDirective, RouterLink, PanelComponent],
+  standalone: true,
   templateUrl: './return-for-amends-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

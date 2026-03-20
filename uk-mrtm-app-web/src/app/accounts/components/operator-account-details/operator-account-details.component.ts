@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { GovukDatePipe } from '@netz/common/pipes';
@@ -17,9 +17,6 @@ import { CountryPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-operator-account-details',
-  templateUrl: './operator-account-details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     CommonModule,
     RouterLink,
@@ -32,10 +29,13 @@ import { CountryPipe } from '@shared/pipes';
     CountryPipe,
     GovukDatePipe,
   ],
+  standalone: true,
+  templateUrl: './operator-account-details.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorAccountDetailsComponent {
-  @Input() editable: boolean = true;
-  @Input() formRouterLink = 'edit';
+  readonly editable = input<boolean>(true);
+  readonly formRouterLink = input('edit');
   private readonly store: OperatorAccountsStore = inject(OperatorAccountsStore);
   accountInfo$ = this.store.pipe(selectAccount);
 }

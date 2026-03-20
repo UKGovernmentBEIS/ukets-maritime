@@ -34,6 +34,10 @@ public interface MrtmAccountRepository extends AccountBaseRepository<MrtmAccount
     Optional<Long> findAccountIdByImoNumber(String imoNumber);
 
     @Transactional(readOnly = true)
+    @Query(name = MrtmAccount.NAMED_QUERY_FIND_VERIFICATION_BODY_ID_BY_IMO_NUMBER)
+    Optional<Long> findVerificationBodyIdByImoNumber(String imoNumber);
+
+    @Transactional(readOnly = true)
     @Query(name = MrtmAccount.NAMED_QUERY_FIND_BY_USER_ID)
     List<MrtmAccount> findByUserId(String userId);
 

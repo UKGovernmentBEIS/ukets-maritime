@@ -1,18 +1,25 @@
-/* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
-/* eslint-disable @angular-eslint/component-selector */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import { Component, DestroyRef, HostBinding, inject, input, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, input, OnInit } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlContainer, FormGroupDirective, NgForm, UntypedFormGroup } from '@angular/forms';
 
 import { ErrorMessageComponent } from '../error-message';
 import { FieldsetDirective, LegendDirective, LegendSizeType } from '../fieldset';
 
+/*
+  eslint-disable
+  @angular-eslint/prefer-on-push-component-change-detection,
+  @angular-eslint/component-selector
+*/
 @Component({
   selector: 'div[govuk-form-group]',
-  standalone: true,
   imports: [ErrorMessageComponent, FieldsetDirective, LegendDirective],
+  standalone: true,
   templateUrl: './form-group.component.html',
+  host: {
+    '[class.govuk-!-display-block]': 'govukDisplayBlock',
+    '[class.govuk-form-group]': 'govukFormGroupClass',
+    '[class.govuk-form-group--error]': 'govukFormGroupErrorClass',
+  },
 })
 export class FormGroupComponent implements OnInit {
   private readonly container = inject(ControlContainer, { self: true, optional: true });
@@ -23,9 +30,9 @@ export class FormGroupComponent implements OnInit {
   readonly legendSize = input<LegendSizeType>('medium');
   readonly hint = input<string>();
 
-  @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
-  @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;
-  @HostBinding('class.govuk-form-group--error') get govukFormGroupErrorClass(): boolean {
+  readonly govukDisplayBlock = true;
+  readonly govukFormGroupClass = true;
+  get govukFormGroupErrorClass(): boolean {
     return this.shouldDisplayErrors;
   }
 

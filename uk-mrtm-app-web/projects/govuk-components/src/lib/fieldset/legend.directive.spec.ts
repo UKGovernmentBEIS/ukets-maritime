@@ -11,8 +11,8 @@ describe('LegendDirective', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: true,
     imports: [FieldsetDirective, LegendDirective],
+    standalone: true,
     template: `
       <fieldset govukFieldset>
         <legend govukLegend>Legend</legend>

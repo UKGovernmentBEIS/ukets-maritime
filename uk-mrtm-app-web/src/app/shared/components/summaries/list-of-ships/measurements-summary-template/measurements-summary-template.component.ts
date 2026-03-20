@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 import { EmpShipEmissions } from '@mrtm/api';
@@ -17,7 +17,6 @@ import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-measurements-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -29,6 +28,7 @@ import { NotProvidedDirective } from '@shared/directives';
     ButtonDirective,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './measurements-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -36,12 +36,12 @@ export class MeasurementsSummaryTemplateComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  @Input({ required: true }) data: EmpShipEmissions['measurements'];
-  @Input() changeLink: string;
-  @Input() isEditable: boolean = false;
-  @Input() queryParams: Params = {};
+  readonly data = input.required<EmpShipEmissions['measurements']>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input<boolean>(false);
+  readonly queryParams = input<Params>({});
 
   public handleAddAnother(): void {
-    this.router.navigate(['./', this.changeLink], { relativeTo: this.route, queryParams: this.queryParams });
+    this.router.navigate(['./', this.changeLink()], { relativeTo: this.route, queryParams: this.queryParams() });
   }
 }

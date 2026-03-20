@@ -7,8 +7,8 @@ import { PeerReviewStore } from '@requests/tasks/notification-peer-review/+state
 
 @Component({
   selector: 'mrtm-peer-review-decision-success',
-  standalone: true,
   imports: [PanelComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './peer-review-decision-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

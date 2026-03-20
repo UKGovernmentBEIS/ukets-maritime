@@ -24,7 +24,7 @@
       <ng-container [formGroupName]="i">
         <fieldset govukFieldset>
           <legend govukLegend legendSize="medium">Measurement Device {{ i + 1 }}</legend>
-          @if (measurementsFormArray.controls.length > 1) {
+          @if ($count > 1) {
             <button (click)="removeMeasurementDescription(i)" mrtmAddAnother govukSecondaryButton type="button">
               Remove
             </button>
@@ -38,10 +38,10 @@
           <div
             formControlName="emissionSources"
             govuk-checkboxes
-            legend="Select the emission source this device is used for"
-            legendSize="normal">
+            label="Select the emission source this device is used for"
+            labelSize="normal">
             @for (name of emissionSourcesNames; track name) {
-              <govuk-checkbox [value]="name" [label]="name"></govuk-checkbox>
+              <govuk-checkbox [value]="name" [label]="name" />
             }
           </div>
         </fieldset>

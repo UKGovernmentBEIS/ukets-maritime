@@ -9,8 +9,8 @@ import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/co
 
 @Component({
   selector: 'mrtm-aer-returned-for-amends',
-  standalone: true,
   imports: [ReviewReturnForAmendsSubtaskSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './aer-returned-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
