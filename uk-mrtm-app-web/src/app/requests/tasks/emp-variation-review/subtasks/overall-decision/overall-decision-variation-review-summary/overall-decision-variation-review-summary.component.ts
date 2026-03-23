@@ -31,6 +31,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-overall-decision-variation-review-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -39,7 +40,6 @@ interface ViewModel {
     OverallDecisionSummaryTemplateComponent,
     DeterminationTypePipe,
   ],
-  standalone: true,
   templateUrl: './overall-decision-variation-review-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,7 +50,7 @@ export class OverallDecisionVariationReviewSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     determination: this.store.select(empVariationReviewQuery.selectDetermination)(),
     overallDecisionMap: overallDecisionMap,
     isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),

@@ -9,11 +9,11 @@ import { AerAggregatedEmissionsFormComponent } from '@requests/common/aer/compon
 
 describe('AerAggregatedEmissionsFormComponent', () => {
   @Component({
-    imports: [ReactiveFormsModule, AerAggregatedEmissionsFormComponent],
-    standalone: true,
     template: `
       <form [formGroup]="formGroup"><mrtm-aer-aggregated-emissions-form formGroupName="testGroup" /></form>
     `,
+    standalone: true,
+    imports: [ReactiveFormsModule, AerAggregatedEmissionsFormComponent],
   })
   class TestComponent {
     formGroup: FormGroup = new FormGroup({

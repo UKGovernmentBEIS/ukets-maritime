@@ -14,11 +14,11 @@ describe('SkipLinkComponent', () => {
   class RoutedComponent {}
 
   @Component({
-    imports: [SkipLinkComponent, RouterOutlet],
     standalone: true,
+    imports: [SkipLinkComponent, RouterOutlet],
     template: `
-      <govuk-skip-link />
-      <router-outlet />
+      <govuk-skip-link></govuk-skip-link>
+      <router-outlet></router-outlet>
     `,
   })
   class HostComponent {}

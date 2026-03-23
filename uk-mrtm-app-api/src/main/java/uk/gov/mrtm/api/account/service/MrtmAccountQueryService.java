@@ -13,7 +13,6 @@ import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
@@ -38,10 +37,6 @@ public class MrtmAccountQueryService {
     public Long getAccountIdByImoNumber(String imoNumber) {
         return accountRepository.findAccountIdByImoNumber(imoNumber)
             .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
-    }
-
-    public Optional<Long> findVerificationBodyIdByImoNumber(String imoNumber) {
-        return accountRepository.findVerificationBodyIdByImoNumber(imoNumber);
     }
 
     public boolean isExistingAccountImoNumber(String imoNumber) {

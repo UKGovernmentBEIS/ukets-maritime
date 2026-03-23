@@ -14,11 +14,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-create-operator-account',
-  imports: [ReactiveFormsModule, WizardStepComponent, OperatorAccountFormComponent, RouterLink, LinkDirective],
-  standalone: true,
   templateUrl: './create-operator-account.component.html',
-  providers: [createOperatorAccountFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ReactiveFormsModule, WizardStepComponent, OperatorAccountFormComponent, RouterLink, LinkDirective],
+  providers: [createOperatorAccountFormProvider],
 })
 export class CreateOperatorAccountComponent {
   public form = inject<FormGroup>(CREATE_OPERATOR_ACCOUNT_FORM);

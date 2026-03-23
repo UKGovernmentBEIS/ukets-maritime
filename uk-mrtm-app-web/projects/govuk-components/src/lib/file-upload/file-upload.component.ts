@@ -1,55 +1,42 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, HostBinding, inject, Input } from '@angular/core';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 import { ErrorMessageComponent } from '../error-message';
 import { FormService } from '../form';
-import { LabelSizeType } from '../text-input';
 
 /*
   eslint-disable
   @typescript-eslint/no-unused-vars,
   @angular-eslint/prefer-on-push-component-change-detection,
+  @typescript-eslint/no-empty-function
 */
 @Component({
   selector: 'div[govukFileUpload],govuk-file-upload',
-  imports: [ErrorMessageComponent],
   standalone: true,
+  imports: [ErrorMessageComponent],
   templateUrl: './file-upload.component.html',
-  host: {
-    '[class.govuk-!-display-block]': 'govukDisplayBlock',
-    '[class.govuk-form-group]': 'govukFormGroupClass',
-    '[class.govuk-form-group--error]': 'govukFormGroupErrorClass',
-  },
 })
 export class FileUploadComponent implements ControlValueAccessor {
   ngControl = inject(NgControl, { self: true, optional: true })!;
   private formService = inject(FormService);
 
-  readonly label = input<string>();
-  readonly isLabelHidden = input(false);
-  readonly labelSize = input<LabelSizeType>('normal');
-  readonly accepted = input<string>();
-  readonly isMultiple = input<boolean>();
+  @Input()
+  set label(label: string) {
+    this.isLabelHidden = false;
+    this.currentLabel = label;
+  }
 
-  readonly govukDisplayBlock = true;
-  readonly govukFormGroupClass = true;
+  @Input() accepted: string;
+  @Input() isMultiple: boolean;
+  @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
+  @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;
 
-  get govukFormGroupErrorClass(): boolean {
+  @HostBinding('class.govuk-form-group--error') get govukFormGroupErrorClass(): boolean {
     return this.control?.invalid && this.control?.touched;
   }
 
-  readonly currentLabelSize = computed(() => {
-    switch (this.labelSize()) {
-      case 'small':
-        return 'govuk-label govuk-label--s';
-      case 'medium':
-        return 'govuk-label govuk-label--m';
-      case 'large':
-        return 'govuk-label govuk-label--l';
-      default:
-        return 'govuk-label';
-    }
-  });
+  isLabelHidden = true;
+  currentLabel = 'Legend';
 
   constructor() {
     const ngControl = this.ngControl;

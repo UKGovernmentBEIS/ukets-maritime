@@ -1,19 +1,18 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 export const canActivateProvideNoteRedirect: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);
-  const requestTaskWorkflowId = store.select(requestTaskQuery.selectRequestInfo)()?.id;
-  const requestTaskAccountId = store.select(requestTaskQuery.selectRequestTaskAccountId)();
+  const requestInfo = store.select(requestTaskQuery.selectRequestInfo)();
 
-  return !isNil(requestTaskAccountId) && !isNil(requestTaskWorkflowId)
+  return !isNil(requestInfo?.accountId) && !isNil(requestInfo?.id)
     ? createUrlTreeFromSnapshot(
         route.root,
-        [`./accounts/${requestTaskAccountId}/workflows/${requestTaskWorkflowId}`],
+        [`./accounts/${requestInfo?.accountId}/workflows/${requestInfo?.id}`],
         null,
         'notes',
       )

@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+import { isNil } from 'lodash-es';
+
 import { GuidanceDocumentDTO, GuidanceDocumentsService } from '@mrtm/api';
 
 import { GovukValidators } from '@netz/govuk-components';
@@ -11,7 +13,6 @@ import { ManageGuidanceDocumentDTO } from '@guidance/guidance.types';
 import { ManageDocumentsFormGroupModel } from '@guidance/manage-documents/manage-documents-form/manage-documents-form.types';
 import { createCommonFileValidators } from '@shared/components';
 import { FileUploadService } from '@shared/services';
-import { isNil } from '@shared/utils';
 
 const uniqueDocumentNameValidator =
   (documents: Array<GuidanceDocumentDTO>, currentDocumentId?: number): ValidatorFn =>

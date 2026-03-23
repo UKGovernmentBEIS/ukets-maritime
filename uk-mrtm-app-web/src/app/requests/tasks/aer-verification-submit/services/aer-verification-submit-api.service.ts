@@ -53,19 +53,6 @@ export class AerVerificationSubmitApiService extends TaskApiService<AerVerificat
     }
   }
 
-  private get importThirdPartyDataActionTypes(): SaveActionTypes {
-    const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
-
-    switch (taskType) {
-      case 'AER_APPLICATION_VERIFICATION_SUBMIT':
-      default:
-        return {
-          actionType: 'AER_VERIFICATION_IMPORT_THIRD_PARTY_DATA_APPLICATION',
-          actionPayloadType: 'AER_VERIFICATION_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD',
-        };
-    }
-  }
-
   save(payload: AerVerificationSubmitTaskPayload): Observable<AerVerificationSubmitTaskPayload> {
     return this.service.processRequestTaskAction(this.createSaveAction(payload)).pipe(
       catchError((err) => {
@@ -120,35 +107,6 @@ export class AerVerificationSubmitApiService extends TaskApiService<AerVerificat
       requestTaskId,
       requestTaskActionType: actionType,
       requestTaskActionPayload: { payloadType: actionPayloadType },
-    } as RequestTaskActionProcessDTO;
-  }
-
-  importThirdPartyData(payload: AerVerificationSubmitTaskPayload): Observable<AerVerificationSubmitTaskPayload> {
-    return this.service.processRequestTaskAction(this.createImportThirdPartyDataAction(payload)).pipe(
-      catchNotFoundRequest(ErrorCodes.NOTFOUND1001, () =>
-        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
-      ),
-      catchTaskReassignedBadRequest(() =>
-        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
-      ),
-      catchBadRequest(ErrorCodes.FORM1001, () => {
-        const taskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
-        const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
-        const year = this.store.select(aerCommonQuery.selectReportingYear)();
-        return this.businessErrorService.showError(aerVerificationSubmitValidationError(taskId, taskType, year));
-      }),
-    );
-  }
-
-  private createImportThirdPartyDataAction(payload: AerVerificationSubmitTaskPayload): RequestTaskActionProcessDTO {
-    const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
-    const { verificationSectionsCompleted } = payload;
-    const { actionType, actionPayloadType } = this.importThirdPartyDataActionTypes;
-
-    return {
-      requestTaskId,
-      requestTaskActionType: actionType,
-      requestTaskActionPayload: { payloadType: actionPayloadType, verificationSectionsCompleted },
     } as RequestTaskActionProcessDTO;
   }
 }

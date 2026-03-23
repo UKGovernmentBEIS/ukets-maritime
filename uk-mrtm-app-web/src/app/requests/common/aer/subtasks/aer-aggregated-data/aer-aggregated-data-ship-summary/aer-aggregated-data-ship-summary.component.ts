@@ -3,6 +3,7 @@ import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
@@ -24,11 +25,11 @@ import { TaskItemStatus } from '@requests/common/task-item-status';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataShipSummaryTemplateComponent } from '@shared/components/summaries';
 import { AerAggregatedDataShipSummary, AerPortSummaryItemDto, AerVoyageSummaryItemDto } from '@shared/types';
-import { isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-ship-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -39,7 +40,6 @@ import BigNumber from 'bignumber.js';
     WarningTextComponent,
     NotificationBannerComponent,
   ],
-  standalone: true,
   templateUrl: './aer-aggregated-data-ship-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -76,12 +76,7 @@ export class AerAggregatedDataShipSummaryComponent {
     }
   > = computed(() => this.store.select(aerCommonQuery.selectAggregatedDataSummaryItem(this.dataId()))());
   readonly editable: Signal<boolean> = computed(() => {
-    const aggregatedData = this.aggregatedData();
-    return (
-      !aggregatedData?.fromFetch &&
-      aggregatedData?.dataInputType !== 'EXTERNAL_PROVIDER' &&
-      this.store.select(requestTaskQuery.selectIsEditable)()
-    );
+    return !this.aggregatedData()?.fromFetch && this.store.select(requestTaskQuery.selectIsEditable)();
   });
 
   readonly canSubmit: Signal<boolean> = computed(() => {

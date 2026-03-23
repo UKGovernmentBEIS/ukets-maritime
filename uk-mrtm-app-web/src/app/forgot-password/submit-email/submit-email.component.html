@@ -10,7 +10,7 @@
       label="Email address"></div>
     <button govukButton type="submit">Confirm</button>
   </form>
-  <mrtm-back-to-top />
+  <mrtm-back-to-top></mrtm-back-to-top>
 } @else {
-  <mrtm-email-sent [email]="form.get('email').value" (retry)="retryResetPassword()" />
+  <mrtm-email-sent [email]="form.get('email').value" (retry)="retryResetPassword()"></mrtm-email-sent>
 }

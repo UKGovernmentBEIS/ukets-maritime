@@ -49,7 +49,6 @@ export const REDUCTION_CLAIM_ROUTES: Routes = [
       },
       {
         path: ReductionClaimWizardStep.FUEL_PURCHASE,
-        title: reductionClaimMap.purchaseAdd.title,
         data: { breadcrumb: false },
         resolve: {
           backlink: backlinkResolver(ReductionClaimWizardStep.SUMMARY, `../${ReductionClaimWizardStep.DETAILS}`),
@@ -63,7 +62,6 @@ export const REDUCTION_CLAIM_ROUTES: Routes = [
       {
         path: ':fuelPurchaseId',
         data: { breadcrumb: false },
-        title: reductionClaimMap.purchaseEdit.title,
         resolve: {
           backlink: backlinkResolver(
             `../${ReductionClaimWizardStep.SUMMARY}`,

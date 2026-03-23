@@ -17,7 +17,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
-import uk.gov.mrtm.api.web.orchestrator.authorization.service.AccountOperatorUserAuthorityDeleteOrchestrator;
 import uk.gov.netz.api.account.domain.AccountContactType;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
@@ -67,9 +66,6 @@ class OperatorAuthorityControllerTest {
 
     @Mock
     private OperatorAuthorityDeletionService operatorAuthorityDeletionService;
-
-    @Mock
-    private AccountOperatorUserAuthorityDeleteOrchestrator accountOperatorUserAuthorityDeleteOrchestrator;
 
     @Mock
     private AccountOperatorUserAuthorityQueryOrchestrator accountOperatorUserAuthorityQueryOrchestrator;
@@ -236,7 +232,7 @@ class OperatorAuthorityControllerTest {
                 BASE_PATH + ACCOUNT_OPERATOR_USERS_PATH  + "/" + accountId + "/" + userId))
             .andExpect(status().isNoContent());
 
-        verify(accountOperatorUserAuthorityDeleteOrchestrator, times(1))
+        verify(operatorAuthorityDeletionService, times(1))
                 .deleteAccountOperatorAuthority(userId, accountId);
     }
 

@@ -19,6 +19,7 @@ import { BooleanToTextPipe, YesNoToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-ets-compliance-rules-summary-template',
+  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -31,7 +32,6 @@ import { BooleanToTextPipe, YesNoToTextPipe } from '@shared/pipes';
     NotProvidedDirective,
     YesNoToTextPipe,
   ],
-  standalone: true,
   templateUrl: './ets-compliance-rules-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

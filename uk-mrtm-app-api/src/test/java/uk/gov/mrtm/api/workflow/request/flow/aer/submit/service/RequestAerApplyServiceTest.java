@@ -1,9 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.submit.service;
 
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -23,7 +21,6 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerSaveApplicatio
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 
 import java.util.Map;
-import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -56,15 +53,13 @@ class RequestAerApplyServiceTest {
     @Mock
     private AerTotalEmissionsCalculator totalEmissionsCalculator;
 
-    @ParameterizedTest
-    @MethodSource("applySaveActionScenarios")
-    void applySaveAction(String thirdPartyDataProviderName, Aer existingAer) {
+    @Test
+    void applySaveAction() {
         AerSave aerSave = AerSave.builder()
             .additionalDocuments(AdditionalDocuments.builder().exist(true).build())
             .build();
         Aer aer = Aer.builder()
             .additionalDocuments(AdditionalDocuments.builder().exist(true).build())
-            .thirdPartyDataProviderName(thirdPartyDataProviderName)
             .build();
 
         AerSaveApplicationRequestTaskActionPayload taskActionPayload =
@@ -77,7 +72,6 @@ class RequestAerApplyServiceTest {
 
         AerApplicationSubmitRequestTaskPayload requestTaskPayload = AerApplicationSubmitRequestTaskPayload.builder()
             .payloadType(MrtmRequestTaskPayloadType.AER_APPLICATION_SUBMIT_PAYLOAD)
-            .aer(existingAer)
             .build();
 
         RequestTask requestTask = RequestTask.builder()
@@ -93,7 +87,6 @@ class RequestAerApplyServiceTest {
         assertNotNull(payloadSaved.getAer());
         assertTrue(payloadSaved.getReportingRequired());
         assertThat(payloadSaved.getAerSectionsCompleted()).containsExactly(Map.entry(AdditionalDocuments.class.getName(), "COMPLETED"));
-        assertThat(payloadSaved.getAer().getThirdPartyDataProviderName()).isEqualTo(thirdPartyDataProviderName);
         assertFalse(payloadSaved.isVerificationPerformed());
 
         verify(syncAerAttachmentsService).sync(taskActionPayload.getReportingRequired(), requestTaskPayload);
@@ -105,14 +98,5 @@ class RequestAerApplyServiceTest {
 
         verifyNoMoreInteractions(portEmissionsCalculator, voyageEmissionsCalculator,
             smfEmissionsCalculator, aggregatedDataEmissionsCalculator, totalEmissionsCalculator);
-    }
-
-    private static Stream<Arguments> applySaveActionScenarios() {
-        String thirdPartyDataProviderName = "thirdPartyDataProviderName";
-
-        return Stream.of(
-            Arguments.of(thirdPartyDataProviderName, Aer.builder().thirdPartyDataProviderName(thirdPartyDataProviderName).build()),
-            Arguments.of(null, null)
-        );
     }
 }

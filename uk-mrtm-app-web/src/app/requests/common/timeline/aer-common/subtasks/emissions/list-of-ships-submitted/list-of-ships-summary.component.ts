@@ -11,13 +11,13 @@ import {
 
 @Component({
   selector: 'mrtm-list-of-ships-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ListOfShipsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './list-of-ships-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

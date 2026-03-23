@@ -67,7 +67,7 @@ export const landingPageGuard: () => Observable<boolean | UrlTree> = () => {
       if (
         shouldShowDisabled(userState) ||
         hasNoAuthority(userState) ||
-        router.currentNavigation()?.extras?.state?.addAnotherInstallation ||
+        router.getCurrentNavigation()?.extras?.state?.addAnotherInstallation ||
         shouldShowAccepted(userState)
       ) {
         return true;

@@ -18,6 +18,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-vir-regulator-response-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -30,7 +31,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
     LinkDirective,
     NotProvidedDirective,
   ],
-  standalone: true,
   templateUrl: './vir-regulator-response-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

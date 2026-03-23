@@ -20,6 +20,7 @@ import {
 
 @Component({
   selector: 'mrtm-payment-bank-transfer',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -29,7 +30,6 @@ import {
     InternationalPaymentDetailsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './payment-bank-transfer.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

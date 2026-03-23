@@ -46,6 +46,10 @@ type TableData = AccountContactInfoDTO & { user: RegulatorUserAuthorityInfoDTO; 
 
 @Component({
   selector: 'mrtm-site-contacts',
+  templateUrl: './site-contacts.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserFullNamePipe, DestroySubject],
+  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -58,10 +62,6 @@ type TableData = AccountContactInfoDTO & { user: RegulatorUserAuthorityInfoDTO; 
     AsyncPipe,
     UserFullNamePipe,
   ],
-  standalone: true,
-  templateUrl: './site-contacts.component.html',
-  providers: [UserFullNamePipe, DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SiteContactsComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);

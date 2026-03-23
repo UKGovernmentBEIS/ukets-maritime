@@ -2,33 +2,34 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { RequestActionStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
+import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { actionProviders } from '@requests/common/action.providers';
 import { greenhouseGasMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
 import { mockGreenhouseGas } from '@requests/common/emp/testing/emp-data.mock';
 import { GreenhouseGasSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/greenhouse-gas';
+import { screen } from '@testing-library/angular';
 
 describe('GreenhouseGasSubmittedComponent', () => {
   let fixture: ComponentFixture<GreenhouseGasSubmittedComponent>;
   let component: GreenhouseGasSubmittedComponent;
   let store: RequestActionStore;
-  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
 
-  class Page extends BasePage<GreenhouseGasSubmittedComponent> {
-    get summaryListTerms(): string[] {
-      return this.queryAll('dt').map((dt) => dt.textContent.trim());
-    }
-  }
+  const createComponent = () => {
+    fixture = TestBed.createComponent(GreenhouseGasSubmittedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    jest.clearAllMocks();
+  };
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [GreenhouseGasSubmittedComponent],
       providers: [{ provide: ActivatedRoute, useValue: activatedRouteStub }, ...actionProviders],
-    });
+    }).compileComponents();
 
     store = TestBed.inject(RequestActionStore);
     store.setState(
@@ -36,11 +37,7 @@ describe('GreenhouseGasSubmittedComponent', () => {
         greenhouseGas: mockGreenhouseGas,
       }),
     );
-    fixture = TestBed.createComponent(GreenhouseGasSubmittedComponent);
-    component = fixture.componentInstance;
-    page = new Page(fixture);
-    fixture.detectChanges();
-    jest.clearAllMocks();
+    createComponent();
   });
 
   it('should create', () => {
@@ -48,11 +45,16 @@ describe('GreenhouseGasSubmittedComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.heading1.textContent).toEqual(
+    expect(screen.getAllByRole('heading')[0].textContent).toEqual(
       'Procedures related to the monitoring of greenhouse gas emissions and fuel consumption',
     );
 
-    expect(page.queryAll('h2').map((item) => item.textContent.trim())).toEqual([
+    const summarySections = screen
+      .getAllByRole('heading')
+      .slice(1)
+      .map((section) => section.textContent);
+
+    expect(summarySections).toEqual([
       greenhouseGasMap.fuel.title,
       greenhouseGasMap.crossChecks.title,
       greenhouseGasMap.information.title,
@@ -60,7 +62,7 @@ describe('GreenhouseGasSubmittedComponent', () => {
       greenhouseGasMap.voyages.title,
     ]);
 
-    expect([...new Set(page.summaryListTerms)]).toEqual([
+    expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
       'Procedure reference',
       'Procedure version',
       'Description of procedure',

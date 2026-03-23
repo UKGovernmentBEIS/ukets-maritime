@@ -8,8 +8,8 @@ import { FollowUpRequest } from '@shared/types/follow-up-request.interface';
 
 @Component({
   selector: 'mrtm-notification-wait-for-follow-up',
-  imports: [FollowUpRequestSummaryTemplateComponent],
   standalone: true,
+  imports: [FollowUpRequestSummaryTemplateComponent],
   templateUrl: './notification-wait-for-follow-up.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

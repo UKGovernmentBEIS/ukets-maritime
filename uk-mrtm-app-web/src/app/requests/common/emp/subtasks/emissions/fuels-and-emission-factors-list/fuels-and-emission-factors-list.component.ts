@@ -22,6 +22,7 @@ import { FuelsAndEmissionFactorsSummaryTemplateComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-emp-fuels-and-emission-factors-list',
+  standalone: true,
   imports: [
     ShipStepTitleCustomPipe,
     PageHeadingComponent,
@@ -29,7 +30,6 @@ import { FuelsAndEmissionFactorsSummaryTemplateComponent } from '@shared/compone
     ButtonDirective,
     ReturnToShipsListTableComponent,
   ],
-  standalone: true,
   templateUrl: './fuels-and-emission-factors-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

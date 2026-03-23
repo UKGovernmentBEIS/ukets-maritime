@@ -1,3 +1,4 @@
+import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -14,6 +15,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
 import { expand, map, Observable, switchMap, tap, timer } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { AccountNotesService, FileNotesService, FileToken, RequestNotesService } from '@mrtm/api';
 
@@ -21,12 +23,9 @@ import { BreadcrumbService } from '@netz/common/navigation';
 import { LinkDirective } from '@netz/govuk-components';
 
 import { LoadingSpinnerComponent } from '@shared/components';
-import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-note-file-download',
-  imports: [LinkDirective, LoadingSpinnerComponent],
-  standalone: true,
   template: `
     @if (downloadProcessing()) {
       <div mrtm-loading-spinner>Preparing file to download</div>
@@ -36,7 +35,9 @@ import { isNil } from '@shared/utils';
       <a govukLink [href]="url()" download #anchor>Click to restart download if it fails</a>
     }
   `,
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LinkDirective, AsyncPipe, LoadingSpinnerComponent],
 })
 export class NoteFileDownloadComponent implements OnInit {
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
@@ -52,7 +53,7 @@ export class NoteFileDownloadComponent implements OnInit {
   public readonly downloadProcessing: WritableSignal<boolean> = signal(true);
   public readonly anchor = viewChild<ElementRef<HTMLAnchorElement>>('anchor');
 
-  readonly url = toSignal(
+  url = toSignal(
     this.route.paramMap.pipe(
       map((params): Observable<FileToken> => {
         return params.has('workflowId') ? this.requestNoteDownloadInfo(params) : this.accountNoteDownloadInfo(params);

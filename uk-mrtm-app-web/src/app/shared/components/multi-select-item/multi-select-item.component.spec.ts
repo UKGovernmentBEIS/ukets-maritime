@@ -7,14 +7,14 @@ import { MultiSelectComponent, MultiSelectItemComponent } from '@shared/componen
 
 describe('MultipleSelectItemComponent', () => {
   @Component({
-    imports: [MultiSelectComponent, MultiSelectItemComponent, ReactiveFormsModule],
-    standalone: true,
     template: `
       <div mrtm-multi-select [formControl]="control" label="Test label">
         <div mrtm-multi-select-item itemValue="1" label="Test label 1"></div>
         <div mrtm-multi-select-item itemValue="2" label="Test label 2"></div>
       </div>
     `,
+    standalone: true,
+    imports: [MultiSelectComponent, MultiSelectItemComponent, ReactiveFormsModule],
   })
   class TestComponent {
     control = new FormControl();

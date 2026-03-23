@@ -2,7 +2,6 @@ package uk.gov.mrtm.api.workflow.request.flow.doe.common.domain;
 
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -17,8 +16,7 @@ import lombok.NoArgsConstructor;
 public class DoeDeterminationReason {
 
     @NotNull
-    @Valid
-    private DoeDeterminationReasonDetails details;
+    private DoeDeterminationReasonType type;
 
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @Size(max=10000)

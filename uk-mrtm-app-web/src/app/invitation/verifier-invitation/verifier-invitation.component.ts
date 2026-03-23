@@ -18,6 +18,10 @@ import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers';
 
 @Component({
   selector: 'mrtm-verifier-invitation',
+  templateUrl: './verifier-invitation.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [passwordFormProvider, DestroySubject],
+  standalone: true,
   imports: [
     ErrorSummaryComponent,
     PageHeadingComponent,
@@ -28,10 +32,6 @@ import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers';
     AsyncPipe,
     PasswordComponent,
   ],
-  standalone: true,
-  templateUrl: './verifier-invitation.component.html',
-  providers: [passwordFormProvider, DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerifierInvitationComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);

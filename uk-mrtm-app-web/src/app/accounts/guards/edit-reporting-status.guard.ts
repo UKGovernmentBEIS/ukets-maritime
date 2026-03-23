@@ -2,13 +2,13 @@ import { inject } from '@angular/core';
 import { CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
 import { map, tap } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { AccountReportingStatusHistoryService } from '@mrtm/api';
 
 import { AuthStore, selectUserRoleType } from '@netz/common/auth';
 
 import { OperatorAccountsStore } from '@accounts/store';
-import { isNil } from '@shared/utils';
 
 export const canActivateEditReportingStatus: CanActivateFn = (route) => {
   const authStore = inject(AuthStore);

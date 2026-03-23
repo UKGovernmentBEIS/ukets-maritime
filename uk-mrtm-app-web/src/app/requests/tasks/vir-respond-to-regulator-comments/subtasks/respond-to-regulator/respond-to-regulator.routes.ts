@@ -15,9 +15,9 @@ export const RESPOND_TO_REGULATOR_ROUTES: Routes = [
         data: { breadcrumb: false, backlink: '../../../' },
         canActivate: [canActivateVirRespondToRegulatorSummary],
         loadComponent: () =>
-          import('@requests/tasks/vir-respond-to-regulator-comments/subtasks/respond-to-regulator/respond-to-regulator-summary').then(
-            (c) => c.RespondToRegulatorSummaryComponent,
-          ),
+          import(
+            '@requests/tasks/vir-respond-to-regulator-comments/subtasks/respond-to-regulator/respond-to-regulator-summary'
+          ).then((c) => c.RespondToRegulatorSummaryComponent),
       },
       {
         path: VirRespondToRegulatorWizardStep.FORM,
@@ -27,9 +27,9 @@ export const RESPOND_TO_REGULATOR_ROUTES: Routes = [
           backlink: backlinkResolver(VirRespondToRegulatorWizardStep.SUMMARY, '../../../'),
         },
         loadComponent: () =>
-          import('@requests/tasks/vir-respond-to-regulator-comments/subtasks/respond-to-regulator/respond-to-regulator-form').then(
-            (c) => c.RespondToRegulatorFormComponent,
-          ),
+          import(
+            '@requests/tasks/vir-respond-to-regulator-comments/subtasks/respond-to-regulator/respond-to-regulator-form'
+          ).then((c) => c.RespondToRegulatorFormComponent),
       },
     ],
   },

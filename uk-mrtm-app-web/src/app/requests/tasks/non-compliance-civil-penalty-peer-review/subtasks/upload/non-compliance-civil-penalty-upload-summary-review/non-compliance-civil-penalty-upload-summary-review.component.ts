@@ -10,12 +10,12 @@ import { NonComplianceCivilPenaltyUploadSummaryTemplateComponent } from '@shared
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-upload-summary-review',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     NonComplianceCivilPenaltyUploadSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './non-compliance-civil-penalty-upload-summary-review.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

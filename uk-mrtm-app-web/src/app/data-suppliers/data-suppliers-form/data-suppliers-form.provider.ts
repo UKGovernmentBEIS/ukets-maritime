@@ -13,32 +13,13 @@ import { DataSuppliersFormGroup } from '@data-suppliers/data-suppliers-form/data
 const dataSupplierValueExistExistValidator =
   (items: Array<DataSupplierItem>, key: keyof ThirdPartyDataProviderCreateDTO, message: string): ValidatorFn =>
   (control: AbstractControl): ValidationErrors | null => {
-    const values = items.map((item) => item[key]?.toLowerCase()).filter((value) => value?.length > 0);
+    const values = items.map((item) => item[key].toLowerCase());
 
     return values.includes(control.value?.toLowerCase())
       ? {
           exist: message,
         }
       : null;
-  };
-
-const urlValidator =
-  (): ValidatorFn =>
-  (control: AbstractControl): ValidationErrors | null => {
-    if (!control.value) {
-      return null;
-    }
-
-    let validUrl: boolean;
-
-    try {
-      const parsed = new URL(control.value);
-      validUrl = parsed.protocol === 'https:';
-    } catch {
-      validUrl = false;
-    }
-
-    return validUrl ? null : { invalidUrl: 'Enter a valid https URL' };
   };
 
 export const provideDataSuppliersForm: Provider = {
@@ -57,18 +38,6 @@ export const provideDataSuppliersForm: Provider = {
             dataSuppliers,
             'name',
             'The name of the data supplier already exists. Enter a unique name.',
-          ),
-        ],
-      }),
-      jwksUrl: formBuilder.control<ThirdPartyDataProviderCreateDTO['jwksUrl'] | null>(newItem?.jwksUrl, {
-        validators: [
-          GovukValidators.required('Enter the Public key URL'),
-          GovukValidators.maxLength(255, 'Enter up to 255 characters'),
-          urlValidator(),
-          dataSupplierValueExistExistValidator(
-            dataSuppliers,
-            'jwksUrl',
-            'The Public key URL already exists. Enter a unique name.',
           ),
         ],
       }),

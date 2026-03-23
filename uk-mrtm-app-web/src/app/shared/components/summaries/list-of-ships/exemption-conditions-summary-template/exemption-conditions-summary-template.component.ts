@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpShipEmissions } from '@mrtm/api';
@@ -16,6 +16,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-exemption-conditions-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -26,13 +27,12 @@ import { BooleanToTextPipe } from '@shared/pipes';
     RouterLink,
     BooleanToTextPipe,
   ],
-  standalone: true,
   templateUrl: './exemption-conditions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExemptionConditionsSummaryTemplateComponent {
-  public readonly data = input.required<EmpShipEmissions['exemptionConditions']>();
-  readonly changeLink = input<string>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) public data: EmpShipEmissions['exemptionConditions'];
+  @Input() changeLink: string;
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 }

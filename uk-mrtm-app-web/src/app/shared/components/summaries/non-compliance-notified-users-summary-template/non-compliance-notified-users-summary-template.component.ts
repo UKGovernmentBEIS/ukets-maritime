@@ -13,6 +13,7 @@ import { UserInfoResolverPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-non-compliance-notified-users-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -20,7 +21,6 @@ import { UserInfoResolverPipe } from '@shared/pipes';
     SummaryListRowValueDirective,
     UserInfoResolverPipe,
   ],
-  standalone: true,
   templateUrl: './non-compliance-notified-users-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

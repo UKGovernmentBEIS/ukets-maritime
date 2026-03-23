@@ -1,6 +1,6 @@
-import { AerDataGapsMethodologies } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { AerDataGapsMethodologies } from '@mrtm/api';
 
 export const isWizardCompleted = (dataGapsMethodologies: AerDataGapsMethodologies): boolean => {
   if (isMethodRequiredStepCompleted(dataGapsMethodologies)) {

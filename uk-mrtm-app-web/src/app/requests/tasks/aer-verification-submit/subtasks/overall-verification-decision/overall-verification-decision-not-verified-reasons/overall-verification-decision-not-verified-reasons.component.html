@@ -6,7 +6,7 @@
   [showReturnLink]="true"
   [isTwoThirds]="true">
   <p class="govuk-hint">Select all options that apply.</p>
-  <div [label]="map.notVerifiedReasons.title" [isLabelHidden]="true" formControlName="reasons" govuk-checkboxes>
+  <div formControlName="reasons" govuk-checkboxes>
     <govuk-checkbox
       value="UNCORRECTED_MATERIAL_MISSTATEMENT"
       [label]="'UNCORRECTED_MATERIAL_MISSTATEMENT' | notVerifiedReasonType" />

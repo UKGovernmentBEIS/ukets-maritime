@@ -20,6 +20,7 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-materiality-level-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -31,7 +32,6 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
     NotProvidedDirective,
     AccreditationReferenceDocumentTypesPipe,
   ],
-  standalone: true,
   templateUrl: './materiality-level-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,11 +41,7 @@ export class MaterialityLevelSummaryTemplateComponent {
   readonly queryParams = input<Params>({ change: true });
 
   readonly wizardStep = MaterialityLevelStep;
-  readonly materialityLevelMap = materialityLevelMap;
-  readonly materialityLevelUKASCompliance =
-    '\n\n ' +
-    'GHG quantification is subject to inherent uncertainty due to the designed capability of measurement instrumentation and testing methodologies and incomplete scientific knowledge used in the determination of emissions factors and global warming potentials.';
-
+  readonly map = materialityLevelMap;
   readonly accreditationReferenceDocumentTypes = computed(() =>
     AER_ACCREDITATION_REFERENCE_DOCUMENT_TYPES.filter(
       (type) => type !== 'OTHER' && this.data()?.accreditationReferenceDocumentTypes?.includes(type),

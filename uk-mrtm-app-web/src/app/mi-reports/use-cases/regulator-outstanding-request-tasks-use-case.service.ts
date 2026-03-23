@@ -14,7 +14,7 @@ import { AccountStatusPipe } from '@shared/pipes';
 
 export class RegulatorOutstandingRequestTasksUseCaseService extends MiReportUseCaseService {
   reportType: MiReportType = MiReportType.REGULATOR_OUTSTANDING_REQUEST_TASKS;
-  readonly tableColumns: Signal<Array<GovukTableColumn>> = signal([
+  tableColumns: Signal<Array<GovukTableColumn>> = signal([
     { field: 'Account ID', header: 'Account ID' },
     { field: 'Account name', header: 'Account name' },
     { field: 'Account status', header: 'Account status' },

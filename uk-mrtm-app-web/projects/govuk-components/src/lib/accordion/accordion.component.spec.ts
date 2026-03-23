@@ -13,7 +13,6 @@ describe('AccordionComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [AccordionItemComponent, AccordionComponent, AsyncPipe],
     standalone: true,
     template: `
       <govuk-accordion [id]="id">
@@ -31,6 +30,7 @@ describe('AccordionComponent', () => {
         }
       </govuk-accordion>
     `,
+    imports: [AccordionItemComponent, AccordionComponent, AsyncPipe],
   })
   class TestComponent {
     id = 'test-accordion';

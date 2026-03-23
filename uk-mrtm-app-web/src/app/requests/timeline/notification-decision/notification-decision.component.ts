@@ -17,15 +17,15 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-notification-decision',
-  imports: [NotificationDecisionSummaryTemplateComponent],
   standalone: true,
+  imports: [NotificationDecisionSummaryTemplateComponent],
   templateUrl: './notification-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationDecisionComponent {
   private readonly store = inject(RequestActionStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       reviewDecision: this.store.select(notificationDecisionQuery.selectReviewDecision)(),
       usersInfo: this.store.select(notificationDecisionQuery.selectUsersInfo)(),

@@ -8,8 +8,8 @@ import { empReviewQuery } from '@requests/common/emp/+state';
 
 @Component({
   selector: 'mrtm-emp-peer-review-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     @if (canBeDisplayed) {
       <div class="govuk-button-group">

@@ -1,0 +1,15 @@
+{
+  "extends": "../../.eslintrc.json",
+  "ignorePatterns": ["!**/*"],
+  "overrides": [
+    {
+      "files": ["*.ts"],
+      "rules": {
+        "no-control-regex": "off",
+        "no-useless-escape": "off",
+        "@typescript-eslint/ban-types": "off",
+        "@typescript-eslint/no-restricted-imports": "off"
+      }
+    }
+  ]
+}

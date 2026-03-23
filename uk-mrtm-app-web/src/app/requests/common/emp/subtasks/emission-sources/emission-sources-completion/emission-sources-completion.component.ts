@@ -10,10 +10,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-emission-sources-completion',
-  imports: [WizardStepComponent, AboutProcedureDetailsComponent, EmpProcedureFormComponent, ReactiveFormsModule],
   standalone: true,
-  templateUrl: './emission-sources-completion.component.html',
+  imports: [WizardStepComponent, AboutProcedureDetailsComponent, EmpProcedureFormComponent, ReactiveFormsModule],
   providers: [emissionSourcesCompletionFormProvider],
+  templateUrl: './emission-sources-completion.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesCompletionComponent extends EmpProcedureWizardStepAbstract {

@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.Assert.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -127,21 +127,6 @@ class MrtmAccountQueryServiceTest {
         assertEquals(RESOURCE_NOT_FOUND, exception.getErrorCode());
 
         verify(mrtmAccountRepository).findAccountIdByImoNumber(imoNumber);
-        verifyNoMoreInteractions(mrtmAccountRepository);
-    }
-
-    @Test
-    void findVerificationBodyIdByImoNumber() {
-        String imoNumber = "1234567";
-        long vbId = 1L;
-
-        when(mrtmAccountRepository.findVerificationBodyIdByImoNumber(imoNumber)).thenReturn(Optional.of(vbId));
-        Optional<Long> response = mrtmAccountQueryService.findVerificationBodyIdByImoNumber(imoNumber);
-
-        assertTrue(response.isPresent());
-        assertEquals(vbId, response.get());
-
-        verify(mrtmAccountRepository).findVerificationBodyIdByImoNumber(imoNumber);
         verifyNoMoreInteractions(mrtmAccountRepository);
     }
 

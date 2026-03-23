@@ -12,13 +12,13 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-vir-follow-up-details',
+  standalone: true,
   imports: [
     VirVerifierRecommendationSummaryTemplateComponent,
     VirOperatorResponseSummaryTemplateComponent,
     VirRegulatorResponseSummaryTemplateComponent,
     VirOperatorResponseToRegulatorCommentsSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './vir-follow-up-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

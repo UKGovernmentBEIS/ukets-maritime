@@ -19,17 +19,17 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
 
 @Component({
   selector: 'mrtm-xml-error-summary',
-  imports: [DetailsComponent, IncludesPipe, SafeHtmlPipe],
   standalone: true,
+  imports: [DetailsComponent, IncludesPipe, SafeHtmlPipe],
   templateUrl: './xml-error-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class XmlErrorSummaryComponent implements AfterViewInit {
   private readonly title: Title = inject(Title);
-  readonly xmlErrors = input<XmlValidationError[]>();
-  readonly container = viewChild<ElementRef<HTMLElement>>('container');
-  readonly xmlErrorList: Signal<NestedMessageValidationError[]> = computed(() => this.getGroupedErrors());
-  readonly formatNestedErrorDetails: Signal<(error: NestedMessageValidationError) => string | undefined> =
+  xmlErrors = input<XmlValidationError[]>();
+  container = viewChild<ElementRef<HTMLElement>>('container');
+  xmlErrorList: Signal<NestedMessageValidationError[]> = computed(() => this.getGroupedErrors());
+  formatNestedErrorDetails: Signal<(error: NestedMessageValidationError) => string | undefined> =
     input<(error: NestedMessageValidationError) => string | undefined>();
 
   /**

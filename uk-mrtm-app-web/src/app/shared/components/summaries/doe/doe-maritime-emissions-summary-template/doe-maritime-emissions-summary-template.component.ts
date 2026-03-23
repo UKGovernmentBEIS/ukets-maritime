@@ -23,6 +23,7 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-doe-maritime-emissions-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -38,7 +39,6 @@ import BigNumber from 'bignumber.js';
     GovukDatePipe,
     I18nSelectPipe,
   ],
-  standalone: true,
   templateUrl: './doe-maritime-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

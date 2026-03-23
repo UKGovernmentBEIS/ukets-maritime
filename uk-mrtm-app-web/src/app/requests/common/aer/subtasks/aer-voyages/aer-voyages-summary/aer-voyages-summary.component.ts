@@ -12,16 +12,15 @@ import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import {
-  AER_VOYAGES_SUB_TASK,
-  AerVoyagesWizardStep,
-} from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-subtask-list.map';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { VoyagesListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-voyages-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -32,7 +31,6 @@ import { VoyagesListSummaryTemplateComponent } from '@shared/components';
     ReactiveFormsModule,
     PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './aer-voyages-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

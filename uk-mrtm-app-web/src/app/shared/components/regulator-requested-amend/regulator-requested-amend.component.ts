@@ -4,8 +4,8 @@ import { WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-regulator-requested-amend',
-  imports: [WarningTextComponent],
   standalone: true,
+  imports: [WarningTextComponent],
   template: `
     <govuk-warning-text [assistiveText]="null">The regulator has requested amends to your response</govuk-warning-text>
   `,

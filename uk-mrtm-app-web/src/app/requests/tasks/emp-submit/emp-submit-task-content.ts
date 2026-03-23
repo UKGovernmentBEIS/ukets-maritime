@@ -25,9 +25,9 @@ import {
   managementProceduresMap,
   mandateMap,
 } from '@requests/common/emp/subtasks/subtask-list.map';
-import { ThirdPartyDataProviderInfoComponent } from '@requests/common/third-party-data-provider/third-party-data-provider-info';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
 import { EMP_SUBMIT_ROUTE_PREFIX } from '@requests/tasks/emp-submit/emp-submit.const';
+import { ThirdPartyDataProviderInfoComponent } from '@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider-info';
 import { NotificationBannerComponent } from '@shared/components';
 import { taskActionTypeToTitleMap } from '@shared/constants';
 

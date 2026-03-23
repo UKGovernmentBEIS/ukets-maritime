@@ -24,6 +24,7 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-variation-details',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -32,9 +33,8 @@ import { SubTaskListMap } from '@shared/types';
     RadioComponent,
     RadioOptionComponent,
   ],
-  standalone: true,
-  templateUrl: './variation-details-reason-notice.component.html',
   providers: [variationDetailsReasonNoticeFormProvider],
+  templateUrl: './variation-details-reason-notice.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VariationDetailsReasonNoticeComponent {

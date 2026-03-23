@@ -19,11 +19,11 @@ import { DeterminationHeaderTypePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-overall-decision-question',
-  imports: [WizardStepComponent, ReactiveFormsModule, TextareaComponent, DeterminationHeaderTypePipe],
   standalone: true,
+  imports: [WizardStepComponent, ReactiveFormsModule, TextareaComponent, DeterminationHeaderTypePipe],
   templateUrl: './overall-decision-question.component.html',
-  providers: [overallDecisionQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [overallDecisionQuestionFormProvider],
 })
 export class OverallDecisionQuestionComponent {
   protected readonly form = inject(TASK_FORM);

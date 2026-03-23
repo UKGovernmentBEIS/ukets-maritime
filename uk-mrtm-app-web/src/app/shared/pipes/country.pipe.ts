@@ -4,12 +4,8 @@ import { catchError, EmptyError, of, take, tap } from 'rxjs';
 
 import { CountryService } from '@core/services/country.service';
 
-/* eslint-disable @angular-eslint/no-pipe-impure */
-@Pipe({
-  name: 'country',
-  standalone: true,
-  pure: false,
-})
+// eslint-disable-next-line @angular-eslint/no-pipe-impure
+@Pipe({ name: 'country', pure: false, standalone: true })
 export class CountryPipe implements PipeTransform {
   private readonly countryService = inject(CountryService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

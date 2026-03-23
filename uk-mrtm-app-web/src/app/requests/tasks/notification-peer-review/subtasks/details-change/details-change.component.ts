@@ -23,20 +23,20 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-details-change-summary',
+  standalone: true,
   imports: [
     NotificationDetailsOfChangeSummaryTemplateComponent,
     NotificationReviewDecisionSummaryTemplateComponent,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './details-change.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsChangeComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const detailsOfChange = this.store.select(peerReviewQuery.selectEmpNotificationDetailsOfChange)();
     return {
       detailsOfChange: detailsOfChange,

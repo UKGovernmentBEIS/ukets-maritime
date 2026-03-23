@@ -19,6 +19,7 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-respond-to-recommendation-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     VirVerifierRecommendationSummaryTemplateComponent,
@@ -27,7 +28,6 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './respond-to-recommendation-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -59,7 +59,7 @@ public class EmpIssuanceApplicationReviewRequestTaskPayload extends EmpIssuanceA
     @Override
     public Set<UUID> getReferencedAttachmentIds() {
         final Set<UUID> reviewAttachmentIds = getReviewGroupDecisions().values().stream()
-                .filter(decision -> decision.getType().equals(EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED))
+                .filter(decision -> EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED == decision.getType() )
                 .flatMap(reviewDecision -> ((ChangesRequiredDecisionDetails) reviewDecision.getDetails()).getRequiredChanges().stream()
                         .map(ReviewDecisionRequiredChange::getFiles)
                 )

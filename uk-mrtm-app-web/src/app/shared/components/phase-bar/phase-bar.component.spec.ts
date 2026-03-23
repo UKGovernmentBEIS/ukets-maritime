@@ -2,6 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { AuthStore } from '@netz/common/auth';
+import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { PhaseBarComponent } from '@shared/components';
 
@@ -12,6 +13,7 @@ describe('PhaseBarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [GovukComponentsModule],
       providers: [provideRouter([])],
     }).compileComponents();
 

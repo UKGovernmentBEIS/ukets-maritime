@@ -9,8 +9,8 @@ import { RfiSubmittedSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-rfi-submitted',
-  imports: [RfiSubmittedSummaryTemplateComponent, LinkDirective, RouterLink],
   standalone: true,
+  imports: [RfiSubmittedSummaryTemplateComponent, LinkDirective, RouterLink],
   templateUrl: './rfi-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

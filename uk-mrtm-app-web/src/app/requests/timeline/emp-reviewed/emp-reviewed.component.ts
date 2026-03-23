@@ -13,8 +13,8 @@ import { EmpReviewedSummaryTemplateComponent } from '@shared/components/summarie
 
 @Component({
   selector: 'mrtm-emp-reviewed',
-  imports: [EmpReviewedSummaryTemplateComponent, TaskListComponent],
   standalone: true,
+  imports: [EmpReviewedSummaryTemplateComponent, TaskListComponent],
   template: `
     @if (isDetailsView()) {
       <netz-task-list [sections]="sections" />
@@ -28,7 +28,7 @@ export class EmpReviewedComponent {
   private readonly actionsStore: RequestActionStore = inject(RequestActionStore);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
-  public readonly isDetailsView: Signal<boolean> = toSignal<boolean>(
+  public isDetailsView: Signal<boolean> = toSignal<boolean>(
     this.activatedRoute.data.pipe(map((params) => JSON.parse(params?.details ?? false) === true)),
   );
   public readonly sections = getEmpSubtaskSections('details');

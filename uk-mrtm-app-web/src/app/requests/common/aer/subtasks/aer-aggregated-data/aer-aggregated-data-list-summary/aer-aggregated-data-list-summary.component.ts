@@ -20,6 +20,7 @@ import { AggregatedDataListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -29,7 +30,6 @@ import { AggregatedDataListSummaryTemplateComponent } from '@shared/components';
     ButtonDirective,
     AggregatedDataListSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './aer-aggregated-data-list-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -41,12 +41,6 @@ export class AerAggregatedDataListSummaryComponent {
   public readonly wizardStep = AerAggregatedDataWizardStep;
   public readonly aggregatedData = this.store.select(aerCommonQuery.selectAggregatedDataList);
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
-
-  public readonly hasExternalSystemData = computed(() => {
-    return !!this.aggregatedData().find((data) => data.dataInputType === 'EXTERNAL_PROVIDER');
-  });
-
-  public readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
 
   public readonly canSubmit: Signal<boolean> = computed(() => {
     const statuses = this.aggregatedData().map((port) => port.status);

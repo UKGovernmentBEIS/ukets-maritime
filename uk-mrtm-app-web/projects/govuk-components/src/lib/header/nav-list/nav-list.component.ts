@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'govuk-header-nav-list',
@@ -8,9 +8,9 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderNavListComponent {
-  readonly identifier = input('navigation');
-  readonly ariaLabel = input('Navigation menu');
-  readonly menuButtonAriaLabel = input('Show or hide navigation menu');
+  @Input() identifier = 'navigation';
+  @Input() ariaLabel = 'Navigation menu';
+  @Input() menuButtonAriaLabel = 'Show or hide navigation menu';
 
   isNavigationOpen = false;
 }

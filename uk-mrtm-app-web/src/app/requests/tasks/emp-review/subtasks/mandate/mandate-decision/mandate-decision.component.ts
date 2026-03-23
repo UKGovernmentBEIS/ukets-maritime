@@ -2,11 +2,13 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@a
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { EmpOperatorDetails, RegisteredOwnerShipDetails } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { WarningTextComponent } from '@netz/govuk-components';
+import { LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { empCommonQuery, EmpReviewTaskPayload } from '@requests/common';
 import {
@@ -26,25 +28,25 @@ import {
 } from '@requests/tasks/emp-review/components';
 import { EmpReviewService } from '@requests/tasks/emp-review/services';
 import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
-import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-decision',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
     ReviewDecisionComponent,
     WarningTextComponent,
+    LinkDirective,
     MandateSummaryTemplateComponent,
   ],
-  standalone: true,
-  templateUrl: './mandate-decision.component.html',
   providers: [
     reviewDecisionFormProvider(MANDATE_SUB_TASK, [
       validateAllIsmShipsHaveRegisteredOwner,
       hasNeedsReviewRegisteredOwners,
     ]),
   ],
+  templateUrl: './mandate-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateDecisionComponent {
@@ -62,7 +64,7 @@ export class MandateDecisionComponent {
     () => !isNil(this.mandate()?.registeredOwners.find((ro) => ro.needsReview === true)),
   );
 
-  public readonly allShipsAssociated: Signal<boolean> = computed(() => {
+  public allShipsAssociated: Signal<boolean> = computed(() => {
     const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
       (this.mandate()?.registeredOwners ?? [])

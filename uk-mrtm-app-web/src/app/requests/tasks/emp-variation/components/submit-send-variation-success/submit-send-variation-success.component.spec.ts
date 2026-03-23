@@ -4,37 +4,34 @@ import { ActivatedRoute } from '@angular/router';
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { EmpVariationTaskPayload } from '@requests/common/emp/emp.types';
 import { taskProviders } from '@requests/common/task.providers';
 import { SubmitSendVariationSuccessComponent } from '@requests/tasks/emp-variation/components/submit-send-variation-success/submit-send-variation-success.component';
+import { screen } from '@testing-library/angular';
 
 describe('SubmitSendVariationSuccessComponent', () => {
   let component: SubmitSendVariationSuccessComponent;
   let fixture: ComponentFixture<SubmitSendVariationSuccessComponent>;
-  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<EmpVariationTaskPayload>> = {
     submit: jest.fn().mockReturnValue(of({})),
   };
 
-  class Page extends BasePage<SubmitSendVariationSuccessComponent> {}
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [SubmitSendVariationSuccessComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    });
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SubmitSendVariationSuccessComponent);
     component = fixture.componentInstance;
-    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -43,6 +40,6 @@ describe('SubmitSendVariationSuccessComponent', () => {
   });
 
   it('should display correct header and content', () => {
-    expect(page.heading1.textContent).toEqual('Variation application sent to regulator');
+    expect(screen.getByRole('heading', { name: 'Variation application sent to regulator' })).toBeInTheDocument();
   });
 });

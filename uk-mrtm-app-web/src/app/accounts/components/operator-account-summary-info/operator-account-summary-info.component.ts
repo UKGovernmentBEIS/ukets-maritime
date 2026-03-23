@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { MrtmAccountDTO } from '@mrtm/api';
@@ -17,6 +17,9 @@ import { CountryPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-operator-account-summary-info',
+  templateUrl: './operator-account-summary-info.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     RouterLink,
     SummaryListComponent,
@@ -28,13 +31,10 @@ import { CountryPipe } from '@shared/pipes';
     CountryPipe,
     GovukDatePipe,
   ],
-  standalone: true,
-  templateUrl: './operator-account-summary-info.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorAccountSummaryInfoComponent {
-  readonly summaryInfo = input<MrtmAccountDTO>();
-  readonly formRouterLink = input('edit');
-  readonly withRegistryId = input<boolean>();
-  readonly editable = input(true);
+  @Input() summaryInfo: MrtmAccountDTO;
+  @Input() formRouterLink = 'edit';
+  @Input() withRegistryId: boolean;
+  @Input() editable = true;
 }

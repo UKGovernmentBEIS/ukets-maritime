@@ -11,7 +11,7 @@ import {
 export const MATERIALITY_LEVEL_ROUTES: Routes = [
   {
     path: '',
-    title: materialityLevelMap.title,
+    title: materialityLevelMap.caption,
     canActivate: [canActivateMaterialityLevelSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
@@ -41,8 +41,8 @@ export const MATERIALITY_LEVEL_ROUTES: Routes = [
       backlink: backlinkResolver(MaterialityLevelStep.SUMMARY, MaterialityLevelStep.DETAILS),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/materiality-level/materiality-level-reference-documents').then(
-        (c) => c.MaterialityLevelReferenceDocumentsComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/materiality-level/materiality-level-reference-documents'
+      ).then((c) => c.MaterialityLevelReferenceDocumentsComponent),
   },
 ];

@@ -10,13 +10,14 @@ import {
   EMISSION_SOURCES_TYPE_SELECT_ITEMS,
   monitoringMethodMap,
 } from '@shared/constants';
-import { NotProvidedDirective, ScrollablePaneDirective } from '@shared/directives';
+import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { MethaneSlipValuePipe } from '@shared/pipes/methane-slip-value.pipe';
 import { WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-emission-sources-and-fuel-types-used-summary-template',
+  standalone: true,
   imports: [
     RouterLink,
     FuelOriginTitlePipe,
@@ -25,9 +26,7 @@ import { WithNeedsReview } from '@shared/types';
     TableComponent,
     LinkDirective,
     MethaneSlipValuePipe,
-    ScrollablePaneDirective,
   ],
-  standalone: true,
   templateUrl: './aer-emission-sources-and-fuel-types-used-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -52,9 +51,7 @@ export class AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent {
     { field: 'monitoringMethod', header: 'Monitoring methods' },
   ];
   readonly columns: Signal<GovukTableColumn[]> = computed(() =>
-    this.isEditable()
-      ? [...this.mainColumns, { field: 'actionLinks', header: 'Actions', hiddenHeader: true }]
-      : this.mainColumns,
+    this.isEditable() ? [...this.mainColumns, { field: 'actionLinks', header: undefined }] : this.mainColumns,
   );
 
   getSortedMonitoringMethods(item: EmissionsSources): EmissionsSources['monitoringMethod'] {

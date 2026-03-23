@@ -1,17 +1,10 @@
 <div class="govuk-!-width-two-thirds">
-  <mrtm-notification-banner />
   <netz-page-heading>{{ wizardMap.fromFetch.title }}</netz-page-heading>
-  @if (hasAggregatedData()) {
-    <govuk-warning-text [assistiveText]="wizardMap.fromFetch.description" />
-  }
-  <p class="govuk-body govuk-!-margin-bottom-6">
-    You can import aggregated greenhouse gas emissions from domestic voyages, including Northern Ireland, and from
-    activities within a port. You cannot import emissions from EU or international voyages.
-  </p>
-
+  <govuk-warning-text [assistiveText]="wizardMap.fromFetch.description" />
   <button govukButton netzPendingButton type="submit" (click)="onSubmit()">Yes, import data</button>
 </div>
+
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <a govukLink [routerLink]="['../', wizardStep.LIST_OF_AGGREGATED_DATA]">Return to: {{ wizardMap.title }}</a>
 </div>

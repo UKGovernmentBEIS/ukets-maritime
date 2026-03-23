@@ -26,6 +26,7 @@ import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
 
 @Component({
   selector: 'mrtm-aer-voyages-list',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     LinkDirective,
@@ -38,7 +39,6 @@ import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
     FilterByShipAndDateRangeComponent,
     NotificationBannerComponent,
   ],
-  standalone: true,
   templateUrl: './aer-voyages-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

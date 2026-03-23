@@ -12,6 +12,7 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-mandate-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     MandateRegisteredOwnersListSummaryTemplateComponent,
@@ -19,17 +20,16 @@ import { SubTaskListMap } from '@shared/types';
     MandateResponsibilitySummaryTemplateComponent,
     RouterLink,
   ],
-  standalone: true,
   templateUrl: './mandate-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateSummaryTemplateComponent {
-  readonly mandate = input.required<EmpMandate>();
-  readonly originalMandate = input<EmpMandate>();
-  readonly operatorName = input<EmpOperatorDetails['operatorName']>();
-  readonly originalOperatorName = input<EmpOperatorDetails['operatorName']>();
-  readonly mandateMap = input.required<SubTaskListMap<EmpMandate>>();
-  readonly wizardStep = input<{ [s: string]: string }>();
-  readonly isEditable = input<boolean>(false);
-  readonly queryParams = input<Params>({});
+  mandate = input.required<EmpMandate>();
+  originalMandate = input<EmpMandate>();
+  operatorName = input<EmpOperatorDetails['operatorName']>();
+  originalOperatorName = input<EmpOperatorDetails['operatorName']>();
+  mandateMap = input.required<SubTaskListMap<EmpMandate>>();
+  wizardStep = input<{ [s: string]: string }>();
+  isEditable = input<boolean>(false);
+  queryParams = input<Params>({});
 }

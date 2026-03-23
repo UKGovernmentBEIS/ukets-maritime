@@ -30,6 +30,10 @@ interface ViewModel {
 
 @Component({
   selector: 'netz-change-assignee',
+  standalone: true,
+  templateUrl: './change-assignee.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [UserFullNamePipe],
   imports: [
     AsyncPipe,
     ReactiveFormsModule,
@@ -39,10 +43,6 @@ interface ViewModel {
     SelectComponent,
     ButtonDirective,
   ],
-  standalone: true,
-  templateUrl: './change-assignee.component.html',
-  providers: [UserFullNamePipe],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChangeAssigneeComponent {
   private readonly fb = inject(UntypedFormBuilder);

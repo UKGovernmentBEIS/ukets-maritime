@@ -91,7 +91,7 @@ public interface EmpReviewMapper {
     default Map<EmpReviewGroup, EmpIssuanceReviewDecision> setReviewGroupDecisionsForOperatorAmend(
         Map<EmpReviewGroup, EmpIssuanceReviewDecision> reviewGroupDecision) {
         return reviewGroupDecision.entrySet().stream()
-            .filter(entry -> entry.getValue().getType().equals(EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED)).map(entry ->
+            .filter(entry -> EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED == entry.getValue().getType()).map(entry ->
                 new AbstractMap.SimpleEntry<>(entry.getKey(),
                     EmpIssuanceReviewDecision.builder()
                         .type(entry.getValue().getType())

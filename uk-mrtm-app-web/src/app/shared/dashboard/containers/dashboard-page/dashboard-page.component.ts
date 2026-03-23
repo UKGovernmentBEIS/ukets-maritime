@@ -46,8 +46,19 @@ const getTableColumns = (activeTab: WorkflowItemsAssignmentType): GovukTableColu
   });
 };
 
+/* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'mrtm-dashboard-page',
+  templateUrl: './dashboard-page.component.html',
+  providers: [
+    DestroySubject,
+    WorkflowItemsService,
+    { provide: ITEM_NAME_TRANSFORMER, useValue: taskActionTypeToTitleTransformer },
+    { provide: DAYS_REMAINING_INPUT_TRANSFORMER, useValue: daysRemainingTransformer },
+    { provide: ITEM_LINK_REQUEST_TYPES_WHITELIST, useValue: requestTypesWhitelistForItemLinkPipe },
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
@@ -58,16 +69,6 @@ const getTableColumns = (activeTab: WorkflowItemsAssignmentType): GovukTableColu
     PaginationComponent,
     TabLazyDirective,
   ],
-  standalone: true,
-  templateUrl: './dashboard-page.component.html',
-  providers: [
-    DestroySubject,
-    WorkflowItemsService,
-    { provide: ITEM_NAME_TRANSFORMER, useValue: taskActionTypeToTitleTransformer },
-    { provide: DAYS_REMAINING_INPUT_TRANSFORMER, useValue: daysRemainingTransformer },
-    { provide: ITEM_LINK_REQUEST_TYPES_WHITELIST, useValue: requestTypesWhitelistForItemLinkPipe },
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DashboardPageComponent {
   private readonly workflowItemsService = inject(WorkflowItemsService);
@@ -77,12 +78,12 @@ export class DashboardPageComponent {
 
   pageSize = initialState.paging.pageSize;
   role = this.authStore.select(selectUserRoleType);
-  readonly activeTab = signal(
+  activeTab = signal(
     this.isValidTab(this.activatedRoute.snapshot.fragment as any)
       ? (this.activatedRoute.snapshot.fragment as WorkflowItemsAssignmentType)
       : initialState.activeTab,
   );
-  readonly page = signal(
+  page = signal(
     this.activatedRoute.snapshot.queryParamMap.get('page')
       ? +this.activatedRoute.snapshot.queryParamMap.get('page')
       : initialState.paging.page,
@@ -94,21 +95,7 @@ export class DashboardPageComponent {
   }));
   private readonly response = toSignal(
     toObservable(this.params).pipe(
-      switchMap(
-        ({ activeTab, page }) => this.workflowItemsService.getItems(activeTab, page, this.pageSize),
-        // of({
-        //   items: [
-        //     {
-        //       taskAssigneeType: 'REGULATOR',
-        //       creationDate: new Date('2020-11-27T10:13:49Z').toISOString(),
-        //       requestId: '40',
-        //       taskId: 19,
-        //       daysRemaining: 3,
-        //     },
-        //   ],
-        //   totalItems: 1,
-        // } as ItemDTOResponse),
-      ),
+      switchMap(({ activeTab, page }) => this.workflowItemsService.getItems(activeTab, page, this.pageSize)),
     ),
     {
       initialValue: {
@@ -117,8 +104,8 @@ export class DashboardPageComponent {
       },
     },
   );
-  readonly items = computed(() => this.response().items);
-  readonly total = computed(() => this.response().totalItems);
+  items = computed(() => this.response().items);
+  total = computed(() => this.response().totalItems);
 
   changePage(page: number) {
     this.page.update(() => page);

@@ -5,11 +5,14 @@
       *ngTemplateOutlet="
         tabTemplate;
         context: { unassigned: 'Regulator', tab: 'assigned-to-me', header: 'Assigned to me' }
-      " />
+      "></ng-container>
   </ng-template>
   <ng-template govukTabLazy id="assigned-to-others" label="Assigned to others">
     <ng-container
-      *ngTemplateOutlet="tabTemplate; context: { tab: 'assigned-to-others', header: 'Assigned to others' }" />
+      *ngTemplateOutlet="
+        tabTemplate;
+        context: { tab: 'assigned-to-others', header: 'Assigned to others' }
+      "></ng-container>
   </ng-template>
   @if (role() !== 'OPERATOR') {
     <ng-template govukTabLazy id="unassigned" label="Unassigned">
@@ -17,7 +20,7 @@
         *ngTemplateOutlet="
           tabTemplate;
           context: { unassigned: 'Unassigned', tab: 'unassigned', header: 'Unassigned' }
-        " />
+        "></ng-container>
     </ng-template>
   }
 </govuk-tabs>

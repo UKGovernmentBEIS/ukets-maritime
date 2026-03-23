@@ -7,8 +7,8 @@ import { NON_COMPLIANCE_CIVIL_PENALTY_PEER_REVIEW_ROUTE_PREFIX } from '@requests
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-peer-review-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     <div class="govuk-button-group">
       <a govukButton [routerLink]="[routePath, 'review-decision']">Peer review decision</a>

@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-data-gaps-methodologies-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     DataGapsMethodologiesSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './data-gaps-methodologies-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -15,7 +15,7 @@ public class EmpVariationReviewReturnForAmendsValidatorService {
 
         // Validate if operator amends needed exist
         boolean amendExists = taskPayload.getReviewGroupDecisions().values().stream()
-                .anyMatch(reviewDecision -> reviewDecision.getType().equals(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED))
+                .anyMatch(reviewDecision -> reviewDecision.getType() == EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)
                 || (taskPayload.getEmpVariationDetailsReviewDecision() != null
                 && taskPayload.getEmpVariationDetailsReviewDecision().getType() == EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED);
         if (!amendExists) {

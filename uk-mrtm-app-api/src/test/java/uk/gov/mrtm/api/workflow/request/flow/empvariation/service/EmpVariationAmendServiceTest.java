@@ -17,6 +17,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionT
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPayloadType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpReviewGroup;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpAcceptedVariationDecisionDetails;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDetails;
@@ -30,7 +31,9 @@ import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionRequiredChange;
 
 import java.util.HashMap;
 import java.util.List;
@@ -112,30 +115,46 @@ public class EmpVariationAmendServiceTest {
 
     @Test
     void submitAmend() {
+        UUID fileUuuid = UUID.randomUUID();
         String operator = "operator";
         Long accountId = 1L;
         Set<EmpReviewGroup> updatedSubtasks =
-            Set.of(EmpReviewGroup.ADDITIONAL_DOCUMENTS, EmpReviewGroup.MARITIME_OPERATOR_DETAILS);
+            Set.of(EmpReviewGroup.ADDITIONAL_DOCUMENTS, EmpReviewGroup.MARITIME_OPERATOR_DETAILS, EmpReviewGroup.DATA_GAPS);
         Map<EmpReviewGroup, EmpVariationReviewDecision> reviewGroupDecisions = new HashMap<>();
         reviewGroupDecisions.put(
             EmpReviewGroup.ADDITIONAL_DOCUMENTS,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build());
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes")
+                    .requiredChanges(List.of(ReviewDecisionRequiredChange.builder().reason("reason").files(Set.of(fileUuuid)).build()))
+                    .build()).build());
         reviewGroupDecisions.put(
             EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build());
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes")
+                    .requiredChanges(List.of(ReviewDecisionRequiredChange.builder().reason("reason").files(Set.of(fileUuuid)).build()))
+                    .build()).build());
         reviewGroupDecisions.put(
             EmpReviewGroup.MARITIME_OPERATOR_DETAILS,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.ACCEPTED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build());
+                .details(EmpAcceptedVariationDecisionDetails.builder().notes("notes").variationScheduleItems(List.of("variationScheduleItems")).build()).build());
         reviewGroupDecisions.put(
             EmpReviewGroup.EMISSION_SOURCES,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.ACCEPTED)
+                .details(EmpAcceptedVariationDecisionDetails.builder().notes("notes").variationScheduleItems(List.of("variationScheduleItems")).build()).build()
+        );
+        reviewGroupDecisions.put(
+            EmpReviewGroup.DATA_GAPS,
+            EmpVariationReviewDecision.builder()
+                .type(EmpVariationReviewDecisionType.REJECTED)
+                .details(ReviewDecisionDetails.builder().notes("notes").build()).build());
+        reviewGroupDecisions.put(
+            EmpReviewGroup.CONTROL_ACTIVITIES,
+            EmpVariationReviewDecision.builder()
+                .type(EmpVariationReviewDecisionType.REJECTED)
                 .details(ReviewDecisionDetails.builder().notes("notes").build()).build()
         );
 
@@ -143,16 +162,37 @@ public class EmpVariationAmendServiceTest {
             EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build(),
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes")
+                    .requiredChanges(List.of(ReviewDecisionRequiredChange.builder().reason("reason").files(Set.of(fileUuuid)).build()))
+                    .build())
+                .build(),
+
+            EmpReviewGroup.MARITIME_OPERATOR_DETAILS,
+            EmpVariationReviewDecision.builder()
+                .details(EmpAcceptedVariationDecisionDetails.builder().variationScheduleItems(null).notes("notes").build())
+                .type(null)
+                .build(),
+
+            EmpReviewGroup.ADDITIONAL_DOCUMENTS,
+            EmpVariationReviewDecision.builder()
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes").requiredChanges(null).build())
+                .type(null)
+                .build(),
 
             EmpReviewGroup.EMISSION_SOURCES,
             EmpVariationReviewDecision.builder()
                 .type(EmpVariationReviewDecisionType.ACCEPTED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build(),
+                .details(EmpAcceptedVariationDecisionDetails.builder().notes("notes").variationScheduleItems(List.of("variationScheduleItems")).build()).build(),
 
-            EmpReviewGroup.ADDITIONAL_DOCUMENTS,
+            EmpReviewGroup.DATA_GAPS,
             EmpVariationReviewDecision.builder()
-                .type(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)
+                .details(ReviewDecisionDetails.builder().notes("notes").build())
+                .type(null)
+                .build(),
+
+            EmpReviewGroup.CONTROL_ACTIVITIES,
+            EmpVariationReviewDecision.builder()
+                .type(EmpVariationReviewDecisionType.REJECTED)
                 .details(ReviewDecisionDetails.builder().notes("notes").build()).build()
         );
 

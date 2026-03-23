@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-rfi-rde-cancel-success',
-  imports: [RouterLink, LinkDirective, PanelComponent],
   standalone: true,
+  imports: [RouterLink, LinkDirective, PanelComponent],
   templateUrl: './rfi-rde-cancel-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

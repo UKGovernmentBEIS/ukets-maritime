@@ -1,33 +1,30 @@
-<govuk-table
-  [columns]="tableColumns()"
-  [data]="items()"
-  description="Task list"
-  mrtmScrollablePane
-  ariaLabel="Task list">
-  <ng-template let-column="column" let-row="row">
-    @switch (column.field) {
-      @case ('taskType') {
-        <a [routerLink]="row | itemLink" govukLink>
-          {{ row[column.field] | itemName: getYearFromRequestId(row.requestId) }}
-        </a>
-        @if (row.isNew) {
-          <div class="govuk-!-margin-top-2">
-            <govuk-tag>New</govuk-tag>
-          </div>
+<div class="overflow-auto overflow-auto-table">
+  <govuk-table [columns]="tableColumns" [data]="items">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('taskType') {
+          <a [routerLink]="row | itemLink" govukLink>
+            {{ row[column.field] | itemName: getYearFromRequestId(row.requestId) }}
+          </a>
+          @if (row.isNew) {
+            <div class="govuk-!-margin-top-2">
+              <govuk-tag>New</govuk-tag>
+            </div>
+          }
+        }
+        @case ('requestType') {
+          {{ row[column.field] | itemType }}
+        }
+        @case ('taskAssignee') {
+          {{ !row[column.field] ? unassignedLabel : (row[column.field] | userFullName) }}
+        }
+        @case ('daysRemaining') {
+          {{ row[column.field] | daysRemaining: getYearFromRequestId(row.requestId) : row.taskType }}
+        }
+        @default {
+          {{ row[column.field] }}
         }
       }
-      @case ('requestType') {
-        {{ row[column.field] | itemType }}
-      }
-      @case ('taskAssignee') {
-        {{ !row[column.field] ? unassignedLabel() : (row[column.field] | userFullName) }}
-      }
-      @case ('daysRemaining') {
-        {{ row[column.field] | daysRemaining: getYearFromRequestId(row.requestId) : row.taskType }}
-      }
-      @default {
-        {{ row[column.field] }}
-      }
-    }
-  </ng-template>
-</govuk-table>
+    </ng-template>
+  </govuk-table>
+</div>

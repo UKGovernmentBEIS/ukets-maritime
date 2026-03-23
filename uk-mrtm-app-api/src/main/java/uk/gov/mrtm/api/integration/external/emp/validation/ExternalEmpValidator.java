@@ -12,7 +12,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpEmissionsValidator;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpMandateValidator;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
-import uk.gov.mrtm.api.integration.external.emp.transform.EmpViolationMapper;
+import uk.gov.mrtm.api.emissionsmonitoringplan.transform.EmpViolationMapper;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.common.validation.Violation;
@@ -51,7 +51,7 @@ public class ExternalEmpValidator {
         try {
             empValidatorService.validateStagingEmissionsMonitoringPlan(staging);
         } catch (Exception e) {
-            log.error("Error when validating staging EMP", e);
+            log.error("Error when validating staging EMP: {}", e.getMessage());
             throw new BusinessException(ErrorCode.INTERNAL_SERVER);
         }
     }

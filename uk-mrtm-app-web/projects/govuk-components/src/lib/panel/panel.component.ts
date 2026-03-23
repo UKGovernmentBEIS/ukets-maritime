@@ -1,17 +1,17 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   selector: 'govuk-panel',
-  imports: [],
   standalone: true,
+  imports: [],
   templateUrl: './panel.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styles: `
     .govuk-panel__body:empty {
       display: none;
     }
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PanelComponent {
-  readonly title = input<string>();
+  @Input() title: string;
 }

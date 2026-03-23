@@ -6,7 +6,7 @@ import { take } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { TextareaComponent, TextInputComponent } from '@netz/govuk-components';
+import { LinkDirective, TextareaComponent, TextInputComponent } from '@netz/govuk-components';
 
 import { TASK_FORM } from '@requests/common';
 import { VERIFIER_DETAILS_SUB_TASK, verifierDetailsMap, VerifierDetailsStep } from '@requests/common/aer';
@@ -17,17 +17,18 @@ import { VerificationBodyDetailsSummaryTemplateComponent, WizardStepComponent } 
 
 @Component({
   selector: 'mrtm-verifier-details-form',
+  standalone: true,
   imports: [
+    LinkDirective,
     TextareaComponent,
     TextInputComponent,
     ReactiveFormsModule,
     WizardStepComponent,
     VerificationBodyDetailsSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './verifier-details-form.component.html',
-  providers: [verifierDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [verifierDetailsFormProvider],
 })
 export class VerifierDetailsFormComponent {
   readonly map = verifierDetailsMap;

@@ -24,6 +24,7 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-respond-to-regulator-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     VirVerifierRecommendationSummaryTemplateComponent,
@@ -34,7 +35,6 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
     VirRegulatorResponseOperatorSideSummaryTemplateComponent,
     VirOperatorResponseToRegulatorCommentsSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './respond-to-regulator-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

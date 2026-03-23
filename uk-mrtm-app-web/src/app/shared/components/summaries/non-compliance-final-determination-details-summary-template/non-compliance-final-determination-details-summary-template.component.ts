@@ -23,6 +23,7 @@ import { BooleanToTextPipe, YesNoToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-non-compliance-final-determination-details-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -36,7 +37,6 @@ import { BooleanToTextPipe, YesNoToTextPipe } from '@shared/pipes';
     GovukDatePipe,
     YesNoToTextPipe,
   ],
-  standalone: true,
   templateUrl: './non-compliance-final-determination-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

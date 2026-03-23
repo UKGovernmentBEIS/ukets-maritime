@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDetermination;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceReviewDecision;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpReviewDecisionType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceSaveApplicationAmendRequestTaskActionPayload;
@@ -16,6 +18,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 
 @Service
 @RequiredArgsConstructor
@@ -110,10 +113,24 @@ public class RequestEmpReviewService {
         // Update request payload
         EmpIssuanceRequestPayload requestPayload = (EmpIssuanceRequestPayload) request.getPayload();
 
-        taskPayload.getUpdatedSubtasks().forEach(empReviewGroup -> requestPayload.getReviewGroupDecisions().remove(empReviewGroup));
+        resetTypeOnUpdatedReviewGroupDecisions(taskPayload, requestPayload);
         requestPayload.setEmpAttachments(taskPayload.getEmpAttachments());
         requestPayload.setEmissionsMonitoringPlan(taskPayload.getEmissionsMonitoringPlan());
         requestPayload.setEmpSectionsCompleted(taskPayload.getEmpSectionsCompleted());
+    }
+
+    private void resetTypeOnUpdatedReviewGroupDecisions(EmpIssuanceApplicationAmendsSubmitRequestTaskPayload taskPayload,
+                                                        EmpIssuanceRequestPayload requestPayload) {
+
+        taskPayload.getUpdatedSubtasks().forEach(empReviewGroup -> {
+            if (requestPayload.getReviewGroupDecisions().containsKey(empReviewGroup)) {
+                EmpIssuanceReviewDecision decision = requestPayload.getReviewGroupDecisions().get(empReviewGroup);
+                if (EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED == decision.getType()) {
+                    ((ChangesRequiredDecisionDetails) decision.getDetails()).setRequiredChanges(null);
+                }
+                decision.setType(null);
+            }
+        });
     }
 
     private void resetDeterminationIfApproved(EmpIssuanceApplicationReviewRequestTaskPayload reviewRequestTaskPayload) {

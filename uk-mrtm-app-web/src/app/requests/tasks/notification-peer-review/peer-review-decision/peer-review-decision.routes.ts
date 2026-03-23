@@ -16,9 +16,9 @@ export const PEER_REVIEW_DECISION_ROUTES: Routes = [
       backlink: '../../',
     },
     loadComponent: () =>
-      import('@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision/peer-review-decision.component').then(
-        (c) => c.PeerReviewDecisionComponent,
-      ),
+      import(
+        '@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision/peer-review-decision.component'
+      ).then((c) => c.PeerReviewDecisionComponent),
   },
   {
     path: 'summary',
@@ -29,17 +29,17 @@ export const PEER_REVIEW_DECISION_ROUTES: Routes = [
       backlink: '../../../',
     },
     loadComponent: () =>
-      import('@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision-summary/peer-review-decision-summary.component').then(
-        (c) => c.PeerReviewDecisionSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision-summary/peer-review-decision-summary.component'
+      ).then((c) => c.PeerReviewDecisionSummaryComponent),
   },
   {
     path: 'success',
     title: 'Returned to regulator',
     canActivate: [canActivatePeerReviewDecisionSuccess],
     loadComponent: () =>
-      import('@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision-success/peer-review-decision-success.component').then(
-        (c) => c.PeerReviewDecisionSuccessComponent,
-      ),
+      import(
+        '@requests/tasks/notification-peer-review/peer-review-decision/peer-review-decision-success/peer-review-decision-success.component'
+      ).then((c) => c.PeerReviewDecisionSuccessComponent),
   },
 ];

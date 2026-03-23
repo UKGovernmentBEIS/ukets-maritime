@@ -8,14 +8,9 @@
     <govuk-warning-text assistiveText="Emissions have already been reported for the selected year." />
   }
 
-  <div
-    label="Reason"
-    [isLabelHidden]="true"
-    govuk-textarea
-    [maxLength]="maxReasonLength"
-    formControlName="reason"></div>
+  <div govuk-textarea [maxLength]="maxReasonLength" formControlName="reason"></div>
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <a govukLink [routerLink]="['../../']">Return to: Account details</a>
 </div>

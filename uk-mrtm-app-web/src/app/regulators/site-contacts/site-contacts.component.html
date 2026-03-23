@@ -6,8 +6,6 @@
           @switch (column.field) {
             @case ('user') {
               <div
-                label="Select assignee"
-                [isLabelHidden]="true"
                 [options]="assigneeOptions$ | async"
                 formControlName="userId"
                 govuk-select
@@ -20,7 +18,7 @@
         </ng-container>
       </ng-template>
     </govuk-table>
-    <ng-container *ngTemplateOutlet="pagination" />
+    <ng-container *ngTemplateOutlet="pagination"></ng-container>
     <div class="govuk-button-group">
       <button netzPendingButton govukButton type="submit" class="govuk-!-margin-top-3">Save</button>
       <button govukSecondaryButton type="button" (click)="refresh$.next()">Discard changes</button>
@@ -39,7 +37,7 @@
       }
     </ng-template>
   </govuk-table>
-  <ng-container *ngTemplateOutlet="pagination" />
+  <ng-container *ngTemplateOutlet="pagination"></ng-container>
 }
 
 <ng-template #pagination>

@@ -70,8 +70,8 @@ describe('NotifyOperatorFormComponent', () => {
   const notifyUsersServiceSpy = jest.spyOn(notifyUsersService, 'submitDecisionToOperator');
 
   class Page extends BasePage<NotifyOperatorFormComponent> {
-    get headingsOrLabels(): HTMLHeadingElement[] | HTMLLegendElement[] {
-      return this.queryAll<HTMLHeadingElement | HTMLLegendElement>('h2, legend, [govuk-select] label');
+    get headings2(): HTMLHeadingElement[] {
+      return this.queryAll<HTMLHeadingElement>('h2');
     }
 
     set signatory(value: string) {
@@ -136,7 +136,7 @@ describe('NotifyOperatorFormComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Select who should receive the notification letter');
+      expect(page.heading1.textContent.trim()).toEqual('Select who should receive the notification letter');
       expect(page.submitButton).toBeTruthy();
     });
 
@@ -181,8 +181,8 @@ describe('NotifyOperatorFormComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual('Select who should receive the notification letter');
-      expect(page.headingsOrLabels.map((item) => item.textContent.trim())).toEqual([
+      expect(page.heading1.textContent.trim()).toEqual('Select who should receive the notification letter');
+      expect(page.headings2.map((item) => item.textContent.trim())).toEqual([
         'Users automatically notified',
         'Select any additional users you want to notify',
         'Select the external contacts you want to notify',
@@ -202,8 +202,8 @@ describe('NotifyOperatorFormComponent', () => {
         },
       });
       fixture.detectChanges();
-      expect(page.heading1.textContent).toEqual('Select who should receive documents');
-      expect(page.headingsOrLabels.map((item) => item.textContent.trim())).toEqual([
+      expect(page.heading1.textContent.trim()).toEqual('Select who should receive documents');
+      expect(page.headings2.map((item) => item.textContent.trim())).toEqual([
         'Users that automatically receive documents',
         'Select other users',
         'Select the external contacts',

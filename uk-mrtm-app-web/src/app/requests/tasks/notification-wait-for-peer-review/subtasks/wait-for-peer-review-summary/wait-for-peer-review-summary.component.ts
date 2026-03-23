@@ -22,20 +22,20 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-wait-for-peer-review-summary',
+  standalone: true,
   imports: [
     NotificationDetailsOfChangeSummaryTemplateComponent,
     NotificationReviewDecisionSummaryTemplateComponent,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './wait-for-peer-review-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WaitForPeerReviewSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const detailsOfChange = this.store.select(waitForPeerReviewQuery.selectEmpNotificationDetailsOfChange)();
     return {
       detailsOfChange: detailsOfChange,

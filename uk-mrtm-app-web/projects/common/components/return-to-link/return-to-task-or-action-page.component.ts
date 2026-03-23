@@ -14,8 +14,8 @@ import { LinkDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'netz-return-to-task-or-action-page',
-  imports: [RouterLinkWithHref, LinkDirective],
   standalone: true,
+  imports: [RouterLinkWithHref, LinkDirective],
   template: `
     <a govukLink [routerLink]="returnToUrl()">Return to: {{ returnToText() }}</a>
   `,

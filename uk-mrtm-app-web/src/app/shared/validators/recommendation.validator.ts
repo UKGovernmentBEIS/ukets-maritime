@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { isNil } from '@shared/utils';
+import { isNil } from 'lodash-es';
 
 export function addressedDescriptionValidator(): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {

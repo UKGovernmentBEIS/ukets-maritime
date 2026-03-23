@@ -16,9 +16,9 @@ export class HtmlDiffDirective {
   private readonly sanitizer: DomSanitizer = inject(DomSanitizer);
   private readonly htmlDiffProvider: boolean = inject(HTML_DIFF, { optional: true });
 
-  readonly previous = input<string | null>(null);
-  readonly current = input.required<string>();
-  readonly isFiles = input<boolean>(false);
+  previous = input<string | null>(null);
+  current = input.required<string>();
+  isFiles = input<boolean>(false);
 
   constructor() {
     effect(() => {

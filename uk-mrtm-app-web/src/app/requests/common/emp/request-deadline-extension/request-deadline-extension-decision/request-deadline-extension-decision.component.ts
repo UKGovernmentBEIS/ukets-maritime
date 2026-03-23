@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, effect, inject, Signal } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { AbstractControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { RdeDecisionPayload, RdeForceDecisionPayload } from '@mrtm/api';
@@ -7,6 +8,7 @@ import { RdeDecisionPayload, RdeForceDecisionPayload } from '@mrtm/api';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import {
   ConditionalContentDirective,
+  GovukValidators,
   RadioComponent,
   RadioOptionComponent,
   TextareaComponent,
@@ -22,6 +24,7 @@ import { RequestDeadlineExtensionDecisionDetailsSummaryTemplateComponent } from 
 
 @Component({
   selector: 'mrtm-request-deadline-extension-decision',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -32,23 +35,45 @@ import { RequestDeadlineExtensionDecisionDetailsSummaryTemplateComponent } from 
     MultipleFileInputComponent,
     ConditionalContentDirective,
   ],
-  standalone: true,
-  templateUrl: './request-deadline-extension-decision.component.html',
   providers: [requestDeadlineExtensionDecisionFormProvider],
+  templateUrl: './request-deadline-extension-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestDeadlineExtensionDecisionComponent {
-  public readonly formGroup = inject(TASK_FORM);
   private readonly taskStore = inject(RequestTaskStore);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly rdeService = inject(RequestDeadlineExtensionApiService);
   private readonly requestTaskStore: RequestTaskStore = inject(RequestTaskStore);
 
+  public readonly formGroup = inject(TASK_FORM);
   public readonly downloadUrl = this.taskStore.select(empCommonQuery.selectTasksDownloadUrl)();
   public readonly rdeDetails = this.taskStore.select(rdeDetailsQuery.selectResponseDetails);
   public readonly isRegulatorTask = this.taskStore.select(rdeDetailsQuery.selectIsRegulatorTask);
+  public readonly reasonCtrlValue: Signal<RdeForceDecisionPayload['decision']> = toSignal(
+    this.reasonCtrl.valueChanges,
+    { initialValue: this.reasonCtrl.value },
+  );
   public readonly isEditable = this.requestTaskStore.select(requestTaskQuery.selectIsEditable)();
+
+  constructor() {
+    effect(() => {
+      if (this.reasonCtrlValue() === 'ACCEPTED' && !this.isRegulatorTask()) {
+        this.reasonCtrl.clearValidators();
+      } else {
+        this.reasonCtrl.setValidators([
+          GovukValidators.required('Enter a reason'),
+          GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
+        ]);
+      }
+
+      this.formGroup.updateValueAndValidity({ emitEvent: true });
+    });
+  }
+
+  public get reasonCtrl(): AbstractControl {
+    return this.formGroup.get('reason');
+  }
 
   public onSubmit(): void {
     this.rdeService

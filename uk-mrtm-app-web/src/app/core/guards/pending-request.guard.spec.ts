@@ -1,6 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject as inject_1 } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 
 import { firstValueFrom, lastValueFrom, Observable, timer } from 'rxjs';
 
@@ -16,21 +16,21 @@ describe('PendingRequestGuard', () => {
   let router: Router;
   let windowAlert: jest.SpyInstance;
 
-  @Component({
-    selector: 'mrtm-test-1',
-    standalone: true,
-    template: '',
-    providers: [PendingRequestService],
-  })
+  @Component({ selector: 'mrtm-test-1', template: '', providers: [PendingRequestService] })
   class TestComponent implements PendingRequest {
-    readonly pendingRequest = inject(PendingRequestService);
+    readonly pendingRequest = inject_1(PendingRequestService);
+
     someRequest = timer(3000).pipe(this.pendingRequest.trackRequest());
   }
 
-  @Component({ selector: 'mrtm-test-2', standalone: true, template: '' })
+  @Component({ selector: 'mrtm-test-2', template: '' })
   class EmptyTestComponent {}
 
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([])],
+      declarations: [TestComponent, EmptyTestComponent],
+    });
     fixture = TestBed.createComponent(TestComponent);
     testComponent = fixture.componentInstance;
     guard = TestBed.inject(PendingRequestGuard);
@@ -55,7 +55,7 @@ describe('PendingRequestGuard', () => {
   });
 
   it('should allow deactivation if forced navigation', () => {
-    jest.spyOn(router, 'currentNavigation').mockReturnValue({ extras: { state: { forceNavigation: true } } } as any);
+    jest.spyOn(router, 'getCurrentNavigation').mockReturnValue({ extras: { state: { forceNavigation: true } } } as any);
 
     expect(guard.canDeactivate(testComponent)).toEqual(true);
   });

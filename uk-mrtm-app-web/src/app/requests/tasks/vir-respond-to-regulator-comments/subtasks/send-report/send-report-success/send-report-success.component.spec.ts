@@ -34,7 +34,7 @@ describe('SendReportSuccessComponent', () => {
   });
 
   it('should display all HTML elements', () => {
-    expect(page.heading1.textContent).toEqual('Your improvement response has been sent to the regulator');
+    expect(page.heading1.textContent.trim()).toEqual('Your improvement response has been sent to the regulator');
     expect(page.query('a').textContent.trim()).toEqual('Return to: Dashboard');
   });
 });

@@ -48,7 +48,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSaveReviewGrou
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSkipReviewActionType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSkipReviewDecision;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.mapper.AerReviewMapper;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
@@ -97,7 +97,7 @@ class RequestAerReviewServiceTest {
     private ReportableEmissionsService reportableEmissionsService;
 
     @Mock
-    private EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
+    private SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
 
     @Test
     void saveReviewGroupDecision() {
@@ -431,7 +431,7 @@ class RequestAerReviewServiceTest {
         verify(reportableEmissionsService, times(updateReportableEmissionsInvocations)).calculateTotalReportableEmissions(aerContainer);
         verify(reportableEmissionsService, times(updateReportableEmissionsInvocations))
             .updateReportableEmissions(totalReportableEmissions, reportingYear, accountId, false);
-        verify(emissionsUpdatedEventAddRequestActionService, times(updateReportableEmissionsInvocations))
+        verify(sendRegistryUpdatedEventAddRequestActionService, times(updateReportableEmissionsInvocations))
             .addRequestAction(request, eventDetails, userId);
         verify(reportableEmissionsService, times(deleteReportableEmissionsInvocations)).deleteReportableEmissions(accountId, reportingYear);
         verifyNoMoreInteractions(aerReviewMapper, aerValidatorService, requestService, reportableEmissionsService, requestActionPayload);

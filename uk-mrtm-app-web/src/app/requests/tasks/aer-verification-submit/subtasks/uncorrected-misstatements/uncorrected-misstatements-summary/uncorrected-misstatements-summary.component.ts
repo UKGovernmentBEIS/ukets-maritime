@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
-import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
@@ -19,14 +18,13 @@ import { UncorrectedMisstatementsSummaryTemplateComponent } from '@shared/compon
 
 @Component({
   selector: 'mrtm-uncorrected-misstatements-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     UncorrectedMisstatementsSummaryTemplateComponent,
-    PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './uncorrected-misstatements-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

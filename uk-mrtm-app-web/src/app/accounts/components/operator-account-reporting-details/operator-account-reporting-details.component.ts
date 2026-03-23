@@ -28,10 +28,10 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-operator-account-reporting-details',
-  imports: [RouterLink, LinkDirective, AccountReportingStatusPipe, TableComponent, GovukDatePipe, PaginationComponent],
-  standalone: true,
   templateUrl: './operator-account-reporting-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [RouterLink, LinkDirective, AccountReportingStatusPipe, TableComponent, GovukDatePipe, PaginationComponent],
 })
 export class OperatorAccountReportingDetailsComponent {
   private readonly operatorAccountsStore: OperatorAccountsStore = inject(OperatorAccountsStore);

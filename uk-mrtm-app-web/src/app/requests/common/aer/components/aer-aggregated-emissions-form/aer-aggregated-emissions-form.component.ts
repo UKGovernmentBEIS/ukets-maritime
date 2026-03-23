@@ -3,6 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ControlContainer, FormGroup, ReactiveFormsModule } from '@angular/forms';
 
 import { debounceTime } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { AerPortEmissionsMeasurement } from '@mrtm/api';
 
@@ -11,13 +12,13 @@ import { FieldsetDirective, LegendDirective, TextInputComponent } from '@netz/go
 import { AerAggregatedEmissionsFormGroupModel } from '@requests/common/aer/components/aer-aggregated-emissions-form/aer-aggregated-emissions-form.types';
 import { BigNumberPipe } from '@shared/pipes';
 import { existingControlContainer } from '@shared/providers';
-import { bigNumberUtils, isNil } from '@shared/utils';
+import { bigNumberUtils } from '@shared/utils';
 
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'mrtm-aer-aggregated-emissions-form',
-  imports: [TextInputComponent, FieldsetDirective, LegendDirective, ReactiveFormsModule, BigNumberPipe],
   standalone: true,
+  imports: [TextInputComponent, FieldsetDirective, LegendDirective, ReactiveFormsModule, BigNumberPipe],
   templateUrl: './aer-aggregated-emissions-form.component.html',
   viewProviders: [existingControlContainer],
 })

@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-verifier-details-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     VerifierDetailsSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './verifier-details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

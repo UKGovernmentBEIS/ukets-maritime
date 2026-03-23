@@ -8,10 +8,14 @@ import { MultiSelectTableComponent } from '@shared/components';
 
 describe('MultiSelectTableComponent', () => {
   @Component({
-    imports: [MultiSelectTableComponent],
     standalone: true,
+    imports: [MultiSelectTableComponent],
     template: `
-      <mrtm-multi-select-table [caption]="caption" [columns]="columns" [data]="data" (sort)="onSort($event)" />
+      <mrtm-multi-select-table
+        [caption]="caption"
+        [columns]="columns"
+        [data]="data"
+        (sort)="onSort($event)"></mrtm-multi-select-table>
     `,
   })
   class TestComponent {
@@ -27,8 +31,8 @@ describe('MultiSelectTableComponent', () => {
   }
 
   @Component({
-    imports: [MultiSelectTableComponent],
     standalone: true,
+    imports: [MultiSelectTableComponent],
     template: `
       <mrtm-multi-select-table [caption]="caption" [columns]="columns" [data]="data" (sort)="onSort($event)">
         <ng-template let-column="column" let-row="row">

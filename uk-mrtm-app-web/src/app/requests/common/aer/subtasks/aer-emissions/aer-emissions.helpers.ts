@@ -1,3 +1,5 @@
+import { isNil } from 'lodash-es';
+
 import {
   AerDerogations,
   AerFuelsAndEmissionsFactors,
@@ -15,7 +17,7 @@ import { FUELS_AND_EMISSIONS_FORM_STEP } from '@requests/common/components/emiss
 import { EmpFuelsAndEmissionsFactorsExtended } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AllFuelOriginTypeName, FuelsAndEmissionsFactors } from '@shared/types';
-import { isLNG, isNil } from '@shared/utils';
+import { isLNG } from '@shared/utils';
 
 export enum AerEmissionsWizardStep {
   LIST_OF_SHIPS = LIST_OF_SHIPS_STEP,
@@ -111,7 +113,7 @@ export const aerDerogationsValidator = (derogations: AerDerogations): boolean =>
   !isNil(derogations?.exceptionFromPerVoyageMonitoring);
 
 export const shipStepsCompletedMap: Record<
-  keyof Omit<AerShipEmissions, 'uniqueIdentifier' | 'dataInputType'>,
+  keyof Omit<AerShipEmissions, 'uniqueIdentifier'>,
   (ship: AerShipEmissions) => boolean
 > = {
   details: (ship) => aerShipDetailsValidator(ship?.details),

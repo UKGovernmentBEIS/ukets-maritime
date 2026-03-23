@@ -20,7 +20,7 @@ describe('ReviewDecisionSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(ReviewDecisionSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('reviewDecision', {
+    component.reviewDecision = {
       type: 'ACCEPTED',
       details: {
         requiredChanges: [
@@ -35,7 +35,7 @@ describe('ReviewDecisionSummaryTemplateComponent', () => {
         ],
         notes: 'some notes',
       },
-    });
+    };
 
     page = new Page(fixture);
     fixture.detectChanges();

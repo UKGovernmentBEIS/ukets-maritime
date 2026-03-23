@@ -28,7 +28,8 @@ public class EmpVariationReviewDecision {
                     @DiscriminatorMapping(schema = ChangesRequiredDecisionDetails.class, value = "OPERATOR_AMENDS_NEEDED")
             },
             discriminatorProperty = "type")
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.EXTERNAL_PROPERTY, property = "type", visible = true)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = As.EXTERNAL_PROPERTY, property = "type", visible = true,
+        defaultImpl =  ReviewDecisionDetails.class)
     @JsonSubTypes({
         @JsonSubTypes.Type(value = EmpAcceptedVariationDecisionDetails.class, name = "ACCEPTED"),
         @JsonSubTypes.Type(value = ReviewDecisionDetails.class, name = "REJECTED"),

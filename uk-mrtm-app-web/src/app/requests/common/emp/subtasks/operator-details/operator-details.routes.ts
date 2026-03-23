@@ -42,9 +42,9 @@ export const OPERATOR_DETAILS_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/common/emp/subtasks/operator-details/undertaken-activities/undertaken-activities.component').then(
-        (c) => c.UndertakenActivitiesComponent,
-      ),
+      import(
+        '@requests/common/emp/subtasks/operator-details/undertaken-activities/undertaken-activities.component'
+      ).then((c) => c.UndertakenActivitiesComponent),
   },
   {
     path: OperatorDetailsWizardStep.OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION,

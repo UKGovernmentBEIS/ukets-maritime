@@ -11,8 +11,8 @@ import { ShipSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-ship-submitted',
-  imports: [ShipSummaryTemplateComponent, ReturnToShipsListTableComponent, PageHeadingComponent],
   standalone: true,
+  imports: [ShipSummaryTemplateComponent, ReturnToShipsListTableComponent, PageHeadingComponent],
   templateUrl: './ship-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

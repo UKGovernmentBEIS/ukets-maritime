@@ -11,13 +11,13 @@ import { OperatorDetailsSummaryTemplateComponent, ReviewDecisionSummaryTemplateC
 
 @Component({
   selector: 'mrtm-operator-details-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     OperatorDetailsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './operator-details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

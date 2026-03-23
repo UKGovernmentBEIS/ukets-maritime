@@ -12,7 +12,6 @@ export const SEND_VARIATION_ROUTES: Routes = [
   },
   {
     path: 'success',
-    title: 'Variation sent successfully',
     loadComponent: () => import('./send-variation-success').then((c) => c.SendVariationSuccessComponent),
   },
 ];

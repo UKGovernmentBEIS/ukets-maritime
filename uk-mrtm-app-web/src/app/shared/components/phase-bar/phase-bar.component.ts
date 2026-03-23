@@ -11,8 +11,6 @@ import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
 /* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'mrtm-phase-bar',
-  imports: [PhaseBannerComponent, LinkDirective, RouterLink, AsyncPipe],
-  standalone: true,
   template: `
     <govuk-phase-banner phase="Beta">
       This is a new service – your
@@ -26,9 +24,11 @@ import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
       }
     </govuk-phase-banner>
   `,
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
+  standalone: true,
+  imports: [PhaseBannerComponent, LinkDirective, RouterLink, AsyncPipe],
 })
 export class PhaseBarComponent {
   private readonly authStore = inject(AuthStore);

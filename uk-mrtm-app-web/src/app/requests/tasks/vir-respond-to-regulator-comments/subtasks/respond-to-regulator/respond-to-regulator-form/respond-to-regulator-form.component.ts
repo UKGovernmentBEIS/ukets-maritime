@@ -33,6 +33,7 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-respond-to-recommendation-form',
+  standalone: true,
   imports: [
     WizardStepComponent,
     VirVerifierRecommendationSummaryTemplateComponent,
@@ -48,9 +49,8 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
     VirOperatorResponseSummaryTemplateComponent,
     VirRegulatorResponseOperatorSideSummaryTemplateComponent,
   ],
-  standalone: true,
-  templateUrl: './respond-to-regulator-form.component.html',
   providers: [respondToRegulatorFormProvider],
+  templateUrl: './respond-to-regulator-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RespondToRegulatorFormComponent {

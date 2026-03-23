@@ -21,6 +21,10 @@ import {
 
 @Component({
   selector: 'mrtm-document-template',
+  templateUrl: './document-template.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  providers: [DocumentTemplateFormProvider, DestroySubject],
   imports: [
     AsyncPipe,
     ButtonDirective,
@@ -31,10 +35,6 @@ import {
     DocumentTemplateDetailsTemplateComponent,
     FileInputComponent,
   ],
-  standalone: true,
-  templateUrl: './document-template.component.html',
-  providers: [DocumentTemplateFormProvider, DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DocumentTemplateComponent implements OnInit {
   readonly form = inject<UntypedFormGroup>(DOCUMENT_TEMPLATE_FORM);

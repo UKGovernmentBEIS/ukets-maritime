@@ -20,7 +20,7 @@ describe('FollowUpResponseRegulatorSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(FollowUpResponseRegulatorSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('followUpResponseDTO', {
+    component.followUpResponseDTO = {
       followUpRequest: 'some changes here',
       followUpResponseExpirationDate: '2026-01-01',
       submissionDate: '2024-10-01',
@@ -29,7 +29,7 @@ describe('FollowUpResponseRegulatorSummaryTemplateComponent', () => {
         { downloadUrl: '/tasks/1/file-download/11111111-1111-4111-a111-111111111111', fileName: '1.png' },
         { downloadUrl: '/tasks/1/file-download/22222222-2222-4222-a222-222222222222', fileName: '2.png' },
       ],
-    });
+    };
 
     page = new Page(fixture);
     fixture.detectChanges();

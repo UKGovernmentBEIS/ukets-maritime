@@ -5,21 +5,19 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="operatorDetails()?.imoNumber"
-      [previous]="originalOperatorDetails()?.imoNumber"></dd>
+      [current]="operatorDetails?.imoNumber"
+      [previous]="originalOperatorDetails?.imoNumber"></dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Operator name</dt>
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="operatorDetails()?.operatorName"
-      [previous]="originalOperatorDetails()?.operatorName"></dd>
-    @if (isEditable()) {
+      [current]="operatorDetails?.operatorName"
+      [previous]="originalOperatorDetails?.operatorName"></dd>
+    @if (isEditable) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep().OPERATOR_DETAILS_OPERATOR_FORM]" [queryParams]="queryParams()">
-          Change
-        </a>
+        <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_OPERATOR_FORM]" [queryParams]="queryParams">Change</a>
       </dd>
     }
   </div>
@@ -28,48 +26,44 @@
     <dd govukSummaryListRowValue>
       <div
         htmlDiff
-        [current]="operatorDetails()?.contactAddress?.line1"
-        [previous]="originalOperatorDetails()?.contactAddress?.line1"></div>
+        [current]="operatorDetails?.contactAddress?.line1"
+        [previous]="originalOperatorDetails?.contactAddress?.line1"></div>
       <div
         htmlDiff
-        [current]="operatorDetails()?.contactAddress?.line2"
-        [previous]="originalOperatorDetails()?.contactAddress?.line2"></div>
+        [current]="operatorDetails?.contactAddress?.line2"
+        [previous]="originalOperatorDetails?.contactAddress?.line2"></div>
       <div
         htmlDiff
-        [current]="operatorDetails()?.contactAddress?.city"
-        [previous]="originalOperatorDetails()?.contactAddress?.city"></div>
+        [current]="operatorDetails?.contactAddress?.city"
+        [previous]="originalOperatorDetails?.contactAddress?.city"></div>
       <div
         htmlDiff
-        [current]="operatorDetails()?.contactAddress?.state"
-        [previous]="originalOperatorDetails()?.contactAddress?.state"></div>
+        [current]="operatorDetails?.contactAddress?.state"
+        [previous]="originalOperatorDetails?.contactAddress?.state"></div>
       <div
         htmlDiff
-        [current]="operatorDetails()?.contactAddress?.postcode"
-        [previous]="originalOperatorDetails()?.contactAddress?.postcode"></div>
+        [current]="operatorDetails?.contactAddress?.postcode"
+        [previous]="originalOperatorDetails?.contactAddress?.postcode"></div>
       <div
         htmlDiff
         [current]="
-          operatorDetails()?.contactAddress?.country
-            ? (operatorDetails()?.contactAddress?.country | country)
-            : undefined
+          operatorDetails?.contactAddress?.country ? (operatorDetails?.contactAddress?.country | country) : undefined
         "
         [previous]="
-          originalOperatorDetails()?.contactAddress?.country
-            ? (originalOperatorDetails()?.contactAddress?.country | country)
+          originalOperatorDetails?.contactAddress?.country
+            ? (originalOperatorDetails?.contactAddress?.country | country)
             : undefined
         "></div>
     </dd>
-    @if (isEditable()) {
+    @if (isEditable) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep().OPERATOR_DETAILS_OPERATOR_FORM]" [queryParams]="queryParams()">
-          Change
-        </a>
+        <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_OPERATOR_FORM]" [queryParams]="queryParams">Change</a>
       </dd>
     }
   </div>
 </dl>
 
-@if ($any(operatorDetails())?.activityDescription) {
+@if ($any(operatorDetails)?.activityDescription) {
   <h2 class="govuk-heading-m">Describe the activities carried out by the Maritime Operator</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
@@ -78,14 +72,11 @@
         govukSummaryListRowValue
         class="pre-wrap"
         htmlDiff
-        [current]="$any(operatorDetails())?.activityDescription"
-        [previous]="$any(originalOperatorDetails())?.activityDescription"></dd>
-      @if (isEditable()) {
+        [current]="$any(operatorDetails)?.activityDescription"
+        [previous]="$any(originalOperatorDetails)?.activityDescription"></dd>
+      @if (isEditable) {
         <dd govukSummaryListRowActions>
-          <a
-            govukLink
-            [routerLink]="[wizardStep().OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES]"
-            [queryParams]="queryParams()">
+          <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES]" [queryParams]="queryParams">
             Change
           </a>
         </dd>
@@ -94,7 +85,7 @@
   </dl>
 }
 
-@if (operatorDetails()?.organisationStructure) {
+@if (operatorDetails?.organisationStructure) {
   <h2 class="govuk-heading-m">Organisation details</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
@@ -102,58 +93,53 @@
       <dd
         govukSummaryListRowValue
         htmlDiff
-        [current]="operatorDetails()?.organisationStructure?.legalStatusType | legalStatusTypeDisplayText"
-        [previous]="
-          originalOperatorDetails()?.organisationStructure?.legalStatusType | legalStatusTypeDisplayText
-        "></dd>
-      @if (isEditable()) {
+        [current]="operatorDetails?.organisationStructure?.legalStatusType | legalStatusTypeDisplayText"
+        [previous]="originalOperatorDetails?.organisationStructure?.legalStatusType | legalStatusTypeDisplayText"></dd>
+      @if (isEditable) {
         <dd govukSummaryListRowActions>
           <a
             govukLink
-            [routerLink]="[wizardStep().OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION]"
-            [queryParams]="queryParams()">
+            [routerLink]="[wizardStep.OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION]"
+            [queryParams]="queryParams">
             Change
           </a>
         </dd>
       }
     </div>
     <div govukSummaryListRow>
-      @switch (operatorDetails()?.organisationStructure?.legalStatusType) {
+      @switch (operatorDetails?.organisationStructure?.legalStatusType) {
         @case ('INDIVIDUAL') {
           <dt govukSummaryListRowKey>Full name</dt>
           <dd
             govukSummaryListRowValue
             htmlDiff
-            [current]="$any(operatorDetails()?.organisationStructure)?.fullName"
-            [previous]="$any(originalOperatorDetails()?.organisationStructure)?.fullName"></dd>
+            [current]="$any(operatorDetails?.organisationStructure)?.fullName"
+            [previous]="$any(originalOperatorDetails?.organisationStructure)?.fullName"></dd>
         }
         @case ('LIMITED_COMPANY') {
           <dt govukSummaryListRowKey>Company registration number</dt>
           <dd
             govukSummaryListRowValue
             htmlDiff
-            [current]="$any(operatorDetails()?.organisationStructure)?.registrationNumber"
-            [previous]="$any(originalOperatorDetails()?.organisationStructure)?.registrationNumber"></dd>
+            [current]="$any(operatorDetails?.organisationStructure)?.registrationNumber"
+            [previous]="$any(originalOperatorDetails?.organisationStructure)?.registrationNumber"></dd>
         }
         @case ('PARTNERSHIP') {
           <dt govukSummaryListRowKey>Name of the partnership</dt>
           <dd
             govukSummaryListRowValue
             htmlDiff
-            [current]="$any(operatorDetails()?.organisationStructure)?.partnershipName"
-            [previous]="$any(originalOperatorDetails()?.organisationStructure)?.partnershipName"></dd>
+            [current]="$any(operatorDetails?.organisationStructure)?.partnershipName"
+            [previous]="$any(originalOperatorDetails?.organisationStructure)?.partnershipName"></dd>
         }
         @default {
           <dt govukSummaryListRowKey><span class="govuk-hint">Not provided</span></dt>
           <dd govukSummaryListRowValue><span class="govuk-hint">Not provided</span></dd>
         }
       }
-      @if (isEditable()) {
+      @if (isEditable) {
         <dd govukSummaryListRowActions>
-          <a
-            govukLink
-            [routerLink]="[wizardStep().OPERATOR_DETAILS_ORGANISATION_DETAILS]"
-            [queryParams]="queryParams()">
+          <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_ORGANISATION_DETAILS]" [queryParams]="queryParams">
             Change
           </a>
         </dd>
@@ -163,67 +149,64 @@
       <dt
         govukSummaryListRowKey
         htmlDiff
-        [current]="operatorDetails()?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle"
+        [current]="operatorDetails?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle"
         [previous]="
-          originalOperatorDetails()?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle
+          originalOperatorDetails?.organisationStructure?.legalStatusType | organisationDetailsAddressTitle
         "></dt>
       <dd govukSummaryListRowValue>
         <div
           htmlDiff
-          [current]="operatorDetails()?.organisationStructure?.registeredAddress?.line1"
-          [previous]="originalOperatorDetails()?.organisationStructure?.registeredAddress?.line1"></div>
+          [current]="operatorDetails?.organisationStructure?.registeredAddress?.line1"
+          [previous]="originalOperatorDetails?.organisationStructure?.registeredAddress?.line1"></div>
         <div
           htmlDiff
-          [current]="operatorDetails()?.organisationStructure?.registeredAddress?.line2"
-          [previous]="originalOperatorDetails()?.organisationStructure?.registeredAddress?.line2"></div>
+          [current]="operatorDetails?.organisationStructure?.registeredAddress?.line2"
+          [previous]="originalOperatorDetails?.organisationStructure?.registeredAddress?.line2"></div>
         <div
           htmlDiff
-          [current]="operatorDetails()?.organisationStructure?.registeredAddress?.city"
-          [previous]="originalOperatorDetails()?.organisationStructure?.registeredAddress?.city"></div>
+          [current]="operatorDetails?.organisationStructure?.registeredAddress?.city"
+          [previous]="originalOperatorDetails?.organisationStructure?.registeredAddress?.city"></div>
         <div
           htmlDiff
-          [current]="operatorDetails()?.organisationStructure?.registeredAddress?.state"
-          [previous]="originalOperatorDetails()?.organisationStructure?.registeredAddress?.state"></div>
+          [current]="operatorDetails?.organisationStructure?.registeredAddress?.state"
+          [previous]="originalOperatorDetails?.organisationStructure?.registeredAddress?.state"></div>
         <div
           htmlDiff
-          [current]="operatorDetails()?.organisationStructure?.registeredAddress?.postcode"
-          [previous]="originalOperatorDetails()?.organisationStructure?.registeredAddress?.postcode"></div>
+          [current]="operatorDetails?.organisationStructure?.registeredAddress?.postcode"
+          [previous]="originalOperatorDetails?.organisationStructure?.registeredAddress?.postcode"></div>
         <div
           htmlDiff
           [current]="
-            operatorDetails()?.organisationStructure?.registeredAddress?.country
-              ? (operatorDetails()?.organisationStructure?.registeredAddress?.country | country)
+            operatorDetails?.organisationStructure?.registeredAddress?.country
+              ? (operatorDetails?.organisationStructure?.registeredAddress?.country | country)
               : undefined
           "
           [previous]="
-            originalOperatorDetails()?.organisationStructure?.registeredAddress?.country
-              ? (originalOperatorDetails()?.organisationStructure?.registeredAddress?.country | country)
+            originalOperatorDetails?.organisationStructure?.registeredAddress?.country
+              ? (originalOperatorDetails?.organisationStructure?.registeredAddress?.country | country)
               : undefined
           "></div>
       </dd>
-      @if (isEditable()) {
+      @if (isEditable) {
         <dd govukSummaryListRowActions>
-          <a
-            govukLink
-            [routerLink]="[wizardStep().OPERATOR_DETAILS_ORGANISATION_DETAILS]"
-            [queryParams]="queryParams()">
+          <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_ORGANISATION_DETAILS]" [queryParams]="queryParams">
             Change
           </a>
         </dd>
       }
     </div>
-    @if (operatorDetails()?.organisationStructure?.legalStatusType !== 'INDIVIDUAL') {
+    @if (operatorDetails?.organisationStructure?.legalStatusType !== 'INDIVIDUAL') {
       <div govukSummaryListRow>
-        @switch (operatorDetails()?.organisationStructure?.legalStatusType) {
+        @switch (operatorDetails?.organisationStructure?.legalStatusType) {
           @case ('PARTNERSHIP') {
             <dt govukSummaryListRowKey>List the partners</dt>
             <dd govukSummaryListRowValue>
               @if (combinedPartners()?.length > 0) {
-                @for (partner of combinedPartners(); track partner) {
+                @for (partner of combinedPartners(); track partner; let idx = $index) {
                   <div
                     htmlDiff
-                    current="{{ $index + 1 }}. {{ partner.current }}"
-                    previous="{{ $index + 1 }}. {{ partner.previous }}"></div>
+                    current="{{ idx + 1 }}. {{ partner.current }}"
+                    previous="{{ idx + 1 }}. {{ partner.previous }}"></div>
                 }
               }
             </dd>
@@ -231,16 +214,13 @@
           @case ('LIMITED_COMPANY') {
             <dt govukSummaryListRowKey>Upload proof of registered address</dt>
             <dd govukSummaryListRowValue>
-              <mrtm-summary-download-files [files]="files()" [originalFiles]="originalFiles()" />
+              <mrtm-summary-download-files [files]="files" [originalFiles]="originalFiles" />
             </dd>
           }
         }
-        @if (isEditable()) {
+        @if (isEditable) {
           <dd govukSummaryListRowActions>
-            <a
-              govukLink
-              [routerLink]="[wizardStep().OPERATOR_DETAILS_ORGANISATION_DETAILS]"
-              [queryParams]="queryParams()">
+            <a govukLink [routerLink]="[wizardStep.OPERATOR_DETAILS_ORGANISATION_DETAILS]" [queryParams]="queryParams">
               Change
             </a>
           </dd>

@@ -13,6 +13,7 @@ import { RfiResponse } from '@shared/types';
 
 @Component({
   selector: 'mrtm-rfi-response-summary-template',
+  standalone: true,
   imports: [
     NotProvidedDirective,
     SummaryDownloadFilesComponent,
@@ -21,10 +22,9 @@ import { RfiResponse } from '@shared/types';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
   ],
-  standalone: true,
   templateUrl: './rfi-response-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RfiResponseSummaryTemplateComponent {
-  readonly data = input.required<RfiResponse>();
+  data = input.required<RfiResponse>();
 }

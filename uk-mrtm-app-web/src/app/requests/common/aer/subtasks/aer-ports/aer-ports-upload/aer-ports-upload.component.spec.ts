@@ -69,7 +69,7 @@ describe('AerPortsUploadComponent', () => {
   it('should display all HTMLElements and form with 0 errors', () => {
     expect(page.errorSummary).toBeFalsy();
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent).toEqual('Upload the ports and emission details file');
+    expect(page.heading1.textContent.trim()).toEqual('Upload the ports and emission details file');
     expect(page.paragraphs).toHaveLength(4);
     expect(page.uploadFileButton).toBeTruthy();
     expect(page.submitButton).toBeTruthy();

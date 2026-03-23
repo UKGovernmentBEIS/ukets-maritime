@@ -6,9 +6,9 @@ import { BackToTopComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-legislation',
-  imports: [PageHeadingComponent, BackToTopComponent],
   standalone: true,
   templateUrl: './legislation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [PageHeadingComponent, BackToTopComponent],
 })
 export class LegislationComponent {}

@@ -15,8 +15,8 @@ import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types
 
 @Component({
   selector: 'mrtm-recommended-improvements-improvement-delete',
-  imports: [RouterLink, ButtonDirective, LinkDirective, PageHeadingComponent, PendingButtonDirective],
   standalone: true,
+  imports: [RouterLink, ButtonDirective, LinkDirective, PageHeadingComponent, PendingButtonDirective],
   templateUrl: './recommended-improvements-improvement-delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

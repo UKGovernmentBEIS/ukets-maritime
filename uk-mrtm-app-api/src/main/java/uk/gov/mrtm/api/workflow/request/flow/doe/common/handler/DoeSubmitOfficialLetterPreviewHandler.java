@@ -5,6 +5,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTempla
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.PreviewOfficialNoticeService;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
+import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.doe.submit.domain.DoeApplicationSubmitRequestTaskPayload;
@@ -83,8 +84,8 @@ public class DoeSubmitOfficialLetterPreviewHandler extends PreviewDocumentAbstra
 
         vars.put("reportingYear", reportingYear);
         vars.put("totalEmissions", doe.getMaritimeEmissions().getTotalMaritimeEmissions().getTotalReportableEmissions());
-        vars.put("noticeText",
-                doe.getMaritimeEmissions().getDeterminationReason().getDetails().getNoticeText());
+        vars.put("determinationReasonDescription",
+                retrieveDeterminationReasonDescription(doe.getMaritimeEmissions().getDeterminationReason().getType(), reportingYear));
         vars.put("emissionsCalculationApproachDescription",
                 doe.getMaritimeEmissions().getTotalMaritimeEmissions().getCalculationApproach());
         vars.put("surrenderEmissions",
@@ -95,4 +96,15 @@ public class DoeSubmitOfficialLetterPreviewHandler extends PreviewDocumentAbstra
         return vars;
     }
 
+    private String retrieveDeterminationReasonDescription(DoeDeterminationReasonType doeDeterminationReasonType,
+                                                          Year reportingYear) {
+        return switch (doeDeterminationReasonType) {
+            case VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER ->
+                    String.format(doeDeterminationReasonType.getDescription(), reportingYear.plusYears(1));
+            case CORRECTING_NON_MATERIAL_MISSTATEMENT ->
+                    String.format(doeDeterminationReasonType.getDescription(), reportingYear);
+            case IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER ->
+                    doeDeterminationReasonType.getDescription();
+        };
+    }
 }

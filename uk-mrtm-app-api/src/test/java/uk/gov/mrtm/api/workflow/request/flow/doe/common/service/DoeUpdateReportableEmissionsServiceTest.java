@@ -11,13 +11,12 @@ import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsSaveParams;
 import uk.gov.mrtm.api.reporting.service.ReportableEmissionsService;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
-import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeTotalMaritimeEmissions;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
 
@@ -42,7 +41,7 @@ class DoeUpdateReportableEmissionsServiceTest {
     private ReportableEmissionsService reportableEmissionsService;
 
     @Mock
-    private EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
+    private SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
 
     @Test
     void updateReportableEmissions() {
@@ -65,10 +64,7 @@ class DoeUpdateReportableEmissionsServiceTest {
                                 .calculationApproach("calculationApproach").build())
                             .chargeOperator(false)
                         .determinationReason(DoeDeterminationReason.builder()
-                                .details(DoeDeterminationReasonDetails.builder()
-                                    .type(DoeDeterminationReasonType.IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER)
-                                    .noticeText("noticeText")
-                                    .build())
+                                .type(DoeDeterminationReasonType.IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER)
                                 .furtherDetails("furtherDetails")
                                 .build())
                     .build())
@@ -99,7 +95,7 @@ class DoeUpdateReportableEmissionsServiceTest {
 
         verify(requestService).findRequestById(requestId);
         verify(reportableEmissionsService).saveReportableEmissions(saveParams);
-        verify(emissionsUpdatedEventAddRequestActionService).addRequestAction(request, eventDetails, regulatorAssignee);
-        verifyNoMoreInteractions(requestService, reportableEmissionsService, emissionsUpdatedEventAddRequestActionService);
+        verify(sendRegistryUpdatedEventAddRequestActionService).addRequestAction(request, eventDetails, regulatorAssignee);
+        verifyNoMoreInteractions(requestService, reportableEmissionsService, sendRegistryUpdatedEventAddRequestActionService);
     }
 }

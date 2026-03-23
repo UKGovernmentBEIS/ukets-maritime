@@ -11,15 +11,13 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
 
 @Component({
   selector: 'mrtm-invitation',
-  imports: [PanelComponent, LinkDirective, RouterLink, AsyncPipe, UserTypePipeWithArticle],
-  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
         <govuk-panel
           title="You have been added as {{
             (operatorInvitationResultData$ | async)?.roleCode | userTypeWithArticle
-          }} to the account of {{ (operatorInvitationResultData$ | async)?.accountName }}" />
+          }} to the account of {{ (operatorInvitationResultData$ | async)?.accountName }}"></govuk-panel>
 
         <h2 class="govuk-heading-m">What happens next</h2>
         <p class="govuk-body">
@@ -33,6 +31,8 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PanelComponent, LinkDirective, RouterLink, AsyncPipe, UserTypePipeWithArticle],
 })
 export class InvitationComponent {
   private readonly activatedRoute = inject(ActivatedRoute);

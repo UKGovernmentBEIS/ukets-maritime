@@ -20,18 +20,18 @@ describe('AbbreviationsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(AbbreviationsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('abbreviations', {
+    component.abbreviations = {
       exist: true,
       abbreviationDefinitions: [{ abbreviation: 'Abbreviation1', definition: 'definition 1' }],
-    });
-    fixture.componentRef.setInput('abbreviationsMap', {
+    };
+    component.abbreviationsMap = {
       title: 'List of definitions and abbreviations',
       abbreviationsQuestion: {
         title: 'Are you using any abbreviations or terminology in your application which need explanation?',
       },
-    });
-    fixture.componentRef.setInput('wizardStep', { ABBREVIATIONS_QUESTION: 'abbreviations-question', SUMMARY: '../' });
-    fixture.componentRef.setInput('isEditable', true);
+    };
+    component.wizardStep = { ABBREVIATIONS_QUESTION: 'abbreviations-question', SUMMARY: '../' };
+    component.isEditable = true;
     page = new Page(fixture);
     fixture.detectChanges();
   });

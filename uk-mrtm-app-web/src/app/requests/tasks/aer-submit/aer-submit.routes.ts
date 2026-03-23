@@ -6,11 +6,8 @@ import {
   AER_AGGREGATED_DATA_SUB_TASK_PATH,
   aerAggregatedDataRouteProviders,
 } from '@requests/common/aer/subtasks/aer-aggregated-data';
-import {
-  AER_PORTS_SUB_TASK,
-  aerPortsRouteProviders,
-  canActivateAerPorts,
-} from '@requests/common/aer/subtasks/aer-ports';
+import { aerPortsRouteProviders, canActivateAerPorts } from '@requests/common/aer/subtasks/aer-ports';
+import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports';
 import { canActivateGuardedAerSubtask } from '@requests/common/aer/subtasks/aer-subtasks.guard';
 import { canActivateAerTotalEmissionsSubtask } from '@requests/common/aer/subtasks/aer-total-emissions/aer-total-emissions.guard';
 import { AER_TOTAL_EMISSIONS_SUB_TASK_PATH } from '@requests/common/aer/subtasks/aer-total-emissions/aer-total-emissions.helpers';
@@ -25,7 +22,6 @@ import {
 import { REPORTING_OBLIGATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/reporting-obligation/reporting-obligation.helpers';
 import { EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
 import { OPERATOR_DETAILS_SUB_TASK_PATH } from '@requests/common/components/operator-details';
-import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/common/third-party-data-provider';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK_PATH } from '@requests/common/utils/additional-documents';
 import { canActivateAerSubmitSendReportAction } from '@requests/tasks/aer-submit/aer-submit.guard';
 import {
@@ -33,16 +29,13 @@ import {
   provideAerSubmitSideEffects,
   provideAerSubmitStepFlowManagers,
   provideAerSubmitTaskServices,
-  provideThirdPartyConfigurations,
 } from '@requests/tasks/aer-submit/aer-submit.providers';
 import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-submit/subtasks/send-report/send-report.helpers';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const AER_SUBMIT_ROUTES: Routes = [
   {
     path: '',
     providers: [
-      provideThirdPartyConfigurations(),
       PayloadMutatorsHandler,
       provideAerSubmitPayloadMutators(),
       SideEffectsHandler,
@@ -50,7 +43,7 @@ export const AER_SUBMIT_ROUTES: Routes = [
       provideAerSubmitTaskServices(),
       provideAerSubmitStepFlowManagers(),
     ],
-    canActivate: [resetPersistableStateGuard],
+    canActivateChild: [],
     children: [
       {
         path: REPORTING_OBLIGATION_SUB_TASK_PATH,
@@ -118,15 +111,6 @@ export const AER_SUBMIT_ROUTES: Routes = [
         path: SEND_REPORT_SUB_TASK_PATH,
         canActivate: [canActivateAerSubmitSendReportAction],
         loadChildren: () => import('@requests/tasks/aer-submit/subtasks/send-report').then((r) => r.SEND_REPORT_ROUTES),
-      },
-      {
-        path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
-        title: 'Import data from a data supplier',
-        data: { backlink: '../../', breadcrumb: false },
-        loadComponent: () =>
-          import('@requests/common/third-party-data-provider/third-party-data-provider-import').then(
-            (c) => c.ThirdPartyDataProviderImportComponent,
-          ),
       },
     ],
   },

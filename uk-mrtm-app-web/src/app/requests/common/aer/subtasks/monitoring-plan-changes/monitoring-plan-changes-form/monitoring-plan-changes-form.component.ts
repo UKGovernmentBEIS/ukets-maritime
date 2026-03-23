@@ -26,6 +26,7 @@ import { MonitoringPlanVersionSummaryTemplateComponent, WizardStepComponent } fr
 
 @Component({
   selector: 'mrtm-monitoring-plan-changes-form',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     RadioComponent,
@@ -35,10 +36,9 @@ import { MonitoringPlanVersionSummaryTemplateComponent, WizardStepComponent } fr
     WizardStepComponent,
     MonitoringPlanVersionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './monitoring-plan-changes-form.component.html',
-  providers: [monitoringPlanChangesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [monitoringPlanChangesFormProvider],
 })
 export class MonitoringPlanChangesFormComponent {
   readonly map = monitoringPlanChangesMap;

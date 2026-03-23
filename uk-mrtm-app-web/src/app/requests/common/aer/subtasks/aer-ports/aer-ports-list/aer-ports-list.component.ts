@@ -23,6 +23,7 @@ import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
 
 @Component({
   selector: 'mrtm-aer-ports-list',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -35,7 +36,6 @@ import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
     FilterByShipAndDateRangeComponent,
     NotificationBannerComponent,
   ],
-  standalone: true,
   templateUrl: './aer-ports-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

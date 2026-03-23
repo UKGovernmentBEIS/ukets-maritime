@@ -1,7 +1,6 @@
 /**
 Helper classes that were not covered through govuk-components
  */
-@use 'govuk-frontend/dist/govuk/index' as govuk;
 
 main {
   &:focus,
@@ -15,10 +14,6 @@ main {
   white-space: pre-line;
 }
 
-.overflow-wrap {
-  overflow-wrap: break-word;
-}
-
 .float-left {
   float: left;
 }
@@ -30,8 +25,8 @@ main {
 .row-flex {
   display: flex;
   flex-wrap: wrap;
-  margin-left: -(govuk.govuk-spacing(3));
-  margin-right: -(govuk.govuk-spacing(3));
+  margin-left: -(govuk-spacing(3));
+  margin-right: -(govuk-spacing(3));
 }
 
 .flex-space-between {
@@ -40,9 +35,9 @@ main {
   align-items: flex-start;
   flex-direction: column;
 
-  @include govuk.govuk-media-query($from: tablet) {
+  @include govuk-media-query($from: tablet) {
     flex-direction: row;
-    gap: govuk.govuk-spacing(1);
+    gap: govuk-spacing(1);
   }
 }
 
@@ -53,31 +48,31 @@ main {
 .col-flex-three-quarters {
   box-sizing: border-box;
   flex: 0 0 auto;
-  width: govuk.govuk-grid-width('three-quarters');
-  padding: 0 govuk.govuk-spacing(3);
+  width: govuk-grid-width('three-quarters');
+  padding: 0 govuk-spacing(3);
 }
 
 .col-flex-one-quarter {
   box-sizing: border-box;
   flex: 0 0 auto;
-  width: govuk.govuk-grid-width('one-quarter');
-  padding: 0 govuk.govuk-spacing(3) 0 0;
+  width: govuk-grid-width('one-quarter');
+  padding: 0 govuk-spacing(3) 0 0;
 }
 
 a[role='button'] {
   @extend %govuk-link;
-  color: govuk.$govuk-link-visited-colour;
+  color: $govuk-link-visited-colour;
   cursor: pointer;
 }
 
 .highlight-error {
-  color: govuk.$govuk-error-colour;
+  color: $govuk-error-colour;
   font-weight: bold;
 }
 
 .control-row {
   display: flex;
-  gap: govuk.govuk-spacing(3);
+  gap: govuk-spacing(3);
 }
 
 .justify-content-end {

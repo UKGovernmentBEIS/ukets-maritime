@@ -1,5 +1,5 @@
 @use 'sass:map';
-@use 'govuk-frontend/dist/govuk/index' as govuk;
+@import 'govuk-frontend/dist/govuk/settings/colours-applied';
 
 [aria-sort] button,
 [aria-sort] button:hover {
@@ -8,7 +8,7 @@
   margin: 0;
   padding: 0;
   border-width: 0;
-  color: map.get(govuk.$govuk-colours, 'blue');
+  color: map.get($govuk-colours, 'blue');
   background-color: transparent;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;
@@ -23,16 +23,16 @@
 
 [aria-sort] button:focus {
   outline: none;
-  color: govuk.$govuk-focus-text-colour;
-  background-color: govuk.$govuk-focus-colour;
+  color: $govuk-focus-text-colour;
+  background-color: $govuk-focus-colour;
   box-shadow:
-    0 -2px govuk.$govuk-focus-colour,
-    0 4px govuk.$govuk-focus-text-colour;
+    0 -2px $govuk-focus-colour,
+    0 4px $govuk-focus-text-colour;
 }
 
 .govuk-table__cell--empty {
-  padding-block: govuk.govuk-spacing(3);
-  border-bottom: govuk.govuk-spacing(3) solid transparent;
+  padding-block: govuk-spacing(3);
+  border-bottom: govuk-spacing(3) solid transparent;
 
   &--no-bottom-border {
     border-bottom: none;

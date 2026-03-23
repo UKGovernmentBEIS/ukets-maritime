@@ -10,8 +10,8 @@ import { rdeDetailsQuery } from '@requests/common/emp/request-deadline-extension
 
 @Component({
   selector: 'mrtm-request-deadline-extension-decision-success',
-  imports: [LinkDirective, RouterLink, PanelComponent, LowerCasePipe, GovukDatePipe],
   standalone: true,
+  imports: [LinkDirective, RouterLink, PanelComponent, LowerCasePipe, GovukDatePipe],
   templateUrl: './request-deadline-extension-decision-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -19,7 +19,7 @@ export class RequestDeadlineExtensionDecisionSuccessComponent {
   private readonly taskStore = inject(RequestTaskStore);
   private readonly router = inject(Router);
 
-  public readonly decision = this.router.currentNavigation()?.extras?.state?.decision;
+  public readonly decision = this.router.getCurrentNavigation()?.extras?.state?.decision;
   public readonly rdeDetails = this.taskStore.select(rdeDetailsQuery.selectResponseDetails);
   public readonly extDueDate: Signal<string> = computed(() => this.rdeDetails()?.currentDueDate);
 }

@@ -9,8 +9,8 @@ import { AdditionalDocumentsSummaryTemplateComponent } from '@shared/components'
 
 @Component({
   selector: 'mrtm-additional-documents-submitted',
-  imports: [PageHeadingComponent, AdditionalDocumentsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   standalone: true,
+  imports: [PageHeadingComponent, AdditionalDocumentsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './additional-documents-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

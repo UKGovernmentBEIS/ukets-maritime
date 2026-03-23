@@ -1,4 +1,4 @@
-@use 'base' as govuk;
+@import 'base';
 
 :host {
   display: block;
@@ -40,6 +40,6 @@
   border: none;
   margin: 6px 0 0 0;
   overflow: hidden;
-  background-color: govuk.govuk-colour('light-grey');
+  background-color: govuk-colour('light-grey');
   transition: none;
 }

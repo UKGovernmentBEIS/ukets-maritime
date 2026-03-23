@@ -20,6 +20,7 @@ import { MandateRegisteredOwnersListSummaryTemplateComponent } from '@shared/com
 
 @Component({
   selector: 'mrtm-mandate-responsibility-declaration',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -28,10 +29,9 @@ import { MandateRegisteredOwnersListSummaryTemplateComponent } from '@shared/com
     LabelDirective,
     MandateRegisteredOwnersListSummaryTemplateComponent,
   ],
-  standalone: true,
+  providers: [provideMandateResponsibilityDeclarationFormProvider],
   templateUrl: './mandate-responsibility-declaration.component.html',
   styleUrl: './mandate-responsibility-declaration.component.scss',
-  providers: [provideMandateResponsibilityDeclarationFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateResponsibilityDeclarationComponent {

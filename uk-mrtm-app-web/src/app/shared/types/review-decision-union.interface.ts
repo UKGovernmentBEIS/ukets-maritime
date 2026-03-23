@@ -23,12 +23,10 @@ interface EmpVariationReviewDecisionDetails extends ReviewDecisionDetails {
 
 export type ReviewDecisionType = AerDataReviewDecision['type'] | EmpIssuanceReviewDecision['type'];
 
-export type ReviewDecisionUnion = ReviewDecisionUnionBase<ReviewDecisionType, ReviewDecisionDetails>;
+export interface ReviewDecisionUnion extends ReviewDecisionUnionBase<ReviewDecisionType, ReviewDecisionDetails> {}
 
-export type EmpVariationReviewDecisionUnion = ReviewDecisionUnionBase<
-  EmpVariationReviewDecision['type'],
-  EmpVariationReviewDecisionDetails
->;
+export interface EmpVariationReviewDecisionUnion
+  extends ReviewDecisionUnionBase<EmpVariationReviewDecision['type'], EmpVariationReviewDecisionDetails> {}
 
 interface ReviewDecisionDtoBase<T> {
   type?: T;
@@ -42,6 +40,6 @@ interface ReviewDecisionDtoBase<T> {
   };
 }
 
-export type ReviewDecisionDto = ReviewDecisionDtoBase<ReviewDecisionType>;
+export interface ReviewDecisionDto extends ReviewDecisionDtoBase<ReviewDecisionType> {}
 
-export type EmpVariationReviewDecisionDto = ReviewDecisionDtoBase<EmpVariationReviewDecision['type']>;
+export interface EmpVariationReviewDecisionDto extends ReviewDecisionDtoBase<EmpVariationReviewDecision['type']> {}

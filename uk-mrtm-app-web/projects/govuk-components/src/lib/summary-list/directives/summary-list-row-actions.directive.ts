@@ -1,10 +1,9 @@
-import { Directive } from '@angular/core';
+import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
   selector: 'dd[govukSummaryListRowActions]',
   standalone: true,
-  host: { '[class]': 'className' },
 })
 export class SummaryListRowActionsDirective {
-  className = 'govuk-summary-list__actions';
+  @HostBinding('class') className = 'govuk-summary-list__actions';
 }

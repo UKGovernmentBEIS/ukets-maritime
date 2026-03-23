@@ -19,8 +19,8 @@ import {
 
 @Component({
   selector: 'mrtm-aer-verification-submit',
-  imports: [TaskSuperListComponent],
   standalone: true,
+  imports: [TaskSuperListComponent],
   templateUrl: './aer-verification-submit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

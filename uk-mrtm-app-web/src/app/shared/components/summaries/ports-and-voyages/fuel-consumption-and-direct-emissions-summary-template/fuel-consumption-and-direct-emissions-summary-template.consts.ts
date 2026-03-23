@@ -10,5 +10,5 @@ export const FUEL_CONSUMPTIONS_SUMMARY_COLUMNS: Array<GovukTableColumn<FuelConsu
   { field: 'measuringUnit', header: 'Measuring unit' },
   { field: 'fuelDensity', header: 'Density' },
   { field: 'totalConsumption', header: 'Consumption (tonnes)' },
-  { field: null, header: 'Actions', hiddenHeader: true },
+  { field: null, header: null },
 ];

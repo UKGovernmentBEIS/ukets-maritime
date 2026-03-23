@@ -68,7 +68,7 @@ export const canActivateRfiSuccess = (route: ActivatedRouteSnapshot): UrlTree | 
 
 export const canActivateRfiRespondSuccess = (route: ActivatedRouteSnapshot): UrlTree | boolean => {
   const router = inject(Router);
-  const responded = router.currentNavigation()?.extras?.state?.responded;
+  const responded = router.getCurrentNavigation()?.extras?.state?.responded;
 
   if (!responded) {
     return createUrlTreeFromSnapshot(route, ['../../../../']);

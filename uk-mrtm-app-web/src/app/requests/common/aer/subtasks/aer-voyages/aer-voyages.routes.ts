@@ -7,7 +7,8 @@ import {
   canActivateVoyageEmissions,
   canActivateVoyageEmissionSummary,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.guard';
-import { AER_VOYAGE_PARAM, AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import { AER_VOYAGE_PARAM } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { aerVoyagesBacklinkResolver } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-backlink.resolver';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-subtask-list.map';
 

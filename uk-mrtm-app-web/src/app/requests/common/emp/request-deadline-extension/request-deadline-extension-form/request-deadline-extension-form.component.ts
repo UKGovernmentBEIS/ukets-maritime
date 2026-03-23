@@ -19,16 +19,16 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-request-deadline-extension-form',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
     DateInputComponent,
-    ReturnToTaskOrActionPageComponent,
     GovukDatePipe,
+    ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
-  templateUrl: './request-deadline-extension-form.component.html',
   providers: [requestDeadlineExtensionFormProvider],
+  templateUrl: './request-deadline-extension-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestDeadlineExtensionFormComponent {

@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-overall-verification-decision-comments-form',
-  imports: [ReactiveFormsModule, TextareaComponent, WizardStepComponent],
   standalone: true,
+  imports: [ReactiveFormsModule, TextareaComponent, WizardStepComponent],
   templateUrl: './overall-verification-decision-comments-form.component.html',
-  providers: [overallVerificationDecisionCommentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [overallVerificationDecisionCommentsFormProvider],
 })
 export class OverallVerificationDecisionCommentsFormComponent {
   readonly map = overallVerificationDecisionMap;

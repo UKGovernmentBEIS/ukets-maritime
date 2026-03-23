@@ -3,6 +3,7 @@ import { provideRouter } from '@angular/router';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { BasePage } from '@netz/common/testing';
+import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { EmailLinkInvalidComponent } from '@forgot-password/email-link-invalid/email-link-invalid.component';
 
@@ -23,7 +24,7 @@ describe('EmailLinkInvalidComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PageHeadingComponent, EmailLinkInvalidComponent],
+      imports: [GovukComponentsModule, PageHeadingComponent, EmailLinkInvalidComponent],
       providers: [provideRouter([])],
     }).compileComponents();
 

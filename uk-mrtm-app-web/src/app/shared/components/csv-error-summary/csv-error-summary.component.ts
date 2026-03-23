@@ -20,8 +20,8 @@ import { NestedMessageValidationError } from '@shared/types';
 
 @Component({
   selector: 'mrtm-csv-error-summary',
-  imports: [AsyncPipe, DetailsComponent],
   standalone: true,
+  imports: [AsyncPipe, DetailsComponent],
   templateUrl: './csv-error-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,8 +29,8 @@ export class CsvErrorSummaryComponent implements OnChanges, AfterViewInit {
   private readonly formService: FormService = inject(FormService);
   private readonly title: Title = inject(Title);
 
-  readonly form = input<UntypedFormGroup | NgForm>();
-  readonly container = viewChild<ElementRef<HTMLElement>>('container');
+  form = input<UntypedFormGroup | NgForm>();
+  container = viewChild<ElementRef<HTMLElement>>('container');
 
   errorList$: Observable<NestedMessageValidationError[]>;
   private formControl: UntypedFormGroup | NgForm;

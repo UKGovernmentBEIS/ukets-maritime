@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidationErrors, ValidatorFn } from '@angular/forms';
 
+import { isNil } from 'lodash-es';
+
 import { GuidanceSectionDTO, RegulatorCurrentUserDTO, SaveGuidanceSectionDTO } from '@mrtm/api';
 
 import { AuthStore, selectUser } from '@netz/common/auth';
@@ -9,7 +11,6 @@ import { GovukValidators } from '@netz/govuk-components';
 import { guidanceQuery, GuidanceStore } from '@guidance/+state';
 import { MANAGE_GUIDANCE_FORM } from '@guidance/guidance.constants';
 import { ManageSectionsFormGroupModel } from '@guidance/manage-sections/manage-sections-form/manage-sections-form.types';
-import { isNil } from '@shared/utils';
 
 const uniqueSectionNameValidator =
   (sections: Array<GuidanceSectionDTO>, currentSectionId?: number): ValidatorFn =>

@@ -1,8 +1,8 @@
 <div formControlName="firstName" govuk-text-input label="First name" widthClass="govuk-!-width-one-half"></div>
 <div formControlName="lastName" govuk-text-input label="Last name" widthClass="govuk-!-width-one-half"></div>
 
-@if (formMode() === 'EDIT') {
-  @switch (phoneType()) {
+@if (formMode === 'EDIT') {
+  @switch (phoneType) {
     @case ('full') {
       <div
         mrtm-phone-input
@@ -37,7 +37,7 @@
 <div
   formControlName="email"
   govuk-text-input
-  [hint]="emailHint()"
+  [hint]="emailHint"
   inputType="email"
   label="Email address"
   widthClass="govuk-!-width-one-half"></div>

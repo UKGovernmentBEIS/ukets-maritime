@@ -18,6 +18,7 @@ import { NotificationCompleted } from '@shared/types/notification-completed.inte
 
 @Component({
   selector: 'mrtm-notification-completed-summary-template',
+  standalone: true,
   imports: [
     GovukDatePipe,
     SummaryListComponent,
@@ -32,16 +33,15 @@ import { NotificationCompleted } from '@shared/types/notification-completed.inte
     UserInfoResolverPipe,
     SummaryDownloadFilesComponent,
   ],
-  standalone: true,
   templateUrl: './notification-completed-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationCompletedSummaryTemplateComponent {
-  readonly notificationCompleted = input.required<NotificationCompleted>();
-  readonly changeLink = input<string>();
-  readonly isEditable = input<boolean>(false);
-  readonly queryParams = input<Params>({});
-  readonly recipientIds = computed(() =>
+  notificationCompleted = input.required<NotificationCompleted>();
+  changeLink = input<string>();
+  isEditable = input<boolean>(false);
+  queryParams = input<Params>({});
+  recipientIds = computed(() =>
     Object.keys(this.notificationCompleted().usersInfo).filter(
       (userId) => userId !== this.notificationCompleted().signatory,
     ),

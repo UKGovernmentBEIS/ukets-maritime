@@ -17,7 +17,7 @@ export const ACCOUNT_CLOSURE_ROUTES: Routes = [
       },
       {
         path: 'success',
-        title: 'Account closed successfully',
+        title: 'Close account',
         component: AccountClosureSuccessComponent,
       },
     ],

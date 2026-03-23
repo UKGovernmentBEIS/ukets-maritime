@@ -7,5 +7,5 @@
   <span class="dropdown-button-group__trigger-inner">{{ label() }}</span>
 </button>
 <div class="dropdown-button-group__popover" (toggle)="onToggle($event)" id="{{ uniqueId }}" #popover popover>
-  <ng-content select="mrtm-dropdown-button-item" />
+  <ng-content select="mrtm-dropdown-button-item"></ng-content>
 </div>

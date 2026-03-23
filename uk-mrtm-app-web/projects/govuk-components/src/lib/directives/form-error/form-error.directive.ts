@@ -5,8 +5,9 @@ import {
   DoCheck,
   ElementRef,
   EmbeddedViewRef,
+  HostBinding,
   inject,
-  input,
+  Input,
   OnDestroy,
   OnInit,
   Renderer2,
@@ -18,24 +19,25 @@ import { BehaviorSubject, combineLatest, startWith, Subject, takeUntil, tap } fr
 
 import { ErrorMessageComponent } from '../../error-message';
 
-@Directive({ selector: '[govukFormError]', standalone: true, host: { '[attr.id]': 'identifier' } })
+@Directive({ selector: '[govukFormError]', standalone: true })
 export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
   private readonly formControl = inject(NgControl, { self: true });
   private readonly elementRef = inject(ElementRef);
   private readonly viewContainer = inject(ViewContainerRef);
   private readonly renderer = inject(Renderer2);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  private readonly container = inject(ControlContainer, { optional: true });
+  private readonly container = inject(ControlContainer, { optional: true })!;
 
-  readonly id = input<string>();
+  @Input() id: string;
 
   private readonly destroy$ = new Subject<void>();
   private touch$ = new BehaviorSubject(false);
   private errorComponent: ComponentRef<ErrorMessageComponent>;
   private isSubmitted = false;
 
+  @HostBinding('attr.id')
   get identifier(): string {
-    return this.id();
+    return this.id;
   }
 
   private get nativeElement(): HTMLElement {
@@ -73,7 +75,7 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
 
   private attachErrorComponent() {
     this.errorComponent = this.viewContainer.createComponent(ErrorMessageComponent);
-    this.errorComponent.instance.identifier.set(this.id());
+    this.errorComponent.instance.identifier = this.id;
 
     const htmlElement: HTMLElement = (this.errorComponent.hostView as EmbeddedViewRef<ErrorMessageComponent>)
       .rootNodes[0];
@@ -99,7 +101,8 @@ export class FormErrorDirective implements OnDestroy, OnInit, DoCheck {
           this.attachErrorComponent();
         }
 
-        this.errorComponent.setInput('errors', this.formControl.errors);
+        this.errorComponent.instance.errors = this.formControl.errors;
+        this.errorComponent.changeDetectorRef.markForCheck();
       }
 
       this.renderer.addClass(this.nativeElement, this.getErrorClass());

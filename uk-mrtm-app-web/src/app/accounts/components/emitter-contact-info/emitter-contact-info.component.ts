@@ -4,8 +4,8 @@ import { WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-emitter-contact-info',
-  imports: [WarningTextComponent],
   standalone: true,
+  imports: [WarningTextComponent],
   templateUrl: './emitter-contact-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -22,11 +22,11 @@ export const MAKE_PAYMENT_ROUTES: Routes = [
   },
   {
     path: MakePaymentWizardSteps.BANK_TRANSFER,
+    title: 'Make payment by bank transfer',
     canActivate: [canActivateBankTransfer],
     children: [
       {
         path: '',
-        title: 'Pay by bank transfer',
         data: { breadcrumb: false, backlink: `../${MakePaymentWizardSteps.PAYMENT_METHOD}` },
         loadComponent: () =>
           import('@requests/tasks/payment/subtasks/make/payment-bank-transfer').then(
@@ -35,7 +35,6 @@ export const MAKE_PAYMENT_ROUTES: Routes = [
       },
       {
         path: MakePaymentWizardSteps.BANK_TRANSFER_SUBMIT,
-        title: 'Are you sure you want to mark this payment as paid?',
         data: { breadcrumb: false, backlink: '../' },
         loadComponent: () =>
           import('@requests/tasks/payment/subtasks/make/payment-bank-transfer-confirm').then(
@@ -53,8 +52,7 @@ export const MAKE_PAYMENT_ROUTES: Routes = [
   },
   {
     path: MakePaymentWizardSteps.NOT_SUCCESS,
-    title: 'Payment not completed',
-    data: { breadcrumb: true },
+    data: { pageTitle: 'Payment not completed', breadcrumb: true },
     loadComponent: () =>
       import('@requests/tasks/payment/subtasks/make/payment-not-success').then((c) => c.PaymentNotSuccessComponent),
   },

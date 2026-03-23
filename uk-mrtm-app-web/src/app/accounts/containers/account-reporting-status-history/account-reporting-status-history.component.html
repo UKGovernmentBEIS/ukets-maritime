@@ -1,6 +1,5 @@
 @if (vm$(); as vm) {
   <netz-page-heading size="l">Reporting status history</netz-page-heading>
-  <div class="govuk-inset-text">All reporting status updates are recorded in the UK Registry.</div>
   <govuk-accordion>
     @for (item of vm | keyvalue: descOrder; track item.key) {
       <govuk-accordion-item [header]="item.key">

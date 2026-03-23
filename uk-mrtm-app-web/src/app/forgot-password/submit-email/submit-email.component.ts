@@ -11,6 +11,8 @@ import { BackToTopComponent } from '@shared/components';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-submit-email',
+  templateUrl: './submit-email.component.html',
+  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -19,8 +21,6 @@ import { BackToTopComponent } from '@shared/components';
     BackToTopComponent,
     EmailSentComponent,
   ],
-  standalone: true,
-  templateUrl: './submit-email.component.html',
 })
 export class SubmitEmailComponent {
   private readonly forgotPasswordService = inject(ForgotPasswordService);

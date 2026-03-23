@@ -1,6 +1,6 @@
 @if (documentTemplate$ | async; as documentTemplate) {
   @if (displayErrorSummary$ | async) {
-    <govuk-error-summary [form]="form" />
+    <govuk-error-summary [form]="form"></govuk-error-summary>
   }
   <netz-page-heading>Edit {{ documentTemplate.name }}</netz-page-heading>
   <h2 class="govuk-heading-m">Document template</h2>
@@ -10,8 +10,9 @@
       [downloadUrl]="getDownloadUrl"
       formControlName="documentFile"
       label="Upload a file"
-      [showFilesizeHint]="false" />
+      [showFilesizeHint]="false"></mrtm-file-input>
     <button netzPendingButton govukButton type="submit">Confirm and complete</button>
   </form>
-  <mrtm-document-template-details-template [documentTemplate]="documentTemplate" />
+  <mrtm-document-template-details-template
+    [documentTemplate]="documentTemplate"></mrtm-document-template-details-template>
 }

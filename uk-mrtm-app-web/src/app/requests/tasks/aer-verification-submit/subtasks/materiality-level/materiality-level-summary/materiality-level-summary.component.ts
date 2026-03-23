@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
-import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
@@ -15,14 +14,13 @@ import { MaterialityLevelSummaryTemplateComponent } from '@shared/components/sum
 
 @Component({
   selector: 'mrtm-materiality-level-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     MaterialityLevelSummaryTemplateComponent,
-    PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './materiality-level-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -34,10 +32,11 @@ export class MaterialityLevelSummaryComponent {
 
   readonly subtask = MATERIALITY_LEVEL_SUB_TASK;
   readonly wizardStep = MaterialityLevelStep;
-  readonly materialityLevelMap = materialityLevelMap;
+  readonly map = materialityLevelMap;
 
   readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
   readonly isSubtaskCompleted = this.store.select(aerCommonQuery.selectIsSubtaskCompleted(this.subtask));
+
   readonly materialityLevel = this.store.select(aerVerificationSubmitQuery.selectMaterialityLevel);
 
   constructor() {

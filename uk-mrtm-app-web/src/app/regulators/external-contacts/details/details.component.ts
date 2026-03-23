@@ -19,6 +19,9 @@ import { requiredFieldsValidator } from '@shared/validators';
 
 @Component({
   selector: 'mrtm-details',
+  templateUrl: './details.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     ErrorSummaryComponent,
     PageHeadingComponent,
@@ -30,9 +33,6 @@ import { requiredFieldsValidator } from '@shared/validators';
     AsyncPipe,
     SubmitIfEmptyPipe,
   ],
-  standalone: true,
-  templateUrl: './details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent {
   private readonly fb = inject(UntypedFormBuilder);

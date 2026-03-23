@@ -1,8 +1,8 @@
-@use 'base' as govuk;
+@import 'base';
 
-$dropdown-button-colour: govuk.govuk-colour('light-grey');
-$dropdown-button-hover-colour: govuk.govuk-shade($dropdown-button-colour, 52%);
-$dropdown-button-shadow-colour: govuk.govuk-shade($dropdown-button-colour, 40%);
+$dropdown-button-colour: govuk-colour('light-grey');
+$dropdown-button-hover-colour: govuk-shade($dropdown-button-colour, 52%);
+$dropdown-button-shadow-colour: govuk-shade($dropdown-button-colour, 40%);
 
 :host {
   display: block;
@@ -27,7 +27,7 @@ $dropdown-button-shadow-colour: govuk.govuk-shade($dropdown-button-colour, 40%);
   &:visited,
   &:active,
   &:hover {
-    color: govuk.govuk-colour('black');
+    color: govuk-colour('black');
   }
 
   &:active {
@@ -42,7 +42,7 @@ $dropdown-button-shadow-colour: govuk.govuk-shade($dropdown-button-colour, 40%);
   }
 
   &:hover {
-    color: govuk.govuk-colour('white');
+    color: govuk-colour('white');
     background-color: $dropdown-button-hover-colour;
   }
 }

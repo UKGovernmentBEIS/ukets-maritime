@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { AdminVerifierUserInvitationDTO } from '@mrtm/api';
@@ -15,6 +15,7 @@ import {
 
 @Component({
   selector: 'mrtm-verification-body-admin-user-summary',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -25,13 +26,12 @@ import {
     RouterLink,
     NgTemplateOutlet,
   ],
-  standalone: true,
   templateUrl: './verification-body-admin-user-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationBodyAdminUserSummaryComponent {
-  readonly summaryInfo = input<AdminVerifierUserInvitationDTO>();
-  readonly formRouterLink = input('edit');
-  readonly viewMode = input<'CREATE' | 'VIEW'>('CREATE');
-  readonly editable = input(true);
+  @Input() summaryInfo: AdminVerifierUserInvitationDTO;
+  @Input() formRouterLink = 'edit';
+  @Input() viewMode: 'CREATE' | 'VIEW' = 'CREATE';
+  @Input() editable = true;
 }

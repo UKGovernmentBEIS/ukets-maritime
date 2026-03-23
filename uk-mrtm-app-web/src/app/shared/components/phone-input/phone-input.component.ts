@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { Component, DoCheck, inject, input, OnInit } from '@angular/core';
+import { Component, DoCheck, HostBinding, inject, Input, OnInit } from '@angular/core';
 import {
   ControlContainer,
   ControlValueAccessor,
@@ -32,15 +32,10 @@ import { UKCountryCodes } from '@shared/types';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[mrtm-phone-input]',
-  imports: [FieldsetDirective, ErrorMessageComponent, FormsModule, ReactiveFormsModule, AsyncPipe, LegendDirective],
-  standalone: true,
   templateUrl: './phone-input.component.html',
   providers: [DestroySubject],
-  host: {
-    '[class.govuk-!-display-block]': 'govukDisplayBlock',
-    '[class.govuk-form-group]': 'govukFormGroupClass',
-    '[class.govuk-form-group--error]': 'govukFormGroupErrorClass',
-  },
+  standalone: true,
+  imports: [FieldsetDirective, ErrorMessageComponent, FormsModule, ReactiveFormsModule, AsyncPipe, LegendDirective],
 })
 export class PhoneInputComponent implements OnInit, DoCheck, ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true })!;
@@ -50,9 +45,9 @@ export class PhoneInputComponent implements OnInit, DoCheck, ControlValueAccesso
   private readonly container = inject(ControlContainer, { optional: true })!;
   private readonly countryCallingCodeService = inject(CountryCallingCodeService);
 
-  readonly label = input<string>();
-  readonly govukDisplayBlock = true;
-  readonly govukFormGroupClass = true;
+  @Input() label: string;
+  @HostBinding('class.govuk-!-display-block') readonly govukDisplayBlock = true;
+  @HostBinding('class.govuk-form-group') readonly govukFormGroupClass = true;
 
   formGroup = new UntypedFormGroup({
     countryCode: new UntypedFormControl(),
@@ -88,7 +83,7 @@ export class PhoneInputComponent implements OnInit, DoCheck, ControlValueAccesso
     ngControl.valueAccessor = this;
   }
 
-  get govukFormGroupErrorClass() {
+  @HostBinding('class.govuk-form-group--error') get govukFormGroupErrorClass() {
     return this.shouldDisplayErrors;
   }
 

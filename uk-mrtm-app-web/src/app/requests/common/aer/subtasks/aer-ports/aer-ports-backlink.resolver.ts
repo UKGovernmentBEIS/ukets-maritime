@@ -1,13 +1,14 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { AerPort } from '@mrtm/api';
 
 import { RequestTaskStore } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerPortsWizardStep } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
-import { isNil } from '@shared/utils';
 
 const selectShipBacklinkResolver = (
   returnToSummary: boolean,

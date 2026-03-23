@@ -2,6 +2,8 @@ import { Provider } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';
 
@@ -11,7 +13,6 @@ import {
   RespondToRegulatorFormGroupModel,
   RespondToRegulatorFormModel,
 } from '@requests/tasks/vir-respond-to-regulator-comments/subtasks/respond-to-regulator/respond-to-regulator-form/respond-to-regulator-form.types';
-import { isNil } from '@shared/utils';
 import { todayOrPastDateValidator } from '@shared/validators';
 
 export const respondToRegulatorFormProvider: Provider = {

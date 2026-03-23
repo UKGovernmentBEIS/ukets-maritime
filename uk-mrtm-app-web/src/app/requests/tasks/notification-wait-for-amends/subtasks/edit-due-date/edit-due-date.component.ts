@@ -16,10 +16,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-edit-due-date',
-  imports: [WizardStepComponent, ReturnToTaskOrActionPageComponent, ReactiveFormsModule, DateInputComponent],
   standalone: true,
-  templateUrl: './edit-due-date.component.html',
+  imports: [WizardStepComponent, ReturnToTaskOrActionPageComponent, ReactiveFormsModule, DateInputComponent],
   providers: [editDueDateFormProvider],
+  templateUrl: './edit-due-date.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditDueDateComponent {

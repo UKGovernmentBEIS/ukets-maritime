@@ -13,7 +13,6 @@ import {
 } from '@requests/tasks/emp-variation-regulator/emp-variation-regulator.providers';
 import { canActivateEmpVariationRegulatorActions } from '@requests/tasks/emp-variation-regulator/guards';
 import { HTML_DIFF } from '@shared/directives';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
   {
@@ -27,7 +26,6 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
       provideEmpVariationRegulatorStepFlowManagers(),
       { provide: HTML_DIFF, useValue: true },
     ],
-    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'variation-details',

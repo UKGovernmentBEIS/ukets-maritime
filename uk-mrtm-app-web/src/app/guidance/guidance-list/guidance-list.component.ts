@@ -15,6 +15,7 @@ import { CompetentAuthorityPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-guidance-list',
+  standalone: true,
   imports: [
     DropdownButtonGroupComponent,
     DropdownButtonItemComponent,
@@ -25,7 +26,6 @@ import { CompetentAuthorityPipe } from '@shared/pipes';
     CompetentAuthorityPipe,
     NotificationBannerComponent,
   ],
-  standalone: true,
   templateUrl: './guidance-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

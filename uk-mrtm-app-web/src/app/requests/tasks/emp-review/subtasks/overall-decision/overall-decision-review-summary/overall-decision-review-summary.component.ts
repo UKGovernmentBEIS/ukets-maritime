@@ -29,6 +29,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-overall-decision-review-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -36,7 +37,6 @@ interface ViewModel {
     ReturnToTaskOrActionPageComponent,
     OverallDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './overall-decision-review-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,7 +45,7 @@ export class OverallDecisionReviewSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => ({
+  vm: Signal<ViewModel> = computed(() => ({
     determination: this.store.select(empReviewQuery.selectDetermination)(),
     overallDecisionMap: overallDecisionMap,
     isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),

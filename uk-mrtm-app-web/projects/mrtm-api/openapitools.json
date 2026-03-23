@@ -2,9 +2,9 @@
   "$schema": "../../node_modules/@openapitools/openapi-generator-cli/config.schema.json",
   "spaces": 2,
   "generator-cli": {
-    "version": "7.19.0",
+    "version": "7.11.0",
     "generators": {
-      "Typescript Angular OAS3 NG20": {
+      "Typescript Angular OAS3 NG18": {
         "generatorName": "typescript-angular",
         "inputSpec": "http://localhost:8085/api/v3/api-docs/Internal%20API",
         "output": "./projects/mrtm-api/src/lib",
@@ -14,7 +14,7 @@
           "set": "Array"
         },
         "additionalProperties": {
-          "ngVersion": "20.0.0",
+          "ngVersion": "18.0.0",
           "basePath": "/api",
           "enumPropertyNaming": "UPPERCASE",
           "stringEnums": true

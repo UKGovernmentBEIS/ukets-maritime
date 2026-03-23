@@ -40,7 +40,6 @@ const phoneNumberValidatorWithSeparateCountryCodeAndPhoneNumberFields = (): Vali
       const phoneNumber = phoneNumberUtil.parseAndKeepRawInput(phone, regionCode);
       validNumber = phoneNumberUtil.isValidNumber(phoneNumber);
       validationResult = phoneNumberUtil.isPossibleNumberWithReason(phoneNumber);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (e) {
       return { invalidPhone: 'Your phone number is not valid' };
     }
@@ -60,10 +59,59 @@ const phoneNumberValidatorWithSeparateCountryCodeAndPhoneNumberFields = (): Vali
   };
 };
 
+/* const phoneNumberSingleFieldValidator = (): ValidatorFn => {
+  return (control: AbstractControl): ValidationErrors | null => {
+    const phoneNumberUtil = PhoneNumberUtil.getInstance();
+    const rawInput = control.value?.toString().trim();
+
+    // If no input, don't validate (let required validator handle it if needed)
+    if (!rawInput) {
+      return null;
+    }
+
+    // Check for invalid characters
+    const phoneNumberRegex = /^[\d\s\-()+]+$/;
+    if (!phoneNumberRegex.test(rawInput)) {
+      return { invalidChars: 'The phone number contains invalid characters' };
+    }
+
+    try {
+      // Use default region 'GB' if no '+' prefix (i.e., not international format)
+      const hasCountryCode = rawInput.startsWith('+');
+      const parsedNumber = hasCountryCode
+        ? phoneNumberUtil.parse(rawInput)
+        : phoneNumberUtil.parseAndKeepRawInput(rawInput, 'GB');
+      const isValid = phoneNumberUtil.isValidNumber(parsedNumber);
+
+      if (!isValid) {
+        const possibleReason = phoneNumberUtil.isPossibleNumberWithReason(parsedNumber);
+
+        switch (possibleReason) {
+          case PhoneNumberUtil.ValidationResult.TOO_SHORT:
+            return { tooShort: 'The phone number is too short' };
+          case PhoneNumberUtil.ValidationResult.TOO_LONG:
+            return { tooLong: 'The phone number is too long' };
+          case PhoneNumberUtil.ValidationResult.INVALID_LENGTH:
+            return { invalidLength: 'The phone number length is invalid' };
+          default:
+            return { invalidPhone: 'Your phone number is not valid' };
+        }
+      }
+
+      return null; // Valid phone number
+    } catch (e) {
+      return { invalidPhone: 'Your phone number is not valid' };
+    }
+  };
+}; */
+
 export const phoneInputWithCountyCodeSelectValidators: MessageValidatorFn[] = [
   GovukValidators.incomplete('Enter both country code and number'),
   phoneNumberSizeValidator(),
   phoneNumberValidatorWithSeparateCountryCodeAndPhoneNumberFields(),
 ];
 
-export const phoneInputValidators: MessageValidatorFn[] = [phoneNumberSizeValidator()];
+export const phoneInputValidators: MessageValidatorFn[] = [
+  phoneNumberSizeValidator(),
+  // phoneNumberSingleFieldValidator(),
+];

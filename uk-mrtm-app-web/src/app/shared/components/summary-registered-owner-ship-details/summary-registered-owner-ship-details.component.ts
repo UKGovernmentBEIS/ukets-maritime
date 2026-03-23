@@ -10,21 +10,21 @@ import { mergeDiffShipDetails } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-summary-registered-owner-ship-details',
-  imports: [HtmlDiffDirective, LinkDirective, NgTemplateOutlet],
   standalone: true,
+  imports: [HtmlDiffDirective, LinkDirective, NgTemplateOutlet],
   templateUrl: './summary-registered-owner-ship-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryRegisteredOwnerShipDetailsComponent {
   protected readonly hasHtmlDiff = inject(HTML_DIFF, { optional: true });
 
-  readonly registeredOwnerUniqueIdentifier = input.required<string>();
-  readonly shipDetails = input.required<RegisteredOwnerShipDetails[]>();
-  readonly originalShipDetails = input<RegisteredOwnerShipDetails[]>(null);
-  readonly needsReview = input<boolean>(false);
-  readonly showDiff = input<boolean>(false);
+  registeredOwnerUniqueIdentifier = input.required<string>();
+  shipDetails = input.required<RegisteredOwnerShipDetails[]>();
+  originalShipDetails = input<RegisteredOwnerShipDetails[]>(null);
+  needsReview = input<boolean>(false);
+  showDiff = input<boolean>(false);
 
-  readonly combinedShipDetails = computed(() => mergeDiffShipDetails(this.shipDetails(), this.originalShipDetails()));
+  combinedShipDetails = computed(() => mergeDiffShipDetails(this.shipDetails(), this.originalShipDetails()));
   isExpandedStates = new Map<string, boolean>();
 
   isExpanded() {

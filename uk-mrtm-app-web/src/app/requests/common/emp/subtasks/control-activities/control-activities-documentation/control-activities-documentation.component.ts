@@ -19,10 +19,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-control-activities-documentation',
-  imports: [ReactiveFormsModule, EmpProcedureFormComponent, WizardStepComponent, AboutProcedureDetailsComponent],
   standalone: true,
-  templateUrl: './control-activities-documentation.component.html',
+  imports: [ReactiveFormsModule, EmpProcedureFormComponent, WizardStepComponent, AboutProcedureDetailsComponent],
   providers: [controlActivitiesDocumentationFormProvider],
+  templateUrl: './control-activities-documentation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesDocumentationComponent {

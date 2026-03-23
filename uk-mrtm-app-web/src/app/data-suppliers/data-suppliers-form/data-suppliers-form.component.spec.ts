@@ -48,27 +48,24 @@ describe('DataSuppliersFormComponent', () => {
     fixture.detectChanges();
 
     expect(page.errorSummary).toBeTruthy();
-    expect(page.errorSummaryListContents.length).toEqual(2);
+    expect(page.errorSummaryListContents.length).toEqual(1);
 
-    expect(page.errorSummaryListContents).toEqual(['Enter the name of the data supplier', 'Enter the Public key URL']);
+    expect(page.errorSummaryListContents).toEqual(['Enter the name of the data supplier']);
   });
 
   it('should display error for existing values', () => {
     page.setInputValue('#name', 'Maritime Analytics Ltd');
-    page.setInputValue('#jwksUrl', 'https://myapi2.com');
     page.submitButton.click();
     fixture.detectChanges();
 
     expect(page.errorSummaryListContents).toEqual([
       'The name of the data supplier already exists. Enter a unique name.',
-      'The Public key URL already exists. Enter a unique name.',
     ]);
   });
 
   it('should submit form', () => {
     const storeSpy = jest.spyOn(store, 'setNewItem');
     page.setInputValue('#name', singleDataSupplierItemCreateDTO.name);
-    page.setInputValue('#jwksUrl', singleDataSupplierItemCreateDTO.jwksUrl);
     page.submitButton.click();
     fixture.detectChanges();
 

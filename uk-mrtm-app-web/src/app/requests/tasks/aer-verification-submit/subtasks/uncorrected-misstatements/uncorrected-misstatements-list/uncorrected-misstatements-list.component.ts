@@ -18,6 +18,7 @@ import { UncorrectedItemsListTemplateComponent } from '@shared/components/summar
 
 @Component({
   selector: 'mrtm-uncorrected-misstatements-list',
+  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -26,7 +27,6 @@ import { UncorrectedItemsListTemplateComponent } from '@shared/components/summar
     ReturnToTaskOrActionPageComponent,
     UncorrectedItemsListTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './uncorrected-misstatements-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-emp-variation-cancel-success',
-  imports: [RouterLink, LinkDirective, PanelComponent],
   standalone: true,
+  imports: [RouterLink, LinkDirective, PanelComponent],
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">

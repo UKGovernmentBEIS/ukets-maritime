@@ -22,6 +22,7 @@ import { empSubtaskToTitle } from '@shared/constants';
 
 @Component({
   selector: 'mrtm-requested-changes-question',
+  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     CheckboxComponent,
@@ -30,7 +31,6 @@ import { empSubtaskToTitle } from '@shared/constants';
     ReactiveFormsModule,
     ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './requested-changes-question.component.html',
   providers: [requestedChangesQuestionComponentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

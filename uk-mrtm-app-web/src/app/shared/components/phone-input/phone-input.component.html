@@ -1,17 +1,17 @@
 <fieldset govukFieldset>
   <legend govukLegend class="govuk-visually-hidden">Phone information</legend>
   @if (shouldDisplayErrors) {
-    <govuk-error-message [errors]="control.errors" />
+    <govuk-error-message [errors]="control.errors"></govuk-error-message>
   }
   <div [formGroup]="formGroup" class="govuk-grid-row">
     <div class="govuk-grid-column-one-quarter">
       <div class="govuk-form-group">
-        <label [for]="`${id}.countryCode`" [id]="`l.${id}`" class="govuk-label">Country code</label>
+        <label [for]="id + '.countryCode'" [id]="'l.' + id" class="govuk-label">Country code</label>
         <select
           (blur)="onInputBlur()"
           [class.govuk-select--error]="shouldDisplayErrors"
-          [id]="`${id}.countryCode`"
-          [name]="`${id}.countryCode`"
+          [id]="id + '.countryCode'"
+          [name]="id + '.countryCode'"
           autocomplete="tel-country-code"
           class="govuk-select"
           formControlName="countryCode">
@@ -23,7 +23,7 @@
     </div>
     <div class="govuk-grid-column-one-half">
       <div class="govuk-form-group">
-        <label [for]="id" class="govuk-label">{{ label() }}</label>
+        <label [for]="id" class="govuk-label">{{ label }}</label>
         <input
           (blur)="onInputBlur()"
           [class.govuk-input--error]="shouldDisplayErrors"

@@ -18,6 +18,7 @@ import { WithNeedsReview } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-fuel-consumptions-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -30,7 +31,6 @@ import { WithNeedsReview } from '@shared/types';
     LinkDirective,
     RouterLink,
   ],
-  standalone: true,
   templateUrl: './aer-aggregated-data-fuel-consumptions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

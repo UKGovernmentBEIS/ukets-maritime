@@ -86,10 +86,7 @@ describe('ContactDetailsComponent', () => {
     }
   }
 
-  @Component({
-    standalone: true,
-    template: '',
-  })
+  @Component({ template: '' })
   class NoopComponent {}
 
   const mockContactDetails: Omit<OperatorUserRegistrationDTO, 'emailToken'> = {
@@ -114,13 +111,16 @@ describe('ContactDetailsComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      declarations: [NoopComponent],
       imports: [ContactDetailsComponent, PageHeadingComponent],
       providers: [
         provideRouter([{ path: 'choose-password', component: NoopComponent }]),
         UserRegistrationStore,
         { provide: CountryService, useClass: CountryServiceStub },
       ],
-    }).compileComponents();
+    })
+
+      .compileComponents();
   });
 
   beforeEach(() => {

@@ -2,16 +2,16 @@
 <dl govuk-summary-list [hasBorders]="true">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Request from the regulator</dt>
-    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpAmends().followUpResponse?.request"></dd>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpAmends.followUpResponse?.request"></dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Operator's response</dt>
-    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpAmends().followUpResponse?.response"></dd>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpAmends.followUpResponse?.response"></dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Supporting documents</dt>
     <dd govukSummaryListRowValue>
-      <mrtm-summary-download-files [files]="followUpAmends().followUpResponse?.attachments" />
+      <mrtm-summary-download-files [files]="followUpAmends.followUpResponse?.attachments" />
     </dd>
   </div>
 </dl>
@@ -20,9 +20,9 @@
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Amends needed</dt>
     <dd govukSummaryListRowValue class="pre-wrap">
-      @if (followUpAmends().followUpReviewDecision?.requiredChanges?.length > 0) {
+      @if (followUpAmends.followUpReviewDecision?.requiredChanges?.length > 0) {
         <ul class="govuk-list govuk-list--number">
-          @for (change of followUpAmends().followUpReviewDecision?.requiredChanges; track change) {
+          @for (change of followUpAmends.followUpReviewDecision?.requiredChanges; track change) {
             <li>
               {{ change?.reason }}
               <br />
@@ -38,15 +38,15 @@
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Due date</dt>
-    <dd govukSummaryListRowValue [notProvided]="followUpAmends().followUpReviewDecision?.dueDate | govukDate"></dd>
-    @if (isEditable()) {
+    <dd govukSummaryListRowValue [notProvided]="followUpAmends.followUpReviewDecision?.dueDate | govukDate"></dd>
+    @if (isEditable) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Notes</dt>
-    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpAmends().followUpReviewDecision?.notes"></dd>
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="followUpAmends.followUpReviewDecision?.notes"></dd>
   </div>
 </dl>

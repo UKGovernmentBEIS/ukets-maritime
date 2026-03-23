@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { MrtmItemDTO } from '@mrtm/api';
 
@@ -7,31 +7,31 @@ import { getYearFromRequestId } from '@netz/common/utils';
 
 @Component({
   selector: 'netz-task-header-info',
-  imports: [DaysRemainingPipe],
   standalone: true,
   template: `
     <div class="govuk-!-margin-top-2">
       <p class="govuk-body">
         <strong>Assigned to:</strong>
-        {{ assignee() }}
+        {{ assignee }}
       </p>
     </div>
-    @if (daysRemaining() | daysRemaining: getYearFromRequestId(requestId()) : taskType()) {
+    @if (daysRemaining | daysRemaining: getYearFromRequestId(requestId) : taskType) {
       <div class="govuk-!-margin-top-2">
         <p class="govuk-body">
           <strong>Days Remaining:</strong>
-          {{ daysRemaining() | daysRemaining: getYearFromRequestId(requestId()) : taskType() }}
+          {{ daysRemaining | daysRemaining: getYearFromRequestId(requestId) : taskType }}
         </p>
       </div>
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [DaysRemainingPipe],
 })
 export class TaskHeaderInfoComponent {
-  readonly assignee = input<string>();
-  readonly daysRemaining = input<number>();
-  readonly requestId = input<string>();
-  readonly taskType = input<MrtmItemDTO['taskType']>();
+  @Input() assignee: string;
+  @Input() daysRemaining: number;
+  @Input() requestId: string;
+  @Input() taskType: MrtmItemDTO['taskType'];
 
   readonly getYearFromRequestId = getYearFromRequestId;
 }

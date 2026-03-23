@@ -7,24 +7,32 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
+import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
-import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
-import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
+import uk.gov.netz.integration.model.account.AccountDetailsMessage;
 import uk.gov.netz.integration.model.account.AccountOpeningEvent;
 import uk.gov.netz.integration.model.account.AccountOpeningEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.RESPONSE_LOG_FORMAT;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
 import static uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils.asStringOrEmpty;
+import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.RESPONSE_LOG_FORMAT;
+import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
+import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 
 @Log4j2
 @Service
@@ -34,33 +42,21 @@ public class AccountCreatedResponseHandler {
 
     private static final String INTEGRATION_POINT_KEY = "Account Created";
 
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     private final RegistryIntegrationEmailProperties emailProperties;
     private final MrtmAccountRepository accountRepository;
-    private final NotifyRegistryEmailService notifyRegistryEmailService;
+
 
     public void handleResponse(AccountOpeningEventOutcome event, String correlationId) {
-        log.info("Received account opening outcome with correlationId {} and data {}", correlationId, event);
+        log.info("Received account opening outcome with correlationId {}", correlationId);
         if (event.getOutcome() == IntegrationEventOutcome.ERROR) {
             if (!ObjectUtils.isEmpty(event.getErrors())) {
-                MrtmAccount account = accountRepository.findByBusinessId(event.getEvent().getAccountDetails().getEmitterId());
-                String recipient = emailProperties.getEmail().get(account.getCompetentAuthority().getCode());
-                Map<String, String> fields = getAccountOpeningFields(event.getEvent());
-
                 final List<IntegrationEventErrorDetails> actionErrors = event.getErrors().stream()
                         .filter(errorDetails -> errorDetails.getError().equals(IntegrationEventError.ERROR_0106))
                         .toList();
                 if (!ObjectUtils.isEmpty(actionErrors)) {
-                    notifyRegistryEmailService.notifyRegulator(
-                        NotifyRegistryEmailServiceParams.builder()
-                            .account(account)
-                            .emitterId(account.getBusinessId())
-                            .correlationId(correlationId)
-                            .errorsForMail(actionErrors)
-                            .recipient(recipient)
-                            .isFordway(false)
-                            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
-                            .integrationPoint(INTEGRATION_POINT_KEY)
-                            .fields(fields).build());
+                    notifyRegulator(event, correlationId, actionErrors,
+                            MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE);
                 }
 
                 List<IntegrationEventErrorDetails> remainingErrors = event.getErrors()
@@ -69,18 +65,8 @@ public class AccountCreatedResponseHandler {
                         .toList();
 
                 if (!ObjectUtils.isEmpty(remainingErrors)) {
-                    notifyRegistryEmailService.notifyRegulator(
-                        NotifyRegistryEmailServiceParams.builder()
-                            .account(account)
-                            .emitterId(account.getBusinessId())
-                            .correlationId(correlationId)
-                            .errorsForMail(remainingErrors)
-                            .recipient(recipient)
-                            .isFordway(false)
-                            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE)
-                            .integrationPoint(INTEGRATION_POINT_KEY)
-                            .fields(fields)
-                            .build());
+                    notifyRegulator(event, correlationId, remainingErrors,
+                            MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE);
                 }
 
                 log.info(RESPONSE_LOG_FORMAT,
@@ -99,6 +85,30 @@ public class AccountCreatedResponseHandler {
             log.info("Successfully created registry account with emitter ID: '{}'",
                 event.getEvent().getAccountDetails().getEmitterId());
         }
+    }
+
+    private void notifyRegulator(AccountOpeningEventOutcome event, String correlationId,
+                                 List<IntegrationEventErrorDetails> errorsForMail, String templateName) {
+        final AccountDetailsMessage accountDetails = event.getEvent().getAccountDetails();
+        final Map<String, Object> templateParams = new HashMap<>();
+        templateParams.put(MrtmEmailNotificationTemplateConstants.EMITTER_ID, accountDetails.getEmitterId());
+        templateParams.put(MrtmEmailNotificationTemplateConstants.ERRORS, errorsForMail);
+        templateParams.put(MrtmEmailNotificationTemplateConstants.FIELDS, getAccountOpeningFields(event.getEvent()));
+        templateParams.put(MrtmEmailNotificationTemplateConstants.CORRELATION_ID, correlationId);
+        templateParams.put(MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, capitalizeFirstLetter(SERVICE_KEY));
+        templateParams.put(MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, accountDetails.getAccountName());
+        templateParams.put(MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, INTEGRATION_POINT_KEY);
+
+        final CompetentAuthorityEnum competentAuthority = accountRepository.findByImoNumber(accountDetails.getCompanyImoNumber()).map(MrtmAccount::getCompetentAuthority)
+                .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
+
+        final EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
+                .notificationTemplateData(EmailNotificationTemplateData.builder()
+                        .templateName(templateName)
+                        .templateParams(templateParams)
+                        .build())
+                .build();
+        notificationEmailService.notifyRecipient(emailData, emailProperties.getEmail().get(competentAuthority.getCode()));
     }
 
     private Map<String, String> getAccountOpeningFields(AccountOpeningEvent event) {

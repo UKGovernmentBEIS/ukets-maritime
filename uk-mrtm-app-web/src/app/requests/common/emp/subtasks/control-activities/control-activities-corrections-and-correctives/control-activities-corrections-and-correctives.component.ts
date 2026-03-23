@@ -20,10 +20,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-control-activities-corrections-and-correctives',
-  imports: [ReactiveFormsModule, EmpProcedureFormComponent, WizardStepComponent, AboutProcedureDetailsComponent],
   standalone: true,
-  templateUrl: './control-activities-corrections-and-correctives.component.html',
+  imports: [ReactiveFormsModule, EmpProcedureFormComponent, WizardStepComponent, AboutProcedureDetailsComponent],
   providers: [controlActivitiesCorrectionsAndCorrectivesFormProvider],
+  templateUrl: './control-activities-corrections-and-correctives.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesCorrectionsAndCorrectivesComponent {

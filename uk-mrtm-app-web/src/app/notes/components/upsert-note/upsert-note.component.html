@@ -15,7 +15,7 @@
   <netz-page-heading size="l">{{ heading }}</netz-page-heading>
   <form (ngSubmit)="onSubmit()" [formGroup]="form">
     @if (isErrorSummaryDisplayed$ | async) {
-      <govuk-error-summary [form]="form" />
+      <govuk-error-summary [form]="form"></govuk-error-summary>
     }
     <div
       govuk-textarea
@@ -26,9 +26,9 @@
       hint="This will only be visible to other regulators"></div>
     <mrtm-multiple-file-input
       [baseDownloadUrl]="downloadUrl"
-      listTitle="Uploaded files"
+      [listTitle]="'Uploaded files'"
       label="Upload a file (Optional)"
-      formControlName="files" />
+      formControlName="files"></mrtm-multiple-file-input>
     <button netzPendingButton govukButton type="submit">Confirm and complete</button>
   </form>
 }

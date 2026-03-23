@@ -1,4 +1,14 @@
-import { ChangeDetectorRef, Directive, ElementRef, inject, input, OnDestroy, OnInit, Renderer2 } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Directive,
+  ElementRef,
+  HostBinding,
+  inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
 
 import { filter, Subscription } from 'rxjs';
@@ -6,13 +16,6 @@ import { filter, Subscription } from 'rxjs';
 @Directive({
   selector: 'a[govukLink]',
   standalone: true,
-  host: {
-    '[class.govuk-link]': 'hasSimpleLink',
-    '[class.govuk-breadcrumbs__link]': 'hasBreadcrumbsLink',
-    '[class.govuk-footer__link]': 'hasFooterLink',
-    '[class.govuk-header__link]': 'hasHeaderLink',
-    '[class.govuk-notification-banner__link]': 'hasNotificationLink',
-  },
 })
 export class LinkDirective implements OnDestroy, OnInit {
   private readonly elementRef = inject(ElementRef);
@@ -22,39 +25,36 @@ export class LinkDirective implements OnDestroy, OnInit {
   private readonly link = inject(RouterLink, { optional: true });
   private readonly linkWithHref = inject(RouterLink, { optional: true });
 
-  readonly navLinkType = input<'header' | 'footer' | 'meta' | 'breadcrumb' | 'notification' | 'summaryAction' | ''>(
-    '',
-    { alias: 'govukLink' },
-  );
+  // eslint-disable-next-line @angular-eslint/no-input-rename
+  @Input('govukLink')
+  navLinkType: 'header' | 'footer' | 'meta' | 'breadcrumb' | 'notification' | 'summaryAction' | '' = '';
 
   private isActive = false;
   private subscription: Subscription;
   private liElement: HTMLLIElement;
 
-  get hasSimpleLink() {
-    const navLinkType = this.navLinkType();
-    return !navLinkType || navLinkType === 'summaryAction';
+  @HostBinding('class.govuk-link') get hasSimpleLink() {
+    return !this.navLinkType || this.navLinkType === 'summaryAction';
   }
 
-  get hasBreadcrumbsLink() {
-    return this.navLinkType() === 'breadcrumb';
+  @HostBinding('class.govuk-breadcrumbs__link') get hasBreadcrumbsLink() {
+    return this.navLinkType === 'breadcrumb';
   }
 
-  get hasFooterLink() {
-    const navLinkType = this.navLinkType();
-    return navLinkType === 'meta' || navLinkType === 'footer';
+  @HostBinding('class.govuk-footer__link') get hasFooterLink() {
+    return this.navLinkType === 'meta' || this.navLinkType === 'footer';
   }
 
-  get hasHeaderLink() {
-    return this.navLinkType() === 'header';
+  @HostBinding('class.govuk-header__link') get hasHeaderLink() {
+    return this.navLinkType === 'header';
   }
 
-  get hasNotificationLink() {
-    return this.navLinkType() === 'notification';
+  @HostBinding('class.govuk-notification-banner__link') get hasNotificationLink() {
+    return this.navLinkType === 'notification';
   }
 
   ngOnInit(): void {
-    if (this.navLinkType()) {
+    if (this.navLinkType) {
       this.subscription = this.router.events
         .pipe(filter((s) => s instanceof NavigationEnd))
         .subscribe(() => this.update());
@@ -76,7 +76,7 @@ export class LinkDirective implements OnDestroy, OnInit {
   }
 
   private getLiClassName(): string {
-    switch (this.navLinkType()) {
+    switch (this.navLinkType) {
       case 'meta':
         return 'govuk-footer__inline-list-item';
       case 'footer':
@@ -93,7 +93,7 @@ export class LinkDirective implements OnDestroy, OnInit {
   }
 
   private getActiveLiClassName(): string {
-    switch (this.navLinkType()) {
+    switch (this.navLinkType) {
       case 'header':
         return 'govuk-header__navigation-item--active';
       default:

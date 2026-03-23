@@ -1,7 +1,8 @@
+import { isNil } from 'lodash-es';
+
 import { AerEtsComplianceRules } from '@mrtm/api';
 
 import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types';
-import { isNil } from '@shared/utils';
 
 export const isWizardCompleted = (payload: AerVerificationSubmitTaskPayload): boolean => {
   const etsComplianceRules = payload.verificationReport?.etsComplianceRules;

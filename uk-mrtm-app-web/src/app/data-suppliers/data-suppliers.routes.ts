@@ -11,17 +11,16 @@ export const DATA_SUPPLIERS_ROUTES: Routes = [
   },
   {
     path: 'add',
+    title: 'Add a new data supplier',
     canActivate: [canActivateDataSupplierForm],
     children: [
       {
         path: '',
-        title: 'Add a new data supplier',
         data: { breadcrumb: false, backlink: '../' },
         loadComponent: () => import('@data-suppliers/data-suppliers-form').then((c) => c.DataSuppliersFormComponent),
       },
       {
         path: 'summary',
-        title: 'Data supplier summary',
         data: { breadcrumb: false, backlink: '../' },
         canActivate: [canActivateDataSupplierSummary],
         loadComponent: () =>
@@ -29,7 +28,6 @@ export const DATA_SUPPLIERS_ROUTES: Routes = [
       },
       {
         path: 'success',
-        title: 'Data supplier successfully added',
         data: { breadcrumb: true },
         canActivate: [canActivateDataSupplierSummary],
         loadComponent: () =>

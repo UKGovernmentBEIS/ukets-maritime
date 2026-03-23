@@ -19,10 +19,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-control-activities-quality-assurance',
-  imports: [WizardStepComponent, ReactiveFormsModule, EmpProcedureFormComponent, AboutProcedureDetailsComponent],
   standalone: true,
-  templateUrl: './control-activities-quality-assurance.component.html',
+  imports: [WizardStepComponent, ReactiveFormsModule, EmpProcedureFormComponent, AboutProcedureDetailsComponent],
   providers: [controlActivitiesQualityAssuranceFormProvider],
+  templateUrl: './control-activities-quality-assurance.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesQualityAssuranceComponent {

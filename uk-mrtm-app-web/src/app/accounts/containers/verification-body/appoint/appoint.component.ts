@@ -32,6 +32,9 @@ import {
 
 @Component({
   selector: 'mrtm-appoint',
+  templateUrl: './appoint.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     PageHeadingComponent,
     WarningTextComponent,
@@ -44,9 +47,6 @@ import {
     ButtonDirective,
     UnappointConfirmationComponent,
   ],
-  standalone: true,
-  templateUrl: './appoint.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppointComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);

@@ -23,7 +23,6 @@ import { CANCEL_ACTIONS_MAP, CancelActionsMap } from '../cancel-actions.provider
 
 @Component({
   selector: 'netz-cancel-task',
-  imports: [PendingButtonDirective, PageHeadingComponent, ButtonDirective, ItemNamePipe],
   standalone: true,
   template: `
     <netz-page-heading size="xl" [caption]="taskType() | itemName: getYearFromRequestId(requestId())">
@@ -35,6 +34,7 @@ import { CANCEL_ACTIONS_MAP, CancelActionsMap } from '../cancel-actions.provider
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [PendingButtonDirective, PageHeadingComponent, ButtonDirective, ItemNamePipe],
 })
 export class CancelComponent {
   private readonly cancelActionsMap: CancelActionsMap = inject(CANCEL_ACTIONS_MAP);

@@ -9,10 +9,10 @@ describe('TagComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [TagComponent],
     standalone: true,
+    imports: [TagComponent],
     template: `
-      <govuk-tag [color]="color" />
+      <govuk-tag [color]="color"></govuk-tag>
     `,
   })
   class TestComponent {

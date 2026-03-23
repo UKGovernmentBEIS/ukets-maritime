@@ -39,7 +39,7 @@ export class EmpVarSubmittedOperatorDetailsComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const empOperatorDetails = this.store.select(empVariationSubmittedQuery.selectOperatorDetails)();
 
     return {

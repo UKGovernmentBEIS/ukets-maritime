@@ -9,8 +9,8 @@ import { RdeSubmittedSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-rde-submitted',
-  imports: [RdeSubmittedSummaryTemplateComponent, LinkDirective, RouterLink],
   standalone: true,
+  imports: [RdeSubmittedSummaryTemplateComponent, LinkDirective, RouterLink],
   templateUrl: './rde-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

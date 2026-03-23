@@ -1,10 +1,9 @@
-import { Directive } from '@angular/core';
+import { Directive, HostBinding } from '@angular/core';
 
 @Directive({
   selector: 'div[govukSummaryListColumn]',
   standalone: true,
-  host: { '[class]': 'className' },
 })
 export class SummaryListColumnDirective {
-  className = 'govuk-summary-list__column';
+  @HostBinding('class') className = 'govuk-summary-list__column';
 }

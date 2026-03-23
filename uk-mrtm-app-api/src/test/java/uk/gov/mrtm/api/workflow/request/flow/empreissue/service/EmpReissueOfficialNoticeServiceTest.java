@@ -5,7 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.common.config.RegistryConfig;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayloadType;
@@ -32,8 +31,6 @@ import java.util.concurrent.ExecutionException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -47,12 +44,9 @@ class EmpReissueOfficialNoticeServiceTest {
 	
 	@Mock
 	private FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;
-
+	
 	@Mock
 	private OfficialNoticeSendService officialNoticeSendService;
-
-	@Mock
-	private RegistryConfig registryConfig;
 
 	@Test
 	void generateOfficialNotice() throws InterruptedException, ExecutionException {
@@ -103,7 +97,6 @@ class EmpReissueOfficialNoticeServiceTest {
 	
 	@Test
 	void sendOfficialNotice() {
-		String registryMail = "registry@mail.com";
 		FileInfoDTO officialNotice = FileInfoDTO.builder()
     			.name("off").uuid(UUID.randomUUID().toString())
     			.build();
@@ -119,16 +112,10 @@ class EmpReissueOfficialNoticeServiceTest {
 		Request request = Request.builder()
 				.payload(requestPayload)
 				.build();
-		when(registryConfig.getEmail()).thenReturn(registryMail);
-
+		
 		cut.sendOfficialNotice(request);
-
-		verify(registryConfig).getEmail();
-		verify(officialNoticeSendService, times(1))
-			.sendOfficialNotice(List.of(officialNotice, permitDocument), request, List.of(registryMail));
-
-		verifyNoMoreInteractions(registryConfig, officialNoticeSendService);
-		verifyNoInteractions(fileDocumentGenerateServiceDelegator, documentTemplateOfficialNoticeParamsProvider);
+		
+		verify(officialNoticeSendService, times(1)).sendOfficialNotice(List.of(officialNotice, permitDocument), request);
 	}
 	
 }

@@ -25,7 +25,7 @@
             In progress
           } @else {
             @if (data?.report) {
-              <mrtm-summary-download-files [files]="[data?.report]" />
+              <mrtm-summary-download-files [files]="[data?.report]"></mrtm-summary-download-files>
             }
           }
         </dd>
@@ -35,7 +35,7 @@
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Documents</dt>
         <dd govukSummaryListRowValue>
-          <mrtm-summary-download-files [files]="data?.documents" />
+          <mrtm-summary-download-files [files]="data?.documents"></mrtm-summary-download-files>
         </dd>
       </div>
     }

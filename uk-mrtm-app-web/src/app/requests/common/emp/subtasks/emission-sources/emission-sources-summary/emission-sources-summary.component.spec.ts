@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { EMISSION_SOURCES_SUB_TASK, EmissionSourcesWizardStep } from '@requests/common/emp/subtasks/emission-sources';
 import { EmissionSourcesSummaryComponent } from '@requests/common/emp/subtasks/emission-sources/emission-sources-summary/emission-sources-summary.component';
@@ -13,12 +13,12 @@ import { emissionSourcesMap } from '@requests/common/emp/subtasks/subtask-list.m
 import { mockEmpEmissionSources, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { screen } from '@testing-library/angular';
 
 describe('EmissionSourcesSummaryComponent', () => {
   let fixture: ComponentFixture<EmissionSourcesSummaryComponent>;
   let component: EmissionSourcesSummaryComponent;
   let store: RequestTaskStore;
-  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<unknown>> = {
@@ -27,25 +27,22 @@ describe('EmissionSourcesSummaryComponent', () => {
 
   const taskServiceSpy = jest.spyOn(taskServiceMock, 'submitSubtask');
 
-  class Page extends BasePage<EmissionSourcesSummaryComponent> {
-    get summaryListTerms(): string[] {
-      return this.queryAll('dt').map((dt) => dt.textContent.trim());
-    }
+  const createComponent = () => {
+    fixture = TestBed.createComponent(EmissionSourcesSummaryComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    jest.clearAllMocks();
+  };
 
-    get heading2s(): string[] {
-      return this.queryAll('h2').map((h2) => h2.textContent.trim());
-    }
-  }
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
       imports: [EmissionSourcesSummaryComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    });
+    }).compileComponents();
 
     store = TestBed.inject(RequestTaskStore);
     store.setState(
@@ -58,10 +55,7 @@ describe('EmissionSourcesSummaryComponent', () => {
         },
       ),
     );
-    fixture = TestBed.createComponent(EmissionSourcesSummaryComponent);
-    component = fixture.componentInstance;
-    page = new Page(fixture);
-    fixture.detectChanges();
+    createComponent();
   });
 
   it('should create', () => {
@@ -69,15 +63,20 @@ describe('EmissionSourcesSummaryComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.heading1.textContent).toEqual('Check your answers');
+    expect(screen.getAllByRole('heading')[0].textContent).toEqual('Check your answers');
 
-    expect(page.heading2s).toEqual([
+    const summarySections = screen
+      .getAllByRole('heading')
+      .slice(1)
+      .map((section) => section.textContent);
+
+    expect(summarySections).toEqual([
       emissionSourcesMap.listCompletion.title,
       emissionSourcesMap.emissionFactors.title,
       emissionSourcesMap.emissionCompliance.title,
     ]);
 
-    expect(page.summaryListTerms).toEqual([
+    expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
       'Procedure reference',
       'Procedure version',
       'Description of procedure',
@@ -85,24 +84,12 @@ describe('EmissionSourcesSummaryComponent', () => {
       'Location where records are kept',
       'Name of IT system used',
       'Are you using default values for all emissions factors?',
-      'Procedure reference',
-      'Procedure version',
-      'Description of procedure',
-      'Name of person or position responsible for this procedure',
-      'Location where records are kept',
-      'Name of IT system used',
       'Will you be making an emissions reduction claim relating to eligible fuels?',
-      'Procedure reference',
-      'Procedure version',
-      'Description of procedure',
-      'Name of person or position responsible for this procedure',
-      'Location where records are kept',
-      'Name of IT system used',
     ]);
   });
 
   it('should submit subtask', () => {
-    page.standardButton.click();
+    screen.getByRole('button', { name: 'Confirm and continue' }).click();
 
     expect(taskServiceSpy).toHaveBeenCalledWith(
       EMISSION_SOURCES_SUB_TASK,

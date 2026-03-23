@@ -38,6 +38,10 @@ import { FormUtils } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-regulators',
+  templateUrl: './regulators.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
+  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
@@ -57,10 +61,6 @@ import { FormUtils } from '@shared/utils';
     UsersTableDirective,
     NotificationBannerComponent,
   ],
-  standalone: true,
-  templateUrl: './regulators.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegulatorsComponent implements OnInit {
   readonly authStore = inject(AuthStore);
@@ -85,7 +85,7 @@ export class RegulatorsComponent implements OnInit {
     { field: 'name', header: 'Name', isSortable: true },
     { field: 'jobTitle', header: 'Job title' },
     { field: 'authorityStatus', header: 'Account status' },
-    { field: 'deleteBtn', header: 'Actions', hiddenHeader: true },
+    { field: 'deleteBtn', header: undefined },
   ];
   nonEditableCols: GovukTableColumn[] = this.editableCols.slice(0, 2);
   regulatorsForm = this.fb.group({ regulatorsArray: this.fb.array([]) });

@@ -41,16 +41,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-additional-documents-variation-regulator-decision',
+  standalone: true,
   imports: [
     AdditionalDocumentsSummaryTemplateComponent,
     WizardStepComponent,
     ReactiveFormsModule,
     VariationRegulatorDecisionComponent,
   ],
-  standalone: true,
   templateUrl: './additional-documents-variation-regulator-decision.component.html',
-  providers: [variationRegulatorDecisionFormProvider(ADDITIONAL_DOCUMENTS_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [variationRegulatorDecisionFormProvider(ADDITIONAL_DOCUMENTS_SUB_TASK)],
 })
 export class AdditionalDocumentsVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -60,7 +60,7 @@ export class AdditionalDocumentsVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(empCommonQuery.selectAdditionalDocuments)();
     const originalAdditionalDocuments = this.store.select(
       empVariationRegulatorQuery.selectOriginalAdditionalDocuments,

@@ -19,9 +19,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
     canActivate: [canActivateUncorrectedNonConformitiesSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-summary').then(
-        (c) => c.UncorrectedNonConformitiesSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-summary'
+      ).then((c) => c.UncorrectedNonConformitiesSummaryComponent),
   },
   {
     path: UncorrectedNonConformitiesStep.EXIST_FORM,
@@ -32,9 +32,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonConformitiesStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-exist').then(
-        (c) => c.UncorrectedNonConformitiesExistComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-exist'
+      ).then((c) => c.UncorrectedNonConformitiesExistComponent),
   },
   {
     path: UncorrectedNonConformitiesStep.ITEMS_LIST,
@@ -45,9 +45,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonConformitiesStep.SUMMARY, UncorrectedNonConformitiesStep.EXIST_FORM),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-list').then(
-        (c) => c.UncorrectedNonConformitiesListComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-list'
+      ).then((c) => c.UncorrectedNonConformitiesListComponent),
   },
   {
     path: UncorrectedNonConformitiesStep.ITEM_FORM_ADD,
@@ -58,9 +58,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonConformitiesStep.SUMMARY, UncorrectedNonConformitiesStep.ITEMS_LIST),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-item-form').then(
-        (c) => c.UncorrectedNonConformitiesItemFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-item-form'
+      ).then((c) => c.UncorrectedNonConformitiesItemFormComponent),
   },
   {
     path: `:reference/${UncorrectedNonConformitiesStep.ITEM_FORM_EDIT}`,
@@ -74,9 +74,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-item-form').then(
-        (c) => c.UncorrectedNonConformitiesItemFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-item-form'
+      ).then((c) => c.UncorrectedNonConformitiesItemFormComponent),
   },
   {
     path: `:reference/${UncorrectedNonConformitiesStep.ITEM_DELETE}`,
@@ -90,9 +90,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-item-delete').then(
-        (c) => c.UncorrectedNonConformitiesItemDeleteComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-item-delete'
+      ).then((c) => c.UncorrectedNonConformitiesItemDeleteComponent),
   },
 
   // PRIOR YEAR
@@ -105,9 +105,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       backlink: backlinkResolver(UncorrectedNonConformitiesStep.SUMMARY, UncorrectedNonConformitiesStep.ITEMS_LIST),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issues-exist').then(
-        (c) => c.UncorrectedNonConformitiesPriorYearIssuesExistComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issues-exist'
+      ).then((c) => c.UncorrectedNonConformitiesPriorYearIssuesExistComponent),
   },
   {
     path: UncorrectedNonConformitiesStep.PRIOR_YEAR_ISSUES_LIST,
@@ -121,9 +121,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issues-list').then(
-        (c) => c.UncorrectedNonConformitiesPriorYearIssuesListComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issues-list'
+      ).then((c) => c.UncorrectedNonConformitiesPriorYearIssuesListComponent),
   },
   {
     path: UncorrectedNonConformitiesStep.PRIOR_YEAR_ISSUE_FORM_ADD,
@@ -137,9 +137,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issue-form').then(
-        (c) => c.UncorrectedNonConformitiesPriorYearIssueFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issue-form'
+      ).then((c) => c.UncorrectedNonConformitiesPriorYearIssueFormComponent),
   },
   {
     path: `:reference/${UncorrectedNonConformitiesStep.PRIOR_YEAR_ISSUE_FORM_EDIT}`,
@@ -153,9 +153,9 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issue-form').then(
-        (c) => c.UncorrectedNonConformitiesPriorYearIssueFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issue-form'
+      ).then((c) => c.UncorrectedNonConformitiesPriorYearIssueFormComponent),
   },
   {
     path: `:reference/${UncorrectedNonConformitiesStep.PRIOR_YEAR_ISSUE_DELETE}`,
@@ -169,8 +169,8 @@ export const UNCORRECTED_NON_CONFORMITIES_ROUTES: Routes = [
       ),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issue-delete').then(
-        (c) => c.UncorrectedNonConformitiesPriorYearIssueDeleteComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/uncorrected-non-conformities/uncorrected-non-conformities-prior-year-issue-delete'
+      ).then((c) => c.UncorrectedNonConformitiesPriorYearIssueDeleteComponent),
   },
 ];

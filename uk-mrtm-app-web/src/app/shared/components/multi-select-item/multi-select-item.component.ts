@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, HostBinding, inject, Input } from '@angular/core';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 @Component({
@@ -8,26 +8,25 @@ import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/fo
     <input
       type="checkbox"
       class="govuk-checkboxes__input"
-      [attr.value]="itemValue()"
+      [attr.value]="itemValue"
       [id]="id"
       [name]="groupIdentifier"
       [checked]="isChecked"
       [disabled]="isDisabled"
       (change)="onChange($event)"
       (blur)="onBlur()" />
-    <label class="govuk-label govuk-checkboxes__label" [for]="id">{{ label() }}</label>
+    <label class="govuk-label govuk-checkboxes__label" [for]="id">{{ label }}</label>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  host: { '[class.govuk-checkboxes__item]': 'govukCheckboxesItem' },
 })
 export class MultiSelectItemComponent implements ControlValueAccessor {
   readonly cdRef = inject(ChangeDetectorRef);
   private readonly ngControl = inject(NgControl);
 
-  readonly label = input<string>();
-  readonly itemValue = input<string>();
+  @Input() label: string;
+  @Input() itemValue: string;
 
-  readonly govukCheckboxesItem = true;
+  @HostBinding('class.govuk-checkboxes__item') readonly govukCheckboxesItem = true;
 
   isChecked: boolean;
   index: number;

@@ -12,20 +12,20 @@ import {
 
 @Component({
   selector: 'mrtm-materiality-level-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     MaterialityLevelSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './materiality-level-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MaterialityLevelSubmittedComponent {
   private readonly store = inject(RequestActionStore);
   readonly materialityLevel = this.store.select(aerTimelineCommonQuery.selectMaterialityLevel);
-  readonly materialityLevelMap = materialityLevelMap;
+  readonly map = materialityLevelMap;
 
   readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(aerTimelineCommonQuery.selectSummaryReviewGroupDecision('MATERIALITY_LEVEL'));

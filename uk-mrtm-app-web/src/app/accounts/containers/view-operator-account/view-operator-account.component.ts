@@ -32,6 +32,9 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-view-operator-account',
+  templateUrl: './view-operator-account.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     ButtonDirective,
     RouterLink,
@@ -52,9 +55,6 @@ interface ViewModel {
     ReportsTabComponent,
     NonComplianceTabComponent,
   ],
-  standalone: true,
-  templateUrl: './view-operator-account.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ViewOperatorAccountComponent {
   private readonly store: OperatorAccountsStore = inject(OperatorAccountsStore);

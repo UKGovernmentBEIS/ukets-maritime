@@ -19,6 +19,7 @@ import { PortCallsListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-ports-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -29,7 +30,6 @@ import { PortCallsListSummaryTemplateComponent } from '@shared/components';
     ReactiveFormsModule,
     PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './aer-ports-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

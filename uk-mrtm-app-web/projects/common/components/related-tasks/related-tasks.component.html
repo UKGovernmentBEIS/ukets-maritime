@@ -1,9 +1,9 @@
 <div class="govuk-!-margin-bottom-9">
-  <h2 class="govuk-heading-m">{{ heading() }}</h2>
-  @if (!noBorders()) {
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <h2 class="govuk-heading-m">{{ heading }}</h2>
+  @if (!noBorders) {
+    <hr class="govuk-!-margin-bottom-3" />
   }
-  @for (item of items(); track item.taskId) {
+  @for (item of items; track item.taskId) {
     <div class="flex-space-between">
       <div class="govuk-!-margin-bottom-4">
         <h3 class="govuk-heading-s govuk-!-margin-bottom-1">
@@ -23,8 +23,8 @@
         View task
       </a>
     </div>
-    @if (!noBorders()) {
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    @if (!noBorders) {
+      <hr class="govuk-!-margin-bottom-3" />
     }
   }
 </div>

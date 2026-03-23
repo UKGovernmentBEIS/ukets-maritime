@@ -9,7 +9,6 @@ import {
   provideEmpAmendStepFlowManagers,
   provideEmpAmendTaskServices,
 } from '@requests/tasks/emp-amend/emp-amend.providers';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_AMEND_ROUTES: Routes = [
   {
@@ -22,7 +21,6 @@ export const EMP_AMEND_ROUTES: Routes = [
       provideEmpAmendStepFlowManagers(),
       provideEmpAmendTaskServices(),
     ],
-    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'requested-changes',

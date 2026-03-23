@@ -83,17 +83,6 @@ class MrtmAccountRepositoryIT extends AbstractContainerBaseTest {
         assertTrue(repository.findAccountIdByImoNumber("0000002").isEmpty());
     }
 
-
-    @Test
-    void findVerificationBodyIdByImoNumber() {
-        String imoNumber1 = "0000000";
-        long accountId1 = 1L;
-        createAccount(accountId1, imoNumber1, null);
-
-        assertEquals(100L, repository.findVerificationBodyIdByImoNumber(imoNumber1).get());
-        assertTrue(repository.findVerificationBodyIdByImoNumber("0000002").isEmpty());
-    }
-
     @Test
     void findByBusinessId() {
         long accountId1 = 1234L;
@@ -155,7 +144,6 @@ class MrtmAccountRepositoryIT extends AbstractContainerBaseTest {
                 .businessId(String.valueOf(id))
                 .registryId(registryId)
                 .name("name")
-                .verificationBodyId(100L)
                 .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                 .status(MrtmAccountStatus.NEW)
                 .emissionTradingScheme(MrtmEmissionTradingScheme.UK_MARITIME_EMISSION_TRADING_SCHEME)

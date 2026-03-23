@@ -4,12 +4,12 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
-  contentChild,
+  ContentChild,
   ElementRef,
   inject,
-  input,
+  Input,
   OnInit,
-  viewChild,
+  ViewChild,
 } from '@angular/core';
 import { ControlContainer, FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -22,37 +22,38 @@ import { existingControlContainer } from '@shared/providers';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-boolean-radio-group',
-  imports: [RadioComponent, FormsModule, ReactiveFormsModule, RadioOptionComponent, AsyncPipe],
-  standalone: true,
   templateUrl: './boolean-radio-group.component.html',
   providers: [existingControlContainer],
   viewProviders: [existingControlContainer],
+  standalone: true,
+  imports: [RadioComponent, FormsModule, ReactiveFormsModule, RadioOptionComponent, AsyncPipe],
 })
 export class BooleanRadioGroupComponent implements AfterContentInit, AfterViewInit, OnInit {
   private readonly controlContainer = inject(ControlContainer);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  readonly controlName = input<string>();
-  readonly legend = input<string>();
-  readonly hint = input<string>();
-  readonly isEditable = input(true);
-  readonly positiveValue = input<boolean | string>(true);
-  readonly negativeValue = input<boolean | string>(false);
-  readonly positiveLabel = input('Yes');
-  readonly negativeLabel = input('No');
+  @Input() controlName: string;
+  @Input() legend: string;
+  @Input() hint: string;
+  @Input() isEditable = true;
+  @Input() positiveValue: boolean | string = true;
+  @Input() negativeValue: boolean | string = false;
+  @Input() positiveLabel = 'Yes';
+  @Input() negativeLabel = 'No';
 
-  readonly radio = viewChild(RadioComponent, { read: ElementRef });
+  @ViewChild(RadioComponent, { read: ElementRef, static: true }) radio: ElementRef<HTMLElement>;
   value$: Observable<boolean>;
 
   private yesRadio: HTMLInputElement;
-  private readonly conditional = contentChild(ConditionalContentDirective);
+  @ContentChild(ConditionalContentDirective, { static: true })
+  private readonly conditional: ConditionalContentDirective;
 
   get conditionalId() {
     return `${this.yesRadio?.id}-conditional`;
   }
 
   private get control() {
-    return this.controlContainer.control.get(this.controlName());
+    return this.controlContainer.control.get(this.controlName);
   }
 
   ngOnInit(): void {
@@ -67,7 +68,7 @@ export class BooleanRadioGroupComponent implements AfterContentInit, AfterViewIn
   }
 
   ngAfterViewInit(): void {
-    this.yesRadio = this.radio().nativeElement.querySelector('input');
+    this.yesRadio = this.radio.nativeElement.querySelector('input');
     this.yesRadio.setAttribute('aria-controls', this.conditionalId);
     this.setAriaExpanded(this.control.value);
 
@@ -76,15 +77,14 @@ export class BooleanRadioGroupComponent implements AfterContentInit, AfterViewIn
   }
 
   private onChoose(value: boolean | string): void {
-    const isPositiveSelected = value === this.positiveValue();
+    const isPositiveSelected = value === this.positiveValue;
     this.setAriaExpanded(isPositiveSelected);
 
-    const conditional = this.conditional();
-    if (conditional) {
-      if (isPositiveSelected && this.isEditable()) {
-        conditional.enableControls();
+    if (this.conditional) {
+      if (isPositiveSelected && this.isEditable) {
+        this.conditional.enableControls();
       } else {
-        conditional.disableControls();
+        this.conditional.disableControls();
       }
     }
   }

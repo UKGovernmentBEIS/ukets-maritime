@@ -41,6 +41,10 @@ interface ViewModel extends Pagination {
 
 @Component({
   selector: 'mrtm-accounts',
+  templateUrl: './accounts-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
+  standalone: true,
   imports: [
     PageHeadingComponent,
     AccountsListComponent,
@@ -52,10 +56,6 @@ interface ViewModel extends Pagination {
     ButtonDirective,
     PaginationComponent,
   ],
-  standalone: true,
-  templateUrl: './accounts-page.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountsPageComponent implements OnInit {
   private readonly router = inject(Router);

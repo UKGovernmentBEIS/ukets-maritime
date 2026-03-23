@@ -29,7 +29,9 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionRequiredChange;
 
 import java.util.HashMap;
 import java.util.List;
@@ -530,16 +532,21 @@ class RequestEmpReviewServiceTest {
         Set<EmpReviewGroup> updatedSubtasks =
             Set.of(EmpReviewGroup.ADDITIONAL_DOCUMENTS, EmpReviewGroup.MARITIME_OPERATOR_DETAILS);
         Map<EmpReviewGroup, EmpIssuanceReviewDecision> reviewGroupDecisions = new HashMap<>();
+        UUID fileUuuid = UUID.randomUUID();
         reviewGroupDecisions.put(
             EmpReviewGroup.ADDITIONAL_DOCUMENTS,
             EmpIssuanceReviewDecision.builder()
                 .type(EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build());
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes")
+                    .requiredChanges(List.of(ReviewDecisionRequiredChange.builder().reason("reason").files(Set.of(fileUuuid)).build()))
+                    .build()).build());
         reviewGroupDecisions.put(
             EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
             EmpIssuanceReviewDecision.builder()
                 .type(EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build());
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes")
+                    .requiredChanges(List.of(ReviewDecisionRequiredChange.builder().reason("reason").files(Set.of(fileUuuid)).build()))
+                    .build()).build());
         reviewGroupDecisions.put(
             EmpReviewGroup.MARITIME_OPERATOR_DETAILS,
             EmpIssuanceReviewDecision.builder()
@@ -556,7 +563,22 @@ class RequestEmpReviewServiceTest {
             EmpReviewGroup.ABBREVIATIONS_AND_DEFINITIONS,
             EmpIssuanceReviewDecision.builder()
                 .type(EmpReviewDecisionType.OPERATOR_AMENDS_NEEDED)
-                .details(ReviewDecisionDetails.builder().notes("notes").build()).build(),
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes")
+                    .requiredChanges(List.of(ReviewDecisionRequiredChange.builder().reason("reason").files(Set.of(fileUuuid)).build()))
+                    .build())
+                .build(),
+
+            EmpReviewGroup.MARITIME_OPERATOR_DETAILS,
+            EmpIssuanceReviewDecision.builder()
+                .details(ReviewDecisionDetails.builder().notes("notes").build())
+                .type(null)
+                .build(),
+
+            EmpReviewGroup.ADDITIONAL_DOCUMENTS,
+            EmpIssuanceReviewDecision.builder()
+                .details(ChangesRequiredDecisionDetails.builder().notes("notes").requiredChanges(null).build())
+                .type(null)
+                .build(),
 
             EmpReviewGroup.EMISSION_SOURCES,
             EmpIssuanceReviewDecision.builder()
@@ -567,7 +589,7 @@ class RequestEmpReviewServiceTest {
 
         EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
         EmpIssuanceRequestPayload requestPayload = EmpIssuanceRequestPayload.builder().reviewGroupDecisions(reviewGroupDecisions).build();
-        Map<UUID, String> empAttachments = Map.of(UUID.randomUUID(), "attachment");
+        Map<UUID, String> empAttachments = Map.of(fileUuuid, "attachment");
         Map<String, String> empSectionsCompleted = Map.of("test", "COMPLETED");
 
         EmpIssuanceApplicationAmendsSubmitRequestTaskPayload requestTaskPayload =

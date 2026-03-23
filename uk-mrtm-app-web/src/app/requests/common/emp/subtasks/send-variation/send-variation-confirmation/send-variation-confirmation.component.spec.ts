@@ -4,17 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { EmpVariationTaskPayload } from '@requests/common/emp/emp.types';
 import { SendVariationConfirmationComponent } from '@requests/common/emp/subtasks/send-variation/send-variation-confirmation/send-variation-confirmation.component';
 import { taskProviders } from '@requests/common/task.providers';
+import { screen } from '@testing-library/angular';
 
 describe('SendVariationConfirmationComponent', () => {
   let component: SendVariationConfirmationComponent;
   let fixture: ComponentFixture<SendVariationConfirmationComponent>;
   let router: Router;
-  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<EmpVariationTaskPayload>> = {
@@ -22,8 +22,6 @@ describe('SendVariationConfirmationComponent', () => {
   };
 
   const taskServiceSpy = jest.spyOn(taskServiceMock, 'submit');
-
-  class Page extends BasePage<SendVariationConfirmationComponent> {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -38,7 +36,6 @@ describe('SendVariationConfirmationComponent', () => {
     fixture = TestBed.createComponent(SendVariationConfirmationComponent);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
-    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -47,12 +44,12 @@ describe('SendVariationConfirmationComponent', () => {
   });
 
   it('should display correct header and content', () => {
-    expect(page.heading1.textContent).toEqual('Send variation application to regulator');
+    expect(screen.getByRole('heading', { name: 'Send variation application to regulator' })).toBeInTheDocument();
   });
 
   it('should submit task', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
-    page.standardButton.click();
+    screen.getByRole('button', { name: 'Confirm and send' }).click();
     fixture.detectChanges();
     expect(taskServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith(['success'], { relativeTo: activatedRouteStub, skipLocationChange: true });

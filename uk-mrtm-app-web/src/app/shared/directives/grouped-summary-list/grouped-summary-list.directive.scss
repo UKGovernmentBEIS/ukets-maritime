@@ -1,7 +1,7 @@
-@use 'govuk-frontend/dist/govuk/index' as govuk;
+@import 'base';
 
 .summary-list--edge-border {
-  border-bottom: 1px solid govuk.$govuk-border-colour;
+  border-bottom: 1px solid $govuk-border-colour;
 }
 
 .summary-list--edge-border:not(:last-of-type) {

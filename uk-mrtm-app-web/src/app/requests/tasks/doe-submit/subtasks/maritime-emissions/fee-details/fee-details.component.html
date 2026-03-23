@@ -13,7 +13,7 @@
     inputType="number"
     label="Total billable hours"
     labelSize="small"
-    widthClass="govuk-input--width-10"></div>
+    [widthClass]="'govuk-input--width-10'"></div>
   <div
     formControlName="hourlyRate"
     govuk-text-input
@@ -22,12 +22,12 @@
     labelSize="small"
     prefix="£"
     suffix="per hour"
-    widthClass="govuk-input--width-10"></div>
+    [widthClass]="'govuk-input--width-10'"></div>
   <div
     formControlName="dueDate"
     govuk-date-input
     label="Set a due date for the payment"
-    labelSize="small"
+    legendSize="small"
     hint="This date is for notification purposes and is not a formal deadline"></div>
   <div
     formControlName="comments"

@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-prior-year-issues-exist',
-  imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent],
   standalone: true,
+  imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent],
   templateUrl: './uncorrected-non-conformities-prior-year-issues-exist.component.html',
-  providers: [uncorrectedNonConformitiesPriorYearIssuesExistProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uncorrectedNonConformitiesPriorYearIssuesExistProvider],
 })
 export class UncorrectedNonConformitiesPriorYearIssuesExistComponent {
   readonly map = uncorrectedNonConformitiesMap;

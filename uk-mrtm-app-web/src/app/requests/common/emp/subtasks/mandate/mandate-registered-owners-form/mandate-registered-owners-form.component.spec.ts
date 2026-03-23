@@ -1,8 +1,8 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { TaskService } from '@netz/common/forms';
-import { MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { MANDATE_REGISTERED_OWNER_FORM_MODE, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { MandateRegisteredOwnersFormComponent } from '@requests/common/emp/subtasks/mandate/mandate-registered-owners-form/mandate-registered-owners-form.component';
@@ -11,6 +11,7 @@ import { taskProviders } from '@requests/common/task.providers';
 describe('MandateRegisteredOwnersFormComponent', () => {
   let component: MandateRegisteredOwnersFormComponent;
   let fixture: ComponentFixture<MandateRegisteredOwnersFormComponent>;
+  const activatedRouteMock = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<any>> = {};
 
   beforeEach(() => {
@@ -24,7 +25,7 @@ describe('MandateRegisteredOwnersFormComponent', () => {
     await TestBed.configureTestingModule({
       imports: [MandateRegisteredOwnersFormComponent],
       providers: [
-        provideRouter([]),
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: TaskService, useValue: taskServiceMock },
         { provide: MANDATE_REGISTERED_OWNER_FORM_MODE, useValue: MandateWizardStep.REGISTERED_OWNERS_FORM_ADD },
         ...taskProviders,

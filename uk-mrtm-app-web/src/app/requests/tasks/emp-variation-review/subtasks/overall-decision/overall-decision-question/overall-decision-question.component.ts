@@ -21,6 +21,7 @@ import { DeterminationTypePipe, VariationDeterminationHeaderTypePipe } from '@sh
 
 @Component({
   selector: 'mrtm-overall-decision-question',
+  standalone: true,
   imports: [
     WizardStepComponent,
     DeterminationTypePipe,
@@ -28,10 +29,9 @@ import { DeterminationTypePipe, VariationDeterminationHeaderTypePipe } from '@sh
     TextareaComponent,
     VariationDeterminationHeaderTypePipe,
   ],
-  standalone: true,
   templateUrl: './overall-decision-question.component.html',
-  providers: [overallDecisionQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [overallDecisionQuestionFormProvider],
 })
 export class OverallDecisionQuestionComponent {
   protected readonly form = inject(TASK_FORM);

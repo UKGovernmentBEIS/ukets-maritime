@@ -12,8 +12,8 @@ import {
 
 @Component({
   selector: 'mrtm-vir-submit-task-item-details',
-  imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
   standalone: true,
+  imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
   templateUrl: './vir-submit-task-item-details.component.html',
   styleUrl: './vir-submit-task-item-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

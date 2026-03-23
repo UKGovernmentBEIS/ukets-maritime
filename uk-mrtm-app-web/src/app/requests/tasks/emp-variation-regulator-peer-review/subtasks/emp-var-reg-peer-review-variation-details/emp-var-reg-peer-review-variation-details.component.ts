@@ -17,14 +17,14 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-variation-details',
-  imports: [PageHeadingComponent, VariationDetailsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   standalone: true,
+  imports: [PageHeadingComponent, VariationDetailsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './emp-var-reg-peer-review-variation-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewVariationDetailsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       variationDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectEmpVariationDetails)(),
       title: variationDetailsSubtaskMap.title,

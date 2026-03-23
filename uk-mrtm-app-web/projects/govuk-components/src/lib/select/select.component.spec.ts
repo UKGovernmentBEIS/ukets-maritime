@@ -1,17 +1,16 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { SelectComponent } from './select.component';
 
 describe('SelectComponent', () => {
   @Component({
-    imports: [SelectComponent, ReactiveFormsModule],
     standalone: true,
+    imports: [SelectComponent, ReactiveFormsModule],
     template: `
       <div
-        label="Select"
         govuk-select
         [options]="[
           { text: 'First', value: 1 },
@@ -33,7 +32,7 @@ describe('SelectComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [ControlContainer],
+      imports: [ReactiveFormsModule],
     }).compileComponents();
   });
 

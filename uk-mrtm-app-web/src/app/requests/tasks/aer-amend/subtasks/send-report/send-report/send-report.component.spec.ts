@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { of } from 'rxjs';
 
@@ -8,12 +8,13 @@ import { AccountVerificationBodyService } from '@mrtm/api';
 import { TaskService } from '@netz/common/forms';
 import { mockRequestTask } from '@netz/common/request-task';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AerCommonService } from '@requests/common/aer/services';
 import { taskProviders } from '@requests/common/task.providers';
 import { SendReportComponent } from '@requests/tasks/aer-amend/subtasks/send-report/send-report/send-report.component';
+import { screen } from '@testing-library/angular';
 
 describe('SendReportComponent', () => {
   let component: SendReportComponent;
@@ -22,9 +23,6 @@ describe('SendReportComponent', () => {
   let payload: AerSubmitTaskPayload;
   let accountVerificationBodyServiceMock: MockType<AccountVerificationBodyService>;
   let router: Router;
-  let page: Page;
-
-  class Page extends BasePage<SendReportComponent> {}
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<AerCommonService> = {
@@ -34,6 +32,7 @@ describe('SendReportComponent', () => {
 
   const createComponent = async (payload: AerSubmitTaskPayload) => {
     await TestBed.configureTestingModule({
+      imports: [SendReportComponent, RouterModule.forRoot([])],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyServiceMock },
@@ -76,7 +75,8 @@ describe('SendReportComponent', () => {
 
     fixture = TestBed.createComponent(SendReportComponent);
     component = fixture.componentInstance;
-    page = new Page(fixture);
+    fixture.detectChanges();
+    await fixture.whenStable();
     fixture.detectChanges();
   };
 
@@ -104,12 +104,13 @@ describe('SendReportComponent', () => {
 
     it('should display correct header and content', async () => {
       await createComponent(payload);
-      expect(page.heading1.textContent).toEqual('Send report to regulator');
-      expect(page.paragraphs.map((paragraph) => paragraph.textContent.trim())).toEqual([
+      expect(screen.getByRole('heading', { name: 'Send report to regulator' })).toBeInTheDocument();
+      expect(screen.getAllByRole('paragraph').map((paragraph) => paragraph.textContent.trim())).toEqual([
         'Your report will be sent directly to Environment Agency.',
         'By selecting ‘Confirm and send’ you confirm that the information in your report is correct to the best of your knowledge.',
       ]);
-      expect(page.standardButton.textContent).toEqual('Confirm and send');
+
+      expect(screen.getByRole('button', { name: 'Confirm and send' })).toBeInTheDocument();
     });
 
     it('should submit task', async () => {
@@ -117,7 +118,7 @@ describe('SendReportComponent', () => {
       const taskServiceSpy = jest.spyOn(taskServiceMock, 'submit');
       const navigateSpy = jest.spyOn(router, 'navigate');
       taskServiceSpy.mockReturnValue(of(null));
-      page.standardButton.click();
+      screen.getByRole('button', { name: 'Confirm and send' }).click();
       fixture.detectChanges();
       expect(taskServiceSpy).toHaveBeenCalledTimes(1);
       expect(navigateSpy).toHaveBeenCalledWith(['success'], {
@@ -142,25 +143,29 @@ describe('SendReportComponent', () => {
         getVerificationBodyOfAccount: jest.fn().mockReturnValue(of(null)),
       };
       await createComponent(payload);
-      expect(page.heading1.textContent).toEqual('Appoint an accredited verification body to continue');
+      expect(
+        screen.getByRole('heading', {
+          name: 'Your named verifier is invalid. Please make sure a verification body has been successfully added to your account.',
+        }),
+      ).toBeInTheDocument();
     });
 
     it('should display correct header and content', async () => {
       await createComponent(payload);
-      expect(page.heading1.textContent).toEqual('Send report for verification');
-      expect(page.heading4.textContent).toEqual('Current verifier');
-      expect(page.paragraphs.map((paragraph) => paragraph.textContent.trim())).toEqual([
+      expect(screen.getByRole('heading', { name: 'Send report for verification' })).toBeInTheDocument();
+      expect(screen.getByRole('heading', { name: 'Current verifier' })).toBeInTheDocument();
+      expect(screen.getAllByRole('paragraph').map((paragraph) => paragraph.textContent.trim())).toEqual([
         'test verification body 123',
         'By selecting ‘Confirm and send’ you confirm that the information in your report is correct to the best of your knowledge.',
       ]);
-      expect(page.standardButton.textContent).toEqual('Confirm and send');
+      expect(screen.getByRole('button', { name: 'Confirm and send' })).toBeInTheDocument();
     });
 
     it('should submit task', async () => {
       await createComponent(payload);
       const taskServiceSpy = jest.spyOn(taskServiceMock, 'submitForVerification');
       const navigateSpy = jest.spyOn(router, 'navigate');
-      page.standardButton.click();
+      screen.getByRole('button', { name: 'Confirm and send' }).click();
       fixture.detectChanges();
       expect(taskServiceSpy).toHaveBeenCalledTimes(1);
       expect(navigateSpy).toHaveBeenCalledWith(['success'], {

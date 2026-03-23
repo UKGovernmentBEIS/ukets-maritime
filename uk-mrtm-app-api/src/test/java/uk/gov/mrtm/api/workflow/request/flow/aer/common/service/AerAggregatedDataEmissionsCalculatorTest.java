@@ -199,6 +199,74 @@ class AerAggregatedDataEmissionsCalculatorTest {
         );
     }
 
+    @Test
+    void calculateEmissions_all_data_filtered_out() {
+        String imoNumber1 = "1000000";
+        String imoNumber2 = "2000000";
+        String imoNumber3 = "3000000";
+        String imoNumber4 = "4000000";
+        String imoNumber5 = "5000000";
+
+        AerPortEmissions portEmissions = AerPortEmissions.builder()
+            .ports(Set.of(
+                AerPort.builder().imoNumber(imoNumber4).build()
+            ))
+            .build();
+
+        AerVoyageEmissions voyageEmissions = AerVoyageEmissions.builder()
+            .voyages(Set.of(
+                getAerVoyage(
+                    imoNumber1,
+                    PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.GB, PortCodes1.GBAYW.name(),
+                    null,
+                    false),
+                getAerVoyage(
+                    imoNumber3,
+                    PortCountries.GB, PortCodesNorthernIreland.GBLDY.name(), PortCountries.GB, PortCodes1.GBAYW.name(),
+                    null,
+                    false),
+                getAerVoyage(
+                    imoNumber5,
+                    PortCountries.GB, PortCodes1.GBABD.name(), PortCountries.GB, PortCodes1.GBAYW.name(),
+                    null,
+                    false),
+                getAerVoyage(
+                    imoNumber2,
+                    PortCountries.US, PortCodes2.USBAL.name(), PortCountries.CU, PortCodes1.CUHAV.name(),
+                    null,
+                    false)
+            ))
+            .build();
+
+        Aer aer = Aer.builder()
+            .portEmissions(portEmissions)
+            .voyageEmissions(voyageEmissions)
+            .emissions(AerEmissions.builder().build())
+            .aggregatedData(AerAggregatedData.builder().emissions(new HashSet<>(Set.of(
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber1).build(),
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber2).build(),
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber3).build(),
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber4).build(),
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber5).build()
+            ))).build())
+            .build();
+
+        Aer expectedAer = Aer.builder()
+            .portEmissions(portEmissions)
+            .voyageEmissions(voyageEmissions)
+            .emissions(AerEmissions.builder().build())
+            .aggregatedData(AerAggregatedData.builder().emissions(new  HashSet<>(Set.of(
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber3).build(),
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber4).build(),
+                AerShipAggregatedData.builder().isFromFetch(true).imoNumber(imoNumber5).build()
+            ))).build())
+            .build();
+
+        calculator.calculateEmissions(aer);
+
+        assertEquals(expectedAer, aer);
+    }
+
     private AerPortEmissions getAerPortEmissions(boolean hasFuelConsumptions) {
         return AerPortEmissions.builder()
             .ports(Set.of(

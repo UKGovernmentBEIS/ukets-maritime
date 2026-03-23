@@ -19,13 +19,12 @@ import {
   MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS,
   MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS_WITH_ACTIONS,
 } from '@requests/common/components/mandate/mandate-registered-owners-table.constants';
-import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { SummaryRegisteredOwnerShipDetailsComponent } from '@shared/components';
-import { PersistablePaginationState } from '@shared/services';
 import { MandateRegisteredOwnerTableListItem } from '@shared/types';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-table',
+  standalone: true,
   imports: [
     TableComponent,
     GovukDatePipe,
@@ -34,11 +33,10 @@ import { MandateRegisteredOwnerTableListItem } from '@shared/types';
     PaginationComponent,
     SummaryRegisteredOwnerShipDetailsComponent,
   ],
-  standalone: true,
   templateUrl: './mandate-registered-owners-table.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MandateRegisteredOwnersTableComponent extends PaginationStatePersistableComponent {
+export class MandateRegisteredOwnersTableComponent {
   readonly registeredOwnerItems = input<Array<MandateRegisteredOwnerTableListItem>>([]);
   readonly isEditable = input<boolean>(false);
 
@@ -50,9 +48,7 @@ export class MandateRegisteredOwnersTableComponent extends PaginationStatePersis
   );
   readonly pageSize: number = 10;
   readonly totalItems: Signal<number> = computed(() => this.registeredOwnerItems()?.length ?? 0);
-  readonly currentPage: WritableSignal<number> = signal<number>(
-    this.currentPersistableComponentState()?.currentPage ?? 1,
-  );
+  readonly currentPage: WritableSignal<number> = signal<number>(1);
   readonly page: Signal<Array<MandateRegisteredOwnerTableListItem>> = computed(() => {
     const tableData = [...(this.registeredOwnerItems() ?? [])].sort((a, b) =>
       a?.name?.localeCompare(b?.name, 'en', { sensitivity: 'base', numeric: true }),
@@ -79,9 +75,5 @@ export class MandateRegisteredOwnersTableComponent extends PaginationStatePersis
 
   onDefineRowAdditionalStyle(item: MandateRegisteredOwnerTableListItem): string | string[] | undefined {
     return item?.needsReview ? 'needs-review' : undefined;
-  }
-
-  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
-    return {};
   }
 }

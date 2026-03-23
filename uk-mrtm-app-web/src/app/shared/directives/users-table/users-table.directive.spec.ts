@@ -1,4 +1,3 @@
-import { TitleCasePipe } from '@angular/common';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormArray, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -9,10 +8,10 @@ import { Observable, of } from 'rxjs';
 import { RegulatorUsersAuthoritiesInfoDTO } from '@mrtm/api';
 
 import { BasePage } from '@netz/common/testing';
-import { TableComponent } from '@netz/govuk-components';
+import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { UsersTableDirective } from '@shared/directives';
-import { UsersTableItem } from '@shared/types';
+import { UsersTableItemInterface } from '@shared/types';
 
 describe('UsersTableDirective', () => {
   let directive: UsersTableDirective;
@@ -86,8 +85,6 @@ describe('UsersTableDirective', () => {
     );
 
   @Component({
-    imports: [ReactiveFormsModule, UsersTableDirective, TableComponent, TitleCasePipe],
-    standalone: true,
     template: `
       <form [formGroup]="usersForm" id="users-form">
         <govuk-table
@@ -112,13 +109,18 @@ describe('UsersTableDirective', () => {
     `,
   })
   class TestComponent {
-    users$: Observable<UsersTableItem[]> = of(mockRegulatorsRouteData.regulators.caUsers);
+    users$: Observable<UsersTableItemInterface[]> = of(mockRegulatorsRouteData.regulators.caUsers);
     usersForm = new FormGroup({
       usersArray: new FormArray([]),
     });
   }
 
   beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [UsersTableDirective, GovukComponentsModule, ReactiveFormsModule],
+      declarations: [TestComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TestComponent);
     page = new Page(fixture);
     fixture.detectChanges();

@@ -14,6 +14,7 @@ import {
 
 @Component({
   selector: 'mrtm-vir-regulator-report-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -23,7 +24,6 @@ import {
     LinkDirective,
     RouterLink,
   ],
-  standalone: true,
   templateUrl: './vir-regulator-report-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

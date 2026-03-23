@@ -20,8 +20,8 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-response',
-  imports: [ReactiveFormsModule, WizardStepComponent, TextareaComponent, MultipleFileInputComponent],
   standalone: true,
+  imports: [ReactiveFormsModule, WizardStepComponent, TextareaComponent, MultipleFileInputComponent],
   templateUrl: './response.component.html',
   providers: [followUpResponseFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

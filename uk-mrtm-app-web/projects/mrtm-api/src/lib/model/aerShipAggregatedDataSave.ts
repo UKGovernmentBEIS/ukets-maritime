@@ -17,6 +17,5 @@ export interface AerShipAggregatedDataSave {
   emissionsWithinUKPorts?: AerPortEmissionsMeasurementSave;
   emissionsBetweenUKPorts?: AerPortEmissionsMeasurementSave;
   emissionsBetweenUKAndNIVoyages?: AerPortEmissionsMeasurementSave;
-  dataInputType: 'MANUAL';
   fromFetch?: boolean;
 }

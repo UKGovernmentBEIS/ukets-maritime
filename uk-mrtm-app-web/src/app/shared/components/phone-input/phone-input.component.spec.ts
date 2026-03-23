@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { BasePage } from '@netz/common/testing';
-import { GovukValidators } from '@netz/govuk-components';
+import { GovukComponentsModule, GovukValidators } from '@netz/govuk-components';
 
 import { CountryService } from '@core/services/country.service';
 import { CountryServiceStub } from '@registration/testing/country-service-stub';
@@ -17,8 +17,6 @@ describe('PhoneInputComponent', () => {
   let page: Page;
 
   @Component({
-    imports: [PhoneInputComponent, ReactiveFormsModule],
-    standalone: true,
     template: `
       <form [formGroup]="form">
         <div mrtm-phone-input formControlName="firstPhone"></div>
@@ -74,7 +72,8 @@ describe('PhoneInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, PhoneInputComponent],
+      imports: [ReactiveFormsModule, GovukComponentsModule, PhoneInputComponent],
+      declarations: [TestComponent],
       providers: [{ provide: CountryService, useClass: CountryServiceStub }],
     }).compileComponents();
   });

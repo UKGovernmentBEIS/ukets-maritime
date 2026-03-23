@@ -11,10 +11,10 @@
   </div>
 }
 
-@for (emissionSource of emissionSources(); track emissionSource.uniqueIdentifier) {
+@for (emissionSource of emissionSources(); track emissionSource.uniqueIdentifier; let i = $index) {
   <mrtm-emission-sources-and-fuel-types-used-summary-template
     [data]="emissionSource"
-    [index]="$index"
+    [index]="i"
     (delete)="onDelete($event)"
     [isDeletable]="true"
     [isEditable]="isEditable" />

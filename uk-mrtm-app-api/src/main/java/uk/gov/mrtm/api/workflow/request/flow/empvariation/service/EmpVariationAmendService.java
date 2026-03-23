@@ -8,9 +8,11 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanCon
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionType;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpAcceptedVariationDecisionDetails;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationAmendsSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationAmendsSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestPayload;
+import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationReviewDecision;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationReviewDecisionType;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.mapper.EmpVariationReviewMapper;
@@ -18,6 +20,7 @@ import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ChangesRequiredDecisionDetails;
 
 @Service
 @RequiredArgsConstructor
@@ -60,14 +63,26 @@ public class EmpVariationAmendService {
         requestPayload.setEmpVariationDetails(taskPayload.getEmpVariationDetails());
         requestPayload.setEmpVariationDetailsCompleted(taskPayload.getEmpVariationDetailsCompleted());
         requestPayload.setEmpVariationDetailsReviewCompleted(taskPayload.getEmpVariationDetailsReviewCompleted());
-        taskPayload.getUpdatedSubtasks().forEach(empReviewGroup -> {
-            if (!requestPayload.getReviewGroupDecisions().get(empReviewGroup).getType().equals(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)) {
-                requestPayload.getReviewGroupDecisions().remove(empReviewGroup);
-            }
-        });
+        resetTypeOnUpdatedReviewGroupDecisions(taskPayload, requestPayload);
 
         // Add timeline
         addAmendsSubmittedRequestAction(request, appUser);
+    }
+
+    private void resetTypeOnUpdatedReviewGroupDecisions(EmpVariationApplicationAmendsSubmitRequestTaskPayload taskPayload,
+                                                        EmpVariationRequestPayload requestPayload) {
+
+        taskPayload.getUpdatedSubtasks().forEach(empReviewGroup -> {
+            if (requestPayload.getReviewGroupDecisions().containsKey(empReviewGroup)) {
+                EmpVariationReviewDecision decision = requestPayload.getReviewGroupDecisions().get(empReviewGroup);
+                if (EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED == decision.getType()) {
+                    ((ChangesRequiredDecisionDetails) decision.getDetails()).setRequiredChanges(null);
+                } else if (EmpVariationReviewDecisionType.ACCEPTED == decision.getType()) {
+                    ((EmpAcceptedVariationDecisionDetails) decision.getDetails()).setVariationScheduleItems(null);
+                }
+                decision.setType(null);
+            }
+        });
     }
 
     private void addAmendsSubmittedRequestAction(Request request, AppUser appUser) {

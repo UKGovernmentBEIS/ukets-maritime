@@ -71,7 +71,7 @@ public interface EmpVariationAmendSubmitMapper {
                 .flatMap(Collection::stream).collect(Collectors.toSet());
 
         final Set<UUID> variationDetailsReviewAttachmentsUuids = new HashSet<>();
-        if (variationDetailsReviewDecision != null && EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED.equals(variationDetailsReviewDecision.getType())) {
+        if (variationDetailsReviewDecision != null && EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED == variationDetailsReviewDecision.getType()) {
             variationDetailsReviewAttachmentsUuids
                     .addAll(((ChangesRequiredDecisionDetails) variationDetailsReviewDecision.getDetails())
                             .getRequiredChanges().stream()
@@ -92,7 +92,7 @@ public interface EmpVariationAmendSubmitMapper {
     default Map<EmpReviewGroup, EmpVariationReviewDecision> setReviewGroupDecisionsForOperatorAmend(
             Map<EmpReviewGroup, EmpVariationReviewDecision> reviewGroupDecision) {
         return reviewGroupDecision.entrySet().stream()
-                .filter(entry -> entry.getValue().getType().equals(EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED)).map(entry ->
+                .filter(entry -> entry.getValue().getType() == EmpVariationReviewDecisionType.OPERATOR_AMENDS_NEEDED).map(entry ->
                         new AbstractMap.SimpleEntry<>(entry.getKey(), cloneAmendDecisionWithoutNotes(entry.getValue()))
                 ).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
     }

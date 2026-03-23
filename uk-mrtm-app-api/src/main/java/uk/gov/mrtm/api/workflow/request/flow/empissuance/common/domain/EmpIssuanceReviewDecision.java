@@ -18,7 +18,8 @@ import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecision
 public class EmpIssuanceReviewDecision {
 
     @Valid
-    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type", visible = true)
+    @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "type", visible = true,
+        defaultImpl =  ReviewDecisionDetails.class)
     @JsonSubTypes({
             @JsonSubTypes.Type(value = ReviewDecisionDetails.class, name = "ACCEPTED"),
             @JsonSubTypes.Type(value = ChangesRequiredDecisionDetails.class, name = "OPERATOR_AMENDS_NEEDED")

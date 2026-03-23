@@ -1,23 +1,23 @@
-@if (data()?.length) {
+@if (data?.length) {
   <h2 class="govuk-heading-m">Description of the measurement instruments involved</h2>
-  @for (measurement of data(); track measurement; let index = $index) {
+  @for (measurement of data; track measurement; let index = $index) {
     <h3 class="govuk-heading-s">Measurement Device {{ index + 1 }}</h3>
     <dl govuk-summary-list>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Name of measurement device</dt>
         <dd govukSummaryListRowValue [notProvided]="measurement?.name"></dd>
-        @if (isEditable()) {
+        @if (isEditable) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
           </dd>
         }
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Technical description</dt>
         <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="measurement?.technicalDescription"></dd>
-        @if (isEditable()) {
+        @if (isEditable) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
           </dd>
         }
       </div>
@@ -34,15 +34,15 @@
             <span [notProvided]="undefined"></span>
           }
         </dd>
-        @if (isEditable()) {
+        @if (isEditable) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
           </dd>
         }
       </div>
     </dl>
   }
-  @if (isEditable()) {
+  @if (isEditable) {
     <p class="govuk-body">
       <button (click)="handleAddAnother()" govukButton govukSecondaryButton type="button">Add another item</button>
     </p>

@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
+import { isNil } from 'lodash-es';
 
 import { EmpIssuanceApplicationSubmitRequestTaskPayload } from '@mrtm/api';
 
@@ -10,7 +11,6 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
 import { MANDATE_SUB_TASK } from '@requests/common/emp/subtasks/mandate';
 import { empTaskSectionsCompletedDefaultStatusMap } from '@requests/common/emp/utils';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { isNil } from '@shared/utils';
 
 export class EmissionReviewListOfShipsSideEffect extends SideEffect {
   subtask = EMISSIONS_SUB_TASK;

@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
-import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeFeeDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
@@ -49,13 +48,11 @@ class DoePopulateRequestMetadataWithReportableEmissionsServiceTest {
                                     .chargeOperator(false)
                                     .feeDetails(DoeFeeDetails.builder().build())
                                     .determinationReason(
-                                        DoeDeterminationReason.builder()
-                                            .details(DoeDeterminationReasonDetails.builder()
-                                                .type(DoeDeterminationReasonType.IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER)
-                                                .noticeText("noticeText")
-                                                .build())
-                                            .furtherDetails("furtherDetails")
-                                            .build())
+                                            DoeDeterminationReason.builder()
+                                                    .type(DoeDeterminationReasonType
+                                                            .IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER)
+                                                    .furtherDetails("furtherDetails")
+                                                    .build())
                                     .build())
 
 

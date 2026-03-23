@@ -11,6 +11,7 @@ import { VirRespondToRegulatorService } from '@requests/tasks/vir-respond-to-reg
 
 @Component({
   selector: 'mrtm-send-report',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -18,7 +19,6 @@ import { VirRespondToRegulatorService } from '@requests/tasks/vir-respond-to-reg
     ReturnToTaskOrActionPageComponent,
     WarningTextComponent,
   ],
-  standalone: true,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

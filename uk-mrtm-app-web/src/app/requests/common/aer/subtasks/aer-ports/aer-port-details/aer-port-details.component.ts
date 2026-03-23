@@ -34,6 +34,7 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
 
 @Component({
   selector: 'mrtm-aer-port-details',
+  standalone: true,
   imports: [
     WizardStepComponent,
     SelectComponent,
@@ -43,9 +44,8 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     TimeInputComponent,
     DatePickerComponent,
   ],
-  standalone: true,
-  templateUrl: './aer-port-details.component.html',
   providers: [aerPortDetailsFormProvider],
+  templateUrl: './aer-port-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerPortDetailsComponent {
@@ -58,10 +58,8 @@ export class AerPortDetailsComponent {
 
   public readonly wizardMap = aerPortsMap;
   public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS.filter((x) => x.value === 'GB');
-  private readonly currentCountry = toSignal(this.countryCtrl.valueChanges.pipe(), {
-    initialValue: this.countryCtrl.value,
-  });
-  public readonly portSelectItems = computed(() => {
+  private currentCountry = toSignal(this.countryCtrl.valueChanges.pipe(), { initialValue: this.countryCtrl.value });
+  public portSelectItems = computed(() => {
     const country = this.currentCountry();
     return !country
       ? []

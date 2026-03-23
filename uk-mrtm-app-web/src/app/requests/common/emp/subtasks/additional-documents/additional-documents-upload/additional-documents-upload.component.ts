@@ -20,8 +20,8 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-additional-documents-upload',
-  imports: [WizardStepComponent, ReactiveFormsModule, RadioComponent, RadioOptionComponent, MultipleFileInputComponent],
   standalone: true,
+  imports: [WizardStepComponent, ReactiveFormsModule, RadioComponent, RadioOptionComponent, MultipleFileInputComponent],
   templateUrl: './additional-documents-upload.component.html',
   providers: [additionalDocumentsUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -34,7 +34,7 @@ export class AdditionalDocumentsUploadComponent {
 
   protected readonly additionalDocumentsMap = additionalDocumentsMap;
   downloadUrl = this.store.select(empCommonQuery.selectTasksDownloadUrl)();
-  readonly existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
+  existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
     initialValue: this.existCtrl.value,
   });
 

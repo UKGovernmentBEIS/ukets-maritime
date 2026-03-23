@@ -15,8 +15,8 @@
     formControlName="exist"
     govuk-radio
     legend="Do you intend to make use of the derogation for monitoring the amount of fuel consumed on a per-voyage basis?">
-    <govuk-radio-option label="Yes" [value]="true" />
-    <govuk-radio-option label="No" [value]="false" />
+    <govuk-radio-option [label]="'Yes'" [value]="true" />
+    <govuk-radio-option [label]="'No'" [value]="false" />
   </div>
 
   @if (existCtrl.value) {

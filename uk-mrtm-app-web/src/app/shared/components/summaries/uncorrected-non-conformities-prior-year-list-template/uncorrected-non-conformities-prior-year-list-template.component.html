@@ -11,14 +11,14 @@
             <a
               govukLink
               class="govuk-link--no-visited-state"
-              [routerLink]="[`${editLinkPrefix() + row['reference']}/${wizardStep.PRIOR_YEAR_ISSUE_FORM_EDIT}`]"
+              [routerLink]="[editLinkPrefix() + row['reference'] + '/' + wizardStep.PRIOR_YEAR_ISSUE_FORM_EDIT]"
               [queryParams]="queryParams()">
               Change
             </a>
             <a
               govukLink
               class="govuk-link--no-visited-state"
-              [routerLink]="[`${editLinkPrefix() + row['reference']}/${wizardStep.PRIOR_YEAR_ISSUE_DELETE}`]"
+              [routerLink]="[editLinkPrefix() + row['reference'] + '/' + wizardStep.PRIOR_YEAR_ISSUE_DELETE]"
               [queryParams]="queryParams()">
               Remove
             </a>
