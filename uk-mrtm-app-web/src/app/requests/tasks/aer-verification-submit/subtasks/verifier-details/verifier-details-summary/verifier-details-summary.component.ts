@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective } from '@netz/govuk-components';
@@ -14,13 +15,14 @@ import { VerifierDetailsSummaryTemplateComponent } from '@shared/components/summ
 
 @Component({
   selector: 'mrtm-verifier-details-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     VerifierDetailsSummaryTemplateComponent,
+    PendingButtonDirective,
   ],
+  standalone: true,
   templateUrl: './verifier-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

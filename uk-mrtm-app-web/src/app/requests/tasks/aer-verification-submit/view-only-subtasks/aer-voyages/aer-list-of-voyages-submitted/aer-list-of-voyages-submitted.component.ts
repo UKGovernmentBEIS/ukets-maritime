@@ -9,8 +9,8 @@ import { VoyagesListSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-list-of-voyages-submitted',
-  standalone: true,
   imports: [VoyagesListSummaryTemplateComponent, ReturnToTaskOrActionPageComponent, PageHeadingComponent],
+  standalone: true,
   templateUrl: './aer-list-of-voyages-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -16,6 +16,7 @@ interface RelatedAction {
 
 @Component({
   selector: 'netz-related-actions',
+  imports: [RouterLink, LinkDirective, RelatedDocumentsComponent],
   standalone: true,
   template: `
     <aside class="app-related-items" role="complementary">
@@ -36,19 +37,18 @@ interface RelatedAction {
   `,
   styleUrl: './related-actions.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink, LinkDirective, RelatedDocumentsComponent],
 })
 export class RelatedActionsComponent {
   protected readonly route: ActivatedRoute = inject(ActivatedRoute);
   private readonly actionsMap: RelatedActionsMap = inject(TASK_RELATED_ACTIONS_MAP);
 
-  allowedRequestTaskActions = input.required<RequestTaskItemDTO['allowedRequestTaskActions']>();
-  taskId = input.required<RequestTaskDTO['id'] | RequestDetailsDTO['id']>();
-  requestTaskType = input<RequestTaskDTO['type'] | RequestDetailsDTO['requestType']>();
-  previewDocuments = input.required<PreviewDocument[]>();
-  showReassignAction = input<boolean>(false);
-  reassignAction = input<RelatedAction>({ text: 'Reassign task', link: ['change-assignee'] });
-  relatedActions: Signal<RelatedAction[]> = computed(() => this.filterRelatedActions());
+  readonly allowedRequestTaskActions = input.required<RequestTaskItemDTO['allowedRequestTaskActions']>();
+  readonly taskId = input.required<RequestTaskDTO['id'] | RequestDetailsDTO['id']>();
+  readonly requestTaskType = input<RequestTaskDTO['type'] | RequestDetailsDTO['requestType']>();
+  readonly previewDocuments = input.required<PreviewDocument[]>();
+  readonly showReassignAction = input<boolean>(false);
+  readonly reassignAction = input<RelatedAction>({ text: 'Reassign task', link: ['change-assignee'] });
+  readonly relatedActions: Signal<RelatedAction[]> = computed(() => this.filterRelatedActions());
 
   private filterRelatedActions() {
     let result: { text: string; link: string[] }[];

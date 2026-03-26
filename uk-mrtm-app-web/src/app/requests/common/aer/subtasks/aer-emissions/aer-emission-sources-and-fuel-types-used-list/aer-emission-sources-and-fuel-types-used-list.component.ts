@@ -2,7 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, input, signal, Wr
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { takeUntil } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { EmissionsSources } from '@mrtm/api';
 
@@ -30,10 +29,10 @@ import {
 } from '@shared/components';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-emission-sources-and-fuel-types-used-list',
-  standalone: true,
   imports: [
     AerEmissionSourcesAndFuelTypesUsedSummaryTemplateComponent,
     PageHeadingComponent,
@@ -42,6 +41,7 @@ import { NestedMessageValidationError, XmlValidationError } from '@shared/types'
     XmlErrorSummaryComponent,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './aer-emission-sources-and-fuel-types-used-list.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,

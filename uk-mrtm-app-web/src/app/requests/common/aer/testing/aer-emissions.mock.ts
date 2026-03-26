@@ -3,6 +3,7 @@ import { AerEmissions, AerFuelsAndEmissionsFactors, FuelOriginTypeName } from '@
 export const aerEmissionsMock: AerEmissions = {
   ships: [
     {
+      dataInputType: 'MANUAL',
       details: {
         imoNumber: '1111111',
         name: 'SameMonitoringMethod',
@@ -111,6 +112,7 @@ export const aerEmissionsMock: AerEmissions = {
       },
     },
     {
+      dataInputType: 'MANUAL',
       details: {
         imoNumber: '2222222',
         name: 'SameMonitoringMethod',

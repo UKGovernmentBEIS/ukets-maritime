@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import {
   CONTROL_ACTIVITIES_SUB_TASK,
@@ -16,12 +16,12 @@ import { controlActivitiesMap } from '@requests/common/emp/subtasks/subtask-list
 import { mockEmpControlActivities, mockStateBuild } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { screen } from '@testing-library/angular';
 
 describe('ControlActivitiesSummaryComponent', () => {
   let fixture: ComponentFixture<ControlActivitiesSummaryComponent>;
   let component: ControlActivitiesSummaryComponent;
   let store: RequestTaskStore;
+  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<unknown>> = {
@@ -30,22 +30,21 @@ describe('ControlActivitiesSummaryComponent', () => {
 
   const taskServiceSpy = jest.spyOn(taskServiceMock, 'submitSubtask');
 
-  const createComponent = () => {
-    fixture = TestBed.createComponent(ControlActivitiesSummaryComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    jest.clearAllMocks();
-  };
+  class Page extends BasePage<ControlActivitiesSummaryComponent> {
+    get summaryListTerms(): string[] {
+      return this.queryAll('dt').map((dt) => dt.textContent.trim());
+    }
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [ControlActivitiesSummaryComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    }).compileComponents();
+    });
 
     store = TestBed.inject(RequestTaskStore);
     store.setState(
@@ -58,7 +57,11 @@ describe('ControlActivitiesSummaryComponent', () => {
         },
       ),
     );
-    createComponent();
+    fixture = TestBed.createComponent(ControlActivitiesSummaryComponent);
+    component = fixture.componentInstance;
+    page = new Page(fixture);
+    fixture.detectChanges();
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
@@ -66,14 +69,9 @@ describe('ControlActivitiesSummaryComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(screen.getAllByRole('heading')[0].textContent).toEqual('Check your answers');
+    expect(page.heading1.textContent).toEqual('Check your answers');
 
-    const summarySections = screen
-      .getAllByRole('heading')
-      .slice(1)
-      .map((section) => section.textContent);
-
-    expect(summarySections).toEqual([
+    expect(page.queryAll('h2').map((item) => item.textContent.trim())).toEqual([
       controlActivitiesMap.qualityAssurance.title,
       controlActivitiesMap.internalReviews.title,
       controlActivitiesMap.corrections.title,
@@ -81,7 +79,7 @@ describe('ControlActivitiesSummaryComponent', () => {
       controlActivitiesMap.documentation.title,
     ]);
 
-    expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
+    expect([...new Set(page.summaryListTerms)]).toEqual([
       'Procedure reference',
       'Procedure version',
       'Description of procedure',
@@ -93,7 +91,7 @@ describe('ControlActivitiesSummaryComponent', () => {
   });
 
   it('should submit subtask', () => {
-    screen.getByRole('button', { name: 'Confirm and continue' }).click();
+    page.standardButton.click();
 
     expect(taskServiceSpy).toHaveBeenCalledWith(
       CONTROL_ACTIVITIES_SUB_TASK,

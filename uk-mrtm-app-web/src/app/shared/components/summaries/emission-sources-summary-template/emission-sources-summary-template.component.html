@@ -1,65 +1,67 @@
-<h2 class="govuk-heading-m">{{ emissionSourcesMap.listCompletion.title }}</h2>
+<h2 class="govuk-heading-m">{{ emissionSourcesMap().listCompletion.title }}</h2>
 <mrtm-procedure-form-partial-summary-template
-  [procedureForm]="emissionSources?.listCompletion"
-  [originalProcedureForm]="originalEmissionSources?.listCompletion"
-  [currentWizardStep]="wizardStep?.LIST_COMPLETION"
-  [queryParams]="queryParams"
-  [isEditable]="isEditable" />
+  [procedureForm]="emissionSources()?.listCompletion"
+  [originalProcedureForm]="originalEmissionSources()?.listCompletion"
+  [currentWizardStep]="wizardStep()?.LIST_COMPLETION"
+  [queryParams]="queryParams()"
+  [isEditable]="isEditable()" />
 
-<h2 class="govuk-heading-m">{{ emissionSourcesMap.emissionFactors.title }}</h2>
+<h2 class="govuk-heading-m">{{ emissionSourcesMap().emissionFactors.title }}</h2>
 <dl
   govuk-summary-list
   [hasBottomMargin]="false"
-  [class]="emissionSources?.emissionFactors?.exist === false ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-9'">
+  [class]="emissionSources()?.emissionFactors?.exist === false ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-9'">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Are you using default values for all emissions factors?</dt>
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="emissionSources?.emissionFactors?.exist | booleanToText"
-      [previous]="originalEmissionSources?.emissionFactors?.exist | booleanToText"></dd>
-    @if (isEditable) {
+      [current]="emissionSources()?.emissionFactors?.exist | booleanToText"
+      [previous]="originalEmissionSources()?.emissionFactors?.exist | booleanToText"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep?.EMISSION_FACTORS]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep()?.EMISSION_FACTORS]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
 </dl>
-@if (emissionSources?.emissionFactors?.exist === false) {
+@if (emissionSources()?.emissionFactors?.exist === false) {
   <mrtm-procedure-form-partial-summary-template
-    [procedureForm]="emissionSources?.emissionFactors?.factors"
-    [originalProcedureForm]="originalEmissionSources?.emissionFactors?.factors"
-    [currentWizardStep]="wizardStep?.EMISSION_FACTORS"
-    [queryParams]="queryParams"
-    [isEditable]="isEditable" />
+    [procedureForm]="emissionSources()?.emissionFactors?.factors"
+    [originalProcedureForm]="originalEmissionSources()?.emissionFactors?.factors"
+    [currentWizardStep]="wizardStep()?.EMISSION_FACTORS"
+    [queryParams]="queryParams()"
+    [isEditable]="isEditable()" />
 }
 
-<h2 class="govuk-heading-m">{{ emissionSourcesMap.emissionCompliance.title }}</h2>
+<h2 class="govuk-heading-m">{{ emissionSourcesMap().emissionCompliance.title }}</h2>
 <dl
   govuk-summary-list
   [hasBottomMargin]="false"
-  [class]="emissionSources?.emissionCompliance?.exist === true ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-9'">
+  [class]="
+    emissionSources()?.emissionCompliance?.exist === true ? 'govuk-!-margin-bottom-0' : 'govuk-!-margin-bottom-9'
+  ">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>
-      {{ emissionSourcesMap.emissionCompliance.caption }}
+      {{ emissionSourcesMap().emissionCompliance.caption }}
     </dt>
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="emissionSources?.emissionCompliance?.exist | booleanToText"
-      [previous]="originalEmissionSources?.emissionCompliance?.exist | booleanToText"></dd>
-    @if (isEditable) {
+      [current]="emissionSources()?.emissionCompliance?.exist | booleanToText"
+      [previous]="originalEmissionSources()?.emissionCompliance?.exist | booleanToText"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep?.EMISSION_COMPLIANCE]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep()?.EMISSION_COMPLIANCE]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
 </dl>
-@if (emissionSources?.emissionCompliance?.exist === true) {
+@if (emissionSources()?.emissionCompliance?.exist === true) {
   <mrtm-procedure-form-partial-summary-template
-    [procedureForm]="emissionSources?.emissionCompliance?.criteria"
-    [originalProcedureForm]="originalEmissionSources?.emissionCompliance?.criteria"
-    [currentWizardStep]="wizardStep?.EMISSION_COMPLIANCE"
-    [queryParams]="queryParams"
-    [isEditable]="isEditable" />
+    [procedureForm]="emissionSources()?.emissionCompliance?.criteria"
+    [originalProcedureForm]="originalEmissionSources()?.emissionCompliance?.criteria"
+    [currentWizardStep]="wizardStep()?.EMISSION_COMPLIANCE"
+    [queryParams]="queryParams()"
+    [isEditable]="isEditable()" />
 }

@@ -2,17 +2,13 @@
   <h2 class="govuk-heading-m">Notes</h2>
   <div>
     <a govukSecondaryButton routerLink="./notes/add" type="button">Add a note</a>
-    <hr class="govuk-section-break govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   </div>
-  @for (note of result.notes; track note; let i = $index) {
+  @for (note of result.notes; track note) {
     <dl govuk-summary-list>
       <div govukSummaryListRow>
         <dd govukSummaryListRowValue>
-          <mrtm-more-less-text
-            [text]="note.payload.note"
-            [index]="i"
-            [lines]="5"
-            widthClass="note-line-width"></mrtm-more-less-text>
+          <mrtm-more-less-text [text]="note.payload.note" [index]="$index" [lines]="5" widthClass="note-line-width" />
           <div class="govuk-!-margin-top-6">
             <mrtm-summary-download-files [files]="getDownloadUrlFiles(note)" />
           </div>
@@ -29,9 +25,6 @@
     </dl>
   }
   @if (result.totalItems > pageSize) {
-    <govuk-pagination
-      [count]="result.totalItems"
-      (currentPageChange)="page$.next($event)"
-      [pageSize]="pageSize"></govuk-pagination>
+    <govuk-pagination [count]="result.totalItems" (currentPageChange)="page$.next($event)" [pageSize]="pageSize" />
   }
 }

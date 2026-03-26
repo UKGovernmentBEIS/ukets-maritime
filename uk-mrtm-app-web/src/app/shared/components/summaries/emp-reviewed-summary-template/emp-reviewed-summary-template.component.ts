@@ -18,7 +18,6 @@ import { EmpReviewedDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-reviewed-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -31,6 +30,7 @@ import { EmpReviewedDto } from '@shared/types';
     RouterLink,
     RecipientsPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-reviewed-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

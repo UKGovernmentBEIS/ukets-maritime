@@ -106,6 +106,7 @@ export class AerShipsXmlService implements ShipsXmlService {
               emissionsSources: emissionsSourcesResult.data,
               uncertaintyLevel: uncertaintyLevelResult.data,
               derogations: derogationsResult.data,
+              dataInputType: 'MANUAL',
             });
           }
         });

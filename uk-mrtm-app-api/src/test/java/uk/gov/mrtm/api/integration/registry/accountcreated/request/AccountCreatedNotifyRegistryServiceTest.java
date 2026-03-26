@@ -3,6 +3,9 @@ package uk.gov.mrtm.api.integration.registry.accountcreated.request;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.InjectMocks;
@@ -19,11 +22,14 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.event.EmpApprovedEvent;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.EmpOperatorDetails;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.LimitedCompanyOrganisation;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.operatordetails.OrganisationLegalStatusType;
+import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.integration.model.account.AccountOpeningEvent;
 
 import java.time.LocalDate;
+import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -37,6 +43,7 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class AccountCreatedNotifyRegistryServiceTest {
+    private static final String EMP_ID = "UK-1";
     private static final Long ACCOUNT_ID = 1L;
     private static final String EMITTER_ID = "MA000001";
     private static final String ACCOUNT_NAME = "name";
@@ -52,31 +59,37 @@ class AccountCreatedNotifyRegistryServiceTest {
     private AccountCreatedSendToRegistryProducer accountCreatedSendToRegistryProducer;
 
     @Mock
+    private EmissionsMonitoringPlanQueryService empQueryService;
+
+    @Mock
     private KafkaTemplate<String, AccountOpeningEvent> accountCreatedKafkaTemplate;
 
     @Captor
     private ArgumentCaptor<AccountOpeningEvent> accountOpeningEventArgumentCaptor;
 
-    @Test
-    void notifyRegistry() {
+    @ParameterizedTest
+    @MethodSource("notifyRegistrySuccessScenarios")
+    void notifyRegistry(Optional<String> empIdOptional, String empId) {
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
         LocalDate firstMaritimeActivity = LocalDate.of(2025, 3, 16);
 
         MrtmAccount account = createAccount(EMITTER_ID, ACCOUNT_NAME, IMO_NUMBER, ca, firstMaritimeActivity);
 
         when(accountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(account);
+        when(empQueryService.getEmpIdByAccountId(ACCOUNT_ID)).thenReturn(empIdOptional);
 
         accountCreatedNotifyRegistryService.notifyRegistry(createEvent());
 
         verify(accountQueryService).getAccountById(ACCOUNT_ID);
+        verify(empQueryService).getEmpIdByAccountId(ACCOUNT_ID);
         verify(accountCreatedSendToRegistryProducer).produce(accountOpeningEventArgumentCaptor.capture(),
                 eq(accountCreatedKafkaTemplate));
-        verifyNoMoreInteractions(accountQueryService, accountCreatedSendToRegistryProducer);
+        verifyNoMoreInteractions(accountQueryService, accountCreatedSendToRegistryProducer, empQueryService);
 
         final AccountOpeningEvent accountOpeningEventCaptured = accountOpeningEventArgumentCaptor.getValue();
         assertEquals(EMITTER_ID, accountOpeningEventCaptured.getAccountDetails().getEmitterId());
         assertEquals(ACCOUNT_NAME, accountOpeningEventCaptured.getAccountDetails().getAccountName());
-        assertEquals("empId", accountOpeningEventCaptured.getAccountDetails().getMonitoringPlanId());
+        assertEquals(empId, accountOpeningEventCaptured.getAccountDetails().getMonitoringPlanId());
         assertEquals(IMO_NUMBER, accountOpeningEventCaptured.getAccountDetails().getCompanyImoNumber());
         assertEquals("DAERA", accountOpeningEventCaptured.getAccountDetails().getRegulator());
         assertEquals(2025, accountOpeningEventCaptured.getAccountDetails().getFirstYearOfVerifiedEmissions());
@@ -93,6 +106,13 @@ class AccountCreatedNotifyRegistryServiceTest {
         assertNull(accountOpeningEventCaptured.getAccountHolder().getCrnJustification());
     }
 
+    public static Stream<Arguments> notifyRegistrySuccessScenarios() {
+        return Stream.of(
+            Arguments.of(Optional.of(EMP_ID), EMP_ID),
+            Arguments.of(Optional.empty(), null)
+        );
+    }
+
     @Test
     void notifyRegistry_registry_id_exists() {
         CompetentAuthorityEnum ca = CompetentAuthorityEnum.NORTHERN_IRELAND;
@@ -107,12 +127,11 @@ class AccountCreatedNotifyRegistryServiceTest {
 
         verify(accountQueryService).getAccountById(ACCOUNT_ID);
         verifyNoMoreInteractions(accountQueryService);
-        verifyNoInteractions(accountCreatedSendToRegistryProducer);
+        verifyNoInteractions(accountCreatedSendToRegistryProducer, empQueryService);
     }
 
     private EmpApprovedEvent createEvent() {
         return EmpApprovedEvent.builder()
-            .empId("empId")
             .accountId(ACCOUNT_ID)
             .emissionsMonitoringPlan(
                 EmissionsMonitoringPlan.builder()
@@ -139,6 +158,7 @@ class AccountCreatedNotifyRegistryServiceTest {
     private MrtmAccount createAccount(String emitterId, String accountName, String imoNumber,
                                       CompetentAuthorityEnum ca, LocalDate firstMaritimeActivity) {
         return MrtmAccount.builder()
+                .id(ACCOUNT_ID)
                 .businessId(emitterId)
                 .name(accountName)
                 .imoNumber(imoNumber)

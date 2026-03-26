@@ -1,8 +1,7 @@
 import { FormGroup } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { TimeInputFormGroupModel, TimeInputFormModel } from '@shared/components/time-input/time-input.types';
+import { isNil } from '@shared/utils';
 
 const isInRange = (value: number, min: number, max: number): boolean => value >= min && value <= max;
 

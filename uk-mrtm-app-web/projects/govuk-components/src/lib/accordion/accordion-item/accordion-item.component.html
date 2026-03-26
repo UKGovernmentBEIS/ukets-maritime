@@ -6,20 +6,18 @@
         class="govuk-accordion__section-button"
         [attr.aria-controls]="contentId"
         [attr.aria-expanded]="isExpanded$ | async"
-        [attr.aria-label]="
-          header() + ' , ' + ((isExpanded$ | async) === true ? 'Hide this section' : 'Show this section')
-        "
+        [attr.aria-label]="`${header()} , ${(isExpanded | async) === true ? 'Hide this section' : 'Show this section'}`"
         (click)="isExpanded.next(!isExpanded.value)"
         (focusin)="isFocused = true"
         (blur)="isFocused = false">
-        <span class="govuk-accordion__section-heading-text" [id]="accordion.id + '-heading-' + itemIndex">
+        <span class="govuk-accordion__section-heading-text" [id]="`${accordion.id}-heading-${itemIndex}`">
           <span class="govuk-accordion__section-heading-text-focus">{{ header() }}</span>
         </span>
         <span class="govuk-visually-hidden govuk-accordion__section-heading-divider">,</span>
 
-        @if (accordionItemSummaryDirective) {
-          <span [id]="accordion.id + '-summary-' + itemIndex" class="govuk-accordion__section-summary govuk-body">
-            <ng-content select="[govukAccordionItemSummary]"></ng-content>
+        @if (accordionItemSummaryDirective()) {
+          <span [id]="`${accordion.id}-summary-${itemIndex}`" class="govuk-accordion__section-summary govuk-body">
+            <ng-content select="[govukAccordionItemSummary]" />
             <span class="govuk-visually-hidden govuk-accordion__section-heading-divider">,</span>
           </span>
         }
@@ -36,6 +34,6 @@
     </h2>
   </div>
   <div [id]="contentId" class="govuk-accordion__section-content">
-    <ng-content></ng-content>
+    <ng-content />
   </div>
 </div>

@@ -6,7 +6,7 @@
   }
 } @else {
   @if (isSummaryDisplayed$ | async) {
-    <govuk-error-summary [form]="form"></govuk-error-summary>
+    <govuk-error-summary [form]="form" />
   }
   <netz-page-heading size="xl">
     {{ (currentVerificationBody$ | async) ? 'Replace a verifier' : 'Appoint a verifier' }}

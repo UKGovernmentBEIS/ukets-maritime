@@ -11,10 +11,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-data-suppliers-form',
-  standalone: true,
   imports: [WizardStepComponent, TextInputComponent, ReactiveFormsModule],
-  providers: [provideDataSuppliersForm],
+  standalone: true,
   templateUrl: './data-suppliers-form.component.html',
+  providers: [provideDataSuppliersForm],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataSuppliersFormComponent {

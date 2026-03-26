@@ -1,14 +1,14 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { TimeInputComponent } from '@shared/components';
 
 describe('TimeInputComponent', () => {
   @Component({
-    standalone: true,
     imports: [TimeInputComponent, ReactiveFormsModule],
+    standalone: true,
     template: '<div mrtm-time-input [formControl]="control" label="test" hint="test"></div>',
   })
   class TestComponent {
@@ -21,7 +21,7 @@ describe('TimeInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TimeInputComponent],
+      providers: [ControlContainer],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);

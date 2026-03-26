@@ -1,14 +1,14 @@
-import { ChangeDetectionStrategy, Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, input, viewChild } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'govuk-header',
-  standalone: true,
   imports: [RouterLink],
+  standalone: true,
   templateUrl: './header.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HeaderComponent {
-  @Input() title: string;
-  @ViewChild('header') header: ElementRef;
+  readonly title = input<string>();
+  readonly header = viewChild<ElementRef>('header');
 }

@@ -17,9 +17,9 @@ export const EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_ROUTES: Routes = [
     data: { breadcrumb: false, backlink: '../../' },
     canActivate: [canActivateEmissionsReductionClaimVerificationSummary],
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/emissions-reduction-claims-verification/emissions-reduction-claims-verification-summary'
-      ).then((c) => c.EmissionsReductionClaimsVerificationSummaryComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/emissions-reduction-claims-verification/emissions-reduction-claims-verification-summary').then(
+        (c) => c.EmissionsReductionClaimsVerificationSummaryComponent,
+      ),
   },
   {
     path: EmissionsReductionClaimsVerificationStep.FORM,
@@ -30,8 +30,8 @@ export const EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_ROUTES: Routes = [
       backlink: backlinkResolver(EmissionsReductionClaimsVerificationStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/emissions-reduction-claims-verification/emissions-reduction-claims-verification-form'
-      ).then((c) => c.EmissionsReductionClaimsVerificationFormComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/emissions-reduction-claims-verification/emissions-reduction-claims-verification-form').then(
+        (c) => c.EmissionsReductionClaimsVerificationFormComponent,
+      ),
   },
 ];

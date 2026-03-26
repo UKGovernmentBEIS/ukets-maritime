@@ -1,6 +1,6 @@
-import { isNil } from 'lodash-es';
-
 import { AerEmissionsReductionClaimVerification } from '@mrtm/api';
+
+import { isNil } from '@shared/utils';
 
 export const isWizardCompleted = (
   emissionsReductionClaimVerification: AerEmissionsReductionClaimVerification,

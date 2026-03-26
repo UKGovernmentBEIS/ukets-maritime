@@ -1,21 +1,24 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { BrowserModule, By } from '@angular/platform-browser';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { By } from '@angular/platform-browser';
 
-import { FormErrorDirective } from '../directives';
-import { ErrorMessageComponent, GovukValidators } from '../error-message';
+import { GovukValidators } from '../error-message';
+import { LabelSizeType } from '../text-input';
 import { TextareaComponent } from './textarea.component';
 
 describe('TextareaComponent', () => {
   @Component({
-    standalone: true,
     imports: [TextareaComponent, ReactiveFormsModule],
-    template: '<div govuk-textarea [formControl]="control" [maxLength]="maxLength"></div>',
+    standalone: true,
+    template:
+      '<div [labelSize]="labelSize" [isLabelHidden]="isLabelHidden" govuk-textarea [formControl]="control" [maxLength]="maxLength"></div>',
   })
   class TestComponent {
     control = new FormControl();
     maxLength: number;
+    isLabelHidden = false;
+    labelSize: LabelSizeType = 'normal';
   }
 
   let component: TextareaComponent;
@@ -24,14 +27,7 @@ describe('TextareaComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        BrowserModule,
-        TextareaComponent,
-        TestComponent,
-        ErrorMessageComponent,
-        FormErrorDirective,
-      ],
+      providers: [ControlContainer],
     }).compileComponents();
   });
 
@@ -113,27 +109,27 @@ describe('TextareaComponent', () => {
     const hostElement: HTMLElement = fixture.nativeElement;
     const label = hostElement.querySelector('label');
 
-    component.isLabelHidden = false;
+    hostComponent.isLabelHidden = false;
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    component.labelSize = 'normal';
+    hostComponent.labelSize = 'normal';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    component.labelSize = 'small';
+    hostComponent.labelSize = 'small';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--s');
 
-    component.labelSize = 'medium';
+    hostComponent.labelSize = 'medium';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--m');
 
-    component.labelSize = 'large';
+    hostComponent.labelSize = 'large';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--l');

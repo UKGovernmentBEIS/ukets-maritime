@@ -49,7 +49,7 @@ select
        s.count_of_overdue_improvements "No of overdue improvements"
   from account a
   join account_mrtm am on am.id = a.id
-  join emp p on p.account_id = a.id
+  left join emp p on p.account_id = a.id
   left join account_reporting_status ars on a.id = ars.account_id
   left join account_contact ac on ac.account_id = a.id and ac.contact_type = 'PRIMARY'
   join request_resource rr on (rr.resource_type = 'ACCOUNT' and rr.resource_id = a.id::VARCHAR)

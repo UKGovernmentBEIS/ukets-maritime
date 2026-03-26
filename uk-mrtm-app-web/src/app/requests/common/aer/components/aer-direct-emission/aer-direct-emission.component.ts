@@ -27,10 +27,10 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-direct-emission',
-  standalone: true,
   imports: [WizardStepComponent, TextInputComponent, ReactiveFormsModule, LinkDirective, RouterLink],
-  providers: [aerDirectEmissionFormProvider],
+  standalone: true,
   templateUrl: './aer-direct-emission.component.html',
+  providers: [aerDirectEmissionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerDirectEmissionComponent {
@@ -45,7 +45,7 @@ export class AerDirectEmissionComponent {
   private readonly objectId: Signal<string> = toSignal(
     this.activatedRoute.params.pipe(map((param) => param?.[this.routeParamKey])),
   );
-  public ship: Signal<AerShipEmissions> = computed(() =>
+  public readonly ship: Signal<AerShipEmissions> = computed(() =>
     this.store.select(this.relatedShipSelector(this.objectId()))(),
   );
 

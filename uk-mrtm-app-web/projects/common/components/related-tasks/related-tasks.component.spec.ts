@@ -26,27 +26,25 @@ describe('RelatedTasksComponent', () => {
     }
   }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
         { provide: ITEM_NAME_TRANSFORMER, useValue: () => {} },
         { provide: ITEM_LINK_REQUEST_TYPES_WHITELIST, useValue: ['DUMMY_REQUEST_TYPE'] },
       ],
-    }).compileComponents();
-  });
+    }).overrideComponent(RelatedTasksComponent, { set: { host: { 'data-test-id': 'related-tasks-spec' } } });
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(RelatedTasksComponent);
     component = fixture.componentInstance;
-    component.items = [
+    fixture.componentRef.setInput('items', [
       {
         requestType: 'DUMMY_REQUEST_TYPE',
         taskType: 'DUMMY_REQUEST_TASK_TYPE2',
         taskId: 1,
         daysRemaining: 13,
       },
-    ];
+    ]);
     page = new Page(fixture);
     fixture.detectChanges();
   });

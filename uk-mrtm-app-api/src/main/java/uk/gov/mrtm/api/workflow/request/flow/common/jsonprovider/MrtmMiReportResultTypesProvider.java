@@ -2,8 +2,8 @@ package uk.gov.mrtm.api.workflow.request.flow.common.jsonprovider;
 
 import com.fasterxml.jackson.databind.jsontype.NamedType;
 import org.springframework.stereotype.Component;
-import uk.gov.mrtm.api.mireport.MrtmMiReportType;
-import uk.gov.mrtm.api.mireport.verificationbodyusers.MaritimeVerificationBodyUsersMiReportResult;
+import uk.gov.mrtm.api.mireport.system.MrtmMiReportType;
+import uk.gov.mrtm.api.mireport.system.verificationbodyusers.MaritimeVerificationBodyUsersMiReportResult;
 import uk.gov.netz.api.common.config.jackson.JsonSubTypesProvider;
 
 import java.util.List;

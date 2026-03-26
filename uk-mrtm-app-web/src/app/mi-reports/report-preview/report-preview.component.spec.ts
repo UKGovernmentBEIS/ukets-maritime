@@ -2,20 +2,22 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { MiReportsService } from '@mrtm/api';
 
-import { mockClass } from '@netz/common/testing';
+import { BasePage, mockClass } from '@netz/common/testing';
 
 import { miReportTypeDescriptionMap } from '@mi-reports/core/mi-report';
 import { MiReportType } from '@mi-reports/core/mi-report-type.enum';
 import { ReportPreviewComponent } from '@mi-reports/report-preview';
 import { MI_REPORT_USE_CASE_SERVICE } from '@mi-reports/use-cases/common';
 import { ListOfAccountsUseCaseService } from '@mi-reports/use-cases/list-of-accounts-use-case.service';
-import { screen } from '@testing-library/angular';
 
 describe('ReportPreviewComponent', () => {
   let component: ReportPreviewComponent;
   let fixture: ComponentFixture<ReportPreviewComponent>;
+  let page: Page;
 
   const miReportsService = mockClass(MiReportsService);
+
+  class Page extends BasePage<ReportPreviewComponent> {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -28,6 +30,7 @@ describe('ReportPreviewComponent', () => {
 
     fixture = TestBed.createComponent(ReportPreviewComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -36,10 +39,7 @@ describe('ReportPreviewComponent', () => {
   });
 
   it('should display HTML Elements', () => {
-    expect(screen.getByRole('heading').textContent).toEqual(
-      miReportTypeDescriptionMap[MiReportType.LIST_OF_ACCOUNTS_USERS_CONTACTS],
-    );
-    expect(screen.getByRole('button', { name: /Execute/ })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: /Export to excel/ })).toBeInTheDocument();
+    expect(page.heading1.textContent).toEqual(miReportTypeDescriptionMap[MiReportType.LIST_OF_ACCOUNTS_USERS_CONTACTS]);
+    expect(page.queryAll('button').map((item) => item.textContent)).toEqual(['Execute', 'Export to excel']);
   });
 });

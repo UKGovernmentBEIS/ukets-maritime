@@ -5,8 +5,7 @@ import { provideRouter } from '@angular/router';
 import { RELATED_PRINTABLE_ITEMS_MAP } from '@netz/common/components';
 import { TASK_STATUS_TAG_MAP, TaskStatusTagMap } from '@netz/common/pipes';
 import { requestActionQuery, RequestActionStore } from '@netz/common/store';
-
-import { screen } from '@testing-library/angular';
+import { BasePage } from '@netz/common/testing';
 
 import { RelatedPrintableItemsMap } from '../../../components';
 import { REQUEST_ACTION_PAGE_CONTENT } from '../../request-action.providers';
@@ -14,10 +13,10 @@ import { RequestActionPageContentFactoryMap } from '../../request-action.types';
 import { RequestActionPageComponent } from './request-action-page.component';
 
 @Component({
+  standalone: true,
   template: `
     <h1>TEST CONTENT</h1>
   `,
-  standalone: true,
 })
 class MockContentComponent {}
 
@@ -50,8 +49,12 @@ describe('RequestActionComponent', () => {
   let component: RequestActionPageComponent;
   let fixture: ComponentFixture<RequestActionPageComponent>;
   let store: RequestActionStore;
+  let page: Page;
+
   const map: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
   const relatedPrintableItemsMap: RelatedPrintableItemsMap = {};
+
+  class Page extends BasePage<RequestActionPageComponent> {}
 
   function createTestModule(content: RequestActionPageContentFactoryMap) {
     TestBed.configureTestingModule({
@@ -72,6 +75,7 @@ describe('RequestActionComponent', () => {
 
     fixture = TestBed.createComponent(RequestActionPageComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   }
 
@@ -82,14 +86,14 @@ describe('RequestActionComponent', () => {
 
   it('should show content with custom component', () => {
     createTestModule(getContent('component'));
-    expect(screen.getByRole('heading', { name: 'TEST CONTENT' })).toBeVisible();
+    expect(page.queryAll('h1').map((h) => h.textContent)).toContain('TEST CONTENT');
   });
 
   it('should show content with sections', () => {
     createTestModule(getContent('sections'));
-    expect(screen.getByRole('heading', { name: 'TEST_SECTION_1' })).toBeVisible();
-    expect(screen.getByRole('link', { name: 'TEST_SUBTASK_1_1' })).toBeVisible();
-    expect(screen.getByRole('heading', { name: 'TEST_SECTION_2' })).toBeVisible();
-    expect(screen.getByRole('link', { name: 'TEST_SUBTASK_2_1' })).toBeVisible();
+    expect(page.queryAll('h2').map((h) => h.textContent)).toContain('TEST_SECTION_1');
+    expect(page.link.textContent).toContain('TEST_SUBTASK_1_1');
+    expect(page.queryAll('h2').map((h) => h.textContent)).toContain('TEST_SECTION_2');
+    expect(page.queryAll('a').map((a) => a.textContent)).toContain('TEST_SUBTASK_2_1');
   });
 });

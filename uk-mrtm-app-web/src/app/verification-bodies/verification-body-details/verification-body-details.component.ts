@@ -6,7 +6,7 @@ import { BehaviorSubject, catchError, map, shareReplay, switchMap, take, throwEr
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { BusinessErrorService, ErrorCodes, isBadRequest } from '@netz/common/error';
-import { TabDirective, TabsComponent } from '@netz/govuk-components';
+import { TabDirective, TabLazyDirective, TabsComponent } from '@netz/govuk-components';
 
 import { VerifierUsersListComponent } from '@shared/components';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
@@ -19,19 +19,22 @@ import {
 } from '@verification-bodies/+state/verification-bodies.selectors';
 import { VerificationBodiesStoreService } from '@verification-bodies/+state/verification-bodies-store.service';
 import { VerificationBodySummaryComponent } from '@verification-bodies/components';
+import { DataSupplierTabComponent } from '@verification-bodies/components/data-supplier-tab';
 
 @Component({
   selector: 'mrtm-verification-body-details',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
     TabDirective,
+    TabLazyDirective,
     VerificationBodySummaryComponent,
     AsyncPipe,
     NotificationBannerComponent,
     VerifierUsersListComponent,
+    DataSupplierTabComponent,
   ],
+  standalone: true,
   templateUrl: './verification-body-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

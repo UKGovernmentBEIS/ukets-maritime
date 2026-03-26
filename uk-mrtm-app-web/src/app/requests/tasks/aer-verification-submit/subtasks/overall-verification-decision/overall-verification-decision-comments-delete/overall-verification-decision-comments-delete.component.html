@@ -1,15 +1,17 @@
-<div class="govuk-!-width-two-thirds">
-  <netz-page-heading>{{ map.commentsDelete.title }}</netz-page-heading>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <netz-page-heading>{{ map.commentsDelete.title }}</netz-page-heading>
 
-  <p class="govuk-body govuk-!-margin-bottom-8">All information entered will be lost.</p>
+    <p class="govuk-body govuk-!-margin-bottom-8">All information entered will be lost.</p>
 
-  <div class="govuk-button-group">
-    <button type="button" (click)="onSubmit()" netzPendingButton govukWarnButton>Yes, remove</button>
-    <a
-      govukLink
-      class="govuk-link--no-visited-state"
-      [routerLink]="['../../' + wizardStep.VERIFIED_WITH_COMMENTS_LIST]">
-      Cancel
-    </a>
+    <div class="govuk-button-group">
+      <button type="button" (click)="onSubmit()" netzPendingButton govukWarnButton>Yes, remove</button>
+      <a
+        govukLink
+        class="govuk-link--no-visited-state"
+        [routerLink]="[`../../${wizardStep.VERIFIED_WITH_COMMENTS_LIST}`]">
+        Cancel
+      </a>
+    </div>
   </div>
 </div>

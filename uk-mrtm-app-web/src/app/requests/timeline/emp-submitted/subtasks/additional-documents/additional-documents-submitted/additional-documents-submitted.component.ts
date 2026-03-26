@@ -35,7 +35,7 @@ interface ViewModel {
 export class AdditionalDocumentsSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(empSubmittedQuery.selectAdditionalDocuments)();
     return {
       additionalDocuments: additionalDocuments,

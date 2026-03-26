@@ -1,8 +1,24 @@
 import { Routes } from '@angular/router';
 
+import {
+  complianceMonitoringReportingMap,
+  dataGapsMethodologiesMap,
+  etsComplianceRulesMap,
+  materialityLevelMap,
+  opinionStatementMap,
+  overallVerificationDecisionMap,
+  recommendedImprovementsMap,
+  uncorrectedMisstatementsMap,
+  uncorrectedNonCompliancesMap,
+  uncorrectedNonConformitiesMap,
+  verifierDetailsMap,
+} from '@requests/common/aer';
 import { COMPLIANCE_MONITORING_REPORTING_SUB_TASK_PATH } from '@requests/common/aer/subtasks/compliance-monitoring-reporting/compliance-monitoring-reporting.helpers';
 import { DATA_GAPS_METHODOLOGIES_SUB_TASK_PATH } from '@requests/common/aer/subtasks/data-gaps-methodologies/data-gaps-methodologies.helpers';
-import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
+import {
+  EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+  emissionsReductionClaimVerificationSubtaskListMap,
+} from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { ETS_COMPLIANCE_RULES_SUB_TASK_PATH } from '@requests/common/aer/subtasks/ets-compliance-rules/ets-compliance-rules.helpers';
 import { MATERIALITY_LEVEL_SUB_TASK_PATH } from '@requests/common/aer/subtasks/materiality-level/materiality-level.helpers';
 import { OPINION_STATEMENT_SUB_TASK_PATH } from '@requests/common/aer/subtasks/opinion-statement/opinion-statement.helpers';
@@ -16,6 +32,7 @@ import { VERIFIER_DETAILS_SUB_TASK_PATH } from '@requests/common/aer/subtasks/ve
 export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   {
     path: VERIFIER_DETAILS_SUB_TASK_PATH,
+    title: verifierDetailsMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/verifier-details-submitted').then(
@@ -24,6 +41,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: OPINION_STATEMENT_SUB_TASK_PATH,
+    title: opinionStatementMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/opinion-statement-submitted').then(
@@ -32,6 +50,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: ETS_COMPLIANCE_RULES_SUB_TASK_PATH,
+    title: etsComplianceRulesMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/ets-compliance-rules-submitted').then(
@@ -40,6 +59,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: COMPLIANCE_MONITORING_REPORTING_SUB_TASK_PATH,
+    title: complianceMonitoringReportingMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/compliance-monitoring-reporting-submitted').then(
@@ -48,6 +68,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH,
+    title: emissionsReductionClaimVerificationSubtaskListMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/emissions-reduction-claims-verification-submitted').then(
@@ -56,6 +77,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: OVERALL_VERIFICATION_DECISION_SUB_TASK_PATH,
+    title: overallVerificationDecisionMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/overall-verification-decision-submitted').then(
@@ -66,6 +88,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   // Verifier findings
   {
     path: UNCORRECTED_MISSTATEMENTS_SUB_TASK_PATH,
+    title: uncorrectedMisstatementsMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/uncorrected-misstatements-submitted').then(
@@ -74,6 +97,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: UNCORRECTED_NON_CONFORMITIES_SUB_TASK_PATH,
+    title: uncorrectedNonConformitiesMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/uncorrected-non-conformities-submitted').then(
@@ -82,6 +106,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: UNCORRECTED_NON_COMPLIANCES_SUB_TASK_PATH,
+    title: uncorrectedNonCompliancesMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/uncorrected-non-compliances-submitted').then(
@@ -90,6 +115,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: RECOMMENDED_IMPROVEMENTS_SUB_TASK_PATH,
+    title: recommendedImprovementsMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/recommended-improvements-submitted').then(
@@ -98,6 +124,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: DATA_GAPS_METHODOLOGIES_SUB_TASK_PATH,
+    title: dataGapsMethodologiesMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/data-gaps-methodologies-submitted').then(
@@ -106,6 +133,7 @@ export const AER_VERIFICATION_SUBMITTED_ROUTES_COMMON_CHILDREN: Routes = [
   },
   {
     path: MATERIALITY_LEVEL_SUB_TASK_PATH,
+    title: materialityLevelMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
       import('@requests/common/timeline/aer-common/subtasks/materiality-level-submitted').then(

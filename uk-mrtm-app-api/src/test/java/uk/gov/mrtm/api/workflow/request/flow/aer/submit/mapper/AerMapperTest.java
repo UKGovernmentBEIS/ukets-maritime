@@ -43,8 +43,9 @@ class AerMapperTest {
     void aerShipEmissionsSaveSetToAerShipEmissionsSet() {
         AerShipEmissionsSave shipToSave1 = createAerShipEmissionsSave("1");
         AerShipEmissionsSave shipToSave2 = createAerShipEmissionsSave("2");
+        AerShipEmissionsSave shipToSave4 = createAerShipEmissionsSave("4");
 
-        Set<AerShipEmissionsSave> shipsToSave = Set.of(shipToSave1, shipToSave2);
+        Set<AerShipEmissionsSave> shipsToSave = Set.of(shipToSave1, shipToSave2, shipToSave4);
 
         AerShipEmissions savedShip1 = createAerShipEmissions("1");
         AerShipEmissions savedShip3 = createAerShipEmissions("3");
@@ -57,10 +58,19 @@ class AerMapperTest {
             .uncertaintyLevel(shipToSave2.getUncertaintyLevel())
             .derogations(shipToSave2.getDerogations())
             .build();
+        AerShipEmissions savedShip4 = AerShipEmissions.builder()
+            .dataInputType(DataInputType.FETCH_FROM_EMP)
+            .details(shipToSave4.getDetails())
+            .uniqueIdentifier(shipToSave4.getUniqueIdentifier())
+            .fuelsAndEmissionsFactors(shipToSave4.getFuelsAndEmissionsFactors())
+            .emissionsSources(shipToSave4.getEmissionsSources())
+            .uncertaintyLevel(shipToSave4.getUncertaintyLevel())
+            .derogations(shipToSave4.getDerogations())
+            .build();
 
-        Set<AerShipEmissions> savedShips = Set.of(savedShip1, savedShip3);
+        Set<AerShipEmissions> savedShips = Set.of(savedShip1, savedShip3, savedShip4);
 
-        Set<AerShipEmissions> expectedShips = Set.of(savedShip1, savedShip2);
+        Set<AerShipEmissions> expectedShips = Set.of(savedShip1, savedShip2, savedShip4);
 
         Aer existingAer = Aer.builder().emissions(AerEmissions.builder().ships(savedShips).build()).build();
         Set<AerShipEmissions> actualShips = mapper.aerShipEmissionsSaveSetToAerShipEmissionsSet(shipsToSave, existingAer);

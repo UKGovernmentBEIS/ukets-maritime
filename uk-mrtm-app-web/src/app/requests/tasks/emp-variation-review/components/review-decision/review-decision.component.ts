@@ -25,7 +25,6 @@ import { RequestTaskFileService } from '@shared/services';
 
 @Component({
   selector: 'mrtm-review-decision',
-  standalone: true,
   imports: [
     ButtonDirective,
     ReactiveFormsModule,
@@ -37,6 +36,7 @@ import { RequestTaskFileService } from '@shared/services';
     FieldsetDirective,
     ConditionalContentDirective,
   ],
+  standalone: true,
   templateUrl: './review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [existingControlContainer],

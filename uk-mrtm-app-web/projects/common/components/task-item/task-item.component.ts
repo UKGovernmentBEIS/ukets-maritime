@@ -1,5 +1,5 @@
 import { NgComponentOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, HostBinding, Input, Type } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, Type } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { StatusTagColorPipe, StatusTagTextPipe } from '@netz/common/pipes';
@@ -8,7 +8,6 @@ import { LinkDirective, TagComponent, WarningTextComponent } from '@netz/govuk-c
 /* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: 'li[netz-task-item]',
-  standalone: true,
   imports: [
     RouterLink,
     StatusTagColorPipe,
@@ -18,16 +17,18 @@ import { LinkDirective, TagComponent, WarningTextComponent } from '@netz/govuk-c
     WarningTextComponent,
     NgComponentOutlet,
   ],
+  standalone: true,
   templateUrl: './task-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.app-task-list__item]': 'taskListItem' },
 })
 export class TaskItemComponent {
-  @Input() link: string;
-  @Input() linkText: string;
-  @Input() status: string;
-  @Input() warningHint: string;
-  @Input() hint: string;
-  @Input() postContentComponent: Type<unknown>;
-  @Input() postContentComponentInputs: Record<string, unknown>;
-  @HostBinding('class.app-task-list__item') readonly taskListItem = true;
+  readonly link = input<string>();
+  readonly linkText = input<string>();
+  readonly status = input<string>();
+  readonly warningHint = input<string>();
+  readonly hint = input<string>();
+  readonly postContentComponent = input<Type<unknown>>();
+  readonly postContentComponentInputs = input<Record<string, unknown>>();
+  readonly taskListItem = true;
 }

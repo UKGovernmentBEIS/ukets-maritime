@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, inject, Input, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, input, OnInit, viewChild } from '@angular/core';
 import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
 
 import {
@@ -21,33 +21,30 @@ import { FileUploadListComponent } from '@shared/components';
 import { FileUploadService } from '@shared/services';
 import { FileUpload, FileUploadEvent } from '@shared/types';
 
-/*
-  eslint-disable
-  @typescript-eslint/no-empty-function
- */
+/* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: 'mrtm-multiple-file-input[baseDownloadUrl]',
+  imports: [FileUploadListComponent, AsyncPipe],
+  standalone: true,
   templateUrl: './multiple-file-input.component.html',
   styleUrl: './multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [FileUploadListComponent, AsyncPipe],
 })
 export class MultipleFileInputComponent implements ControlValueAccessor, OnInit {
   private readonly ngControl = inject(NgControl, { self: true, optional: true })!;
   private readonly formService = inject(FormService);
   private readonly fileUploadService = inject(FileUploadService);
 
-  @Input() headerSize: 'm' | 's' = 'm';
-  @Input() listTitle: string;
-  @Input() label = 'Upload a file';
-  @Input() hint: string;
-  @Input() accepted = '*/*';
-  @Input() uploadStatusText = 'Uploading files, please wait';
-  @Input() dropzoneHintText = 'Drag and drop files here or';
-  @Input() dropzoneButtonText = 'Choose files';
-  @Input() baseDownloadUrl: string;
-  @ViewChild('input') fileInput: ElementRef<HTMLInputElement>;
+  readonly headerSize = input<'m' | 's'>('m');
+  readonly listTitle = input<string>();
+  readonly label = input('Upload a file');
+  readonly hint = input<string>();
+  readonly accepted = input('*/*');
+  readonly uploadStatusText = input('Uploading files, please wait');
+  readonly dropzoneHintText = input('Drag and drop files here or');
+  readonly dropzoneButtonText = input('Choose files');
+  readonly baseDownloadUrl = input<string>();
+  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('input');
 
   uploadStatusText$ = new Subject<string>();
   uploadedFiles$: Observable<FileUploadEvent[]>;
@@ -105,7 +102,7 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
               ...existingFile,
               ...acc.find(({ file, uuid }) => (uuid && uuid === existingFile.uuid) || file === existingFile.file),
               ...(uploadEvent?.file === existingFile.file ? uploadEvent : {}),
-              ...(existingFile.uuid && { downloadUrl: this.baseDownloadUrl + `${existingFile.uuid}` }),
+              ...(existingFile.uuid && { downloadUrl: this.baseDownloadUrl() + `${existingFile.uuid}` }),
               errors: this.applyRowErrors(errors, index),
             };
           }),
@@ -136,8 +133,8 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
   onFileChange(event: Event): void {
     const files = (event?.target as HTMLInputElement)?.files;
     this.uploadFiles(files);
-    this.fileInput.nativeElement.value = null;
-    this.fileInput.nativeElement.focus();
+    this.fileInput().nativeElement.value = null;
+    this.fileInput().nativeElement.focus();
   }
 
   onFileFocus(): void {
@@ -166,7 +163,7 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
     this.isDraggedOver = false;
 
     if (!this.isDisabled) {
-      this.uploadStatusText$.next(this.uploadStatusText);
+      this.uploadStatusText$.next(this.uploadStatusText());
       this.uploadFiles(event.dataTransfer.files);
     }
   }

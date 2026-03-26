@@ -2,7 +2,6 @@ import { Provider } from '@angular/core';
 import { FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
 import { areIntervalsOverlapping } from 'date-fns';
 
 import { AerPort } from '@mrtm/api';
@@ -17,7 +16,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
 import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { convertToUTCDate, mergeDatesToDate } from '@shared/utils';
+import { convertToUTCDate, isNil, mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherPortCall =
   (

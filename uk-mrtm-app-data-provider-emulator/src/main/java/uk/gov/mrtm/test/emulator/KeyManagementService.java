@@ -41,8 +41,10 @@ public class KeyManagementService {
   }
 
   private void loadKeysFromApplicationProperties() throws ParseException {
-    this.jwkSet = JWKSet.parse(this.jwkSetJon);
-    this.signingKey = (RSAKey) jwkSet.getKeys().get(0);
+    if (jwkSetJon != null && !jwkSetJon.isEmpty()) {
+      this.jwkSet = JWKSet.parse(this.jwkSetJon);
+      this.signingKey = (RSAKey) jwkSet.getKeys().get(0);
+    }
   }
 
   private void initializeJwkSetMap() throws JOSEException {

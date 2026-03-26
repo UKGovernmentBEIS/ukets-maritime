@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EMISSION_SOURCES_SUB_TASK, EmissionSourcesWizardStep } from '@requests/common/emp/subtasks/emission-sources';
@@ -18,12 +18,22 @@ import {
 } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { fireEvent, screen, within } from '@testing-library/angular';
 
 describe('EmissionSourceFactorsComponent', () => {
   let fixture: ComponentFixture<EmissionSourcesFactorsComponent>;
   let component: EmissionSourcesFactorsComponent;
+  let page: Page;
   let store: RequestTaskStore;
+
+  class Page extends BasePage<EmissionSourcesFactorsComponent> {
+    get radios() {
+      return this.queryAll<HTMLInputElement>('input[type="radio"]');
+    }
+
+    get errorSummaryLinks() {
+      return Array.from(this.errorSummary.querySelectorAll('a'));
+    }
+  }
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<EmpTaskPayload>> = {
@@ -35,23 +45,24 @@ describe('EmissionSourceFactorsComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(EmissionSourcesFactorsComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
     jest.clearAllMocks();
   };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [EmissionSourcesCompletionComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    }).compileComponents();
+    });
   });
 
   describe('for new emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(mockEmpIssuanceSubmitRequestTask);
       createComponent();
@@ -62,28 +73,26 @@ describe('EmissionSourceFactorsComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('heading', { name: 'Determination of emission factors' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('radio')).toHaveLength(2);
+      expect(page.heading1.textContent).toEqual('Determination of emission factors');
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.radios).toHaveLength(2);
     });
 
     it('should display error on empty form submit', () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
-      const summaryBox = screen.queryByRole('alert', { name: 'There is a problem' });
-      expect(summaryBox).toBeInTheDocument();
 
-      const summaryErrors = within(summaryBox).getAllByRole('link');
-      expect(summaryErrors).toHaveLength(1);
-      expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorSummaryLinks).toHaveLength(1);
+      expect(page.errorSummaryLinks.map((anchor) => anchor.textContent.trim())).toEqual([
         'Select yes if you are using default values for all emissions factors',
       ]);
     });
   });
 
   describe('for existing emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(
         mockStateBuild(
@@ -101,17 +110,17 @@ describe('EmissionSourceFactorsComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('heading', { name: 'Determination of emission factors' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('radio')).toHaveLength(2);
+      expect(page.heading1.textContent).toEqual('Determination of emission factors');
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.radios).toHaveLength(2);
     });
 
     it('should edit and submit a valid form without `factors` section', async () => {
-      const input = screen.getByRole('radio', { name: /yes/i });
-      fireEvent.click(input);
+      page.radios[0].click();
+      fixture.detectChanges();
 
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
       expect(taskServiceSpy).toHaveBeenCalledWith(
@@ -125,10 +134,10 @@ describe('EmissionSourceFactorsComponent', () => {
     });
 
     it('should submit a valid form', async () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
+      expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(
         EMISSION_SOURCES_SUB_TASK,
         EmissionSourcesWizardStep.EMISSION_FACTORS,

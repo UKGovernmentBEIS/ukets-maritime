@@ -1,7 +1,6 @@
 import { Provider } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
 import { addDays } from 'date-fns';
 
 import { AerInPersonSiteVisit, AerInPersonSiteVisitDates } from '@mrtm/api';
@@ -15,6 +14,7 @@ import {
   AerInPersonSiteVisitDatesFormGroupModel,
   AerInPersonSiteVisitFormGroupModel,
 } from '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-in-person/opinion-statement-site-visit-in-person.types';
+import { isNil } from '@shared/utils';
 import { todayOrPastDateValidator } from '@shared/validators';
 
 export const addVisitDateFormGroup = (

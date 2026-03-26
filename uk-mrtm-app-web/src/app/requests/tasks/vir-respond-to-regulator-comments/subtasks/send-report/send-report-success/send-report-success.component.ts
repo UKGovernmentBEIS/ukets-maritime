@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-send-report-success',
-  standalone: true,
   imports: [LinkDirective, RouterLink, PanelComponent],
+  standalone: true,
   templateUrl: './send-report-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

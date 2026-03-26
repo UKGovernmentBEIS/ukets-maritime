@@ -17,7 +17,6 @@ import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-verifier-details-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -29,6 +28,7 @@ import { NotProvidedDirective } from '@shared/directives';
     NotProvidedDirective,
     VerificationBodyDetailsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './verifier-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

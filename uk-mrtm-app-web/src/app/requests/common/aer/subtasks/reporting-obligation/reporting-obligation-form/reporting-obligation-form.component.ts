@@ -22,7 +22,6 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-reporting-obligation-form',
-  standalone: true,
   imports: [
     MultipleFileInputComponent,
     RadioComponent,
@@ -31,9 +30,10 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
     TextareaComponent,
     WizardStepComponent,
   ],
+  standalone: true,
   templateUrl: './reporting-obligation-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reportingObligationFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReportingObligationFormComponent {
   protected readonly map = reportingObligationMap;

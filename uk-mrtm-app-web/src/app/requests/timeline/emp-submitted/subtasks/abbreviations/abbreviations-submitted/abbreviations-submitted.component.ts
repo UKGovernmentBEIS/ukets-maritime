@@ -31,7 +31,7 @@ interface ViewModel {
 export class AbbreviationsSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     abbreviations: this.store.select(empSubmittedQuery.selectAbbreviations)(),
     abbreviationsMap: abbreviationsMap,
     reviewGroupDecision: this.store.select(empSubmittedQuery.selectReviewGroupDecision('abbreviations'))(),

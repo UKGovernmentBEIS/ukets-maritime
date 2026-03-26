@@ -1,10 +1,9 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { guidanceQuery, GuidanceStore } from '@guidance/+state';
 import { ManageGuidanceDocumentDTO } from '@guidance/guidance.types';
+import { isNil } from '@shared/utils';
 
 export const canActivateManageDocumentForm =
   (prefix?: string): CanActivateFn =>

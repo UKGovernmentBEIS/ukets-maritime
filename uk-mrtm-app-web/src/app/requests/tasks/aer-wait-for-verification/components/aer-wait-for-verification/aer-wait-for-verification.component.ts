@@ -4,8 +4,8 @@ import { WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-aer-wait-for-verification',
-  standalone: true,
   imports: [WarningTextComponent],
+  standalone: true,
   templateUrl: './aer-wait-for-verification.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

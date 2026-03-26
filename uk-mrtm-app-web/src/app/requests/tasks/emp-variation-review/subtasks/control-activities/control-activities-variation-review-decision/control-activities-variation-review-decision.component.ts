@@ -36,16 +36,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-control-activities-variation-review-decision',
-  standalone: true,
   imports: [
     ControlActivitiesSummaryTemplateComponent,
     ReactiveFormsModule,
     WizardStepComponent,
     ReviewDecisionComponent,
   ],
+  standalone: true,
   templateUrl: './control-activities-variation-review-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewEmpSubtaskDecisionFormProvider(CONTROL_ACTIVITIES_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -55,7 +55,7 @@ export class ControlActivitiesVariationReviewDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       controlActivities: this.store.select(empCommonQuery.selectControlActivities)(),
       originalControlActivities: this.store.select(empVariationReviewQuery.selectOriginalControlActivities)(),

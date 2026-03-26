@@ -13,8 +13,8 @@
     controlName="type"
     legend="What is your decision for the information submitted?"
     hint="Take into account any additional information shared"
-    [positiveValue]="'ACCEPTED'"
-    [negativeValue]="'REJECTED'"
+    positiveValue="ACCEPTED"
+    negativeValue="REJECTED"
     positiveLabel="Accepted"
     negativeLabel="Rejected">
     <ng-container govukConditionalContent formGroupName="details">
@@ -38,7 +38,7 @@
                 label="Date response is needed"
                 hint="You can change this later"
                 govuk-date-input
-                legendSize="small"></div>
+                labelSize="small"></div>
             </ng-container>
           </govuk-radio-option>
           <govuk-radio-option [value]="false" label="No" />

@@ -10,7 +10,7 @@ export const SEND_REPORT_ROUTES: Routes = [
   },
   {
     path: 'success',
-    title: 'Send report',
+    title: 'Report sent successfully',
     data: { breadcrumb: 'Dashboard' },
     loadComponent: () =>
       import('@requests/tasks/aer-submit/subtasks/send-report/send-report-success-message').then(

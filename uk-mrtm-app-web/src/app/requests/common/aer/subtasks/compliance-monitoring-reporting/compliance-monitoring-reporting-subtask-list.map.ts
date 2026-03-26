@@ -10,7 +10,7 @@ export const complianceMonitoringReportingMap: SubTaskListMap<{
   integrityCompliant: string;
 }> = {
   title: 'Compliance with monitoring and reporting principles',
-  caption: 'Compliance with the Monitoring and Reporting Principles in the UKETS Order',
+  caption: 'Compliance with monitoring and reporting principles',
   accuracyCompliant: {
     title: 'Accuracy',
     caption: 'Accuracy of report',

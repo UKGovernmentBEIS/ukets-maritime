@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpVariationDetails, EmpVariationRegulatorLedReason } from '@mrtm/api';
@@ -21,7 +21,6 @@ import { RegulatorLedReasonPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-variation-details-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -33,26 +32,30 @@ import { RegulatorLedReasonPipe } from '@shared/pipes';
     RegulatorLedReasonPipe,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './variation-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VariationDetailsSummaryTemplateComponent {
-  @Input({ required: true }) variationDetails: EmpVariationDetails;
-  @Input() isVariationRegulator: boolean;
-  @Input() regulatorLedReason: EmpVariationRegulatorLedReason;
-  @Input() wizardStep: { [s: string]: string };
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly variationDetails = input.required<EmpVariationDetails>();
+  readonly isVariationRegulator = input<boolean>();
+  readonly regulatorLedReason = input<EmpVariationRegulatorLedReason>();
+  readonly wizardStep = input<{
+    [s: string]: string;
+  }>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 
   public readonly significantChangesOptions = EMP_VARIATION_SIGNIFICANT_CHANGES_SELECT_OPTIONS;
   public readonly nonSignificantChangesOptions = EMP_VARIATION_NON_SIGNIFICANT_CHANGES_SELECT_OPTIONS;
   public readonly hasSignificantChangesItems = computed(
     () =>
-      this.significantChangesOptions.filter((x) => this.variationDetails?.changes?.includes(x.value as any)).length > 0,
+      this.significantChangesOptions.filter((x) => this.variationDetails()?.changes?.includes(x.value as any)).length >
+      0,
   );
   public readonly hasNonSignificantChangesItems = computed(
     () =>
-      this.nonSignificantChangesOptions.filter((x) => this.variationDetails?.changes?.includes(x.value as any)).length >
-      0,
+      this.nonSignificantChangesOptions.filter((x) => this.variationDetails()?.changes?.includes(x.value as any))
+        .length > 0,
   );
 }

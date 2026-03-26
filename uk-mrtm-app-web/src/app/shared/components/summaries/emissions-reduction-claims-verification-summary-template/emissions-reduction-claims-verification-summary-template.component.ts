@@ -18,7 +18,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emissions-reduction-claims-verification-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -30,6 +29,7 @@ import { SubTaskListMap } from '@shared/types';
     NotProvidedDirective,
     BooleanToTextPipe,
   ],
+  standalone: true,
   templateUrl: './emissions-reduction-claims-verification-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

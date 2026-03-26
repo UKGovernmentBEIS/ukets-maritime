@@ -7,8 +7,8 @@ import { NOTIFY_OPERATOR_SUCCESS_COMPONENT } from '@requests/common/components/n
 
 @Component({
   selector: 'mrtm-notify-operator-success',
-  standalone: true,
   imports: [NgComponentOutlet, PanelComponent],
+  standalone: true,
   templateUrl: './notify-operator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

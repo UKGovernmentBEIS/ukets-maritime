@@ -24,25 +24,31 @@ public class AerComplianceMonitoringReporting {
 
     @NotNull
     private Boolean accuracyCompliant;
+    @Size(max = 10000)
     private String accuracyNonCompliantReason;
 
     @NotNull
     private Boolean completenessCompliant;
+    @Size(max = 10000)
     private String completenessNonCompliantReason;
 
     @NotNull
     private Boolean consistencyCompliant;
+    @Size(max = 10000)
     private String consistencyNonCompliantReason;
 
     @NotNull
     private Boolean comparabilityCompliant;
+    @Size(max = 10000)
     private String comparabilityNonCompliantReason;
 
     @NotNull
     private Boolean transparencyCompliant;
+    @Size(max = 10000)
     private String transparencyNonCompliantReason;
 
     @NotNull
     private Boolean integrityCompliant;
+    @Size(max = 10000)
     private String integrityNonCompliantReason;
 }

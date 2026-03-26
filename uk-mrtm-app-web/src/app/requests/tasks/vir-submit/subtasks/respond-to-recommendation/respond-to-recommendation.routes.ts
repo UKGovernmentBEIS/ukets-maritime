@@ -19,9 +19,9 @@ export const RESPOND_TO_RECOMMENDATION_ROUTES: Routes = [
         data: { breadcrumb: false, backlink: '../../../' },
         canActivate: [canActivateVirRespondToRecommendationSummary],
         loadComponent: () =>
-          import(
-            '@requests/tasks/vir-submit/subtasks/respond-to-recommendation/respond-to-recommendation-summary'
-          ).then((c) => c.RespondToRecommendationSummaryComponent),
+          import('@requests/tasks/vir-submit/subtasks/respond-to-recommendation/respond-to-recommendation-summary').then(
+            (c) => c.RespondToRecommendationSummaryComponent,
+          ),
       },
       {
         path: VirRespondToRecommendationWizardStep.RESPOND_TO,

@@ -31,7 +31,6 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-carbon-capture',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ShipStepTitleCustomPipe,
@@ -44,9 +43,10 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
     CheckboxComponent,
     ReturnToShipsListTableComponent,
   ],
+  standalone: true,
   templateUrl: './carbon-capture.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [carbonCaptureFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CarbonCaptureComponent {
   protected readonly formGroup = inject<FormGroup<CarbonCaptureFormModel>>(TASK_FORM);
@@ -58,7 +58,7 @@ export class CarbonCaptureComponent {
   readonly shipId = this.route.snapshot.params['shipId'];
   readonly emissionSourcesNames = this.store.select(empCommonQuery.selectShipEmissionSourcesNames(this.shipId))();
   downloadUrl = this.store.select(empCommonQuery.selectTasksDownloadUrl)();
-  existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
+  readonly existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
     initialValue: this.existCtrl.value,
   });
   readonly shipName = this.store.select(empCommonQuery.selectShipName(this.shipId))();

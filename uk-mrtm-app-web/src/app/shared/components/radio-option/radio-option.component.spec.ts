@@ -12,6 +12,8 @@ describe('RadioOptionComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    imports: [ReactiveFormsModule, RadioOptionComponent],
+    standalone: true,
     template: `
       <form [formGroup]="testFormGroup">
         <div mrtm-radio-option index="0" value="pinball" formControlName="testControl" [isDisabled]="disable1">
@@ -40,8 +42,7 @@ describe('RadioOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, RadioOptionComponent],
-      declarations: [TestComponent],
+      imports: [ReactiveFormsModule],
     }).compileComponents();
   });
 

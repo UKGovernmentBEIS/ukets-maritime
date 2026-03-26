@@ -5,8 +5,8 @@ import { CalendarDate } from '@shared/components/date-picker/date-picker.interfa
 
 @Component({
   selector: 'mrtm-date-picker-button',
-  standalone: true,
   imports: [DatePipe],
+  standalone: true,
   template: `
     <button
       class="moj-datepicker__button moj-datepicker__calendar-day"
@@ -31,7 +31,7 @@ import { CalendarDate } from '@shared/components/date-picker/date-picker.interfa
 export class DatePickerButtonComponent {
   private elementRef: ElementRef<HTMLButtonElement> = inject(ElementRef);
 
-  calendarDate = input.required<CalendarDate>();
+  readonly calendarDate = input.required<CalendarDate>();
 
   constructor() {
     effect(() => {

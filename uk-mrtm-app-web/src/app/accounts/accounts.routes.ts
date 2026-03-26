@@ -48,6 +48,7 @@ import { FileDownloadComponent } from '@shared/components';
 export const ACCOUNTS_ROUTES: Routes = [
   {
     path: '',
+    title: 'Accounts',
     component: AccountsPageComponent,
   },
   {
@@ -200,7 +201,7 @@ export const ACCOUNTS_ROUTES: Routes = [
               },
               {
                 path: 'success',
-                title: 'You have successfully created an user account',
+                title: 'You have successfully created a user account',
                 data: { breadcrumb: 'Dashboard' },
                 canActivate: [createOperatorUserSuccessGuard],
                 component: CreateUserAuthoritySuccessComponent,
@@ -226,10 +227,12 @@ export const ACCOUNTS_ROUTES: Routes = [
       },
       {
         path: 'file-download/:uuid',
+        title: 'Download file',
         component: NoteFileDownloadComponent,
       },
       {
         path: 'file-download/:fileType/:empId/:uuid',
+        title: 'Download file',
         component: FileDownloadComponent,
       },
     ],

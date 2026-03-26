@@ -43,7 +43,7 @@ export class EmpVarSubmittedManagementProceduresComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empVariationSubmittedQuery.selectManagementProcedures)();
     return {
       managementProcedures: managementProcedures,

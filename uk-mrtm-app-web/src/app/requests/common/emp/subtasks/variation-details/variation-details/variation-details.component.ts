@@ -28,7 +28,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-variation-details',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -37,8 +36,9 @@ import { SubTaskListMap } from '@shared/types';
     CheckboxComponent,
     ConditionalContentDirective,
   ],
-  providers: [variationDetailsFormProvider],
+  standalone: true,
   templateUrl: './variation-details.component.html',
+  providers: [variationDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VariationDetailsComponent {

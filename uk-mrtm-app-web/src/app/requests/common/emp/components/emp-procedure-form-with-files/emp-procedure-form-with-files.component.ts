@@ -11,10 +11,10 @@ import { existingControlContainer } from '@shared/providers';
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-emp-procedure-form-with-files',
-  standalone: true,
   imports: [EmpProcedureFormComponent, MultipleFileInputComponent, ReactiveFormsModule],
-  viewProviders: [existingControlContainer],
+  standalone: true,
   templateUrl: './emp-procedure-form-with-files.component.html',
+  viewProviders: [existingControlContainer],
 })
 export class EmpProcedureFormWithFilesComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);

@@ -5,7 +5,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.account.domain.MrtmAccountUpdatedEvent;
+import uk.gov.mrtm.api.account.domain.MrtmAccountReportingYearsUpdatedEvent;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerCreationService;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerRequestQueryService;
 
@@ -32,7 +32,7 @@ class MrtmAccountUpdatedEventListenerTest {
     @Test
     void onMrtmAccountUpdatedEvent() {
         Long accountId = 1L;
-        final MrtmAccountUpdatedEvent updatedEvent = MrtmAccountUpdatedEvent.builder()
+        final MrtmAccountReportingYearsUpdatedEvent updatedEvent = MrtmAccountReportingYearsUpdatedEvent.builder()
                 .accountId(accountId)
                 .reportingYears(List.of(Year.of(2025), Year.of(2024), Year.of(2023), Year.of(2022)))
                 .build();
@@ -50,7 +50,7 @@ class MrtmAccountUpdatedEventListenerTest {
     @Test
     void onMrtmAccountCreatedEvent_no_existing_AER() {
         Long accountId = 1L;
-        final MrtmAccountUpdatedEvent updatedEvent = MrtmAccountUpdatedEvent.builder()
+        final MrtmAccountReportingYearsUpdatedEvent updatedEvent = MrtmAccountReportingYearsUpdatedEvent.builder()
                 .accountId(accountId)
                 .reportingYears(List.of(Year.of(2025), Year.of(2024), Year.of(2023)))
                 .build();

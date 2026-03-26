@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-non-compliance-details-notice-of-intent',
-  standalone: true,
   imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './non-compliance-details-notice-of-intent.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceDetailsNoticeOfIntentProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceDetailsNoticeOfIntentComponent {
   readonly map = nonComplianceDetailsMap;

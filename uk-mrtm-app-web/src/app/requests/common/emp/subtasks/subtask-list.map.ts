@@ -130,6 +130,7 @@ export const mandateMap: SubTaskListMap<
     variationRegulatorDecision: string;
     decision: string;
     uploadOwners: string;
+    uploadOwnersConfirmation: string;
   }
 > = {
   title: 'Delegated responsibility',
@@ -160,6 +161,9 @@ export const mandateMap: SubTaskListMap<
   },
   uploadOwners: {
     title: 'Upload the registered owner file',
+  },
+  uploadOwnersConfirmation: {
+    title: 'Are you sure you want to replace the data?',
   },
 };
 

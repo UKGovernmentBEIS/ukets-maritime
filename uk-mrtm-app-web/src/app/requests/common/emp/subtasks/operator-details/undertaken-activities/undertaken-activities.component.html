@@ -6,10 +6,11 @@
   [showReturnLink]="true"
   [isTwoThirds]="true">
   <div
+    label="Describe activity"
+    [isLabelHidden]="true"
     formControlName="activityDescription"
     govuk-textarea
-    hint="
-    Include geographical scope, typical leasing arrangements if applicable and purpose of maritime activity,
+    hint="Include geographical scope, typical leasing arrangements if applicable and purpose of maritime activity,
     for example transport of passengers or cargo."
     [maxLength]="10000"></div>
 </mrtm-wizard-step>

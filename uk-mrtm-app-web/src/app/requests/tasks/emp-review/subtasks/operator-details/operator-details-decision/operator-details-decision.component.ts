@@ -39,11 +39,11 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-operator-details-decision',
-  standalone: true,
   imports: [OperatorDetailsSummaryTemplateComponent, WizardStepComponent, ReviewDecisionComponent, ReactiveFormsModule],
+  standalone: true,
   templateUrl: './operator-details-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewDecisionFormProvider(OPERATOR_DETAILS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(REVIEW_DECISION_FORM);
@@ -51,7 +51,7 @@ export class OperatorDetailsDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const empOperatorDetails = this.store.select(empCommonQuery.selectOperatorDetails)();
 
     return {

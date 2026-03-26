@@ -15,8 +15,8 @@ describe('BusinessErrorComponent', () => {
 
   const error = new BusinessError('Test header').withLink({ link: ['/dashboard'], linkText: 'Go to dashboard' });
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [BusinessErrorComponent, RouterStubComponent],
       providers: [
         provideRouter([
@@ -24,7 +24,9 @@ describe('BusinessErrorComponent', () => {
           { path: 'error/business', component: BusinessErrorComponent },
         ]),
       ],
-    }).compileComponents();
+    }).overrideComponent(BusinessErrorComponent, {
+      set: { host: { 'test-id': 'component-spec' } },
+    });
 
     TestBed.inject(BusinessErrorService).showError(error);
   });

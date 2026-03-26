@@ -6,7 +6,7 @@ import { OperatorUserDTO } from '@mrtm/api';
 import { GovukValidators } from '@netz/govuk-components';
 
 import { UserAuthorityStore } from '@accounts/store';
-import { phoneInputValidators } from '@shared/validators';
+import { phoneInputWithCountyCodeSelectValidators } from '@shared/validators';
 
 export const EDIT_USER_AUTHORITY_FORM: InjectionToken<string> = new InjectionToken<string>('Edit user authority form');
 
@@ -34,11 +34,11 @@ export const editUserAuthorityFormProvider: Provider = {
       ]),
       phoneNumber: new FormControl<OperatorUserDTO['phoneNumber']>(currentUser?.phoneNumber, [
         GovukValidators.empty('Enter phone number'),
-        ...phoneInputValidators,
+        ...phoneInputWithCountyCodeSelectValidators,
         GovukValidators.maxLength(255, 'Phone number should not be more than 255 characters'),
       ]),
       mobileNumber: new FormControl<OperatorUserDTO['mobileNumber']>(currentUser?.mobileNumber, [
-        ...phoneInputValidators,
+        ...phoneInputWithCountyCodeSelectValidators,
         GovukValidators.maxLength(255, 'Mobile number should not be more than 255 characters'),
       ]),
     });

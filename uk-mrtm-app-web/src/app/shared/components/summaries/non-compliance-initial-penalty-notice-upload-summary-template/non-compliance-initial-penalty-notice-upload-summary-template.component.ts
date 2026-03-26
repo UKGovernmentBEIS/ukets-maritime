@@ -21,7 +21,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-non-compliance-initial-penalty-notice-upload-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryDownloadFilesComponent,
@@ -33,6 +32,7 @@ import { AttachedFile } from '@shared/types';
     NotProvidedDirective,
     RouterLink,
   ],
+  standalone: true,
   templateUrl: './non-compliance-initial-penalty-notice-upload-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -8,10 +8,10 @@ import { PageHeadingComponent } from '@netz/common/components';
 
 @Component({
   selector: 'mrtm-invalid-link',
+  imports: [PageHeadingComponent, AsyncPipe],
+  standalone: true,
   templateUrl: './invalid-link.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PageHeadingComponent, AsyncPipe],
 })
 export class InvalidLinkComponent {
   private readonly route = inject(ActivatedRoute);

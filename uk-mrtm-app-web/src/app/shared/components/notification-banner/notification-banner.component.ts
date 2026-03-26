@@ -8,7 +8,7 @@ import {
   input,
   OnDestroy,
   OnInit,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Title } from '@angular/platform-browser';
@@ -30,13 +30,13 @@ import {
 
 @Component({
   selector: 'mrtm-notification-banner',
-  standalone: true,
   imports: [AsyncPipe, GovukNotificationBannerComponent, ErrorSummaryComponent],
+  standalone: true,
   templateUrl: './notification-banner.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationBannerComponent implements OnInit, OnDestroy {
-  @ViewChild('bannerContainer', { static: false }) private readonly bannerContEl: ElementRef<HTMLDivElement>;
+  private readonly bannerContEl = viewChild<ElementRef<HTMLDivElement>>('bannerContainer');
   private readonly router = inject(Router);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly store = inject(NotificationBannerStore);
@@ -57,7 +57,7 @@ export class NotificationBannerComponent implements OnInit, OnDestroy {
       if (!type || (!successMessages?.length && !invalidForm)) {
         return null;
       }
-      this.bannerContEl?.nativeElement.scrollIntoView({ behavior: 'instant' });
+      this.bannerContEl()?.nativeElement.scrollIntoView({ behavior: 'instant' });
       this.storeToReset = true;
 
       const currentTitle = this.title.getTitle();

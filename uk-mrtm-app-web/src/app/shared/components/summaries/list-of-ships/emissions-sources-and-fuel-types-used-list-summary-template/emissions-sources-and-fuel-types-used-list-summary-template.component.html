@@ -1,21 +1,21 @@
-@if (data?.length > 0) {
+@if (data()?.length > 0) {
   <div class="govuk-grid-row">
     <h2 class="govuk-heading-m govuk-grid-column-two-thirds">Emissions sources and fuel types used</h2>
-    @if (isEditable) {
+    @if (isEditable()) {
       <div class="govuk-grid-column-one-third govuk-!-text-align-right govuk-body">
-        <a govukLink [routerLink]="changeLinkList" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLinkList()" [queryParams]="queryParams()">Change</a>
       </div>
     }
   </div>
-  @for (emission of data; track emission.uniqueIdentifier; let i = $index) {
+  @for (emission of data(); track emission.uniqueIdentifier) {
     <mrtm-emission-sources-and-fuel-types-used-summary-template
       (delete)="onDeleteEmissionSource($event)"
       [data]="emission"
-      [changeLink]="changeLinkForm"
-      [index]="i"
-      [isEditable]="isEditable" />
+      [changeLink]="changeLinkForm()"
+      [index]="$index"
+      [isEditable]="isEditable()" />
   }
-  @if (isEditable) {
+  @if (isEditable()) {
     <p class="govuk-body">
       <button (click)="handleAddAnother()" govukButton govukSecondaryButton type="button">Add another item</button>
     </p>

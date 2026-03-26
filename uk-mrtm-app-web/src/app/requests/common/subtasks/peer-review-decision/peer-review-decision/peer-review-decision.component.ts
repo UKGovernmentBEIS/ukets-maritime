@@ -23,7 +23,6 @@ import { PeerReviewDecisionPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-emp-peer-review-decision',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -34,6 +33,7 @@ import { PeerReviewDecisionPipe } from '@shared/pipes';
     FieldsetDirective,
     PeerReviewDecisionPipe,
   ],
+  standalone: true,
   templateUrl: './peer-review-decision.component.html',
   providers: [peerReviewDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

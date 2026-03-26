@@ -6,14 +6,35 @@
   [hideSubmit]="false"
   [isTwoThirds]="true"
   [showReturnLink]="true">
-  <div
-    formControlName="type"
-    govuk-radio
-    legend="Why are you determining the maritime emissions or emissions figure for surrender?"
-    legendSize="medium">
-    @for (option of determineReasonTypeOptions; track option) {
-      <govuk-radio-option [value]="option" [label]="option | i18nSelect: determineReasonTypeMap" />
-    }
+  <div formGroupName="details">
+    <ng-template #determinationReasonNoticeText let-reason="reason" let-currentReason="currentReason">
+      @if (!!currentReason && reason === currentReason) {
+        <div
+          formControlName="noticeText"
+          [maxLength]="10000"
+          govuk-textarea
+          label="Notice text"
+          [hint]="reason | i18nSelect: determineReasonTypeNoticeHintMap"
+          labelSize="normal"></div>
+      }
+    </ng-template>
+    <div
+      formControlName="type"
+      govuk-radio
+      legend="Why are you determining the maritime emissions or emissions figure for surrender?"
+      legendSize="medium">
+      @for (option of determineReasonTypeOptions; track option) {
+        <govuk-radio-option [value]="option" [label]="option | i18nSelect: determineReasonTypeMap">
+          <ng-container govukConditionalContent>
+            <ng-container
+              *ngTemplateOutlet="
+                determinationReasonNoticeText;
+                context: { reason: option, currentReason: detailsFormGroup?.value?.type }
+              " />
+          </ng-container>
+        </govuk-radio-option>
+      }
+    </div>
   </div>
   <div
     formControlName="furtherDetails"

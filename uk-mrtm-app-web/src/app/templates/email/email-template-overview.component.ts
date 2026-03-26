@@ -21,9 +21,6 @@ import { EmailTemplateDetailsTemplateComponent } from '@templates/email/email-te
 
 @Component({
   selector: 'mrtm-email-template-overview',
-  templateUrl: './email-template-overview.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     AsyncPipe,
     EmailTemplateDetailsTemplateComponent,
@@ -37,11 +34,14 @@ import { EmailTemplateDetailsTemplateComponent } from '@templates/email/email-te
     SummaryListRowActionsDirective,
     NotificationBannerComponent,
   ],
+  standalone: true,
+  templateUrl: './email-template-overview.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailTemplateOverviewComponent {
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
 
-  notification = this.router.getCurrentNavigation()?.extras.state?.notification;
+  notification = this.router.currentNavigation()?.extras.state?.notification;
   emailTemplate$: Observable<NotificationTemplateDTO> = this.route.data.pipe(map(({ emailTemplate }) => emailTemplate));
 }

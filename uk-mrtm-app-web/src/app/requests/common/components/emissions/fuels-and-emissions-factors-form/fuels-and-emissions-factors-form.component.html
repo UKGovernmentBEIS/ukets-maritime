@@ -27,17 +27,17 @@
   <div formControlName="origin" govuk-radio>
     <govuk-radio-option [label]="'FOSSIL' | shipFuelOrigin" value="FOSSIL">
       <ng-container govukConditionalContent>
-        <ng-container *ngTemplateOutlet="fuelTypeInput"></ng-container>
+        <ng-container *ngTemplateOutlet="fuelTypeInput" />
       </ng-container>
     </govuk-radio-option>
     <govuk-radio-option [label]="'BIOFUEL' | shipFuelOrigin" value="BIOFUEL">
       <ng-container govukConditionalContent>
-        <ng-container *ngTemplateOutlet="fuelTypeInput"></ng-container>
+        <ng-container *ngTemplateOutlet="fuelTypeInput" />
       </ng-container>
     </govuk-radio-option>
     <govuk-radio-option [label]="'RFNBO' | shipFuelOrigin" value="RFNBO">
       <ng-container govukConditionalContent>
-        <ng-container *ngTemplateOutlet="fuelTypeInput"></ng-container>
+        <ng-container *ngTemplateOutlet="fuelTypeInput" />
       </ng-container>
     </govuk-radio-option>
   </div>
@@ -70,7 +70,7 @@
       @for (option of nitrousOxideOptions; track option) {
         <option [value]="option">{{ option }}</option>
       }
-      <option [value]="'OTHER'">Other</option>
+      <option value="OTHER">Other</option>
     </div>
   } @else {
     <div
@@ -111,7 +111,7 @@
 
 @if (isAer()) {
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <a govukLink routerLink="../list">Return to: {{ returnToLabel() }}</a>
   </div>
 } @else {

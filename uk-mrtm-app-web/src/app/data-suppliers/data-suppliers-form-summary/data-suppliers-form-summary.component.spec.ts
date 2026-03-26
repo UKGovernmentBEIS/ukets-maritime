@@ -44,7 +44,14 @@ describe('DataSuppliersFormSummaryComponent', () => {
 
   it('should display all HTML elements', () => {
     expect(page.heading1.textContent).toContain('Check your answers');
-    expect(page.summariesContents).toEqual(['Name of data supplier', 'Vessel Tracking Systems Inc', 'Change']);
+    expect(page.summariesContents).toEqual([
+      'Name of data supplier',
+      'Vessel Tracking Systems Inc',
+      'Change',
+      'Public key URL',
+      'https://example.com/jwksurl',
+      'Change',
+    ]);
     expect(page.submitButton.textContent).toContain('Submit');
   });
 

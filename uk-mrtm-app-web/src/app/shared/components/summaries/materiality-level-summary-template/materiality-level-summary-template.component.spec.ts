@@ -10,7 +10,25 @@ describe('MaterialityLevelSummaryTemplateComponent', () => {
   let fixture: ComponentFixture<MaterialityLevelSummaryTemplateComponent>;
   let page: Page;
 
-  class Page extends BasePage<MaterialityLevelSummaryTemplateComponent> {}
+  class Page extends BasePage<MaterialityLevelSummaryTemplateComponent> {
+    get summariesKeys(): string[] {
+      return this.queryAll<HTMLDListElement>('dl dt').map((item) => item.textContent.trim());
+    }
+
+    get summariesValues(): string[] {
+      return this.queryAll<HTMLDListElement>('dl dd:first-of-type').map((item) => item.textContent.trim());
+    }
+
+    get referenceDocumentTypes(): string[] {
+      return this.queryAll<HTMLDListElement>('dl:nth-child(2) .govuk-summary-list__row:nth-child(2) ul > li').map(
+        (item) => item.textContent.trim(),
+      );
+    }
+
+    get summariesActions(): string[] {
+      return this.queryAll<HTMLDListElement>('dl dd:nth-of-type(2)').map((item) => item.textContent.trim());
+    }
+  }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -42,31 +60,40 @@ describe('MaterialityLevelSummaryTemplateComponent', () => {
   });
 
   it('should display all HTML elements', () => {
-    expect(page.summariesContents).toEqual([
+    expect(page.summariesKeys).toEqual([
+      'Objectives and scope of the Verification',
+      'Responsibilities',
+      'Work performed & basis of the opinion',
       'Materiality level',
-      'Lorem ipsum',
-      'Change',
       'Accreditation reference documents',
-      'The Greenhouse Gas Emissions Trading Scheme Order 2020 (SI 2020/1265)EN ISO 14065:2020 Requirements for greenhouse gas validation and verification bodies for use in accreditation or other forms of recognitionEN ISO 14064-3:2019 Specification with guidance for the validation and verification of GHG assertionsIAF MD 6:2023 International Accreditation Forum (IAF) Mandatory Document for the Application of ISO 14065:2020 (Issue 3, November 2023)Any guidance developed by the UK ETS Authority on verification and accreditation in relation to Maritime',
-      'Change',
       'Reference details',
-      'Dolor sit',
-      'Change',
     ]);
+    expect(page.summariesValues).toHaveLength(6);
+    expect(page.summariesActions).toHaveLength(3);
+  });
+
+  it('should contain UKAS additional declaration for materiality level', () => {
+    expect(page.summariesValues[3]).toContain('GHG quantification');
+  });
+
+  it('should contain proper types for accreditationReferenceDocumentTypes', () => {
+    expect(page.referenceDocumentTypes).toHaveLength(5);
   });
 
   it('should hide editing controls when not editable', () => {
     fixture.componentRef.setInput('isEditable', false);
     fixture.detectChanges();
 
-    expect(page.summariesContents).toEqual([
+    expect(page.summariesKeys).toEqual([
+      'Objectives and scope of the Verification',
+      'Responsibilities',
+      'Work performed & basis of the opinion',
       'Materiality level',
-      'Lorem ipsum',
       'Accreditation reference documents',
-      'The Greenhouse Gas Emissions Trading Scheme Order 2020 (SI 2020/1265)EN ISO 14065:2020 Requirements for greenhouse gas validation and verification bodies for use in accreditation or other forms of recognitionEN ISO 14064-3:2019 Specification with guidance for the validation and verification of GHG assertionsIAF MD 6:2023 International Accreditation Forum (IAF) Mandatory Document for the Application of ISO 14065:2020 (Issue 3, November 2023)Any guidance developed by the UK ETS Authority on verification and accreditation in relation to Maritime',
       'Reference details',
-      'Dolor sit',
     ]);
+    expect(page.summariesValues).toHaveLength(6);
+    expect(page.summariesActions).toHaveLength(0);
   });
 
   it('should not show Reference details when accreditationReferenceDocumentTypes: OTHER is not selected', () => {
@@ -76,13 +103,12 @@ describe('MaterialityLevelSummaryTemplateComponent', () => {
     });
     fixture.detectChanges();
 
-    expect(page.summariesContents).toEqual([
+    expect(page.summariesKeys).toEqual([
+      'Objectives and scope of the Verification',
+      'Responsibilities',
+      'Work performed & basis of the opinion',
       'Materiality level',
-      'Lorem ipsum',
-      'Change',
       'Accreditation reference documents',
-      'The Greenhouse Gas Emissions Trading Scheme Order 2020 (SI 2020/1265)',
-      'Change',
     ]);
   });
 });

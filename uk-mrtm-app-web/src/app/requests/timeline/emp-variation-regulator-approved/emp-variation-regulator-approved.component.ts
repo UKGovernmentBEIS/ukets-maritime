@@ -8,8 +8,8 @@ import { EmpReviewedDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-variation-regulator-approved',
-  standalone: true,
   imports: [EmpVariationReviewedSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './emp-variation-regulator-approved.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

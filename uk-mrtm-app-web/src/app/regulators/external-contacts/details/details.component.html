@@ -1,5 +1,5 @@
 @if (isSummaryDisplayed) {
-  <govuk-error-summary [form]="form"></govuk-error-summary>
+  <govuk-error-summary [form]="form" />
 }
 <netz-page-heading size="xl">
   {{ (userLoaded$ | async) ? 'External contact details' : 'Add an external contact' }}

@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
-import { DoeSubtasks } from '@requests/common/doe';
+import { DoeSubtasks, maritimeEmissionsMap } from '@requests/common/doe';
 import { canActivatePeerReviewDecision } from '@requests/tasks/doe-peer-review/doe-peer-review.guard';
 import {
   peerReviewDecisionProviders,
@@ -24,6 +24,7 @@ export const DOE_PEER_REVIEW_ROUTES: Routes = [
     children: [
       {
         path: DoeSubtasks.MaritimeEmissions,
+        title: maritimeEmissionsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
           import('@requests/tasks/doe-peer-review/subtasks/maritime-emissions').then(

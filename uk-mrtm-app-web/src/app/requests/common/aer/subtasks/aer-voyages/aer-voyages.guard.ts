@@ -4,9 +4,9 @@ import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import {
   aerVoyageStepsCompletedMap,
+  AerVoyagesWizardStep,
   isVoyageWizardCompleted,
   isWizardCompleted,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';

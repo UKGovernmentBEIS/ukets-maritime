@@ -23,9 +23,9 @@ import { Observable } from 'rxjs';
 
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
-import { MiReportParams } from '../model/miReportParams';
-import { MiReportResult } from '../model/miReportResult';
-import { MiReportSearchResult } from '../model/miReportSearchResult';
+import { MiReportSystemParams } from '../model/miReportSystemParams';
+import { MiReportSystemResult } from '../model/miReportSystemResult';
+import { MiReportSystemSearchResult } from '../model/miReportSystemSearchResult';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -96,130 +96,37 @@ export class MiReportsService {
   }
 
   /**
-   * Generates custom report
-   * @param miReportParams
-   * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-   * @param reportProgress flag to report request and response progress.
-   */
-  public generateCustomReport(
-    miReportParams: MiReportParams,
-    observe?: 'body',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<MiReportResult>;
-  public generateCustomReport(
-    miReportParams: MiReportParams,
-    observe?: 'response',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpResponse<MiReportResult>>;
-  public generateCustomReport(
-    miReportParams: MiReportParams,
-    observe?: 'events',
-    reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpEvent<MiReportResult>>;
-  public generateCustomReport(
-    miReportParams: MiReportParams,
-    observe: any = 'body',
-    reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<any> {
-    if (miReportParams === null || miReportParams === undefined) {
-      throw new Error('Required parameter miReportParams was null or undefined when calling generateCustomReport.');
-    }
-
-    let localVarHeaders = this.defaultHeaders;
-
-    // authentication (bearerAuth) required
-    const localVarCredential: string | undefined = this.configuration.lookupCredential('bearerAuth');
-    if (localVarCredential) {
-      localVarHeaders = localVarHeaders.set('Authorization', 'Bearer ' + localVarCredential);
-    }
-
-    let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-    if (localVarHttpHeaderAcceptSelected === undefined) {
-      // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json'];
-      localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-    }
-    if (localVarHttpHeaderAcceptSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-    }
-
-    let localVarHttpContext: HttpContext | undefined = options && options.context;
-    if (localVarHttpContext === undefined) {
-      localVarHttpContext = new HttpContext();
-    }
-
-    let localVarTransferCache: boolean | undefined = options && options.transferCache;
-    if (localVarTransferCache === undefined) {
-      localVarTransferCache = true;
-    }
-
-    // to determine the Content-Type header
-    const consumes: string[] = ['application/json'];
-    const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-    if (httpContentTypeSelected !== undefined) {
-      localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-    }
-
-    let responseType_: 'text' | 'json' | 'blob' = 'json';
-    if (localVarHttpHeaderAcceptSelected) {
-      if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-        responseType_ = 'text';
-      } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-        responseType_ = 'json';
-      } else {
-        responseType_ = 'blob';
-      }
-    }
-
-    const localVarPath = `/v1.0/mireports/custom`;
-    return this.httpClient.request<MiReportResult>('post', `${this.configuration.basePath}${localVarPath}`, {
-      context: localVarHttpContext,
-      body: miReportParams,
-      responseType: <any>responseType_,
-      withCredentials: this.configuration.withCredentials,
-      headers: localVarHeaders,
-      observe: observe,
-      transferCache: localVarTransferCache,
-      reportProgress: reportProgress,
-    });
-  }
-
-  /**
    * Generates the report identified by the provided report type
-   * @param miReportParams
+   * @param miReportSystemParams
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public generateReport(
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<MiReportResult>;
+  ): Observable<MiReportSystemResult>;
   public generateReport(
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpResponse<MiReportResult>>;
+  ): Observable<HttpResponse<MiReportSystemResult>>;
   public generateReport(
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpEvent<MiReportResult>>;
+  ): Observable<HttpEvent<MiReportSystemResult>>;
   public generateReport(
-    miReportParams: MiReportParams,
+    miReportSystemParams: MiReportSystemParams,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
-    if (miReportParams === null || miReportParams === undefined) {
-      throw new Error('Required parameter miReportParams was null or undefined when calling generateReport.');
+    if (miReportSystemParams === null || miReportSystemParams === undefined) {
+      throw new Error('Required parameter miReportSystemParams was null or undefined when calling generateReport.');
     }
 
     let localVarHeaders = this.defaultHeaders;
@@ -268,10 +175,10 @@ export class MiReportsService {
       }
     }
 
-    const localVarPath = `/v1.0/mireports`;
-    return this.httpClient.request<MiReportResult>('post', `${this.configuration.basePath}${localVarPath}`, {
+    const localVarPath = `/v1.0/mireports/system`;
+    return this.httpClient.request<MiReportSystemResult>('post', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
-      body: miReportParams,
+      body: miReportSystemParams,
       responseType: <any>responseType_,
       withCredentials: this.configuration.withCredentials,
       headers: localVarHeaders,
@@ -290,17 +197,17 @@ export class MiReportsService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<Array<MiReportSearchResult>>;
+  ): Observable<Array<MiReportSystemSearchResult>>;
   public getCurrentUserMiReports(
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpResponse<Array<MiReportSearchResult>>>;
+  ): Observable<HttpResponse<Array<MiReportSystemSearchResult>>>;
   public getCurrentUserMiReports(
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpEvent<Array<MiReportSearchResult>>>;
+  ): Observable<HttpEvent<Array<MiReportSystemSearchResult>>>;
   public getCurrentUserMiReports(
     observe: any = 'body',
     reportProgress: boolean = false,
@@ -345,8 +252,8 @@ export class MiReportsService {
       }
     }
 
-    const localVarPath = `/v1.0/mireports/types`;
-    return this.httpClient.request<Array<MiReportSearchResult>>(
+    const localVarPath = `/v1.0/mireports/system/types`;
+    return this.httpClient.request<Array<MiReportSystemSearchResult>>(
       'get',
       `${this.configuration.basePath}${localVarPath}`,
       {
@@ -425,7 +332,7 @@ export class MiReportsService {
       }
     }
 
-    const localVarPath = `/v1.0/mireports/request-task-types`;
+    const localVarPath = `/v1.0/mireports/system/request-task-types`;
     return this.httpClient.request<Array<string>>('get', `${this.configuration.basePath}${localVarPath}`, {
       context: localVarHttpContext,
       responseType: <any>responseType_,

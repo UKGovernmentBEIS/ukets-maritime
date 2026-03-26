@@ -13,8 +13,10 @@ import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/
 
 @Component({
   selector: 'mrtm-test-parent',
+  imports: [VerificationBodySummaryComponent],
+  standalone: true,
   template: `
-    <mrtm-verification-body-summary [summaryInfo]="summaryInfo"></mrtm-verification-body-summary>
+    <mrtm-verification-body-summary [summaryInfo]="summaryInfo" />
   `,
 })
 class TestParentComponent {
@@ -27,15 +29,13 @@ describe('VerificationBodySummaryComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestParentComponent],
-      imports: [VerificationBodySummaryComponent],
       providers: [
         { provide: CountryService, useClass: CountryServiceStub },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(VerificationBodySummaryComponent);
+    fixture = TestBed.createComponent(TestParentComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

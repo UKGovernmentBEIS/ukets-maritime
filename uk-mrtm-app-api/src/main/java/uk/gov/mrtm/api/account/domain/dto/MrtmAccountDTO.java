@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.mrtm.api.account.validation.MinYear;
+import uk.gov.mrtm.api.account.validation.ValidFirstMaritimeActivityDate;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
 
 import java.time.LocalDate;
@@ -35,6 +35,6 @@ public class MrtmAccountDTO {
     private AddressStateDTO address;
 
     @NotNull
-    @MinYear(message = "The year must be after or equal to 2026")
+    @ValidFirstMaritimeActivityDate(message = "The year must be after or equal to 2026 and not after current year")
     private LocalDate firstMaritimeActivityDate;
 }

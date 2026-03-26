@@ -1,11 +1,3 @@
-@forward '../app/shared/directives/add-another/add-another.directive';
-@forward '../app/shared/directives/grouped-summary-list/grouped-summary-list.directive';
-
-.overflow-auto {
-  overflow: auto;
-
-  &.overflow-auto-table {
-    padding-left: 1px;
-    padding-right: 1px;
-  }
-}
+@use '../app/shared/directives/add-another/add-another.directive';
+@use '../app/shared/directives/grouped-summary-list/grouped-summary-list.directive';
+@use '../app/shared/directives/scrollable-pane/scrollable-pane.directive';

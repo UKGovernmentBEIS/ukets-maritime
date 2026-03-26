@@ -4,7 +4,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 
 import { ForgotPasswordService } from '@mrtm/api';
 
@@ -41,7 +40,6 @@ describe('SubmitOtpComponent', () => {
       imports: [SubmitOtpComponent, WizardStepComponent, BackToTopComponent],
       providers: [
         provideRouter([]),
-        KeycloakService,
         { provide: AuthService, useValue: authService },
         { provide: ForgotPasswordService, useValue: forgotPasswordService },
         { provide: APP_BASE_HREF, useValue: '/maritime/' },
@@ -93,7 +91,7 @@ describe('SubmitOtpComponent', () => {
   });
 
   it('should submit the forgot password request', () => {
-    forgotPasswordService.resetPassword.mockReturnValueOnce(of({}));
+    forgotPasswordService.resetPassword.mockReturnValueOnce(of({} as any));
 
     page.passwordValue = '123456';
     page.submitButton.click();
@@ -131,7 +129,7 @@ describe('SubmitOtpComponent', () => {
 
   it('should go to login after clicking link', () => {
     jest.spyOn(fixture.componentInstance, 'onSignInAgain');
-    forgotPasswordService.resetPassword.mockReturnValueOnce(of({}));
+    forgotPasswordService.resetPassword.mockReturnValueOnce(of({} as any));
 
     page.passwordValue = '123456';
     page.submitButton.click();

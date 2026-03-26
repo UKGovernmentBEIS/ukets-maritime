@@ -24,10 +24,10 @@
     <div formControlName="isAddressed" govuk-radio>
       <govuk-radio-option [value]="true" label="Yes">
         <ng-container govukConditionalContent>
-          <ng-container *ngTemplateOutlet="addressedDescription; context: { selected: true }"></ng-container>
+          <ng-container *ngTemplateOutlet="addressedDescription; context: { selected: true }" />
           <div
             govuk-date-input
-            legendSize="small"
+            labelSize="small"
             label="Tell us when the recommendation will be addressed"
             hint="If already addressed, provide the date that work was completed"
             formControlName="addressedDate"></div>
@@ -35,7 +35,7 @@
       </govuk-radio-option>
       <govuk-radio-option [value]="false" label="No">
         <ng-container govukConditionalContent>
-          <ng-container *ngTemplateOutlet="addressedDescription; context: { selected: false }"></ng-container>
+          <ng-container *ngTemplateOutlet="addressedDescription; context: { selected: false }" />
         </ng-container>
       </govuk-radio-option>
     </div>

@@ -17,7 +17,7 @@
       <dd
         govukSummaryListRowValue
         class="pre-wrap"
-        [notProvided]="data.penaltyAmount ? '£' + data.penaltyAmount : ''"></dd>
+        [notProvided]="data.penaltyAmount ? `£${data.penaltyAmount}` : ''"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="[wizardStep.UPLOAD_FORM]" [queryParams]="queryParams()">Change</a>

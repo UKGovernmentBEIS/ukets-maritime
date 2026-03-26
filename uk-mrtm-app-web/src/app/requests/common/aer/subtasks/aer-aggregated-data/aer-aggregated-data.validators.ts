@@ -1,8 +1,7 @@
 import { FormGroup, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { AerAggregatedEmissionsFormGroupModel } from '@requests/common/aer/components';
+import { isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 const totalEmissionsValidator =

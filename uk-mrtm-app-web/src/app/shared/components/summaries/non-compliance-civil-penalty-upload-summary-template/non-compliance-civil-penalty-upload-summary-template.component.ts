@@ -23,7 +23,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-upload-summary-template',
-  standalone: true,
   imports: [
     GovukDatePipe,
     LinkDirective,
@@ -36,6 +35,7 @@ import { AttachedFile } from '@shared/types';
     NotProvidedDirective,
     RouterLink,
   ],
+  standalone: true,
   templateUrl: './non-compliance-civil-penalty-upload-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

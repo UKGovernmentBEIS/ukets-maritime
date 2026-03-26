@@ -13,4 +13,5 @@
  */
 export interface ThirdPartyDataProviderCreateDTO {
   name: string;
+  jwksUrl: string;
 }

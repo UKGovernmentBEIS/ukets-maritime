@@ -17,10 +17,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-signature',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, SelectComponent],
-  providers: [signatureFormProvider],
+  standalone: true,
   templateUrl: './signature.component.html',
+  providers: [signatureFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SignatureComponent {

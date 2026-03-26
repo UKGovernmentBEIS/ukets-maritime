@@ -19,7 +19,6 @@ import { EmissionsReductionClaimsVerificationSummaryTemplateComponent } from '@s
 
 @Component({
   selector: 'mrtm-emissions-reduction-claims-verification-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
@@ -27,6 +26,7 @@ import { EmissionsReductionClaimsVerificationSummaryTemplateComponent } from '@s
     ButtonDirective,
     EmissionsReductionClaimsVerificationSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emissions-reduction-claims-verification-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

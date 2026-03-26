@@ -9,6 +9,7 @@ import {
   provideEmpPeerReviewStepFlowManagers,
   provideEmpPeerReviewTaskServices,
 } from '@requests/tasks/emp-peer-review/emp-peer-review.providers';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_PEER_REVIEW_ROUTES: Routes = [
   {
@@ -21,6 +22,7 @@ export const EMP_PEER_REVIEW_ROUTES: Routes = [
       provideEmpPeerReviewTaskServices(),
       provideEmpPeerReviewStepFlowManagers(),
     ],
+    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'operator-details',

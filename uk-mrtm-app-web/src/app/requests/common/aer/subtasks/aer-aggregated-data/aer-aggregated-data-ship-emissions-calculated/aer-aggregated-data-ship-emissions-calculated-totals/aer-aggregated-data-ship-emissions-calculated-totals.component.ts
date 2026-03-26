@@ -14,7 +14,6 @@ import { BigNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-ship-emissions-calculated-totals',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -23,6 +22,7 @@ import { BigNumberPipe } from '@shared/pipes';
     BigNumberPipe,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-ship-emissions-calculated-totals.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

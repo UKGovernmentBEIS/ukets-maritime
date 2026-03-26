@@ -3,10 +3,14 @@ import { Routes } from '@angular/router';
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
 import {
+  aerAdditionalDocumentsMap,
+  aerPortsMap,
+  aerTotalEmissionsMap,
   COMPLIANCE_MONITORING_REPORTING_SUB_TASK_PATH,
   DATA_GAPS_METHODOLOGIES_SUB_TASK_PATH,
   ETS_COMPLIANCE_RULES_SUB_TASK_PATH,
   MATERIALITY_LEVEL_SUB_TASK_PATH,
+  monitoringPlanChangesMap,
   OPINION_STATEMENT_SUB_TASK_PATH,
   OVERALL_VERIFICATION_DECISION_SUB_TASK_PATH,
   RECOMMENDED_IMPROVEMENTS_SUB_TASK_PATH,
@@ -16,15 +20,22 @@ import {
   VERIFIER_DETAILS_SUB_TASK_PATH,
 } from '@requests/common/aer';
 import { AER_VERIFICATION_RETURN_TO_OPERATOR_ROUTE } from '@requests/common/aer/aer.consts';
-import { AER_AGGREGATED_DATA_SUB_TASK_PATH } from '@requests/common/aer/subtasks/aer-aggregated-data';
+import {
+  AER_AGGREGATED_DATA_SUB_TASK_PATH,
+  aerAggregatedDataSubtasksListMap,
+} from '@requests/common/aer/subtasks/aer-aggregated-data';
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_TOTAL_EMISSIONS_SUB_TASK_PATH } from '@requests/common/aer/subtasks/aer-total-emissions/aer-total-emissions.helpers';
+import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages';
 import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK_PATH } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
 import { MONITORING_PLAN_CHANGES_SUB_TASK_PATH } from '@requests/common/aer/subtasks/monitoring-plan-changes';
-import { AER_REDUCTION_CLAIM_SUB_TASK } from '@requests/common/aer/subtasks/reduction-claim';
+import { AER_REDUCTION_CLAIM_SUB_TASK, reductionClaimMap } from '@requests/common/aer/subtasks/reduction-claim';
+import { emissionsShipSubtaskMap } from '@requests/common/components/emissions';
 import { EMISSIONS_SUB_TASK_PATH } from '@requests/common/components/emissions/emissions.helpers';
-import { OPERATOR_DETAILS_SUB_TASK_PATH } from '@requests/common/components/operator-details';
+import { OPERATOR_DETAILS_SUB_TASK_PATH, operatorDetailsMap } from '@requests/common/components/operator-details';
+import { emissionsSubTasksMap } from '@requests/common/emp/subtasks/subtask-list.map';
+import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/common/third-party-data-provider';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK_PATH } from '@requests/common/utils/additional-documents';
 import { canActivateAerVerificationSubmitSendReportAction } from '@requests/tasks/aer-verification-submit/aer-verification-submit.guard';
 import {
@@ -32,9 +43,11 @@ import {
   provideAerVerificationSubmitSideEffects,
   provideAerVerificationSubmitStepFlowManagers,
   provideAerVerificationSubmitTaskServices,
+  provideThirdPartyConfigurations,
 } from '@requests/tasks/aer-verification-submit/aer-verification-submit.providers';
 import { canActivateReturnToOperatorForChanges } from '@requests/tasks/aer-verification-submit/return-to-operator-for-changes/return-to-operator-for-changes.guard';
 import { SEND_REPORT_SUB_TASK_PATH } from '@requests/tasks/aer-verification-submit/subtasks/send-report/send-report.helpers';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
   {
@@ -46,7 +59,9 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       provideAerVerificationSubmitSideEffects(),
       provideAerVerificationSubmitTaskServices(),
       provideAerVerificationSubmitStepFlowManagers(),
+      provideThirdPartyConfigurations(),
     ],
+    canActivate: [resetPersistableStateGuard],
     children: [
       // Verifier assessment
       {
@@ -139,6 +154,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       // AER view-only
       {
         path: OPERATOR_DETAILS_SUB_TASK_PATH,
+        title: operatorDetailsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
           import('@requests/tasks/aer-verification-submit/view-only-subtasks/operator-details-submitted').then(
@@ -147,6 +163,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       },
       {
         path: MONITORING_PLAN_CHANGES_SUB_TASK_PATH,
+        title: monitoringPlanChangesMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
           import('@requests/tasks/aer-verification-submit/view-only-subtasks/monitoring-plan-changes-submitted').then(
@@ -158,6 +175,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
         children: [
           {
             path: '',
+            title: emissionsSubTasksMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/emissions').then(
@@ -166,6 +184,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
           },
           {
             path: 'ships/:shipId',
+            title: emissionsShipSubtaskMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/emissions').then(
@@ -179,6 +198,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
         children: [
           {
             path: '',
+            title: aerVoyagesMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-voyages').then(
@@ -187,6 +207,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
           },
           {
             path: `:voyageId`,
+            title: aerVoyagesMap.caption,
             data: { breadcrumb: false, backlink: '../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-voyages').then(
@@ -200,6 +221,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
         children: [
           {
             path: '',
+            title: aerPortsMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-ports').then(
@@ -208,6 +230,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
           },
           {
             path: `:portId`,
+            title: aerPortsMap.caption,
             data: { breadcrumb: false, backlink: '../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-ports').then(
@@ -221,6 +244,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
         children: [
           {
             path: '',
+            title: aerAggregatedDataSubtasksListMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-aggregated-data').then(
@@ -229,6 +253,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
           },
           {
             path: `:dataId`,
+            title: aerAggregatedDataSubtasksListMap.caption,
             data: { breadcrumb: false, backlink: '../' },
             loadComponent: () =>
               import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-aggregated-data').then(
@@ -239,6 +264,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       },
       {
         path: AER_REDUCTION_CLAIM_SUB_TASK,
+        title: reductionClaimMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
           import('@requests/tasks/aer-verification-submit/view-only-subtasks/reduction-claim-submitted').then(
@@ -247,6 +273,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       },
       {
         path: ADDITIONAL_DOCUMENTS_SUB_TASK_PATH,
+        title: aerAdditionalDocumentsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
           import('@requests/tasks/aer-verification-submit/view-only-subtasks/additional-documents-submitted').then(
@@ -255,6 +282,7 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
       },
       {
         path: AER_TOTAL_EMISSIONS_SUB_TASK_PATH,
+        title: aerTotalEmissionsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
           import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-total-emissions-submitted').then(
@@ -277,6 +305,17 @@ export const AER_VERIFICATION_SUBMIT_ROUTES: Routes = [
         loadChildren: () =>
           import('@requests/tasks/aer-verification-submit/return-to-operator-for-changes').then(
             (r) => r.RETURN_TO_OPERATOR_FOR_CHANGES_ROUTES,
+          ),
+      },
+
+      // AER Import third party data
+      {
+        path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
+        title: 'Import data from a data supplier',
+        data: { backlink: '../../', breadcrumb: false },
+        loadComponent: () =>
+          import('@requests/common/third-party-data-provider/third-party-data-provider-import').then(
+            (c) => c.ThirdPartyDataProviderImportComponent,
           ),
       },
     ],

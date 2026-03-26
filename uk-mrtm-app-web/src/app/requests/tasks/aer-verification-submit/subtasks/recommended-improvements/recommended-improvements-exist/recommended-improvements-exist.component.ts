@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-recommended-improvements-exist',
-  standalone: true,
   imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent, WarningTextComponent],
+  standalone: true,
   templateUrl: './recommended-improvements-exist.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [recommendedImprovementsExistProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RecommendedImprovementsExistComponent {
   readonly map = recommendedImprovementsMap;

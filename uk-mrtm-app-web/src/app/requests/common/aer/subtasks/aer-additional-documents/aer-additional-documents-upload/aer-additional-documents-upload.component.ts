@@ -19,8 +19,8 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-aer-additional-documents-upload',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, RadioComponent, RadioOptionComponent, MultipleFileInputComponent],
+  standalone: true,
   templateUrl: './aer-additional-documents-upload.component.html',
   providers: [aerAdditionalDocumentsUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -33,7 +33,7 @@ export class AerAdditionalDocumentsUploadComponent {
 
   protected readonly aerAdditionalDocumentsMap = aerAdditionalDocumentsMap;
   downloadUrl = this.store.select(requestTaskQuery.selectTasksDownloadUrl)();
-  existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
+  readonly existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
     initialValue: this.existCtrl.value,
   });
 

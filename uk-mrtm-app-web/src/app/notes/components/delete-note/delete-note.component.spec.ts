@@ -23,7 +23,10 @@ describe('DeleteNoteComponent', () => {
     deleteAccountNote: jest.fn().mockReturnValue(of(null)),
   };
 
-  @Component({ template: '', standalone: true })
+  @Component({
+    standalone: true,
+    template: '',
+  })
   class NoopComponent {}
 
   class Page extends BasePage<DeleteNoteComponent> {

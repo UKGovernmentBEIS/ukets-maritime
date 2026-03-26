@@ -17,12 +17,13 @@ import { timelineContent } from '@requests/timeline/timeline.content';
 import { VIR_REVIEWED_ROUTE_PREFIX } from '@requests/timeline/vir-reviewed';
 import { VIR_SUBMITTED_ROUTE_PREFIX } from '@requests/timeline/vir-submitted';
 import { taskActionTypeToTitleMap } from '@shared/constants';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const TIMELINE_ROUTES: Routes = [
   {
     path: ':actionId',
     providers: actionProviders,
-    canActivate: [getRequestActionPageCanActivateGuard()],
+    canActivate: [getRequestActionPageCanActivateGuard(), resetPersistableStateGuard],
     canDeactivate: [getRequestActionPageCanDeactivateGuard()],
     children: [
       {

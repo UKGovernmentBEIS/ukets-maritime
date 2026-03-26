@@ -4,17 +4,17 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { taskProviders } from '@requests/common/task.providers';
 import { SendReportConfirmationComponent } from '@requests/tasks/aer-verification-submit/subtasks/send-report/send-report-confirmation/send-report-confirmation.component';
-import { screen } from '@testing-library/angular';
 
 describe('SendReportConfirmationComponent', () => {
   let component: SendReportConfirmationComponent;
   let fixture: ComponentFixture<SendReportConfirmationComponent>;
   let router: Router;
+  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<AerVerificationSubmitTaskPayload>> = {
@@ -23,19 +23,22 @@ describe('SendReportConfirmationComponent', () => {
 
   const taskServiceSpy = jest.spyOn(taskServiceMock, 'submit');
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  class Page extends BasePage<SendReportConfirmationComponent> {}
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [SendReportConfirmationComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(SendReportConfirmationComponent);
     component = fixture.componentInstance;
     router = TestBed.inject(Router);
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -44,13 +47,14 @@ describe('SendReportConfirmationComponent', () => {
   });
 
   it('should display correct header and content', () => {
-    expect(screen.getByRole('heading', { name: 'Send verification report to the operator' })).toBeInTheDocument();
+    expect(page.heading1.textContent).toEqual('Send verification report to the operator');
   });
 
   it('should submit task', () => {
     const navigateSpy = jest.spyOn(router, 'navigate');
-    screen.getByRole('button', { name: 'Confirm and send' }).click();
+    page.standardButton.click();
     fixture.detectChanges();
+
     expect(taskServiceSpy).toHaveBeenCalledTimes(1);
     expect(navigateSpy).toHaveBeenCalledWith(['success'], { relativeTo: activatedRouteStub, skipLocationChange: true });
   });

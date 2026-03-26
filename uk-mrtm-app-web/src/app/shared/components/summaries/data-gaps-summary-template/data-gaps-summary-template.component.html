@@ -5,11 +5,11 @@
       govukSummaryListRowValue
       class="pre-wrap"
       htmlDiff
-      [current]="dataGaps?.fuelConsumptionEstimationMethod"
-      [previous]="originalDataGaps?.fuelConsumptionEstimationMethod"></dd>
-    @if (isEditable) {
+      [current]="dataGaps()?.fuelConsumptionEstimationMethod"
+      [previous]="originalDataGaps()?.fuelConsumptionEstimationMethod"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.DATA_GAPS_METHOD]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().DATA_GAPS_METHOD]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -18,11 +18,11 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="dataGaps?.responsiblePersonOrPosition"
-      [previous]="originalDataGaps?.responsiblePersonOrPosition"></dd>
-    @if (isEditable) {
+      [current]="dataGaps()?.responsiblePersonOrPosition"
+      [previous]="originalDataGaps()?.responsiblePersonOrPosition"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.DATA_GAPS_METHOD]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().DATA_GAPS_METHOD]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -32,11 +32,11 @@
       govukSummaryListRowValue
       class="pre-wrap"
       htmlDiff
-      [current]="dataGaps?.formulaeUsed"
-      [previous]="originalDataGaps?.formulaeUsed"></dd>
-    @if (isEditable) {
+      [current]="dataGaps()?.formulaeUsed"
+      [previous]="originalDataGaps()?.formulaeUsed"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.DATA_GAPS_METHOD]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().DATA_GAPS_METHOD]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -46,11 +46,11 @@
       govukSummaryListRowValue
       class="pre-wrap"
       htmlDiff
-      [current]="dataGaps?.dataSources"
-      [previous]="originalDataGaps?.dataSources"></dd>
-    @if (isEditable) {
+      [current]="dataGaps()?.dataSources"
+      [previous]="originalDataGaps()?.dataSources"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.DATA_GAPS_METHOD]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().DATA_GAPS_METHOD]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -59,11 +59,11 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="dataGaps?.recordsLocation"
-      [previous]="originalDataGaps?.recordsLocation"></dd>
-    @if (isEditable) {
+      [current]="dataGaps()?.recordsLocation"
+      [previous]="originalDataGaps()?.recordsLocation"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.DATA_GAPS_METHOD]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().DATA_GAPS_METHOD]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -72,11 +72,11 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="dataGaps?.itSystemUsed"
-      [previous]="originalDataGaps?.itSystemUsed"></dd>
-    @if (isEditable) {
+      [current]="dataGaps()?.itSystemUsed"
+      [previous]="originalDataGaps()?.itSystemUsed"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.DATA_GAPS_METHOD]" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="[wizardStep().DATA_GAPS_METHOD]" [queryParams]="{ change: true }">Change</a>
       </dd>
     }
   </div>

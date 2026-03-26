@@ -20,7 +20,7 @@ describe('TaskItemListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskItemListComponent);
     component = fixture.componentInstance;
-    component.taskItems = tasks;
+    fixture.componentRef.setInput('taskItems', tasks);
     fixture.detectChanges();
   });
 

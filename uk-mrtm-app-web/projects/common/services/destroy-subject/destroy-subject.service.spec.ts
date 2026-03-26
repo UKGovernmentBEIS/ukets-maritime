@@ -10,7 +10,7 @@ describe('DestroySubject', () => {
   let fixture: ComponentFixture<TestComponent>;
   let closeSpy: jest.Mock;
 
-  @Component({ template: '', providers: [DestroySubject] })
+  @Component({ standalone: true, template: '', providers: [DestroySubject] })
   class TestComponent {
     private readonly destroy$ = inject(DestroySubject);
 
@@ -26,7 +26,6 @@ describe('DestroySubject', () => {
 
   beforeEach(async () => {
     closeSpy = jest.fn();
-    await TestBed.configureTestingModule({ declarations: [TestComponent] }).compileComponents();
   });
 
   beforeEach(() => {

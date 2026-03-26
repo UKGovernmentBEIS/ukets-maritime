@@ -12,7 +12,6 @@ import { EmpVariationReviewDecisionDto, ReviewDecisionDto } from '@shared/types'
 
 @Component({
   selector: 'mrtm-review-return-for-amends-subtask-summary-template',
-  standalone: true,
   imports: [
     SummaryDownloadFilesComponent,
     SummaryListComponent,
@@ -20,11 +19,12 @@ import { EmpVariationReviewDecisionDto, ReviewDecisionDto } from '@shared/types'
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
   ],
+  standalone: true,
   templateUrl: './review-return-for-amends-subtask-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewReturnForAmendsSubtaskSummaryTemplateComponent {
-  caption = input<string>();
-  reviewDecision = input.required<ReviewDecisionDto | EmpVariationReviewDecisionDto>();
-  showAssignee = input<boolean>(true);
+  readonly caption = input<string>();
+  readonly reviewDecision = input.required<ReviewDecisionDto | EmpVariationReviewDecisionDto>();
+  readonly showAssignee = input<boolean>(true);
 }

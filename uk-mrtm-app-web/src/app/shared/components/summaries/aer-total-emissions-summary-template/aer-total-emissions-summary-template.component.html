@@ -4,7 +4,7 @@
   <p class="govuk-body govuk-!-font-size-27">
     <strong>{{ totalEmissions()?.surrenderEmissionsSummary | bigNumber: 7 }}</strong>
   </p>
-  <hr class="govuk-section-break govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <p class="govuk-hint govuk-!-margin-top-2">
     <span class="govuk-!-margin-right-9">{{ totalEmissionsHeading }} (tCO2e)</span>
     <span class="govuk-!-margin-left-6">{{ totalEmissions()?.totalShipEmissionsSummary | bigNumber: 7 }}</span>

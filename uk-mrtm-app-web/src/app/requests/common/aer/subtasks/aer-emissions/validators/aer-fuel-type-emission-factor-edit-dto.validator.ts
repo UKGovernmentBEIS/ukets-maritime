@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { AerFuelsAndEmissionsFactors } from '@mrtm/api';
 
 import {
@@ -11,6 +9,7 @@ import { fuelsAndEmissionsFormFlowMap } from '@requests/common/components/emissi
 import { FuelOriginCodeEnum, FuelTypeCodeEnum } from '@requests/common/types';
 import { getUniqueFuelEmissionFactorId } from '@requests/common/utils/emissions';
 import { AerFuel, XmlResult } from '@shared/types';
+import { isNil } from '@shared/utils';
 import { XmlValidator } from '@shared/validators';
 
 export class AerFuelTypeEmissionFactorEditDtoValidator {

@@ -27,7 +27,6 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
 
 @Component({
   selector: 'mrtm-list-of-ships-variation-review-decision',
-  standalone: true,
   imports: [
     ListOfShipsSummaryTemplateComponent,
     RouterLink,
@@ -39,9 +38,10 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
     ButtonDirective,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './list-of-ships-variation-review-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewEmpSubtaskDecisionFormProvider(EMISSIONS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListOfShipsVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);

@@ -39,27 +39,27 @@
   <ng-container formArrayName="fuelDetails">
     <h2 class="govuk-heading-m">Potential fuel types used</h2>
     <div class="govuk-hint">Fuel types can be updated in the 'Enter emission factors' section</div>
-    @for (fuelDetailControl of fuelDetailsControl.controls; track fuelDetailControl; let i = $index) {
-      <fieldset govukFieldset [formGroupName]="i">
-        <legend govukLegend legendSize="small">Fuel {{ i + 1 }}</legend>
+    @for (fuelDetailControl of fuelDetailsControl.controls; track fuelDetailControl) {
+      <fieldset govukFieldset [formGroupName]="$index">
+        <legend govukLegend legendSize="small">Fuel {{ $index + 1 }}</legend>
         @if (fuelDetailsControl.length > 1) {
-          <button (click)="removeFuelDetails(i)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
+          <button (click)="removeFuelDetails($index)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
         }
         <div
           govuk-select
           formControlName="uniqueIdentifier"
-          [options]="fuelDetailsOptions(i)"
-          (change)="onChangeFuelDetails(i)"
-          [label]="'Select fuel type ' + (i + 1)"
+          [options]="fuelDetailsOptions($index)"
+          (change)="onChangeFuelDetails($index)"
+          [label]="`Select fuel type ${$index + 1}`"
           [isLabelHidden]="true"
           widthClass="govuk-!-width-full"></div>
 
-        @if (isLNGType(i)) {
+        @if (isLNGType($index)) {
           <div
             govuk-select
             formControlName="methaneSlip"
             [options]="methaneSlipOptions"
-            (change)="onChangeMethaneSlip(i)"
+            (change)="onChangeMethaneSlip($index)"
             label="Methane slip (%)"
             hint="Emission factor of slipped fuel (slippage coefficient) as a percentage of the mass of the fuel used by the emission source"
             widthClass="govuk-!-width-one-third"></div>
@@ -84,8 +84,8 @@
     formControlName="monitoringMethod"
     govuk-checkboxes
     hint="Select all that apply"
-    legend="Monitoring methods"
-    legendSize="medium">
+    label="Monitoring methods"
+    labelSize="medium">
     @for (method of monitoringMethodMap | keyvalue: sortMonitoringMethodsByText; track method.key) {
       <govuk-checkbox [label]="method.value.text" [hint]="method.value.hint" [value]="method.key" />
     }
@@ -94,7 +94,7 @@
 
 @if (isAer()) {
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <a govukLink routerLink="../list">Return to: {{ returnToLabel() }}</a>
   </div>
 } @else {

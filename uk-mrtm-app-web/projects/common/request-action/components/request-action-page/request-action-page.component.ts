@@ -38,8 +38,8 @@ type ViewModel = {
 
 @Component({
   selector: 'netz-request-action-page',
-  standalone: true,
   imports: [NgComponentOutlet, PageHeadingComponent, TaskListComponent, GovukDatePipe, RelatedPrintableItemsComponent],
+  standalone: true,
   templateUrl: './request-action-page.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -49,7 +49,7 @@ export class RequestActionPageComponent {
   private readonly store = inject(RequestActionStore);
   private readonly injector = inject(Injector);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const requestAction = this.store.select(requestActionQuery.selectAction)();
     if (!requestAction) {
       return null;

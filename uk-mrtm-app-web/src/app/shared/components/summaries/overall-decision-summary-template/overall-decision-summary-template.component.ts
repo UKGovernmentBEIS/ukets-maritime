@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpIssuanceDetermination, EmpVariationDetermination } from '@mrtm/api';
@@ -17,7 +17,6 @@ import { DeterminationTypePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-overall-decision-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -29,12 +28,15 @@ import { DeterminationTypePipe } from '@shared/pipes';
     RouterLink,
     DeterminationTypePipe,
   ],
+  standalone: true,
   templateUrl: './overall-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionSummaryTemplateComponent {
-  @Input({ required: true }) determination: EmpIssuanceDetermination | EmpVariationDetermination;
-  @Input() wizardStep: { [s: string]: string };
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly determination = input.required<EmpIssuanceDetermination | EmpVariationDetermination>();
+  readonly wizardStep = input<{
+    [s: string]: string;
+  }>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

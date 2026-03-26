@@ -19,7 +19,6 @@ import {
 
 @Component({
   selector: 'mrtm-summary',
-  standalone: true,
   imports: [
     VerificationBodySummaryComponent,
     ButtonDirective,
@@ -30,6 +29,7 @@ import {
     AsyncPipe,
     VerificationBodyAdminUserSummaryComponent,
   ],
+  standalone: true,
   templateUrl: './summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

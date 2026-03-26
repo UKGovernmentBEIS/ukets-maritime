@@ -9,8 +9,8 @@ import { AggregatedDataListSummaryTemplateComponent } from '@shared/components/s
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list-submitted',
-  standalone: true,
   imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, AggregatedDataListSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './aer-aggregated-data-list-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

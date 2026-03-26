@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.Validator;
+import uk.gov.mrtm.api.web.orchestrator.authorization.service.OperatorUserAuthorityUpdateOrchestrator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
@@ -57,6 +58,9 @@ class OperatorUserManagementControllerTest {
 
     @Mock
     private OperatorUserManagementService operatorUserManagementService;
+
+	@Mock
+	private OperatorUserAuthorityUpdateOrchestrator operatorUserAuthorityUpdateOrchestrator;
 
     @Mock
     private AppUserAuthorizationService appUserAuthorizationService;
@@ -159,7 +163,7 @@ class OperatorUserManagementControllerTest {
 				.andExpect(jsonPath("$.lastName").value(operatorUserDTO.getLastName()))
 				.andExpect(jsonPath("$.email").value(operatorUserDTO.getEmail()));
 
-		verify(operatorUserManagementService, times(1)).updateOperatorUser(user, operatorUserDTO);
+		verify(operatorUserAuthorityUpdateOrchestrator, times(1)).updateOperatorUser(user, operatorUserDTO);
 	}
 
 	@Test
@@ -207,7 +211,7 @@ class OperatorUserManagementControllerTest {
 				.andExpect(jsonPath("$.lastName").value(operatorUserDTO.getLastName()))
 				.andExpect(jsonPath("$.email").value(operatorUserDTO.getEmail()));
 
-		verify(operatorUserManagementService, times(1))
+		verify(operatorUserAuthorityUpdateOrchestrator, times(1))
 				.updateOperatorUserByAccountAndId(1L, userId, operatorUserDTO);
 	}
 

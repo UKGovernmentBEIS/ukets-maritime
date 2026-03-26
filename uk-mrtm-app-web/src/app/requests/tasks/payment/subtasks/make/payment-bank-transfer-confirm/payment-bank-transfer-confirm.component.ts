@@ -12,7 +12,6 @@ import { MakePaymentWizardSteps } from '@requests/tasks/payment/subtasks/make';
 
 @Component({
   selector: 'mrtm-payment-bank-transfer-confirm',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     PendingButtonDirective,
@@ -21,6 +20,7 @@ import { MakePaymentWizardSteps } from '@requests/tasks/payment/subtasks/make';
     LinkDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './payment-bank-transfer-confirm.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

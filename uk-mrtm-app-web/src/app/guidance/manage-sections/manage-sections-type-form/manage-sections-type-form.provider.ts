@@ -1,8 +1,6 @@
 import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { GovukValidators } from '@netz/govuk-components';
 
 import { guidanceQuery, GuidanceStore } from '@guidance/+state';
@@ -11,6 +9,7 @@ import {
   ManageSectionsFormGroupModel,
   ManageSectionsFromModel,
 } from '@guidance/manage-sections/manage-sections-type-form/manage-sections-type-form.types';
+import { isNil } from '@shared/utils';
 
 const noFilesAttachedToSectionValidator =
   (store: GuidanceStore): ValidatorFn =>

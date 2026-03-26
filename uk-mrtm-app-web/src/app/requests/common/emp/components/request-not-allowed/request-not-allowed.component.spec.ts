@@ -3,27 +3,29 @@ import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { mockRequestTask } from '@netz/common/request-task';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, RouterStubComponent } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, RouterStubComponent } from '@netz/common/testing';
 
 import { RequestNotAllowedComponent } from '@requests/common/emp/components/request-not-allowed';
 import { taskProviders } from '@requests/common/task.providers';
-import { fireEvent, screen } from '@testing-library/angular';
 
 describe('RequestNotAllowedComponent', () => {
   let component: RequestNotAllowedComponent;
   let fixture: ComponentFixture<RequestNotAllowedComponent>;
+  let page: Page;
   let router: Router;
   let store: RequestTaskStore;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  class Page extends BasePage<RequestNotAllowedComponent> {}
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [RequestNotAllowedComponent],
       providers: [
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
         ...taskProviders,
         provideRouter([{ path: 'tasks/:id', component: RouterStubComponent }]),
       ],
-    }).compileComponents();
+    });
 
     router = TestBed.inject(Router);
     store = TestBed.inject(RequestTaskStore);
@@ -39,6 +41,7 @@ describe('RequestNotAllowedComponent', () => {
     });
     fixture = TestBed.createComponent(RequestNotAllowedComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -47,16 +50,15 @@ describe('RequestNotAllowedComponent', () => {
   });
 
   it('should display HTML Elements', () => {
-    expect(screen.getByRole('heading').textContent).toEqual('You can only have one active request at any given time.');
-    expect(screen.getByRole('button').textContent).toEqual('View the active request');
+    expect(page.heading1.textContent).toEqual('You can only have one active request at any given time.');
+    expect(page.standardButton.textContent).toEqual('View the active request');
   });
 
   it('should navigate to related task when click on button', () => {
     const routerSpy = jest.spyOn(router, 'navigate');
 
-    const buttonStub = screen.getByRole('button');
+    page.standardButton.click();
 
-    fireEvent.click(buttonStub);
     expect(routerSpy).toHaveBeenCalledWith(['/tasks', 100]);
   });
 });

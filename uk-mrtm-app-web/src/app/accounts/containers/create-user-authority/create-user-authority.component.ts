@@ -6,7 +6,7 @@ import {
   Component,
   ElementRef,
   inject,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -30,7 +30,6 @@ import { UserAccountFormComponent, WizardStepComponent } from '@shared/component
 
 @Component({
   selector: 'mrtm-create-account',
-  standalone: true,
   imports: [
     UserTypePipe,
     UserAccountFormComponent,
@@ -42,13 +41,14 @@ import { UserAccountFormComponent, WizardStepComponent } from '@shared/component
     AgentUserInfoComponent,
     EmitterContactInfoComponent,
   ],
-  providers: [createUserAuthorityFormProvider],
+  standalone: true,
   templateUrl: './create-user-authority.component.html',
+  providers: [createUserAuthorityFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateUserAuthorityComponent implements AfterViewInit {
   public form = inject<FormGroup>(CREATE_USER_AUTHORITY_PROVIDER);
-  @ViewChild(WizardStepComponent, { read: ElementRef }) wizardStep: ElementRef;
+  readonly wizardStep = viewChild(WizardStepComponent, { read: ElementRef });
   private activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   public userType$ = this.activatedRoute.paramMap.pipe(map((params) => params.get('userType')));
   private readonly router: Router = inject(Router);
@@ -68,7 +68,7 @@ export class CreateUserAuthorityComponent implements AfterViewInit {
             submissionErrors.forEach((subError) => {
               this.form.get(subError.control).setErrors(subError.validationErrors);
             });
-            this.wizardStep.nativeElement.querySelector('button[type="submit"]').click();
+            this.wizardStep().nativeElement.querySelector('button[type="submit"]').click();
             this.cdr.detectChanges();
             // Reset the final submission errors.
             this.store.setSubmissionErrors([]);

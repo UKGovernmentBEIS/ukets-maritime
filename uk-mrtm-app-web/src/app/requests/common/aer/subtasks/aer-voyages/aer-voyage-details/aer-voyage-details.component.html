@@ -26,7 +26,7 @@
     [datePickerConfig]="datepickerConfig"
     label="Date of departure"
     hint="For example, 21/7/2024"
-    widthClass="govuk-!-width-one-third"></div>
+    widthClass="govuk-input--width-10"></div>
   <div
     mrtm-time-input
     formControlName="departureTime"
@@ -54,8 +54,9 @@
     formControlName="arrivalDate"
     [datePickerConfig]="datepickerConfig"
     label="Date of arrival"
+    labelSize="normal"
     hint="For example, 21/7/2024"
-    widthClass="govuk-!-width-one-third"></div>
+    widthClass="govuk-input--width-10"></div>
   <div
     mrtm-time-input
     formControlName="arrivalTime"
@@ -63,6 +64,6 @@
     hint="Enter the exact time in GMT, for example 17:06:22"></div>
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
 </div>

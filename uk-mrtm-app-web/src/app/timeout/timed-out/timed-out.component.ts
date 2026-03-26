@@ -12,6 +12,7 @@ import { SecondsToMinutesPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-timed-out',
+  imports: [PageHeadingComponent, AsyncPipe, SecondsToMinutesPipe, LinkDirective],
   standalone: true,
   template: `
     <netz-page-heading size="xl">Your session has timed out</netz-page-heading>
@@ -32,7 +33,6 @@ import { SecondsToMinutesPipe } from '@shared/pipes';
     </p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PageHeadingComponent, AsyncPipe, SecondsToMinutesPipe, LinkDirective],
 })
 export class TimedOutComponent {
   private readonly activatedRoute = inject(ActivatedRoute);

@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { EmpBioFuels, EmpEFuels, EmpFossilFuels, EmpFuelsAndEmissionsFactors } from '@mrtm/api';
 
 import { fuelsAndEmissionsFormFlowMap } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.helper';
@@ -13,6 +11,7 @@ import {
 } from '@requests/common/types';
 import { getUniqueFuelEmissionFactorId } from '@requests/common/utils/emissions';
 import { XmlResult } from '@shared/types';
+import { isNil } from '@shared/utils';
 import { XmlValidator } from '@shared/validators';
 
 export class FuelTypeEmissionFactorEditDtoValidator {

@@ -10,8 +10,8 @@ import { recommendedImprovementsMap } from '@requests/common/aer/subtasks/recomm
 
 @Component({
   selector: 'mrtm-recommended-improvements-list-template',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, TableComponent],
+  standalone: true,
   templateUrl: './recommended-improvements-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -26,6 +26,6 @@ export class RecommendedImprovementsListTemplateComponent {
   readonly columns: Array<GovukTableColumn> = [
     { field: 'reference', header: 'Reference', widthClass: 'app-column-width-15-per' },
     { field: 'explanation', header: 'Explanation' },
-    { field: 'actionLinks', header: '' },
+    { field: 'actionLinks', header: 'Actions', hiddenHeader: true },
   ];
 }

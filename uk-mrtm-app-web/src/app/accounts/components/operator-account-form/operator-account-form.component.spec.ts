@@ -21,14 +21,14 @@ describe('OperatorAccountFormComponent', () => {
   }
 
   @Component({
+    imports: [ReactiveFormsModule, OperatorAccountFormComponent],
+    standalone: true,
     template: `
       <form [formGroup]="formGroup">
-        <mrtm-operator-account-form></mrtm-operator-account-form>
+        <mrtm-operator-account-form />
       </form>
     `,
-    standalone: true,
     schemas: [NO_ERRORS_SCHEMA],
-    imports: [ReactiveFormsModule, OperatorAccountFormComponent],
   })
   class TestComponent {
     formGroup = new FormGroup<Record<keyof MrtmAccountDTO, FormControl>>({

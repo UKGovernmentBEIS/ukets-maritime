@@ -14,7 +14,6 @@ import { RdeSubmitted } from '@shared/types';
 
 @Component({
   selector: 'mrtm-rde-submitted-summary-template',
-  standalone: true,
   imports: [
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
@@ -24,9 +23,10 @@ import { RdeSubmitted } from '@shared/types';
     GovukDatePipe,
     SummaryDownloadFilesComponent,
   ],
+  standalone: true,
   templateUrl: './rde-submitted-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdeSubmittedSummaryTemplateComponent {
-  data = input.required<RdeSubmitted>();
+  readonly data = input.required<RdeSubmitted>();
 }

@@ -7,8 +7,8 @@ import { NonComplianceDetailsSummaryTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-non-compliance-submitted',
-  standalone: true,
   imports: [NonComplianceDetailsSummaryTemplateComponent],
+  standalone: true,
   template: `
     <mrtm-non-compliance-details-summary-template [data]="nonComplianceDetailsSummary()" />
   `,

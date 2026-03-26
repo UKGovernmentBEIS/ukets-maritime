@@ -1,6 +1,5 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { AerSmfPurchase } from '@mrtm/api';
 
@@ -14,7 +13,7 @@ import {
 } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim.helpers';
 import { ReductionClaimFuelPurchaseFormModel } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim-fuel-purchase/reduction-claim-fuel-purchase.types';
 import { UploadedFile } from '@shared/types';
-import { createFileUploadPayload, transformToTaskAttachments } from '@shared/utils';
+import { createFileUploadPayload, isNil, transformToTaskAttachments } from '@shared/utils';
 
 export class ReductionClaimFuelPurchasePayloadMutator extends PayloadMutator {
   public readonly subtask: string = AER_REDUCTION_CLAIM_SUB_TASK;

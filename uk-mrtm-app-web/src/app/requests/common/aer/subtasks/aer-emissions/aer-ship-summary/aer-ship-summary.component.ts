@@ -8,7 +8,7 @@ import { AerShipEmissions, EmissionsSources } from '@mrtm/api';
 import { PageHeadingComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
@@ -25,7 +25,6 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-ship-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AerShipSummaryTemplateComponent,
@@ -34,6 +33,7 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
     PendingButtonDirective,
     ButtonDirective,
   ],
+  standalone: true,
   templateUrl: './aer-ship-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -50,7 +50,7 @@ export class AerShipSummaryComponent {
     return {
       caption: this.store.select(aerCommonQuery.selectShipName(this.shipId()))(),
       ship: this.ship(),
-      isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),
+      isEditable: this.store.select(aerCommonQuery.selectIsShipEditable(this.shipId()))(),
       isShipStatusCompleted: this.store.select(aerCommonQuery.selectIsShipStatusCompleted(this.shipId()))(),
       isShipWizardCompleted: isShipWizardCompleted(this.ship()),
       changeLinks: SUMMARY_CHANGE_LINKS_MAP,

@@ -3,7 +3,6 @@ import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerShipAggregatedData } from '@mrtm/api';
 
@@ -26,10 +25,10 @@ import { AggregatedDataListSummaryTemplateComponent, NotificationBannerComponent
 import { DropdownButtonGroupComponent, DropdownButtonItemComponent } from '@shared/components/dropdown-button-group';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -43,6 +42,7 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
     WarningTextComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,6 +63,7 @@ export class AerAggregatedDataListComponent {
   readonly filter = signal<FilterByShip | null>(null);
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly shipsWithAggregatedData = this.store.select(aerCommonQuery.selectListOfShipsWithAggregatedData);
+  readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
   readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;
   readonly wizardStep = AerAggregatedDataWizardStep;
 
@@ -72,6 +73,10 @@ export class AerAggregatedDataListComponent {
       this.store.select(aerCommonQuery.selectStatusForPortsSubtask)(),
     ].includes(TaskItemStatus.COMPLETED),
   );
+
+  readonly hasExternalSystemData = computed(() => {
+    return !!this.aggregatedDataList().find((data) => data.dataInputType === 'EXTERNAL_PROVIDER');
+  });
 
   readonly filteredAggregatedDataList = computed<AerAggregatedDataSummaryItemDto[]>(() => {
     const imoNumber = this.filter()?.imoNumber;

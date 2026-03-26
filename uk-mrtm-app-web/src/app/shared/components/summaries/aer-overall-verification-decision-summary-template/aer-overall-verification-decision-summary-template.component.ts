@@ -19,7 +19,6 @@ import { NotVerifiedReasonTypePipe, OverallVerificationDecisionPipe } from '@sha
 
 @Component({
   selector: 'mrtm-aer-overall-verification-decision-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -32,6 +31,7 @@ import { NotVerifiedReasonTypePipe, OverallVerificationDecisionPipe } from '@sha
     OverallVerificationDecisionPipe,
     NotVerifiedReasonTypePipe,
   ],
+  standalone: true,
   templateUrl: './aer-overall-verification-decision-summary-template.component.html',
   styles: `
     .govuk-summary-list__key {

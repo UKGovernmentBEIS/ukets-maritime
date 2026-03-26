@@ -32,11 +32,11 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-greenhouse-gas-decision',
-  standalone: true,
   imports: [GreenhousesSummaryTemplateComponent, ReactiveFormsModule, WizardStepComponent, ReviewDecisionComponent],
+  standalone: true,
   templateUrl: './greenhouse-gas-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewDecisionFormProvider(GREENHOUSE_GAS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GreenhouseGasDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(REVIEW_DECISION_FORM);
@@ -44,7 +44,7 @@ export class GreenhouseGasDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     greenhouseGas: this.store.select(empCommonQuery.selectGreenhouseGas)(),
     greenhouseGasMap: greenhouseGasMap,
     isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),

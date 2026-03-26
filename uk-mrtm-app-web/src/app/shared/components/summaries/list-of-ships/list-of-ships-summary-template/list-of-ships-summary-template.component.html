@@ -1,9 +1,12 @@
 <govuk-table
   id="listOfShips"
-  [columns]="columns"
+  [columns]="columns()"
   [data]="paginatedData()"
   (sort)="sort.set($event)"
-  emptyTableText="No items to display">
+  description="Ships and emission details list"
+  emptyTableText="No items to display"
+  mrtmScrollablePane
+  ariaLabel="Ships and emission details list">
   <ng-template let-column="column" let-row="row">
     @switch (column?.field) {
       @case ('name') {
@@ -37,16 +40,19 @@
           </govuk-tag>
         }
       }
+      @case ('dataInputType') {
+        <span [innerHTML]="row?.current?.[column.field] | initialDataSource: dataSupplierName()"></span>
+      }
       @default {
         <span htmlDiff [current]="row?.current?.[column.field]" [previous]="row?.previous?.[column.field]"></span>
       }
     }
   </ng-template>
 </govuk-table>
-@if (totalItems() > pageSize) {
+@if (totalItems() > pageSize()) {
   <govuk-pagination
     fragment="listOfShips"
     [count]="totalItems()"
-    [pageSize]="pageSize"
+    [pageSize]="pageSize()"
     (currentPageChange)="onPageChange($event)" />
 }

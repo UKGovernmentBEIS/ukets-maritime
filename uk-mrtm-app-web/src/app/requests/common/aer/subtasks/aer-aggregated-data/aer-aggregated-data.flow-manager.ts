@@ -13,6 +13,7 @@ export class AerAggregatedDataFlowManager extends WizardFlowManager {
   nextStepPath(currentStep: string): Observable<string> {
     switch (currentStep) {
       case AerAggregatedDataWizardStep.DELETE_AGGREGATED_DATA:
+      case AerAggregatedDataWizardStep.SELECT_SHIP:
         return of('./');
       case AerAggregatedDataWizardStep.FUEL_CONSUMPTION:
         return of(`../${AerAggregatedDataWizardStep.ANNUAL_EMISSIONS}`);

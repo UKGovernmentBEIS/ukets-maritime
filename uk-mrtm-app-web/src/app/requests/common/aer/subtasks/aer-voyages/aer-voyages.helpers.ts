@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { AerFuelConsumption, AerPortEmissionsMeasurement, AerVoyage, AerVoyageDetails } from '@mrtm/api';
 
 import {
@@ -14,6 +12,7 @@ import { AerVoyageItem } from '@requests/common/aer/aer.types';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AER_PORT_COUNTRIES, AER_PORT_COUNTRY_PORTS } from '@shared/constants';
 import { AerJourneyTypeEnum } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 export const AER_VOYAGES_SUB_TASK = 'voyages';
 

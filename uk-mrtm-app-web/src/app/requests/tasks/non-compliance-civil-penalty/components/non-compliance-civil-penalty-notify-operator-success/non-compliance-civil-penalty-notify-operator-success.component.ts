@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-notify-operator-success',
-  standalone: true,
   imports: [RouterLink, LinkDirective, PanelComponent],
+  standalone: true,
   templateUrl: './non-compliance-civil-penalty-notify-operator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

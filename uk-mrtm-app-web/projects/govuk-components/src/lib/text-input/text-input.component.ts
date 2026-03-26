@@ -2,22 +2,23 @@ import { DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   AfterViewInit,
   Component,
-  ContentChild,
+  computed,
+  contentChild,
   ElementRef,
   inject,
-  Input,
+  input,
   NO_ERRORS_SCHEMA,
   OnInit,
   Renderer2,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
-import { ControlContainer, ControlValueAccessor, NgControl } from '@angular/forms';
+import { ControlValueAccessor } from '@angular/forms';
 
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs';
 
 import { LabelDirective } from '../directives';
 import { ErrorMessageComponent, GovukValidators } from '../error-message';
-import { FormInput, FormService } from '../form';
+import { FormInput } from '../form';
 import { GovukWidthClass } from '../types';
 import { LabelSizeType } from './label-size.type';
 import { HTMLInputType } from './text-input.type';
@@ -29,8 +30,8 @@ import { HTMLInputType } from './text-input.type';
  */
 @Component({
   selector: 'div[govuk-text-input]',
-  standalone: true,
   imports: [ErrorMessageComponent, NgClass, NgTemplateOutlet],
+  standalone: true,
   templateUrl: './text-input.component.html',
   providers: [DecimalPipe],
   schemas: [NO_ERRORS_SCHEMA],
@@ -39,57 +40,46 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   private readonly decimalPipe = inject(DecimalPipe);
   private readonly renderer = inject(Renderer2);
 
-  @Input() hint: string;
-  @Input() inputType: HTMLInputType = 'text';
-  @Input() autoComplete = 'on';
-  @Input() inputMode: string;
-  @Input() spellCheck: boolean;
-  @Input() numberFormat: string;
-  @Input() widthClass: GovukWidthClass = 'govuk-!-width-full';
-  @Input() prefix?: string;
-  @Input() suffix?: string;
-  @ContentChild(LabelDirective) templateLabel: LabelDirective;
-  @ViewChild('input') input: ElementRef<HTMLInputElement>;
-  currentLabel = 'Insert text';
-  currentLabelSize = 'govuk-label';
-  isLabelHidden = true;
+  readonly label = input<string>();
+  readonly labelSize = input<LabelSizeType>('normal');
+  readonly isLabelHidden = input(false);
+  readonly hint = input<string>();
+  readonly widthClass = input<GovukWidthClass>('govuk-!-width-full');
+  readonly inputType = input<HTMLInputType>('text');
+  readonly autoComplete = input('on');
+  readonly inputMode = input<string>();
+  readonly spellCheck = input<boolean>();
+  readonly numberFormat = input<string>();
+  readonly prefix = input<string>();
+  readonly suffix = input<string>();
+
+  readonly templateLabel = contentChild(LabelDirective);
+  readonly input = viewChild<ElementRef<HTMLInputElement>>('input');
+
+  readonly currentLabelSize = computed(() => {
+    switch (this.labelSize()) {
+      case 'small':
+        return 'govuk-label govuk-label--s';
+      case 'medium':
+        return 'govuk-label govuk-label--m';
+      case 'large':
+        return 'govuk-label govuk-label--l';
+      default:
+        return 'govuk-label';
+    }
+  });
+
   disabled: boolean;
   onChange: (_: any) => any;
   onBlur: (_: any) => any;
 
   constructor() {
-    const ngControl = inject(NgControl, { self: true, optional: true })!;
-    const formService = inject(FormService);
-    const container = inject(ControlContainer, { optional: true })!;
-
-    super(ngControl, formService, container);
-  }
-
-  @Input() set label(label: string) {
-    this.currentLabel = label;
-    this.isLabelHidden = false;
-  }
-
-  @Input() set labelSize(size: LabelSizeType) {
-    switch (size) {
-      case 'small':
-        this.currentLabelSize = 'govuk-label govuk-label--s';
-        break;
-      case 'medium':
-        this.currentLabelSize = 'govuk-label govuk-label--m';
-        break;
-      case 'large':
-        this.currentLabelSize = 'govuk-label govuk-label--l';
-        break;
-      default:
-        this.currentLabelSize = 'govuk-label';
-        break;
-    }
+    super();
   }
 
   override ngOnInit(): void {
     super.ngOnInit();
-    if (this.inputType === 'number') {
+    if (this.inputType() === 'number') {
       const notNanValidator = GovukValidators.notNaN('Enter a numerical value');
       this.control.addValidators(notNanValidator);
       this.control.updateValueAndValidity();
@@ -101,8 +91,8 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
     this.control.valueChanges
       .pipe(
         distinctUntilChanged((prev, curr) => {
-          const previousValue = this.inputType === 'number' ? Number(prev) : prev;
-          const currentValue = this.inputType === 'number' ? Number(curr) : curr;
+          const previousValue = this.inputType() === 'number' ? Number(prev) : prev;
+          const currentValue = this.inputType() === 'number' ? Number(curr) : curr;
           return previousValue === currentValue;
         }),
         tap((value) => this.handleInputValue(value)),
@@ -112,14 +102,16 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   }
 
   writeValue(value: any): void {
-    if (this.input) {
+    const inputValue = this.input();
+    if (inputValue) {
+      const numberFormat = this.numberFormat();
       this.renderer.setProperty(
-        this.input.nativeElement,
+        inputValue.nativeElement,
         'value',
-        this.input.nativeElement === document.activeElement
+        inputValue.nativeElement === document.activeElement
           ? value
-          : this.numberFormat && !Number.isNaN(Number(value))
-            ? this.decimalPipe.transform(value, this.numberFormat)
+          : numberFormat && !Number.isNaN(Number(value))
+            ? this.decimalPipe.transform(value, numberFormat)
             : value,
       );
     }
@@ -142,10 +134,10 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   }
 
   onFocus(): void {
-    switch (this.inputType) {
+    switch (this.inputType()) {
       case 'number':
-        if (this.numberFormat) {
-          this.renderer.setProperty(this.input.nativeElement, 'value', this.control.value);
+        if (this.numberFormat()) {
+          this.renderer.setProperty(this.input().nativeElement, 'value', this.control.value);
         }
         break;
     }
@@ -162,7 +154,7 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   }
 
   private handleInputValue(value: string) {
-    switch (this.inputType) {
+    switch (this.inputType()) {
       case 'number':
         if (value === null) {
           break;
@@ -171,11 +163,13 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
         } else if (!isNaN(Number(value))) {
           this.control.setValue(Number(value));
 
-          if (this.input.nativeElement !== document.activeElement) {
+          const inputValue = this.input();
+          if (inputValue.nativeElement !== document.activeElement) {
+            const numberFormat = this.numberFormat();
             this.renderer.setProperty(
-              this.input.nativeElement,
+              inputValue.nativeElement,
               'value',
-              this.numberFormat ? this.decimalPipe.transform(value, this.numberFormat) : value,
+              numberFormat ? this.decimalPipe.transform(value, numberFormat) : value,
             );
           }
         }

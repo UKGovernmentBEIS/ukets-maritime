@@ -17,7 +17,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-reduction-claim-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -29,6 +28,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
     LinkDirective,
     SummaryListRowActionsDirective,
   ],
+  standalone: true,
   templateUrl: './reduction-claim-summary-template.component.html',
   styleUrl: './reduction-claim-summary-template.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

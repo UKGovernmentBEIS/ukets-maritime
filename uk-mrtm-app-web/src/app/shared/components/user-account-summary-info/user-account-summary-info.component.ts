@@ -1,5 +1,5 @@
 import { NgTemplateOutlet, TitleCasePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { OperatorUserDTO, OperatorUserInvitationDTO, VerifierUserDTO, VerifierUserInvitationDTO } from '@mrtm/api';
@@ -18,7 +18,6 @@ import { PhoneNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-user-account-summary-info',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -32,20 +31,19 @@ import { PhoneNumberPipe } from '@shared/pipes';
     PhoneNumberPipe,
     NgTemplateOutlet,
   ],
+  standalone: true,
   templateUrl: './user-account-summary-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UserAccountSummaryInfoComponent {
-  @Input() summaryInfo: (
-    | (OperatorUserInvitationDTO & OperatorUserDTO)
-    | VerifierUserInvitationDTO
-    | VerifierUserDTO
-  ) & {
-    roleCode?: string;
-  };
-  @Input() formRouterLink = 'edit';
-  @Input() viewMode: 'CREATE' | 'VIEW' = 'CREATE';
-  @Input() showPhoneFields: boolean = false;
-  @Input() phoneType: 'full' | 'national' = 'full';
-  @Input() editable = true;
+  readonly summaryInfo = input<
+    ((OperatorUserInvitationDTO & OperatorUserDTO) | VerifierUserInvitationDTO | VerifierUserDTO) & {
+      roleCode?: string;
+    }
+  >();
+  readonly formRouterLink = input('edit');
+  readonly viewMode = input<'CREATE' | 'VIEW'>('CREATE');
+  readonly showPhoneFields = input<boolean>(false);
+  readonly phoneType = input<'full' | 'national'>('full');
+  readonly editable = input(true);
 }

@@ -37,7 +37,6 @@ import { AddAnotherDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-measurements',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ShipStepTitleCustomPipe,
@@ -53,9 +52,10 @@ import { AddAnotherDirective } from '@shared/directives';
     ReturnToShipsListTableComponent,
     TextareaComponent,
   ],
+  standalone: true,
   templateUrl: './measurements.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [measurementsFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MeasurementsComponent {
   protected readonly formGroup = inject<FormGroup<MeasurementsFormModel>>(TASK_FORM);

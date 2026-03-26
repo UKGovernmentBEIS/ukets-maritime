@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { GovukValidators } from '@netz/govuk-components';
@@ -10,8 +10,8 @@ import { AutocompleteSelectOption } from '@shared/components/autocomplete-select
 
 describe('AutocompleteSelectComponent', () => {
   @Component({
-    standalone: true,
     imports: [AutocompleteSelectComponent, ReactiveFormsModule],
+    standalone: true,
     template: `
       <div
         mrtm-autocomplete-select
@@ -51,7 +51,9 @@ describe('AutocompleteSelectComponent', () => {
   ];
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({}).compileComponents();
+    await TestBed.configureTestingModule({
+      providers: [ControlContainer],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TestComponent);
     hostComponent = fixture.componentInstance;

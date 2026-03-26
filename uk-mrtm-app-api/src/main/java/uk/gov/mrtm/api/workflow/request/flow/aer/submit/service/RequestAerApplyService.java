@@ -81,6 +81,7 @@ public class RequestAerApplyService {
         aer.setEmissions(stagingPayload.getEmissions());
         aer.setSmf(stagingPayload.getSmf());
         aer.setAggregatedData(stagingPayload.getAggregatedData());
+        aer.setThirdPartyDataProviderName(stagingAerEntity.getProviderName());
         performCalculations(aer);
 
         stagingAerEntity.setImportedOn(dateService.getLocalDateTime());

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, ElementRef, inject, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, ElementRef, inject, viewChild } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -17,15 +17,15 @@ import {
 
 @Component({
   selector: 'mrtm-edit',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, VerificationBodyFormComponent, LocationStateFormComponent],
-  providers: [editVerificationBodyFormProvider],
+  standalone: true,
   templateUrl: './edit.component.html',
+  providers: [editVerificationBodyFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditComponent {
   public readonly form: UntypedFormGroup = inject<UntypedFormGroup>(EDIT_VERIFICATION_BODY_PROVIDER);
-  @ViewChild(WizardStepComponent, { read: ElementRef }) public wizardStep: ElementRef;
+  public readonly wizardStep = viewChild(WizardStepComponent, { read: ElementRef });
   private readonly store: VerificationBodiesStoreService = inject(VerificationBodiesStoreService);
   private readonly router: Router = inject(Router);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -43,7 +43,7 @@ export class EditComponent {
             this.form.controls['accreditationReferenceNumber'].setErrors({
               accreditationReferenceNumberExist: 'Enter a unique Accreditation reference number',
             });
-            this.wizardStep.nativeElement.querySelector('button[type="submit"]').click();
+            this.wizardStep().nativeElement.querySelector('button[type="submit"]').click();
             return EMPTY;
           }),
         )

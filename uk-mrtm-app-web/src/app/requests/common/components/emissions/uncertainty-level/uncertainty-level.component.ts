@@ -25,7 +25,6 @@ import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-uncertainty-level',
-  standalone: true,
   imports: [
     ShipStepTitleCustomPipe,
     WizardStepComponent,
@@ -36,8 +35,9 @@ import { isAer } from '@shared/utils';
     ReturnToShipsListTableComponent,
     LabelDirective,
   ],
-  providers: [uncertaintyLevelFormProvider],
+  standalone: true,
   templateUrl: './uncertainty-level.component.html',
+  providers: [uncertaintyLevelFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncertaintyLevelComponent implements OnInit {

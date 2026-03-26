@@ -127,4 +127,34 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_BANK_ACCOUNT_DETAILS_FOR_SCOTLAND" author="P44065">
+        <sql>
+            INSERT INTO request_payment_bank_account_details( id, competent_authority, sort_code, account_number, account_name)
+            VALUES(nextval('request_payment_bank_account_details_seq'), 'SCOTLAND', '83-34-00', '137187', 'Scottish Environment Protection Agency');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_bank_account_details
+                WHERE competent_authority = 'SCOTLAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_POPULATE_REQUEST_PAYMENT_BANK_ACCOUNT_DETAILS_FOR_NORTHERN_IRELAND" author="P44065">
+        <sql>
+            INSERT INTO request_payment_bank_account_details( id, competent_authority, sort_code, account_number, account_name, iban, swift_code)
+            VALUES(nextval('request_payment_bank_account_details_seq'), 'NORTHERN_IRELAND', '950121', '61253506', 'DAERA General Account', 'GB67DABA95012161253506', 'DABAGB2B');
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE
+                FROM request_payment_bank_account_details
+                WHERE competent_authority = 'NORTHERN_IRELAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

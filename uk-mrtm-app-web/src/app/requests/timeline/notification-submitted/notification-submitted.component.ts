@@ -15,15 +15,15 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-notification-submitted',
-  standalone: true,
   imports: [NotificationDetailsOfChangeSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './notification-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationSubmittedComponent {
   private readonly store = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const detailsOfChange = this.store.select(notificationSubmittedQuery.selectEmpNotificationDetailsOfChange)();
     return {
       detailsOfChange: detailsOfChange,

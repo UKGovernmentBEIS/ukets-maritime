@@ -2,16 +2,15 @@ import { InjectionToken, Provider } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
-
 import { MrtmAccountUpdateDTO } from '@mrtm/api';
 
 import { GovukValidators } from '@netz/govuk-components';
 
-import { minYearValidator } from '@accounts/components/operator-account-form';
+import { commencementDateValidator } from '@accounts/components/operator-account-form';
 import { OperatorAccountsStore } from '@accounts/store';
 import { ConfigService } from '@core/config';
 import { getLocationStateFormGroup } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 export const EDIT_OPERATOR_ACCOUNT_FORM: InjectionToken<string> = new InjectionToken('Edit operator account form');
 
@@ -24,6 +23,9 @@ export const editOperatorAccountFormProvider: Provider = {
     configService: ConfigService,
   ): FormGroup<Record<keyof MrtmAccountUpdateDTO, FormControl>> => {
     const currentOperatorAccount = store.getState().currentAccount?.account;
+    const firstMaritimeActivityDateValue = !isNil(currentOperatorAccount?.firstMaritimeActivityDate)
+      ? new Date(currentOperatorAccount?.firstMaritimeActivityDate)
+      : null;
 
     return formBuilder.group({
       name: new FormControl<MrtmAccountUpdateDTO['name'] | null>(currentOperatorAccount?.name, {
@@ -33,13 +35,14 @@ export const editOperatorAccountFormProvider: Provider = {
         ],
       }),
       firstMaritimeActivityDate: new FormControl<MrtmAccountUpdateDTO['firstMaritimeActivityDate'] | Date | null>(
-        !isNil(currentOperatorAccount?.firstMaritimeActivityDate)
-          ? new Date(currentOperatorAccount?.firstMaritimeActivityDate)
-          : null,
+        firstMaritimeActivityDateValue,
         {
           validators: [
             GovukValidators.required('Enter the first year of reporting obligation'),
-            minYearValidator(toSignal(configService.getConfigProperty('minYearOfFirstMrtmActivity'))()),
+            commencementDateValidator(
+              toSignal(configService.getConfigProperty('minYearOfFirstMrtmActivity'))(),
+              firstMaritimeActivityDateValue,
+            ),
           ],
         },
       ),

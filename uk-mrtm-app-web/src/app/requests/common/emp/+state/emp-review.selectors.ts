@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { EmissionsMonitoringPlan } from '@mrtm/api';
 
 import { createAggregateSelector, createDescendingSelector, RequestTaskState, StateSelector } from '@netz/common/store';
@@ -12,6 +10,7 @@ import { OVERALL_DECISION_SUB_TASK } from '@requests/common/emp/subtasks/overall
 import { subtaskReviewGroupMap } from '@requests/common/emp/utils/subtask-review-group.map';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { EmpVariationReviewDecisionDto, ReviewDecisionDto, ReviewDecisionUnion } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const selectReviewGroupDecisions: StateSelector<RequestTaskState, { [key: string]: ReviewDecisionUnion }> =
   createDescendingSelector(

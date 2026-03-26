@@ -6,7 +6,10 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOrig
 import uk.gov.mrtm.api.reporting.domain.common.AerFuelConsumption;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
+import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
 import uk.gov.mrtm.api.reporting.enumeration.MeasuringUnit;
+import uk.gov.mrtm.api.reporting.enumeration.PortType;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.utils.AerPortCodesUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -129,5 +132,14 @@ public class AerEmissionsCalculatorUtils {
         }
 
         return Triple.of(co2, ch4, n2o);
+    }
+
+    public boolean filterByJourneyType(AerVoyage aerVoyage, PortType portType) {
+        if (aerVoyage.getVoyageDetails() != null){
+            return portType.equals(AerPortCodesUtils.getJourneyType(
+                aerVoyage.getVoyageDetails().getDeparturePort(),
+                aerVoyage.getVoyageDetails().getArrivalPort()));
+        }
+        return false;
     }
 }

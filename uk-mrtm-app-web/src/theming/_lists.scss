@@ -1,8 +1,10 @@
+@use 'govuk-frontend/dist/govuk/index' as govuk;
+
 .unstyled-list {
   list-style: none;
 
   > li:not(:last-child) {
-    margin-bottom: govuk-spacing(3);
+    margin-bottom: govuk.govuk-spacing(3);
   }
 }
 
@@ -12,8 +14,9 @@
 }
 
 .search-results-list_item {
-  border-bottom: 1px solid $govuk-border-colour;
-  padding-bottom: 20px;
+  border-bottom: 1px solid govuk.$govuk-border-colour;
+  padding: 10px 0;
+  margin-bottom: 0 !important;
 }
 
 .status-tag {

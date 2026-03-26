@@ -37,7 +37,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-greenhouse-gas-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -47,6 +46,7 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './greenhouse-gas-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,7 +55,7 @@ export class GreenhouseGasSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const hasReview = this.store.select(empCommonQuery.selectHasReview)();
     const isEditable = this.store.select(empCommonQuery.selectIsPeerReview)()
       ? false

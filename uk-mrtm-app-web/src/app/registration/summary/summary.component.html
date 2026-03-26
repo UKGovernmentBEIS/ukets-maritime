@@ -1,8 +1,6 @@
 <netz-page-heading caption="Create user account" size="xl">Check your answers</netz-page-heading>
 
-<mrtm-user-input-summary-template
-  [changeLink]="'../contact-details'"
-  [userInfo]="userInfo$ | async"></mrtm-user-input-summary-template>
+<mrtm-user-input-summary-template changeLink="../contact-details" [userInfo]="userInfo$ | async" />
 
 @if ((invitationStatus$ | async) !== 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD') {
   <h2

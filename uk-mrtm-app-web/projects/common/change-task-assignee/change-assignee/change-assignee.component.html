@@ -2,7 +2,7 @@
   <netz-page-heading size="l">Reassign task</netz-page-heading>
 
   @if (vm.showErrorSummary) {
-    <govuk-error-summary [form]="vm.form"></govuk-error-summary>
+    <govuk-error-summary [form]="vm.form" />
   }
 
   <form (ngSubmit)="submit(vm.requestTask.id, vm.form.get('assignee').value)" [formGroup]="vm.form">

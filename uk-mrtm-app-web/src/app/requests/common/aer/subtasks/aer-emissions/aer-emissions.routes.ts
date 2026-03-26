@@ -1,6 +1,7 @@
-import { Routes } from '@angular/router';
+import { ActivatedRouteSnapshot, Routes } from '@angular/router';
 
 import {
+  canActivateAerEmissionsShipEdit,
   canActivateAerEmissionsShipSummary,
   canActivateAerEmissionsSummary,
 } from '@requests/common/aer/subtasks/aer-emissions/aer-emissions.guard';
@@ -14,7 +15,7 @@ import { backlinkResolver } from '@requests/common/task-navigation';
 export const AER_EMISSIONS_ROUTES: Routes = [
   {
     path: '',
-    title: aerEmissionsShipMap.title,
+    title: aerEmissionsMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     canActivate: [canActivateAerEmissionsSummary],
     loadComponent: () =>
@@ -57,11 +58,11 @@ export const AER_EMISSIONS_ROUTES: Routes = [
   },
   {
     path: 'ships/:shipId',
-    title: emissionsShipSubtaskMap.title,
     data: { breadcrumb: false },
     children: [
       {
         path: '',
+        title: 'Check your answers',
         data: { breadcrumb: false },
         canActivate: [canActivateAerEmissionsShipSummary],
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.SHIP_SUMMARY) },
@@ -73,6 +74,7 @@ export const AER_EMISSIONS_ROUTES: Routes = [
         title: emissionsShipSubtaskMap.details.title,
         data: { breadcrumb: false },
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.BASIC_DETAILS) },
+        canActivate: [canActivateAerEmissionsShipEdit],
         loadComponent: () =>
           import('@requests/common/components/emissions/basic-ship-details').then((c) => c.BasicShipDetailsComponent),
       },
@@ -80,6 +82,7 @@ export const AER_EMISSIONS_ROUTES: Routes = [
         path: AerEmissionsWizardStep.FUELS_AND_EMISSIONS_LIST,
         title: emissionsShipSubtaskMap.fuelsAndEmissionsFactors.title,
         data: { breadcrumb: false },
+        canActivate: [canActivateAerEmissionsShipEdit],
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.FUELS_AND_EMISSIONS_LIST) },
         loadComponent: () =>
           import('@requests/common/aer/subtasks/aer-emissions/aer-fuels-and-emissions-factors-list').then(
@@ -88,9 +91,13 @@ export const AER_EMISSIONS_ROUTES: Routes = [
       },
       {
         path: `${AerEmissionsWizardStep.FUELS_AND_EMISSIONS_FORM}/:factoryId`,
-        title: emissionsShipSubtaskMap.fuelsAndEmissionsFactors.title,
+        title: (route: ActivatedRouteSnapshot) =>
+          route.queryParamMap.get('change') === 'true'
+            ? emissionsShipSubtaskMap.fuelsAndEmissionsFactorsFormEdit.title
+            : emissionsShipSubtaskMap.fuelsAndEmissionsFactorsFormAdd.title,
         data: { breadcrumb: false },
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.FUELS_AND_EMISSIONS_FORM) },
+        canActivate: [canActivateAerEmissionsShipEdit],
         loadComponent: () =>
           import('@requests/common/components/emissions/fuels-and-emissions-factors-form').then(
             (c) => c.FuelsAndEmissionsFactorsFormComponent,
@@ -101,6 +108,7 @@ export const AER_EMISSIONS_ROUTES: Routes = [
         title: emissionsShipSubtaskMap.emissionsSources.title,
         data: { breadcrumb: false },
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.EMISSION_SOURCES_LIST) },
+        canActivate: [canActivateAerEmissionsShipEdit],
         loadComponent: () =>
           import('@requests/common/aer/subtasks/aer-emissions/aer-emission-sources-and-fuel-types-used-list').then(
             (c) => c.AerEmissionSourcesAndFuelTypesUsedListComponent,
@@ -108,8 +116,13 @@ export const AER_EMISSIONS_ROUTES: Routes = [
       },
       {
         path: `${AerEmissionsWizardStep.EMISSION_SOURCES_FORM}/:sourceId`,
+        title: (route: ActivatedRouteSnapshot) =>
+          route.queryParamMap.get('change') === 'true'
+            ? emissionsShipSubtaskMap.emissionsSourcesFormEdit.title
+            : emissionsShipSubtaskMap.emissionsSourcesFormAdd.title,
         data: { breadcrumb: false },
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.EMISSION_SOURCES_FORM) },
+        canActivate: [canActivateAerEmissionsShipEdit],
         loadComponent: () =>
           import('@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/').then(
             (c) => c.EmissionSourcesAndFuelTypesUsedFormComponent,
@@ -120,6 +133,7 @@ export const AER_EMISSIONS_ROUTES: Routes = [
         title: emissionsShipSubtaskMap.uncertaintyLevel.title,
         data: { breadcrumb: false },
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.UNCERTAINTY_LEVEL) },
+        canActivate: [canActivateAerEmissionsShipEdit],
         loadComponent: () =>
           import('@requests/common/components/emissions/uncertainty-level').then((c) => c.UncertaintyLevelComponent),
       },
@@ -128,6 +142,7 @@ export const AER_EMISSIONS_ROUTES: Routes = [
         title: aerEmissionsShipMap.derogations.title,
         data: { breadcrumb: false },
         resolve: { backlink: aerEmissionsBacklinkResolver(AerEmissionsWizardStep.DEROGATIONS) },
+        canActivate: [canActivateAerEmissionsShipEdit],
         loadComponent: () =>
           import('@requests/common/aer/subtasks/aer-emissions/aer-derogations').then((c) => c.AerDerogationsComponent),
       },

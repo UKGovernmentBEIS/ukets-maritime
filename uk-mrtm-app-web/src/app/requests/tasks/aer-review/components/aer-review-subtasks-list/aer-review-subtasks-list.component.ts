@@ -18,8 +18,8 @@ import {
 
 @Component({
   selector: 'mrtm-aer-review-subtasks-list',
-  standalone: true,
   imports: [TaskSuperListComponent],
+  standalone: true,
   template: '<netz-task-superlist [superSections]="superSections()"/>',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

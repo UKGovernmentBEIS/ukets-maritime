@@ -8,8 +8,8 @@ import { empVariationReviewQuery } from '@requests/common/emp/+state';
 
 @Component({
   selector: 'mrtm-emp-variation-review-action-buttons',
-  standalone: true,
   imports: [ButtonDirective, RouterLink],
+  standalone: true,
   template: `
     @if (isEditable) {
       <div class="govuk-button-group">

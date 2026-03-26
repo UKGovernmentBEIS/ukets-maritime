@@ -5,12 +5,12 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-send-for-peer-review-success',
-  standalone: true,
   imports: [PanelComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './send-for-peer-review-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SendForPeerReviewSuccessComponent {
   private readonly router = inject(Router);
-  public readonly assignedTo = this.router.getCurrentNavigation()?.extras?.state?.assignedTo;
+  public readonly assignedTo = this.router.currentNavigation()?.extras?.state?.assignedTo;
 }

@@ -18,7 +18,7 @@ import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.netz.api.workflow.request.flow.common.domain.NotifyOperatorForDecisionRequestTaskActionPayload;
 import uk.gov.netz.api.workflow.request.flow.common.validation.DecisionNotificationUsersValidator;
 
-import static org.junit.Assert.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;

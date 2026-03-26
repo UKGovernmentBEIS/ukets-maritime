@@ -1,3 +1,5 @@
+$needs-review-background-color: #FBEEDF;
+
 .row-container {
   display: flex;
   align-items: flex-end;
@@ -9,6 +11,14 @@
 
 .app-column-width-20-per {
   width: 20%;
+}
+
+.app-column-width-25-per {
+  width: 25%;
+}
+
+.app-column-width-30-per {
+  width: 30%;
 }
 
 .no-bottom-border table tbody tr:last-of-type td {

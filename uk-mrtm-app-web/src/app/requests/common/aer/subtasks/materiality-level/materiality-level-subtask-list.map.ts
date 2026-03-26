@@ -1,19 +1,13 @@
+import { AerMaterialityLevel } from '@mrtm/api';
+
 import { SubTaskListMap } from '@shared/types';
 
-export const materialityLevelMap: SubTaskListMap<{
-  materialityDetails: string;
-  accreditationReferenceDocumentTypes: string;
-  otherReference: string;
-}> = {
-  title: 'Materiality level and reference documents held',
-  caption: 'Materiality level and reference documents held',
+export const materialityLevelMap: SubTaskListMap<AerMaterialityLevel> = {
+  title: 'Further information of relevance to the opinion',
   materialityDetails: {
-    title: 'What is the materiality level?',
-    caption: 'Materiality level',
+    title: 'Materiality level',
   },
   accreditationReferenceDocumentTypes: {
-    title: 'Accreditation reference documents',
-    description: 'Select the reference documents that are appropriate to the accreditation you hold',
+    title: 'Select the reference documents that are appropriate to the accreditation you hold',
   },
-  otherReference: { title: 'Reference details' },
 };

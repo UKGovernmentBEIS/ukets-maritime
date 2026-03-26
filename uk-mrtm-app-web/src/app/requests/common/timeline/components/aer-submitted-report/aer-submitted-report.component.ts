@@ -90,7 +90,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-aer-submitted-report',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     GovukDatePipe,
@@ -106,6 +105,7 @@ interface ViewModel {
     AdditionalDocumentsSummaryTemplateComponent,
     AerTotalEmissionsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './aer-submitted-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -115,7 +115,7 @@ export class AerSubmittedReportComponent implements AfterViewInit {
   private readonly store = inject(RequestActionStore);
   private readonly requestActionReportService = inject(RequestActionReportService);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const requestActionDTO = this.store.select(requestActionQuery.selectAction)();
     const aer = this.store.select(aerTimelineCommonQuery.selectAer)();
     const reportingYear = this.store.select(timelineCommonQuery.selectReportingYear)();

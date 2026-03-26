@@ -1,6 +1,7 @@
 @if ((showCookiesBanner$ | async) === true) {
   <mrtm-cookies-container />
 }
+
 <govuk-skip-link />
 <govuk-header title="Manage your UK Emissions Trading Scheme Reporting">
   <govuk-header-actions-list>
@@ -47,7 +48,7 @@
   <mrtm-incorporate-header />
   <netz-breadcrumbs />
   <netz-back-link />
-  <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="0">
+  <main class="govuk-main-wrapper" id="main-content" role="main" tabindex="-1">
     <router-outlet />
   </main>
 </div>

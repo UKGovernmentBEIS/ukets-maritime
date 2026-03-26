@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpNotificationDetailsOfChange } from '@mrtm/api';
@@ -19,7 +19,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-notification-details-of-change-summary-template',
-  standalone: true,
   imports: [
     GovukDatePipe,
     SummaryDownloadFilesComponent,
@@ -32,14 +31,15 @@ import { AttachedFile } from '@shared/types';
     RouterLink,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './notification-details-of-change-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationDetailsOfChangeSummaryTemplateComponent {
-  @Input({ required: true }) detailsOfChange: EmpNotificationDetailsOfChange;
-  @Input({ required: true }) notificationFiles: AttachedFile[];
-  @Input() changeLink: string;
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
-  @Input() heading = 'Response details';
+  readonly detailsOfChange = input.required<EmpNotificationDetailsOfChange>();
+  readonly notificationFiles = input.required<AttachedFile[]>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
+  readonly heading = input('Response details');
 }

@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, input, output, Signal } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { EmpEmissionsSources } from '@mrtm/api';
 
 import {
@@ -22,10 +20,10 @@ import {
 import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 import { WithNeedsReview } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emission-sources-and-fuel-types-used-summary-template',
-  standalone: true,
   imports: [
     SummaryCardComponent,
     LinkDirective,
@@ -38,6 +36,7 @@ import { WithNeedsReview } from '@shared/types';
     SelectOptionToTitlePipe,
     NotProvidedDirective,
   ],
+  standalone: true,
   templateUrl: './emission-sources-and-fuel-types-used-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

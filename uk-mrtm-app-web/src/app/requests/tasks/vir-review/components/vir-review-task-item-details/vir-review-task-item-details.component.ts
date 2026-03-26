@@ -12,8 +12,8 @@ import {
 
 @Component({
   selector: 'mrtm-vir-review-task-item-details',
-  standalone: true,
   imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
+  standalone: true,
   templateUrl: './vir-review-task-item-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

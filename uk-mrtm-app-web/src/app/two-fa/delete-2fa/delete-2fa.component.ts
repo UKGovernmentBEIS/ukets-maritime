@@ -11,9 +11,9 @@ import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'mrtm-delete-2fa',
+  standalone: true,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
 export class Delete2faComponent implements OnInit {
   private readonly router = inject(Router);

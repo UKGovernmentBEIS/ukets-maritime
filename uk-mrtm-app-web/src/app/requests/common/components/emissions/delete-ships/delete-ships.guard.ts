@@ -3,7 +3,7 @@ import { CanActivateFn, createUrlTreeFromSnapshot, Router } from '@angular/route
 
 export const deleteShipsGuard: CanActivateFn = (route) => {
   const router = inject(Router);
-  return router.getCurrentNavigation()?.extras?.state?.ships?.length > 0
+  return router.currentNavigation()?.extras?.state?.ships?.length > 0
     ? true
     : createUrlTreeFromSnapshot(route, ['../']);
 };

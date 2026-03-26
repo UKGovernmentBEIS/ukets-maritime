@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { GovukDatePipe } from '@netz/common/pipes';
@@ -16,7 +16,6 @@ import { FollowUpRequest } from '@shared/types/follow-up-request.interface';
 
 @Component({
   selector: 'mrtm-follow-up-request-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -28,12 +27,13 @@ import { FollowUpRequest } from '@shared/types/follow-up-request.interface';
     RouterLink,
     LinkDirective,
   ],
+  standalone: true,
   templateUrl: './follow-up-request-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpRequestSummaryTemplateComponent {
-  @Input({ required: true }) followUpRequest: FollowUpRequest;
-  @Input() changeLink: string;
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly followUpRequest = input.required<FollowUpRequest>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

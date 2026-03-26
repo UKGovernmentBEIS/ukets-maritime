@@ -6,6 +6,7 @@ import { VERSION } from '@environments/version';
 
 @Component({
   selector: 'mrtm-version',
+  imports: [PageHeadingComponent],
   standalone: true,
   template: `
     <netz-page-heading caption="Information about the application version" size="l">About</netz-page-heading>
@@ -19,7 +20,6 @@ import { VERSION } from '@environments/version';
     </p>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [PageHeadingComponent],
 })
 export class VersionComponent {
   version = VERSION;

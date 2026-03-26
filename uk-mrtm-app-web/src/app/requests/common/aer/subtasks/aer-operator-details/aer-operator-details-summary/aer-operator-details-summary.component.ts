@@ -20,7 +20,6 @@ import { OperatorDetailsSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-operator-details-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     OperatorDetailsSummaryTemplateComponent,
@@ -28,6 +27,7 @@ import { OperatorDetailsSummaryTemplateComponent } from '@shared/components';
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './aer-operator-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -4,7 +4,7 @@ import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angul
 
 import { BehaviorSubject, EMPTY, map } from 'rxjs';
 
-import { CustomMiReportParams, MiReportsService } from '@mrtm/api';
+import { MiReportsUserDefinedService } from '@mrtm/api';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { catchBadRequest, ErrorCodes as BusinessErrorCode } from '@netz/common/error';
@@ -16,15 +16,15 @@ import { manipulateResultsAndExportToExcel } from '@mi-reports/core/mi-report';
 
 @Component({
   selector: 'mrtm-custom',
-  templateUrl: './custom.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
-  standalone: true,
   imports: [PageHeadingComponent, FormsModule, ReactiveFormsModule, TextareaComponent, ButtonDirective, AsyncPipe],
+  standalone: true,
+  templateUrl: './custom.component.html',
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomReportComponent {
   private readonly fb = inject(FormBuilder);
-  private readonly miReportsService = inject(MiReportsService);
+  private readonly miReportsUserDefinedService = inject(MiReportsUserDefinedService);
   readonly pendingRequest = inject(PendingRequestService);
 
   errorMessage$ = new BehaviorSubject<string>(null);
@@ -35,11 +35,10 @@ export class CustomReportComponent {
 
   exportToExcel() {
     if (this.reportOptionsForm.valid) {
-      this.miReportsService
+      this.miReportsUserDefinedService
         .generateCustomReport({
-          reportType: 'CUSTOM',
           sqlQuery: this.reportOptionsForm.get('query').value,
-        } as CustomMiReportParams)
+        })
         .pipe(
           this.pendingRequest.trackRequest(),
           catchBadRequest(BusinessErrorCode.REPORT1001, (res) => {

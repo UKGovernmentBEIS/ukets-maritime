@@ -17,8 +17,8 @@ import { selectNewUserAuthority } from '@accounts/store/user-authority.selectors
 
 @Component({
   selector: 'mrtm-create-account-summary',
-  standalone: true,
   imports: [AsyncPipe, PageHeadingComponent, PendingButtonDirective, ButtonDirective, UserAccountSummaryInfoComponent],
+  standalone: true,
   templateUrl: './create-user-authority-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

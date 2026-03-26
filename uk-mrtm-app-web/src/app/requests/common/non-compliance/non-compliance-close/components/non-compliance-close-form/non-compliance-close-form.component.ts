@@ -14,7 +14,6 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-non-compliance-close-form',
-  standalone: true,
   imports: [
     MultipleFileInputComponent,
     TextareaComponent,
@@ -22,9 +21,10 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
     WizardStepComponent,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './non-compliance-close-form.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [nonComplianceCloseFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonComplianceCloseFormComponent {
   private readonly route = inject(ActivatedRoute);

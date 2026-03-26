@@ -36,7 +36,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-batch-variations-list',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -46,6 +45,7 @@ interface ViewModel {
     LinkDirective,
     GovukDatePipe,
   ],
+  standalone: true,
   templateUrl: './batch-variations-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -68,7 +68,7 @@ export class BatchVariationsListComponent {
     });
   }
 
-  public vm: Signal<ViewModel> = computed(() => ({
+  public readonly vm: Signal<ViewModel> = computed(() => ({
     columns: TABLE_COLUMNS,
     data: this.store.select(batchVariationsQuery.selectItems)(),
     totalItems: this.store.select(batchVariationsQuery.selectTotalItems)(),

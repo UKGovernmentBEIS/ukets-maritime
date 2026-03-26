@@ -10,7 +10,6 @@ import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { mapAggregatedDataToTotalShipEmissionsItems } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
-import { AerAggregatedDataShipEmissionsCalculatedTotalsComponent } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-ship-emissions-calculated/aer-aggregated-data-ship-emissions-calculated-totals';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
 import {
   AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent,
@@ -22,16 +21,15 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-ship-emissions-calculated',
-  standalone: true,
   imports: [
     PageHeadingComponent,
-    AerAggregatedDataShipEmissionsCalculatedTotalsComponent,
     AerAggregatedDataEmissionsCalculationsSummaryTemplateComponent,
     RouterLink,
     ButtonDirective,
     LinkDirective,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-ship-emissions-calculated.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

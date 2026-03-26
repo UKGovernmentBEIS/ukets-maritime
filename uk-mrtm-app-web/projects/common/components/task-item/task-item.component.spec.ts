@@ -13,6 +13,8 @@ describe('TaskItemComponent', () => {
   const map: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
 
   @Component({
+    imports: [TaskItemComponent],
+    standalone: true,
     template: `
       <ul class="app-task-list__items">
         @for (task of taskItems; track task) {
@@ -27,8 +29,6 @@ describe('TaskItemComponent', () => {
         }
       </ul>
     `,
-    standalone: true,
-    imports: [TaskItemComponent],
   })
   class TestComponent {
     taskItems = tasks;

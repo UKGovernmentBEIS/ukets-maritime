@@ -12,10 +12,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-emp-log',
-  standalone: true,
   imports: [WizardStepComponent, TextareaComponent, ReactiveFormsModule],
-  providers: [empLogFormProvider],
+  standalone: true,
   templateUrl: './emp-log.component.html',
+  providers: [empLogFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpLogComponent {

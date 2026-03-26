@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { combineLatest, from, map, Observable, of, switchMap, tap } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 import { KeycloakLoginOptions, KeycloakProfile } from 'keycloak-js';
 
 import {
@@ -18,6 +17,8 @@ import {
 import { AuthStore } from '@netz/common/auth';
 
 import { ConfigStore, selectIsFeatureEnabled } from '@core/config';
+import { KeycloakService } from '@core/services';
+import { environment } from '@environments/environment';
 
 @Injectable({ providedIn: 'root' })
 export class AuthService {
@@ -49,10 +50,9 @@ export class AuthService {
     });
   }
 
-  logout(redirectPath?: string): Promise<void> {
-    return this.keycloakService.logout(redirectPath ?? this._baseRedirectUri).then(() => {
-      this.authStore.setIsLoggedIn(false);
-    });
+  logout(redirectPath = ''): void {
+    const isDev = environment.production === false;
+    this.keycloakService.logout(redirectPath || isDev ? this._baseRedirectUri + redirectPath : location.origin);
   }
 
   loadUser(): Observable<UserDTO> {
@@ -92,10 +92,6 @@ export class AuthService {
   }
 
   loadIsLoggedIn(): Observable<boolean> {
-    return of(this.keycloakService.isLoggedIn()).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
-  }
-
-  constructRedirectUri(path: string): string {
-    return new URL(path, this._baseRedirectUri).toString();
+    return of(this.keycloakService.isAuthenticated).pipe(tap((isLoggedIn) => this.authStore.setIsLoggedIn(isLoggedIn)));
   }
 }

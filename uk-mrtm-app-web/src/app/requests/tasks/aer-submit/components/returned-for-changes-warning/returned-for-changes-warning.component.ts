@@ -6,8 +6,8 @@ import { LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-returned-for-changes-warning',
-  standalone: true,
   imports: [WarningTextComponent, LinkDirective, RouterLink],
+  standalone: true,
   templateUrl: './returned-for-changes-warning.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

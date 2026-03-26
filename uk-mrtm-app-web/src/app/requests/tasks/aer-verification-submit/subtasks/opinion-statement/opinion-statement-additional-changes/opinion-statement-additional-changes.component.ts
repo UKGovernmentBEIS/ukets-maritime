@@ -22,7 +22,6 @@ import { MonitoringPlanChangesSummaryTemplateComponent, WizardStepComponent } fr
 
 @Component({
   selector: 'mrtm-opinion-statement-additional-changes',
-  standalone: true,
   imports: [
     ConditionalContentDirective,
     RadioComponent,
@@ -32,9 +31,10 @@ import { MonitoringPlanChangesSummaryTemplateComponent, WizardStepComponent } fr
     WizardStepComponent,
     MonitoringPlanChangesSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './opinion-statement-additional-changes.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [opinionStatementAdditionalChangesFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OpinionStatementAdditionalChangesComponent {
   readonly map = opinionStatementMap;

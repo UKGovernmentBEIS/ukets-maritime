@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { GREENHOUSE_GAS_SUB_TASK, GreenhouseGasWizardStep } from '@requests/common/emp/subtasks/greenhouse-gas';
@@ -18,11 +18,11 @@ import {
 } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { fireEvent, screen, within } from '@testing-library/angular';
 
 describe('GreenhouseGasVoyagesComponent', () => {
   let fixture: ComponentFixture<GreenhouseGasVoyagesComponent>;
   let component: GreenhouseGasVoyagesComponent;
+  let page: Page;
   let store: RequestTaskStore;
 
   const activatedRouteStub = new ActivatedRouteStub();
@@ -32,26 +32,33 @@ describe('GreenhouseGasVoyagesComponent', () => {
 
   const taskServiceSpy = jest.spyOn(taskServiceMock, 'saveSubtask');
 
+  class Page extends BasePage<GreenhouseGasVoyagesComponent> {
+    get textboxes() {
+      return this.queryAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+    }
+  }
+
   const createComponent = () => {
     fixture = TestBed.createComponent(GreenhouseGasVoyagesComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
     jest.clearAllMocks();
   };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [GreenhouseGasVoyagesComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    }).compileComponents();
+    });
   });
 
   describe('for new emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(mockEmpIssuanceSubmitRequestTask);
       createComponent();
@@ -62,21 +69,19 @@ describe('GreenhouseGasVoyagesComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('heading', { name: 'Recording and safeguarding completeness of voyages' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('textbox')).toHaveLength(6);
+      expect(page.heading1.textContent).toEqual('Recording and safeguarding completeness of voyages');
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.textboxes).toHaveLength(6);
     });
 
     it('should display error on empty form submit', () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
-      const summaryBox = screen.queryByRole('alert', { name: 'There is a problem' });
-      expect(summaryBox).toBeInTheDocument();
 
-      const summaryErrors = within(summaryBox).getAllByRole('link');
-      expect(summaryErrors).toHaveLength(4);
-      expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorSummaryListContents).toHaveLength(4);
+      expect(page.errorSummaryListContents).toEqual([
         'Enter a procedure reference',
         'Enter a description for the procedure',
         'Enter the name of the person or position responsible for this procedure',
@@ -86,7 +91,7 @@ describe('GreenhouseGasVoyagesComponent', () => {
   });
 
   describe('for existing emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(
         mockStateBuild(
@@ -104,21 +109,16 @@ describe('GreenhouseGasVoyagesComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('heading', { name: 'Recording and safeguarding completeness of voyages' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('textbox')).toHaveLength(6);
+      expect(page.heading1.textContent).toEqual('Recording and safeguarding completeness of voyages');
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.textboxes).toHaveLength(6);
     });
 
     it('should edit and submit a valid form', async () => {
-      const input = screen.getByRole('textbox', { name: /version/i });
-      fireEvent.input(input, {
-        target: {
-          value: 'test new value',
-        },
-      });
+      page.setInputValue('input[name="version"]', 'test new value');
 
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
       expect(taskServiceSpy).toHaveBeenCalledWith(
@@ -133,10 +133,10 @@ describe('GreenhouseGasVoyagesComponent', () => {
     });
 
     it('should submit a valid form', async () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
+      expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(
         GREENHOUSE_GAS_SUB_TASK,
         GreenhouseGasWizardStep.VOYAGES,

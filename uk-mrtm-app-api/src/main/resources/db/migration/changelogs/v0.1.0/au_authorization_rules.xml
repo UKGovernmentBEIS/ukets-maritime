@@ -20186,6 +20186,47 @@
         </rollback>
     </changeSet>
 
+    <changeSet id="0_2_0_create_rule_registry_updated_account_event_submitted" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'), 'REQUEST_ACTION' , 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED', 'requestActionViewHandler', 'REGULATOR');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type= 'REGULATOR'
+              and r.scope is null;
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule
+                where rule_id in (
+                select r.id
+                from au_rule r
+                where r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope is null);
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+                and handler = 'requestActionViewHandler'
+                and role_type = 'REGULATOR'
+                and scope is null;
+
+
+            </sql>
+        </rollback>
+    </changeSet>
+
     <changeSet id="0_1_0_update_getThirdPartyDataProviderOfAccount_authorization_service_scope" author="P44065">
         <sql>
             delete
@@ -20246,4 +20287,648 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_add_rule_and_associate_services_for_request_action_REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED',
+                    'requestActionViewHandler',
+                    'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED',
+                    'requestActionViewHandler',
+                    'REGULATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED',
+                    'requestActionAccountBasedViewHandler',
+                    'VERIFIER');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type in ('OPERATOR', 'REGULATOR')
+              and r.scope is null;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type in ('VERIFIER')
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type in ('OPERATOR', 'REGULATOR')
+                and r.scope is null;
+
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type in ('VERIFIER')
+                and r.scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+                and handler = 'requestActionViewHandler'
+                and role_type in ('OPERATOR', 'REGULATOR')
+                and scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+                and handler = 'requestActionViewHandler'
+                and role_type in ('VERIFIER')
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+
+    <changeSet id="0_1_0_insert_auth_data_for_getThirdPartyDataProviderInfoByRequestId_of_request_task_type_AER_APPLICATION_AMENDS_SUBMIT" author="P44065">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getThirdPartyDataProviderInfoByRequestId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'AER_APPLICATION_AMENDS_SUBMIT'
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'OPERATOR'
+              and r.scope = 'REQUEST_TASK_VIEW';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('getThirdPartyDataProviderInfoByRequestId')
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'AER_APPLICATION_AMENDS_SUBMIT'
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope = 'REQUEST_TASK_VIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_associate_generateRequestActionGetFileDocumentToken_for_request_action_REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED" author="P44065">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'generateRequestActionGetFileDocumentToken'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type in ('OPERATOR', 'REGULATOR')
+              and r.scope is null;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'generateRequestActionGetFileDocumentToken'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type in ('VERIFIER')
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'generateRequestActionGetFileDocumentToken'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type in ('OPERATOR', 'REGULATOR')
+                and r.scope is null;
+
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'generateRequestActionGetFileDocumentToken'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_REGULATOR_NOTICE_EVENT_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type in ('VERIFIER')
+                and r.scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_rule_and_associate_services_for_request_action_REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED_VERIFIER" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED',
+                    'requestActionAccountBasedViewHandler',
+                    'VERIFIER');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type in ('VERIFIER')
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type in ('VERIFIER')
+                and r.scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'REGISTRY_UPDATED_EMISSIONS_EVENT_SUBMITTED'
+                and handler = 'requestActionAccountBasedViewHandler'
+                and role_type in ('VERIFIER')
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_rule_and_associate_services_for_request_action_REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED_OPERATOR_VERIFIER" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED',
+                    'requestActionViewHandler',
+                    'OPERATOR');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED',
+                    'requestActionAccountBasedViewHandler',
+                    'VERIFIER');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+              and r.handler = 'requestActionViewHandler'
+              and r.role_type in ('OPERATOR')
+              and r.scope is null;
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type in ('VERIFIER')
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+                and r.handler = 'requestActionViewHandler'
+                and r.role_type in ('OPERATOR')
+                and r.scope is null;
+
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type in ('VERIFIER')
+                and r.scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+                and handler = 'requestActionViewHandler'
+                and role_type in ('OPERATOR')
+                and scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'REGISTRY_UPDATED_ACCOUNT_EVENT_SUBMITTED'
+                and handler = 'requestActionAccountBasedViewHandler'
+                and role_type in ('VERIFIER')
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_add_rule_and_associate_services_for_request_action_EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED_VERIFIER" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type)
+            values (nextval('au_rule_seq'),
+                    'REQUEST_ACTION' ,
+                    'EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED',
+                    'requestActionAccountBasedViewHandler',
+                    'VERIFIER');
+
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name = 'getRequestActionById'
+              and r.resource_type = 'REQUEST_ACTION'
+              and r.resource_sub_type = 'EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED'
+              and r.handler = 'requestActionAccountBasedViewHandler'
+              and r.role_type in ('VERIFIER')
+              and r.scope is null;
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getRequestActionById'
+                and r.resource_type = 'REQUEST_ACTION'
+                and r.resource_sub_type = 'EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED'
+                and r.handler = 'requestActionAccountBasedViewHandler'
+                and r.role_type in ('VERIFIER')
+                and r.scope is null;
+
+                delete from au_rule
+                where resource_type = 'REQUEST_ACTION'
+                and resource_sub_type = 'EMP_ISSUANCE_REGISTRY_ACCOUNT_OPENING_EVENT_SUBMITTED'
+                and handler = 'requestActionAccountBasedViewHandler'
+                and role_type in ('VERIFIER')
+                and scope is null;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_getThirdPartyDataProviderInfoByRequestId_of_request_task_type_AER_APPLICATION_VERIFICATION_SUBMIT" author="P44065">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getThirdPartyDataProviderInfoByRequestId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'AER_APPLICATION_VERIFICATION_SUBMIT'
+              and r.handler = 'requestTaskAccountBasedAccessHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope = 'REQUEST_TASK_VIEW';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('getThirdPartyDataProviderInfoByRequestId')
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'AER_APPLICATION_VERIFICATION_SUBMIT'
+                and r.handler = 'requestTaskAccountBasedAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope = 'REQUEST_TASK_VIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_getThirdPartyDataProviderInfoByRequestId_of_request_task_type_AER_AMEND_APPLICATION_VERIFICATION_SUBMIT" author="P44065">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s
+                     cross join au_rule r
+            where s.name in ('getThirdPartyDataProviderInfoByRequestId')
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+              and r.handler = 'requestTaskAccountBasedAccessHandler'
+              and r.role_type = 'VERIFIER'
+              and r.scope = 'REQUEST_TASK_VIEW';
+        </sql>
+        <rollback>
+            <sql>
+                delete
+                from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name in ('getThirdPartyDataProviderInfoByRequestId')
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT'
+                and r.handler = 'requestTaskAccountBasedAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope = 'REQUEST_TASK_VIEW';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_submitAerVerificationData" author="P44065">
+        <sql>
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'VERIFICATION_BODY' ,
+                    null,
+                    'verificationBodyImoNumberAccessHandler',
+                    'THIRD_PARTY_DATA_PROVIDER',
+                    null);
+
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'submitAerVerificationData');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'submitAerVerificationData'
+              and aur.resource_type = 'VERIFICATION_BODY'
+              and aur.resource_sub_type is null
+              and aur.handler = 'verificationBodyImoNumberAccessHandler'
+              and aur.role_type = 'THIRD_PARTY_DATA_PROVIDER';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'submitAerVerificationData'
+                and r.resource_type = 'VERIFICATION_BODY'
+                and r.handler = 'verificationBodyImoNumberAccessHandler'
+                and r.role_type = 'THIRD_PARTY_DATA_PROVIDER';
+
+                delete from au_service
+                where name = 'submitAerVerificationData';
+
+                delete from au_rule
+                where resource_type = 'VERIFICATION_BODY'
+                and resource_sub_type is null
+                and handler = 'verificationBodyImoNumberAccessHandler'
+                and role_type = 'THIRD_PARTY_DATA_PROVIDER';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_fix_rules_service_associations_of_accountImoNumberAccessHandler" author="P44065">
+        <sql>
+            delete from au_service_rule sr
+                using au_rule r, au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'submitEmissionsMonitoringPlanData'
+              and r.resource_type = 'ACCOUNT'
+              and r.handler = 'accountImoNumberAccessHandler'
+              and r.role_type = 'THIRD_PARTY_DATA_PROVIDER';
+
+            delete from au_service_rule sr
+                using au_rule r, au_service s
+            where r.id = sr.rule_id
+              and s.id = sr.service_id
+              and s.name = 'submitAerData'
+              and r.resource_type = 'ACCOUNT'
+              and r.handler = 'accountImoNumberAccessHandler'
+              and r.role_type = 'THIRD_PARTY_DATA_PROVIDER';
+
+            delete from au_rule
+            where resource_type = 'ACCOUNT'
+              and resource_sub_type is null
+              and handler = 'accountImoNumberAccessHandler'
+              and role_type = 'THIRD_PARTY_DATA_PROVIDER';
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'),
+                    'ACCOUNT' ,
+                    null,
+                    'accountImoNumberAccessHandler',
+                    'THIRD_PARTY_DATA_PROVIDER',
+                    null);
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'submitEmissionsMonitoringPlanData'
+              and aur.resource_type = 'ACCOUNT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'accountImoNumberAccessHandler'
+              and aur.role_type = 'THIRD_PARTY_DATA_PROVIDER';
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'submitAerData'
+              and aur.resource_type = 'ACCOUNT'
+              and aur.resource_sub_type is null
+              and aur.handler = 'accountImoNumberAccessHandler'
+              and aur.role_type = 'THIRD_PARTY_DATA_PROVIDER';
+        </sql>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_getThirdPartyDataProviderOfVerificationBodyById" author="P44065">
+        <sql>
+
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getThirdPartyDataProviderOfVerificationBodyById');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id from au_service aus, au_rule aur
+              where aus.name='getThirdPartyDataProviderOfVerificationBodyById'
+              and aur.role_type='REGULATOR'
+              and aur.resource_type='CA'
+              and aur.resource_sub_type is null
+              and aur.handler='caAccessHandler'
+              and scope='MANAGE_VB';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getThirdPartyDataProviderOfVerificationBodyById'
+                and r.resource_type = 'CA'
+                and r.handler = 'caAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'MANAGE_VB';
+
+                delete from au_service
+                where name = 'getThirdPartyDataProviderOfVerificationBodyById';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_getAllThirdPartyDataProvidersForVerificationBody" author="P44065">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'getAllThirdPartyDataProvidersForVerificationBody');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id from au_service aus, au_rule aur
+            where aus.name='getAllThirdPartyDataProvidersForVerificationBody'
+              and aur.role_type='VERIFIER'
+              and aur.resource_type='VERIFICATION_BODY'
+              and aur.resource_sub_type is null
+              and aur.handler='verificationBodyAccessHandler'
+              and scope='EDIT_USER';
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getAllThirdPartyDataProvidersForVerificationBody'
+                and r.resource_type = 'VERIFICATION_BODY'
+                and r.handler = 'verificationBodyAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope = 'EDIT_USER';;
+
+                delete from au_service
+                where name = 'getAllThirdPartyDataProvidersForVerificationBody';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_appointThirdPartyDataProviderToVerificationBody" author="P44065">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'appointThirdPartyDataProviderToVerificationBody');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id from au_service aus, au_rule aur
+            where aus.name='appointThirdPartyDataProviderToVerificationBody'
+              and aur.role_type='VERIFIER'
+              and aur.resource_type='VERIFICATION_BODY'
+              and aur.resource_sub_type is null
+              and aur.handler='verificationBodyAccessHandler'
+              and scope='EDIT_USER';
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'appointThirdPartyDataProviderToVerificationBody'
+                and r.resource_type = 'VERIFICATION_BODY'
+                and r.handler = 'verificationBodyAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope = 'EDIT_USER';
+
+                delete from au_service
+                where name = 'appointThirdPartyDataProviderToVerificationBody';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_auth_data_for_unappointThirdPartyDataProviderFromVerificationBody" author="P44065">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'unappointThirdPartyDataProviderFromVerificationBody');
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id from au_service aus, au_rule aur
+            where aus.name='unappointThirdPartyDataProviderFromVerificationBody'
+              and aur.role_type='VERIFIER'
+              and aur.resource_type='VERIFICATION_BODY'
+              and aur.resource_sub_type is null
+              and aur.handler='verificationBodyAccessHandler'
+              and scope='EDIT_USER';
+
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using au_rule r, au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'unappointThirdPartyDataProviderFromVerificationBody'
+                and r.resource_type = 'VERIFICATION_BODY'
+                and r.handler = 'verificationBodyAccessHandler'
+                and r.role_type = 'VERIFIER'
+                and r.scope = 'EDIT_USER';
+
+                delete from au_service
+                where name = 'unappointThirdPartyDataProviderFromVerificationBody';
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

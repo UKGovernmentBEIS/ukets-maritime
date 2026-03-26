@@ -5,7 +5,7 @@ import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import {
@@ -21,12 +21,22 @@ import {
 } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { fireEvent, screen, within } from '@testing-library/angular';
 
 describe('ControlActivitiesDocumentationComponent', () => {
   let fixture: ComponentFixture<ControlActivitiesDocumentationComponent>;
   let component: ControlActivitiesDocumentationComponent;
+  let page: Page;
   let store: RequestTaskStore;
+
+  class Page extends BasePage<ControlActivitiesDocumentationComponent> {
+    get textboxes() {
+      return this.queryAll<HTMLInputElement>('input[type="text"], textarea');
+    }
+
+    get errorSummaryLinks() {
+      return Array.from(this.errorSummary.querySelectorAll('a'));
+    }
+  }
 
   const activatedRouteStub = new ActivatedRouteStub();
   const taskServiceMock: MockType<TaskService<EmpTaskPayload>> = {
@@ -38,19 +48,20 @@ describe('ControlActivitiesDocumentationComponent', () => {
   const createComponent = () => {
     fixture = TestBed.createComponent(ControlActivitiesDocumentationComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
     jest.clearAllMocks();
   };
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [ControlActivitiesDocumentationComponent],
       providers: [
         { provide: TaskService, useValue: taskServiceMock },
         { provide: ActivatedRoute, useValue: activatedRouteStub },
         ...taskProviders,
       ],
-    }).compileComponents();
+    });
   });
 
   describe('for new emission source', () => {
@@ -65,21 +76,19 @@ describe('ControlActivitiesDocumentationComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('heading', { name: 'Documentation' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('textbox')).toHaveLength(6);
+      expect(page.heading1.textContent).toEqual('Documentation');
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.textboxes).toHaveLength(6);
     });
 
     it('should display error on empty form submit', () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
-      const summaryBox = screen.queryByRole('alert', { name: 'There is a problem' });
-      expect(summaryBox).toBeInTheDocument();
 
-      const summaryErrors = within(summaryBox).getAllByRole('link');
-      expect(summaryErrors).toHaveLength(4);
-      expect(summaryErrors.map((anchor) => anchor.textContent.trim())).toEqual([
+      expect(page.errorSummary).toBeTruthy();
+      expect(page.errorSummaryLinks).toHaveLength(4);
+      expect(page.errorSummaryLinks.map((anchor) => anchor.textContent.trim())).toEqual([
         'Enter a procedure reference',
         'Enter a description for the procedure',
         'Enter the name of the person or position responsible for this procedure',
@@ -89,7 +98,7 @@ describe('ControlActivitiesDocumentationComponent', () => {
   });
 
   describe('for existing emission source', () => {
-    beforeEach(async () => {
+    beforeEach(() => {
       store = TestBed.inject(RequestTaskStore);
       store.setState(
         mockStateBuild(
@@ -107,21 +116,16 @@ describe('ControlActivitiesDocumentationComponent', () => {
     });
 
     it('should display all HTMLElements and form with 0 errors', () => {
-      expect(screen.getByRole('heading', { name: 'Documentation' })).toBeTruthy();
-      expect(screen.getByRole('button', { name: 'Continue' })).toBeTruthy();
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
-      expect(screen.getAllByRole('textbox')).toHaveLength(6);
+      expect(page.heading1.textContent).toEqual('Documentation');
+      expect(page.submitButton).toBeTruthy();
+      expect(page.errorSummary).toBeFalsy();
+      expect(page.textboxes).toHaveLength(6);
     });
 
     it('should edit and submit a valid form', async () => {
-      const input = screen.getByRole('textbox', { name: /version/i });
-      fireEvent.input(input, {
-        target: {
-          value: 'test new value',
-        },
-      });
+      page.setInputValue('input[name="version"]', 'test new value');
 
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
       expect(taskServiceSpy).toHaveBeenCalledWith(
@@ -136,10 +140,10 @@ describe('ControlActivitiesDocumentationComponent', () => {
     });
 
     it('should submit a valid form', async () => {
-      screen.getByRole('button', { name: 'Continue' }).click();
+      page.submitButton.click();
       fixture.detectChanges();
 
-      expect(screen.queryByRole('alert', { name: 'There is a problem' })).not.toBeInTheDocument();
+      expect(page.errorSummary).toBeFalsy();
       expect(taskServiceSpy).toHaveBeenCalledWith(
         CONTROL_ACTIVITIES_SUB_TASK,
         ControlActivitiesWizardStep.DOCUMENTATION,

@@ -1,35 +1,11 @@
-<div class="govuk-!-width-two-thirds">
-  <govuk-panel>
-    <h1 class="govuk-panel__title govuk-!-margin-bottom-0">
-      @switch (manageOperationType()) {
-        @case ('CREATE') {
-          The file has been added
-        }
-        @case ('UPDATE') {
-          The file has been updated
-        }
-        @case ('DELETE') {
-          The file has been deleted
-        }
-      }
-    </h1>
-  </govuk-panel>
-  <h3 class="govuk-heading-m">What happens next</h3>
-  <p class="govuk-body">
-    @switch (manageOperationType()) {
-      @case ('CREATE') {
-        The file will be available in the list of the files.
-      }
-      @case ('UPDATE') {
-        The updated file will be available in the list of files.
-      }
-      @case ('DELETE') {
-        The file will not be available in the list of files.
-      }
-    }
-  </p>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    <govuk-panel [title]="title()" />
+    <h3 class="govuk-heading-m">What happens next</h3>
+    <p class="govuk-body">{{ body() }}</p>
+  </div>
 </div>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink routerLink="/guidance">Return to: Guidance</a>
 </div>

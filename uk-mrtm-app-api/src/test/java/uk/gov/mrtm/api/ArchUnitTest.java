@@ -165,7 +165,8 @@ class ArchUnitTest {
                             MIREPORT_PACKAGE,
                             COMMON_PACKAGE,
                             USER_INFO_API_PACKAGE,
-                            CA_PACKAGE));
+                            CA_PACKAGE,
+                            AUTHORIZATION_PACKAGE));
 
     @ArchTest
     public static final ArchRule accountPackageChecks =

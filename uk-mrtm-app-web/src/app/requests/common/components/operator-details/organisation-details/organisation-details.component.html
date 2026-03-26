@@ -39,7 +39,7 @@
     <ng-container govukLegend>
       <span class="govuk-visually-hidden">Same address as Operator Contact address</span>
     </ng-container>
-    <govuk-checkbox [value]="true" label="Same address as Operator Contact address"></govuk-checkbox>
+    <govuk-checkbox [value]="true" label="Same address as Operator Contact address" />
   </div>
 
   <mrtm-location-state-form
@@ -52,13 +52,17 @@
     @case ('PARTNERSHIP') {
       <h2 class="govuk-heading-m">List the partners</h2>
       <div formArrayName="partners">
-        @for (partner of partnersCtrl.controls; track partner; let i = $index) {
+        @for (partner of partnersCtrl.controls; track partner) {
           <fieldset govukFieldset>
-            <legend govukLegend legendSize="small">Name of partner {{ i + 1 }}</legend>
+            <legend govukLegend legendSize="small">Name of partner {{ $index + 1 }}</legend>
             @if (partnersCtrl.length > 1) {
-              <button (click)="removePartner(i)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
+              <button (click)="removePartner($index)" mrtmAddAnother govukSecondaryButton type="button">Remove</button>
             }
-            <div govuk-text-input [formControlName]="i"></div>
+            <div
+              [label]="`Name of partner ${$index + 1}`"
+              [isLabelHidden]="true"
+              govuk-text-input
+              [formControlName]="$index"></div>
           </fieldset>
         }
         <button (click)="addPartner()" govukSecondaryButton type="button">Add another partner</button>
@@ -70,7 +74,7 @@
         label="Upload proof of registered address (optional)"
         hint="For example, a screenshot from your company register"
         listTitle="Uploaded files"
-        formControlName="evidenceFiles"></mrtm-multiple-file-input>
+        formControlName="evidenceFiles" />
     }
   }
 </mrtm-wizard-step>

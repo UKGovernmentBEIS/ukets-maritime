@@ -15,50 +15,50 @@ describe('TaskHeaderInfoComponent', () => {
     }
   }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [provideRouter([])],
-    }).compileComponents();
-  });
-
   beforeEach(() => {
+    TestBed.configureTestingModule({
+      providers: [provideRouter([])],
+    }).overrideComponent(TaskHeaderInfoComponent, {
+      set: { host: { 'test-id': 'component-spec' } },
+    });
+
     fixture = TestBed.createComponent(TaskHeaderInfoComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
+    fixture.detectChanges();
   });
 
   it('should create', () => {
-    fixture.detectChanges();
     expect(component).toBeTruthy();
   });
 
   it('should display the content', () => {
-    component.assignee = 'Adam Smith';
-    component.daysRemaining = 13;
+    fixture.componentRef.setInput('assignee', 'Adam Smith');
+    fixture.componentRef.setInput('daysRemaining', 13);
     fixture.detectChanges();
 
     expect(page.info.map((el) => el.textContent.trim())).toEqual(['Assigned to: Adam Smith', 'Days Remaining: 13']);
   });
 
   it('should display the content with no deadline', () => {
-    component.assignee = 'Adam Smith';
-    component.daysRemaining = null;
+    fixture.componentRef.setInput('assignee', 'Adam Smith');
+    fixture.componentRef.setInput('daysRemaining', null);
     fixture.detectChanges();
 
     expect(page.info.map((el) => el.textContent.trim())).toEqual(['Assigned to: Adam Smith']);
   });
 
   it('should display the content with no assignee', () => {
-    component.assignee = null;
-    component.daysRemaining = 13;
+    fixture.componentRef.setInput('assignee', null);
+    fixture.componentRef.setInput('daysRemaining', 13);
     fixture.detectChanges();
 
     expect(page.info.map((el) => el.textContent.trim())).toEqual(['Assigned to:', 'Days Remaining: 13']);
   });
 
   it('should display overdue task', () => {
-    component.assignee = 'Adam Smith';
-    component.daysRemaining = -1;
+    fixture.componentRef.setInput('assignee', 'Adam Smith');
+    fixture.componentRef.setInput('daysRemaining', -1);
     fixture.detectChanges();
 
     expect(page.info.map((el) => el.textContent.trim())).toEqual([

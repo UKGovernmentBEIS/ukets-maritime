@@ -27,7 +27,6 @@ import { PeerReviewDecisionPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-peer-review-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     PendingButtonDirective,
@@ -42,6 +41,7 @@ import { PeerReviewDecisionPipe } from '@shared/pipes';
     ReturnToTaskOrActionPageComponent,
     PeerReviewDecisionPipe,
   ],
+  standalone: true,
   templateUrl: './peer-review-decision-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

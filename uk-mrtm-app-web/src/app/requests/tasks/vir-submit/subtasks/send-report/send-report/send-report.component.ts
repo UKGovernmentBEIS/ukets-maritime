@@ -5,21 +5,20 @@ import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/c
 import { PendingButtonDirective } from '@netz/common/directives';
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
+import { ButtonDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 
 @Component({
   selector: 'mrtm-send-report',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
     WarningTextComponent,
-    LinkDirective,
   ],
+  standalone: true,
   templateUrl: './send-report.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

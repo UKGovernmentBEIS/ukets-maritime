@@ -35,7 +35,6 @@ export class DateInputValidators {
   };
 
   static isLeapYear(year: number): boolean {
-    // eslint-disable-next-line no-bitwise
     return !(year & 3 || (!(year % 25) && year & 15));
   }
 

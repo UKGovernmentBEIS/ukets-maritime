@@ -2,14 +2,16 @@ import { Routes } from '@angular/router';
 
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
+import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/common/third-party-data-provider/third-party-data-provider.const';
 import { canActivateEmpSubmitSendApplicationAction } from '@requests/tasks/emp-submit/emp-submit.guard';
 import {
   provideEmpSubmitPayloadMutators,
   provideEmpSubmitSideEffects,
   provideEmpSubmitStepFlowManagers,
   provideEmpSubmitTaskServices,
+  provideThirdPartyConfigurations,
 } from '@requests/tasks/emp-submit/emp-submit.providers';
-import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider.const';
+import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_SUBMIT_ROUTES: Routes = [
   {
@@ -21,7 +23,9 @@ export const EMP_SUBMIT_ROUTES: Routes = [
       provideEmpSubmitSideEffects(),
       provideEmpSubmitTaskServices(),
       provideEmpSubmitStepFlowManagers(),
+      provideThirdPartyConfigurations(),
     ],
+    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'operator-details',
@@ -78,7 +82,7 @@ export const EMP_SUBMIT_ROUTES: Routes = [
         path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
         data: { backlink: '../../', breadcrumb: false },
         loadComponent: () =>
-          import('@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider-import').then(
+          import('@requests/common/third-party-data-provider/third-party-data-provider-import').then(
             (c) => c.ThirdPartyDataProviderImportComponent,
           ),
       },

@@ -1,12 +1,11 @@
 import { AbstractControl, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 
-import { isNil } from 'lodash-es';
 import { isAfter, isBefore } from 'date-fns';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
 import { AllFuelOriginTypeName } from '@shared/types';
-import { mergeDatesToDate } from '@shared/utils';
+import { isNil, mergeDatesToDate } from '@shared/utils';
 
 export const arrivalDepartureDateValidator =
   (type: 'ports' | 'voyages'): ValidatorFn =>
@@ -109,6 +108,7 @@ export const validateIfUsedFuelsExistInEmissionsValidator = (
   relatedShip: AerShipEmissions,
 ): ValidationErrors => {
   const errors: ValidationErrors = {};
+
   for (const fuel of fuels) {
     const fuelOriginTypeName = fuel.fuelOriginTypeName as AllFuelOriginTypeName;
     const isValid = relatedShip?.emissionsSources?.some((source) => {
@@ -130,7 +130,9 @@ export const validateIfUsedFuelsExistInEmissionsValidator = (
 
     if (!isValid) {
       errors[fuelOriginTypeName.uniqueIdentifier] = 'The highlighted entries have invalid values';
+      return errors;
     }
   }
-  return Object.keys(errors).length ? errors : null;
+
+  return null;
 };

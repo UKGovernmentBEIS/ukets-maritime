@@ -1,39 +1,46 @@
 <div class="moj-multi-file-upload moj-multi-file-upload--enhanced">
-  @if (showFileUploadList) {
+  @if (showFileUploadList()) {
     <mrtm-file-upload-list
       (fileDelete)="onFileDeleteClick()"
       [files]="uploadedFiles$ | async"
       [isDisabled]="isDisabled"
-      [listTitle]="listTitle"
-      [headerSize]="headerSize"
-      [showNoFilesHint]="showNoFilesHint" />
+      [listTitle]="listTitle()"
+      [headerSize]="currentHeaderSize()"
+      [showNoFilesHint]="showNoFilesHint()" />
   }
 
-  <label [for]="id" class="{{ currentLabelClass }}" id="{{ 'l.' + id }}">{{ label }}</label>
-  @if (text) {
-    <span class="govuk-body">{{ text }}</span>
+  <label
+    [for]="identifier"
+    [id]="`l.${identifier}`"
+    [class]="currentLabelSize()"
+    [class.govuk-visually-hidden]="isLabelHidden()">
+    {{ label() }}
+  </label>
+
+  @if (text()) {
+    <span class="govuk-body">{{ text() }}</span>
   }
-  @if (showFilesizeHint) {
-    <div [id]="id + '-hint-file-size'" class="govuk-hint">
+  @if (showFilesizeHint()) {
+    <div [id]="`${identifier}-hint-file-size`" class="govuk-hint">
       Your document must be a DOC, DOCX, XLS, XLSX, PPT, PPTX, VSD, VSDX, JPG, JPEG, PDF, PNG, TIF, TXT, DIB, BMP or CSV
       file, no more than 20MB.
     </div>
   }
-  @if (hint) {
-    <span [id]="id + '-hint'" class="govuk-hint">{{ hint }}</span>
+  @if (hint()) {
+    <div [id]="`${identifier}-hint`" class="govuk-hint">{{ hint() }}</div>
   }
   @if (shouldDisplayErrors$ | async) {
-    <govuk-error-message [errors]="control.errors" [identifier]="id"></govuk-error-message>
+    <govuk-error-message [errors]="control.errors" [identifier]="identifier" />
   }
   <input
     #input
     (blur)="onFileBlur()"
     (change)="onFileChange($event)"
-    [accept]="accepted"
+    [accept]="accepted()"
     [class.govuk-file-upload--error]="shouldDisplayErrors$ | async"
     [disabled]="isDisabled"
-    [id]="id"
-    [name]="id"
+    [id]="identifier"
+    [name]="identifier"
     class="govuk-file-upload"
     type="file" />
 </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpControlActivities } from '@mrtm/api';
@@ -19,7 +19,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-control-activities-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -32,14 +31,17 @@ import { SubTaskListMap } from '@shared/types';
     ProcedureFormPartialSummaryTemplateComponent,
     HtmlDiffDirective,
   ],
+  standalone: true,
   templateUrl: './control-activities-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesSummaryTemplateComponent {
-  @Input({ required: true }) controlActivities: EmpControlActivities;
-  @Input() originalControlActivities: EmpControlActivities;
-  @Input({ required: true }) controlActivitiesMap: SubTaskListMap<EmpControlActivities>;
-  @Input() wizardStep: { [s: string]: string };
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly controlActivities = input.required<EmpControlActivities>();
+  readonly originalControlActivities = input<EmpControlActivities>();
+  readonly controlActivitiesMap = input.required<SubTaskListMap<EmpControlActivities>>();
+  readonly wizardStep = input<{
+    [s: string]: string;
+  }>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

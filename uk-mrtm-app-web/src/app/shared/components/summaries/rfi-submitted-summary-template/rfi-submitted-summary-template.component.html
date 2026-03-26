@@ -1,9 +1,9 @@
 @if (data(); as data) {
   <h2 class="govuk-heading-m">Request details</h2>
   <dl govuk-summary-list>
-    @for (question of data.questions; track question; let index = $index) {
+    @for (question of data.questions; track question) {
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Question {{ index + 1 }}</dt>
+        <dt govukSummaryListRowKey>Question {{ $index + 1 }}</dt>
         <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="question"></dd>
       </div>
     }

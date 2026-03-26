@@ -3,14 +3,21 @@ import { Params, RouterLink } from '@angular/router';
 
 import { GovukTableColumn, LinkDirective, TableComponent } from '@netz/govuk-components';
 
-import { NotProvidedDirective } from '@shared/directives';
+import { NotProvidedDirective, ScrollablePaneDirective } from '@shared/directives';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-fuels-and-emission-factors-summary-template',
+  imports: [
+    RouterLink,
+    FuelOriginTitlePipe,
+    NotProvidedDirective,
+    TableComponent,
+    LinkDirective,
+    ScrollablePaneDirective,
+  ],
   standalone: true,
-  imports: [RouterLink, FuelOriginTitlePipe, NotProvidedDirective, TableComponent, LinkDirective],
   templateUrl: './aer-fuels-and-emission-factors-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,7 +52,10 @@ export class AerFuelsAndEmissionFactorsSummaryTemplateComponent {
   ];
   readonly columns: Signal<GovukTableColumn[]> = computed(() =>
     this.isEditable()
-      ? [...this.mainColumns, { field: 'actionLinks', header: undefined, widthClass: 'app-column-width-15-per' }]
+      ? [
+          ...this.mainColumns,
+          { field: 'actionLinks', header: 'Actions', hiddenHeader: true, widthClass: 'app-column-width-15-per' },
+        ]
       : this.mainColumns,
   );
 

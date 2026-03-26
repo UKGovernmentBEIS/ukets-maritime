@@ -4,8 +4,8 @@ import { WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-agent-user-info',
-  standalone: true,
   imports: [WarningTextComponent],
+  standalone: true,
   templateUrl: './agent-user-info.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -39,9 +39,9 @@ export const aerFuelConsumptionFormProvider: Provider = {
     const objectId = route?.snapshot?.params?.[routeParamName];
     const fuelConsumptionId = route?.snapshot?.params?.fuelConsumptionId;
     const fuelConsumption = store.select(fuelConsumptionSelector(objectId, fuelConsumptionId))();
+
     const voyagePortAggregate = store.select(shipSelector(objectId))();
     const fuelOrigin = fuelConsumption?.fuelOriginTypeName as AllFuelOriginTypeName;
-    const isLNGType = isLNG(fuelOrigin);
     const fuelOriginExists = store.select(
       aerCommonQuery.selectShipFuelOriginMethaneCombination(
         voyagePortAggregate?.imoNumber,
@@ -51,30 +51,31 @@ export const aerFuelConsumptionFormProvider: Provider = {
         fuelOrigin?.methaneSlip,
       ),
     )();
-    const methaneSlipValue = fuelOriginExists ? `${fuelOrigin?.methaneSlip}` : null;
-    const emissionSourceNameValue = fuelOriginExists ? fuelConsumption?.name : null;
+    const isLNGType = fuelOriginExists && isLNG(fuelOrigin);
+
+    const fuelOriginValue = fuelOriginExists ? fuelConsumption?.fuelOriginTypeName?.uniqueIdentifier : null;
+    const emissionSourceNameValue = fuelOriginExists && fuelConsumption?.name ? fuelConsumption?.name : null;
+    const methaneSlipValue = fuelOriginExists && fuelOrigin?.methaneSlip ? `${fuelOrigin?.methaneSlip}` : null;
+    const amountValue = fuelOriginExists ? fuelConsumption?.amount : null;
+    const totalConsumptionValue = fuelOriginExists ? fuelConsumption?.totalConsumption : null;
+    const measuringUnitValue = fuelOriginExists ? fuelConsumption?.measuringUnit : null;
+    const fuelDensityValue = fuelOriginExists && measuringUnitValue === 'M3' ? fuelConsumption?.fuelDensity : null;
 
     return formBuilder.group<AerFuelConsumptionFormGroupModel>({
       objectId: formBuilder.control<AerFuelConsumptionFormModel['objectId']>(objectId),
-      fuelOrigin: formBuilder.control<AerFuelConsumptionFormModel['fuelOrigin'] | null>(
-        fuelConsumption?.fuelOriginTypeName?.uniqueIdentifier,
-        {
-          validators: [GovukValidators.required('Select a fuel type')],
-        },
-      ),
-      fuelDensity: formBuilder.control<AerFuelConsumptionFormModel['fuelDensity'] | null>(
-        fuelConsumption?.fuelDensity,
-        {
-          validators: [
-            GovukValidators.required('Enter the fuel density'),
-            GovukValidators.notNaN('Enter a numerical value'),
-            GovukValidators.positiveNumber('Must accept only positive numbers'),
-            GovukValidators.minMaxRangeNumberValidator(0, 2),
-            GovukValidators.maxDecimalsValidator(3),
-          ],
-        },
-      ),
-      amount: formBuilder.control<AerFuelConsumptionFormModel['amount'] | null>(fuelConsumption?.amount, {
+      fuelOrigin: formBuilder.control<AerFuelConsumptionFormModel['fuelOrigin'] | null>(fuelOriginValue, {
+        validators: [GovukValidators.required('Select a fuel type')],
+      }),
+      fuelDensity: formBuilder.control<AerFuelConsumptionFormModel['fuelDensity'] | null>(fuelDensityValue, {
+        validators: [
+          GovukValidators.required('Enter the fuel density'),
+          GovukValidators.notNaN('Enter a numerical value'),
+          GovukValidators.positiveNumber('Must accept only positive numbers'),
+          GovukValidators.minMaxRangeNumberValidator(0, 2),
+          GovukValidators.maxDecimalsValidator(3),
+        ],
+      }),
+      amount: formBuilder.control<AerFuelConsumptionFormModel['amount'] | null>(amountValue, {
         validators: [
           GovukValidators.required('Enter the amount of fuel used'),
           GovukValidators.notNaN('Enter a numerical value'),
@@ -84,17 +85,14 @@ export const aerFuelConsumptionFormProvider: Provider = {
       }),
       name: formBuilder.control<AerFuelConsumptionFormModel['name'] | null>(emissionSourceNameValue),
       totalConsumption: formBuilder.control<AerFuelConsumptionFormModel['totalConsumption'] | null>(
-        fuelConsumption?.totalConsumption,
+        totalConsumptionValue,
         {
           validators: [GovukValidators.positiveNumber('Total emissions as CO2e should be greater than 0')],
         },
       ),
-      measuringUnit: formBuilder.control<AerFuelConsumptionFormModel['measuringUnit'] | null>(
-        fuelConsumption?.measuringUnit,
-        {
-          validators: [GovukValidators.required('Select a measuring unit')],
-        },
-      ),
+      measuringUnit: formBuilder.control<AerFuelConsumptionFormModel['measuringUnit'] | null>(measuringUnitValue, {
+        validators: [GovukValidators.required('Select a measuring unit')],
+      }),
       methaneSlip: formBuilder.control<number | string | null>(
         {
           value: methaneSlipValue,

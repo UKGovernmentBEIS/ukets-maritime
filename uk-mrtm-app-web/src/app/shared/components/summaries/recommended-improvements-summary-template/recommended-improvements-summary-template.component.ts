@@ -20,7 +20,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-recommended-improvements-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryListComponent,
@@ -33,6 +32,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
     BooleanToTextPipe,
     RecommendedImprovementsListTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './recommended-improvements-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

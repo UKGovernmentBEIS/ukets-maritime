@@ -35,16 +35,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-greenhouse-gas-variation-regulator-decision',
-  standalone: true,
   imports: [
     GreenhousesSummaryTemplateComponent,
     ReactiveFormsModule,
     WizardStepComponent,
     VariationRegulatorDecisionComponent,
   ],
+  standalone: true,
   templateUrl: './greenhouse-gas-variation-regulator-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [variationRegulatorDecisionFormProvider(GREENHOUSE_GAS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GreenhouseGasVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -54,7 +54,7 @@ export class GreenhouseGasVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     greenhouseGas: this.store.select(empCommonQuery.selectGreenhouseGas)(),
     originalGreenhouseGas: this.store.select(empVariationRegulatorQuery.selectOriginalGreenhouseGas)(),
     greenhouseGasMap: greenhouseGasMap,

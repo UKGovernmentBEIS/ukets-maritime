@@ -18,11 +18,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-management-procedures-data-flow',
-  standalone: true,
   imports: [WizardStepComponent, ReactiveFormsModule, DetailsComponent, EmpProcedureFormWithFilesComponent],
+  standalone: true,
   templateUrl: './management-procedures-data-flow.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [managementProceduresDataFlowFormProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManagementProceduresDataFlowComponent {
   protected readonly form: UntypedFormGroup = inject(TASK_FORM);

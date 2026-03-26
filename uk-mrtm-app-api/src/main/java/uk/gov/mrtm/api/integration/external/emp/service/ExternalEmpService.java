@@ -9,7 +9,7 @@ import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.integration.external.emp.domain.ExternalEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
-import uk.gov.mrtm.api.integration.external.emp.mapper.ExternalEmpMapper;
+import uk.gov.mrtm.api.integration.external.emp.transform.ExternalEmpMapper;
 import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.integration.external.emp.validation.ExternalEmpValidator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;

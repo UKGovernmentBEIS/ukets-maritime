@@ -133,7 +133,7 @@ Documentation can be found at
 - ItemDTO
 
 ### MiReports
-- implement MiReportGeneratorHandler for all reports applicable to the project:
+- implement MiReportSystemGenerator for all reports applicable to the project:
   - AccountAssignedRegulatorSiteContactReportGenerator, AccountAssignedRegulatorSiteContactsRepository (extend AccountAssignedRegulatorSiteContact if additional properties needed)
   - AccountUsersContactsReportGenerator, AccountUsersContactsRepository (extend AccountUserContact if additional properties needed)
   - OutstandingRequestTasksReportGenerator, OutstandingRequestTasksRepository (extend OutstandingRequestTask if additional properties needed)

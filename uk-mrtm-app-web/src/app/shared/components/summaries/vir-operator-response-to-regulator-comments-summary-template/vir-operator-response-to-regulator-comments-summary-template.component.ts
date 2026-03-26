@@ -17,7 +17,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-vir-operator-response-to-regulator-comments-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -29,6 +28,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
     BooleanToTextPipe,
     GovukDatePipe,
   ],
+  standalone: true,
   templateUrl: './vir-operator-response-to-regulator-comments-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

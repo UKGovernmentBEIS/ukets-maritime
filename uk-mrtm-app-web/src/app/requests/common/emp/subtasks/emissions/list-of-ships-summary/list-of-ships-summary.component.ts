@@ -23,7 +23,6 @@ import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shar
 
 @Component({
   selector: 'mrtm-list-of-ships-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ListOfShipsSummaryTemplateComponent,
@@ -34,6 +33,7 @@ import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shar
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './list-of-ships-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

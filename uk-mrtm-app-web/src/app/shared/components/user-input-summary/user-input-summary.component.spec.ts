@@ -23,9 +23,9 @@ describe('SummaryTemplateComponent', () => {
   };
 
   @Component({
-    template: '<mrtm-user-input-summary-template [userInfo]="userInfo"></mrtm-user-input-summary-template>',
-    standalone: true,
     imports: [UserInputSummaryTemplateComponent],
+    standalone: true,
+    template: '<mrtm-user-input-summary-template [userInfo]="userInfo" />',
   })
   class TestComponent {
     userInfo: OperatorUserDTO;

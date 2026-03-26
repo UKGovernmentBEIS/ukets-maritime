@@ -1,5 +1,5 @@
 @if (showConfirmation) {
-  <netz-page-heading>Are you sure you want to replace the data?</netz-page-heading>
+  <netz-page-heading>{{ wizardMap.uploadOwnersConfirmation.title }}</netz-page-heading>
   <govuk-warning-text assistiveText="All previously entered data will be overwritten by the new file." />
   <div class="govuk-button-group">
     <button govukWarnButton netzPendingButton type="button" (click)="onSubmit()">Yes, replace data</button>
@@ -51,7 +51,7 @@
   </mrtm-data-parser-wizard-step>
 
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <a [routerLink]="['../', wizardStep.REGISTERED_OWNERS]" govukLink>
       Return to: {{ wizardMap.registeredOwners.title }}
     </a>

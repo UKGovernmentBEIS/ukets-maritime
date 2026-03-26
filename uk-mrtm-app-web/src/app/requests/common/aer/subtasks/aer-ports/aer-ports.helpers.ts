@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import { AerFuelConsumption, AerPort, AerPortEmissionsMeasurement } from '@mrtm/api';
 
 import {
@@ -11,6 +9,7 @@ import {
   AER_SELECT_SHIP_STEP,
 } from '@requests/common/aer/aer.consts';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { isNil } from '@shared/utils';
 
 export const AER_PORTS_SUB_TASK = 'ports';
 

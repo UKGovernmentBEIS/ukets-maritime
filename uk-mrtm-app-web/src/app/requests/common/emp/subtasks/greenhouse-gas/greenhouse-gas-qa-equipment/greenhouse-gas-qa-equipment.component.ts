@@ -10,10 +10,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-greenhouse-gas-qa-equipment',
-  standalone: true,
   imports: [WizardStepComponent, AboutProcedureDetailsComponent, EmpProcedureFormComponent, ReactiveFormsModule],
-  providers: [greenhouseGasQaEquipmentFormProvider],
+  standalone: true,
   templateUrl: './greenhouse-gas-qa-equipment.component.html',
+  providers: [greenhouseGasQaEquipmentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class GreenhouseGasQaEquipmentComponent extends EmpProcedureWizardStepAbstract {
