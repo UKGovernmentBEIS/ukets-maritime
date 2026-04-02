@@ -1,7 +1,6 @@
 package uk.gov.mrtm.api.workflow.request.flow.empvariation.handler;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
@@ -33,9 +32,6 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
 	private final StartProcessRequestService startProcessRequestService;
 	private final EmissionsMonitoringPlanQueryService empQueryService;
 
-	@Value("${govuk-pay.empVariationPaymentIsActive}")
-	private boolean empVariationPaymentIsActive;
-
 	@Override
     public String process(Long accountId, RequestCreateActionEmptyPayload payload, AppUser appUser) {
     	final String currentUserRoleType = appUser.getRoleType();
@@ -43,7 +39,7 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
 		EmissionsMonitoringPlanContainer empContainer =
 			empQueryService.getEmissionsMonitoringPlanDTOByAccountId(accountId)
 				.map(EmissionsMonitoringPlanDTO::getEmpContainer)
-				.orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));;
+				.orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
 
     	final EmpVariationRequestPayload requestPayload = EmpVariationRequestPayload.builder()
 	        .payloadType(MrtmRequestPayloadType.EMP_VARIATION_REQUEST_PAYLOAD)
@@ -57,8 +53,6 @@ public class EmpVariationCreateActionHandler implements RequestAccountCreateActi
     		requestPayload.setOperatorAssignee(appUser.getUserId());
     	} else if (RoleTypeConstants.REGULATOR.equals(currentUserRoleType)) {
 			requestPayload.setRegulatorAssignee(appUser.getUserId());
-			processVars.put(BpmnProcessConstants.SKIP_PAYMENT, !empVariationPaymentIsActive);
-
     	} else {
     		throw new BusinessException(ErrorCode.REQUEST_CREATE_ACTION_NOT_ALLOWED, currentUserRoleType);
     	}

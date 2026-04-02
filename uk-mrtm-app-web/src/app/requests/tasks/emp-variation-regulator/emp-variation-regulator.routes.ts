@@ -3,7 +3,6 @@ import { Routes } from '@angular/router';
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
 import { NOTIFY_OPERATOR_SUCCESS_COMPONENT } from '@requests/common/components/notify-operator/notify-operator.providers';
-import { isPaymentCompleted } from '@requests/common/payment';
 import { EmpVariationRegulatorSuccessComponent } from '@requests/tasks/emp-variation-regulator/components';
 import {
   provideEmpVariationRegulatorPayloadMutators,
@@ -101,13 +100,13 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
       {
         path: 'notify-operator',
         data: { backlink: '../../', breadcrumb: false },
-        canActivate: [canActivateEmpVariationRegulatorActions, isPaymentCompleted],
+        canActivate: [canActivateEmpVariationRegulatorActions],
         providers: [{ provide: NOTIFY_OPERATOR_SUCCESS_COMPONENT, useValue: EmpVariationRegulatorSuccessComponent }],
         loadChildren: () => import('@requests/common/components/notify-operator').then((r) => r.NOTIFY_OPERATOR_ROUTES),
       },
       {
         path: 'peer-review',
-        canActivate: [canActivateEmpVariationRegulatorActions, isPaymentCompleted],
+        canActivate: [canActivateEmpVariationRegulatorActions],
         loadChildren: () =>
           import('@requests/common/components/peer-review').then((r) => r.SEND_FOR_PEER_REVIEW_ROUTES),
       },

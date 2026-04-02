@@ -61,7 +61,10 @@ export class FuelsAndEmissionFactorsListComponent {
 
   handleDelete(event: EmpFuelsAndEmissionsFactors) {
     this.taskService
-      .saveSubtask(EMISSIONS_SUB_TASK, EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST, this.route, event.uniqueIdentifier)
+      .saveSubtask(EMISSIONS_SUB_TASK, EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST, this.route, {
+        shipId: this.shipId(),
+        fuelId: event.uniqueIdentifier,
+      })
       .pipe(take(1))
       .subscribe();
   }

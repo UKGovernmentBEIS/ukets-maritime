@@ -101,8 +101,7 @@ class EmpVariationCreateActionHandlerTest {
 
     public static Stream<Arguments> validScenarios() {
         Map<String, ? extends Serializable> regulatorProcessVars = Map.of(
-            BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.REGULATOR,
-            BpmnProcessConstants.SKIP_PAYMENT, true
+            BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.REGULATOR
         );
         Map<String, ? extends Serializable> operatorProcessVars = Map.of(
             BpmnProcessConstants.REQUEST_INITIATOR_ROLE_TYPE, RoleTypeConstants.OPERATOR
