@@ -14,6 +14,7 @@ import { existingControlContainer } from '@shared/providers';
 /* eslint-disable @angular-eslint/prefer-on-push-component-change-detection */
 @Component({
   selector: 'mrtm-completed-work-form',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     RadioComponent,
@@ -22,10 +23,9 @@ import { existingControlContainer } from '@shared/providers';
     TextInputComponent,
     DatePickerComponent,
   ],
-  standalone: true,
   templateUrl: './completed-work-form.component.html',
   viewProviders: [existingControlContainer],
 })
 export class CompletedWorkFormComponent {
-  readonly formGroup = input<UntypedFormGroup>(new UntypedFormGroup({}));
+  formGroup = input<UntypedFormGroup>(new UntypedFormGroup({}));
 }

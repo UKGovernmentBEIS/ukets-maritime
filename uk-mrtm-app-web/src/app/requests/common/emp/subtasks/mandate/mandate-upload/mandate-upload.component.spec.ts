@@ -1,11 +1,11 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { TaskItemStatus } from '@requests/common';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
@@ -23,8 +23,8 @@ describe('MandateUploadComponent', () => {
   let fixture: ComponentFixture<MandateUploadComponent>;
   let page: Page;
   let store: RequestTaskStore;
-  let route: ActivatedRoute;
 
+  const route = new ActivatedRouteStub();
   const taskService: MockType<TaskService<any>> = {
     saveSubtask: jest.fn().mockReturnValue(of({})),
   };
@@ -48,14 +48,13 @@ describe('MandateUploadComponent', () => {
       imports: [MandateUploadComponent],
       providers: [
         RequestTaskStore,
-        provideRouter([]),
+        { provide: ActivatedRoute, useValue: route },
         { provide: TaskService, useValue: taskService },
         ...taskProviders,
       ],
     }).compileComponents();
 
     store = TestBed.inject(RequestTaskStore);
-    route = TestBed.inject(ActivatedRoute);
     store.setState(mockStateBuild({ emissions: emissionsMock }, { emissions: TaskItemStatus.COMPLETED }));
     fixture = TestBed.createComponent(MandateUploadComponent);
     component = fixture.componentInstance;
@@ -70,7 +69,7 @@ describe('MandateUploadComponent', () => {
   it('should display all HTMLElements and form with 0 errors', () => {
     expect(page.errorSummary).toBeFalsy();
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent).toEqual('Upload the registered owner file');
+    expect(page.heading1.textContent.trim()).toEqual('Upload the registered owner file');
     expect(page.paragraphs).toHaveLength(4);
     expect(page.uploadFileButton).toBeTruthy();
     expect(page.submitButton).toBeTruthy();

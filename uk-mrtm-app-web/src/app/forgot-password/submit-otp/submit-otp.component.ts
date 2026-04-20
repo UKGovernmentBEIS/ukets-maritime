@@ -16,6 +16,9 @@ import { BackToTopComponent, WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-submit-otp',
+  templateUrl: './submit-otp.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     ErrorSummaryComponent,
     WizardStepComponent,
@@ -27,9 +30,6 @@ import { BackToTopComponent, WizardStepComponent } from '@shared/components';
     BackToTopComponent,
     AsyncPipe,
   ],
-  standalone: true,
-  templateUrl: './submit-otp.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitOtpComponent {
   private readonly authService = inject(AuthService);

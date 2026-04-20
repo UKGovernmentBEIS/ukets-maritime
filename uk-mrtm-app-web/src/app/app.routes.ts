@@ -12,10 +12,10 @@ import { TimedOutComponent } from '@timeout/timed-out';
 export const APP_ROUTES: Routes = [
   {
     path: 'landing',
-    title: 'Maritime',
+    title: 'NETZ',
     data: { breadcrumb: 'Home' },
-    canActivate: [landingPageGuard],
     component: LandingPageComponent,
+    canActivate: [landingPageGuard],
   },
   {
     path: '',
@@ -89,7 +89,6 @@ export const APP_ROUTES: Routes = [
     children: [
       {
         path: 'dashboard',
-        title: 'Tasks',
         component: DashboardPageComponent,
       },
       {

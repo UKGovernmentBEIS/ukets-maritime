@@ -7,8 +7,8 @@ import { ReturnToOperatorForChangesStore } from '@requests/tasks/aer-verificatio
 
 @Component({
   selector: 'mrtm-return-to-operator-for-changes-success',
-  imports: [PanelComponent, RouterLink, LinkDirective],
   standalone: true,
+  imports: [PanelComponent, RouterLink, LinkDirective],
   templateUrl: './return-to-operator-for-changes-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

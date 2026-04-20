@@ -18,6 +18,7 @@ import { UncorrectedNonConformitiesPriorYearListTemplateComponent } from '@share
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-prior-year-issues-list',
+  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -26,7 +27,6 @@ import { UncorrectedNonConformitiesPriorYearListTemplateComponent } from '@share
     ReturnToTaskOrActionPageComponent,
     UncorrectedNonConformitiesPriorYearListTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './uncorrected-non-conformities-prior-year-issues-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

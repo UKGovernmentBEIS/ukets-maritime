@@ -12,8 +12,8 @@
       [isInline]="true"
       legendSize="small"
       legend="Are carbon capture and storage technologies being applied?">
-      <govuk-radio-option [value]="true" label="Yes" />
-      <govuk-radio-option [value]="false" label="No" />
+      <govuk-radio-option [value]="true" [label]="'Yes'" />
+      <govuk-radio-option [value]="false" [label]="'No'" />
     </div>
 
     @if (existCtrl.value) {
@@ -33,10 +33,10 @@
         <div
           formControlName="technologyEmissionSources"
           govuk-checkboxes
-          label="Select the emission sources this technology is applied to"
-          labelSize="normal">
+          legend="Select the emission sources this technology is applied to"
+          legendSize="normal">
           @for (name of emissionSourcesNames; track name) {
-            <govuk-checkbox [value]="name" [label]="name" />
+            <govuk-checkbox [value]="name" [label]="name"></govuk-checkbox>
           }
         </div>
       </ng-container>

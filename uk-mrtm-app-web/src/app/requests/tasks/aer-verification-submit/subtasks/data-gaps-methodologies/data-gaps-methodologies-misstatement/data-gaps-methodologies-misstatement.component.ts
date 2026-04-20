@@ -24,6 +24,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-data-gaps-methodologies-misstatement',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     RadioComponent,
@@ -32,10 +33,9 @@ import { WizardStepComponent } from '@shared/components';
     TextareaComponent,
     WizardStepComponent,
   ],
-  standalone: true,
   templateUrl: './data-gaps-methodologies-misstatement.component.html',
-  providers: [dataGapsMethodologiesMisstatementProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [dataGapsMethodologiesMisstatementProvider],
 })
 export class DataGapsMethodologiesMisstatementComponent {
   readonly map = dataGapsMethodologiesMap;

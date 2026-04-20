@@ -314,8 +314,8 @@
       </p>
       <p class="govuk-hint">Has the operator corrected any non-conformities?</p>
     </ng-container>
-    <govuk-radio-option value="YES" label="Yes" />
-    <govuk-radio-option value="NO" label="No">
+    <govuk-radio-option [value]="'YES'" label="Yes" />
+    <govuk-radio-option [value]="'NO'" label="No">
       <ng-container govukConditionalContent>
         <div
           formControlName="nonConformitiesDetails"
@@ -325,6 +325,6 @@
           [maxLength]="10000"></div>
       </ng-container>
     </govuk-radio-option>
-    <govuk-radio-option [divider]="true" value="NOT_APPLICABLE" label="Not applicable" />
+    <govuk-radio-option [divider]="true" [value]="'NOT_APPLICABLE'" label="Not applicable" />
   </div>
 </mrtm-wizard-step>

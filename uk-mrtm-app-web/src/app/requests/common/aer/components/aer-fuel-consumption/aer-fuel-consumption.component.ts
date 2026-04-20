@@ -13,6 +13,7 @@ import { AbstractControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { map, take } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
@@ -38,15 +39,15 @@ import { WizardStepComponent } from '@shared/components';
 import { AER_PORT_MEASURING_UNIT_SELECT_ITEMS } from '@shared/constants';
 import { FuelOriginTitlePipe } from '@shared/pipes';
 import { AllFuels } from '@shared/types';
-import { bigNumberUtils, isLNG, isNil } from '@shared/utils';
+import { bigNumberUtils, isLNG } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-fuel-consumption',
-  imports: [WizardStepComponent, LinkDirective, RouterLink, SelectComponent, ReactiveFormsModule, TextInputComponent],
   standalone: true,
-  templateUrl: './aer-fuel-consumption.component.html',
+  imports: [WizardStepComponent, LinkDirective, RouterLink, SelectComponent, ReactiveFormsModule, TextInputComponent],
   providers: [aerFuelConsumptionFormProvider],
+  templateUrl: './aer-fuel-consumption.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerFuelConsumptionComponent {
@@ -67,10 +68,8 @@ export class AerFuelConsumptionComponent {
   public readonly objectId: Signal<string> = toSignal(
     this.activatedRoute.params.pipe(map((param) => param?.[this.routeParamKey])),
   );
-  readonly ship: Signal<AerShipEmissions> = computed(() =>
-    this.store.select(this.relatedShipSelector(this.objectId()))(),
-  );
-  readonly fuelTypeSelectItems: Signal<Array<GovukSelectOption<string>>> = computed(() => {
+  ship: Signal<AerShipEmissions> = computed(() => this.store.select(this.relatedShipSelector(this.objectId()))());
+  fuelTypeSelectItems: Signal<Array<GovukSelectOption<string>>> = computed(() => {
     const existingFuelDetailsUniqueIdentifiers = new Set<string>();
 
     return this.ship()
@@ -117,7 +116,7 @@ export class AerFuelConsumptionComponent {
     },
   );
 
-  readonly emissionSourceSelectItems: Signal<GovukSelectOption<string>[]> = computed(() =>
+  emissionSourceSelectItems: Signal<GovukSelectOption<string>[]> = computed(() =>
     this.ship()
       ?.emissionsSources?.reduce((acc, emission) => {
         const filteredFuelDetails = emission.fuelDetails?.filter(
@@ -136,7 +135,7 @@ export class AerFuelConsumptionComponent {
       })),
   );
 
-  readonly methaneSlipSelectItems: Signal<Array<GovukSelectOption>> = computed(() => {
+  methaneSlipSelectItems: Signal<Array<GovukSelectOption>> = computed(() => {
     const filteredEmissionSources = this.ship()?.emissionsSources?.reduce((acc, emission) => {
       const filteredFuelDetails = emission.fuelDetails?.filter(
         (fuelDetail) => fuelDetail.uniqueIdentifier === this.currentFuelOrigin(),

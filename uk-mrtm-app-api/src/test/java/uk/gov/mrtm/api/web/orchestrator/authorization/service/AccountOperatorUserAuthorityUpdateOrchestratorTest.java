@@ -5,8 +5,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.context.ApplicationEventPublisher;
-import uk.gov.mrtm.api.integration.registry.accountcontacts.domain.AccountContactsRegistryEvent;
 import uk.gov.netz.api.account.domain.AccountContactType;
 import uk.gov.netz.api.account.service.AccountContactUpdateService;
 import uk.gov.netz.api.authorization.core.domain.AuthorityStatus;
@@ -17,14 +15,11 @@ import uk.gov.netz.api.user.operator.service.OperatorUserNotificationGateway;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.anyList;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -41,9 +36,6 @@ class AccountOperatorUserAuthorityUpdateOrchestratorTest {
 
     @Mock
     private AccountContactUpdateService accountContactUpdateService;
-
-    @Mock
-    private ApplicationEventPublisher publisher;
 
     @Test
     void updateAccountOperatorAuthorities() {
@@ -63,11 +55,7 @@ class AccountOperatorUserAuthorityUpdateOrchestratorTest {
         verify(operatorAuthorityUpdateService, times(1))
                 .updateAccountOperatorAuthorities(accountOperatorAuthorities, accountId);
         verify(accountContactUpdateService, times(1)).updateAccountContacts(updatedContactTypes, accountId);
-        verify(publisher, times(1)).publishEvent(AccountContactsRegistryEvent.builder().accountIds(Set.of(accountId)).build());
         verify(operatorUserNotificationGateway, times(1)).notifyUsersUpdateStatus(activatedOperators);
-
-        verifyNoMoreInteractions(operatorAuthorityUpdateService, accountContactUpdateService,
-            publisher, operatorUserNotificationGateway);
     }
 
     @Test
@@ -86,10 +74,6 @@ class AccountOperatorUserAuthorityUpdateOrchestratorTest {
         verify(operatorAuthorityUpdateService, times(1))
                 .updateAccountOperatorAuthorities(accountOperatorAuthorities, accountId);
         verify(accountContactUpdateService, times(1)).updateAccountContacts(updatedContactTypes, accountId);
-        verify(publisher, times(1)).publishEvent(AccountContactsRegistryEvent.builder().accountIds(Set.of(accountId)).build());
         verify(operatorUserNotificationGateway, never()).notifyUsersUpdateStatus(anyList());
-
-        verifyNoMoreInteractions(operatorAuthorityUpdateService, accountContactUpdateService, publisher);
-        verifyNoInteractions(operatorUserNotificationGateway);
     }
 }

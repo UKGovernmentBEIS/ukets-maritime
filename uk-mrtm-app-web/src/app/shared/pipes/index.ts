@@ -38,4 +38,3 @@ export * from './non-compliance-reason.pipe';
 export * from './request-name.pipe';
 export * from './peer-review-decision.pipe';
 export * from './aer-port-voyage-aggregated-task-status.pipe';
-export * from './initial-data-source.pipe';

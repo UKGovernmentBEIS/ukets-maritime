@@ -16,13 +16,13 @@
   @if (currentUser.authorityStatus !== 'PENDING') {
     <h2 class="govuk-heading-m">Credentials</h2>
     @if (isCurrentUser$ | async) {
-      <mrtm-two-fa-link [link]="['/', '2fa', 'change']" title="Change two factor authentication" />
+      <mrtm-two-fa-link [link]="['/', '2fa', 'change']" [title]="'Change two factor authentication'" />
     } @else {
       <mrtm-two-fa-link
         [accountId]="accountId$ | async"
         [link]="['/', '2fa', 'reset-2fa']"
-        role="OPERATOR"
-        title="Change two-factor authentication"
+        [role]="'OPERATOR'"
+        [title]="'Change two-factor authentication'"
         [userId]="userId$ | async"
         [userName]="currentUser | userFullName" />
     }

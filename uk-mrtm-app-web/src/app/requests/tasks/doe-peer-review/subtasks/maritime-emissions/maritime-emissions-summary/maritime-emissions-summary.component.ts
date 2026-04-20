@@ -9,8 +9,8 @@ import { DoeMaritimeEmissionsSummaryTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-maritime-emissions-summary',
-  imports: [PageHeadingComponent, DoeMaritimeEmissionsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   standalone: true,
+  imports: [PageHeadingComponent, DoeMaritimeEmissionsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './maritime-emissions-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

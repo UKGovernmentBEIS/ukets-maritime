@@ -15,18 +15,17 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-materiality-level-details',
-  imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent],
   standalone: true,
+  imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent],
   templateUrl: './materiality-level-details.component.html',
-  providers: [materialityLevelDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [materialityLevelDetailsFormProvider],
 })
 export class MaterialityLevelDetailsComponent {
+  readonly map = materialityLevelMap;
   readonly formGroup = inject<FormGroup>(TASK_FORM);
   private readonly route = inject(ActivatedRoute);
   private readonly service = inject(TaskService<AerVerificationSubmitTaskPayload>);
-
-  readonly materialityLevelMap = materialityLevelMap;
 
   onSubmit() {
     this.service

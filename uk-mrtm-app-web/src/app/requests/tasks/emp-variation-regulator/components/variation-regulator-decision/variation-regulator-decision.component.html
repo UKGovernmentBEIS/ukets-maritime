@@ -1,16 +1,16 @@
 <h2 class="govuk-heading-m">List changes to include in the variation schedule (optional)</h2>
 <p class="govuk-hint">The operator will see these in the official notice</p>
 <ng-container formArrayName="variationScheduleItems">
-  @for (requiredChange of scheduleItemsCtrl.controls; track requiredChange) {
-    <fieldset [formGroupName]="$index" govukFieldset id="variationScheduleItems.{{ $index }}">
+  @for (requiredChange of scheduleItemsCtrl.controls; track requiredChange; let i = $index) {
+    <fieldset [formGroupName]="i" govukFieldset id="variationScheduleItems.{{ i }}">
       <div class="govuk-grid-row">
         <div class="govuk-grid-column-two-thirds">
-          <legend govukLegend legendSize="small">Item {{ $index + 1 }}</legend>
+          <legend govukLegend legendSize="small">Item {{ i + 1 }}</legend>
         </div>
         <div class="govuk-grid-column-one-third govuk-!-text-align-right govuk-!-margin-bottom-2">
           @if (scheduleItemsCtrl?.length > 0) {
             <button
-              (click)="scheduleItemsCtrl.removeAt($index)"
+              (click)="scheduleItemsCtrl.removeAt(i)"
               govukSecondaryButton
               type="button"
               class="govuk-!-margin-bottom-0">
@@ -19,12 +19,7 @@
           }
         </div>
       </div>
-      <div
-        [label]="`Changes for item ${$index + 1}`"
-        [isLabelHidden]="true"
-        govuk-textarea
-        [maxLength]="10000"
-        formControlName="item"></div>
+      <div govuk-textarea [maxLength]="10000" formControlName="item"></div>
     </fieldset>
   }
 </ng-container>

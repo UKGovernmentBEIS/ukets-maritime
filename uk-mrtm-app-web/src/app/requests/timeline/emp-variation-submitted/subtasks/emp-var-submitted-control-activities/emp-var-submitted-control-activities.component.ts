@@ -38,7 +38,7 @@ export class EmpVarSubmittedControlActivitiesComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       controlActivities: this.store.select(empVariationSubmittedQuery.selectControlActivities)(),
       controlActivitiesMap: controlActivitiesMap,

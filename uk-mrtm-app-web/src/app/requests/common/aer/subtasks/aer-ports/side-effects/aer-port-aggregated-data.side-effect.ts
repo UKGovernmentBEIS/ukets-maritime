@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
+import { isNil } from 'lodash-es';
 
 import { SideEffect } from '@netz/common/forms';
 
@@ -7,7 +8,6 @@ import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AER_AGGREGATED_DATA_SUB_TASK } from '@requests/common/aer/subtasks/aer-aggregated-data';
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
-import { isNil } from '@shared/utils';
 
 export class AerPortAggregatedDataSideEffect extends SideEffect {
   public readonly subtask = AER_PORTS_SUB_TASK;
@@ -26,7 +26,7 @@ export class AerPortAggregatedDataSideEffect extends SideEffect {
 
           if (
             isNil(associatedPortCall) ||
-            payload.aerSectionsCompleted?.[`${this.subtask}-port-${associatedPortCall.uniqueIdentifier}`] !==
+            payload.aerSectionsCompleted?.[`${this.subtask}-voyage-${associatedPortCall.uniqueIdentifier}`] !==
               TaskItemStatus.COMPLETED
           ) {
             payload.aerSectionsCompleted[`${AER_AGGREGATED_DATA_SUB_TASK}-aggregated-data-${data.uniqueIdentifier}`] =

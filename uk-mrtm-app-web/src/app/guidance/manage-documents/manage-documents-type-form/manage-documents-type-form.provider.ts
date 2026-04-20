@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, ValidatorFn } from '@angular/forms';
 
+import { isNil } from 'lodash-es';
+
 import { GovukValidators } from '@netz/govuk-components';
 
 import { guidanceQuery, GuidanceStore } from '@guidance/+state';
@@ -9,7 +11,6 @@ import {
   ManageDocumentsFormGroupModel,
   ManageDocumentsFromModel,
 } from '@guidance/manage-documents/manage-documents-type-form/manage-documents-type-form.types';
-import { isNil } from '@shared/utils';
 
 const sectionRequiredValidator = (formGroup: ManageDocumentsFormGroupModel): ValidatorFn => {
   return (control: AbstractControl) => {

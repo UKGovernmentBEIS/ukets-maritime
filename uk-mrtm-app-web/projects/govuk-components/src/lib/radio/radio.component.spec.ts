@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { RadioComponent } from './radio.component';
@@ -8,19 +8,19 @@ import { RadioOptionComponent } from './radio-option/radio-option.component';
 
 describe('RadioComponent', () => {
   @Component({
-    imports: [RadioComponent, ReactiveFormsModule, RadioOptionComponent],
     standalone: true,
+    imports: [RadioComponent, ReactiveFormsModule, RadioOptionComponent],
     template: `
       <div govuk-radio [formControl]="control">
         @for (option of options; track option) {
-          <govuk-radio-option [value]="option.value" [label]="option.label" />
+          <govuk-radio-option [value]="option.value" [label]="option.label"></govuk-radio-option>
         }
       </div>
 
       <form [formGroup]="form">
         <div govuk-radio formControlName="radio">
           @for (option of options; track option) {
-            <govuk-radio-option [value]="option.value" [label]="option.label" />
+            <govuk-radio-option [value]="option.value" [label]="option.label"></govuk-radio-option>
           }
         </div>
       </form>
@@ -46,7 +46,7 @@ describe('RadioComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [ControlContainer],
+      imports: [ReactiveFormsModule, TestComponent],
     }).compileComponents();
   });
 
@@ -98,7 +98,7 @@ describe('RadioComponent', () => {
     expect(hostComponent.form.value).toEqual({ radio: null });
     expect(element.querySelector('.govuk-error-message')).toBeFalsy();
 
-    element.querySelector('form').dispatchEvent(new Event('submit'));
+    element.querySelector('form').submit();
     fixture.detectChanges();
 
     expect(hostComponent.form.get('radio').errors).toBeTruthy();

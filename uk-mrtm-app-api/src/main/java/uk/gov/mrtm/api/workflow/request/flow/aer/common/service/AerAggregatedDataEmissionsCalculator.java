@@ -17,6 +17,7 @@ import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageEmissions;
 import uk.gov.mrtm.api.reporting.enumeration.PortType;
 import uk.gov.mrtm.api.reporting.validation.AerValidatorHelper;
+import uk.gov.mrtm.api.workflow.request.flow.aer.common.utils.AerPortCodesUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -38,6 +39,8 @@ public class AerAggregatedDataEmissionsCalculator {
             return;
         }
 
+        filterOutNonEligibleFetchedShips(aer);
+
         calculateEmissions(aer.getAggregatedData(), aer.getEmissions(), aer.getPortEmissions(), aer.getVoyageEmissions());
     }
 
@@ -51,6 +54,33 @@ public class AerAggregatedDataEmissionsCalculator {
                 processShip(portEmissions, voyageEmissions, emissions, shipEmissionsOptional.get());
             }
         }
+    }
+
+    private void filterOutNonEligibleFetchedShips(Aer aer) {
+        aer.getAggregatedData().getEmissions()
+            .removeIf(data -> {
+                if (data.isFromFetch()) {
+                    boolean hasPorts = aer.getPortEmissions().getPorts().stream().anyMatch(
+                        aerPort -> aerPort.getImoNumber().equals(data.getImoNumber())
+                    );
+
+                    if (hasPorts) {
+                        return false;
+                    }
+
+                    boolean hasNIOrGBVoyages = aer.getVoyageEmissions().getVoyages().stream().anyMatch(
+                        aerVoyage -> aerVoyage.getImoNumber().equals(data.getImoNumber())
+                            && (filterByJourneyType(aerVoyage, PortType.GB) || filterByJourneyType(aerVoyage, PortType.NI))
+                    );
+
+                    if (hasNIOrGBVoyages) {
+                        return false;
+                    }
+
+                    return true;
+                }
+                return false;
+            });
     }
 
     private void processShip(AerPortEmissions portEmissions, AerVoyageEmissions voyageEmissions,
@@ -179,7 +209,7 @@ public class AerAggregatedDataEmissionsCalculator {
 
         if (emissions.isFromFetch()) {
             AerPortEmissionsMeasurement calculatedEmissions = calculateVoyageEmissions(voyageEmissions, emissions,
-                aerVoyage -> AerEmissionsCalculatorUtils.filterByJourneyType(aerVoyage, PortType.GB));
+                aerVoyage -> filterByJourneyType(aerVoyage, PortType.GB));
 
             emissions.setEmissionsBetweenUKPorts(calculatedEmissions);
 
@@ -194,7 +224,7 @@ public class AerAggregatedDataEmissionsCalculator {
 
         if (emissions.isFromFetch()) {
             AerPortEmissionsMeasurement calculatedEmissions = calculateVoyageEmissions(voyageEmissions, emissions,
-                aerVoyage -> AerEmissionsCalculatorUtils.filterByJourneyType(aerVoyage, PortType.NI));
+                aerVoyage -> filterByJourneyType(aerVoyage, PortType.NI));
 
             emissions.setEmissionsBetweenUKAndNIVoyages(calculatedEmissions);
 
@@ -265,6 +295,15 @@ public class AerAggregatedDataEmissionsCalculator {
         return emissions.getCo2().add(emissions.getCh4()).add(emissions.getN2o()).setScale(scale, RoundingMode.HALF_UP);
     }
 
+    private boolean filterByJourneyType(AerVoyage aerVoyage, PortType portType) {
+        if (aerVoyage.getVoyageDetails() != null){
+            return portType.equals(AerPortCodesUtils.getJourneyType(
+                    aerVoyage.getVoyageDetails().getDeparturePort(),
+                    aerVoyage.getVoyageDetails().getArrivalPort()));
+        }
+        return false;
+    }
+
     private void setFuelConsumptions(AerPortEmissions portEmissions, AerVoyageEmissions voyageEmissions,
                                      AerShipAggregatedData aggregatedData, AerShipEmissions emissions) {
         HashMap<FuelOriginTypeName, BigDecimal> totalFuelConsumptions = new HashMap<>();
@@ -276,8 +315,7 @@ public class AerAggregatedDataEmissionsCalculator {
 
         voyageEmissions.getVoyages().stream()
             .filter(aerVoyage -> aerVoyage.getImoNumber().equals(aggregatedData.getImoNumber()))
-            .filter(aerVoyage -> AerEmissionsCalculatorUtils.filterByJourneyType(aerVoyage, PortType.NI)
-                || AerEmissionsCalculatorUtils.filterByJourneyType(aerVoyage, PortType.GB))
+            .filter(aerVoyage -> filterByJourneyType(aerVoyage, PortType.NI) || filterByJourneyType(aerVoyage, PortType.GB))
             .flatMap(aerVoyage -> aerVoyage.getFuelConsumptions().stream())
             .forEach(aerFuelConsumption -> addTotalFuelConsumption(aerFuelConsumption, totalFuelConsumptions));
 

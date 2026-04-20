@@ -7,6 +7,8 @@ import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.account.service.reportingstatus.AccountReportingStatusQueryService;
+import uk.gov.mrtm.api.account.transform.AddressStateMapper;
+import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPayloadType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestMetadata;
@@ -25,6 +27,7 @@ public class AerApplicationSubmitInitializer implements InitializeRequestTaskHan
 	
 	private final MrtmAccountQueryService mrtmAccountQueryService;
     private final AccountReportingStatusQueryService accountReportingStatusQueryService;
+    private final AddressStateMapper addressStateMapper;
 
     @Override
     public RequestTaskPayload initializePayload(Request request) {
@@ -40,6 +43,11 @@ public class AerApplicationSubmitInitializer implements InitializeRequestTaskHan
         boolean sendEmailNotification = !MrtmAccountReportingStatus.EXEMPT.equals(accountReportingStatus);
 
         final EmpOriginatedData originatedData = requestPayload.getEmpOriginatedData();
+        final Aer aer = requestPayload.getAer();
+        if(aer != null && aer.getOperatorDetails() != null) {
+            aer.getOperatorDetails().setOperatorName(account.getName());
+            aer.getOperatorDetails().setContactAddress(addressStateMapper.toAddressState(account.getAddress()));
+        }
 
         return AerApplicationSubmitRequestTaskPayload.builder()
             .payloadType(MrtmRequestTaskPayloadType.AER_APPLICATION_SUBMIT_PAYLOAD)

@@ -11,19 +11,17 @@
         <p class="govuk-body">{{ verificationBody()?.name }}</p>
         <ng-container *ngTemplateOutlet="commonConfirmationContent" />
       } @else if (hasVerificationBody() === false) {
-        <netz-page-heading>Appoint an accredited verification body to continue</netz-page-heading>
-        <p class="govuk-body">
-          <a govukLink [routerLink]="['/accounts', accountId()]" fragment="users">Appoint a verifier</a>
-          for your account. You will be able to send your report once you have successfully added a verifier to your
+        <netz-page-heading>
+          Your named verifier is invalid. Please make sure a verification body has been successfully added to your
           account.
-        </p>
+        </netz-page-heading>
       }
     }
   </div>
 </div>
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <netz-return-to-task-or-action-page />
 </div>
 

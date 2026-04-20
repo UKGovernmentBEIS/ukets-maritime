@@ -66,7 +66,7 @@ export const canActivateRdeSuccess = (route: ActivatedRouteSnapshot): UrlTree | 
 
 export const canActivateRdeDecisionSuccess = (route: ActivatedRouteSnapshot): UrlTree | boolean => {
   const router = inject(Router);
-  const decision = router.currentNavigation()?.extras?.state?.decision;
+  const decision = router.getCurrentNavigation()?.extras?.state?.decision;
 
   if (!decision) {
     return createUrlTreeFromSnapshot(route, ['../../../../']);

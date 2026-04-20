@@ -5,11 +5,7 @@ import { MrtmItemDTO } from '@mrtm/api';
 import { ITEM_NAME_TRANSFORMER } from './item-name.providers';
 import { ItemNameTransformer } from './item-name.types';
 
-@Pipe({
-  name: 'itemName',
-  standalone: true,
-  pure: true,
-})
+@Pipe({ name: 'itemName', pure: true, standalone: true })
 export class ItemNamePipe implements PipeTransform {
   private readonly itemNameTransformer: ItemNameTransformer = inject(ITEM_NAME_TRANSFORMER);
 

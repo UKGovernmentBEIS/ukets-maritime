@@ -18,7 +18,7 @@ describe('NotificationDecisionSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(NotificationDecisionSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('usersInfo', {
+    component.usersInfo = {
       '123': {
         name: 'Regulator',
       },
@@ -27,8 +27,8 @@ describe('NotificationDecisionSummaryTemplateComponent', () => {
         roleCode: 'operator_admin',
         contactTypes: ['PRIMARY', 'SERVICE', 'FINANCIAL'],
       },
-    });
-    fixture.componentRef.setInput('reviewDecision', {
+    };
+    component.reviewDecision = {
       details: {
         officialNotice: 'notice text',
         notes: 'notes',
@@ -39,14 +39,14 @@ describe('NotificationDecisionSummaryTemplateComponent', () => {
         },
       },
       type: 'ACCEPTED',
-    });
-    fixture.componentRef.setInput('officialNotice', {
+    };
+    component.officialNotice = {
       fileName: 'file name',
       downloadUrl: '',
-    });
-    fixture.componentRef.setInput('reviewDecisionNotification', {
+    };
+    component.reviewDecisionNotification = {
       signatory: '123',
-    });
+    };
     fixture.detectChanges();
   });
 

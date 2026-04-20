@@ -13,8 +13,8 @@ describe('TabLazyDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [TabsComponent, TabLazyDirective, AsyncPipe],
     standalone: true,
+    imports: [TabsComponent, TabLazyDirective, AsyncPipe],
     template: `
       <govuk-tabs>
         @for (tab of tabsLazy$ | async; track tab) {

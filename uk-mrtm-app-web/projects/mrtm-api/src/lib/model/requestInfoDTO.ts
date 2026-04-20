@@ -12,10 +12,10 @@ import { RequestMetadata } from './requestMetadata';
 export interface RequestInfoDTO {
   id?: string;
   type?: string;
-  resourceType?: string;
+  competentAuthority?: 'ENGLAND' | 'NORTHERN_IRELAND' | 'OPRED' | 'SCOTLAND' | 'WALES';
+  accountId?: number;
   requestMetadata?: RequestMetadata;
   paymentCompleted?: boolean;
   paymentAmount?: string;
   creationDate?: string;
-  resources?: { [key: string]: string };
 }

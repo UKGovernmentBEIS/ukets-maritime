@@ -85,11 +85,8 @@ public class AerTotalEmissionsCalculator {
             .add(lessVoyagesInNorthernIrelandDeductionN2o);
         totalVoyagesInNorthernIrelandDeduction = totalVoyagesInNorthernIrelandDeduction.setScale(7, RoundingMode.HALF_UP);
 
-        boolean negativeTotalEmissions = totalLessEmissionsReductionClaim.compareTo(BigDecimal.ZERO) < 0
-            || totalVoyagesInNorthernIrelandDeduction.compareTo(BigDecimal.ZERO) < 0;
-
-        BigDecimal totalShipEmissionsSummary = negativeTotalEmissions? totalLessEmissionsReductionClaim: totalLessEmissionsReductionClaim.setScale(0, RoundingMode.HALF_UP);
-        BigDecimal surrenderEmissionsSummary = negativeTotalEmissions? totalVoyagesInNorthernIrelandDeduction: totalVoyagesInNorthernIrelandDeduction.setScale(0, RoundingMode.HALF_UP);
+        BigDecimal totalShipEmissionsSummary = totalLessEmissionsReductionClaim.setScale(0, RoundingMode.HALF_UP);
+        BigDecimal surrenderEmissionsSummary = totalVoyagesInNorthernIrelandDeduction.setScale(0, RoundingMode.HALF_UP);
 
         aer.setTotalEmissions(AerTotalEmissions.builder()
             .totalEmissions(buildAerPortEmissionsMeasurement(totalEmissionsCo2, totalEmissionsCh4, totalEmissionsN2o, sumTotalEmissions))

@@ -30,6 +30,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-aer-additional-documents-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     AdditionalDocumentsSummaryTemplateComponent,
@@ -37,7 +38,6 @@ interface ViewModel {
     ButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './aer-additional-documents-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -46,7 +46,7 @@ export class AerAdditionalDocumentsSummaryComponent {
   private readonly store = inject(RequestTaskStore);
   private readonly route = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(aerCommonQuery.selectAerAdditionalDocuments)();
     const isEditable = this.store.select(requestTaskQuery.selectIsEditable)();
     const isSubTaskCompleted = this.store.select(

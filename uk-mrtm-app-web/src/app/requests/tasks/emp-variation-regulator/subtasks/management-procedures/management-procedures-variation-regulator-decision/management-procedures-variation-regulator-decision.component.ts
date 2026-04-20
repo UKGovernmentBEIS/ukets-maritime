@@ -41,16 +41,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-management-procedures-variation-regulator-decision',
+  standalone: true,
   imports: [
     ManagementProceduresSummaryTemplateComponent,
     ReactiveFormsModule,
     WizardStepComponent,
     VariationRegulatorDecisionComponent,
   ],
-  standalone: true,
   templateUrl: './management-procedures-variation-regulator-decision.component.html',
-  providers: [variationRegulatorDecisionFormProvider(MANAGEMENT_PROCEDURES_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [variationRegulatorDecisionFormProvider(MANAGEMENT_PROCEDURES_SUB_TASK)],
 })
 export class ManagementProceduresVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -60,7 +60,7 @@ export class ManagementProceduresVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empCommonQuery.selectManagementProcedures)();
     const originalManagementProcedures = this.store.select(
       empVariationRegulatorQuery.selectOriginalManagementProcedures,

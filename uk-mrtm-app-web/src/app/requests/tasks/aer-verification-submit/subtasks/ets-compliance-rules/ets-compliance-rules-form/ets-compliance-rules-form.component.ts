@@ -22,6 +22,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-ets-compliance-rules-form',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     DetailsComponent,
@@ -32,10 +33,9 @@ import { WizardStepComponent } from '@shared/components';
     ReactiveFormsModule,
     WizardStepComponent,
   ],
-  standalone: true,
   templateUrl: './ets-compliance-rules-form.component.html',
-  providers: [etsComplianceRulesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [etsComplianceRulesFormProvider],
 })
 export class EtsComplianceRulesFormComponent {
   readonly map = etsComplianceRulesMap;

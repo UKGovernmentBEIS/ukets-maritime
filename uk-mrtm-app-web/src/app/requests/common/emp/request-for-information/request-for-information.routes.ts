@@ -26,7 +26,6 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
     children: [
       {
         path: '',
-        title: 'Check your answers',
         data: { backlink: '../../', breadcrumb: false },
         canActivate: [canActivateRfiSummary],
         loadComponent: () =>
@@ -36,7 +35,6 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
       },
       {
         path: RfiWizardSteps.RFI_REQUEST,
-        title: 'Request for information',
         data: { breadcrumb: false },
         resolve: {
           backlink: backlinkResolver(RfiWizardSteps.SUMMARY, '../../'),
@@ -49,7 +47,6 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
       },
       {
         path: RfiWizardSteps.RFI_NOTIFICATION,
-        title: 'Select who you want to notify about this request',
         data: { breadcrumb: false },
         resolve: {
           backlink: backlinkResolver(RfiWizardSteps.SUMMARY, RfiWizardSteps.RFI_REQUEST),
@@ -70,7 +67,6 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
       },
       {
         path: RfiWizardSteps.SUCCESS,
-        title: 'Your request for information has been sent to the operator',
         canActivate: [canActivateRfiSuccess],
         loadComponent: () =>
           import('@requests/common/emp/request-for-information/request-for-information-success').then(
@@ -81,7 +77,6 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
   },
   {
     path: 'not-allowed',
-    title: 'You can only have one active request at any given time',
     loadComponent: () =>
       import('@requests/common/emp/components/request-not-allowed').then((c) => c.RequestNotAllowedComponent),
   },
@@ -90,7 +85,6 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
     children: [
       {
         path: RfiWizardSteps.SUCCESS,
-        title: 'Response sent to regulator',
         canActivate: [canActivateRfiRespondSuccess],
         loadComponent: () =>
           import('@requests/common/emp/request-for-information/request-for-information-respond-success').then(

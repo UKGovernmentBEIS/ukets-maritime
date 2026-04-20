@@ -9,8 +9,8 @@ import { FollowUpAmends } from '@shared/types/follow-up-amends.interface';
 
 @Component({
   selector: 'mrtm-notification-wait-for-amends',
-  imports: [WarningTextComponent, FollowUpResponseAndDecisionSummaryTemplateComponent],
   standalone: true,
+  imports: [WarningTextComponent, FollowUpResponseAndDecisionSummaryTemplateComponent],
   templateUrl: './notification-wait-for-amends.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

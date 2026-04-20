@@ -1,17 +1,17 @@
 <label
+  [class.govuk-visually-hidden]="!templateLabel && isLabelHidden"
   [for]="identifier"
-  [id]="`l.${identifier}`"
-  [class]="currentLabelSize()"
-  [class.govuk-visually-hidden]="!templateLabel() && isLabelHidden()">
-  @if (!templateLabel()) {
-    {{ label() }}
+  [id]="'l.' + identifier"
+  [class]="currentLabelSize">
+  @if (!templateLabel) {
+    {{ currentLabel }}
   } @else {
-    <ng-content select="[govukLabel]" />
+    <ng-content select="[govukLabel]"></ng-content>
   }
 </label>
-@if (hint()) {
-  <div [id]="`${identifier}-hint`" class="govuk-hint">
-    {{ hint() }}
+@if (hint) {
+  <div [id]="identifier + '-hint'" class="govuk-hint">
+    {{ hint }}
   </div>
 }
 
@@ -23,13 +23,13 @@
   [class.govuk-select--error]="shouldDisplayErrors"
   [formControl]="control"
   [id]="identifier"
-  [ngClass]="widthClass()"
+  [ngClass]="widthClass"
   class="govuk-select"
   govukFormError>
-  @for (option of options(); track $index) {
+  @for (option of options; track $index) {
     <option [attr.disabled]="option.disabled || null" [ngValue]="option.value">
       {{ option.text }}
     </option>
   }
-  <ng-content />
+  <ng-content></ng-content>
 </select>

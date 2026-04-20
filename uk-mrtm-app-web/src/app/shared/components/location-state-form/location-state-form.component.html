@@ -12,7 +12,6 @@
     <div
       formControlName="line1"
       govuk-text-input
-      widthClass="govuk-!-width-two-thirds"
       [label]="'Address line 1' | optionalFieldLabel: optionalFields().line1"></div>
   }
   @if (isReadonly()) {
@@ -22,7 +21,7 @@
     <div
       formControlName="line2"
       govuk-text-input
-      widthClass="govuk-!-width-two-thirds"
+      [labelSize]=""
       [label]="'Address line 2' | optionalFieldLabel: optionalFields().line2"></div>
   }
   @if (isReadonly()) {

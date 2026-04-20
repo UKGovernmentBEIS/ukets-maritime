@@ -15,8 +15,8 @@ describe('SummaryListComponent', () => {
   let fixture3: ComponentFixture<TemplateTestComponent>;
 
   @Component({
-    imports: [SummaryListComponent],
     standalone: true,
+    imports: [SummaryListComponent],
     template: '<dl govuk-summary-list [details]="details"></dl>',
   })
   class DetailsTestComponent {
@@ -27,8 +27,8 @@ describe('SummaryListComponent', () => {
   }
 
   @Component({
-    imports: [SummaryListComponent],
     standalone: true,
+    imports: [SummaryListComponent],
     template: `
       <dl govuk-summary-list [details]="details">
         <ng-template #keyTemplate let-item>
@@ -48,8 +48,8 @@ describe('SummaryListComponent', () => {
   }
 
   @Component({
-    imports: [SummaryListComponent, SummaryListRowKeyDirective, SummaryListRowDirective, SummaryListRowValueDirective],
     standalone: true,
+    imports: [SummaryListComponent, SummaryListRowKeyDirective, SummaryListRowDirective, SummaryListRowValueDirective],
     template: `
       <dl govuk-summary-list [details]="details">
         <div govukSummaryListRow>

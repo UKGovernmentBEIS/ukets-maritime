@@ -12,10 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
+import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
-import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
-import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
+import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.mrtm.api.integration.registry.emissionsupdated.domain.ReportableEmissionsUpdatedSubmittedEventDetails;
 import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsEntity;
@@ -26,6 +26,9 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerRequestQueryS
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.integration.model.emission.AccountEmissionsUpdateEvent;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
@@ -34,6 +37,7 @@ import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Year;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -47,6 +51,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
+import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
 
 @ExtendWith(MockitoExtension.class)
 class ReportableEmissionsNotifyRegistryServiceTest {
@@ -76,7 +82,7 @@ class ReportableEmissionsNotifyRegistryServiceTest {
     @Mock
     private RegistryIntegrationEmailProperties emailProperties;
     @Mock
-    private NotifyRegistryEmailService notifyRegistryEmailService;
+    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 
     @ParameterizedTest
     @ValueSource(booleans = {true, false})
@@ -100,7 +106,7 @@ class ReportableEmissionsNotifyRegistryServiceTest {
         verify(reportableEmissionsRepository).findByAccountIdAndYear(ACCOUNT_ID, YEAR);
         verifyNoMoreInteractions(accountQueryService, reportableEmissionsRepository);
         verifyNoInteractions(requestQueryService, reportableEmissionsSendToRegistryProducer,
-            accountEmissionsUpdateEventKafkaTemplate, emailProperties, notifyRegistryEmailService);
+            accountEmissionsUpdateEventKafkaTemplate, emailProperties, notificationEmailService);
     }
 
     @Test
@@ -112,21 +118,6 @@ class ReportableEmissionsNotifyRegistryServiceTest {
             .businessId(EMITTER_ID)
             .build();
         ReportableEmissionsUpdatedSubmittedEventDetails expectedResponse = createResponse(false, null);
-        String noRegistryIdErrorMessage = "No Registry ID exists in METS account";
-        IntegrationEventErrorDetails integrationEventErrorDetails = IntegrationEventErrorDetails.builder()
-            .error(IntegrationEventError.ERROR_0801)
-            .errorMessage(noRegistryIdErrorMessage)
-            .build();
-
-        NotifyRegistryEmailServiceParams infoEmailParams = NotifyRegistryEmailServiceParams.builder()
-            .account(account)
-            .emitterId(EMITTER_ID)
-            .errorsForMail(List.of(integrationEventErrorDetails))
-            .recipient(EMAIL)
-            .isFordway(false)
-            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
-            .integrationPoint(INTEGRATION_POINT_KEY)
-            .build();
 
         when(accountQueryService.getAccountById(ACCOUNT_ID)).thenReturn(account);
         when(reportableEmissionsRepository.findByAccountIdAndYear(ACCOUNT_ID, YEAR))
@@ -139,9 +130,9 @@ class ReportableEmissionsNotifyRegistryServiceTest {
 
         verify(accountQueryService).getAccountById(ACCOUNT_ID);
         verify(reportableEmissionsRepository).findByAccountIdAndYear(ACCOUNT_ID, YEAR);
-        verify(notifyRegistryEmailService).notifyRegulator(infoEmailParams);
+        verify(notificationEmailService).notifyRecipient(getEmailData(), EMAIL);
         verifyNoMoreInteractions(accountQueryService, reportableEmissionsRepository,
-            notifyRegistryEmailService, emailProperties);
+            notificationEmailService, emailProperties);
         verifyNoInteractions(requestQueryService, reportableEmissionsSendToRegistryProducer,
             accountEmissionsUpdateEventKafkaTemplate);
     }
@@ -180,9 +171,10 @@ class ReportableEmissionsNotifyRegistryServiceTest {
         verify(reportableEmissionsSendToRegistryProducer).produce(accountEmissionsUpdatedRequestEvent, accountEmissionsUpdateEventKafkaTemplate);
         verify(accountQueryService).getAccountById(ACCOUNT_ID);
         verify(reportableEmissionsRepository).findByAccountIdAndYear(ACCOUNT_ID, YEAR);
-        verifyNoMoreInteractions(accountQueryService, reportableEmissionsRepository, reportableEmissionsSendToRegistryProducer);
+        verifyNoMoreInteractions(accountQueryService, reportableEmissionsRepository,
+            notificationEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
         verifyNoInteractions(requestQueryService, accountEmissionsUpdateEventKafkaTemplate,
-            notifyRegistryEmailService, emailProperties);
+            notificationEmailService, emailProperties);
     }
 
     @Test
@@ -214,9 +206,10 @@ class ReportableEmissionsNotifyRegistryServiceTest {
         verify(accountQueryService).getAccountById(ACCOUNT_ID);
         verify(reportableEmissionsRepository).findByAccountIdAndYear(ACCOUNT_ID, YEAR);
         verify(requestQueryService).findRequestByAccountAndTypeForYear(ACCOUNT_ID, YEAR);
-        verifyNoMoreInteractions(requestQueryService, accountQueryService, reportableEmissionsRepository);
+        verifyNoMoreInteractions(requestQueryService, accountQueryService, reportableEmissionsRepository,
+            notificationEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
         verifyNoInteractions(accountEmissionsUpdateEventKafkaTemplate,
-            notifyRegistryEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
+            notificationEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
     }
 
     @ParameterizedTest
@@ -256,9 +249,10 @@ class ReportableEmissionsNotifyRegistryServiceTest {
         verify(accountQueryService).getAccountById(ACCOUNT_ID);
         verify(reportableEmissionsRepository).findByAccountIdAndYear(ACCOUNT_ID, YEAR);
         verify(requestQueryService).findRequestByAccountAndTypeForYear(ACCOUNT_ID, YEAR);
-        verifyNoMoreInteractions(requestQueryService, accountQueryService, reportableEmissionsRepository);
+        verifyNoMoreInteractions(requestQueryService, accountQueryService, reportableEmissionsRepository,
+            notificationEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
         verifyNoInteractions(accountEmissionsUpdateEventKafkaTemplate,
-            notifyRegistryEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
+            notificationEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
     }
 
     public static Stream<Arguments> aerConditionsNotSatisfiedScenarios() {
@@ -312,9 +306,9 @@ class ReportableEmissionsNotifyRegistryServiceTest {
         verify(reportableEmissionsRepository).findByAccountIdAndYear(ACCOUNT_ID, YEAR);
         verify(requestQueryService).findRequestByAccountAndTypeForYear(ACCOUNT_ID, YEAR);
         verifyNoMoreInteractions(requestQueryService, accountQueryService, reportableEmissionsRepository,
-            reportableEmissionsSendToRegistryProducer);
+            notificationEmailService, emailProperties, reportableEmissionsSendToRegistryProducer);
         verifyNoInteractions(accountEmissionsUpdateEventKafkaTemplate,
-            notifyRegistryEmailService, emailProperties);
+            notificationEmailService, emailProperties);
     }
 
     public static Stream<Arguments> reportingPeriodValidScenarios() {
@@ -331,5 +325,29 @@ class ReportableEmissionsNotifyRegistryServiceTest {
             .notifiedRegistry(notifiedRegistry)
             .data(data)
             .build();
+    }
+
+    private EmailData<EmailNotificationTemplateData> getEmailData() {
+        String noRegistryIdErrorMessage = "No Registry ID exists in METS account";
+        IntegrationEventErrorDetails integrationEventErrorDetails = IntegrationEventErrorDetails.builder()
+            .error(IntegrationEventError.ERROR_0801)
+            .errorMessage(noRegistryIdErrorMessage)
+            .build();
+
+        final Map<String, Object> templateParams = new HashMap<>();
+        templateParams.put(MrtmEmailNotificationTemplateConstants.EMITTER_ID, EMITTER_ID);
+        templateParams.put(MrtmEmailNotificationTemplateConstants.ERRORS, List.of(integrationEventErrorDetails));
+        templateParams.put(MrtmEmailNotificationTemplateConstants.CORRELATION_ID, PayloadFieldsUtils.EMPTY);
+        templateParams.put(MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, capitalizeFirstLetter(SERVICE_KEY));
+        templateParams.put(MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, ACCOUNT_NAME);
+        templateParams.put(MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, INTEGRATION_POINT_KEY);
+
+        final EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
+            .notificationTemplateData(EmailNotificationTemplateData.builder()
+                .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
+                .templateParams(templateParams)
+                .build())
+            .build();
+        return emailData;
     }
 }

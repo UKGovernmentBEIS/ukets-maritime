@@ -7,7 +7,7 @@
       </timerEventDefinition>
     </startEvent>
     <serviceTask id="INITIATE_AERs" name="Initiate AERs" flowable:delegateExpression="#{initiateAersHandlerFlowable}">
-      <multiInstanceLoopCharacteristics flowable:collection="accounts" flowable:elementVariable="accountId">
+      <multiInstanceLoopCharacteristics flowable:async="true" flowable:collection="accounts" flowable:elementVariable="accountId">
         <extensionElements />
       </multiInstanceLoopCharacteristics>
     </serviceTask>

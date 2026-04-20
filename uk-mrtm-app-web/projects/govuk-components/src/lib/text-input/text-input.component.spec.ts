@@ -1,11 +1,10 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { LabelDirective } from '../directives';
 import { GovukValidators } from '../error-message';
-import { LabelSizeType } from './label-size.type';
 import { TextInputComponent } from './text-input.component';
 
 describe('TextInputComponent', () => {
@@ -17,24 +16,11 @@ describe('TextInputComponent', () => {
   let fixtureNumericComponent: ComponentFixture<TestNumericComponent>;
 
   @Component({
-    imports: [TextInputComponent, ReactiveFormsModule, LabelDirective],
     standalone: true,
+    imports: [TextInputComponent, ReactiveFormsModule, LabelDirective],
     template: `
-      <div
-        govuk-text-input
-        [formControl]="control"
-        [prefix]="prefix"
-        [suffix]="suffix"
-        label="First control"
-        [isLabelHidden]="isLabelHidden"
-        [labelSize]="labelSize"></div>
-      <div
-        [isLabelHidden]="isLabelHidden"
-        [labelSize]="labelSize"
-        govuk-text-input
-        [formControl]="control"
-        [prefix]="prefix"
-        [suffix]="suffix">
+      <div govuk-text-input [formControl]="control" [prefix]="prefix" [suffix]="suffix" label="First control"></div>
+      <div govuk-text-input [formControl]="control" [prefix]="prefix" [suffix]="suffix">
         <ng-container govukLabel>
           Second control
           <span class="govuk-visually-hidden">hidden</span>
@@ -52,15 +38,13 @@ describe('TextInputComponent', () => {
       { text: new FormControl(null, { validators: GovukValidators.minLength(5, 'Enter a value') }) },
       { updateOn: 'submit' },
     );
-    isLabelHidden = false;
-    labelSize: LabelSizeType = 'normal';
     prefix: string;
     suffix: string;
   }
 
   @Component({
-    imports: [TextInputComponent, ReactiveFormsModule],
     standalone: true,
+    imports: [TextInputComponent, ReactiveFormsModule],
     template: '<div govuk-text-input [formControl]="control" inputType="number" [numberFormat]="format"></div>',
   })
   class TestNumericComponent {
@@ -69,7 +53,7 @@ describe('TextInputComponent', () => {
   }
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({ providers: [ControlContainer] }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
   });
 
   beforeEach(() => {
@@ -162,7 +146,7 @@ describe('TextInputComponent', () => {
     expect(hostTestComponent.group.value).toEqual({ text: 'abc' });
     expect(formControl.classes['govuk-input--error']).toBeFalsy();
 
-    element.querySelector('form').dispatchEvent(new Event('submit'));
+    element.querySelector('form').submit();
     fixtureTestComponent.detectChanges();
 
     expect(hostTestComponent.group.value).toEqual({ text: 'abc' });
@@ -234,22 +218,27 @@ describe('TextInputComponent', () => {
     const hostElement: HTMLElement = fixtureTestComponent.nativeElement;
     const label = hostElement.querySelector('label');
 
-    hostTestComponent.isLabelHidden = false;
+    testComponent.isLabelHidden = false;
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    hostTestComponent.labelSize = 'small';
+    testComponent.labelSize = 'normal';
+    fixtureTestComponent.detectChanges();
+
+    expect(label.className).toEqual('govuk-label');
+
+    testComponent.labelSize = 'small';
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--s');
 
-    hostTestComponent.labelSize = 'medium';
+    testComponent.labelSize = 'medium';
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--m');
 
-    hostTestComponent.labelSize = 'large';
+    testComponent.labelSize = 'large';
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--l');

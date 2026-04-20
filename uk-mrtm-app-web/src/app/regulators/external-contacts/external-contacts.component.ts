@@ -10,10 +10,10 @@ import { ButtonDirective, GovukTableColumn, LinkDirective, SortEvent, TableCompo
 
 @Component({
   selector: 'mrtm-external-contacts',
-  imports: [ButtonDirective, TableComponent, LinkDirective, RouterLink, AsyncPipe],
-  standalone: true,
   templateUrl: './external-contacts.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [ButtonDirective, TableComponent, LinkDirective, RouterLink, AsyncPipe],
 })
 export class ExternalContactsComponent implements OnInit {
   readonly router = inject(Router);
@@ -27,7 +27,7 @@ export class ExternalContactsComponent implements OnInit {
     { field: 'name', header: 'Displayed name', isSortable: true, isHeader: true },
     { field: 'email', header: 'Email address', isSortable: true },
     { field: 'description', header: 'Description' },
-    { field: null, header: 'Actions', hiddenHeader: true },
+    { field: null, header: null },
   ];
   nonEditableColumns = this.editableColumns.slice(0, 3);
 

@@ -9,10 +9,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
+import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
-import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
-import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
+import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.mrtm.api.integration.registry.emissionsupdated.domain.ReportableEmissionsUpdatedSubmittedEventDetails;
 import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsEntity;
@@ -22,6 +22,9 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestPayload
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerRequestQueryService;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
+import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
+import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.integration.model.emission.AccountEmissionsUpdateEvent;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
@@ -31,11 +34,14 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.Month;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
+import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.capitalizeFirstLetter;
 
 @Log4j2
 @Service
@@ -48,12 +54,11 @@ public class ReportableEmissionsNotifyRegistryService {
     private final MrtmAccountQueryService accountQueryService;
     private final AerRequestQueryService requestQueryService;
     private final ReportableEmissionsSendToRegistryProducer reportableEmissionsSendToRegistryProducer;
-    private final NotifyRegistryEmailService notifyRegistryEmailService;
     private final KafkaTemplate<String, AccountEmissionsUpdateEvent> accountEmissionsUpdateEventKafkaTemplate;
     private final ReportableEmissionsRepository reportableEmissionsRepository;
     private final RegistryIntegrationEmailProperties emailProperties;
     private final DateService dateService;
-
+    private final NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
     @Value("${feature-flag.updated.emissions.integration.reporting.period.check.disabled}")
     private boolean emissionsUpdatedReportingPeriodCheckDisabled;
 
@@ -143,9 +148,6 @@ public class ReportableEmissionsNotifyRegistryService {
             .reportableEmissions(roundedEmissions.longValueExact())
             .reportingYear(event.getYear()).build();
 
-        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getRegistryId(),
-            INTEGRATION_POINT_KEY, "Sending emissions event to registry " + accountEmissionsUpdatedRequestEvent);
-
         reportableEmissionsSendToRegistryProducer.produce(accountEmissionsUpdatedRequestEvent,
             accountEmissionsUpdateEventKafkaTemplate);
 
@@ -156,10 +158,9 @@ public class ReportableEmissionsNotifyRegistryService {
     }
 
     private void notifyRegulator(MrtmAccount account) {
-        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getId(), INTEGRATION_POINT_KEY,
+        log.info(REQUEST_LOG_FORMAT, SERVICE_KEY, account.getId(),
+            INTEGRATION_POINT_KEY,
             "Cannot send emissions to ETS Registry because account doesn't have a registry id");
-
-        String recipient = emailProperties.getEmail().get(account.getCompetentAuthority().getCode());
 
         String noRegistryIdErrorMessage = "No Registry ID exists in METS account";
         IntegrationEventErrorDetails integrationEventErrorDetails = IntegrationEventErrorDetails.builder()
@@ -167,17 +168,21 @@ public class ReportableEmissionsNotifyRegistryService {
             .errorMessage(noRegistryIdErrorMessage)
             .build();
 
-        notifyRegistryEmailService.notifyRegulator(
-            NotifyRegistryEmailServiceParams.builder()
-                .account(account)
-                .emitterId(account.getBusinessId())
-                .errorsForMail(List.of(integrationEventErrorDetails))
-                .recipient(recipient)
-                .isFordway(false)
+        final Map<String, Object> templateParams = new HashMap<>();
+        templateParams.put(MrtmEmailNotificationTemplateConstants.EMITTER_ID, account.getBusinessId());
+        templateParams.put(MrtmEmailNotificationTemplateConstants.ERRORS, List.of(integrationEventErrorDetails));
+        templateParams.put(MrtmEmailNotificationTemplateConstants.CORRELATION_ID, PayloadFieldsUtils.EMPTY);
+        templateParams.put(MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, capitalizeFirstLetter(SERVICE_KEY));
+        templateParams.put(MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, account.getName());
+        templateParams.put(MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, INTEGRATION_POINT_KEY);
+
+        final EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
+            .notificationTemplateData(EmailNotificationTemplateData.builder()
                 .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
-                .integrationPoint(INTEGRATION_POINT_KEY)
-                .build()
-        );
+                .templateParams(templateParams)
+                .build())
+            .build();
+        notificationEmailService.notifyRecipient(emailData, emailProperties.getEmail().get(account.getCompetentAuthority().getCode()));
     }
 
     private Request getAer(ReportableEmissionsUpdatedEvent event, Long accountId) {

@@ -16,10 +16,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-change-2fa',
-  imports: [WizardStepComponent, FormsModule, ReactiveFormsModule, TextInputComponent, PanelComponent],
-  standalone: true,
   templateUrl: './change-2fa.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [WizardStepComponent, FormsModule, ReactiveFormsModule, TextInputComponent, PanelComponent],
 })
 export class Change2faComponent implements PendingRequest {
   readonly pendingRequest = inject(PendingRequestService);

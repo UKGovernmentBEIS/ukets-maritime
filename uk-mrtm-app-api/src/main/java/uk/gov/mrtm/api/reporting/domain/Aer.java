@@ -61,8 +61,6 @@ public class Aer {
     @NotNull
     private AerTotalEmissions totalEmissions;
 
-    private String thirdPartyDataProviderName;
-
     @JsonIgnore
     public Set<UUID> getAerSectionAttachmentIds() {
         Set<UUID> attachments = new HashSet<>();

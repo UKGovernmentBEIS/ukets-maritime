@@ -5,7 +5,6 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.authorization.rules.services.authorityinfo.providers.EmpAuthorityInfoProvider;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanEntity;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
@@ -14,19 +13,14 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmpDetailsDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.repository.EmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.emissionsmonitoringplan.transform.EmissionsMonitoringPlanMapper;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
-import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
-import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
-import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.documents.service.FileDocumentService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
-import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.repository.RequestRepository;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -135,30 +129,5 @@ public class EmissionsMonitoringPlanQueryService implements EmpAuthorityInfoProv
     public Long getEmpAccountById(String id) {
         return emissionsMonitoringPlanRepository.findEmpAccountById(id)
             .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
-    }
-
-    @Transactional(readOnly = true)
-    public EmissionsMonitoringPlan getLastestEmissionsMonitoringPlan(Long accountId) {
-        Optional<EmissionsMonitoringPlanDTO> empOptional = getEmissionsMonitoringPlanDTOByAccountId(accountId);
-
-        return empOptional.isPresent()
-            ? empOptional.get().getEmpContainer().getEmissionsMonitoringPlan()
-            : getEmpFromPendingApprovalRequest(accountId);
-    }
-
-    private EmissionsMonitoringPlan getEmpFromPendingApprovalRequest(Long accountId) {
-        List<Request> requestList = requestRepository.findByRequestTypeAndResourceTypeAndResourceId(
-            MrtmRequestType.EMP_ISSUANCE, ResourceType.ACCOUNT, String.valueOf(accountId));
-
-        Optional<RequestTask> requestTask = requestList.stream()
-            .findFirst()
-            .map(Request::getRequestTasks)
-            .orElse(Collections.emptyList())
-            .stream()
-            .filter(rt -> MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_REVIEW.equals(rt.getType().getCode()))
-            .findFirst();
-
-        return requestTask.map(task -> ((EmpIssuanceApplicationReviewRequestTaskPayload) task.getPayload()).getEmissionsMonitoringPlan())
-            .orElse(null);
     }
 }

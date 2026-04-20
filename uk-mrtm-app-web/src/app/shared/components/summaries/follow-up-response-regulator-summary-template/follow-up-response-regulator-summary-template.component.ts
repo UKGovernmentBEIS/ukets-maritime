@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { GovukDatePipe } from '@netz/common/pipes';
@@ -17,6 +17,7 @@ import { FollowUpResponseDTO } from '@shared/types';
 
 @Component({
   selector: 'mrtm-follow-up-response-regulator-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryDownloadFilesComponent,
@@ -29,13 +30,12 @@ import { FollowUpResponseDTO } from '@shared/types';
     GovukDatePipe,
     NotProvidedDirective,
   ],
-  standalone: true,
   templateUrl: './follow-up-response-regulator-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FollowUpResponseRegulatorSummaryTemplateComponent {
-  readonly followUpResponseDTO = input.required<FollowUpResponseDTO>();
-  readonly changeLink = input<string>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) followUpResponseDTO: FollowUpResponseDTO;
+  @Input() changeLink: string;
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 }

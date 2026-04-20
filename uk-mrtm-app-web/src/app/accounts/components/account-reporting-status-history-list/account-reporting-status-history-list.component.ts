@@ -11,12 +11,12 @@ import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-account-reporting-status-history-list',
-  imports: [AccountReportingStatusPipe, GovukDatePipe, TableComponent, NotProvidedDirective],
-  standalone: true,
   templateUrl: './account-reporting-status-history-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [AccountReportingStatusPipe, GovukDatePipe, TableComponent, NotProvidedDirective],
 })
 export class AccountReportingStatusHistoryListComponent {
-  readonly history = input.required<Array<AccountReportingStatusHistoryDTO>>();
-  readonly columns = signal(ACCOUNT_REPORTING_HISTORY_COLUMNS);
+  history = input.required<Array<AccountReportingStatusHistoryDTO>>();
+  columns = signal(ACCOUNT_REPORTING_HISTORY_COLUMNS);
 }

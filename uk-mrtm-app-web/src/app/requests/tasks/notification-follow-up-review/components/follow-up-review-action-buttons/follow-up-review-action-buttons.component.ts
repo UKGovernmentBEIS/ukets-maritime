@@ -10,8 +10,8 @@ import { REVIEW_DECISION_SUB_TASK } from '@requests/tasks/notification-follow-up
 
 @Component({
   selector: 'mrtm-follow-up-review-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     @if (canBeDisplayed) {
       <div class="govuk-button-group">

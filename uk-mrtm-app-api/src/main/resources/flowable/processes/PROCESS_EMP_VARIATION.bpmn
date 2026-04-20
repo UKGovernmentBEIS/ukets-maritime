@@ -58,9 +58,7 @@
     <sequenceFlow id="Flow_1ul4f0f" name="cancelled" sourceRef="Gateway_0kxajqi" targetRef="Activity_0dc857y">
       <conditionExpression xsi:type="tFormalExpression">${empVariationSubmitOutcome=='CANCELLED'}</conditionExpression>
     </sequenceFlow>
-    <endEvent id="Event_0xwu20n">
-      <incoming>Flow_1e0fxnx</incoming>
-    </endEvent>
+    <endEvent id="Event_0xwu20n" />
     <sequenceFlow id="Flow_1mgsto7" sourceRef="Activity_11lfq4t" targetRef="Event_1435rl5" />
     <serviceTask id="Activity_11lfq4t" name="Update Workflow status to CANCELLED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
       <extensionElements>
@@ -85,7 +83,7 @@
     <serviceTask id="Activity_1snl8xz" name="Set regulator led request type prefix" flowable:delegateExpression="#{empVariationSetRegulatorLedRequestTypePrefixHandlerFlowable}" />
     <sequenceFlow id="Flow_1czvs4b" sourceRef="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" targetRef="Gateway_1p5poiy" />
     <userTask id="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" name="Regulator:&#10;Submit EMP Variation Aplication" flowable:formFieldValidation="true">
-      <incoming>Flow_1n11i8a</incoming>
+      <incoming>Flow_1fhjewm</incoming>
     </userTask>
     <exclusiveGateway id="Gateway_1p5poiy" name="what is the submit outcome?" default="Flow_1tc0wml" />
     <serviceTask id="Activity_0bhmh2k" name="Add cancelled request action" flowable:delegateExpression="#{empVariationAddCancelledRequestActionHandlerFlowable}" />
@@ -119,7 +117,7 @@
     <serviceTask id="Activity_0q23j5f" name="Generate approved documents" flowable:delegateExpression="#{empVariationRegulatorLedApprovedGenerateDocumentsHandlerFlowable}" />
     <sequenceFlow id="Flow_0ru8iix" sourceRef="Activity_1t4bki7" targetRef="Activity_1cziaqw" />
     <serviceTask id="Activity_1t4bki7" name="Add submitted request action" flowable:delegateExpression="#{empVariationAddRegulatorLedApprovedRequestActionHandlerFlowable}" />
-    <sequenceFlow id="Flow_1hdtlcs" sourceRef="Activity_0fqgr7w" targetRef="Activity_1j1xob0" />
+    <sequenceFlow id="Flow_1hdtlcs" sourceRef="Activity_0fqgr7w" targetRef="Event_0xwu20n" />
     <serviceTask id="Activity_0fqgr7w" name="Update Workflow status to APPROVED" flowable:delegateExpression="#{requestUpdateStatusHandlerFlowable}">
       <extensionElements>
         <flowable:field name="requestStatus">
@@ -146,16 +144,19 @@
         <flowable:in source="${false}" target="expires" />
         <flowable:in source="skipPayment" target="skipPayment" />
       </extensionElements>
-      <incoming>Flow_1hdtlcs</incoming>
-      <outgoing>Flow_1e0fxnx</outgoing>
+      <incoming>Flow_1f1w9dk</incoming>
     </callActivity>
     <serviceTask id="Activity_00ear9f" name="Populate request metadata" flowable:delegateExpression="#{empVariationApprovedPopulateRequestMetadataHandlerFlowable}" />
     <sequenceFlow id="Flow_1kas0lh" sourceRef="Activity_00ear9f" targetRef="Activity_1ib2lxq" />
     <sequenceFlow id="Flow_04bbuo6" name="submitted" sourceRef="Gateway_0kxajqi" targetRef="Activity_0la8qh3">
       <conditionExpression xsi:type="tFormalExpression">${empVariationSubmitOutcome=='SUBMITTED'}</conditionExpression>
     </sequenceFlow>
-    <sequenceFlow id="Flow_1n11i8a" sourceRef="Activity_1snl8xz" targetRef="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" />
-    <sequenceFlow id="Flow_1e0fxnx" sourceRef="Activity_1j1xob0" targetRef="Event_0xwu20n" />
+    <parallelGateway id="Gateway_15xf941" />
+    <sequenceFlow id="Flow_1n11i8a" sourceRef="Activity_1snl8xz" targetRef="Gateway_15xf941" />
+    <endEvent id="Event_0x9r9bc" />
+    <sequenceFlow id="Flow_0gys3l4" sourceRef="Activity_1j1xob0" targetRef="Event_0x9r9bc" />
+    <sequenceFlow id="Flow_1fhjewm" sourceRef="Gateway_15xf941" targetRef="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" />
+    <sequenceFlow id="Flow_1f1w9dk" sourceRef="Gateway_15xf941" targetRef="Activity_1j1xob0" />
     <textAnnotation id="TextAnnotation_105sg2r">
       <text>requestId</text>
     </textAnnotation>
@@ -204,6 +205,9 @@
         <bpmndi:BPMNLabel>
           <omgdc:Bounds x="773" y="197.5" width="84" height="27" />
         </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Event_0xwu20n" bpmnElement="Event_0xwu20n">
+        <omgdc:Bounds x="2232" y="802" width="28" height="28" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Activity_11lfq4t" bpmnElement="Activity_11lfq4t">
         <omgdc:Bounds x="1900" y="510" width="100" height="80" />
@@ -286,14 +290,17 @@
       <bpmndi:BPMNShape id="BPMNShape_Activity_1cziaqw" bpmnElement="Activity_1cziaqw">
         <omgdc:Bounds x="1710" y="780" width="100" height="80" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_1j1xob0" bpmnElement="Activity_1j1xob0">
+        <omgdc:Bounds x="560" y="1030" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_Activity_00ear9f" bpmnElement="Activity_00ear9f">
         <omgdc:Bounds x="1290" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_Activity_1j1xob0" bpmnElement="Activity_1j1xob0">
-        <omgdc:Bounds x="2060" y="780" width="100" height="80" />
+      <bpmndi:BPMNShape id="BPMNShape_Event_0x9r9bc" bpmnElement="Event_0x9r9bc">
+        <omgdc:Bounds x="2222" y="1052" width="28" height="28" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="BPMNShape_Event_0xwu20n" bpmnElement="Event_0xwu20n">
-        <omgdc:Bounds x="2232" y="806" width="28" height="28" />
+      <bpmndi:BPMNShape id="BPMNShape_Gateway_15xf941" bpmnElement="Gateway_15xf941">
+        <omgdc:Bounds x="335" y="790" width="40" height="40" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_TextAnnotation_105sg2r" bpmnElement="TextAnnotation_105sg2r">
         <omgdc:Bounds x="160" y="302" width="70" height="30" />
@@ -401,7 +408,7 @@
       <bpmndi:BPMNEdge id="BPMNEdge_Flow_1hv2s0d" bpmnElement="Flow_1hv2s0d" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
         <omgdi:waypoint x="2000" y="940" />
         <omgdi:waypoint x="2246" y="940" />
-        <omgdi:waypoint x="2246" y="834" />
+        <omgdi:waypoint x="2246" y="830" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_Flow_0iaydw6" bpmnElement="Flow_0iaydw6" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
         <omgdi:waypoint x="1629.9499999993895" y="940" />
@@ -459,8 +466,8 @@
         <omgdi:waypoint x="1710" y="820" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_Flow_1hdtlcs" bpmnElement="Flow_1hdtlcs" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
-        <omgdi:waypoint x="2000" y="820" />
-        <omgdi:waypoint x="2060" y="820" />
+        <omgdi:waypoint x="1999.95" y="819.3243243243243" />
+        <omgdi:waypoint x="2232.0012491840807" y="816.1884968830509" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_Flow_14dhuyl" bpmnElement="Flow_14dhuyl" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
         <omgdi:waypoint x="1519.9499999999928" y="120" />
@@ -503,16 +510,24 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_Flow_1n11i8a" bpmnElement="Flow_1n11i8a" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="20.0" flowable:targetDockerY="20.0">
         <omgdi:waypoint x="355" y="540" />
-        <omgdi:waypoint x="355" y="810" />
+        <omgdi:waypoint x="355" y="790" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0gys3l4" bpmnElement="Flow_0gys3l4" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="659.95" y="1069.876998769988" />
+        <omgdi:waypoint x="2222.0000383335046" y="1066.0343173612073" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1fhjewm" bpmnElement="Flow_1fhjewm" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="375" y="810" />
         <omgdi:waypoint x="560" y="810" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1f1w9dk" bpmnElement="Flow_1f1w9dk" flowable:sourceDockerX="20.0" flowable:sourceDockerY="20.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="355" y="830" />
+        <omgdi:waypoint x="355" y="1070" />
+        <omgdi:waypoint x="560" y="1070" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_Association_0imzgfa" bpmnElement="Association_0imzgfa" flowable:sourceDockerX="15.0" flowable:sourceDockerY="15.0" flowable:targetDockerX="35.0" flowable:targetDockerY="0.0">
         <omgdi:waypoint x="255" y="263" />
         <omgdi:waypoint x="195" y="302" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1e0fxnx_di" bpmnElement="Flow_1e0fxnx">
-        <omgdi:waypoint x="2160" y="820" />
-        <omgdi:waypoint x="2232" y="820" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

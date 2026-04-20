@@ -4,13 +4,10 @@
   <button type="button" (click)="onDelete()" netzPendingButton govukWarnButton>Yes, delete this note</button>
 </div>
 
-<div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
-  <a govukLink [routerLink]="backUrl" fragment="notes">
-    @if (workflowId) {
-      Return to: Workflow notes
-    } @else {
-      Return to: Account notes
-    }
-  </a>
-</div>
+<a govukLink [routerLink]="backUrl" fragment="notes">
+  @if (workflowId) {
+    Return to: Workflow notes
+  } @else {
+    Return to: Account notes
+  }
+</a>

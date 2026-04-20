@@ -1,6 +1,6 @@
-import { RegulatorImprovementResponse } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { RegulatorImprovementResponse } from '@mrtm/api';
 
 export enum VirRespondToOperatorWizardStep {
   SUMMARY = '../',

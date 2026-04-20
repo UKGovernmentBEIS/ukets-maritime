@@ -1,11 +1,13 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+import { RequestInfoDTO } from '@mrtm/api';
+
 @Pipe({
   name: 'competentAuthority',
   standalone: true,
 })
 export class CompetentAuthorityPipe implements PipeTransform {
-  transform(value: string): string {
+  transform(value: RequestInfoDTO['competentAuthority']): string {
     switch (value) {
       case 'ENGLAND':
         return 'Environment Agency';

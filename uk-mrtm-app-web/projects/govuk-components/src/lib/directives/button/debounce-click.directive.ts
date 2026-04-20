@@ -1,25 +1,25 @@
-import { Directive, input, OnDestroy, OnInit, output } from '@angular/core';
+import { Directive, EventEmitter, HostListener, Input, OnDestroy, OnInit, Output } from '@angular/core';
 
 import { debounceTime, Subject, Subscription } from 'rxjs';
 
 @Directive({
   selector: 'button[govukDebounceClick]',
   standalone: true,
-  host: { '(click)': 'onClick($event)' },
 })
 export class DebounceClickDirective implements OnInit, OnDestroy {
-  readonly debounceTime = input(500);
-  readonly debounceClick = output<MouseEvent>();
+  @Input() debounceTime = 500;
+  @Output() readonly debounceClick = new EventEmitter<MouseEvent>();
   private subscription = new Subscription();
   private clicks = new Subject<MouseEvent>();
 
+  @HostListener('click', ['$event'])
   onClick(event: MouseEvent): void {
     this.clicks.next(event);
   }
 
   ngOnInit(): void {
     this.subscription = this.clicks
-      .pipe(debounceTime(this.debounceTime()))
+      .pipe(debounceTime(this.debounceTime))
       .subscribe((e: MouseEvent) => this.debounceClick.emit(e));
   }
 

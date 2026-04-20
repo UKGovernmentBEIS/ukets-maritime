@@ -26,7 +26,7 @@ import { CustomHttpParameterCodec } from '../encoder';
 import { RequestTaskActionProcessDTO } from '../model/requestTaskActionProcessDTO';
 import { RequestTaskItemDTO } from '../model/requestTaskItemDTO';
 import { RequestTaskPayload } from '../model/requestTaskPayload';
-import { ThirdPartyDataProviderStagingDetailsDTO } from '../model/thirdPartyDataProviderStagingDetailsDTO';
+import { ThirdPartyDataProviderDTO } from '../model/thirdPartyDataProviderDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -192,19 +192,19 @@ export class TasksService {
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<ThirdPartyDataProviderStagingDetailsDTO>;
+  ): Observable<ThirdPartyDataProviderDTO>;
   public getThirdPartyDataProviderInfoByRequestId(
     id: number,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpResponse<ThirdPartyDataProviderStagingDetailsDTO>>;
+  ): Observable<HttpResponse<ThirdPartyDataProviderDTO>>;
   public getThirdPartyDataProviderInfoByRequestId(
     id: number,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
-  ): Observable<HttpEvent<ThirdPartyDataProviderStagingDetailsDTO>>;
+  ): Observable<HttpEvent<ThirdPartyDataProviderDTO>>;
   public getThirdPartyDataProviderInfoByRequestId(
     id: number,
     observe: any = 'body',
@@ -257,19 +257,15 @@ export class TasksService {
     }
 
     const localVarPath = `/v1.0/tasks/${this.configuration.encodeParam({ name: 'id', value: id, in: 'path', style: 'simple', explode: false, dataType: 'number', dataFormat: 'int64' })}/third-party-data-provider-info`;
-    return this.httpClient.request<ThirdPartyDataProviderStagingDetailsDTO>(
-      'get',
-      `${this.configuration.basePath}${localVarPath}`,
-      {
-        context: localVarHttpContext,
-        responseType: <any>responseType_,
-        withCredentials: this.configuration.withCredentials,
-        headers: localVarHeaders,
-        observe: observe,
-        transferCache: localVarTransferCache,
-        reportProgress: reportProgress,
-      },
-    );
+    return this.httpClient.request<ThirdPartyDataProviderDTO>('get', `${this.configuration.basePath}${localVarPath}`, {
+      context: localVarHttpContext,
+      responseType: <any>responseType_,
+      withCredentials: this.configuration.withCredentials,
+      headers: localVarHeaders,
+      observe: observe,
+      transferCache: localVarTransferCache,
+      reportProgress: reportProgress,
+    });
   }
 
   /**

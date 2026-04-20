@@ -31,6 +31,6 @@ describe('PaymentNotCompletedComponent', () => {
   });
 
   it('should show content', () => {
-    expect(page.heading1.textContent).toEqual('The payment task must be closed before you can proceed');
+    expect(page.heading1.textContent.trim()).toEqual('The payment task must be closed before you can proceed');
   });
 });

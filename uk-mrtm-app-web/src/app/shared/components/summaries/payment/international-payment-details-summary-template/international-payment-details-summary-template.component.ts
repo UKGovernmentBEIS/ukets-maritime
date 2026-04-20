@@ -10,8 +10,8 @@ import {
 } from '@netz/govuk-components';
 @Component({
   selector: 'mrtm-international-payment-details-summary-template',
-  imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
   standalone: true,
+  imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
   templateUrl: './international-payment-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

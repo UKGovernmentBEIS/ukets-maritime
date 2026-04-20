@@ -32,6 +32,9 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-upsert-note',
+  templateUrl: './upsert-note.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     ErrorSummaryComponent,
     PageHeadingComponent,
@@ -45,9 +48,6 @@ interface ViewModel {
     OperatorAccountsStatusColorPipe,
     TagComponent,
   ],
-  standalone: true,
-  templateUrl: './upsert-note.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UpsertNoteComponent implements OnInit {
   protected readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder);

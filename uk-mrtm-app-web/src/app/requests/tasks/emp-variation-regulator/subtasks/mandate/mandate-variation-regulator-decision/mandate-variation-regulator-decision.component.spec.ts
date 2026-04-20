@@ -1,13 +1,13 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute, provideRouter } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { BasePage, MockType } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
 import { TaskItemStatus } from '@requests/common';
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
@@ -24,8 +24,8 @@ describe('MandateVariationRegulatorDecisionComponent', () => {
   let fixture: ComponentFixture<MandateVariationRegulatorDecisionComponent>;
   let page: Page;
   let store: RequestTaskStore;
-  let route: ActivatedRoute;
 
+  const route = new ActivatedRouteStub();
   const taskService: MockType<EmpVariationRegulatorService> = {
     saveVariationRegulatorDecision: jest.fn().mockReturnValue(of({})),
   };
@@ -65,7 +65,7 @@ describe('MandateVariationRegulatorDecisionComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideRouter([]),
+        { provide: ActivatedRoute, useValue: route },
         { provide: TaskService, useValue: taskService },
         ...taskProviders,
         { provide: HTML_DIFF, useValue: true },
@@ -75,7 +75,6 @@ describe('MandateVariationRegulatorDecisionComponent', () => {
 
   beforeEach(() => {
     store = TestBed.inject(RequestTaskStore);
-    route = TestBed.inject(ActivatedRoute);
     store.setState(
       mockEmpVariationRegulatorStateBuild({ mandate: mockEmpMandate }, { mandate: TaskItemStatus.IN_PROGRESS }),
     );

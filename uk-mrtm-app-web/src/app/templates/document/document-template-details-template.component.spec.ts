@@ -14,10 +14,9 @@ describe('DocumentTemplateDetailsTemplateComponent', () => {
   let page: Page;
 
   @Component({
-    imports: [DocumentTemplateDetailsTemplateComponent],
-    standalone: true,
     template: `
-      <mrtm-document-template-details-template [documentTemplate]="documentTemplate" />
+      <mrtm-document-template-details-template
+        [documentTemplate]="documentTemplate"></mrtm-document-template-details-template>
     `,
   })
   class TestComponent {
@@ -34,7 +33,9 @@ describe('DocumentTemplateDetailsTemplateComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [DocumentTemplateDetailsTemplateComponent],
       providers: [provideRouter([])],
+      declarations: [TestComponent],
     }).compileComponents();
   });
 

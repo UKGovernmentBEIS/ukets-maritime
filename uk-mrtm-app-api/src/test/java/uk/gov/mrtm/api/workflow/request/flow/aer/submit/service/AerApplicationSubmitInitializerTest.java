@@ -9,9 +9,10 @@ import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.dto.AccountReportingStatusDTO;
 import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
-import uk.gov.mrtm.api.account.service.reportingstatus.AccountReportingStatusQueryService;
+import uk.gov.mrtm.api.account.transform.AddressStateMapper;
 import uk.gov.mrtm.api.common.domain.AddressState;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
+import uk.gov.mrtm.api.account.service.reportingstatus.AccountReportingStatusQueryService;
 import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.reporting.domain.AerOperatorDetails;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPayloadType;
@@ -47,6 +48,9 @@ class AerApplicationSubmitInitializerTest {
 
     @Mock
     private MrtmAccountQueryService mrtmAccountQueryService;
+
+    @Mock
+    private AddressStateMapper addressStateMapper;
 
     @Mock
     private AccountReportingStatusQueryService accountReportingStatusQueryService;
@@ -146,6 +150,7 @@ class AerApplicationSubmitInitializerTest {
 
         when(mrtmAccountQueryService.getAccountById(accountId)).thenReturn(MrtmAccount.builder().id(accountId).address(newAddress).build());
         when(accountReportingStatusQueryService.getReportingStatusByYear(accountId, year)).thenReturn(AccountReportingStatusDTO.builder().accountId(accountId).build());
+        when(addressStateMapper.toAddressState(newAddress)).thenReturn(newAddressDto);
 
         RequestTaskPayload expectedTaskPayload = AerApplicationSubmitRequestTaskPayload.builder()
             .payloadType(MrtmRequestTaskPayloadType.AER_APPLICATION_SUBMIT_PAYLOAD)
@@ -162,7 +167,8 @@ class AerApplicationSubmitInitializerTest {
 
         assertEquals(expectedTaskPayload, actualTaskPayload);
         verify(mrtmAccountQueryService).getAccountById(accountId);
-        verifyNoMoreInteractions(mrtmAccountQueryService);
+        verify(addressStateMapper).toAddressState(newAddress);
+        verifyNoMoreInteractions(mrtmAccountQueryService, addressStateMapper);
     }
 
     @Test

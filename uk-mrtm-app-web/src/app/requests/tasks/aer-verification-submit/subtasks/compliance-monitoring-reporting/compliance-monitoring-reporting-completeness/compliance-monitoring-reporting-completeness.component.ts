@@ -25,6 +25,7 @@ import { ComplianceToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-compliance-monitoring-reporting-completeness',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     TextareaComponent,
@@ -34,10 +35,9 @@ import { ComplianceToTextPipe } from '@shared/pipes';
     WizardStepComponent,
     ComplianceToTextPipe,
   ],
-  standalone: true,
   templateUrl: './compliance-monitoring-reporting-completeness.component.html',
-  providers: [complianceMonitoringReportingCompletenessFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [complianceMonitoringReportingCompletenessFormProvider],
 })
 export class ComplianceMonitoringReportingCompletenessComponent {
   readonly map = complianceMonitoringReportingMap;

@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -11,6 +11,9 @@ import { ButtonDirective, ErrorSummaryComponent, LinkDirective } from '@netz/gov
 
 @Component({
   selector: 'mrtm-wizard-step',
+  standalone: true,
+  templateUrl: './wizard-step.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     ReactiveFormsModule,
     AsyncPipe,
@@ -22,40 +25,36 @@ import { ButtonDirective, ErrorSummaryComponent, LinkDirective } from '@netz/gov
     ErrorSummaryComponent,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
-  templateUrl: './wizard-step.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WizardStepComponent {
-  readonly showBackLink = input(false);
-  readonly formGroup = input<UntypedFormGroup>();
-  readonly heading = input<string>();
-  readonly caption = input<string>();
-  readonly submitText = input('Continue');
-  readonly hideSubmit = input<boolean>();
-  readonly showReturnLink = input(false);
-  readonly showCancelLink = input<boolean>(false);
-  readonly cancelLinkPath = input<string>();
-  readonly isTwoThirds = input<boolean>(false);
-  readonly size = input<'l' | 'xl'>('l');
-  readonly formSubmit = output<UntypedFormGroup>();
+  @Input() showBackLink = false;
+  @Input() formGroup: UntypedFormGroup;
+  @Input() heading: string;
+  @Input() caption: string;
+  @Input() submitText = 'Continue';
+  @Input() hideSubmit: boolean;
+  @Input() showReturnLink = false;
+  @Input() showCancelLink: boolean = false;
+  @Input() cancelLinkPath: string;
+  @Input() isTwoThirds: boolean = false;
+  @Output() readonly formSubmit = new EventEmitter<UntypedFormGroup>();
 
   isSummaryDisplayedSubject = new BehaviorSubject(false);
 
   onSubmit(): void {
-    this.formGroup()
-      .statusChanges.pipe(
-        startWith(this.formGroup().status),
+    this.formGroup.statusChanges
+      .pipe(
+        startWith(this.formGroup.status),
         filter((status) => status !== 'PENDING'),
         take(1),
       )
       .subscribe((status) => {
         switch (status) {
           case 'VALID':
-            this.formSubmit.emit(this.formGroup());
+            this.formSubmit.emit(this.formGroup);
             break;
           case 'INVALID':
-            this.formGroup().markAllAsTouched();
+            this.formGroup.markAllAsTouched();
             this.isSummaryDisplayedSubject.next(true);
             break;
         }

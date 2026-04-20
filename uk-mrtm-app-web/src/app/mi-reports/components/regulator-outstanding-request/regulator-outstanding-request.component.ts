@@ -12,8 +12,8 @@ import { existingControlContainer } from '@shared/providers';
 
 @Component({
   selector: 'mrtm-regulator-outstanding-request',
-  imports: [MultiSelectComponent, ReactiveFormsModule, MultiSelectItemComponent],
   standalone: true,
+  imports: [MultiSelectComponent, ReactiveFormsModule, MultiSelectItemComponent],
   templateUrl: './regulator-outstanding-request.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [existingControlContainer],

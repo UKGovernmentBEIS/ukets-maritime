@@ -4,11 +4,7 @@ import { MrtmItemDTO } from '@mrtm/api';
 
 import { ITEM_LINK_REQUEST_TYPES_WHITELIST } from './item-link.provider';
 
-@Pipe({
-  name: 'itemLink',
-  standalone: true,
-  pure: true,
-})
+@Pipe({ name: 'itemLink', pure: true, standalone: true })
 export class ItemLinkPipe implements PipeTransform {
   private readonly requestTypesWhitelist: string[] = inject(ITEM_LINK_REQUEST_TYPES_WHITELIST);
 

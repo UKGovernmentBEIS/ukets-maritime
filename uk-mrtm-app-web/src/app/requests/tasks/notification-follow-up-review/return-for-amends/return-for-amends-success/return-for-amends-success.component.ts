@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-return-for-amends-success',
-  imports: [PanelComponent, LinkDirective, RouterLink],
   standalone: true,
+  imports: [PanelComponent, LinkDirective, RouterLink],
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
@@ -16,7 +16,7 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
       </div>
     </div>
     <div>
-      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+      <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
       <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
     </div>
   `,

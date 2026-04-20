@@ -8,8 +8,8 @@ import { FileUploadComponent } from './file-upload.component';
 
 describe('FileUploadComponent', () => {
   @Component({
-    imports: [FileUploadComponent, ReactiveFormsModule],
     standalone: true,
+    imports: [FileUploadComponent, ReactiveFormsModule],
     template: '<div govukFileUpload [formControl]="control"></div>',
   })
   class TestComponent {

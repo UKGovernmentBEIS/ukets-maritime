@@ -34,10 +34,7 @@ describe('UpsertNoteComponent', () => {
     return fixture.whenStable();
   };
 
-  @Component({
-    standalone: true,
-    template: '',
-  })
+  @Component({ template: '', standalone: true })
   class NoopComponent {}
 
   class Page extends BasePage<UpsertNoteComponent> {

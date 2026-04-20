@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.GenericWebApplicationContext;
+import uk.gov.mrtm.api.workflow.request.core.service.MrtmRequestQueryService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
@@ -86,6 +87,9 @@ class RequestControllerTest {
 
     @Mock
     private RequestQueryService requestQueryService;
+
+    @Mock
+    private MrtmRequestQueryService mrtmRequestQueryService;
 
     private ObjectMapper mapper;
     
@@ -218,7 +222,7 @@ class RequestControllerTest {
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(requestQueryService.findRequestDetailsBySearchCriteria(criteria, user)).thenReturn(results);
+        when(mrtmRequestQueryService.findRequestDetailsBySearchCriteria(criteria, user)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.post(BASE_PATH + "/workflows")
                 .content(mapper.writeValueAsString(criteria))
@@ -227,7 +231,7 @@ class RequestControllerTest {
                 .andExpect(jsonPath("$.total").value(results.getTotal()))
                 .andExpect(jsonPath("$.requestDetails[0].id").value(workflowResult1.getId()));
 
-        verify(requestQueryService, times(1)).findRequestDetailsBySearchCriteria(criteria, user);
+        verify(mrtmRequestQueryService, times(1)).findRequestDetailsBySearchCriteria(criteria, user);
     }
 
     @Test
@@ -252,7 +256,7 @@ class RequestControllerTest {
                 .andExpect(status().isForbidden());
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(requestQueryService, never()).findRequestDetailsBySearchCriteria(any(), eq(user));
+        verify(mrtmRequestQueryService, never()).findRequestDetailsBySearchCriteria(any(), eq(user));
     }
     
     private LocalValidatorFactoryBean mockValidatorFactoryBean() {

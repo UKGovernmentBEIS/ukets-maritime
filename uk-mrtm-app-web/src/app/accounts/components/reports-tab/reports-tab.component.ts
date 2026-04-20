@@ -16,11 +16,12 @@ import { ReportGroupType } from '@accounts/components/reports-tab/reports-tab.ty
 import { OperatorAccountsStore, selectAccount } from '@accounts/store';
 import { BigNumberPipe, RequestStatusTagColorPipe } from '@shared/pipes';
 import { MrtmRequestStatus, MrtmRequestType, reportStatusMap, reportTypesMap } from '@shared/types';
-import { FormUtils, isNil, originalOrder, taskActionTypeToTitleTransformer } from '@shared/utils';
+import { FormUtils, originalOrder, taskActionTypeToTitleTransformer } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-reports-tab',
+  standalone: true,
   imports: [
     CheckboxComponent,
     CheckboxesComponent,
@@ -35,7 +36,6 @@ import BigNumber from 'bignumber.js';
     I18nSelectPipe,
     BigNumberPipe,
   ],
-  standalone: true,
   templateUrl: './reports-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -66,7 +66,7 @@ export class ReportsTabComponent {
     0,
   );
 
-  readonly reportResults = toSignal(
+  reportResults = toSignal(
     combineLatest([
       this.accountId$,
       this.selectedTypes$,
@@ -87,7 +87,7 @@ export class ReportsTabComponent {
     ),
   );
 
-  readonly groupedReports: Signal<Array<ReportGroupType>> = computed(() => {
+  groupedReports: Signal<Array<ReportGroupType>> = computed(() => {
     const reports = this.reportResults()?.requestDetails ?? [];
 
     const reducedResult = reports.reduce((result, report) => {
@@ -102,30 +102,16 @@ export class ReportsTabComponent {
     }, {});
 
     return Object.entries(reducedResult)
-      .map(([reportingYear, items]) => {
-        const doeItem = items.find(
-          (reportItem: RequestDetailsDTO) =>
-            reportItem?.requestType === 'DOE' &&
-            !isNil((reportItem?.requestMetadata as any)?.emissions?.surrenderEmissions),
-        );
-        const nonDoeItems = items.filter((item: RequestDetailsDTO) => item?.requestType !== 'DOE');
-
-        return {
-          reportingYear,
-          total: doeItem
-            ? new BigNumber(0).plus((doeItem?.requestMetadata as any)?.emissions?.surrenderEmissions)
-            : nonDoeItems.filter(Boolean).reduce((acc: BigNumber | undefined, reportItem: RequestDetailsDTO) => {
-                const surrenderEmissions = (reportItem?.requestMetadata as any)?.emissions?.surrenderEmissions;
-
-                if (!isNil(surrenderEmissions)) {
-                  return (acc ?? new BigNumber(0)).plus(surrenderEmissions);
-                }
-
-                return acc;
-              }, undefined),
-          items,
-        };
-      })
+      .map(([key, value]) => ({
+        reportingYear: key,
+        total: value.reduce((acc: BigNumber | undefined, reportItem: RequestDetailsDTO) => {
+          if ((reportItem?.requestMetadata as any)?.emissions?.surrenderEmissions) {
+            return (acc ?? new BigNumber(0)).plus((reportItem?.requestMetadata as any)?.emissions?.surrenderEmissions);
+          }
+          return acc;
+        }, undefined),
+        items: value,
+      }))
       .sort((a: any, b: any) => +(b?.reportingYear ?? 0) - +(a?.reportingYear ?? 0));
   });
 }

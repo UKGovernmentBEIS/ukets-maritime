@@ -62,10 +62,7 @@ describe('IncorporateHeaderComponent', () => {
     maritimeAccountsService.getMaritimeAccount = jest.fn().mockReturnValue(of(mockAccountDetails));
     requestTaskStore.setRequestTaskItem({
       requestInfo: {
-        resourceType: 'ACCOUNT',
-        resources: {
-          ACCOUNT: '1',
-        },
+        accountId: 1,
       },
     });
     fixture.detectChanges();
@@ -76,10 +73,7 @@ describe('IncorporateHeaderComponent', () => {
     maritimeAccountsService.getMaritimeAccount.mockReturnValue(of(null));
     requestTaskStore.setRequestTaskItem({
       requestInfo: {
-        resourceType: 'ACCOUNT',
-        resources: {
-          ACCOUNT: '1',
-        },
+        accountId: 1,
       },
     });
     fixture.detectChanges();
@@ -90,10 +84,7 @@ describe('IncorporateHeaderComponent', () => {
     maritimeAccountsService.getMaritimeAccount = jest.fn().mockReturnValue(of(mockAccountDetails));
     requestTaskStore.setRequestTaskItem({
       requestInfo: {
-        resourceType: 'ACCOUNT',
-        resources: {
-          ACCOUNT: '1',
-        },
+        accountId: 1,
       },
     });
     fixture.detectChanges();
@@ -112,10 +103,7 @@ describe('IncorporateHeaderComponent', () => {
     );
     requestTaskStore.setRequestTaskItem({
       requestInfo: {
-        resourceType: 'ACCOUNT',
-        resources: {
-          ACCOUNT: '1',
-        },
+        accountId: 1,
       },
     });
     fixture.detectChanges();

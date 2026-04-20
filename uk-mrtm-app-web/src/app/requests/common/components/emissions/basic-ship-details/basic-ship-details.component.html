@@ -9,7 +9,6 @@
     formControlName="imoNumber"
     govuk-text-input
     [label]="map.imoNumber.title"
-    hint="Must be 7 digits long"
     widthClass="govuk-!-width-one-third"></div>
   <div formControlName="name" govuk-text-input [label]="map.name.title"></div>
   <div
@@ -55,18 +54,14 @@
       <govuk-radio-option [value]="true" label="All year" />
       <govuk-radio-option [value]="false" label="Select specific period">
         <ng-container govukConditionalContent>
-          <div
-            mrtm-date-picker
-            widthClass="govuk-input--width-10"
-            formControlName="from"
-            label="From"
-            hint="For example, 17/5/2024"></div>
-          <div
-            mrtm-date-picker
-            widthClass="govuk-input--width-10"
-            formControlName="to"
-            label="To"
-            hint="For example, 17/5/2024"></div>
+          <div class="govuk-grid-row row-container">
+            <div class="govuk-grid-column-one-half">
+              <div mrtm-date-picker formControlName="from" label="From" hint="For example, 17/5/2024"></div>
+            </div>
+            <div class="govuk-grid-column-one-half">
+              <div mrtm-date-picker formControlName="to" label="To" hint="For example, 17/5/2024"></div>
+            </div>
+          </div>
         </ng-container>
       </govuk-radio-option>
     </div>

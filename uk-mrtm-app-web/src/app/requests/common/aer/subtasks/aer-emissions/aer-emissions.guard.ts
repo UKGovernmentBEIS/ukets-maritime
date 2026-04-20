@@ -24,22 +24,9 @@ export const canActivateAerEmissionsShipSummary: CanActivateFn = (route) => {
 
   return (
     !isEditable ||
-    ship?.dataInputType === 'EXTERNAL_PROVIDER' ||
     (isEditable && isShipWizardCompleted(ship)) ||
     createUrlTreeFromSnapshot(route, [`./${getNextIncompleteShipStep(ship)}`])
   );
-};
-
-export const canActivateAerEmissionsShipEdit: CanActivateFn = (route) => {
-  const shipId = route.params['shipId'];
-  if (!shipId) {
-    return false;
-  }
-  const store = inject(RequestTaskStore);
-
-  const isEditable = store.select(aerCommonQuery.selectIsShipEditable(shipId))();
-
-  return isEditable || createUrlTreeFromSnapshot(route, ['../']);
 };
 
 export const canActivateAerEmissionsSummary: CanActivateFn = (route) => {

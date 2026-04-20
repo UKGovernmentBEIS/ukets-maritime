@@ -32,6 +32,9 @@ import {
 
 @Component({
   selector: 'mrtm-appoint',
+  templateUrl: './appoint.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     PageHeadingComponent,
     WarningTextComponent,
@@ -44,9 +47,6 @@ import {
     ButtonDirective,
     UnappointConfirmationComponent,
   ],
-  standalone: true,
-  templateUrl: './appoint.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppointComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);
@@ -72,11 +72,7 @@ export class AppointComponent implements OnInit {
   ngOnInit(): void {
     this.activeBodies$ = this.accountId$.pipe(
       switchMap((accountId) => this.accountVerificationBodyService.getActiveVerificationBodies(accountId)),
-      map((bodies) =>
-        bodies
-          .map((body) => ({ text: body.name, value: body.id }))
-          .sort((a, b) => a.text.localeCompare(b.text, 'en-GB', { sensitivity: 'base' })),
-      ),
+      map((bodies) => bodies.map((body) => ({ text: body.name, value: body.id }))),
       withLatestFrom(this.currentVerificationBody$),
       map(([bodies, currentVerificationBody]) =>
         currentVerificationBody ? [{ text: 'No verification body', value: -1 }, ...bodies] : bodies,

@@ -48,7 +48,7 @@ describe('RecommendedImprovementsListTemplateComponent', () => {
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
-      'Actions',
+      '',
       'D1',
       'Lorem ipsum 1',
       'Change  Remove',
@@ -65,7 +65,7 @@ describe('RecommendedImprovementsListTemplateComponent', () => {
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
-      'Actions',
+      '',
       'D1',
       'Lorem ipsum 1',
       '',

@@ -4,6 +4,8 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 
+import { KeycloakService } from 'keycloak-angular';
+
 import { AuthoritiesService, TermsAndConditionsService, UsersService, UserStateDTO } from '@mrtm/api';
 
 import { AuthStore } from '@netz/common/auth';
@@ -15,7 +17,6 @@ import {
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/core-guards.mock';
-import { KeycloakService } from '@core/services';
 import { LandingPageComponent } from '@landing-page/landing-page.component';
 
 describe('LandingPageComponent', () => {
@@ -25,6 +26,10 @@ describe('LandingPageComponent', () => {
   let page: Page;
 
   class Page extends BasePage<LandingPageComponent> {
+    get notLoggedInLandingPageLinks() {
+      return this.queryAll<HTMLAnchorElement>('.govuk-button--start');
+    }
+
     get pageHeadingContent() {
       return this.query<HTMLElement>('netz-page-heading').textContent.trim();
     }

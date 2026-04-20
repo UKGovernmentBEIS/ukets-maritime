@@ -33,7 +33,6 @@ export const MANDATE_REGISTERED_OWNERS_TABLE_COLUMNS_WITH_ACTIONS: Array<
   {
     field: 'actions',
     widthClass: 'app-column-width-10-per',
-    header: 'Actions',
-    hiddenHeader: true,
+    header: null,
   },
 ];

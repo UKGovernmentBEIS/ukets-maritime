@@ -7,10 +7,14 @@ import uk.gov.netz.api.common.exception.NetzErrorCode;
 @Getter
 public enum MrtmErrorCode implements NetzErrorCode {
 
+    /**
+     * Request error codes
+     */
+    ROLE_NOT_ALLOWED_FOR_HISTORY_CATEGORY("HIST1001", HttpStatus.FORBIDDEN, "The specified role does not have permission to access this history category"),
+
     /** Codes for Account errors. */
     IMO_NUMBER_ALREADY_RELATED_WITH_ANOTHER_ACCOUNT("ACCOUNT1011", HttpStatus.BAD_REQUEST, "Enter a different company IMO number. This one is already in use."),
     ACCOUNT_REPORTING_STATUS_NOT_CHANGED("ACCOUNT1012", HttpStatus.BAD_REQUEST, "Enter a different reporting status."),
-    FIRST_MARITIME_ACTIVITY_DATE_AFTER_PREVIOUS("ACCOUNT1013", HttpStatus.BAD_REQUEST, "The year of first maritime activity cannot be later than previously set"),
 
     /**Emissions Monitoring Plan error codes */
     INVALID_EMP("EMP1001", HttpStatus.BAD_REQUEST, "Invalid Emissions Monitoring Plan"),
@@ -43,7 +47,6 @@ public enum MrtmErrorCode implements NetzErrorCode {
     INTEGRATION_REGISTRY_EMISSIONS_KAFKA_QUEUE_CONNECTION_ISSUE("INTREGACCOUNTCREATIONMRTM1007", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because kafka message queue is not available"),
     INTEGRATION_REGISTRY_ACCOUNT_CREATION_REGISTRY_ID_EXISTS("INTREGACCOUNTCREATIONMRTM1008", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because Operator Id already exists"),
     INTEGRATION_REGISTRY_EMISSIONS_AER_NOT_FOUND("INTREGEMISSIONSMRTM1006", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send emissions to ETS Registry because no aer request has been found"),
-    INTEGRATION_REGISTRY_ACCOUNT_CONTACTS_INVALID_ROLE("INTREGACCOUNTCONTACTSMRTM1006", HttpStatus.INTERNAL_SERVER_ERROR, "Cannot send account contacts to ETS Registry because role type cannot be mapped to registry role type"),
 
     /**
      * VIR

@@ -8,8 +8,8 @@ describe('WarningTextComponent', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [WarningTextComponent],
     standalone: true,
+    imports: [WarningTextComponent],
     template: `
       <govuk-warning-text [assistiveText]="text">Test warning</govuk-warning-text>
     `,

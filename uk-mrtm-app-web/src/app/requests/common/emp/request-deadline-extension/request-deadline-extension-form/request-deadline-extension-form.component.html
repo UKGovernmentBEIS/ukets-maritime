@@ -2,20 +2,22 @@
   <div
     govuk-date-input
     label="Propose an extension date"
-    labelSize="medium"
+    [legendSize]="'medium'"
     [isRequired]="true"
     formControlName="extensionDate"
-    [hint]="`The date must be after the determination deadline date, which is ${(deadlineDate | govukDate)}`"></div>
+    [hint]="
+      'The date must be after the determination deadline date, which is ' + (deadlineDate | govukDate: 'date')
+    "></div>
   <div
     govuk-date-input
     label="Set a deadline to receive a reply"
-    labelSize="medium"
+    [legendSize]="'medium'"
     [isRequired]="true"
     formControlName="deadline"
     hint="The date must be before the proposed extension date"></div>
 </mrtm-wizard-step>
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <netz-return-to-task-or-action-page />
 </div>

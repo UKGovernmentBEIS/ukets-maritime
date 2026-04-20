@@ -3,11 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { DestroySubject, PendingRequestService } from '@netz/common/services';
 
-@Directive({
-  selector: 'button[netzPendingButton]',
-  standalone: true,
-  providers: [DestroySubject],
-})
+@Directive({ selector: 'button[netzPendingButton]', providers: [DestroySubject], standalone: true })
 export class PendingButtonDirective implements OnInit {
   private readonly pendingRequest = inject(PendingRequestService, { optional: true })!;
   private readonly changeDetectorRef = inject(ChangeDetectorRef);

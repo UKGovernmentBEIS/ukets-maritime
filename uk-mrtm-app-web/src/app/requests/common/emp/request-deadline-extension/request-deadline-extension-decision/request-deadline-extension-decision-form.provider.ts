@@ -25,7 +25,6 @@ export const requestDeadlineExtensionDecisionFormProvider: Provider = {
     const attachments = store.select(rdeDetailsQuery.selectRdeAttachments)();
     const uploadPermissionKey = requestTypeUploadActionMap[store.select(requestTaskQuery.selectRequestTaskType)()];
     const disabled = !store.select(requestTaskQuery.selectIsEditable)();
-    const isReasonDisabled = !store.select(requestTaskQuery.selectIsEditable)() || isRegulatorTask;
 
     return fb.group<RequestDeadlineExtensionDecisionFormModel>({
       decision: fb.control<RdeForceDecisionPayload['decision'] | null>(
@@ -45,15 +44,7 @@ export const requestDeadlineExtensionDecisionFormProvider: Provider = {
             : undefined,
         },
       ),
-      reason: fb.control<RdeDecisionPayload['reason'] | null>(
-        { value: null, disabled: isReasonDisabled },
-        {
-          validators: [
-            GovukValidators.required('Enter a reason'),
-            GovukValidators.maxLength(10000, 'Enter up to 10000 characters'),
-          ],
-        },
-      ),
+      reason: fb.control<RdeDecisionPayload['reason'] | null>({ value: null, disabled: disabled }),
       files: requestTaskFileService.buildFormControl(
         requestTaskId,
         [],

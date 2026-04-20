@@ -9,8 +9,8 @@ import { empVariationNotifyOperatorStatusMap } from '@requests/tasks/emp-variati
 
 @Component({
   selector: 'mrtm-notify-operator-success',
-  imports: [PanelComponent, RouterLink, LinkDirective],
   standalone: true,
+  imports: [PanelComponent, RouterLink, LinkDirective],
   templateUrl: './emp-variation-notify-operator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

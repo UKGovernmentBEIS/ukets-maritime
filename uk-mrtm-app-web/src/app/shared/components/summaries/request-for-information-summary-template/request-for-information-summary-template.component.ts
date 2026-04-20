@@ -17,6 +17,7 @@ import { RfiSubmitDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-request-for-information-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryListRowDirective,
@@ -29,14 +30,13 @@ import { RfiSubmitDto } from '@shared/types';
     GovukDatePipe,
     SummaryDownloadFilesComponent,
   ],
-  standalone: true,
   templateUrl: './request-for-information-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestForInformationSummaryTemplateComponent {
-  readonly data = input.required<RfiSubmitDto>();
-  readonly isEditable = input<boolean>();
-  readonly questionEditUrl = input<string>();
-  readonly notificationEditUrl = input<string>();
-  readonly queryParams = input<Params>();
+  data = input.required<RfiSubmitDto>();
+  isEditable = input<boolean>();
+  questionEditUrl = input<string>();
+  notificationEditUrl = input<string>();
+  queryParams = input<Params>();
 }

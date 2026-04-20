@@ -15,8 +15,8 @@ import { AerVerificationSubmitTaskPayload } from '@requests/common/aer/aer.types
 
 @Component({
   selector: 'mrtm-overall-verification-decision-comments-delete',
-  imports: [RouterLink, ButtonDirective, LinkDirective, PageHeadingComponent, PendingButtonDirective],
   standalone: true,
+  imports: [RouterLink, ButtonDirective, LinkDirective, PageHeadingComponent, PendingButtonDirective],
   templateUrl: './overall-verification-decision-comments-delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

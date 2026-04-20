@@ -24,6 +24,7 @@ import { FormUtils, originalOrder } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emissions-plan-history-tab',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     CheckboxesComponent,
@@ -37,7 +38,6 @@ import { FormUtils, originalOrder } from '@shared/utils';
     RequestStatusTagColorPipe,
     TagComponent,
   ],
-  standalone: true,
   templateUrl: './emissions-plan-history-tab.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

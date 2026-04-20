@@ -29,6 +29,7 @@ import {
 
 @Component({
   selector: 'mrtm-details-change-decision',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -40,7 +41,6 @@ import {
     ConditionalContentDirective,
     NotificationDetailsOfChangeSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './details-change-decision.component.html',
   providers: [detailsChangeDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

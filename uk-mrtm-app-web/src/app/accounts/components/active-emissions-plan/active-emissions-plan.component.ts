@@ -13,6 +13,7 @@ import { SummaryDownloadFilesComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-active-emissions-plan',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -20,12 +21,11 @@ import { SummaryDownloadFilesComponent } from '@shared/components';
     SummaryListRowValueDirective,
     SummaryDownloadFilesComponent,
   ],
-  standalone: true,
   templateUrl: './active-emissions-plan.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ActiveEmissionsPlanComponent {
   private readonly store: OperatorAccountsStore = inject(OperatorAccountsStore);
-  readonly emp = toSignal(this.store.pipe(selectCurrentAccountEmp));
-  readonly empFiles = toSignal(this.store.pipe(selectActiveEmissionsPlanFiles));
+  emp = toSignal(this.store.pipe(selectCurrentAccountEmp));
+  empFiles = toSignal(this.store.pipe(selectActiveEmissionsPlanFiles));
 }

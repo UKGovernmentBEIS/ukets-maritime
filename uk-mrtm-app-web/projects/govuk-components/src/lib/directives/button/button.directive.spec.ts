@@ -1,4 +1,4 @@
-import { Component, ElementRef, viewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,23 +9,24 @@ describe('ButtonDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [ButtonDirective],
     standalone: true,
+    imports: [ButtonDirective],
     template: `
-      <button #simple govukButton (click)="onClick()" type="button">Simple button</button>
-      <button #warn govukWarnButton type="button">Warn button</button>
-      <button #secondary govukSecondaryButton type="button">Secondary button</button>
-      <button #disabled govukButton disabled type="button">Disabled button</button>
-      <button #inverse govukButton govukInverseButton type="button">Inverse button</button>
+      <button #simple govukButton (click)="onClick()">Simple button</button>
+      <button #warn govukWarnButton>Warn button</button>
+      <button #secondary govukSecondaryButton>Secondary button</button>
+      <button #disabled govukButton disabled>Disabled button</button>
+      <button #inverse govukButton govukInverseButton>Inverse button</button>
     `,
   })
   class TestComponent {
-    readonly simpleButton = viewChild('simple', { read: ElementRef });
-    readonly warnButton = viewChild('warn', { read: ElementRef });
-    readonly secondaryButton = viewChild('secondary', { read: ElementRef });
-    readonly disabledButton = viewChild('disabled', { read: ElementRef });
-    readonly inverseButton = viewChild('inverse', { read: ElementRef });
+    @ViewChild('simple', { read: ElementRef }) simpleButton: ElementRef;
+    @ViewChild('warn', { read: ElementRef }) warnButton: ElementRef;
+    @ViewChild('secondary', { read: ElementRef }) secondaryButton: ElementRef;
+    @ViewChild('disabled', { read: ElementRef }) disabledButton: ElementRef;
+    @ViewChild('inverse', { read: ElementRef }) inverseButton: ElementRef;
 
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
     onClick(): void {}
   }
 
@@ -51,33 +52,33 @@ describe('ButtonDirective', () => {
   });
 
   it('should have disabled class (disabled button)', () => {
-    const element: HTMLButtonElement = fixture.componentInstance.disabledButton().nativeElement;
+    const element: HTMLButtonElement = fixture.componentInstance.disabledButton.nativeElement;
     expect(element.classList).toContain('govuk-button--disabled');
   });
 
   it('should have aria-disabled attribute (disabled button)', () => {
-    const element: HTMLButtonElement = fixture.componentInstance.disabledButton().nativeElement;
+    const element: HTMLButtonElement = fixture.componentInstance.disabledButton.nativeElement;
     expect(element.hasAttribute('aria-disabled')).toBeTruthy();
     expect(element.getAttribute('aria-disabled')).toEqual('true');
   });
 
   it('should not have aria-disabled attribute (simple button)', () => {
-    const element: HTMLButtonElement = fixture.componentInstance.simpleButton().nativeElement;
+    const element: HTMLButtonElement = fixture.componentInstance.simpleButton.nativeElement;
     expect(element.hasAttribute('aria-disabled')).toBeFalsy();
   });
 
   it('should have warning attribute (warn button)', () => {
-    const element: HTMLButtonElement = fixture.componentInstance.warnButton().nativeElement;
+    const element: HTMLButtonElement = fixture.componentInstance.warnButton.nativeElement;
     expect(element.hasAttribute('govukwarnbutton')).toBeTruthy();
   });
 
   it('should have secondary attribute (secondary button)', () => {
-    const element: HTMLButtonElement = fixture.componentInstance.secondaryButton().nativeElement;
+    const element: HTMLButtonElement = fixture.componentInstance.secondaryButton.nativeElement;
     expect(element.hasAttribute('govuksecondarybutton')).toBeTruthy();
   });
 
   it('should have inverse attribute (inverse button)', () => {
-    const element: HTMLButtonElement = fixture.componentInstance.inverseButton().nativeElement;
+    const element: HTMLButtonElement = fixture.componentInstance.inverseButton.nativeElement;
     expect(element.hasAttribute('govukinversebutton')).toBeTruthy();
   });
 
@@ -88,7 +89,7 @@ describe('ButtonDirective', () => {
       cancelable: true,
     });
     jest.spyOn(fixture.componentInstance, 'onClick');
-    const button: HTMLButtonElement = fixture.componentInstance.simpleButton().nativeElement;
+    const button: HTMLButtonElement = fixture.componentInstance.simpleButton.nativeElement;
     button.dispatchEvent(event);
     expect(fixture.componentInstance.onClick).toHaveBeenCalledTimes(0);
   }));
@@ -96,7 +97,7 @@ describe('ButtonDirective', () => {
   it('should get clicked if keydown is space', fakeAsync(() => {
     const event = new KeyboardEvent('keydown', { key: ' ', code: 'Space' });
     jest.spyOn(fixture.componentInstance, 'onClick');
-    const button: HTMLButtonElement = fixture.componentInstance.simpleButton().nativeElement;
+    const button: HTMLButtonElement = fixture.componentInstance.simpleButton.nativeElement;
     button.dispatchEvent(event);
     expect(fixture.componentInstance.onClick).toHaveBeenCalledTimes(1);
   }));

@@ -3,13 +3,13 @@ import { CanActivate, Resolve } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
-import { MiReportsService, MiReportSystemSearchResult } from '@mrtm/api';
+import { MiReportSearchResult, MiReportsService } from '@mrtm/api';
 
 @Injectable({ providedIn: 'root' })
-export class MiReportsListGuard implements CanActivate, Resolve<MiReportSystemSearchResult[]> {
+export class MiReportsListGuard implements CanActivate, Resolve<MiReportSearchResult[]> {
   private readonly miReportsService = inject(MiReportsService);
 
-  miReports: MiReportSystemSearchResult[];
+  miReports: MiReportSearchResult[];
 
   canActivate(): Observable<boolean> {
     return this.miReportsService.getCurrentUserMiReports().pipe(
@@ -18,19 +18,7 @@ export class MiReportsListGuard implements CanActivate, Resolve<MiReportSystemSe
     );
   }
 
-  /**
-   * Add a "CUSTOM" report when there is at least one report,
-   * since it will never be retrieved from the API
-   */
-  resolve(): MiReportSystemSearchResult[] {
-    return this.miReports
-      ? [
-          ...this.miReports,
-          {
-            id: 9999,
-            miReportType: 'CUSTOM',
-          },
-        ]
-      : [];
+  resolve(): MiReportSearchResult[] {
+    return this.miReports;
   }
 }

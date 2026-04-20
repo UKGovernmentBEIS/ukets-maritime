@@ -9,8 +9,8 @@ import { MonitoringPlanChangesSummaryTemplateComponent } from '@shared/component
 
 @Component({
   selector: 'mrtm-monitoring-plan-changes-submitted',
-  imports: [ReturnToTaskOrActionPageComponent, PageHeadingComponent, MonitoringPlanChangesSummaryTemplateComponent],
   standalone: true,
+  imports: [ReturnToTaskOrActionPageComponent, PageHeadingComponent, MonitoringPlanChangesSummaryTemplateComponent],
   templateUrl: './monitoring-plan-changes-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

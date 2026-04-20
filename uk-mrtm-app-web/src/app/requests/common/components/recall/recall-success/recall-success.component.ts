@@ -8,8 +8,8 @@ import { recallActionsMap } from '@requests/common/recall-actions.map';
 
 @Component({
   selector: 'mrtm-recall-success',
-  imports: [LinkDirective, RouterLink, PanelComponent],
   standalone: true,
+  imports: [LinkDirective, RouterLink, PanelComponent],
   templateUrl: './recall-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

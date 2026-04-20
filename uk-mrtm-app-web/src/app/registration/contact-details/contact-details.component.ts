@@ -14,6 +14,10 @@ import { phoneInputWithCountyCodeSelectValidators } from '@shared/validators';
 
 @Component({
   selector: 'mrtm-contact-details',
+  templateUrl: './contact-details.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
+  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -22,10 +26,6 @@ import { phoneInputWithCountyCodeSelectValidators } from '@shared/validators';
     ButtonDirective,
     UserInputComponent,
   ],
-  standalone: true,
-  templateUrl: './contact-details.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ContactDetailsComponent implements OnInit {
   private readonly router = inject(Router);

@@ -10,7 +10,7 @@
                 <a
                   #anchor
                   (click)="errorClick(controlError.path)"
-                  [fragment]="`l.${controlError.path}`"
+                  [fragment]="'l.' + controlError.path"
                   [state]="{ scrollSkip: true }"
                   [replaceUrl]="true"
                   queryParamsHandling="preserve"

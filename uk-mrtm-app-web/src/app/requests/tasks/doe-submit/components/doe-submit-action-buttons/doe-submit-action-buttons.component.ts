@@ -8,8 +8,8 @@ import { doeCommonQuery } from '@requests/common/doe';
 
 @Component({
   selector: 'mrtm-doe-submit-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   templateUrl: './doe-submit-action-buttons.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

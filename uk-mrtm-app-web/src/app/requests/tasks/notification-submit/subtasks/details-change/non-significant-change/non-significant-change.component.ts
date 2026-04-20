@@ -19,6 +19,7 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-non-significant-change',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -26,9 +27,8 @@ import { MultipleFileInputComponent, WizardStepComponent } from '@shared/compone
     MultipleFileInputComponent,
     DateInputComponent,
   ],
-  standalone: true,
-  templateUrl: './non-significant-change.component.html',
   providers: [nonSignificantChangeFormProvider],
+  templateUrl: './non-significant-change.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NonSignificantChangeComponent {

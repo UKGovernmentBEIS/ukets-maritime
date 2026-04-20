@@ -14,11 +14,11 @@ import { NotifyUsersService } from '@shared/services';
 
 @Component({
   selector: 'mrtm-send-for-peer-review',
-  imports: [WizardStepComponent, ReactiveFormsModule, SelectComponent],
   standalone: true,
+  imports: [WizardStepComponent, ReactiveFormsModule, SelectComponent],
   templateUrl: './send-for-peer-review.component.html',
-  providers: [sendForPeerReviewFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [sendForPeerReviewFormProvider],
 })
 export class SendForPeerReviewComponent {
   protected readonly form: UntypedFormGroup = inject(TASK_FORM);
@@ -34,7 +34,7 @@ export class SendForPeerReviewComponent {
   pendingRfi = this.store
     .select(requestTaskQuery.selectRelatedTasks)()
     ?.some((task) => task.taskType.endsWith('WAIT_FOR_RFI_RESPONSE'));
-  readonly assignees = toSignal(
+  assignees = toSignal(
     this.notifyUsersService.getAssigneesByTaskType(
       this.currentAssigneeId,
       this.requestTaskId,

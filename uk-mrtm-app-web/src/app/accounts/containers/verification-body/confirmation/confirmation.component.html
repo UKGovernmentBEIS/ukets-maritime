@@ -1,6 +1,6 @@
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <govuk-panel title="You have appointed a new verifier">{{ verificationAccount() }}</govuk-panel>
+    <govuk-panel title="You have appointed a new verifier">{{ verificationAccount }}</govuk-panel>
     <p class="govuk-body">
       The verifier organisation has been informed that they now have read-only access to your account.
     </p>
@@ -20,9 +20,6 @@
       An operator admin user on your account can change verifiers by selecting the users and contacts option from the
       dashboard.
     </p>
+    <a routerLink="../../" fragment="users" govukLink>Return to: Users, contacts and verifiers page</a>
   </div>
-</div>
-<div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
-  <a routerLink="../../" fragment="users" govukLink>Return to: Users, contacts and verifiers page</a>
 </div>

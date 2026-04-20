@@ -30,6 +30,7 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
 
 @Component({
   selector: 'mrtm-list-of-ships-variation-regulator-decision',
+  standalone: true,
   imports: [
     ListOfShipsSummaryTemplateComponent,
     RouterLink,
@@ -41,10 +42,9 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
     WarningTextComponent,
     ButtonDirective,
   ],
-  standalone: true,
   templateUrl: './list-of-ships-variation-regulator-decision.component.html',
-  providers: [variationRegulatorDecisionFormProvider(EMISSIONS_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [variationRegulatorDecisionFormProvider(EMISSIONS_SUB_TASK)],
 })
 export class ListOfShipsVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);

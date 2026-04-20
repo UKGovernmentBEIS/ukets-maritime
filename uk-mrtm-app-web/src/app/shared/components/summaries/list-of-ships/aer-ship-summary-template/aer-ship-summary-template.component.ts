@@ -16,6 +16,7 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-ship-summary-template',
+  standalone: true,
   imports: [
     BasicShipDetailsSummaryTemplateComponent,
     AerFuelsAndEmissionFactorsSummaryTemplateComponent,
@@ -26,7 +27,6 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
     LinkDirective,
     RouterLink,
   ],
-  standalone: true,
   templateUrl: './aer-ship-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

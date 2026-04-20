@@ -11,8 +11,8 @@ import { OperatorDetailsSummaryTemplateComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-operator-details-submitted',
-  imports: [PageHeadingComponent, OperatorDetailsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   standalone: true,
+  imports: [PageHeadingComponent, OperatorDetailsSummaryTemplateComponent, ReturnToTaskOrActionPageComponent],
   templateUrl: './operator-details-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

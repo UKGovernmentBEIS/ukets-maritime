@@ -1,6 +1,6 @@
 @if (!isPasswordReset) {
   @if (isSummaryDisplayed$ | async) {
-    <govuk-error-summary [form]="form" />
+    <govuk-error-summary [form]="form"></govuk-error-summary>
   }
   <mrtm-wizard-step
     (formSubmit)="onSubmit()"
@@ -26,7 +26,7 @@
         <a govukLink [routerLink]="[]" (click)="onSignInAgain()">sign in to the NETZ service</a>
         with your new password.
       </p>
-      <mrtm-back-to-top />
+      <mrtm-back-to-top></mrtm-back-to-top>
     </div>
   </div>
 }

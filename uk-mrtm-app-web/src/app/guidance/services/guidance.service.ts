@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 
 import { map, Observable, switchMap, take } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import {
   GuidanceDocumentDTO,
@@ -16,7 +17,6 @@ import { PendingRequestService } from '@netz/common/services';
 import { GuidanceStore } from '@guidance/+state';
 import { guidanceSectionNameExist } from '@guidance/errors/business-error';
 import { ManageGuidanceDocumentDTO } from '@guidance/guidance.types';
-import { isNil } from '@shared/utils';
 
 @Injectable({ providedIn: 'root' })
 export class GuidanceService {

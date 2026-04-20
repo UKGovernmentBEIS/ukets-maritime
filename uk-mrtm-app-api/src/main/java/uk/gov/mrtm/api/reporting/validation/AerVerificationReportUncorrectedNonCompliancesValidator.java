@@ -1,7 +1,6 @@
 package uk.gov.mrtm.api.reporting.validation;
 
 import org.springframework.stereotype.Service;
-import uk.gov.mrtm.api.reporting.domain.common.AerVerificationReferencePrefix;
 import uk.gov.mrtm.api.reporting.domain.common.UncorrectedItem;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
@@ -22,7 +21,7 @@ public class AerVerificationReportUncorrectedNonCompliancesValidator extends Aer
 
     @Override
     public String getPrefix() {
-        return AerVerificationReferencePrefix.UNCORRECTED_NON_COMPLIANCES.getPrefix();
+        return "C";
     }
 
     @Override

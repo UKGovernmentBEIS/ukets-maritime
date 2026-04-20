@@ -11,8 +11,8 @@ import { nonComplianceNoticeOfIntentCommonQuery } from '@requests/common/non-com
 
 @Component({
   selector: 'mrtm-non-compliance-notice-of-intent-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     @if (canBeDisplayed()) {
       <div class="govuk-button-group">

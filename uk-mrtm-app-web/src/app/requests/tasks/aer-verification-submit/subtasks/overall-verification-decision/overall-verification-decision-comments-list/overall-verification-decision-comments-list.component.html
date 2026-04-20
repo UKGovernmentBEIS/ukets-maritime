@@ -4,8 +4,8 @@
 
 @if (reasons()?.length) {
   <h2 class="govuk-heading-m">{{ reasons()?.length > 1 ? 'Reasons' : 'Reason' }}</h2>
-  @for (reason of reasons(); track $index) {
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  @for (reason of reasons(); track i; let i = $index) {
+    <hr />
     <div class="flex-space-between govuk-body govuk-!-margin-top-1 govuk-!-margin-bottom-1">
       <div class="pre-wrap">{{ reason }}</div>
       @if (isEditable()) {
@@ -13,33 +13,33 @@
           <a
             govukLink
             class="govuk-link--no-visited-state"
-            [routerLink]="[`../${$index}/${wizardStep.VERIFIED_WITH_COMMENTS_FORM_EDIT}`]">
+            [routerLink]="['../' + i + '/' + wizardStep.VERIFIED_WITH_COMMENTS_FORM_EDIT]">
             Change
           </a>
           <a
             govukLink
             class="govuk-link--no-visited-state"
-            [routerLink]="[`../${$index}/${wizardStep.VERIFIED_WITH_COMMENTS_DELETE}`]">
+            [routerLink]="['../' + i + '/' + wizardStep.VERIFIED_WITH_COMMENTS_DELETE]">
             Remove
           </a>
         </div>
       }
     </div>
   }
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-!-margin-bottom-4" />
 
   @if (isEditable()) {
     <div class="govuk-!-margin-bottom-6">
-      <a govukSecondaryButton [routerLink]="[`../${wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD}`]">Add another item</a>
+      <a govukSecondaryButton [routerLink]="['../' + wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD]">Add another item</a>
     </div>
   }
 
   <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
 } @else {
-  <a govukButton [routerLink]="[`../${wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD}`]">Add a reason</a>
+  <a govukButton [routerLink]="['../' + wizardStep.VERIFIED_WITH_COMMENTS_FORM_ADD]">Add a reason</a>
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <netz-return-to-task-or-action-page />
 </div>

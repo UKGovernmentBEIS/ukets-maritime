@@ -1,6 +1,6 @@
-@use 'base' as govuk;
+@import 'base';
 
 :host {
   display: block;
-  margin-bottom: govuk.govuk-spacing(7);
+  margin-bottom: govuk-spacing(7);
 }

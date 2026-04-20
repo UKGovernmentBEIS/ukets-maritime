@@ -8,7 +8,6 @@ import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, WarningTextComponent } from '@netz/govuk-components';
 
-import { aerTotalEmissionsMap } from '@requests/common/aer';
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AER_TOTAL_EMISSIONS_SUB_TASK } from '@requests/common/aer/subtasks/aer-total-emissions/aer-total-emissions.helpers';
@@ -19,6 +18,7 @@ import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-total-emissions-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -28,7 +28,6 @@ import BigNumber from 'bignumber.js';
     WarningTextComponent,
     NotificationBannerComponent,
   ],
-  standalone: true,
   templateUrl: './aer-total-emissions-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,7 +50,6 @@ export class AerTotalEmissionsSummaryComponent {
   );
 
   readonly subtask = AER_TOTAL_EMISSIONS_SUB_TASK;
-  readonly map = aerTotalEmissionsMap;
   readonly totalEmissions = this.store.select(aerCommonQuery.selectTotalEmissions);
   readonly isEditable = this.store.select(requestTaskQuery.selectIsEditable);
   readonly isSubtaskCompleted = this.store.select(aerCommonQuery.selectIsSubtaskCompleted(this.subtask));

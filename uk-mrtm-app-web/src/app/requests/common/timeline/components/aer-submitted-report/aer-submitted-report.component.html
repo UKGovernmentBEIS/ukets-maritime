@@ -39,28 +39,28 @@
 
     @if (vm.aerEmissions) {
       <netz-page-heading>{{ vm.aerEmissionsSubtaskMap.title }}</netz-page-heading>
-      <mrtm-list-of-ships-summary-template [withPagination]="false" [data]="vm.aerEmissions" editUrl="./ships" />
+      <mrtm-list-of-ships-summary-template [data]="vm.aerEmissions" editUrl="./ships" />
       <div style="page-break-after: always">&nbsp;</div>
       <div style="page-break-before: always">&nbsp;</div>
     }
 
     @if (vm.aerVoyages) {
       <netz-page-heading>{{ vm.aerVoyagesSubtaskMap.title }}</netz-page-heading>
-      <mrtm-voyages-list-summary-template [withPagination]="false" [data]="vm.aerVoyages" />
+      <mrtm-voyages-list-summary-template [data]="vm.aerVoyages" />
       <div style="page-break-after: always">&nbsp;</div>
       <div style="page-break-before: always">&nbsp;</div>
     }
 
     @if (vm.aerPorts) {
       <netz-page-heading>{{ vm.aerPortsSubtaskMap.title }}</netz-page-heading>
-      <mrtm-port-calls-list-summary-template [withPagination]="false" [data]="vm.aerPorts" />
+      <mrtm-port-calls-list-summary-template [data]="vm.aerPorts" />
       <div style="page-break-after: always">&nbsp;</div>
       <div style="page-break-before: always">&nbsp;</div>
     }
 
     @if (vm.aerAggregatedData) {
       <netz-page-heading>{{ vm.aerAggregatedDataSubtaskMap.title }}</netz-page-heading>
-      <mrtm-aggregated-data-list-summary-template [withPagination]="false" [data]="vm.aerAggregatedData" />
+      <mrtm-aggregated-data-list-summary-template [data]="vm.aerAggregatedData" />
       <div style="page-break-after: always">&nbsp;</div>
       <div style="page-break-before: always">&nbsp;</div>
     }

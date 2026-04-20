@@ -1,31 +1,21 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { GovukValidators, LabelSizeType } from '@netz/govuk-components';
+import { GovukValidators } from '@netz/govuk-components';
 
 import { datePickerConfigDefaults } from '@shared/components/date-picker//date-picker.interface';
 import { DatePickerComponent } from '@shared/components/date-picker/date-picker.component';
 
 describe('DatePickerComponent', () => {
   @Component({
-    imports: [DatePickerComponent, ReactiveFormsModule],
     standalone: true,
-    template: `
-      <div
-        label="Select date"
-        mrtm-date-picker
-        [formControl]="control"
-        [datePickerConfig]="DatePickerConfigDefaults"
-        [isLabelHidden]="isLabelHidden"
-        [labelSize]="labelSize"></div>
-    `,
+    imports: [DatePickerComponent, ReactiveFormsModule],
+    template: '<div mrtm-date-picker [formControl]="control" [datePickerConfig]="DatePickerConfigDefaults"></div>',
   })
   class TestComponent {
     control = new FormControl();
-    isLabelHidden = false;
-    labelSize: LabelSizeType = 'normal';
     protected readonly DatePickerConfigDefaults = datePickerConfigDefaults;
   }
 
@@ -35,10 +25,10 @@ describe('DatePickerComponent', () => {
   let element: HTMLElement;
 
   beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      providers: [ControlContainer],
-    }).compileComponents();
+    await TestBed.configureTestingModule({}).compileComponents();
+  });
 
+  beforeEach(async () => {
     fixture = TestBed.createComponent(TestComponent);
     hostComponent = fixture.componentInstance;
     element = fixture.nativeElement;
@@ -85,22 +75,27 @@ describe('DatePickerComponent', () => {
     const hostElement: HTMLElement = fixture.nativeElement;
     const label = hostElement.querySelector('label');
 
-    hostComponent.isLabelHidden = false;
+    component.isLabelHidden = false;
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label');
 
-    hostComponent.labelSize = 'small';
+    component.labelSize = 'normal';
+    fixture.detectChanges();
+
+    expect(label.className).toEqual('govuk-label');
+
+    component.labelSize = 'small';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--s');
 
-    hostComponent.labelSize = 'medium';
+    component.labelSize = 'medium';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--m');
 
-    hostComponent.labelSize = 'large';
+    component.labelSize = 'large';
     fixture.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--l');

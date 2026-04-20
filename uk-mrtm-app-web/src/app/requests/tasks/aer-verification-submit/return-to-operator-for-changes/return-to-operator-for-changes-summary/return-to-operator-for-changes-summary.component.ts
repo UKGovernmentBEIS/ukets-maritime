@@ -32,6 +32,7 @@ import {
 
 @Component({
   selector: 'mrtm-return-to-operator-for-changes-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     PendingButtonDirective,
@@ -45,7 +46,6 @@ import {
     SummaryListRowActionsDirective,
     ReturnToTaskOrActionPageComponent,
   ],
-  standalone: true,
   templateUrl: './return-to-operator-for-changes-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

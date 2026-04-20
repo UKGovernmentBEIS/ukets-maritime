@@ -4,8 +4,6 @@ import { PageHeadingComponent } from '@netz/common/components';
 
 @Component({
   selector: 'mrtm-invalid-code',
-  imports: [PageHeadingComponent],
-  standalone: true,
   template: `
     <netz-page-heading>Invalid code</netz-page-heading>
     <div class="govuk-grid-row">
@@ -15,5 +13,7 @@ import { PageHeadingComponent } from '@netz/common/components';
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PageHeadingComponent],
 })
 export class InvalidCodeComponent {}

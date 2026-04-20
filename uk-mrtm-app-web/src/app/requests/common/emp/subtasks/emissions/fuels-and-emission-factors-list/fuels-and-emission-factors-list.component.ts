@@ -22,6 +22,7 @@ import { FuelsAndEmissionFactorsSummaryTemplateComponent } from '@shared/compone
 
 @Component({
   selector: 'mrtm-emp-fuels-and-emission-factors-list',
+  standalone: true,
   imports: [
     ShipStepTitleCustomPipe,
     PageHeadingComponent,
@@ -29,7 +30,6 @@ import { FuelsAndEmissionFactorsSummaryTemplateComponent } from '@shared/compone
     ButtonDirective,
     ReturnToShipsListTableComponent,
   ],
-  standalone: true,
   templateUrl: './fuels-and-emission-factors-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -61,10 +61,7 @@ export class FuelsAndEmissionFactorsListComponent {
 
   handleDelete(event: EmpFuelsAndEmissionsFactors) {
     this.taskService
-      .saveSubtask(EMISSIONS_SUB_TASK, EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST, this.route, {
-        shipId: this.shipId(),
-        fuelId: event.uniqueIdentifier,
-      })
+      .saveSubtask(EMISSIONS_SUB_TASK, EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST, this.route, event.uniqueIdentifier)
       .pipe(take(1))
       .subscribe();
   }

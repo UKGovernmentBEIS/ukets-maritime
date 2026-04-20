@@ -6,30 +6,30 @@ import {
   Component,
   ElementRef,
   inject,
-  viewChild,
+  ViewChild,
 } from '@angular/core';
 import { FormGroup, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { filter, map, take } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { UserAccountFormComponent, WizardStepComponent } from '@shared/components';
-import { isNil } from '@shared/utils';
 import { selectSubmissionErrors } from '@verifiers/+state/verifier-user.selectors';
 import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 import { ADD_USER_AUTHORITY_PROVIDER, addFormProvider } from '@verifiers/add/add.form-provider';
 
 @Component({
   selector: 'mrtm-add',
-  imports: [WizardStepComponent, UserAccountFormComponent, ReactiveFormsModule, AsyncPipe],
   standalone: true,
-  templateUrl: './add.component.html',
+  imports: [WizardStepComponent, UserAccountFormComponent, ReactiveFormsModule, AsyncPipe],
   providers: [addFormProvider],
+  templateUrl: './add.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddComponent implements AfterViewInit {
   public readonly formGroup: FormGroup = inject<UntypedFormGroup>(ADD_USER_AUTHORITY_PROVIDER);
-  public readonly wizardStep = viewChild(WizardStepComponent, { read: ElementRef });
+  @ViewChild(WizardStepComponent, { read: ElementRef }) public wizardStep: ElementRef;
   private readonly store: VerifierUserStore = inject(VerifierUserStore);
   private readonly router: Router = inject(Router);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -63,7 +63,7 @@ export class AddComponent implements AfterViewInit {
         for (const { control, validationErrors } of submissionErrors) {
           this.formGroup.get(control).setErrors(validationErrors);
         }
-        this.wizardStep().nativeElement.querySelector('button[type="submit"]').click();
+        this.wizardStep.nativeElement.querySelector('button[type="submit"]').click();
 
         this.changeDetectorRef.detectChanges();
         this.store.setSubmissionErrors(null);

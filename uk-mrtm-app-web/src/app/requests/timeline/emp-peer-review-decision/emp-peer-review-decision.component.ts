@@ -8,8 +8,8 @@ import { EmpPeerReviewDecisionDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-peer-review-decision',
-  imports: [EmpPeerReviewDecisionSummaryTemplateComponent],
   standalone: true,
+  imports: [EmpPeerReviewDecisionSummaryTemplateComponent],
   templateUrl: './emp-peer-review-decision.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

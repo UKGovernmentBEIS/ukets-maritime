@@ -30,6 +30,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-request-for-information-summary',
+  standalone: true,
   imports: [
     RequestForInformationSummaryTemplateComponent,
     PageHeadingComponent,
@@ -37,7 +38,6 @@ interface ViewModel {
     ReturnToTaskOrActionPageComponent,
     ButtonDirective,
   ],
-  standalone: true,
   templateUrl: './request-for-information-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -49,7 +49,7 @@ export class RequestForInformationSummaryComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly notifyUsersService: NotifyUsersService = inject(NotifyUsersService);
-  private readonly accountId = this.taskStore.select(requestTaskQuery.selectRequestTaskAccountId)();
+  private readonly accountId = this.taskStore.select(requestTaskQuery.selectRequestInfo)().accountId;
   private readonly requestTaskId = this.taskStore.select(requestTaskQuery.selectRequestTaskId)();
   private readonly allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
   private readonly assignees = toSignal(this.notifyUsersService.getAssignees(this.requestTaskId));

@@ -45,6 +45,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-additional-documents-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     AdditionalDocumentsSummaryTemplateComponent,
@@ -54,7 +55,6 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './additional-documents-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -63,7 +63,7 @@ export class AdditionalDocumentsSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(empCommonQuery.selectAdditionalDocuments)();
     const originalAdditionalDocuments = this.store.select(
       empVariationRegulatorQuery.selectOriginalAdditionalDocuments,

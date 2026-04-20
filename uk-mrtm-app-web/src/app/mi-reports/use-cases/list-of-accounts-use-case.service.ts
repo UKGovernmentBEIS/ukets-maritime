@@ -10,7 +10,7 @@ import { MiReportUseCaseService } from '@mi-reports/use-cases/common';
 
 export class ListOfAccountsUseCaseService extends MiReportUseCaseService {
   reportType: MiReportType = MiReportType.LIST_OF_ACCOUNTS_USERS_CONTACTS;
-  readonly tableColumns: Signal<Array<GovukTableColumn>> = signal([
+  tableColumns: Signal<Array<GovukTableColumn>> = signal([
     { field: 'Account ID', header: 'Account ID' },
     { field: 'Account name', header: 'Account Name' },
     { field: 'Account status', header: 'Account Status' },

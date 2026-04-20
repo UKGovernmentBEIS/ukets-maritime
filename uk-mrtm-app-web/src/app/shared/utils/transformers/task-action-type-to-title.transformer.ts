@@ -3,7 +3,9 @@ import { MrtmItemDTO } from '@mrtm/api';
 import { ItemNameTransformer } from '@netz/common/pipes';
 
 import { taskActionTypeToTitleMap } from '@shared/constants';
-import { isAer, isDoe, isVir } from '@shared/utils';
+import { isVir } from '@shared/utils';
+import { isAer } from '@shared/utils/is-aer';
+import { isDoe } from '@shared/utils/is-doe';
 
 export const taskActionTypeToTitleTransformer: ItemNameTransformer = (
   taskType: MrtmItemDTO['taskType'],

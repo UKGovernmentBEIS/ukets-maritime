@@ -35,7 +35,7 @@ public class AerFuelConsumption {
     @Valid
     private FuelOriginTypeName fuelOriginTypeName;
 
-    @Size(max = 255)
+    @Size(max = 30)
     private String name;
 
     @NotNull

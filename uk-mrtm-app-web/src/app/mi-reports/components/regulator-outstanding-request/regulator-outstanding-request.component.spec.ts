@@ -14,13 +14,13 @@ import { MI_REPORT_FORM_GROUP } from '@mi-reports/core/mi-report.providers';
 
 describe('RegulatorOutstandingRequestComponent', () => {
   @Component({
-    imports: [ReactiveFormsModule, RegulatorOutstandingRequestComponent],
-    standalone: true,
     template: `
       <form [formGroup]="formGroup()"><mrtm-regulator-outstanding-request /></form>
     `,
-    providers: [regulatorOutstandingRequestProvider],
+    standalone: true,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    providers: [regulatorOutstandingRequestProvider],
+    imports: [ReactiveFormsModule, RegulatorOutstandingRequestComponent],
   })
   class TestComponent {
     readonly formGroup = inject(MI_REPORT_FORM_GROUP);
@@ -93,7 +93,7 @@ describe('RegulatorOutstandingRequestComponent', () => {
   });
 
   it('should show all applicable inputs', () => {
-    expect(page.query<HTMLDivElement>('div[formcontrolname=requestTaskTypes]')).toBeTruthy();
-    expect(page.query<HTMLDivElement>('div[formcontrolname=userIds]')).toBeTruthy();
+    expect(page.query<HTMLDivElement>('div[formcontrolname=requestTaskTypes]')).toBeInTheDocument();
+    expect(page.query<HTMLDivElement>('div[formcontrolname=userIds]')).toBeInTheDocument();
   });
 });

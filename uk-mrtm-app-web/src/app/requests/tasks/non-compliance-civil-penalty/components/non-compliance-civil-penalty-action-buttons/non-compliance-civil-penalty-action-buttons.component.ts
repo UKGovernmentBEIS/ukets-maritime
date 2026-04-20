@@ -11,8 +11,8 @@ import { nonComplianceCivilPenaltyCommonQuery } from '@requests/common/non-compl
 
 @Component({
   selector: 'mrtm-non-compliance-civil-penalty-action-buttons',
-  imports: [ButtonDirective, RouterLink],
   standalone: true,
+  imports: [ButtonDirective, RouterLink],
   template: `
     @if (canBeDisplayed()) {
       <div class="govuk-button-group">

@@ -11,10 +11,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-organisation-account-application-review',
-  imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent, LinkDirective, RouterLink],
-  standalone: true,
   templateUrl: './account-closure-submit.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent, LinkDirective, RouterLink],
 })
 export class AccountClosureSubmitComponent {
   private readonly accountClosureStateService = inject(AccountClosureStateService);

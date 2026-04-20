@@ -11,10 +11,8 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPort;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
-import uk.gov.mrtm.api.reporting.enumeration.PortType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
-import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerEmissionsCalculatorUtils;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -46,10 +44,12 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
                                         Set<AerVoyage> voyages) {
         List<AerViolation> aerViolations = new ArrayList<>();
 
-        Set<String> eligibleShipsForFetch = getShipsEligibleForFetch(emissions, ports, voyages);
+        Set<String> portShips = ports.stream().map(AerPort::getImoNumber).collect(Collectors.toSet());
+
+        Set<String> voyageShips = voyages.stream().map(AerVoyage::getImoNumber).collect(Collectors.toSet());
 
         for (AerShipAggregatedData data : aggregatedData.getEmissions()) {
-            validateAggregatedData(emissions, data, eligibleShipsForFetch, aerViolations);
+            validateAggregatedData(emissions, data, portShips, voyageShips, aerViolations);
         }
 
         return AerValidationResult.builder()
@@ -60,7 +60,8 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
 
     private void validateAggregatedData(AerEmissions emissions,
                                         AerShipAggregatedData aggregatedData,
-                                        Set<String> eligibleShipsForFetch,
+                                        Set<String> portShips,
+                                        Set<String> voyageShips,
                                         List<AerViolation> aerViolations) {
 
         if (!aggregatedData.isFromFetch()) {
@@ -72,9 +73,12 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
                 .findFirst()
                 .orElse(null);
 
-        validateShipExistsInListOfShips(ship, aggregatedData.getImoNumber(), aerViolations, "emissions");
+        validateShipExistsInListOfShips(ship, aggregatedData.getImoNumber(),
+                aerViolations, "emissions");
 
-        validateFetchedShipInPortsOrVoyages(aggregatedData, eligibleShipsForFetch, aerViolations);
+        validateFetchedShipInPortsOrVoyages(aggregatedData, portShips, voyageShips, aerViolations);
+
+
 
         if (ship != null) {
             validateFuelConsumptions(ship, aggregatedData, aerViolations);
@@ -82,10 +86,12 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
     }
 
     private void validateFetchedShipInPortsOrVoyages(AerShipAggregatedData aggregatedData,
-                                                     Set<String> eligibleShipsForFetch,
+                                                     Set<String> portShips,
+                                                     Set<String> voyageShips,
                                                      List<AerViolation> aerViolations) {
         boolean fetchedShipNotIncludedInPortsOrVoyages = aggregatedData.isFromFetch()
-                && !eligibleShipsForFetch.contains(aggregatedData.getImoNumber());
+                && !portShips.contains(aggregatedData.getImoNumber())
+                && !voyageShips.contains(aggregatedData.getImoNumber());
 
         if (fetchedShipNotIncludedInPortsOrVoyages) {
             aerViolations.add(new AerViolation(
@@ -115,28 +121,6 @@ public class AerShipAggregatedDataValidator implements AerContextValidator {
                 AerViolation.ViolationMessage.DUPLICATE_FUEL_ENTRIES,
                 duplicateFuelNames.toArray()));
         }
-    }
-
-    private Set<String> getShipsEligibleForFetch(AerEmissions emissions, Set<AerPort> ports, Set<AerVoyage> voyages) {
-
-        return emissions.getShips()
-            .stream().filter(data -> {
-                boolean hasPorts = ports.stream().anyMatch(
-                    aerPort -> aerPort.getImoNumber().equals(data.getDetails().getImoNumber())
-                );
-
-                boolean hasNIOrGBVoyages = voyages.stream().anyMatch(
-                    aerVoyage -> aerVoyage.getImoNumber().equals(data.getDetails().getImoNumber())
-                        && (
-                        AerEmissionsCalculatorUtils.filterByJourneyType(aerVoyage, PortType.GB)
-                            || AerEmissionsCalculatorUtils.filterByJourneyType(aerVoyage, PortType.NI)
-                    )
-                );
-
-                return hasPorts || hasNIOrGBVoyages;
-            })
-            .map(aerShipEmissions -> aerShipEmissions.getDetails().getImoNumber())
-            .collect(Collectors.toSet());
     }
 
     private Set<String> getInvalidFuelConsumptions(Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors,

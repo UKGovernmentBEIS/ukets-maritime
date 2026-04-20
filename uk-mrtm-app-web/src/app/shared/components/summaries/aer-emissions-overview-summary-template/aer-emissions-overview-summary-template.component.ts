@@ -13,6 +13,7 @@ import { BigNumberPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-aer-emissions-overview-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -20,7 +21,6 @@ import { BigNumberPipe } from '@shared/pipes';
     SummaryListRowValueDirective,
     BigNumberPipe,
   ],
-  standalone: true,
   templateUrl: './aer-emissions-overview-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

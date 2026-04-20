@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-item-form',
-  imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, TextareaComponent, WizardStepComponent],
   standalone: true,
+  imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, TextareaComponent, WizardStepComponent],
   templateUrl: './uncorrected-non-conformities-item-form.component.html',
-  providers: [uncorrectedNonConformitiesItemFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [uncorrectedNonConformitiesItemFormProvider],
 })
 export class UncorrectedNonConformitiesItemFormComponent {
   readonly map = uncorrectedNonConformitiesMap;

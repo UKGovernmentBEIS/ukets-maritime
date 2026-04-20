@@ -28,10 +28,7 @@ public class CollectAccountsForAerHandlerFlowable implements JavaDelegate {
 
     @Override
     public void execute(DelegateExecution execution) {
-        List<Long> accounts = getAccounts(execution);
-        log.info("Account IDs eligible for AER: {}", accounts);
-
-        execution.setVariable("accounts", accounts);
+        execution.setVariable("accounts", getAccounts(execution));
     }
 
     private List<Long> getAccounts(DelegateExecution execution) {

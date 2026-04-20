@@ -3,7 +3,6 @@ package uk.gov.mrtm.api.workflow.request.flow.empreissue.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import uk.gov.mrtm.api.common.config.RegistryConfig;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestMetadata;
@@ -26,7 +25,6 @@ public class EmpReissueOfficialNoticeService {
 	private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
 	private final FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;
 	private final OfficialNoticeSendService officialNoticeSendService;
-	private final RegistryConfig registryConfig;
 
 	@Transactional
     public CompletableFuture<FileInfoDTO> generateOfficialNotice(final Request request) {
@@ -47,6 +45,6 @@ public class EmpReissueOfficialNoticeService {
         final EmpReissueRequestPayload requestPayload = (EmpReissueRequestPayload) request.getPayload();
 		final List<FileInfoDTO> attachments = List.of(requestPayload.getOfficialNotice(),
 				requestPayload.getDocument());
-        officialNoticeSendService.sendOfficialNotice(attachments, request, List.of(registryConfig.getEmail()));
+        officialNoticeSendService.sendOfficialNotice(attachments, request);
     }
 }

@@ -8,24 +8,18 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Operator name</dt>
       <dd govukSummaryListRowValue>{{ accountInfo.name }}</dd>
-      @if (editable()) {
+      @if (editable) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink()]" govukLink>
-            Change
-            <span class="govuk-visually-hidden">operator name</span>
-          </a>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
         </dd>
       }
     </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>SOP ID</dt>
       <dd govukSummaryListRowValue>{{ accountInfo.sopId }}</dd>
-      @if (editable()) {
+      @if (editable) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink()]" govukLink>
-            Change
-            <span class="govuk-visually-hidden">SOP ID</span>
-          </a>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
         </dd>
       }
     </div>
@@ -38,34 +32,31 @@
       <dd govukSummaryListRowValue>
         <div>
           {{ accountInfo.line1 }}
+          @if (accountInfo.line2) {
+            , {{ accountInfo.line2 }}
+          }
         </div>
-        @if (accountInfo.line2) {
-          <div>{{ accountInfo.line2 }}</div>
-        }
         <div>{{ accountInfo.city }}</div>
         <div>{{ accountInfo.state }}</div>
         <div>{{ accountInfo.postcode }}</div>
         <div>{{ accountInfo.country | country }}</div>
       </dd>
-      @if (editable()) {
+      @if (editable) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink()]" govukLink>
-            Change
-            <span class="govuk-visually-hidden">contact address</span>
-          </a>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
         </dd>
       }
     </div>
-    <div govukSummaryListRow class="govuk-summary-list__row--no-actions">
+    <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Registered address</dt>
       @if (accountInfo.registeredAddress) {
         <dd govukSummaryListRowValue>
           <div>
             {{ accountInfo.registeredAddress.line1 }}
+            @if (accountInfo.registeredAddress.line2) {
+              , {{ accountInfo.registeredAddress.line2 }}
+            }
           </div>
-          @if (accountInfo.registeredAddress.line2) {
-            <div>{{ accountInfo.registeredAddress.line2 }}</div>
-          }
           <div>{{ accountInfo.registeredAddress.city }}</div>
           <div>{{ accountInfo.registeredAddress.state }}</div>
           <div>{{ accountInfo.registeredAddress.postcode }}</div>
@@ -76,12 +67,9 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>First year of reporting obligation</dt>
       <dd govukSummaryListRowValue>{{ accountInfo.firstMaritimeActivityDate | govukDate }}</dd>
-      @if (editable()) {
+      @if (editable) {
         <dd govukSummaryListRowActions>
-          <a [routerLink]="[formRouterLink()]" govukLink>
-            Change
-            <span class="govuk-visually-hidden">first year of reporting obligation</span>
-          </a>
+          <a [routerLink]="[formRouterLink]" govukLink>Change</a>
         </dd>
       }
     </div>

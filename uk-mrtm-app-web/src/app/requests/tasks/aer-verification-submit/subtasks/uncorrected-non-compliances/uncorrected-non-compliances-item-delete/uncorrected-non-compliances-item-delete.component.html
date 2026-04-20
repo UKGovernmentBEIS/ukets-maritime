@@ -1,12 +1,10 @@
-<div class="govuk-grid-row">
-  <div class="govuk-grid-column-two-thirds">
-    <netz-page-heading>Are you sure you want to delete '{{ reference() }}'?</netz-page-heading>
+<div class="govuk-!-width-two-thirds">
+  <netz-page-heading>Are you sure you want to delete '{{ reference() }}'?</netz-page-heading>
 
-    <p class="govuk-body govuk-!-margin-bottom-8">Any reference for this item will be removed from your report.</p>
+  <p class="govuk-body govuk-!-margin-bottom-8">Any reference for this item will be removed from your report.</p>
 
-    <div class="govuk-button-group">
-      <button type="button" (click)="onSubmit()" netzPendingButton govukWarnButton>Yes, delete</button>
-      <a govukLink class="govuk-link--no-visited-state" [routerLink]="[`../../${wizardStep.ITEMS_LIST}`]">Cancel</a>
-    </div>
+  <div class="govuk-button-group">
+    <button type="button" (click)="onSubmit()" netzPendingButton govukWarnButton>Yes, delete</button>
+    <a govukLink class="govuk-link--no-visited-state" [routerLink]="['../../' + wizardStep.ITEMS_LIST]">Cancel</a>
   </div>
 </div>

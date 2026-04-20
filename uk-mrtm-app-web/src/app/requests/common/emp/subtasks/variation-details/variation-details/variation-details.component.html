@@ -11,8 +11,8 @@
     govuk-checkboxes
     hint='<div class="govuk-inset-text">You must apply for this variation at least 14 days before making any of these significant changes, or as soon as
       possible if this is not practicable. You must make the changes directly in the relevant section of the plan.</div>'
-    label="Significant changes"
-    labelSize="medium">
+    legend="Significant changes"
+    legendSize="medium">
     @for (opt of significantChangesOptions; track opt) {
       <govuk-checkbox [value]="opt.value" [label]="opt.text">
         @if (opt.value === 'OTHER_SIGNIFICANT') {
@@ -33,8 +33,8 @@
     hint='<div class="govuk-inset-text">You must notify the regulator by 31 December in the year in which the change occurred, either through this
       variation
       workflow or the notification workflow. These changes can then be made to the permit when it is next updated.</div>'
-    label="Non significant changes"
-    labelSize="medium">
+    legend="Non significant changes"
+    legendSize="medium">
     @for (opt of nonSignificantChangesOptions; track opt) {
       <govuk-checkbox [value]="opt.value" [label]="opt.text">
         @if (opt.value === 'OTHER_NON_SIGNIFICANT') {

@@ -31,7 +31,7 @@ public class EmpBatchReissueRequestsAndInitiatePermissionOrchestrator {
                 .requestTypes(Set.of(MrtmRequestType.EMP_BATCH_REISSUE))
                 .historyCategory(MrtmRequestHistoryCategory.CA.name())
                 .paging(pagingRequestInfo)
-                .build(), authUser);
+                .build());
         final boolean canInitiateBatchReissue = compAuthAuthorizationResourceService.hasUserScopeOnResourceSubType(authUser,
                 Scope.REQUEST_CREATE, MrtmRequestType.EMP_BATCH_REISSUE);
 

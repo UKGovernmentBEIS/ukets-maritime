@@ -6,9 +6,9 @@ import { LinkDirective } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-email-link-invalid',
-  imports: [PageHeadingComponent, LinkDirective, RouterLink],
-  standalone: true,
   templateUrl: './email-link-invalid.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [PageHeadingComponent, LinkDirective, RouterLink],
 })
 export class EmailLinkInvalidComponent {}

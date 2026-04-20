@@ -33,16 +33,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emission-sources-variation-regulator-decision',
+  standalone: true,
   imports: [
     EmissionSourcesSummaryTemplateComponent,
     ReactiveFormsModule,
     WizardStepComponent,
     VariationRegulatorDecisionComponent,
   ],
-  standalone: true,
   templateUrl: './emission-sources-variation-regulator-decision.component.html',
-  providers: [variationRegulatorDecisionFormProvider(EMISSION_SOURCES_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [variationRegulatorDecisionFormProvider(EMISSION_SOURCES_SUB_TASK)],
 })
 export class EmissionSourcesVariationRegulatorDecisionComponent {
   protected readonly form: VariationRegulatorDecisionFormModel = inject(VARIATION_REGULATOR_DECISION_FORM);
@@ -52,7 +52,7 @@ export class EmissionSourcesVariationRegulatorDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       emissionSources: this.store.select(empCommonQuery.selectEmissionSources)(),
       originalEmissionSources: this.store.select(empVariationRegulatorQuery.selectOriginalEmissionSources)(),

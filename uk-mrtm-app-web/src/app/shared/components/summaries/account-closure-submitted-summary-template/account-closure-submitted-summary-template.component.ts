@@ -12,6 +12,7 @@ import { AccountClosureDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-account-closure-submitted-summary-template',
+  standalone: true,
   imports: [
     GovukDatePipe,
     SummaryListComponent,
@@ -19,10 +20,9 @@ import { AccountClosureDto } from '@shared/types';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
   ],
-  standalone: true,
   templateUrl: './account-closure-submitted-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountClosureSubmittedSummaryTemplateComponent {
-  readonly accountClosure = input.required<AccountClosureDto>();
+  accountClosure = input.required<AccountClosureDto>();
 }

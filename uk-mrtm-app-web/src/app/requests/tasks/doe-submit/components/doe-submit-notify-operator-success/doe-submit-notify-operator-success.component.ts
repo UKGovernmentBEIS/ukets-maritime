@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-doe-submit-notify-operator-success',
-  imports: [RouterLink, LinkDirective, PanelComponent],
   standalone: true,
+  imports: [RouterLink, LinkDirective, PanelComponent],
   templateUrl: './doe-submit-notify-operator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

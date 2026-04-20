@@ -32,7 +32,7 @@ describe('DeterminationReasonComponent', () => {
 
   class Page extends BasePage<DeterminationReasonComponent> {
     get typeRadios() {
-      return this.queryAll<HTMLInputElement>('input[name$="details.type"]');
+      return this.queryAll<HTMLInputElement>('input[name$="type"]');
     }
 
     get furtherDetails() {
@@ -41,14 +41,6 @@ describe('DeterminationReasonComponent', () => {
 
     set furtherDetails(value: string) {
       this.setInputValue(`#furtherDetails`, value);
-    }
-
-    get noticeText() {
-      return this.getInputValue('#details.noticeText');
-    }
-
-    set noticeText(value: string) {
-      this.setInputValue(`#details.noticeText`, value);
     }
   }
 
@@ -85,7 +77,7 @@ describe('DeterminationReasonComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual(
+      expect(page.heading1.textContent.trim()).toEqual(
         'Reason for determining maritime emissions or emissions figure for surrender',
       );
       expect(page.submitButton).toBeTruthy();
@@ -94,18 +86,12 @@ describe('DeterminationReasonComponent', () => {
     it('should display error on empty form submit', () => {
       page.submitButton.click();
       fixture.detectChanges();
+
       expect(page.errorSummary).toBeTruthy();
       expect(page.errorSummaryListContents.length).toEqual(1);
       expect(page.errorSummaryListContents).toEqual([
         'Select why are you determining the maritime emissions or emissions figure for surrender',
       ]);
-
-      page.typeRadios[1].click();
-      page.submitButton.click();
-      fixture.detectChanges();
-      expect(page.errorSummary).toBeTruthy();
-      expect(page.errorSummaryListContents.length).toEqual(1);
-      expect(page.errorSummaryListContents).toEqual(['Enter a notice text']);
     });
   });
 
@@ -128,11 +114,10 @@ describe('DeterminationReasonComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent).toEqual(
+      expect(page.heading1.textContent.trim()).toEqual(
         'Reason for determining maritime emissions or emissions figure for surrender',
       );
       expect(page.typeRadios[1].checked).toBeTruthy();
-      expect(page.noticeText).toEqual('test notice text');
       expect(page.furtherDetails).toEqual('test further details');
       expect(page.submitButton).toBeTruthy();
     });
@@ -140,7 +125,6 @@ describe('DeterminationReasonComponent', () => {
     it(`should edit and submit a valid form`, async () => {
       page.furtherDetails = 'further details edited';
       page.typeRadios[0].click();
-      page.noticeText = 'test';
       page.submitButton.click();
       fixture.detectChanges();
 
@@ -149,10 +133,7 @@ describe('DeterminationReasonComponent', () => {
         MARITIME_EMISSIONS_SUB_TASK,
         MaritimeEmissionsWizardStep.DETERMINATION_REASON,
         route,
-        {
-          details: { type: 'VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER', noticeText: 'test' },
-          furtherDetails: 'further details edited',
-        },
+        { type: 'VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER', furtherDetails: 'further details edited' },
       );
     });
   });

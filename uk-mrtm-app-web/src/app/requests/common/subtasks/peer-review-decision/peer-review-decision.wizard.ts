@@ -1,6 +1,6 @@
-import { PeerReviewDecision } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { PeerReviewDecision } from '@mrtm/api';
 
 export const isPeerReviewWizardCompleted = (decision: PeerReviewDecision) =>
   !isNil(decision?.type) && !isNil(decision?.notes);

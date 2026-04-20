@@ -13,7 +13,6 @@ import {
 } from '@requests/tasks/emp-variation-review/emp-variation-review.providers';
 import { canActivateEmpVariationReviewActions } from '@requests/tasks/emp-variation-review/guards';
 import { HTML_DIFF } from '@shared/directives';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_VARIATION_REVIEW_ROUTES: Routes = [
   {
@@ -27,7 +26,6 @@ export const EMP_VARIATION_REVIEW_ROUTES: Routes = [
       SideEffectsHandler,
       { provide: HTML_DIFF, useValue: true },
     ],
-    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'variation-details',

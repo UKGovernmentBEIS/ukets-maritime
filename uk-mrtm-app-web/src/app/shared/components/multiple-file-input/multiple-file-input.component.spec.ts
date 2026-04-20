@@ -11,8 +11,9 @@ import { FileUuidDTO } from '@mrtm/api';
 
 import { HttpStatuses } from '@netz/common/error';
 import { BasePage } from '@netz/common/testing';
+import { GovukComponentsModule } from '@netz/govuk-components';
 
-import { FileValidators, MultipleFileInputComponent } from '@shared/components';
+import { FileUploadListComponent, FileValidators, MultipleFileInputComponent } from '@shared/components';
 import { FileUploadService } from '@shared/services';
 
 describe('MultipleFileInputComponent', () => {
@@ -23,11 +24,11 @@ describe('MultipleFileInputComponent', () => {
   let control: FormControl;
 
   @Component({
-    imports: [ReactiveFormsModule, MultipleFileInputComponent],
-    standalone: true,
     template: `
       <form [formGroup]="form">
-        <mrtm-multiple-file-input formControlName="file" [baseDownloadUrl]="getDownloadUrl()" />
+        <mrtm-multiple-file-input
+          formControlName="file"
+          [baseDownloadUrl]="getDownloadUrl()"></mrtm-multiple-file-input>
       </form>
     `,
   })
@@ -58,7 +59,9 @@ describe('MultipleFileInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
+      imports: [ReactiveFormsModule, GovukComponentsModule, MultipleFileInputComponent, FileUploadListComponent],
       providers: [provideRouter([])],
+      declarations: [TestComponent],
     }).compileComponents();
   });
 

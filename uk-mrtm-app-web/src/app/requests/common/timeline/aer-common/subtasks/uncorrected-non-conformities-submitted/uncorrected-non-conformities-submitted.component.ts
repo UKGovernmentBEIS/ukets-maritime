@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     UncorrectedNonConformitiesSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './uncorrected-non-conformities-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

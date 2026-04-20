@@ -7,8 +7,8 @@ import { RequestForInformationStore } from '@requests/common/emp/request-for-inf
 
 @Component({
   selector: 'mrtm-request-for-information-success',
-  imports: [LinkDirective, RouterLink, PanelComponent],
   standalone: true,
+  imports: [LinkDirective, RouterLink, PanelComponent],
   templateUrl: './request-for-information-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

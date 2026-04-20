@@ -19,6 +19,7 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-vir-operator-response-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -31,7 +32,6 @@ import { AttachedFile } from '@shared/types';
     LinkDirective,
     SummaryDownloadFilesComponent,
   ],
-  standalone: true,
   templateUrl: './vir-operator-response-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -3,6 +3,7 @@ import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { EmpRegisteredOwner, RegisteredOwnerShipDetails } from '@mrtm/api';
 
@@ -19,10 +20,10 @@ import { mandateMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { NotificationBannerComponent, XmlErrorSummaryComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { NestedMessageValidationError, XmlValidationError } from '@shared/types';
-import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-registered-owners-list',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -35,7 +36,6 @@ import { isNil } from '@shared/utils';
     NotificationBannerComponent,
     LinkDirective,
   ],
-  standalone: true,
   templateUrl: './mandate-registered-owners-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -60,7 +60,7 @@ export class MandateRegisteredOwnersListComponent {
     () => !isNil(this.data().find((ro) => ro.needsReview === true)),
   );
 
-  public readonly allShipsAssociated: Signal<boolean> = computed(() => {
+  public allShipsAssociated: Signal<boolean> = computed(() => {
     const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
       this.data()

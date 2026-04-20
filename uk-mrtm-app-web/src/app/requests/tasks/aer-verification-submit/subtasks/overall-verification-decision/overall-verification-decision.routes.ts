@@ -16,9 +16,9 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
     canActivate: [canActivateOverallVerificationDecisionSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-summary').then(
-        (c) => c.OverallVerificationDecisionSummaryComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-summary'
+      ).then((c) => c.OverallVerificationDecisionSummaryComponent),
   },
   {
     path: OverallVerificationDecisionStep.ASSESSMENT,
@@ -29,9 +29,9 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
       backlink: backlinkResolver(OverallVerificationDecisionStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-assessment').then(
-        (c) => c.OverallVerificationDecisionAssessmentComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-assessment'
+      ).then((c) => c.OverallVerificationDecisionAssessmentComponent),
   },
   {
     path: OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_LIST,
@@ -42,9 +42,9 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
       backlink: backlinkResolver(OverallVerificationDecisionStep.SUMMARY, OverallVerificationDecisionStep.ASSESSMENT),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-list').then(
-        (c) => c.OverallVerificationDecisionCommentsListComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-list'
+      ).then((c) => c.OverallVerificationDecisionCommentsListComponent),
   },
   {
     path: OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_FORM_ADD,
@@ -55,9 +55,9 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
       backlink: () => `../${OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_LIST}`,
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-form').then(
-        (c) => c.OverallVerificationDecisionCommentsFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-form'
+      ).then((c) => c.OverallVerificationDecisionCommentsFormComponent),
   },
   {
     path: `:reasonIndex/${OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_FORM_EDIT}`,
@@ -68,9 +68,9 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
       backlink: () => `../../${OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_LIST}`,
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-form').then(
-        (c) => c.OverallVerificationDecisionCommentsFormComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-form'
+      ).then((c) => c.OverallVerificationDecisionCommentsFormComponent),
   },
   {
     path: `:reasonIndex/${OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_DELETE}`,
@@ -81,9 +81,9 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
       backlink: () => `../../${OverallVerificationDecisionStep.VERIFIED_WITH_COMMENTS_LIST}`,
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-delete').then(
-        (c) => c.OverallVerificationDecisionCommentsDeleteComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-comments-delete'
+      ).then((c) => c.OverallVerificationDecisionCommentsDeleteComponent),
   },
   {
     path: OverallVerificationDecisionStep.NOT_VERIFIED_REASONS,
@@ -94,8 +94,8 @@ export const OVERALL_VERIFICATION_DECISION_ROUTES: Routes = [
       backlink: backlinkResolver(OverallVerificationDecisionStep.SUMMARY, OverallVerificationDecisionStep.ASSESSMENT),
     },
     loadComponent: () =>
-      import('@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-not-verified-reasons').then(
-        (c) => c.OverallVerificationDecisionNotVerifiedReasonsComponent,
-      ),
+      import(
+        '@requests/tasks/aer-verification-submit/subtasks/overall-verification-decision/overall-verification-decision-not-verified-reasons'
+      ).then((c) => c.OverallVerificationDecisionNotVerifiedReasonsComponent),
   },
 ];

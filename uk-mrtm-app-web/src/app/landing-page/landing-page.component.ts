@@ -1,5 +1,6 @@
 import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, OnInit, Signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { RouterLink } from '@angular/router';
 
 import { KeycloakProfile } from 'keycloak-js';
@@ -23,6 +24,10 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-landing-page',
+  standalone: true,
+  templateUrl: './landing-page.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
   imports: [
     PageHeadingComponent,
     RouterLink,
@@ -32,13 +37,9 @@ interface ViewModel {
     ServiceBannerComponent,
     LinkDirective,
   ],
-  standalone: true,
-  templateUrl: './landing-page.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LandingPageComponent {
-  readonly vm: Signal<ViewModel> = computed(() => {
+export class LandingPageComponent implements OnInit {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       isLoggedIn: this.authStore.select(selectIsLoggedIn)(),
       userProfile: this.authStore.select(selectUserProfile)(),
@@ -49,4 +50,9 @@ export class LandingPageComponent {
 
   private readonly authStore = inject(AuthStore);
   public readonly authService = inject(AuthService);
+  private readonly title = inject(Title);
+
+  ngOnInit(): void {
+    this.title.setTitle('Maritime');
+  }
 }

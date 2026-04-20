@@ -24,6 +24,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-non-compliance-details-civil-penalty',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     RadioComponent,
@@ -32,10 +33,9 @@ import { WizardStepComponent } from '@shared/components';
     ReactiveFormsModule,
     WizardStepComponent,
   ],
-  standalone: true,
   templateUrl: './non-compliance-details-civil-penalty.component.html',
-  providers: [nonComplianceDetailsCivilPenaltyProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [nonComplianceDetailsCivilPenaltyProvider],
 })
 export class NonComplianceDetailsCivilPenaltyComponent {
   readonly map = nonComplianceDetailsMap;

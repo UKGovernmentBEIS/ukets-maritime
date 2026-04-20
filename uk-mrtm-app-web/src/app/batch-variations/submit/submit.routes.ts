@@ -8,7 +8,6 @@ import { PendingRequestGuard } from '@core/guards';
 export const SUBMIT_ROUTES: Routes = [
   {
     path: '',
-    title: 'Batch variation summary',
     canActivate: [canActivateStep(SubmitWizardSteps.SUMMARY)],
     canDeactivate: [PendingRequestGuard],
     data: { backlink: '../', breadcrumb: false },
@@ -16,7 +15,6 @@ export const SUBMIT_ROUTES: Routes = [
   },
   {
     path: SubmitWizardSteps.EMP_LOG,
-    title: 'Provide a summary of changes for the emissions monitoring plan log',
     data: { breadcrumb: false },
     canActivate: [canActivateStep(SubmitWizardSteps.EMP_LOG)],
     resolve: {
@@ -26,7 +24,6 @@ export const SUBMIT_ROUTES: Routes = [
   },
   {
     path: SubmitWizardSteps.SIGNATURE,
-    title: 'Whose name and signature should appear on the notice?',
     data: { breadcrumb: false },
     canActivate: [canActivateStep(SubmitWizardSteps.SIGNATURE)],
     resolve: {
@@ -36,7 +33,6 @@ export const SUBMIT_ROUTES: Routes = [
   },
   {
     path: 'success',
-    title: 'Batch variation in progress',
     canActivate: [canActivateStep(SubmitWizardSteps.SUMMARY)],
     data: { breadcrumb: true, backlink: false },
     loadComponent: () => import('@batch-variations/submit/success').then((c) => c.SuccessComponent),

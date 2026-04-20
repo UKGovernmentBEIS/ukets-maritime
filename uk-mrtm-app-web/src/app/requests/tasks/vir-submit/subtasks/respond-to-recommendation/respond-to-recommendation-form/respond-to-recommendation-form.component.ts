@@ -27,6 +27,7 @@ import { VirVerifierRecommendationSummaryTemplateComponent, WizardStepComponent 
 
 @Component({
   selector: 'mrtm-respond-to-recommendation-form',
+  standalone: true,
   imports: [
     WizardStepComponent,
     VirVerifierRecommendationSummaryTemplateComponent,
@@ -41,9 +42,8 @@ import { VirVerifierRecommendationSummaryTemplateComponent, WizardStepComponent 
     NgTemplateOutlet,
     UpperCasePipe,
   ],
-  standalone: true,
-  templateUrl: './respond-to-recommendation-form.component.html',
   providers: [respondToRecommendationFormProvider],
+  templateUrl: './respond-to-recommendation-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RespondToRecommendationFormComponent implements AfterViewInit {

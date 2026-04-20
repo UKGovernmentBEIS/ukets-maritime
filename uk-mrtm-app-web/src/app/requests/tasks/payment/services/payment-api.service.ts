@@ -9,9 +9,8 @@ import {
   PaymentCancelRequestTaskActionPayload,
   PaymentMarkAsReceivedRequestTaskActionPayload,
   PaymentsService,
-  RequestTaskActionEmptyPayload,
-  RequestTaskActionProcessDTO,
 } from '@mrtm/api';
+import { RequestTaskActionEmptyPayload, RequestTaskActionProcessDTO } from '@mrtm/api';
 
 import {
   BusinessErrorService,

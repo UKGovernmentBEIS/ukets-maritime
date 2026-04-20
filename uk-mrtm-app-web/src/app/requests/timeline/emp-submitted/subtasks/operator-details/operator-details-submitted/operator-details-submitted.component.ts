@@ -32,7 +32,7 @@ interface ViewModel {
 export class OperatorDetailsSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const empOperatorDetails = this.store.select(empSubmittedQuery.selectOperatorDetails)();
 
     return {

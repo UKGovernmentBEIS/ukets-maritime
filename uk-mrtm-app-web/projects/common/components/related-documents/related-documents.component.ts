@@ -10,19 +10,19 @@ import { PreviewDocument } from './related-documents.providers';
 
 @Component({
   selector: 'netz-related-documents',
-  imports: [LinkDirective, RouterLink],
   standalone: true,
   templateUrl: './related-documents.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LinkDirective, RouterLink],
 })
 export class RelatedDocumentsComponent {
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  readonly fileDownloadPrePath = input<Array<string>>([]);
-  readonly previewDocuments = input.required<PreviewDocument[]>();
-  readonly taskId = input.required<RequestTaskDTO['id'] | RequestDetailsDTO['id']>();
-  readonly decisionNotification = input<DecisionNotification>();
-  readonly isDisabled: WritableSignal<boolean> = signal(false);
+  fileDownloadPrePath = input<Array<string>>([]);
+  previewDocuments = input.required<PreviewDocument[]>();
+  taskId = input.required<RequestTaskDTO['id'] | RequestDetailsDTO['id']>();
+  decisionNotification = input<DecisionNotification>();
+  isDisabled: WritableSignal<boolean> = signal(false);
 
   public getDownloadLinkQueryParams(document: PreviewDocument): Params {
     const { filename } = document;

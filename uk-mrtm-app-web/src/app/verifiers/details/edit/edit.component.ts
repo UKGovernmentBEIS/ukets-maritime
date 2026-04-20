@@ -12,10 +12,10 @@ import { EDIT_USER_AUTHORITY_PROVIDER, editFormProvider } from '@verifiers/detai
 
 @Component({
   selector: 'mrtm-edit',
-  imports: [UserAccountFormComponent, WizardStepComponent, ReactiveFormsModule],
   standalone: true,
-  templateUrl: './edit.component.html',
+  imports: [UserAccountFormComponent, WizardStepComponent, ReactiveFormsModule],
   providers: [editFormProvider],
+  templateUrl: './edit.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EditComponent {

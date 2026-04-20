@@ -24,6 +24,10 @@ type RateWithoutNotApplicable = Exclude<Rate, 'NOT_APPLICABLE_NOT_USED_YET'>;
 
 @Component({
   selector: 'mrtm-feedback',
+  standalone: true,
+  templateUrl: './feedback.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [DestroySubject],
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -35,10 +39,6 @@ type RateWithoutNotApplicable = Exclude<Rate, 'NOT_APPLICABLE_NOT_USED_YET'>;
     ReactiveFormsModule,
     PendingButtonDirective,
   ],
-  standalone: true,
-  templateUrl: './feedback.component.html',
-  providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeedbackComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);

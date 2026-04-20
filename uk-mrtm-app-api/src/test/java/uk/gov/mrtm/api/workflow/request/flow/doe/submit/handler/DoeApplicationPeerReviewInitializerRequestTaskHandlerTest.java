@@ -8,7 +8,6 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPay
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
-import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestPayload;
@@ -28,15 +27,10 @@ class DoeApplicationPeerReviewInitializerRequestTaskHandlerTest {
     void initializePayload() {
         Doe doe = Doe.builder()
                 .maritimeEmissions(DoeMaritimeEmissions.builder()
-                    .determinationReason(
-                        DoeDeterminationReason.builder()
-                            .details(DoeDeterminationReasonDetails.builder()
-                            .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
-                            .noticeText("noticeText")
-                            .build())
-                            .furtherDetails("furtherDetails")
-                            .build()
-                    )
+                        .determinationReason(DoeDeterminationReason.builder()
+                        .furtherDetails("furtherDetails")
+                        .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                        .build())
                     .build())
                 .build();
         DoeRequestPayload requestPayload = DoeRequestPayload.builder()

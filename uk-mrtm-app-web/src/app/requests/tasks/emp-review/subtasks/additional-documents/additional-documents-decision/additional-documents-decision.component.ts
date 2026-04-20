@@ -35,16 +35,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-additional-documents-decision',
+  standalone: true,
   imports: [
     AdditionalDocumentsSummaryTemplateComponent,
     ReviewDecisionComponent,
     WizardStepComponent,
     ReactiveFormsModule,
   ],
-  standalone: true,
   templateUrl: './additional-documents-decision.component.html',
-  providers: [reviewDecisionFormProvider(ADDITIONAL_DOCUMENTS_SUB_TASK)],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reviewDecisionFormProvider(ADDITIONAL_DOCUMENTS_SUB_TASK)],
 })
 export class AdditionalDocumentsDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(REVIEW_DECISION_FORM);
@@ -52,7 +52,7 @@ export class AdditionalDocumentsDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(empCommonQuery.selectAdditionalDocuments)();
     return {
       additionalDocuments: additionalDocuments,

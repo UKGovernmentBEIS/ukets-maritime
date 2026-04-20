@@ -10,28 +10,27 @@ describe('NotificationBannerComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: true,
     imports: [NotificationBannerComponent],
     template: `
       <govuk-notification-banner [type]="type" [heading]="heading">
         <h3 class="govuk-notification-banner__heading">Training outcome recorded and trainee withdrawn</h3>
-        <p>Test content</p>
+        <p class="govuk-body">Test content</p>
       </govuk-notification-banner>
     `,
   })
   class TestComponent {
-    type: 'success' | 'neutral' = 'neutral';
-    heading?: string;
+    type: NotificationBannerComponent['type'] = 'neutral';
+    heading: string = 'Alert';
   }
 
   const getBanner = () => element.querySelector<HTMLDivElement>('.govuk-notification-banner');
   const getHeading = () => element.querySelector<HTMLHeadingElement>('.govuk-notification-banner__title');
 
-  const createComponent = (type: 'success' | 'neutral', heading?: string) => {
+  const createComponent = (type: NotificationBannerComponent['type'], heading?: string) => {
     fixture = TestBed.createComponent(TestComponent);
-    fixture.componentInstance.type = type;
-    if (heading !== undefined) {
-      fixture.componentInstance.heading = heading;
-    }
+    fixture.componentInstance['type'] = type;
+    fixture.componentInstance['heading'] = heading;
     component = fixture.debugElement.query(By.directive(NotificationBannerComponent)).componentInstance;
     element = fixture.nativeElement;
     fixture.detectChanges();
@@ -60,7 +59,7 @@ describe('NotificationBannerComponent', () => {
 
     it('should project content', () => {
       expect(element.querySelector<HTMLHeadingElement>('.govuk-notification-banner__heading')).toBeTruthy();
-      expect(element.querySelector<HTMLParagraphElement>('p')).toBeTruthy();
+      expect(element.querySelector<HTMLAnchorElement>('p.govuk-body')).toBeTruthy();
     });
 
     it('should not focus the element in neutral notifications', () => {

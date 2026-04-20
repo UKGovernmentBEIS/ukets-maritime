@@ -11,9 +11,9 @@ describe('PageHeadingComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    imports: [PageHeadingComponent],
-    standalone: true,
     template: '<netz-page-heading [caption]="caption" [size]="size">Test heading</netz-page-heading>',
+    standalone: true,
+    imports: [PageHeadingComponent],
   })
   class TestComponent {
     caption: string;

@@ -17,18 +17,13 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmpDetailsDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.managementprocedures.EmpManagementProcedures;
 import uk.gov.mrtm.api.emissionsmonitoringplan.repository.EmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
-import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
-import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
-import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.files.documents.service.FileDocumentService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
-import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
-import uk.gov.netz.api.workflow.request.core.domain.RequestTaskType;
 import uk.gov.netz.api.workflow.request.core.repository.RequestRepository;
 
 import java.util.List;
@@ -40,7 +35,6 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
@@ -289,66 +283,5 @@ class EmissionsMonitoringPlanQueryServiceTest {
         int result = emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanConsolidationNumberByAccountId(accountId);
         assertThat(result).isEqualTo(1);
         verify(emissionsMonitoringPlanRepository, times(1)).findByAccountId(accountId);
-    }
-
-    @Test
-    void getLastestEmissionsMonitoringPlan_when_emp_exists() {
-        EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
-        EmissionsMonitoringPlanContainer empContainer = EmissionsMonitoringPlanContainer.builder()
-            .emissionsMonitoringPlan(emissionsMonitoringPlan)
-            .build();
-
-        EmissionsMonitoringPlanEntity empEntity = new EmissionsMonitoringPlanEntity("1", ACCOUNT_ID, empContainer, null);
-
-        when(emissionsMonitoringPlanRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.of(empEntity));
-
-        EmissionsMonitoringPlan lastestEmissionsMonitoringPlan = emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
-        assertEquals(emissionsMonitoringPlan,  lastestEmissionsMonitoringPlan);
-
-        verify(emissionsMonitoringPlanRepository).findByAccountId(ACCOUNT_ID);
-        verifyNoMoreInteractions(emissionsMonitoringPlanRepository);
-        verifyNoInteractions(fileDocumentService, requestRepository, empIdentifierGenerator, empValidatorService);
-    }
-
-    @Test
-    void getLastestEmissionsMonitoringPlan_when_emp_does_not_exist_and_emp_review_exists() {
-        EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
-
-        when(emissionsMonitoringPlanRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.empty());
-        EmpIssuanceApplicationReviewRequestTaskPayload requestTaskPayload = EmpIssuanceApplicationReviewRequestTaskPayload.builder().emissionsMonitoringPlan(emissionsMonitoringPlan).build();
-        RequestTaskType requestTaskType = RequestTaskType.builder().code(MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_REVIEW).build();
-        RequestTask requestTask = RequestTask.builder().type(requestTaskType).payload(requestTaskPayload).build();
-        Request request = Request.builder().requestTasks(List.of(requestTask)).build();
-        when(requestRepository.findByRequestTypeAndResourceTypeAndResourceId(MrtmRequestType.EMP_ISSUANCE, ResourceType.ACCOUNT, String.valueOf(ACCOUNT_ID)))
-            .thenReturn(List.of(request));
-
-        EmissionsMonitoringPlan lastestEmissionsMonitoringPlan = emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
-        assertEquals(emissionsMonitoringPlan,  lastestEmissionsMonitoringPlan);
-
-        verify(emissionsMonitoringPlanRepository).findByAccountId(ACCOUNT_ID);
-        verify(requestRepository).findByRequestTypeAndResourceTypeAndResourceId(MrtmRequestType.EMP_ISSUANCE, ResourceType.ACCOUNT, String.valueOf(ACCOUNT_ID));
-        verifyNoMoreInteractions(requestRepository, emissionsMonitoringPlanRepository);
-        verifyNoInteractions(fileDocumentService, empIdentifierGenerator, empValidatorService);
-    }
-
-    @Test
-    void getLastestEmissionsMonitoringPlan_when_emp_does_not_exist_and_emp_review_does_not_exist() {
-        EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
-
-        when(emissionsMonitoringPlanRepository.findByAccountId(ACCOUNT_ID)).thenReturn(Optional.empty());
-        EmpIssuanceApplicationReviewRequestTaskPayload requestTaskPayload = EmpIssuanceApplicationReviewRequestTaskPayload.builder().emissionsMonitoringPlan(emissionsMonitoringPlan).build();
-        RequestTaskType requestTaskType = RequestTaskType.builder().code(MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_SUBMIT).build();
-        RequestTask requestTask = RequestTask.builder().type(requestTaskType).payload(requestTaskPayload).build();
-        Request request = Request.builder().requestTasks(List.of(requestTask)).build();
-        when(requestRepository.findByRequestTypeAndResourceTypeAndResourceId(MrtmRequestType.EMP_ISSUANCE, ResourceType.ACCOUNT, String.valueOf(ACCOUNT_ID)))
-            .thenReturn(List.of(request));
-
-        EmissionsMonitoringPlan lastestEmissionsMonitoringPlan = emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(ACCOUNT_ID);
-        assertNull(lastestEmissionsMonitoringPlan);
-
-        verify(emissionsMonitoringPlanRepository).findByAccountId(ACCOUNT_ID);
-        verify(requestRepository).findByRequestTypeAndResourceTypeAndResourceId(MrtmRequestType.EMP_ISSUANCE, ResourceType.ACCOUNT, String.valueOf(ACCOUNT_ID));
-        verifyNoMoreInteractions(requestRepository, emissionsMonitoringPlanRepository);
-        verifyNoInteractions(fileDocumentService, empIdentifierGenerator, empValidatorService);
     }
 }

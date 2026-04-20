@@ -1,6 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 
 import { combineLatest, iif, map, Observable, switchMap, tap } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import {
   UsersService,
@@ -18,7 +19,6 @@ import { PendingRequestService } from '@netz/common/services';
 
 import { Store } from '@core/store';
 import { SubmissionError } from '@shared/types';
-import { isNil } from '@shared/utils';
 import { selectIsEditableVerifierUsersList } from '@verifiers/+state/verifier-user.selectors';
 import {
   initialCreateUserAuthorityState,

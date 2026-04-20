@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  contentChild,
+  ContentChild,
   inject,
-  input,
+  Input,
   TemplateRef,
-  viewChild,
+  ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
@@ -14,21 +14,21 @@ import { ConditionalContentDirective } from '../../directives';
 
 @Component({
   selector: 'govuk-radio-option',
-  imports: [],
   standalone: true,
+  imports: [],
   templateUrl: './radio-option.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RadioOptionComponent<T> implements ControlValueAccessor {
   readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  readonly value = input<T>();
-  readonly label = input<string>();
-  readonly hint = input<string>();
-  readonly divider = input<boolean>();
-  readonly conditional = contentChild(ConditionalContentDirective);
-  readonly conditionalTemplate = viewChild<TemplateRef<any>>('conditionalTemplate');
-  readonly optionTemplate = viewChild<TemplateRef<any>>('optionTemplate');
+  @Input() value: T;
+  @Input() label: string;
+  @Input() hint?: string;
+  @Input() divider?: boolean;
+  @ContentChild(ConditionalContentDirective, { static: true }) readonly conditional: ConditionalContentDirective;
+  @ViewChild('conditionalTemplate', { static: true }) conditionalTemplate: TemplateRef<any>;
+  @ViewChild('optionTemplate', { static: true }) optionTemplate: TemplateRef<any>;
   isChecked: boolean;
   index: number;
   isDisabled: boolean;
@@ -49,7 +49,7 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
   }
 
   writeValue(newValue: T): void {
-    this.isChecked = newValue === this.value();
+    this.isChecked = newValue === this.value;
     this.setConditionalDisabledState();
     this.changeDetectorRef.detectChanges();
   }
@@ -62,9 +62,9 @@ export class RadioOptionComponent<T> implements ControlValueAccessor {
 
   private setConditionalDisabledState() {
     if (this.isChecked && !this.isDisabled) {
-      this.conditional()?.enableControls();
+      this.conditional?.enableControls();
     } else {
-      this.conditional()?.disableControls();
+      this.conditional?.disableControls();
     }
   }
 }

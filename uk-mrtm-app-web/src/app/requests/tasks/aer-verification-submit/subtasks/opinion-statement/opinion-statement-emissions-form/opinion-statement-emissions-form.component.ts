@@ -23,6 +23,7 @@ import { AerEmissionsOverviewSummaryTemplateComponent } from '@shared/components
 
 @Component({
   selector: 'mrtm-opinion-statement-emissions-form',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     TextInputComponent,
@@ -32,10 +33,9 @@ import { AerEmissionsOverviewSummaryTemplateComponent } from '@shared/components
     WizardStepComponent,
     AerEmissionsOverviewSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './opinion-statement-emissions-form.component.html',
-  providers: [opinionStatementEmissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [opinionStatementEmissionsFormProvider],
 })
 export class OpinionStatementEmissionsFormComponent {
   readonly map = opinionStatementMap;

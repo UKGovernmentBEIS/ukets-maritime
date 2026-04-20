@@ -18,6 +18,7 @@ import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-fuels-and-emission-factors-summary-template',
+  standalone: true,
   imports: [
     SummaryCardComponent,
     LinkDirective,
@@ -30,7 +31,6 @@ import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
     SelectOptionToTitlePipe,
     NotProvidedDirective,
   ],
-  standalone: true,
   templateUrl: './fuels-and-emission-factors-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

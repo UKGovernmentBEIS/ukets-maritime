@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, Input, Output } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
 import { EmpEmissionsSources, EmpShipEmissions } from '@mrtm/api';
@@ -9,25 +9,25 @@ import { EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent } from '@shared
 
 @Component({
   selector: 'mrtm-emissions-sources-and-fuel-types-used-list-summary-template',
-  imports: [EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent, ButtonDirective, LinkDirective, RouterLink],
   standalone: true,
+  imports: [EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent, ButtonDirective, LinkDirective, RouterLink],
   templateUrl: './emissions-sources-and-fuel-types-used-list-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsSourcesAndFuelTypesUsedListSummaryTemplateComponent {
-  readonly data = input.required<EmpShipEmissions['emissionsSources']>();
-  readonly changeLinkForm = input<string>();
-  readonly changeLinkList = input<string>();
-  readonly isEditable = input<boolean>(false);
-  readonly queryParams = input<Params>({});
-  readonly delete = output<EmpEmissionsSources>();
+  @Input({ required: true }) readonly data: EmpShipEmissions['emissionsSources'];
+  @Input() readonly changeLinkForm: string;
+  @Input() readonly changeLinkList: string;
+  @Input() readonly isEditable: boolean = false;
+  @Input() readonly queryParams: Params = {};
+  @Output() readonly delete = new EventEmitter<EmpEmissionsSources>();
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
   handleAddAnother(): void {
-    this.router.navigate(['./', this.changeLinkForm(), crypto.randomUUID()], {
+    this.router.navigate(['./', this.changeLinkForm, crypto.randomUUID()], {
       relativeTo: this.route,
-      queryParams: this.queryParams(),
+      queryParams: this.queryParams,
     });
   }
 

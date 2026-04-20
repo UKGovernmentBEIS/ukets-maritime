@@ -1,6 +1,6 @@
-@for (superSection of superSections(); track $index) {
+@for (superSection of superSections; track index; let index = $index) {
   <div class="app-task-list__supersection">
-    <h2 class="app-task-list__supersection-title" [attr.data-index]="$index + 1">{{ superSection.superTitle }}</h2>
+    <h2 class="app-task-list__supersection-title" [attr.data-index]="index + 1">{{ superSection.superTitle }}</h2>
     <netz-task-list [sections]="superSection.sections" titleElement="h3" />
   </div>
 }

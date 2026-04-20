@@ -21,6 +21,7 @@ import { GuidanceService } from '@guidance/services';
 
 @Component({
   selector: 'mrtm-manage-sections-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     LinkDirective,
@@ -34,7 +35,6 @@ import { GuidanceService } from '@guidance/services';
     ButtonDirective,
     PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './manage-sections-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

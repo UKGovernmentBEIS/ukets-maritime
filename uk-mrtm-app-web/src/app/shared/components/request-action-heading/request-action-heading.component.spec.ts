@@ -12,8 +12,6 @@ describe('RequestActionHeadingComponent', () => {
   let page: Page;
 
   @Component({
-    imports: [RequestActionHeadingComponent],
-    standalone: true,
     template: `
       <mrtm-request-action-heading [headerText]="headerText" [timelineCreationDate]="timelineCreationDate">
         <div>New content</div>
@@ -40,6 +38,11 @@ describe('RequestActionHeadingComponent', () => {
   }
 
   beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RequestActionHeadingComponent],
+      declarations: [TestComponent],
+    }).compileComponents();
+
     fixture = TestBed.createComponent(TestComponent);
     page = new Page(fixture);
     component = fixture.componentInstance;

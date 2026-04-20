@@ -13,7 +13,8 @@ import {
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-import { combineLatest, expand, map, Observable, of, switchMap, take, tap, timer } from 'rxjs';
+import { combineLatest, expand, map, Observable, of, switchMap, tap, timer } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import {
   DocumentPreviewService,
@@ -32,7 +33,6 @@ import { BreadcrumbService } from '@netz/common/navigation';
 import { LinkDirective } from '@netz/govuk-components';
 
 import { LoadingSpinnerComponent } from '@shared/components';
-import { isNil } from '@shared/utils';
 
 export interface FileDownloadInfo {
   request: Observable<Partial<FileToken> & { fileUrl?: string }>;
@@ -41,7 +41,6 @@ export interface FileDownloadInfo {
 
 @Component({
   selector: 'mrtm-file-download',
-  imports: [LinkDirective, LoadingSpinnerComponent],
   standalone: true,
   template: `
     @if (downloadProcessing()) {
@@ -53,6 +52,7 @@ export interface FileDownloadInfo {
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [LinkDirective, LoadingSpinnerComponent],
 })
 export class FileDownloadComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
@@ -67,15 +67,15 @@ export class FileDownloadComponent implements OnInit {
   private readonly fileDocumentsService = inject(FileDocumentsService);
   private readonly fileGuidanceService = inject(FileGuidanceService);
   private readonly changeDetectorRef = inject(ChangeDetectorRef);
-  readonly downloadProcessing: WritableSignal<boolean> = signal(true);
-  readonly anchor = viewChild<ElementRef<HTMLAnchorElement>>('anchor');
+  downloadProcessing: WritableSignal<boolean> = signal(true);
+  anchor = viewChild<ElementRef<HTMLAnchorElement>>('anchor');
 
   private hasDownloadedOnce = false;
   private readonly fileDownloadAttachmentPath = `${this.fileAttachmentsService.configuration.basePath}/v1.0/file-attachments/`;
   private readonly fileDownloadDocumentPath = `${this.fileDocumentsService.configuration.basePath}/v1.0/file-documents/`;
   private readonly fileDownloadGuidancePath = `${this.fileGuidanceService.configuration.basePath}/v1.0/file-guidance/`;
 
-  readonly url = toSignal(
+  url = toSignal(
     this.route.paramMap.pipe(
       map((params): FileDownloadInfo => {
         if (params.has('actionId')) {
@@ -100,7 +100,6 @@ export class FileDownloadComponent implements OnInit {
           ),
         ]);
       }),
-      take(1),
       map(([fileType, fileToken]) => {
         switch (fileType) {
           case 'attachment':

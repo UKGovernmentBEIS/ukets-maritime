@@ -22,7 +22,6 @@ import {
 } from '@requests/tasks/emp-peer-review/emp-peer-review.providers';
 import { provideEmpVariationRegulatorPeerReviewTaskServices } from '@requests/tasks/emp-variation-regulator-peer-review/emp-variation-regulator-peer-review.providers';
 import { HTML_DIFF } from '@shared/directives';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_VARIATION_REGULATOR_PEER_REVIEW_ROUTES: Routes = [
   {
@@ -36,24 +35,23 @@ export const EMP_VARIATION_REGULATOR_PEER_REVIEW_ROUTES: Routes = [
       provideEmpPeerReviewStepFlowManagers(),
       { provide: HTML_DIFF, useValue: true },
     ],
-    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'variation-details',
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-variation-details/emp-var-reg-peer-review-variation-details.component').then(
-            (c) => c.EmpVarRegPeerReviewVariationDetailsComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-variation-details/emp-var-reg-peer-review-variation-details.component'
+          ).then((c) => c.EmpVarRegPeerReviewVariationDetailsComponent),
       },
       {
         path: 'operator-details',
         title: identifyMaritimeOperatorMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-operator-details/emp-var-reg-peer-review-operator-details.component').then(
-            (c) => c.EmpVarRegPeerReviewOperatorDetailsComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-operator-details/emp-var-reg-peer-review-operator-details.component'
+          ).then((c) => c.EmpVarRegPeerReviewOperatorDetailsComponent),
       },
       {
         path: 'emissions',
@@ -63,9 +61,9 @@ export const EMP_VARIATION_REGULATOR_PEER_REVIEW_ROUTES: Routes = [
             title: emissionsSubTasksMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
-              import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-emissions/emp-var-reg-peer-review-emissions.component').then(
-                (c) => c.EmpVarRegPeerReviewEmissionsComponent,
-              ),
+              import(
+                '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-emissions/emp-var-reg-peer-review-emissions.component'
+              ).then((c) => c.EmpVarRegPeerReviewEmissionsComponent),
           },
           {
             path: 'ships/:shipId',
@@ -80,72 +78,72 @@ export const EMP_VARIATION_REGULATOR_PEER_REVIEW_ROUTES: Routes = [
         title: emissionSourcesMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-emission-sources/emp-var-reg-peer-review-emission-sources.component').then(
-            (c) => c.EmpVarRegPeerReviewEmissionSourcesComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-emission-sources/emp-var-reg-peer-review-emission-sources.component'
+          ).then((c) => c.EmpVarRegPeerReviewEmissionSourcesComponent),
       },
       {
         path: 'greenhouse-gas',
         title: greenhouseGasMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-greenhouse-gas/emp-var-reg-peer-review-greenhouse-gas.component').then(
-            (c) => c.EmpVarRegPeerReviewGreenhouseGasComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-greenhouse-gas/emp-var-reg-peer-review-greenhouse-gas.component'
+          ).then((c) => c.EmpVarRegPeerReviewGreenhouseGasComponent),
       },
       {
         path: 'data-gaps',
         title: dataGapsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-mandate/emp-var-reg-peer-review-mandate.component').then(
-            (c) => c.EmpVarRegPeerReviewMandateComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-mandate/emp-var-reg-peer-review-mandate.component'
+          ).then((c) => c.EmpVarRegPeerReviewMandateComponent),
       },
       {
         path: 'mandate',
         title: mandateMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-mandate/emp-var-reg-peer-review-mandate.component').then(
-            (c) => c.EmpVarRegPeerReviewMandateComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-mandate/emp-var-reg-peer-review-mandate.component'
+          ).then((c) => c.EmpVarRegPeerReviewMandateComponent),
       },
       {
         path: 'management-procedures',
         title: managementProceduresMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-management-procedures/emp-var-reg-peer-review-management-procedures.component').then(
-            (c) => c.EmpVarRegPeerReviewManagementProceduresComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-management-procedures/emp-var-reg-peer-review-management-procedures.component'
+          ).then((c) => c.EmpVarRegPeerReviewManagementProceduresComponent),
       },
       {
         path: 'control-activities',
         title: controlActivitiesMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-control-activities/emp-var-reg-peer-review-control-activities.component').then(
-            (c) => c.EmpVarRegPeerReviewControlActivitiesComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-control-activities/emp-var-reg-peer-review-control-activities.component'
+          ).then((c) => c.EmpVarRegPeerReviewControlActivitiesComponent),
       },
       {
         path: 'abbreviations',
         title: abbreviationsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-abbreviations/emp-var-reg-peer-review-abbreviations.component').then(
-            (c) => c.EmpVarRegPeerReviewAbbreviationsComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-abbreviations/emp-var-reg-peer-review-abbreviations.component'
+          ).then((c) => c.EmpVarRegPeerReviewAbbreviationsComponent),
       },
       {
         path: 'additional-documents',
         title: additionalDocumentsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-additional-documents/emp-var-reg-peer-review-additional-documents.component').then(
-            (c) => c.EmpVarRegPeerReviewAdditionalDocumentsComponent,
-          ),
+          import(
+            '@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-additional-documents/emp-var-reg-peer-review-additional-documents.component'
+          ).then((c) => c.EmpVarRegPeerReviewAdditionalDocumentsComponent),
       },
       {
         path: 'review-decision',

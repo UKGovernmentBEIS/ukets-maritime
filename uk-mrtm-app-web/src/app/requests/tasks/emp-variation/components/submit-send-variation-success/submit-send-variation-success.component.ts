@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-send-variation-confirmation',
-  imports: [PanelComponent, RouterLink, LinkDirective],
   standalone: true,
+  imports: [PanelComponent, RouterLink, LinkDirective],
   templateUrl: './submit-send-variation-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

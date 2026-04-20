@@ -17,6 +17,7 @@ import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-request-deadline-extension-summary-template',
+  standalone: true,
   imports: [
     LinkDirective,
     SummaryListRowDirective,
@@ -28,14 +29,13 @@ import { NotProvidedDirective } from '@shared/directives';
     SummaryListComponent,
     GovukDatePipe,
   ],
-  standalone: true,
   templateUrl: './request-deadline-extension-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestDeadlineExtensionSummaryTemplateComponent {
-  readonly data = input.required<RdePayload>();
-  readonly isEditable = input<boolean>();
-  readonly deadlineFormEditUrl = input<string>();
-  readonly deadlineNotificationEditUrl = input<string>();
-  readonly queryParams = input<Params>();
+  data = input.required<RdePayload>();
+  isEditable = input<boolean>();
+  deadlineFormEditUrl = input<string>();
+  deadlineNotificationEditUrl = input<string>();
+  queryParams = input<Params>();
 }

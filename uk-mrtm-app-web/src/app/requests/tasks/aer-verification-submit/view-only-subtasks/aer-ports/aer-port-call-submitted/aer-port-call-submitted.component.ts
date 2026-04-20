@@ -13,8 +13,8 @@ import { PortCallSummaryTemplateComponent } from '@shared/components/summaries';
 
 @Component({
   selector: 'mrtm-aer-port-call-submitted',
-  imports: [PageHeadingComponent, RouterLink, LinkDirective, PortCallSummaryTemplateComponent],
   standalone: true,
+  imports: [PageHeadingComponent, RouterLink, LinkDirective, PortCallSummaryTemplateComponent],
   templateUrl: './aer-port-call-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

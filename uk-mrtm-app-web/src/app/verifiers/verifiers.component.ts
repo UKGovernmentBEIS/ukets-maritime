@@ -7,7 +7,7 @@ import { BehaviorSubject, EMPTY, take } from 'rxjs';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { BusinessErrorService, catchBadRequest, ErrorCodes } from '@netz/common/error';
-import { TabDirective, TabLazyDirective, TabsComponent } from '@netz/govuk-components';
+import { TabDirective, TabsComponent } from '@netz/govuk-components';
 
 import { VerifierUsersListComponent } from '@shared/components';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
@@ -18,10 +18,11 @@ import {
   selectVerifierUsersListItems,
 } from '@verifiers/+state/verifier-user.selectors';
 import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
-import { DataSupplierComponent, SiteContactsComponent } from '@verifiers/components';
+import { SiteContactsComponent } from '@verifiers/components';
 
 @Component({
   selector: 'mrtm-verifiers',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
@@ -30,10 +31,7 @@ import { DataSupplierComponent, SiteContactsComponent } from '@verifiers/compone
     VerifierUsersListComponent,
     NotificationBannerComponent,
     SiteContactsComponent,
-    TabLazyDirective,
-    DataSupplierComponent,
   ],
-  standalone: true,
   templateUrl: './verifiers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -22,20 +22,20 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-additional-documents',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     AdditionalDocumentsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './emp-var-reg-peer-review-additional-documents.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewAdditionalDocumentsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(empCommonQuery.selectAdditionalDocuments)();
     const originalAdditionalDocuments = this.store.select(
       empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan,

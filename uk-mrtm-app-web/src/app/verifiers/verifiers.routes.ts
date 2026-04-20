@@ -11,7 +11,6 @@ import {
   AddSummaryComponent,
   addSummaryGuard,
 } from '@verifiers/add';
-import { DATA_SUPPLIER_ROUTE_PREFIX } from '@verifiers/components';
 import { DeleteComponent } from '@verifiers/delete/delete.component';
 import { SuccessComponent } from '@verifiers/delete/success/success.component';
 import { DetailsComponent, detailsGuard, EditComponent } from '@verifiers/details';
@@ -84,9 +83,5 @@ export const VERIFIERS_ROUTES: Routes = [
         component: AddSuccessComponent,
       },
     ],
-  },
-  {
-    path: DATA_SUPPLIER_ROUTE_PREFIX,
-    loadChildren: () => import('@verifiers/components/data-supplier').then((m) => m.DATA_SUPPLIER_ROUTES),
   },
 ];

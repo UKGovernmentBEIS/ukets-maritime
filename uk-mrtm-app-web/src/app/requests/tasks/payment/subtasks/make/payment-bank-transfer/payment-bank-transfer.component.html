@@ -17,16 +17,14 @@
 
 <mrtm-payment-bank-transfer-summary-template [data]="paymentDetails()" />
 
-@if (paymentDetails()?.bankAccountDetails?.swiftCode && paymentDetails()?.bankAccountDetails?.iban) {
-  <govuk-details summary="International payments">
-    <p class="govuk-body">Use the following details if you are making an international payment:</p>
-    <mrtm-international-payment-details-summary-template [data]="paymentDetails()?.bankAccountDetails" />
-  </govuk-details>
-}
+<govuk-details summary="International payments">
+  <p class="govuk-body">Use the following details if you are making an international payment:</p>
+  <mrtm-international-payment-details-summary-template [data]="paymentDetails()?.bankAccountDetails" />
+</govuk-details>
 
 <button type="button" govukButton (click)="onSubmit()">Mark as paid</button>
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
   <netz-return-to-task-or-action-page />
 </div>

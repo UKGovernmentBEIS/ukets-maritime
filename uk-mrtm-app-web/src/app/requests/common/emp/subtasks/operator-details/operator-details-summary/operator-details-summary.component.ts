@@ -39,6 +39,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-operator-details-summary',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     OperatorDetailsSummaryTemplateComponent,
@@ -48,7 +49,6 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './operator-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -57,7 +57,7 @@ export class OperatorDetailsSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     const empOperatorDetails = this.store.select(empCommonQuery.selectOperatorDetails)();
     const originalOperatorDetails = this.store.select(empVariationRegulatorQuery.selectOriginalOperatorDetails)();
     const hasReview = this.store.select(empCommonQuery.selectHasReview)();

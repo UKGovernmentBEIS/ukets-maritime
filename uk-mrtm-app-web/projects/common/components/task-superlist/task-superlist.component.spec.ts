@@ -20,10 +20,10 @@ describe('TaskSuperListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskSuperListComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('superSections', [
+    component.superSections = [
       { superTitle: 'Super Title 1', sections },
       { superTitle: 'Super Title 2', sections },
-    ]);
+    ];
     fixture.detectChanges();
   });
 

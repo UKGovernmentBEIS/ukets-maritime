@@ -20,6 +20,7 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-aer-derogations',
+  standalone: true,
   imports: [
     RadioComponent,
     RadioOptionComponent,
@@ -27,9 +28,8 @@ import { WizardStepComponent } from '@shared/components';
     WizardStepComponent,
     ReturnToShipsListTableComponent,
   ],
-  standalone: true,
-  templateUrl: './aer-derogations.component.html',
   providers: [aerDerogationsFormProvider],
+  templateUrl: './aer-derogations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerDerogationsComponent {

@@ -35,6 +35,7 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
 
 @Component({
   selector: 'mrtm-aer-voyage-details',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -44,9 +45,8 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     LinkDirective,
     DatePickerComponent,
   ],
-  standalone: true,
-  templateUrl: './aer-voyage-details.component.html',
   providers: [aerVoyageDetailsFormProvider],
+  templateUrl: './aer-voyage-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVoyageDetailsComponent implements OnInit {
@@ -60,24 +60,24 @@ export class AerVoyageDetailsComponent implements OnInit {
 
   public readonly wizardMap = aerVoyagesMap;
   public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS;
-  private readonly currentArrivalCountry = toSignal(this.arrivalCountryCtrl.valueChanges.pipe(), {
+  private currentArrivalCountry = toSignal(this.arrivalCountryCtrl.valueChanges.pipe(), {
     initialValue: this.arrivalCountryCtrl.value,
   });
-  private readonly departureArrivalCountry = toSignal(this.departureCountryCtrl.valueChanges.pipe(), {
+  private departureArrivalCountry = toSignal(this.departureCountryCtrl.valueChanges.pipe(), {
     initialValue: this.departureCountryCtrl.value,
   });
-  readonly ship: Signal<AerShipEmissions> = computed(() => {
+  ship: Signal<AerShipEmissions> = computed(() => {
     const port = this.store.select(aerCommonQuery.selectVoyage(this.voyageId()))();
 
     return this.store.select(aerCommonQuery.selectShipByImoNumber(port?.imoNumber))();
   });
-  readonly portArrivalSelectItems = computed(() => {
+  portArrivalSelectItems = computed(() => {
     const country = this.currentArrivalCountry();
     return !country
       ? []
       : AER_PORT_CODE_SELECT_ITEMS.filter((item) => item.countryCode === country || item.value === 'NOT_APPLICABLE');
   });
-  readonly portDepartureSelectItems = computed(() => {
+  portDepartureSelectItems = computed(() => {
     const country = this.departureArrivalCountry();
     return !country
       ? []

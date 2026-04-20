@@ -20,7 +20,7 @@ describe('VariationDetailsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(VariationDetailsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    fixture.componentRef.setInput('variationDetails', {
+    component.variationDetails = {
       reason: 'Test reason',
       changes: [
         'ADD_NEW_FUELS_OR_EMISSION_SOURCES',
@@ -30,7 +30,7 @@ describe('VariationDetailsSummaryTemplateComponent', () => {
       ],
       otherNonSignificantChangeReason: 'Test otherNonSignificantChangeReason',
       otherSignificantChangeReason: 'Test otherSignificantChangeReason',
-    });
+    };
 
     page = new Page(fixture);
     fixture.detectChanges();

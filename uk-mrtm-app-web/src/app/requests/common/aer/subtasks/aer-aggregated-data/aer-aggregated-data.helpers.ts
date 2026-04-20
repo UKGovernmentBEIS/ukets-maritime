@@ -1,3 +1,5 @@
+import { isNil } from 'lodash-es';
+
 import {
   AerPortEmissionsMeasurement,
   AerShipAggregatedData,
@@ -8,7 +10,6 @@ import {
 import { AER_SELECT_SHIP_STEP } from '@requests/common/aer/aer.consts';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AerAggregatedDataEmissionDto } from '@shared/types';
-import { isNil } from '@shared/utils';
 
 export const AER_AGGREGATED_DATA_SUB_TASK = 'aggregatedData';
 

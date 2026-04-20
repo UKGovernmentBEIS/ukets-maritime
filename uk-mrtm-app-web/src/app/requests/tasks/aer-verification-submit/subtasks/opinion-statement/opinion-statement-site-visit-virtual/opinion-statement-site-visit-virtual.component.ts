@@ -15,11 +15,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-opinion-statement-site-visit-virtual',
-  imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent],
   standalone: true,
+  imports: [TextareaComponent, ReactiveFormsModule, WizardStepComponent],
   templateUrl: './opinion-statement-site-visit-virtual.component.html',
-  providers: [opinionStatementSiteVisitVirtualFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [opinionStatementSiteVisitVirtualFormProvider],
 })
 export class OpinionStatementSiteVisitVirtualComponent {
   readonly map = opinionStatementMap;

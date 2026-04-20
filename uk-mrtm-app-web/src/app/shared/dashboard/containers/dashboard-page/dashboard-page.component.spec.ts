@@ -11,7 +11,7 @@ import {
 } from '@mrtm/api';
 
 import { AuthStore } from '@netz/common/auth';
-import { BasePage } from '@netz/common/testing';
+import { asyncData, BasePage } from '@netz/common/testing';
 
 import { DashboardPageComponent, DashboardStore } from '@shared/dashboard';
 import { WorkflowItemsService } from '@shared/dashboard/services';
@@ -97,10 +97,10 @@ describe('DashboardPageComponent', () => {
     itemsAssignedToOthersService = {
       getAssignedToOthersItems: jest
         .fn()
-        .mockReturnValue(of({ items: mockTasks.items.slice(1, 2), totalPages: mockTasks.totalItems })),
+        .mockReturnValue(asyncData({ items: mockTasks.items.slice(1, 2), totalPages: mockTasks.totalItems })),
     };
     unassignedItemsService = {
-      getUnassignedItems: jest.fn().mockReturnValue(of(unassignedItems)),
+      getUnassignedItems: jest.fn().mockReturnValue(asyncData(unassignedItems)),
     };
     await TestBed.configureTestingModule({
       providers: [
@@ -137,7 +137,7 @@ describe('DashboardPageComponent', () => {
       expect(anchors.map((anchor) => anchor.href).length).toEqual(2);
     });
 
-    it('should render assigned to others table rows', async () => {
+    it('should render assigned to others table rows', () => {
       page.assignedToOthersTabLink.click();
       fixture.detectChanges();
 

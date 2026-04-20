@@ -1,5 +1,5 @@
 import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router, UrlSegment } from '@angular/router';
 
@@ -12,7 +12,6 @@ import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
 
 import { CreateOperatorAccountComponent } from '@accounts/containers/create-operator-account/create-operator-account.component';
 import { OperatorAccountsStore, selectIsInitiallySubmitted, selectNewAccount } from '@accounts/store';
-import { ConfigStore } from '@core/config';
 
 describe('CreateOperatorAccountComponent', () => {
   class Page extends BasePage<CreateOperatorAccountComponent> {
@@ -24,9 +23,8 @@ describe('CreateOperatorAccountComponent', () => {
   let component: CreateOperatorAccountComponent;
   let page: Page;
   let fixture: ComponentFixture<CreateOperatorAccountComponent>;
-  let router: Router;
   let store: OperatorAccountsStore;
-  let configStore: ConfigStore;
+  let router: Router;
 
   const account = {
     imoNumber: 1234567,
@@ -44,11 +42,10 @@ describe('CreateOperatorAccountComponent', () => {
   const route = new ActivatedRouteStub();
 
   beforeEach(async () => {
-    TestBed.configureTestingModule({
+    await TestBed.configureTestingModule({
       imports: [CreateOperatorAccountComponent],
       providers: [
         provideHttpClient(),
-        provideHttpClientTesting(),
         PendingRequestService,
         OperatorAccountsStore,
         DestroySubject,
@@ -56,17 +53,15 @@ describe('CreateOperatorAccountComponent', () => {
         { provide: MaritimeAccountUpdateService, useValue: mockClass(MaritimeAccountUpdateService) },
         { provide: ActivatedRoute, useValue: route },
       ],
-    });
-    configStore = TestBed.inject(ConfigStore);
-    configStore.setState({
-      properties: { minYearOfFirstMrtmActivity: '2020' },
-    });
-    store = TestBed.inject(OperatorAccountsStore);
+      schemas: [NO_ERRORS_SCHEMA],
+    }).compileComponents();
+
     router = TestBed.inject(Router);
     route.setUrl([new UrlSegment('/', {})]);
     fixture = TestBed.createComponent(CreateOperatorAccountComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
+    store = TestBed.inject(OperatorAccountsStore);
 
     fixture.detectChanges();
   });

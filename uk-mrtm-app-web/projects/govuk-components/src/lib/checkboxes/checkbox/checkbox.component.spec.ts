@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { ConditionalContentDirective } from '../../directives';
@@ -14,6 +14,7 @@ describe('CheckboxComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    standalone: true,
     imports: [
       CheckboxesComponent,
       ReactiveFormsModule,
@@ -21,10 +22,9 @@ describe('CheckboxComponent', () => {
       TextInputComponent,
       ConditionalContentDirective,
     ],
-    standalone: true,
     template: `
       <div govuk-checkboxes [formControl]="control">
-        <govuk-checkbox [value]="1" label="First" />
+        <govuk-checkbox [value]="1" label="First"></govuk-checkbox>
         <govuk-checkbox [value]="2">
           <ng-container govukLabel>Second</ng-container>
           <ng-container govukConditionalContent>
@@ -42,7 +42,7 @@ describe('CheckboxComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [ControlContainer],
+      imports: [ReactiveFormsModule, TestComponent],
     }).compileComponents();
   });
 

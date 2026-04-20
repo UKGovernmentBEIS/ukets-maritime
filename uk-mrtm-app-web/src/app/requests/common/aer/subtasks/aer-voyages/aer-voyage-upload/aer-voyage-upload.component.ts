@@ -48,13 +48,13 @@ import { DataParserWizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AER_PORT_CODE_SELECT_ITEMS } from '@shared/constants';
 import { SelectOptionToTitlePipe } from '@shared/pipes';
-import { PersistablePaginationService } from '@shared/services';
 import { AerFuel, AerVoyageUploadCsvDto } from '@shared/types';
 import { bigNumberUtils } from '@shared/utils';
 import Papa from 'papaparse';
 
 @Component({
   selector: 'mrtm-aer-voyage-upload',
+  standalone: true,
   imports: [
     DataParserWizardStepComponent,
     LinkDirective,
@@ -64,14 +64,12 @@ import Papa from 'papaparse';
     SelectOptionToTitlePipe,
     RouterLink,
   ],
-  standalone: true,
   templateUrl: './aer-voyage-upload.component.html',
   providers: [aerVoyageUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVoyageUploadComponent {
   protected readonly form = inject<FormGroup<AerVoyageUploadCSVFormModel>>(TASK_FORM);
-  private readonly persistablePaginationService = inject(PersistablePaginationService);
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
@@ -89,8 +87,8 @@ export class AerVoyageUploadComponent {
   insertedRows = 0;
   updatedRows = 0;
   existingVoyages = this.store.select(aerCommonQuery.selectVoyageEmissions)();
-  readonly voyages: WritableSignal<AerVoyage[] | null> = signal(null);
-  readonly voyagesTableData: Signal<AerVoyageUploadCsvDto[]> = computed(() =>
+  voyages: WritableSignal<AerVoyage[] | null> = signal(null);
+  voyagesTableData: Signal<AerVoyageUploadCsvDto[]> = computed(() =>
     (this.voyages() ?? []).map((item) => ({
       imoNumber: item.imoNumber,
       departurePort: item.voyageDetails.departurePort.port,
@@ -301,7 +299,6 @@ export class AerVoyageUploadComponent {
   }
 
   onSubmit() {
-    this.persistablePaginationService.reset();
     this.taskService
       .saveSubtask(AER_VOYAGES_SUB_TASK, AerVoyagesWizardStep.UPLOAD_VOYAGES, this.activatedRoute, this.voyages())
       .subscribe(() => {

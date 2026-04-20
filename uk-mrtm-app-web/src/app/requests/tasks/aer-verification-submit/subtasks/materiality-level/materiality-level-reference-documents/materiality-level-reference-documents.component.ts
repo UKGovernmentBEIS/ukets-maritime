@@ -22,6 +22,7 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-materiality-level-reference-documents',
+  standalone: true,
   imports: [
     ConditionalContentDirective,
     TextareaComponent,
@@ -31,17 +32,16 @@ import { AccreditationReferenceDocumentTypesPipe } from '@shared/pipes';
     WizardStepComponent,
     AccreditationReferenceDocumentTypesPipe,
   ],
-  standalone: true,
   templateUrl: './materiality-level-reference-documents.component.html',
-  providers: [materialityLevelReferenceDocumentsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [materialityLevelReferenceDocumentsFormProvider],
 })
 export class MaterialityLevelReferenceDocumentsComponent {
+  readonly map = materialityLevelMap;
   readonly formGroup = inject<FormGroup>(TASK_FORM);
   private readonly route = inject(ActivatedRoute);
   private readonly service = inject(TaskService<AerVerificationSubmitTaskPayload>);
 
-  readonly materialityLevelMap = materialityLevelMap;
   readonly referenceDocumentTypes = AER_ACCREDITATION_REFERENCE_DOCUMENT_TYPES;
 
   onSubmit() {

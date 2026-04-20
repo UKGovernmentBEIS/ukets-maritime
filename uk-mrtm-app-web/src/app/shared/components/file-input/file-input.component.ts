@@ -2,13 +2,12 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  computed,
   ElementRef,
   forwardRef,
   inject,
-  input,
+  Input,
   OnInit,
-  viewChild,
+  ViewChild,
 } from '@angular/core';
 import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm, UntypedFormControl } from '@angular/forms';
 
@@ -20,13 +19,14 @@ import { FileUploadListComponent } from '@shared/components';
 import { FileUploadService } from '@shared/services';
 import { FileUpload, FileUploadEvent } from '@shared/types';
 
+/* eslint-disable @typescript-eslint/no-empty-function */
 @Component({
   selector: 'mrtm-file-input',
-  imports: [forwardRef(() => FileUploadListComponent), ErrorMessageComponent, AsyncPipe],
-  standalone: true,
   templateUrl: './file-input.component.html',
   styleUrl: '../multiple-file-input/multiple-file-input.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [forwardRef(() => FileUploadListComponent), ErrorMessageComponent, AsyncPipe],
 })
 export class FileInputComponent implements OnInit, ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true })!;
@@ -35,48 +35,43 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
   private readonly root = inject(FormGroupDirective, { optional: true })!;
   private readonly rootNgForm = inject(NgForm, { optional: true })!;
 
-  readonly label = input<string>();
-  readonly labelSize = input<LabelSizeType>('normal');
-  readonly isLabelHidden = input(false);
-  readonly hint = input<string>();
-  readonly listTitle = input<string>();
-  readonly text = input<string>();
-  readonly showFilesizeHint = input(true);
-  readonly showNoFilesHint = input(true);
-  readonly showFileUploadList = input(true);
-  readonly accepted = input('*/*');
-  readonly downloadUrl = input<(uuid: string) => string | string[]>();
+  currentLabelClass = 'govuk-label';
+  headerSize: 'm' | 's' = 's';
 
-  private readonly input = viewChild<ElementRef<HTMLInputElement>>('input');
-
-  readonly currentLabelSize = computed(() => {
-    switch (this.labelSize()) {
+  @Input() listTitle: string;
+  @Input() label: string;
+  @Input() set labelSize(size: LabelSizeType) {
+    switch (size) {
       case 'small':
-        return 'govuk-label govuk-label--s';
+        this.currentLabelClass = 'govuk-label govuk-label--s';
+        this.headerSize = 's';
+        break;
       case 'medium':
-        return 'govuk-label govuk-label--m';
+        this.currentLabelClass = 'govuk-label govuk-label--m';
+        this.headerSize = 'm';
+        break;
       case 'large':
-        return 'govuk-label govuk-label--l';
+        this.currentLabelClass = 'govuk-label govuk-label--l';
+        this.headerSize = 'm';
+        break;
       default:
-        return 'govuk-label';
+        this.currentLabelClass = 'govuk-label';
+        this.headerSize = 's';
+        break;
     }
-  });
-  readonly currentHeaderSize = computed(() => {
-    switch (this.labelSize()) {
-      case 'medium':
-        return 'm';
-      case 'large':
-        return 'm';
-      case 'small':
-      default:
-        return 's';
-    }
-  });
-
+  }
+  @Input() text: string;
+  @Input() showFilesizeHint = true;
+  @Input() showNoFilesHint = true;
+  @Input() showFileUploadList = true;
+  @Input() hint: string;
+  @Input() accepted = '*/*';
+  @Input() downloadUrl: (uuid: string) => string | string[];
   uploadedFiles$: Observable<FileUploadEvent[]>;
   isDisabled: boolean;
   onFileBlur: () => any;
 
+  @ViewChild('input') private readonly input: ElementRef<HTMLInputElement>;
   private value$ = new BehaviorSubject<FileUpload>(null);
   private onChange: (value: FileUpload) => any;
 
@@ -90,7 +85,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
     return this.ngControl.control as UntypedFormControl;
   }
 
-  get identifier(): string {
+  get id(): string {
     return this.formService.getControlIdentifier(this.ngControl);
   }
 
@@ -125,7 +120,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
           ? [
               {
                 ...fileEvent,
-                ...(fileEvent.uuid && { downloadUrl: this.downloadUrl()(fileEvent.uuid) }),
+                ...(fileEvent.uuid && { downloadUrl: this.downloadUrl(fileEvent.uuid) }),
               },
             ]
           : [],
@@ -180,7 +175,7 @@ export class FileInputComponent implements OnInit, ControlValueAccessor {
 
   onFileDeleteClick(): void {
     this.onChange(null);
-    this.input().nativeElement.value = null;
+    this.input.nativeElement.value = null;
   }
 
   private uploadFile(file: File, dimensions): void {

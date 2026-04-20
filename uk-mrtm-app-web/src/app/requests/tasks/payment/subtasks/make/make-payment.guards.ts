@@ -2,6 +2,7 @@ import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
 import { catchError, map, of, switchMap } from 'rxjs';
+import { isNil } from 'lodash-es';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
@@ -9,7 +10,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { paymentQuery } from '@requests/tasks/payment/+state';
 import { PaymentService } from '@requests/tasks/payment/services';
 import { MakePaymentWizardSteps } from '@requests/tasks/payment/subtasks/make/make-payment.constants';
-import { isNil } from '@shared/utils';
 
 export const canActivateBankTransfer: CanActivateFn = (activatedRouteSnapshot: ActivatedRouteSnapshot) => {
   const store = inject(RequestTaskStore);

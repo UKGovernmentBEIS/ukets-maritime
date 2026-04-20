@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 import { TaskSection } from '@netz/common/model';
 
@@ -6,12 +6,12 @@ import { TaskSectionComponent } from '../task-section';
 
 @Component({
   selector: 'netz-task-list',
-  imports: [TaskSectionComponent],
-  standalone: true,
   templateUrl: './task-list.component.html',
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [TaskSectionComponent],
 })
 export class TaskListComponent {
-  readonly sections = input<TaskSection[]>();
-  readonly titleElement = input<'h2' | 'h3'>('h2');
+  @Input() sections: TaskSection[];
+  @Input() titleElement: 'h2' | 'h3' = 'h2';
 }

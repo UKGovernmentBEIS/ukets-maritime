@@ -1,6 +1,8 @@
 import { Provider } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, ValidatorFn } from '@angular/forms';
 
+import { clone, isEmpty } from 'lodash-es';
+
 import { DoeTotalMaritimeEmissions } from '@mrtm/api';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -11,7 +13,6 @@ import { TASK_FORM } from '@requests/common/task-form.token';
 import { doeSubmitQuery } from '@requests/tasks/doe-submit/+state';
 import { taskActionTypeToUploadSectionTaskActionTypeMap } from '@shared/constants/upload-attachment-request-task-action-type.map';
 import { RequestTaskFileService } from '@shared/services';
-import { isEmpty } from '@shared/utils';
 
 export type TotalMaritimeEmissionsFormModel = Record<keyof DoeTotalMaritimeEmissions, FormControl>;
 
@@ -28,7 +29,7 @@ const niDeductionLessThanTotalEmissionsValidator = (): ValidatorFn => {
     } else {
       if (niDeductionCtrl.errors?.invalidLessVoyagesInNorthernIrelandDeduction) {
         delete niDeductionCtrl.errors.invalidLessVoyagesInNorthernIrelandDeduction;
-        const existingErrors = structuredClone(niDeductionCtrl.errors);
+        const existingErrors = clone(niDeductionCtrl.errors);
         // Workaround to trigger the UI refresh on `govuk-error-message`
         // Sets it to null, then sets it to previous errors if they exist
         niDeductionCtrl.setErrors(null);
@@ -55,7 +56,7 @@ const surrenderEmissionsLessThanNIDeductionValidator = (): ValidatorFn => {
     } else {
       if (surrenderEmissionsCtrl.errors?.invalidSurrenderEmissions) {
         delete surrenderEmissionsCtrl.errors.invalidSurrenderEmissions;
-        const existingErrors = structuredClone(surrenderEmissionsCtrl.errors);
+        const existingErrors = clone(surrenderEmissionsCtrl.errors);
         // Workaround to trigger the UI refresh on `govuk-error-message`
         // Sets it to null, then sets it to previous errors if they exist
         surrenderEmissionsCtrl.setErrors(null);

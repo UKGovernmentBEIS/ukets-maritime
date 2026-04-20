@@ -25,9 +25,9 @@ describe('TermsAndConditionsComponent', () => {
 
   @Component({
     selector: 'mrtm-test',
-    imports: [TermsAndConditionsComponent],
+    template: '<mrtm-terms-and-conditions></mrtm-terms-and-conditions>',
     standalone: true,
-    template: '<mrtm-terms-and-conditions />',
+    imports: [TermsAndConditionsComponent],
   })
   class TestComponent {}
 

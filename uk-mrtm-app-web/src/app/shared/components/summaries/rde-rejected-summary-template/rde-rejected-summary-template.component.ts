@@ -14,6 +14,7 @@ import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-rde-rejected-summary-template',
+  standalone: true,
   imports: [
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
@@ -22,10 +23,9 @@ import { NotProvidedDirective } from '@shared/directives';
     SummaryListComponent,
     TitleCasePipe,
   ],
-  standalone: true,
   templateUrl: './rde-rejected-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RdeRejectedSummaryTemplateComponent {
-  readonly data = input.required<RdeRejectedRequestActionPayload>();
+  data = input.required<RdeRejectedRequestActionPayload>();
 }

@@ -25,6 +25,7 @@ import { NotifyUsersService } from '@shared/services/notify-users.service';
 
 @Component({
   selector: 'mrtm-notify-operator',
+  standalone: true,
   imports: [
     KeyValuePipe,
     CheckboxesComponent,
@@ -35,10 +36,9 @@ import { NotifyUsersService } from '@shared/services/notify-users.service';
     SelectComponent,
     RelatedDocumentsComponent,
   ],
-  standalone: true,
   templateUrl: './notify-operator-form.component.html',
-  providers: [notifyOperatorFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [notifyOperatorFormProvider],
 })
 export class NotifyOperatorFormComponent {
   protected readonly config = computed(() => {
@@ -55,16 +55,16 @@ export class NotifyOperatorFormComponent {
     optional: true,
   });
 
-  accountId = this.store.select(requestTaskQuery.selectRequestTaskAccountId)();
+  accountId = this.store.select(requestTaskQuery.selectRequestInfo)().accountId;
   requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
   requestTaskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
   previewDocuments = this.relatedPreviewDocumentsMap?.()?.[this.requestTaskType]
     ? this.relatedPreviewDocumentsMap()[this.requestTaskType].filter((item) => item.visibleInNotify)
     : [];
 
-  readonly allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
-  readonly externalContacts = toSignal(this.notifyUsersService.getExternalContacts());
-  readonly assignees = toSignal(
+  allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
+  externalContacts = toSignal(this.notifyUsersService.getExternalContacts());
+  assignees = toSignal(
     this.notifyUsersService.getAssignees(this.requestTaskId).pipe(
       tap((assignees) => {
         this.populateAssigneeDropDown(assignees);

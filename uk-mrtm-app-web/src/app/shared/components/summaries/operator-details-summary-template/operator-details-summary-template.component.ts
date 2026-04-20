@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, Input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { AerOperatorDetails, EmpOperatorDetails, PartnershipOrganisation } from '@mrtm/api';
@@ -20,6 +20,7 @@ import { mergeDiffArray } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-operator-details-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -34,25 +35,22 @@ import { mergeDiffArray } from '@shared/utils';
     OrganisationDetailsAddressTitlePipe,
     HtmlDiffDirective,
   ],
-  standalone: true,
   templateUrl: './operator-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OperatorDetailsSummaryTemplateComponent {
-  readonly operatorDetails = input.required<EmpOperatorDetails | AerOperatorDetails>();
-  readonly originalOperatorDetails = input<EmpOperatorDetails | AerOperatorDetails>();
-  readonly files = input.required<AttachedFile[]>();
-  readonly originalFiles = input<AttachedFile[]>();
-  readonly wizardStep = input<{
-    [s: string]: string;
-  }>();
-  readonly isEditable = input(false);
-  readonly queryParams = input<Params>({});
+  @Input({ required: true }) operatorDetails: EmpOperatorDetails | AerOperatorDetails;
+  @Input() originalOperatorDetails: EmpOperatorDetails | AerOperatorDetails;
+  @Input({ required: true }) files: AttachedFile[];
+  @Input() originalFiles: AttachedFile[];
+  @Input() wizardStep: { [s: string]: string };
+  @Input() isEditable = false;
+  @Input() queryParams: Params = {};
 
-  readonly combinedPartners = computed(() =>
+  combinedPartners = computed(() =>
     mergeDiffArray<string>(
-      (this.operatorDetails()?.organisationStructure as PartnershipOrganisation)?.partners,
-      (this.originalOperatorDetails()?.organisationStructure as PartnershipOrganisation)?.partners,
+      (this.operatorDetails?.organisationStructure as PartnershipOrganisation)?.partners,
+      (this.originalOperatorDetails?.organisationStructure as PartnershipOrganisation)?.partners,
     ),
   );
 }

@@ -34,20 +34,23 @@ describe('DataSuppliersListComponent', () => {
   });
 
   it('should display all HTML elements', () => {
-    expect(page.tableContents).toEqual(['Data supplier name', 'Public key URL', 'Client ID', 'No items to display']);
+    expect(page.tableContents).toEqual(['Data supplier name', 'Client ID', 'Client secret', '', 'No items to display']);
     expect(page.query('a[govukbutton]').textContent).toEqual('Add a new data supplier');
     store.setItems(mockDataSuppliers);
     fixture.detectChanges();
     expect(page.tableContents).toEqual([
       'Data supplier name',
-      'Public key URL',
       'Client ID',
+      'Client secret',
+      '',
       'Maritime Analytics Ltd',
-      'https://www.myapi1.com',
       'a1b2c3d4-e5f6-7890-abcd-ef1234567890',
+      '1a2b3c4d-5678-90ef-gh12-3456789ijklm',
+      'Show',
       'Ocean Data Solutions',
-      'https://myapi2.com',
       'f7e8d9c0-b1a2-3456-789a-bcdef0123456',
+      '1a2b3c4d-5678-90ef-gh12-3456789ijklm',
+      'Show',
     ]);
   });
 });

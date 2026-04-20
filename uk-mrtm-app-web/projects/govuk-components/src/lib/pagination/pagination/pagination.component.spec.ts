@@ -21,13 +21,16 @@ describe('PaginationComponent', () => {
     Array.from(element.querySelector('.govuk-body').querySelectorAll('strong')).map((text) => text.textContent);
 
   @Component({
+    standalone: true,
+    template: `
+      <govuk-pagination
+        [count]="count"
+        [pageSize]="pageSize"
+        (currentPageChange)="this.currentPage = $event"></govuk-pagination>
+    `,
     // eslint-disable-next-line @angular-eslint/component-selector
     selector: 'test-pagination',
     imports: [PaginationComponent],
-    standalone: true,
-    template: `
-      <govuk-pagination [count]="count" [pageSize]="pageSize" (currentPageChange)="this.currentPage = $event" />
-    `,
   })
   class TestComponent {
     count;
@@ -36,11 +39,11 @@ describe('PaginationComponent', () => {
   }
 
   @Component({
+    standalone: true,
+    imports: [RouterOutlet],
     // eslint-disable-next-line @angular-eslint/component-selector
     selector: 'test-pagination-router',
-    imports: [RouterOutlet],
-    standalone: true,
-    template: '<router-outlet />',
+    template: '<router-outlet></router-outlet>',
   })
   class RouterComponent {}
 

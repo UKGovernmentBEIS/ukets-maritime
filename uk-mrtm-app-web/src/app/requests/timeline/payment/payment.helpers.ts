@@ -1,4 +1,4 @@
-import { isNil } from '@shared/utils';
+import { isNil } from 'lodash-es';
 
 const PAYMENT_ACTIONS_MAP: Record<string, { title: string; suffix?: string }> = {
   PAYMENT_MARKED_AS_PAID: { title: 'Payment marked as paid', suffix: '(BACS)' },

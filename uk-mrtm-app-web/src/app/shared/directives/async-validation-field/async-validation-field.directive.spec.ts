@@ -1,9 +1,9 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ComponentFixture, fakeAsync, TestBed } from '@angular/core/testing';
-import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { TextInputComponent } from '@netz/govuk-components';
+import { GovukComponentsModule } from '@netz/govuk-components';
 
 import { AsyncValidationFieldDirective } from '@shared/directives';
 
@@ -12,7 +12,6 @@ describe('AsyncValidationFieldDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    imports: [AsyncValidationFieldDirective, ReactiveFormsModule, TextInputComponent],
     template: '<div govuk-text-input netzAsyncValidationField [formControl]="name" label="Name"></div>',
   })
   class TestComponent {
@@ -21,9 +20,10 @@ describe('AsyncValidationFieldDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      providers: [ControlContainer],
+      imports: [ReactiveFormsModule, GovukComponentsModule, AsyncValidationFieldDirective],
+      declarations: [TestComponent],
     }).createComponent(TestComponent);
-    fixture = TestBed.createComponent(TestComponent);
+
     fixture.detectChanges();
     directive = fixture.debugElement
       .query(By.directive(AsyncValidationFieldDirective))

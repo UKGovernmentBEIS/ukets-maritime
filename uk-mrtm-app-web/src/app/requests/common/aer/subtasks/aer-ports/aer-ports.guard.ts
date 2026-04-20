@@ -1,7 +1,8 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
+import { RequestTaskStore } from '@netz/common/store';
+import { requestTaskQuery } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import {

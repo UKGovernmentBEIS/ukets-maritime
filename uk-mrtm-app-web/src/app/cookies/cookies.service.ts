@@ -4,23 +4,10 @@ import { BehaviorSubject } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class CookiesService {
-  private PREFERENCES_SET_COOKIE = 'uk_pmrv_cookies_preferences_set';
-  private COOKIES_POLICY = 'uk_pmrv_cookies_policy';
+  private PREFERENCES_SET_COOKIE = 'uk_netz_cookies_preferences_set';
+  private COOKIES_POLICY = 'uk_netz_cookies_policy';
   accepted$ = new BehaviorSubject(this.accepted());
-
-  rejectAllCookies(cookiesExpirationTime: number) {
-    const result = this.processCookie(false, cookiesExpirationTime);
-    this.accepted$.next(true);
-    return result;
-  }
-
   acceptAllCookies(cookiesExpirationTime: number) {
-    const result = this.processCookie(true, cookiesExpirationTime);
-    this.accepted$.next(true);
-    return result;
-  }
-
-  private processCookie(accepted: boolean, cookiesExpirationTime: number) {
     if (!this.cookiesEnabled()) {
       return;
     }
@@ -33,14 +20,15 @@ export class CookiesService {
     this.setCookie(
       this.COOKIES_POLICY,
       JSON.stringify({
-        essential: accepted,
-        usage: accepted,
+        essential: true,
+        usage: true,
       }),
       {
         // secure: true,
         expires: d,
       },
     );
+    this.accepted$.next(true);
     return true;
   }
 

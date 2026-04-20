@@ -3,6 +3,7 @@ package uk.gov.mrtm.api.workflow.request.flow.aer.submit.handler;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -43,7 +44,6 @@ import uk.gov.mrtm.api.reporting.domain.emissions.AerDerogations;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerEmissions;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipDetails;
 import uk.gov.mrtm.api.reporting.domain.emissions.AerShipEmissions;
-import uk.gov.mrtm.api.reporting.domain.emissions.fuel.DataInputType;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.biofuel.AerBioFuels;
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.efuel.AerEFuels;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
@@ -63,6 +63,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -111,7 +112,7 @@ class AerFetchShipListHandlerTest {
                                 .build())
                 );
 
-        AerEmissions aerEmissions = createAerEmissions(exceptionFromPerVoyageMonitoring, DataInputType.FETCH_FROM_EMP);
+        AerEmissions aerEmissions = createAerEmissions(exceptionFromPerVoyageMonitoring);
 
         AerApplicationSubmitRequestTaskPayload expectedTaskPayload = AerApplicationSubmitRequestTaskPayload.builder()
             .aer(Aer.builder().emissions(aerEmissions).build())
@@ -135,10 +136,9 @@ class AerFetchShipListHandlerTest {
         assertThat(aerFetchShipListHandler.getTypes()).containsOnly(MrtmRequestTaskActionType.AER_FETCH_EMP_LIST_OF_SHIPS);
     }
 
-    private AerEmissions createAerEmissions(boolean exceptionFromPerVoyageMonitoring, DataInputType dataInputType) {
+    private AerEmissions createAerEmissions(boolean exceptionFromPerVoyageMonitoring) {
         return AerEmissions.builder()
             .ships(Set.of(AerShipEmissions.builder()
-                .dataInputType(dataInputType)
                 .details(
                     AerShipDetails.builder()
                         .imoNumber("1231231")

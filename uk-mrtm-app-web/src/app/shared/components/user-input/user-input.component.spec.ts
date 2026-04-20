@@ -1,14 +1,12 @@
-import { provideHttpClient } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { BasePage } from '@netz/common/testing';
-import { GovukValidators } from '@netz/govuk-components';
+import { GovukComponentsModule, GovukValidators } from '@netz/govuk-components';
 
-import { UserInputComponent } from '@shared/components';
+import { PhoneInputComponent, UserInputComponent } from '@shared/components';
 import { phoneInputValidators } from '@shared/validators';
 
 describe('UserInputComponent', () => {
@@ -77,15 +75,13 @@ describe('UserInputComponent', () => {
   }
 
   @Component({
-    imports: [UserInputComponent, ReactiveFormsModule],
-    standalone: true,
     template: `
       <form id="national-group" [formGroup]="nationalForm">
-        <mrtm-user-input phoneType="national" />
+        <mrtm-user-input phoneType="national"></mrtm-user-input>
       </form>
 
       <form id="full-group-name" [formGroup]="fullForm">
-        <mrtm-user-input formGroupName="user" phoneType="full" />
+        <mrtm-user-input formGroupName="user" phoneType="full"></mrtm-user-input>
       </form>
     `,
   })
@@ -150,7 +146,8 @@ describe('UserInputComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [provideHttpClient(), provideHttpClientTesting()],
+      imports: [GovukComponentsModule, ReactiveFormsModule, PhoneInputComponent, UserInputComponent],
+      declarations: [TestComponent],
     }).compileComponents();
   });
 

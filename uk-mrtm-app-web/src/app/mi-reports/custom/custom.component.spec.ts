@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { of, throwError } from 'rxjs';
 
-import { MiReportsUserDefinedService, MiReportSystemResult } from '@mrtm/api';
+import { MiReportResult, MiReportsService } from '@mrtm/api';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { DestroySubject } from '@netz/common/services';
@@ -18,7 +18,7 @@ describe('CustomComponent', () => {
   let fixture: ComponentFixture<CustomReportComponent>;
   let page: Page;
 
-  const miReportsUserService = mockClass(MiReportsUserDefinedService);
+  const miReportsService = mockClass(MiReportsService);
 
   class Page extends BasePage<CustomReportComponent> {
     set queryValue(value: string) {
@@ -41,7 +41,7 @@ describe('CustomComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [CustomReportComponent, PageHeadingComponent],
-      providers: [{ provide: MiReportsUserDefinedService, useValue: miReportsUserService }, DestroySubject],
+      providers: [{ provide: MiReportsService, useValue: miReportsService }, DestroySubject],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CustomReportComponent);
@@ -66,8 +66,8 @@ describe('CustomComponent', () => {
     page.executeButton.click();
     fixture.detectChanges();
 
-    miReportsUserService.generateCustomReport.mockReturnValueOnce(
-      of(mockCustomMiReportResult as unknown as HttpResponse<MiReportSystemResult>),
+    miReportsService.generateCustomReport.mockReturnValueOnce(
+      of(mockCustomMiReportResult as unknown as HttpResponse<MiReportResult>),
     );
 
     expect(page.formErrorMessage).toBeTruthy();
@@ -78,8 +78,9 @@ describe('CustomComponent', () => {
 
     expect(page.queryErrorMessage).toBeFalsy();
     expect(page.formErrorMessage).toBeFalsy();
-    expect(miReportsUserService.generateCustomReport).toHaveBeenCalledTimes(1);
-    expect(miReportsUserService.generateCustomReport).toHaveBeenCalledWith({
+    expect(miReportsService.generateCustomReport).toHaveBeenCalledTimes(1);
+    expect(miReportsService.generateCustomReport).toHaveBeenCalledWith({
+      reportType: 'CUSTOM',
       sqlQuery: 'select * from account',
     });
 
@@ -87,7 +88,7 @@ describe('CustomComponent', () => {
   });
 
   it('should display error message when submitting an invalid sql', () => {
-    jest.spyOn(miReportsUserService, 'generateCustomReport').mockReturnValue(
+    jest.spyOn(miReportsService, 'generateCustomReport').mockReturnValue(
       throwError(
         () =>
           new HttpErrorResponse({
@@ -106,8 +107,9 @@ describe('CustomComponent', () => {
     fixture.detectChanges();
 
     expect(page.formErrorMessage).toBeFalsy();
-    expect(miReportsUserService.generateCustomReport).toHaveBeenCalledTimes(1);
-    expect(miReportsUserService.generateCustomReport).toHaveBeenCalledWith({
+    expect(miReportsService.generateCustomReport).toHaveBeenCalledTimes(1);
+    expect(miReportsService.generateCustomReport).toHaveBeenCalledWith({
+      reportType: 'CUSTOM',
       sqlQuery: 'select * from accounts',
     });
 

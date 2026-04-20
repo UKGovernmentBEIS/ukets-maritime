@@ -1,8 +1,5 @@
-<netz-page-heading>{{ map.caption }} for {{ ship()?.details?.name }}</netz-page-heading>
+<netz-page-heading [caption]="map.caption">{{ map.caption }} for {{ ship()?.details?.name }}</netz-page-heading>
 
 <mrtm-aer-aggregated-data-ship-summary-template [aggregatedData]="aggregatedData()" [ship]="ship()" />
 
-<div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
-  <a govukLink [routerLink]="['../']">Return to: {{ map.title }}</a>
-</div>
+<a govukLink [routerLink]="['../']">Return to: {{ map.title }}</a>

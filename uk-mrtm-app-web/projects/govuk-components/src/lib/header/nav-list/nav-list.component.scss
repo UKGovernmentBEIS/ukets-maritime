@@ -1,4 +1,5 @@
-@use 'govuk-frontend/dist/govuk/index' as govuk;
+@import 'govuk-frontend/dist/govuk/settings/media-queries';
+@import 'govuk-frontend/dist/govuk/helpers/media-queries';
 
 /**
 Override display on Menu button and Navigation list
@@ -8,19 +9,19 @@ to compensate for behaviour applicable through javascript in GDS
 :host {
   .govuk-header__menu-button {
     .js-enabled & {
-      @include govuk.govuk-media-query($from: desktop) {
+      @include govuk-media-query($from: desktop) {
         display: none;
       }
     }
   }
 
   .govuk-header__navigation-list {
-    @include govuk.govuk-media-query($until: desktop) {
+    @include govuk-media-query($until: desktop) {
       display: none;
     }
 
     &.govuk-header__navigation--open {
-      @include govuk.govuk-media-query($until: desktop) {
+      @include govuk-media-query($until: desktop) {
         display: block;
       }
     }

@@ -3,6 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
+import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
 
 import { RegulatorUsersRegistrationService } from '@mrtm/api';
 
@@ -54,6 +55,8 @@ describe('RegulatorInvitationComponent', () => {
       imports: [RegulatorInvitationComponent],
       providers: [
         provideHttpClient(),
+        PasswordService,
+        provideZxvbnServiceForPSM(),
         { provide: RegulatorUsersRegistrationService, useValue: regulatorUsersRegistrationService },
         { provide: PasswordService, useValue: passwordService },
         { provide: ActivatedRoute, useValue: activatedRoute },

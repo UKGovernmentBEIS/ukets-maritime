@@ -12,7 +12,6 @@ import { canActivateVariationReviewDetailsSummary } from '@requests/tasks/emp-va
 export const VARIATION_REVIEW_DETAILS_ROUTES: Routes = [
   {
     path: '',
-    title: variationDetailsSubtaskMap.title,
     data: { breadcrumb: false, backlink: '../../' },
     canActivate: [canActivateVariationReviewDetailsSummary],
     loadComponent: () =>
@@ -22,7 +21,6 @@ export const VARIATION_REVIEW_DETAILS_ROUTES: Routes = [
   },
   {
     path: VariationDetailsWizardStep.DECISION,
-    title: variationDetailsSubtaskMap.decision.title,
     data: { breadcrumb: false },
     resolve: { backlink: backlinkResolver(VariationDetailsWizardStep.SUMMARY, '../../') },
     canActivate: [canActivateVariationDetailsDecision],
@@ -33,7 +31,7 @@ export const VARIATION_REVIEW_DETAILS_ROUTES: Routes = [
   },
   {
     path: VariationDetailsWizardStep.DESCRIBE_CHANGES,
-    title: variationDetailsSubtaskMap.empVariationDetails.title,
+    title: variationDetailsSubtaskMap.title,
     data: { breadcrumb: false },
     resolve: { backlink: backlinkResolver(VariationDetailsWizardStep.SUMMARY, '../../') },
     canActivate: [canActivateVariationDetailsStep(VariationDetailsWizardStep.DECISION)],

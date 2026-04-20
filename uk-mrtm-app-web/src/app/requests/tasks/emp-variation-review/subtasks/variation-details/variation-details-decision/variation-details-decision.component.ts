@@ -34,16 +34,16 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-review-variation-details',
+  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
     VariationDetailsSummaryTemplateComponent,
     ReviewDecisionComponent,
   ],
-  standalone: true,
   templateUrl: './variation-details-decision.component.html',
-  providers: [reviewEmpVariationDetailsDecisionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [reviewEmpVariationDetailsDecisionFormProvider],
 })
 export class VariationDetailsDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -52,7 +52,7 @@ export class VariationDetailsDecisionComponent {
     TaskService<EmpVariationReviewTaskPayload>,
   );
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  readonly vm: Signal<ViewModel> = computed(() => {
+  vm: Signal<ViewModel> = computed(() => {
     return {
       variationDetails: this.store.select(empVariationQuery.selectEmpVariationDetails)(),
       variationDetailsMap: variationDetailsSubtaskMap,

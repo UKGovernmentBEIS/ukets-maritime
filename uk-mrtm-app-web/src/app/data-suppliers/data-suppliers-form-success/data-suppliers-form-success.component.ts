@@ -7,8 +7,8 @@ import { dataSuppliersQuery, DataSuppliersStore } from '@data-suppliers/+state';
 
 @Component({
   selector: 'mrtm-data-suppliers-form-success',
-  imports: [PanelComponent, LinkDirective, RouterLink],
   standalone: true,
+  imports: [PanelComponent, LinkDirective, RouterLink],
   templateUrl: './data-suppliers-form-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,23 +1,23 @@
-@if (rows().length || columns().length !== 0) {
-  <ng-content />
+@if (rows.length || columns.length !== 0) {
+  <ng-content></ng-content>
 } @else {
-  @for (item of details(); track item) {
+  @for (item of details; track item; let i = $index) {
     @if (item.value) {
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>
-          @if (keyTemplate()) {
+          @if (keyTemplate) {
             <ng-container
-              [ngTemplateOutlet]="keyTemplate()"
-              [ngTemplateOutletContext]="{ $implicit: item, index: $index }" />
+              [ngTemplateOutlet]="keyTemplate"
+              [ngTemplateOutletContext]="{ $implicit: item, index: i }"></ng-container>
           } @else {
             {{ item.key }}
           }
         </dt>
         <dd govukSummaryListRowValue>
-          @if (valueTemplate()) {
+          @if (valueTemplate) {
             <ng-container
-              [ngTemplateOutlet]="valueTemplate()"
-              [ngTemplateOutletContext]="{ $implicit: item, index: $index }" />
+              [ngTemplateOutlet]="valueTemplate"
+              [ngTemplateOutletContext]="{ $implicit: item, index: i }"></ng-container>
           } @else {
             {{ item.value }}
           }

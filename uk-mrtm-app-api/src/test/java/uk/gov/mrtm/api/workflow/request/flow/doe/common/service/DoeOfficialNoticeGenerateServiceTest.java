@@ -9,7 +9,6 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTempla
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
-import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeFeeDetails;
@@ -79,10 +78,7 @@ class DoeOfficialNoticeGenerateServiceTest {
                                 .comments("comments")
                                 .build())
                         .determinationReason(DoeDeterminationReason.builder()
-                                .details(DoeDeterminationReasonDetails.builder()
-                                    .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
-                                    .noticeText("noticeText")
-                                    .build())
+                                .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
                                 .furtherDetails("Further details")
                                 .build())
                         .totalMaritimeEmissions(DoeTotalMaritimeEmissions.builder()

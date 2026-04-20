@@ -17,6 +17,7 @@ import { PaymentStatusPipe } from '@shared/pipes/payment-status.pipe';
 
 @Component({
   selector: 'mrtm-payment-success-summary-template',
+  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -27,7 +28,6 @@ import { PaymentStatusPipe } from '@shared/pipes/payment-status.pipe';
     PaymentStatusPipe,
     SelectOptionToTitlePipe,
   ],
-  standalone: true,
   templateUrl: './payment-success-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

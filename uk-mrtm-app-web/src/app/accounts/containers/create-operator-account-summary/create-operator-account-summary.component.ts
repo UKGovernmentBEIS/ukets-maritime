@@ -15,6 +15,9 @@ import { OperatorAccountsStore, selectNewAccount } from '@accounts/store';
 
 @Component({
   selector: 'mrtm-create-operator-account-summary',
+  templateUrl: './create-operator-account-summary.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     RouterLink,
     OperatorAccountSummaryInfoComponent,
@@ -23,10 +26,7 @@ import { OperatorAccountsStore, selectNewAccount } from '@accounts/store';
     ButtonDirective,
     LinkDirective,
   ],
-  standalone: true,
-  templateUrl: './create-operator-account-summary.component.html',
   providers: [DestroySubject],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateOperatorAccountSummaryComponent {
   private readonly store: OperatorAccountsStore = inject(OperatorAccountsStore);

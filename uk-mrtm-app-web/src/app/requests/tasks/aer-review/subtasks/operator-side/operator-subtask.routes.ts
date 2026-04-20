@@ -171,18 +171,18 @@ export const OPERATOR_SUBTASK_ROUTES: Routes = [
         data: { breadcrumb: false, backlink: '../' },
         title: aerAggregatedDataSubtasksListMap.title,
         loadComponent: () =>
-          import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-aggregated-data/aer-aggregated-data-ship-submitted').then(
-            (c) => c.AerAggregatedDataShipSubmittedComponent,
-          ),
+          import(
+            '@requests/tasks/aer-verification-submit/view-only-subtasks/aer-aggregated-data/aer-aggregated-data-ship-submitted'
+          ).then((c) => c.AerAggregatedDataShipSubmittedComponent),
       },
       {
         path: `${AerReviewWizardSteps.FORM}/:${AER_AGGREGATED_DATA_PARAM}`,
         data: { breadcrumb: false, backlink: '../' },
         title: aerAggregatedDataSubtasksListMap.title,
         loadComponent: () =>
-          import('@requests/tasks/aer-verification-submit/view-only-subtasks/aer-aggregated-data/aer-aggregated-data-ship-submitted').then(
-            (c) => c.AerAggregatedDataShipSubmittedComponent,
-          ),
+          import(
+            '@requests/tasks/aer-verification-submit/view-only-subtasks/aer-aggregated-data/aer-aggregated-data-ship-submitted'
+          ).then((c) => c.AerAggregatedDataShipSubmittedComponent),
       },
     ],
   },

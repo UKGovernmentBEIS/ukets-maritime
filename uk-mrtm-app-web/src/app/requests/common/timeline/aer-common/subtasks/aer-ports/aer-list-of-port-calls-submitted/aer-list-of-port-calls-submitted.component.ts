@@ -9,13 +9,13 @@ import { PortCallsListSummaryTemplateComponent, ReviewDecisionSummaryTemplateCom
 
 @Component({
   selector: 'mrtm-aer-list-of-port-calls-submitted',
+  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     PortCallsListSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
-  standalone: true,
   templateUrl: './aer-list-of-port-calls-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

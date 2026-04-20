@@ -1,9 +1,8 @@
 <div>
   <h2 class="govuk-heading-m">Check your answers</h2>
-  <mrtm-operator-account-summary-info formRouterLink="../" [summaryInfo]="info$ | async" />
+  <mrtm-operator-account-summary-info
+    [formRouterLink]="'../'"
+    [summaryInfo]="info$ | async"></mrtm-operator-account-summary-info>
   <button (click)="handleSubmit()" govukButton netzPendingButton type="button">Confirm and complete</button>
 </div>
-<div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
-  <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
-</div>
+<a govukLink routerLink="/dashboard">Return to: Dashboard</a>

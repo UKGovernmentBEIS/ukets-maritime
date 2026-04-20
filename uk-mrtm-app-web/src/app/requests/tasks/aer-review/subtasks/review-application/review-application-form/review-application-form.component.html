@@ -1,75 +1,66 @@
 <mrtm-wizard-step
   [formGroup]="formGroup"
-  [heading]="title | reviewSubtaskTitle"
+  [heading]="title"
   [caption]="title"
   (formSubmit)="onSubmit()"
   [showReturnLink]="true">
   @if (summaryDetails) {
     <ng-container *ngComponentOutlet="summaryDetails.component; inputs: summaryDetails.inputs()" />
   }
-  <div class="govuk-grid-row">
-    <div class="govuk-grid-column-two-thirds">
-      <div
-        formControlName="type"
-        govuk-radio
-        legend="What is your decision on the information submitted?"
-        legendSize="medium">
-        @if (availableOptions.includes('ACCEPTED')) {
-          <govuk-radio-option value="ACCEPTED" label="Accepted" />
-        }
-        @if (availableOptions.includes('OPERATOR_AMENDS_NEEDED')) {
-          <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator amends needed">
-            <ng-container govukConditionalContent>
-              <h2 class="govuk-heading-m">Changes required by operator</h2>
-              <ng-container formArrayName="requiredChanges">
-                @for (requiredChange of requiredChangesCtrl.controls; track requiredChange) {
-                  <fieldset [formGroupName]="$index" govukFieldset id="required-changes-{{ $index + 1 }}">
-                    <div class="govuk-grid-row">
-                      <div class="govuk-grid-column-two-thirds">
-                        <legend govukLegend legendSize="small">Required change {{ $index + 1 }}</legend>
-                      </div>
-                      <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-                        @if (requiredChangesCtrl?.length > 1) {
-                          <button (click)="requiredChangesCtrl.removeAt($index)" govukSecondaryButton type="button">
-                            Remove
-                          </button>
-                        }
-                      </div>
+  <div class="govuk-!-width-two-thirds">
+    <div
+      formControlName="type"
+      govuk-radio
+      legend="What is your decision on the information submitted?"
+      legendSize="medium">
+      @if (availableOptions.includes('ACCEPTED')) {
+        <govuk-radio-option value="ACCEPTED" label="Accepted" />
+      }
+      @if (availableOptions.includes('OPERATOR_AMENDS_NEEDED')) {
+        <govuk-radio-option value="OPERATOR_AMENDS_NEEDED" label="Operator amends needed">
+          <ng-container govukConditionalContent>
+            <h2 class="govuk-heading-m">Changes required by operator</h2>
+            <ng-container formArrayName="requiredChanges">
+              @for (requiredChange of requiredChangesCtrl.controls; track requiredChange; let i = $index) {
+                <fieldset [formGroupName]="i" govukFieldset id="required-changes-{{ i + 1 }}">
+                  <div class="govuk-grid-row">
+                    <div class="govuk-grid-column-two-thirds">
+                      <legend govukLegend legendSize="small">Required change {{ i + 1 }}</legend>
                     </div>
-                    <div
-                      label="Reason"
-                      [isLabelHidden]="true"
-                      govuk-textarea
-                      [maxLength]="10000"
-                      formControlName="reason"></div>
-                    <br />
-                    <mrtm-multiple-file-input
-                      [baseDownloadUrl]="downloadUrl"
-                      label="Upload a file (Optional)"
-                      listTitle="Uploaded files"
-                      formControlName="files" />
-                  </fieldset>
-                  @if (requiredChangesCtrl?.length > 1) {
-                    <hr
-                      class="govuk-section-break govuk-section-break--m govuk-section-break--visible"
-                      aria-hidden="true" />
-                  }
+                    <div class="govuk-grid-column-one-third govuk-!-text-align-right">
+                      @if (requiredChangesCtrl?.length > 1) {
+                        <button (click)="requiredChangesCtrl.removeAt(i)" govukSecondaryButton type="button">
+                          Remove
+                        </button>
+                      }
+                    </div>
+                  </div>
+                  <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+                  <br />
+                  <mrtm-multiple-file-input
+                    [baseDownloadUrl]="downloadUrl"
+                    label="Upload a file (Optional)"
+                    listTitle="Uploaded files"
+                    formControlName="files"></mrtm-multiple-file-input>
+                </fieldset>
+                @if (requiredChangesCtrl?.length > 1) {
+                  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
                 }
-                <button (click)="addOtherRequiredChange()" govukSecondaryButton type="button">
-                  Add another required change
-                </button>
-              </ng-container>
+              }
+              <button (click)="addOtherRequiredChange()" govukSecondaryButton type="button">
+                Add another required change
+              </button>
             </ng-container>
-          </govuk-radio-option>
-        }
-      </div>
-      <div
-        formControlName="notes"
-        govuk-textarea
-        label="Notes (optional)"
-        hint="This cannot be viewed by the operator"
-        labelSize="medium"
-        [maxLength]="10000"></div>
+          </ng-container>
+        </govuk-radio-option>
+      }
     </div>
+    <div
+      formControlName="notes"
+      govuk-textarea
+      label="Notes (optional)"
+      hint="This cannot be viewed by the operator"
+      labelSize="medium"
+      [maxLength]="10000"></div>
   </div>
 </mrtm-wizard-step>

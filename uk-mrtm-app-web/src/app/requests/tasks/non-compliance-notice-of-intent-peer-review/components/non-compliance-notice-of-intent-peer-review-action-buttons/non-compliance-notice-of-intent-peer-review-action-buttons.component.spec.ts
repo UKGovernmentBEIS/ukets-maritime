@@ -1,16 +1,14 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
+import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent } from '@requests/tasks/non-compliance-notice-of-intent-peer-review/components';
+import { screen } from '@testing-library/angular';
 
 describe('NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent', () => {
   let component: NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent;
   let fixture: ComponentFixture<NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent>;
-  let page: Page;
-
-  class Page extends BasePage<NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent> {}
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -20,7 +18,6 @@ describe('NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent', () => {
 
     fixture = TestBed.createComponent(NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent);
     component = fixture.componentInstance;
-    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -29,6 +26,8 @@ describe('NonComplianceNoticeOfIntentPeerReviewActionButtonsComponent', () => {
   });
 
   it('should display button with correct label', () => {
-    expect(page.query('a').textContent).toEqual('Peer review decision');
+    const button = screen.getByRole('link');
+    expect(button).toBeInTheDocument();
+    expect(button.textContent).toEqual('Peer review decision');
   });
 });

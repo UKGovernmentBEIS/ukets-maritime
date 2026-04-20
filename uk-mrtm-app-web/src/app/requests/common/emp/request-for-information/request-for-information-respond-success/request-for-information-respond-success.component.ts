@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-request-for-information-respond-success',
-  imports: [LinkDirective, RouterLink, PanelComponent],
   standalone: true,
+  imports: [LinkDirective, RouterLink, PanelComponent],
   templateUrl: './request-for-information-respond-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

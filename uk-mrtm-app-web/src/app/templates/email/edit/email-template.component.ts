@@ -21,6 +21,9 @@ import { EmailTemplateDetailsTemplateComponent } from '@templates/email/email-te
 
 @Component({
   selector: 'mrtm-email-template',
+  templateUrl: './email-template.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
   imports: [
     AsyncPipe,
     ButtonDirective,
@@ -32,9 +35,6 @@ import { EmailTemplateDetailsTemplateComponent } from '@templates/email/email-te
     TextareaComponent,
     TextInputComponent,
   ],
-  standalone: true,
-  templateUrl: './email-template.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmailTemplateComponent {
   private readonly fb = inject(UntypedFormBuilder);

@@ -9,14 +9,14 @@ describe('FormService', () => {
   let service: FormService;
 
   @Component({
-    imports: [ReactiveFormsModule, TextInputComponent, FormsModule],
     standalone: true,
+    imports: [ReactiveFormsModule, TextInputComponent, FormsModule],
     template: `
       <div [formGroup]="formGroup">
         <div govuk-text-input formControlName="test"></div>
         <div formArrayName="list">
-          @for (control of list.controls; track control) {
-            <div govuk-text-input [formControlName]="$index"></div>
+          @for (control of list.controls; track control; let i = $index) {
+            <div govuk-text-input [formControlName]="i"></div>
           }
         </div>
       </div>

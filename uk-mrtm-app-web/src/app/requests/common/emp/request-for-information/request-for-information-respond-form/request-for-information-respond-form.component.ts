@@ -18,6 +18,7 @@ import { AttachedFile, UploadedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-request-for-information-respond-form',
+  standalone: true,
   imports: [
     ReactiveFormsModule,
     WizardStepComponent,
@@ -25,9 +26,8 @@ import { AttachedFile, UploadedFile } from '@shared/types';
     TextareaComponent,
     SummaryDownloadFilesComponent,
   ],
-  standalone: true,
-  templateUrl: './request-for-information-respond-form.component.html',
   providers: [requestForInformationRespondFormProvider],
+  templateUrl: './request-for-information-respond-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RequestForInformationRespondFormComponent {
@@ -44,7 +44,7 @@ export class RequestForInformationRespondFormComponent {
   public readonly canBeDisplayed =
     this.authStore.select(selectUserId)() === this.requestTaskStore.select(requestTaskQuery.selectAssigneeUserId)();
 
-  readonly questionFiles = computed(() => {
+  questionFiles = computed(() => {
     const attachments = this.taskStore.select(rfiRespondQuery.selectAttachments)();
     const questionFiles = this.taskStore.select(rfiRespondQuery.selectQuestion)()?.files;
 

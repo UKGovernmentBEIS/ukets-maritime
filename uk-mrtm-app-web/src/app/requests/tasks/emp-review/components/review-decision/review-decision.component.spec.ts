@@ -1,86 +1,56 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { RequestTaskStore } from '@netz/common/store';
-import { BasePage } from '@netz/common/testing';
 
 import { ABBREVIATIONS_SUB_TASK } from '@requests/common/emp/subtasks/abbreviations';
+import { mockEmpIssuanceSubmitRequestTask } from '@requests/common/emp/testing/emp-data.mock';
 import { ReviewDecisionComponent } from '@requests/tasks/emp-review/components/review-decision/review-decision.component';
 import { reviewDecisionFormProvider } from '@requests/tasks/emp-review/components/review-decision/review-decision.form-provider';
 import { REVIEW_DECISION_FORM } from '@requests/tasks/emp-review/components/review-decision/review-decision-form.token';
 import { ReviewDecisionFormModel } from '@requests/tasks/emp-review/components/review-decision/review-decision-form-model.type';
+import { render } from '@testing-library/angular';
+import { screen } from '@testing-library/dom';
 
 @Component({
   selector: 'mrtm-test',
-  imports: [ReactiveFormsModule, ReviewDecisionComponent],
-  standalone: true,
   template: `
     <form [formGroup]="form">
-      <mrtm-review-decision />
+      <mrtm-review-decision></mrtm-review-decision>
     </form>
   `,
-  providers: [reviewDecisionFormProvider(ABBREVIATIONS_SUB_TASK)],
+  standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  imports: [ReactiveFormsModule, ReviewDecisionComponent],
+  providers: [reviewDecisionFormProvider(ABBREVIATIONS_SUB_TASK)],
 })
 class TestComponent {
   form = inject<ReviewDecisionFormModel>(REVIEW_DECISION_FORM);
 }
 
 describe('ReviewDecisionComponent', () => {
-  let fixture: ComponentFixture<TestComponent>;
-  let page: Page;
-
-  class Page extends BasePage<TestComponent> {
-    get labels(): string[] {
-      return this.labelsElement.map((item) => item.textContent.trim());
-    }
-
-    get operatorAmendsNeededLabel(): HTMLElement {
-      return this.labelsElement.find((label) => label.textContent.includes('Operator amends needed'));
-    }
-
-    get labelsElement(): HTMLElement[] {
-      return this.queryAll('label');
-    }
-  }
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      imports: [TestComponent],
+  beforeEach(async () => {
+    await render(TestComponent, {
       providers: [provideHttpClient(), provideHttpClientTesting(), RequestTaskStore],
+      configureTestBed: (testbed) => {
+        const store = testbed.inject(RequestTaskStore);
+        store.setState(mockEmpIssuanceSubmitRequestTask);
+      },
     });
-
-    fixture = TestBed.createComponent(TestComponent);
-    page = new Page(fixture);
-    fixture.detectChanges();
   });
 
   it('should display controls', () => {
-    expect(page.labels).toEqual([
-      'Accepted',
-      'Operator amends needed',
-      'Reason for required change 1',
-      'Upload a file (Optional)',
-      'Choose files',
-      'Notes (optional)',
-    ]);
+    expect(screen.getByLabelText('Accepted')).toBeInTheDocument();
+    expect(screen.getByLabelText('Operator amends needed')).toBeInTheDocument();
+    expect(screen.getByLabelText('Notes (optional)')).toBeInTheDocument();
   });
 
   it('should show prepopulated form', async () => {
-    page.operatorAmendsNeededLabel.click();
-    fixture.detectChanges();
-
-    expect(page.query<HTMLInputElement>('input[value="OPERATOR_AMENDS_NEEDED"]').checked).toBeTruthy();
-    expect(page.labels).toEqual([
-      'Accepted',
-      'Operator amends needed',
-      'Reason for required change 1',
-      'Upload a file (Optional)',
-      'Choose files',
-      'Notes (optional)',
-    ]);
+    screen.getByLabelText('Operator amends needed').click();
+    expect(screen.getByLabelText('Operator amends needed')).toBeChecked();
+    expect(screen.getByText('Required change 1')).toBeInTheDocument();
+    expect(screen.getByLabelText('Upload a file (Optional)')).toBeInTheDocument();
   });
 });

@@ -17,8 +17,8 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-charge-operator',
-  imports: [RadioComponent, WizardStepComponent, ReactiveFormsModule, RadioOptionComponent],
   standalone: true,
+  imports: [RadioComponent, WizardStepComponent, ReactiveFormsModule, RadioOptionComponent],
   templateUrl: './charge-operator.component.html',
   providers: [chargeOperatorFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

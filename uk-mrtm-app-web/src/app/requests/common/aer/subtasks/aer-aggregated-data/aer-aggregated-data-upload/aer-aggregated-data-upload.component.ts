@@ -9,7 +9,6 @@ import {
   WritableSignal,
 } from '@angular/core';
 import { UntypedFormGroup } from '@angular/forms';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { AerShipAggregatedDataSave } from '@mrtm/api';
@@ -33,11 +32,11 @@ import { AerAggregatedDataXmlService } from '@requests/common/aer/subtasks/aer-a
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { DataParserWizardStepComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
-import { PersistablePaginationService } from '@shared/services';
 import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-upload',
+  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -48,20 +47,17 @@ import { AerAggregatedDataUploadDto, XmlValidationError } from '@shared/types';
     PageHeadingComponent,
     PendingButtonDirective,
   ],
-  standalone: true,
   templateUrl: './aer-aggregated-data-upload.component.html',
   providers: [aerAggregatedDataUploadFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataUploadComponent {
   protected readonly formGroup = inject<UntypedFormGroup>(TASK_FORM);
-  private readonly persistablePaginationService = inject(PersistablePaginationService);
   private readonly store = inject(RequestTaskStore);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly service = inject(TaskService<AerSubmitTaskPayload>);
   private readonly xmlService = inject(AerAggregatedDataXmlService);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
-  private readonly title = inject(Title);
 
   private readonly dataParserWizardStep = viewChild.required(DataParserWizardStepComponent);
 
@@ -71,9 +67,9 @@ export class AerAggregatedDataUploadComponent {
   fileCtrl = this.formGroup.controls.file;
   wizardSteps = AerAggregatedDataWizardStep;
   existingAggregatedData = this.store.select(aerCommonQuery.selectAggregatedDataList);
-  readonly xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
-  readonly shipEmissionsList: WritableSignal<AerShipAggregatedDataSave[]> = signal([]);
-  readonly aggregatedTableData: Signal<AerAggregatedDataUploadDto[]> = computed(() =>
+  xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
+  shipEmissionsList: WritableSignal<AerShipAggregatedDataSave[]> = signal([]);
+  aggregatedTableData: Signal<AerAggregatedDataUploadDto[]> = computed(() =>
     this.shipEmissionsList().map((item) => ({
       imoNumber: item.imoNumber,
       name: this.store.select(aerCommonQuery.selectShipNameByImoNumber(item.imoNumber))(),
@@ -117,9 +113,6 @@ export class AerAggregatedDataUploadComponent {
 
   toggleConfirmation(value: boolean) {
     this.showConfirmation = value;
-    this.showConfirmation
-      ? this.title.setTitle(this.taskMap.uploadAggregatedDataConfirmation.title)
-      : this.title.setTitle(this.taskMap.uploadAggregatedData.title);
   }
 
   onSubmit() {
@@ -128,7 +121,6 @@ export class AerAggregatedDataUploadComponent {
     } else if (this.existingAggregatedData()?.length && !this.showConfirmation && !this.xmlErrors()?.length) {
       this.toggleConfirmation(true);
     } else if (this.shipEmissionsList()?.length) {
-      this.persistablePaginationService.reset();
       this.service
         .saveSubtask(
           AER_AGGREGATED_DATA_SUB_TASK,

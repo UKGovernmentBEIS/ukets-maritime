@@ -15,6 +15,7 @@ import { FollowUpReviewDecisionDTO } from '@shared/types';
 
 @Component({
   selector: 'mrtm-follow-up-returned-for-amends-summary-template',
+  standalone: true,
   imports: [
     SummaryDownloadFilesComponent,
     SummaryListComponent,
@@ -24,7 +25,6 @@ import { FollowUpReviewDecisionDTO } from '@shared/types';
     GovukDatePipe,
     NotProvidedDirective,
   ],
-  standalone: true,
   templateUrl: './follow-up-returned-for-amends-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

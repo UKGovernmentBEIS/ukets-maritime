@@ -2,6 +2,8 @@ import { Provider } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
+import { isNil } from 'lodash-es';
+
 import { RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';
 
@@ -11,7 +13,6 @@ import {
   RespondToRecommendationFormGroup,
   RespondToRecommendationFormModel,
 } from '@requests/tasks/vir-submit/subtasks/respond-to-recommendation/respond-to-recommendation-form/respond-to-recommendation-form.types';
-import { isNil } from '@shared/utils';
 import { addressedDescriptionValidator } from '@shared/validators/recommendation.validator';
 
 export const respondToRecommendationFormProvider: Provider = {

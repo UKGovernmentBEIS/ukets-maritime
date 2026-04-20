@@ -22,6 +22,7 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
 
 @Component({
   selector: 'mrtm-edit-reporting-status-summary',
+  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -35,7 +36,6 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
     AccountReportingStatusPipe,
     WarningTextComponent,
   ],
-  standalone: true,
   templateUrl: './edit-reporting-status-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,7 +45,7 @@ export class EditReportingStatusSummaryComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
 
-  readonly reportingYear = input.required<string>();
+  reportingYear = input.required<string>();
   readonly currentState = toSignal(this.operatorAccountsStore.pipe(selectReportingStatus));
 
   onContinue(): void {

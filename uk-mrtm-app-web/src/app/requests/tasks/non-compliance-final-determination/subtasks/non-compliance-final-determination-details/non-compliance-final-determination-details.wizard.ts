@@ -1,6 +1,6 @@
-import { NonComplianceFinalDetermination } from '@mrtm/api';
+import { isNil } from 'lodash-es';
 
-import { isNil } from '@shared/utils';
+import { NonComplianceFinalDetermination } from '@mrtm/api';
 
 export const isWizardCompleted = (nonComplianceFinalDetermination: NonComplianceFinalDetermination): boolean => {
   return (

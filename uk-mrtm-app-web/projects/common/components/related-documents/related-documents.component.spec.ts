@@ -33,17 +33,16 @@ describe('RelatedDocumentsComponent', () => {
     }
   }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [RelatedDocumentsComponent],
       providers: [
         {
           provide: ActivatedRoute,
           useValue: new ActivatedRouteStub(),
         },
       ],
-    }).overrideComponent(RelatedDocumentsComponent, {
-      set: { host: { 'test-id': 'component-spec' } },
-    });
+    }).compileComponents();
 
     store = TestBed.inject(AuthStore);
     store.setUserState({ userId: 'test-user-id' });

@@ -24,5 +24,5 @@ import {
 export class ListOfShipsSummaryComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   public readonly ships = this.store.select(empSubmittedQuery.selectListOfShips)();
-  public readonly reviewGroupDecision = this.store.select(empSubmittedQuery.selectReviewGroupDecision('abbreviations'));
+  public readonly reviewGroupDecision = this.store.select(empSubmittedQuery.selectReviewGroupDecision('emissions'));
 }

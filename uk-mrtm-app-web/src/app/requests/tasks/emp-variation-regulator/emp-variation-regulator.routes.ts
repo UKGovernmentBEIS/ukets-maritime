@@ -3,6 +3,7 @@ import { Routes } from '@angular/router';
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
 import { NOTIFY_OPERATOR_SUCCESS_COMPONENT } from '@requests/common/components/notify-operator/notify-operator.providers';
+import { isPaymentCompleted } from '@requests/common/payment';
 import { EmpVariationRegulatorSuccessComponent } from '@requests/tasks/emp-variation-regulator/components';
 import {
   provideEmpVariationRegulatorPayloadMutators,
@@ -12,7 +13,6 @@ import {
 } from '@requests/tasks/emp-variation-regulator/emp-variation-regulator.providers';
 import { canActivateEmpVariationRegulatorActions } from '@requests/tasks/emp-variation-regulator/guards';
 import { HTML_DIFF } from '@shared/directives';
-import { resetPersistableStateGuard } from '@shared/guards';
 
 export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
   {
@@ -26,7 +26,6 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
       provideEmpVariationRegulatorStepFlowManagers(),
       { provide: HTML_DIFF, useValue: true },
     ],
-    canActivate: [resetPersistableStateGuard],
     children: [
       {
         path: 'variation-details',
@@ -100,13 +99,13 @@ export const EMP_VARIATION_REGULATOR_ROUTES: Routes = [
       {
         path: 'notify-operator',
         data: { backlink: '../../', breadcrumb: false },
-        canActivate: [canActivateEmpVariationRegulatorActions],
+        canActivate: [canActivateEmpVariationRegulatorActions, isPaymentCompleted],
         providers: [{ provide: NOTIFY_OPERATOR_SUCCESS_COMPONENT, useValue: EmpVariationRegulatorSuccessComponent }],
         loadChildren: () => import('@requests/common/components/notify-operator').then((r) => r.NOTIFY_OPERATOR_ROUTES),
       },
       {
         path: 'peer-review',
-        canActivate: [canActivateEmpVariationRegulatorActions],
+        canActivate: [canActivateEmpVariationRegulatorActions, isPaymentCompleted],
         loadChildren: () =>
           import('@requests/common/components/peer-review').then((r) => r.SEND_FOR_PEER_REVIEW_ROUTES),
       },

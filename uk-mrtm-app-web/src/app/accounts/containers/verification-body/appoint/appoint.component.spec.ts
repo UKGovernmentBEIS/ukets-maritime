@@ -2,20 +2,14 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute, provideRouter, Router, RouterModule } from '@angular/router';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 
 import { throwError } from 'rxjs';
 
 import { AccountVerificationBodyService, VerificationBodyNameInfoDTO } from '@mrtm/api';
 
-import { BusinessErrorComponent, ErrorCodes } from '@netz/common/error';
-import {
-  ActivatedRouteStub,
-  asyncData,
-  BasePage,
-  expectBusinessErrorToBe,
-  RouterStubComponent,
-} from '@netz/common/testing';
+import { ErrorCodes } from '@netz/common/error';
+import { ActivatedRouteStub, asyncData, BasePage, expectBusinessErrorToBe } from '@netz/common/testing';
 
 import { AppointComponent, ConfirmationComponent, UnappointConfirmationComponent } from '@accounts/containers';
 import {
@@ -29,9 +23,8 @@ describe('AppointComponent', () => {
   let fixture: ComponentFixture<AppointComponent>;
 
   const activeBodies: VerificationBodyNameInfoDTO[] = [
-    { id: 1, name: 'Verifying company 3' },
-    { id: 2, name: 'Verifying company 1' },
-    { id: 3, name: 'Verifying company 2' },
+    { id: 1, name: 'Verifying company 1' },
+    { id: 2, name: 'Verifying company 2' },
   ];
 
   const accountVerificationBodyService: Partial<jest.Mocked<AccountVerificationBodyService>> = {
@@ -78,16 +71,8 @@ describe('AppointComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [
-        ReactiveFormsModule,
-        RouterModule,
-        AppointComponent,
-        ConfirmationComponent,
-        UnappointConfirmationComponent,
-        RouterStubComponent,
-      ],
+      imports: [ReactiveFormsModule, RouterModule, AppointComponent, ConfirmationComponent],
       providers: [
-        provideRouter([{ path: 'error/business', component: BusinessErrorComponent }]),
         { provide: AccountVerificationBodyService, useValue: accountVerificationBodyService },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
@@ -105,7 +90,6 @@ describe('AppointComponent', () => {
       expect(page.options.map((option) => option.textContent.trim())).toEqual([
         'Verifying company 1',
         'Verifying company 2',
-        'Verifying company 3',
       ]);
     });
 

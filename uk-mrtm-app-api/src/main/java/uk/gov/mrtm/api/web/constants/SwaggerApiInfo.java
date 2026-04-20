@@ -320,10 +320,6 @@ public final class SwaggerApiInfo {
         FORM1001_ERROR_CODE +
         FORM1002_ERROR_CODE +
         "AER1004 | Business validation error";
-    public static final String EXTERNAL_SAVE_AER_VERIFICATION_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
-        FORM1001_ERROR_CODE +
-        FORM1002_ERROR_CODE +
-        "AER1005 | Business validation error";
     public static final String EXTERNAL_SAVE_AER_NOT_FOUND = NOT_FOUND + "\t\n" + ERROR_CODES_HEADER +
         "AER1007 | AER does not exist for specific year";
     public static final String CREATE_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
