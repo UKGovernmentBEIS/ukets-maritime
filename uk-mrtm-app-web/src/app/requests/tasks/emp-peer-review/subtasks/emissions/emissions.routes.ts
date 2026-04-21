@@ -21,8 +21,7 @@ export const EMISSIONS_ROUTES: Routes = [
     children: [
       {
         path: '',
-        data: { breadcrumb: false },
-        resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.SHIP_SUMMARY) },
+        data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () => import('@requests/common/emp/subtasks/emissions').then((c) => c.ShipSummaryComponent),
       },
     ],
