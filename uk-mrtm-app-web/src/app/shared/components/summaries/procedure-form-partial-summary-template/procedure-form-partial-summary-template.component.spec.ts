@@ -20,15 +20,16 @@ describe('ProcedureFormPartialSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(ProcedureFormPartialSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.procedureForm = {
+    fixture.componentRef.setInput('procedureForm', {
       reference: 'ca ref',
       version: 'ca ver',
       description: 'ca descr',
       responsiblePersonOrPosition: 'ca person',
       recordsLocation: 'ca loc',
       itSystemUsed: null,
-    };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('isEditable', true);
+    fixture.componentRef.setInput('a11yActionsText', 'Determination of emission factors');
     page = new Page(fixture);
     fixture.detectChanges();
   });
@@ -41,22 +42,22 @@ describe('ProcedureFormPartialSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Procedure reference',
       'ca ref',
-      'Change',
+      'Change procedure reference (Determination of emission factors)',
       'Procedure version',
       'ca ver',
-      'Change',
+      'Change procedure version (Determination of emission factors)',
       'Description of procedure',
       'ca descr',
-      'Change',
+      'Change description of procedure (Determination of emission factors)',
       'Name of person or position responsible for this procedure',
       'ca person',
-      'Change',
+      'Change  name of person or position responsible for this procedure (Determination of emission factors)',
       'Location where records are kept',
       'ca loc',
-      'Change',
+      'Change location where records are kept (Determination of emission factors)',
       'Name of IT system used',
       'Not provided',
-      'Change',
+      'Change name of IT system used (Determination of emission factors)',
     ]);
   });
 });

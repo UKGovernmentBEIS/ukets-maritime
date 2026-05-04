@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-reduction-claim-submitted',
-  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
     ReductionClaimSummaryTemplateComponent,
     ReductionClaimDetailsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './reduction-claim-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -27,4 +27,5 @@ export class ReductionClaimSubmittedComponent {
   public readonly map = reductionClaimMap;
   public readonly data = this.store.select(aerCommonQuery.selectReductionClaim);
   public readonly fuelPurchases = this.store.select(aerCommonQuery.selectReductionClaimDetailsListItems);
+  public readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
 }

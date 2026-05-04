@@ -48,11 +48,11 @@ describe('MiReportsComponent', () => {
   it('should create table with expected content', () => {
     const cells = page.cells;
     expect(cells.length).toEqual(2);
+
     const reportDescriptions = cells.map((c) => c.textContent);
     const expectedDescriptions = miReports
       .map((r) => miReportTypeDescriptionMap[r.miReportType])
       .sort((a, b) => a.localeCompare(b));
-
     reportDescriptions.forEach((value, index) => {
       expect(value).toEqual(expectedDescriptions[index]);
     });

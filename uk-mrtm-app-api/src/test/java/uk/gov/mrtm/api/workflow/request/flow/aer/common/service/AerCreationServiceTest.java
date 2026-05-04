@@ -92,4 +92,59 @@ class AerCreationServiceTest {
             aerCreationValidatorService, startProcessRequestService);
         verifyNoInteractions(startProcessRequestService, aerCreationRequestParamsBuilderService);
     }
+
+    @Test
+    void createRequestAerWithNewTransaction() {
+        RequestParams requestParams = mock(RequestParams.class);
+        when(aerCreationRequestParamsBuilderService.buildRequestParams(ACCOUNT_ID, REPORTING_YEAR))
+            .thenReturn(requestParams);
+        when(aerCreationValidatorService.validateAccountStatus(ACCOUNT_ID))
+            .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+        when(aerCreationValidatorService.validateReportingYear(ACCOUNT_ID, REPORTING_YEAR))
+            .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+
+        aerCreationService.createRequestAerWithNewTransaction(ACCOUNT_ID, REPORTING_YEAR);
+
+        verify(aerCreationRequestParamsBuilderService).buildRequestParams(ACCOUNT_ID, REPORTING_YEAR);
+        verify(aerCreationValidatorService).validateAccountStatus(ACCOUNT_ID);
+        verify(aerCreationValidatorService).validateReportingYear(ACCOUNT_ID, REPORTING_YEAR);
+        verify(startProcessRequestService).startProcess(requestParams);
+        verifyNoMoreInteractions(aerCreationRequestParamsBuilderService,
+            aerCreationValidatorService, startProcessRequestService);
+    }
+
+    @Test
+    void createRequestAerWithNewTransaction_invalid_status() {
+        when(aerCreationValidatorService.validateAccountStatus(ACCOUNT_ID))
+            .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
+
+        final BusinessException exception = assertThrows(BusinessException.class, () ->
+            aerCreationService.createRequestAerWithNewTransaction(ACCOUNT_ID, REPORTING_YEAR));
+
+        assertEquals(MrtmErrorCode.AER_CREATION_NOT_ALLOWED_INVALID_ACCOUNT_STATUS, exception.getErrorCode());
+
+        verify(aerCreationValidatorService).validateAccountStatus(ACCOUNT_ID);
+        verifyNoMoreInteractions(aerCreationRequestParamsBuilderService,
+            aerCreationValidatorService, startProcessRequestService);
+        verifyNoInteractions(startProcessRequestService, aerCreationRequestParamsBuilderService);
+    }
+
+    @Test
+    void createRequestAerWithNewTransaction_invalid_year() {
+        when(aerCreationValidatorService.validateAccountStatus(ACCOUNT_ID))
+            .thenReturn(RequestCreateValidationResult.builder().valid(true).build());
+        when(aerCreationValidatorService.validateReportingYear(ACCOUNT_ID, REPORTING_YEAR))
+            .thenReturn(RequestCreateValidationResult.builder().valid(false).build());
+
+        final BusinessException exception = assertThrows(BusinessException.class, () ->
+            aerCreationService.createRequestAerWithNewTransaction(ACCOUNT_ID, REPORTING_YEAR));
+
+        assertEquals(MrtmErrorCode.AER_ALREADY_EXISTS_FOR_REPORTING_YEAR, exception.getErrorCode());
+
+        verify(aerCreationValidatorService).validateAccountStatus(ACCOUNT_ID);
+        verify(aerCreationValidatorService).validateReportingYear(ACCOUNT_ID, REPORTING_YEAR);
+        verifyNoMoreInteractions(aerCreationRequestParamsBuilderService,
+            aerCreationValidatorService, startProcessRequestService);
+        verifyNoInteractions(startProcessRequestService, aerCreationRequestParamsBuilderService);
+    }
 }

@@ -14,7 +14,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-vir-verifier-recommendation-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -22,6 +21,7 @@ import { BooleanToTextPipe } from '@shared/pipes';
     SummaryListRowValueDirective,
     BooleanToTextPipe,
   ],
+  standalone: true,
   templateUrl: './vir-verifier-recommendation-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -43,8 +43,9 @@ class AerMapperTest {
     void aerShipEmissionsSaveSetToAerShipEmissionsSet() {
         AerShipEmissionsSave shipToSave1 = createAerShipEmissionsSave("1");
         AerShipEmissionsSave shipToSave2 = createAerShipEmissionsSave("2");
+        AerShipEmissionsSave shipToSave4 = createAerShipEmissionsSave("4");
 
-        Set<AerShipEmissionsSave> shipsToSave = Set.of(shipToSave1, shipToSave2);
+        Set<AerShipEmissionsSave> shipsToSave = Set.of(shipToSave1, shipToSave2, shipToSave4);
 
         AerShipEmissions savedShip1 = createAerShipEmissions("1");
         AerShipEmissions savedShip3 = createAerShipEmissions("3");
@@ -57,10 +58,19 @@ class AerMapperTest {
             .uncertaintyLevel(shipToSave2.getUncertaintyLevel())
             .derogations(shipToSave2.getDerogations())
             .build();
+        AerShipEmissions savedShip4 = AerShipEmissions.builder()
+            .dataInputType(DataInputType.FETCH_FROM_EMP)
+            .details(shipToSave4.getDetails())
+            .uniqueIdentifier(shipToSave4.getUniqueIdentifier())
+            .fuelsAndEmissionsFactors(shipToSave4.getFuelsAndEmissionsFactors())
+            .emissionsSources(shipToSave4.getEmissionsSources())
+            .uncertaintyLevel(shipToSave4.getUncertaintyLevel())
+            .derogations(shipToSave4.getDerogations())
+            .build();
 
-        Set<AerShipEmissions> savedShips = Set.of(savedShip1, savedShip3);
+        Set<AerShipEmissions> savedShips = Set.of(savedShip1, savedShip3, savedShip4);
 
-        Set<AerShipEmissions> expectedShips = Set.of(savedShip1, savedShip2);
+        Set<AerShipEmissions> expectedShips = Set.of(savedShip1, savedShip2, savedShip4);
 
         Aer existingAer = Aer.builder().emissions(AerEmissions.builder().ships(savedShips).build()).build();
         Set<AerShipEmissions> actualShips = mapper.aerShipEmissionsSaveSetToAerShipEmissionsSet(shipsToSave, existingAer);
@@ -70,13 +80,14 @@ class AerMapperTest {
 
     @Test
     void aerShipAggregatedDataSaveSetToAerShipAggregatedDataSet() {
-        AerShipAggregatedDataSave dataToSave1 = createAerShipAggregatedDataSave("1");
-        AerShipAggregatedDataSave dataToSave2 = createAerShipAggregatedDataSave("2");
+        AerShipAggregatedDataSave dataToSave1 = createAerShipAggregatedDataSave("1", false);
+        AerShipAggregatedDataSave dataToSave2 = createAerShipAggregatedDataSave("2", true);
+        AerShipAggregatedDataSave dataToSave5 = createAerShipAggregatedDataSave("5", true);
+        AerShipAggregatedDataSave dataToSave6 = createAerShipAggregatedDataSave("6", false);
 
-        Set<AerShipAggregatedDataSave> dataToSave = Set.of(dataToSave1, dataToSave2);
+        Set<AerShipAggregatedDataSave> dataToSave = Set.of(dataToSave1, dataToSave2, dataToSave5, dataToSave6);
 
-        AerShipAggregatedData savedData1 = createAerShipAggregatedData("1");
-        AerShipAggregatedData savedData3 = createAerShipAggregatedData("3");
+        AerShipAggregatedData savedData1 = createAerShipAggregatedData("1", false);
         AerShipAggregatedData savedData2 = AerShipAggregatedData.builder()
             .dataInputType(DataInputType.MANUAL)
             .uniqueIdentifier(dataToSave2.getUniqueIdentifier())
@@ -84,10 +95,26 @@ class AerMapperTest {
             .imoNumber(dataToSave2.getImoNumber())
             .fuelConsumptions(dataToSave2.getFuelConsumptions())
             .build();
+        AerShipAggregatedData savedData3 = createAerShipAggregatedData("3", true);
+        AerShipAggregatedData savedData4 = createAerShipAggregatedData("4", false);
+        AerShipAggregatedData savedData5 = AerShipAggregatedData.builder()
+            .dataInputType(DataInputType.MANUAL)
+            .uniqueIdentifier(dataToSave5.getUniqueIdentifier())
+            .isFromFetch(dataToSave5.isFromFetch())
+            .imoNumber(dataToSave5.getImoNumber())
+            .fuelConsumptions(dataToSave5.getFuelConsumptions())
+            .build();
+        AerShipAggregatedData savedData6 = AerShipAggregatedData.builder()
+            .dataInputType(DataInputType.MANUAL)
+            .uniqueIdentifier(dataToSave6.getUniqueIdentifier())
+            .isFromFetch(dataToSave6.isFromFetch())
+            .imoNumber(dataToSave6.getImoNumber())
+            .fuelConsumptions(dataToSave6.getFuelConsumptions())
+            .build();
 
-        Set<AerShipAggregatedData> savedData = Set.of(savedData1, savedData3);
+        Set<AerShipAggregatedData> savedData = Set.of(savedData1, savedData3, savedData4, savedData5, savedData6);
 
-        Set<AerShipAggregatedData> expectedData = Set.of(savedData2, savedData1);
+        Set<AerShipAggregatedData> expectedData = Set.of(savedData2, savedData1, savedData5, savedData6);
 
         Aer existingAer = Aer.builder().aggregatedData(AerAggregatedData.builder().emissions(savedData).build()).build();
         Set<AerShipAggregatedData> actualShips = mapper.aerShipAggregatedDataSaveSetToAerShipAggregatedDataSet(dataToSave, existingAer);
@@ -152,11 +179,11 @@ class AerMapperTest {
             .build();
     }
 
-    private AerShipAggregatedData createAerShipAggregatedData(String imoNumber) {
+    private AerShipAggregatedData createAerShipAggregatedData(String imoNumber, boolean isFromFetch) {
         return AerShipAggregatedData.builder()
             .dataInputType(DataInputType.EXTERNAL_PROVIDER)
             .uniqueIdentifier(mock(UUID.class))
-            .isFromFetch(true)
+            .isFromFetch(isFromFetch)
             .imoNumber(imoNumber)
             .fuelConsumptions(Set.of(mock(AerAggregatedDataFuelConsumption.class)))
             .emissionsWithinUKPorts(mock(AerPortEmissionsMeasurement.class))
@@ -169,10 +196,10 @@ class AerMapperTest {
             .build();
     }
 
-    private AerShipAggregatedDataSave createAerShipAggregatedDataSave(String imoNumber) {
+    private AerShipAggregatedDataSave createAerShipAggregatedDataSave(String imoNumber, boolean isFromFetch) {
         return AerShipAggregatedDataSave.builder()
             .uniqueIdentifier(mock(UUID.class))
-            .isFromFetch(true)
+            .isFromFetch(isFromFetch)
             .imoNumber(imoNumber)
             .dataInputType(DataInputTypeSave.MANUAL)
             .fuelConsumptions(Set.of(mock(AerAggregatedDataFuelConsumption.class)))

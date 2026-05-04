@@ -12,8 +12,8 @@ import {
 
 @Component({
   selector: 'mrtm-vir-respond-to-regulator-comments-task-item-details',
-  standalone: true,
   imports: [SummaryListComponent, SummaryListRowDirective, SummaryListRowKeyDirective, SummaryListRowValueDirective],
+  standalone: true,
   templateUrl: './vir-respond-to-regulator-comments-task-item-details.component.html',
   styleUrl: './vir-respond-to-regulator-comments-task-item-details.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

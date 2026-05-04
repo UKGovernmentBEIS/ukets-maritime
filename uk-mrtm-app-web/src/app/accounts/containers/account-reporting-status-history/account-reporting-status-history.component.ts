@@ -12,9 +12,6 @@ import { OperatorAccountsStore, selectReportingStatusHistory } from '@accounts/s
 
 @Component({
   selector: 'mrtm-account-reporting-status-history',
-  templateUrl: './account-reporting-status-history.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AccordionComponent,
@@ -22,6 +19,9 @@ import { OperatorAccountsStore, selectReportingStatusHistory } from '@accounts/s
     KeyValuePipe,
     AccountReportingStatusHistoryListComponent,
   ],
+  standalone: true,
+  templateUrl: './account-reporting-status-history.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccountReportingStatusHistoryComponent {
   private readonly store = inject(OperatorAccountsStore);

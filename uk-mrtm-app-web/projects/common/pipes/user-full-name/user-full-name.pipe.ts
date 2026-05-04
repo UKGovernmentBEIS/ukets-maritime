@@ -4,7 +4,11 @@ import { UserInfoDTO } from '@mrtm/api';
 
 import { userFullNameTransformer } from '@netz/common/utils';
 
-@Pipe({ name: 'userFullName', pure: true, standalone: true })
+@Pipe({
+  name: 'userFullName',
+  standalone: true,
+  pure: true,
+})
 export class UserFullNamePipe implements PipeTransform {
   transform(userDto: UserInfoDTO): string {
     return userFullNameTransformer(userDto);

@@ -2,7 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
-  ContentChild,
+  contentChild,
   inject,
   input,
   OnDestroy,
@@ -17,17 +17,17 @@ import { AccordionItemSummaryDirective } from '../directives/accordion-item-summ
 
 @Component({
   selector: 'govuk-accordion-item',
-  standalone: true,
   imports: [AsyncPipe],
+  standalone: true,
   templateUrl: './accordion-item.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AccordionItemComponent implements OnInit, OnDestroy {
   protected readonly accordion = inject<Accordion>(ACCORDION);
 
-  header = input<string>();
+  readonly header = input<string>();
   readonly expand = output<boolean>();
-  @ContentChild(AccordionItemSummaryDirective) accordionItemSummaryDirective: AccordionItemSummaryDirective;
+  readonly accordionItemSummaryDirective = contentChild(AccordionItemSummaryDirective);
 
   itemIndex: number;
   isFocused = false;

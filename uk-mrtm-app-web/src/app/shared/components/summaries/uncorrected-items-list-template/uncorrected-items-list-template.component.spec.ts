@@ -52,15 +52,15 @@ describe('UncorrectedItemsListTemplateComponent', () => {
       'Reference',
       'Explanation',
       'Impact',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       'Material',
-      'Change  Remove',
+      'Change reference (D1) Remove reference (D1)',
       'D2',
       'Lorem ipsum 2',
       'Not material',
-      'Change  Remove',
+      'Change reference (D2) Remove reference (D2)',
     ]);
   });
 
@@ -72,7 +72,7 @@ describe('UncorrectedItemsListTemplateComponent', () => {
       'Reference',
       'Explanation',
       'Impact',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       'Material',

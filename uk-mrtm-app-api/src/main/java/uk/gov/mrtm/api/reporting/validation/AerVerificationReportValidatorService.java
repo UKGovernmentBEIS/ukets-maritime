@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
+import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerification;
 import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
@@ -32,5 +33,9 @@ public class AerVerificationReportValidatorService {
             throw new BusinessException(MrtmErrorCode.INVALID_AER_VERIFICATION_REPORT,
                     AerValidatorHelper.extractAerViolations(verificationReportValidationResults));
         }
+    }
+
+    public void validateStagingAerVerification(@Valid @NotNull StagingAerVerification staging) {
+        // Trigger validations
     }
 }

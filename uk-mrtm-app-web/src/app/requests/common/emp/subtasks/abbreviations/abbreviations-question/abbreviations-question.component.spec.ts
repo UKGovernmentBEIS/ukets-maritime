@@ -85,7 +85,7 @@ describe('AbbreviationsAbbreviationsQuestionComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual(
+      expect(page.heading1.textContent).toEqual(
         'Are you using any abbreviations or terminology in your application which need explanation?',
       );
       expect(page.submitButton).toBeTruthy();
@@ -119,7 +119,7 @@ describe('AbbreviationsAbbreviationsQuestionComponent', () => {
     it('should display all HTMLElements and form with 0 errors', () => {
       expect(page.errorSummary).toBeFalsy();
       expect(page.heading1).toBeTruthy();
-      expect(page.heading1.textContent.trim()).toEqual(
+      expect(page.heading1.textContent).toEqual(
         'Are you using any abbreviations or terminology in your application which need explanation?',
       );
       expect(page.existRadios[0].checked).toBeTruthy();

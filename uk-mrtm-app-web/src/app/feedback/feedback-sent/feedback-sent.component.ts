@@ -4,8 +4,8 @@ import { PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-feedback-sent',
-  standalone: true,
   imports: [PanelComponent],
+  standalone: true,
   templateUrl: './feedback-sent.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -4,7 +4,10 @@
     <dd govukSummaryListRowValue>{{ reportingRequired() | booleanToText }}</dd>
     @if (isEditable() && changeLink()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">requirement to submit an emissions report</span>
+        </a>
       </dd>
     }
   </div>
@@ -15,7 +18,10 @@
       <dd govukSummaryListRowValue class="pre-wrap">{{ reportingObligationDetails().noReportingReason }}</dd>
       @if (isEditable() && changeLink()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">explanation for not submitting a report</span>
+          </a>
         </dd>
       }
     </div>
@@ -26,7 +32,10 @@
       </dd>
       @if (isEditable() && changeLink()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">upload of supporting documents</span>
+          </a>
         </dd>
       }
     </div>

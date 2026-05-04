@@ -46,10 +46,6 @@ type TableData = AccountContactVbInfoDTO & { user: UserAuthorityInfoDTO };
 
 @Component({
   selector: 'mrtm-site-contacts',
-  templateUrl: './site-contacts.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [UserFullNamePipe, DestroySubject],
-  standalone: true,
   imports: [
     FormsModule,
     ReactiveFormsModule,
@@ -61,6 +57,10 @@ type TableData = AccountContactVbInfoDTO & { user: UserAuthorityInfoDTO };
     AsyncPipe,
     UserFullNamePipe,
   ],
+  standalone: true,
+  templateUrl: './site-contacts.component.html',
+  providers: [UserFullNamePipe, DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SiteContactsComponent implements OnInit {
   page$ = new ReplaySubject<number>(1);

@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-compliance-monitoring-reporting-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     ComplianceMonitoringReportingSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './compliance-monitoring-reporting-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

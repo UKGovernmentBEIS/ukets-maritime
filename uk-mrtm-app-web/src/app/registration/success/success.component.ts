@@ -7,10 +7,12 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
 
 @Component({
   selector: 'mrtm-success',
+  imports: [PanelComponent, ButtonDirective],
+  standalone: true,
   template: `
     <div class="govuk-grid-row">
       <div class="govuk-grid-column-two-thirds">
-        <govuk-panel title="You've successfully created a user account"></govuk-panel>
+        <govuk-panel title="You've successfully created a user account" />
         <p class="govuk-body">We have sent an email with your user account details.</p>
         <p class="govuk-body">
           When you sign in to the UK ETS reporting service for the first time, you'll be asked to set up two-factor
@@ -23,8 +25,6 @@ import { UserRegistrationStore } from '@registration/store/user-registration.sto
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [PanelComponent, ButtonDirective],
 })
 export class SuccessComponent {
   readonly authService = inject(AuthService);

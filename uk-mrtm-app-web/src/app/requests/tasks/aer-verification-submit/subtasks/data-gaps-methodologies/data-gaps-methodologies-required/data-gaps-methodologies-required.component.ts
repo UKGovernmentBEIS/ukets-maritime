@@ -19,11 +19,11 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-data-gaps-methodologies-required',
-  standalone: true,
   imports: [RadioComponent, RadioOptionComponent, ReactiveFormsModule, WizardStepComponent],
+  standalone: true,
   templateUrl: './data-gaps-methodologies-required.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [dataGapsMethodologiesRequiredProvider],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DataGapsMethodologiesRequiredComponent {
   readonly map = dataGapsMethodologiesMap;

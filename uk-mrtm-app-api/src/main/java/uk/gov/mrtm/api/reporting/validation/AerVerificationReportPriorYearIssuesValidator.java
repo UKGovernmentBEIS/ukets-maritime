@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.reporting.validation;
 
 import org.springframework.stereotype.Service;
+import uk.gov.mrtm.api.reporting.domain.common.AerVerificationReferencePrefix;
 import uk.gov.mrtm.api.reporting.domain.common.VerifierComment;
 import uk.gov.mrtm.api.reporting.domain.verification.AerVerificationReport;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
@@ -10,6 +11,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class AerVerificationReportPriorYearIssuesValidator extends AerVerificationReportReferenceValidator {
+
     @Override
     public Set<String> getReferences(AerVerificationReport verificationReport) {
         return verificationReport.getVerificationData().getUncorrectedNonConformities().getPriorYearIssues()
@@ -20,7 +22,7 @@ public class AerVerificationReportPriorYearIssuesValidator extends AerVerificati
 
     @Override
     public String getPrefix() {
-        return "E";
+        return AerVerificationReferencePrefix.PRIOR_YEAR_ISSUES.getPrefix();
     }
 
     @Override

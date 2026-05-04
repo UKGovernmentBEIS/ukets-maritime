@@ -24,24 +24,25 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-management-procedures',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ManagementProceduresSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-management-procedures.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewManagementProceduresComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empCommonQuery.selectManagementProcedures)();
     const originalManagementProcedures = this.store.select(
       empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan,
-    )().managementProcedures;
+    )()?.managementProcedures;
+
     return {
       managementProcedures: managementProcedures,
       originalManagementProcedures: originalManagementProcedures,
@@ -61,7 +62,7 @@ export class EmpVarRegPeerReviewManagementProceduresComponent {
           originalManagementProcedures?.riskAssessmentProcedures?.files,
         ),
       )(),
-      variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
+      variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()?.[
         'MANAGEMENT_PROCEDURES'
       ],
       managementProceduresMap: managementProceduresMap,

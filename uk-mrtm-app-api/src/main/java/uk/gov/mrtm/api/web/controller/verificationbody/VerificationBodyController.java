@@ -36,6 +36,7 @@ import uk.gov.mrtm.api.web.orchestrator.verificationbody.dto.VerificationBodyCre
 import uk.gov.mrtm.api.web.orchestrator.verificationbody.service.VerificationBodyAndUserOrchestrator;
 import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.security.AuthorizedRole;
+import uk.gov.netz.api.verificationbody.service.VerificationBodyViewService;
 
 import java.util.List;
 
@@ -50,6 +51,7 @@ public class VerificationBodyController {
 
     private final VerificationBodyAndUserOrchestrator verificationBodyAndUserOrchestrator;
     private final VerificationBodyQueryService verificationBodyQueryService;
+    private final VerificationBodyViewService verificationBodyViewService;
     private final VerificationBodyUpdateService verificationBodyUpdateService;
     private final VerificationBodyDeletionService verificationBodyDeletionService;
     
@@ -72,7 +74,7 @@ public class VerificationBodyController {
             content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @AuthorizedRole(roleType = REGULATOR)
     public ResponseEntity<VerificationBodyInfoResponseDTO> getVerificationBodies(@Parameter(hidden = true) AppUser appUser) {
-        return new ResponseEntity<>(verificationBodyQueryService.getVerificationBodies(appUser),
+        return new ResponseEntity<>(verificationBodyViewService.getVerificationBodies(appUser),
                 HttpStatus.OK);
     }
 
@@ -92,7 +94,7 @@ public class VerificationBodyController {
     public ResponseEntity<VerificationBodyDTO> getVerificationBodyById(
             @Parameter(description = "The verification body id") @PathVariable("id") Long verificationBodyId) {
         return new ResponseEntity<>(
-                verificationBodyQueryService.getVerificationBodyById(verificationBodyId),
+                verificationBodyQueryService.getVerificationBodyDTOById(verificationBodyId),
                 HttpStatus.OK);
     }
 

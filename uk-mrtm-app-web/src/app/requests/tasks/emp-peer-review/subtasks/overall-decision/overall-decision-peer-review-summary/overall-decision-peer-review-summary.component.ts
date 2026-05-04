@@ -20,15 +20,15 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-overall-decision-peer-review-summary',
-  standalone: true,
   imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, OverallDecisionSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './overall-decision-peer-review-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverallDecisionPeerReviewSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     determination: this.store.select(empReviewQuery.selectDetermination)(),
     overallDecisionMap: overallDecisionMap,
     isEditable: false,

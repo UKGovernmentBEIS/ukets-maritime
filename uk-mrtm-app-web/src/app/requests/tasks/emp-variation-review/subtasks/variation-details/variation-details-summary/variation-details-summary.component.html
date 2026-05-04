@@ -5,16 +5,18 @@
     [isEditable]="vm.isEditable"
     [wizardStep]="vm.wizardStep"
     [queryParams]="{ change: true }" />
-  <mrtm-review-decision-summary-template
-    [reviewDecision]="vm.empReviewDecisionDTO"
-    [isEditable]="vm.isEditable"
-    [changeLink]="vm.wizardStep.DECISION"
-    [queryParams]="{ change: true }" />
+  @if (vm.showDecisionDetails) {
+    <mrtm-review-decision-summary-template
+      [reviewDecision]="vm.empReviewDecisionDTO"
+      [isEditable]="vm.isEditable"
+      [changeLink]="vm.wizardStep.DECISION"
+      [queryParams]="{ change: true }" />
+  }
   @if (vm.isEditable && !vm.isSubTaskCompleted) {
     <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
   }
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <netz-return-to-task-or-action-page />
   </div>
 }

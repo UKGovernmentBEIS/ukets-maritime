@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormGroup, ValidationErrors } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
 
@@ -16,14 +16,15 @@ import { AER_PORTS_SUB_TASK, AerPortsWizardStep } from '@requests/common/aer/sub
 import { aerPortsMap } from '@requests/common/aer/subtasks/aer-ports/aer-ports-subtask-list.map';
 import { FilterByShipAndDateRange, FilterByShipAndDateRangeComponent } from '@requests/common/components';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { NotificationBannerComponent, PortCallsListSummaryTemplateComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { PersistablePaginationState } from '@shared/services';
 import { AerPortSummaryItemDto } from '@shared/types';
 import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
 
 @Component({
   selector: 'mrtm-aer-ports-list',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -36,17 +37,18 @@ import { isSameDayOrAfter, isSameDayOrBefore } from '@shared/utils/dates.utils';
     FilterByShipAndDateRangeComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-ports-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AerPortsListComponent {
+export class AerPortsListComponent extends PaginationStatePersistableComponent {
   private readonly formGroup = new UntypedFormGroup({});
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly store = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly router = inject(Router);
-  private readonly filter = signal<FilterByShipAndDateRange | null>(null);
+  private readonly filter = signal<FilterByShipAndDateRange | null>(
+    (this.currentPersistableComponentState()?.activeFilters as FilterByShipAndDateRange) ?? null,
+  );
   private readonly allPortCalls = this.store.select(aerCommonQuery.selectPortsList);
 
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
@@ -164,5 +166,11 @@ export class AerPortsListComponent {
     this.notificationBannerStore.reset();
 
     this.router.navigate(['../'], { relativeTo: this.activatedRoute });
+  }
+
+  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
+    return {
+      activeFilters: this.filter(),
+    };
   }
 }

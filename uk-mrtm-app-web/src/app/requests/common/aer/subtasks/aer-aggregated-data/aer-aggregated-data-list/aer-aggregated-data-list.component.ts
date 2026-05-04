@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component, computed, inject, Signal, signal } from '@angular/core';
 import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerShipAggregatedData } from '@mrtm/api';
 
@@ -22,14 +21,16 @@ import {
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
 import { FilterByShip, FilterByShipComponent } from '@requests/common/components';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { PaginationStatePersistableComponent } from '@shared/abstraction';
 import { AggregatedDataListSummaryTemplateComponent, NotificationBannerComponent } from '@shared/components';
 import { DropdownButtonGroupComponent, DropdownButtonItemComponent } from '@shared/components/dropdown-button-group';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
+import { PersistablePaginationState } from '@shared/services';
 import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-list',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -43,14 +44,13 @@ import { AerAggregatedDataSummaryItemDto, SubTaskListMap } from '@shared/types';
     WarningTextComponent,
     NotificationBannerComponent,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class AerAggregatedDataListComponent {
+export class AerAggregatedDataListComponent extends PaginationStatePersistableComponent {
   private readonly store = inject(RequestTaskStore);
   private readonly service = inject(TaskService<AerSubmitTaskPayload>);
-  private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly router = inject(Router);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly formGroup = new UntypedFormGroup({});
   private readonly shipsWithoutAggregatedData = computed(() =>
@@ -60,9 +60,12 @@ export class AerAggregatedDataListComponent {
   );
   private readonly aggregatedDataList = this.store.select(aerCommonQuery.selectAggregatedDataList);
 
-  readonly filter = signal<FilterByShip | null>(null);
+  readonly filter = signal<FilterByShip | null>(
+    this.currentPersistableComponentState()?.activeFilters as FilterByShip | null,
+  );
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly shipsWithAggregatedData = this.store.select(aerCommonQuery.selectListOfShipsWithAggregatedData);
+  readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
   readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;
   readonly wizardStep = AerAggregatedDataWizardStep;
 
@@ -72,6 +75,10 @@ export class AerAggregatedDataListComponent {
       this.store.select(aerCommonQuery.selectStatusForPortsSubtask)(),
     ].includes(TaskItemStatus.COMPLETED),
   );
+
+  readonly hasExternalSystemData = computed(() => {
+    return !!this.aggregatedDataList().find((data) => data.dataInputType === 'EXTERNAL_PROVIDER');
+  });
 
   readonly filteredAggregatedDataList = computed<AerAggregatedDataSummaryItemDto[]>(() => {
     const imoNumber = this.filter()?.imoNumber;
@@ -192,5 +199,11 @@ export class AerAggregatedDataListComponent {
     this.notificationBannerStore.reset();
 
     this.router.navigate([this.wizardStep.SELECT_SHIP], { relativeTo: this.activatedRoute });
+  }
+
+  public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {
+    return {
+      activeFilters: this.filter(),
+    };
   }
 }

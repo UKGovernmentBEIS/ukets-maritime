@@ -1,31 +1,33 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Decision</dt>
-    <dd govukSummaryListRowValue [notProvided]="determination?.type | determinationType"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue [notProvided]="determination()?.type | determinationType"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.OVERALL_DECISION_ACTIONS]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().OVERALL_DECISION_ACTIONS]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Reason for decision</dt>
-    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="determination?.reason"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="determination()?.reason"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.OVERALL_DECISION_QUESTION]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().OVERALL_DECISION_QUESTION]" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
-  @if ($any(determination)?.summary) {
+  @if ($any(determination())?.summary) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>
-        {{ determination?.type === 'REJECTED' ? 'Refusal notice text' : 'Items added to the variation log' }}
+        {{ determination()?.type === 'REJECTED' ? 'Refusal notice text' : 'Items added to the variation log' }}
       </dt>
-      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="$any(determination)?.summary"></dd>
-      @if (isEditable) {
+      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="$any(determination())?.summary"></dd>
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.OVERALL_DECISION_VARIATION_LOG]" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="[wizardStep().OVERALL_DECISION_VARIATION_LOG]" [queryParams]="queryParams()">
+            Change
+          </a>
         </dd>
       }
     </div>

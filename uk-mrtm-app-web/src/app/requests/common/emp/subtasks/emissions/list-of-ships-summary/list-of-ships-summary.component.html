@@ -10,7 +10,11 @@
     </div>
   }
 </div>
-<mrtm-list-of-ships-summary-template [data]="ships" [originalShips]="originalShips" editUrl="./ships" />
+<mrtm-list-of-ships-summary-template
+  [data]="ships"
+  [originalShips]="originalShips"
+  editUrl="./ships"
+  [queryParams]="{ change: true }" />
 @if (isVariationRegulatorDecision) {
   <mrtm-variation-regulator-decision-partial-summary-template
     [variationDecisionDetails]="variationDecisionDetails"
@@ -29,6 +33,6 @@
   <button (click)="onSubmit()" govukButton type="button">Confirm and continue</button>
 }
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />
 </div>

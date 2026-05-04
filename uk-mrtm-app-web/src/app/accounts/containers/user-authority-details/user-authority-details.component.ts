@@ -16,7 +16,6 @@ import { TwoFaLinkComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-user-authority-details',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AsyncPipe,
@@ -25,6 +24,7 @@ import { TwoFaLinkComponent } from '@shared/components';
     UserFullNamePipe,
     TwoFaLinkComponent,
   ],
+  standalone: true,
   templateUrl: './user-authority-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

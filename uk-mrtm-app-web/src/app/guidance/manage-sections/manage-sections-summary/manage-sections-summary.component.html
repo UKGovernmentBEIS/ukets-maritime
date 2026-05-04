@@ -5,7 +5,10 @@
       <dt govukSummaryListRowKey>Type of section update</dt>
       <dd govukSummaryListColumnValue>{{ data.type | manageGuidanceSectionType }}</dd>
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="data.type === 'UPDATE' ? '../../../' : '../../'">Change</a>
+        <a govukLink [routerLink]="data.type === 'UPDATE' ? '../../../' : '../../'">
+          Change
+          <span class="govuk-visually-hidden">type of section update</span>
+        </a>
       </dd>
     </div>
     @if (data.type !== 'CREATE') {
@@ -13,7 +16,12 @@
         <dt govukSummaryListRowKey>{{ data.type === 'DELETE' ? 'Section to delete' : 'Section to update' }}</dt>
         <dd govukSummaryListColumnValue>{{ originalSection()?.name }}</dd>
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="data.type === 'DELETE' ? '../../' : '../../../'">Change</a>
+          <a govukLink [routerLink]="data.type === 'DELETE' ? '../../' : '../../../'">
+            Change
+            <span class="govuk-visually-hidden">
+              {{ data.type === 'DELETE' ? 'section to delete' : 'section to update' }}
+            </span>
+          </a>
         </dd>
       </div>
     }
@@ -22,14 +30,20 @@
         <dt govukSummaryListRowKey>Name of section</dt>
         <dd govukSummaryListColumnValue>{{ $any(data?.object)?.name }}</dd>
         <dd govukSummaryListRowActions>
-          <a govukLink routerLink="../">Change</a>
+          <a govukLink routerLink="../">
+            Change
+            <span class="govuk-visually-hidden">name of section</span>
+          </a>
         </dd>
       </div>
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Display order</dt>
         <dd govukSummaryListColumnValue>{{ $any(data?.object)?.displayOrderNo }}</dd>
         <dd govukSummaryListRowActions>
-          <a govukLink routerLink="../">Change</a>
+          <a govukLink routerLink="../">
+            Change
+            <span class="govuk-visually-hidden">display order</span>
+          </a>
         </dd>
       </div>
     }
@@ -40,7 +54,7 @@
   </div>
 
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <a govukLink routerLink="/guidance">Return to: Guidance</a>
   </div>
 }

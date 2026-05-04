@@ -2,9 +2,8 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { provideRouter } from '@angular/router';
 
-import { GovukComponentsModule } from '@netz/govuk-components';
+import { TextInputComponent } from '@netz/govuk-components';
 
 import { DataParserWizardStepComponent } from '@shared/components';
 
@@ -15,6 +14,8 @@ describe('CsvWizardStepComponent', () => {
   let element: HTMLElement;
 
   @Component({
+    imports: [DataParserWizardStepComponent, TextInputComponent, ReactiveFormsModule],
+    standalone: true,
     template: `
       <mrtm-data-parser-wizard-step
         [formGroup]="formGroup"
@@ -33,14 +34,6 @@ describe('CsvWizardStepComponent', () => {
     });
     onSubmit: (form: FormGroup) => any | jest.SpyInstance<void, [FormGroup]>;
   }
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, GovukComponentsModule, DataParserWizardStepComponent],
-      providers: [provideRouter([])],
-      declarations: [TestComponent],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

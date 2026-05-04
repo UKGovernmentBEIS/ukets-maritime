@@ -7,26 +7,28 @@
   [showReturnLink]="false">
   <p class="govuk-body">For each method state whether a default, or ship specific uncertainty is being applied.</p>
   <div formArrayName="uncertaintyLevels">
-    @for (control of uncertaintyLevelFormArray.controls; track control; let i = $index) {
-      <div [formGroupName]="i">
-        <h3 class="govuk-heading-m">{{ getMethodName(i) }}</h3>
+    @for (control of uncertaintyLevelFormArray.controls; track control) {
+      <fieldset govukFieldset [formGroupName]="$index" id="uncertaintyLevel-{{ $index }}">
+        <legend govukLegend legendSize="medium">{{ getMethodName($index) }}</legend>
         @if (control.get('methodApproach').disabled) {
           <p class="govuk-label">
             <span>Approach used</span>
-            <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix(i) }}</span>
+            <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix($index) }}</span>
           </p>
           <p class="govuk-body">
             {{ control.get('methodApproach').value | selectOptionToTitle: methodApproachOptions }}
           </p>
         } @else {
           <div
+            label="Select method approach"
+            [isLabelHidden]="true"
             formControlName="methodApproach"
             [options]="methodApproachOptions"
             govuk-select
             widthClass="govuk-!-width-one-third">
             <ng-container govukLabel>
               <span>Approach used</span>
-              <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix(i) }}</span>
+              <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix($index) }}</span>
             </ng-container>
           </div>
         }
@@ -34,18 +36,18 @@
         @if (control.get('value').disabled) {
           <p class="govuk-label">
             <span>Uncertainty value (%)</span>
-            <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix(i) }}</span>
+            <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix($index) }}</span>
           </p>
           <p class="govuk-body">{{ control.get('value').value }}</p>
         } @else {
           <div widthClass="govuk-!-width-one-third" formControlName="value" govuk-text-input>
             <ng-container govukLabel>
               <span>Uncertainty value (%)</span>
-              <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix(i) }}</span>
+              <span class="govuk-visually-hidden">{{ getMethodAccessibilitySuffix($index) }}</span>
             </ng-container>
           </div>
         }
-      </div>
+      </fieldset>
     }
   </div>
 </mrtm-wizard-step>

@@ -14,7 +14,6 @@ import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/co
 
 @Component({
   selector: 'mrtm-aer-operator-amends',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
@@ -22,6 +21,7 @@ import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent } from '@shared/co
     PendingButtonDirective,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './return-for-changes-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

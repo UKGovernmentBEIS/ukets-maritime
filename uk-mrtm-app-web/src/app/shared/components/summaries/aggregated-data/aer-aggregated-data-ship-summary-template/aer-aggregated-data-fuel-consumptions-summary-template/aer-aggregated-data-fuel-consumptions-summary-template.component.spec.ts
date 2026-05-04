@@ -40,15 +40,15 @@ describe('AerAggregatedDataFuelConsumptionsSummaryTemplateComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.heading3.textContent).toEqual('Total amount of each fuel type consumed');
+    expect(page.heading2.textContent).toEqual('Total amount of each fuel type consumed');
 
     expect(page.summariesContents).toEqual([
       'Fuel type',
       'RFNBO e-fuels / e-DME',
-      'Change',
+      'Change  RFNBO e-fuels / e-DME fuel type',
       'Total consumption (tonnes)',
       '123',
-      'Change',
+      'Change  RFNBO e-fuels / e-DME total consumption',
     ]);
 
     fixture.componentRef.setInput('editable', false);

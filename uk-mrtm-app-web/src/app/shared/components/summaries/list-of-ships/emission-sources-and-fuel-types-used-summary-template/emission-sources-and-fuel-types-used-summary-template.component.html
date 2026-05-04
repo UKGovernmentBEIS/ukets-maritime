@@ -4,9 +4,13 @@
       <ng-template #actions>
         <a [queryParams]="queryParams()" [routerLink]="[changeLink(), data.uniqueIdentifier]" govukLink="summaryAction">
           Change
+          <span class="govuk-visually-hidden">emission source {{ index() + 1 }}</span>
         </a>
         @if (isDeletable()) {
-          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">Remove</a>
+          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">
+            Remove
+            <span class="govuk-visually-hidden">emission source {{ index() + 1 }}</span>
+          </a>
         }
       </ng-template>
     }

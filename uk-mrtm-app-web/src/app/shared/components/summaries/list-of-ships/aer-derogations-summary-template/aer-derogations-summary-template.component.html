@@ -6,7 +6,10 @@
       <dd govukSummaryListRowValue>{{ data?.exceptionFromPerVoyageMonitoring | booleanToText }}</dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">exemption from per voyage monitoring</span>
+          </a>
         </dd>
       }
     </div>

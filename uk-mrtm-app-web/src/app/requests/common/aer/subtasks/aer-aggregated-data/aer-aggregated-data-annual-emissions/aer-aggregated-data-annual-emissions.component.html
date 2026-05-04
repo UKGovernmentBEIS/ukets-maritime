@@ -5,31 +5,30 @@
   (formSubmit)="onSubmit()"
   [formGroup]="form">
   <mrtm-aer-aggregated-emissions-form
-    class="govuk-!-margin-bottom-5 govuk-!-display-block"
     [header]="wizardMap.emissionsWithinUKPorts.title"
     formGroupName="emissionsWithinUKPorts"
     (change)="onCalculationValueChanged('emissionsWithinUKPorts')" />
 
   <mrtm-aer-aggregated-emissions-form
-    class="govuk-!-margin-bottom-5 govuk-!-display-block"
     [header]="wizardMap.emissionsBetweenUKPorts.title"
     hint="Do not include emissions from voyages between Great Britain and Northern Ireland"
     formGroupName="emissionsBetweenUKPorts"
     (change)="onCalculationValueChanged('emissionsBetweenUKPorts')" />
 
   <mrtm-aer-aggregated-emissions-form
-    class="govuk-!-margin-bottom-5 govuk-!-display-block"
     [header]="wizardMap.emissionsBetweenUKAndNIVoyages.title"
     formGroupName="emissionsBetweenUKAndNIVoyages"
     (change)="onCalculationValueChanged('emissionsBetweenUKAndNIVoyages')" />
 
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr
+    class="govuk-section-break govuk-section-break--s govuk-!-margin-bottom-6 govuk-section-break--visible"
+    aria-hidden="true" />
 
   <mrtm-aer-aggregated-data-annual-emissions-totals
     [header]="wizardMap.totalEmissionsFromVoyagesAndPorts.title"
     [data]="form.get('totalEmissionsFromVoyagesAndPorts').value" />
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
 </div>

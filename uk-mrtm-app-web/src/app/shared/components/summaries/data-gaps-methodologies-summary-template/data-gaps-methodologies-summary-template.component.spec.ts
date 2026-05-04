@@ -41,22 +41,22 @@ describe('DataGapsMethodologiesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Was a data gap method required during the reporting year?',
       'Yes',
-      'Change',
+      'Change whether a data gap method is required during the reporting year',
       'Has the data gap method already been approved by the regulator?',
       'No',
-      'Change',
+      'Change  whether the data gap method has already been approved by the regulator',
       'Was the method used conservative?',
       'No',
-      'Change',
+      'Change whether the method used was conservative',
       'Provide more detail',
       'Lorem ipsum',
-      'Change',
+      'Change details on the method used',
       'Did the method lead to a material misstatement?',
       'Yes',
-      'Change',
+      'Change whether the method lead to a material misstatement',
       'Provide more detail',
       'Dolor sit',
-      'Change',
+      'Change details on the method leading to a material misstatement',
     ]);
   });
 
@@ -89,7 +89,7 @@ describe('DataGapsMethodologiesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Was a data gap method required during the reporting year?',
       'No',
-      'Change',
+      'Change whether a data gap method is required during the reporting year',
     ]);
   });
 
@@ -103,10 +103,10 @@ describe('DataGapsMethodologiesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Was a data gap method required during the reporting year?',
       'Yes',
-      'Change',
+      'Change whether a data gap method is required during the reporting year',
       'Has the data gap method already been approved by the regulator?',
       'Yes',
-      'Change',
+      'Change  whether the data gap method has already been approved by the regulator',
     ]);
   });
 
@@ -122,16 +122,16 @@ describe('DataGapsMethodologiesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Was a data gap method required during the reporting year?',
       'Yes',
-      'Change',
+      'Change whether a data gap method is required during the reporting year',
       'Has the data gap method already been approved by the regulator?',
       'No',
-      'Change',
+      'Change  whether the data gap method has already been approved by the regulator',
       'Was the method used conservative?',
       'Yes',
-      'Change',
+      'Change whether the method used was conservative',
       'Did the method lead to a material misstatement?',
       'No',
-      'Change',
+      'Change whether the method lead to a material misstatement',
     ]);
   });
 });

@@ -1,13 +1,13 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'govuk-footer-nav-list',
-  standalone: true,
   imports: [],
+  standalone: true,
   templateUrl: './nav-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FooterNavListComponent {
-  @Input() title: string;
-  @Input() columns: 1 | 2;
+  readonly title = input<string>();
+  readonly columns = input<1 | 2>();
 }

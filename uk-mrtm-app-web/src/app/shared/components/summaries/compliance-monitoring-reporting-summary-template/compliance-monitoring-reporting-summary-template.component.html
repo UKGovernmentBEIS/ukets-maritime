@@ -11,7 +11,10 @@
       </dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.ACCURACY" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.ACCURACY" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">accuracy of report</span>
+          </a>
         </dd>
       }
     </div>
@@ -29,7 +32,10 @@
       </dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.COMPLETENESS" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.COMPLETENESS" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">completeness of report</span>
+          </a>
         </dd>
       }
     </div>
@@ -49,6 +55,7 @@
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="wizardStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY" [queryParams]="queryParams()">
             Change
+            <span class="govuk-visually-hidden">consistency</span>
           </a>
         </dd>
       }
@@ -65,6 +72,7 @@
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="wizardStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY" [queryParams]="queryParams()">
             Change
+            <span class="govuk-visually-hidden">comparability over time</span>
           </a>
         </dd>
       }
@@ -81,6 +89,7 @@
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="wizardStep.CONSISTENCY_COMPARABILITY_TRANSPARENCY" [queryParams]="queryParams()">
             Change
+            <span class="govuk-visually-hidden">transparency</span>
           </a>
         </dd>
       }
@@ -99,7 +108,10 @@
       </dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.INTEGRITY" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.INTEGRITY" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">integrity</span>
+          </a>
         </dd>
       }
     </div>

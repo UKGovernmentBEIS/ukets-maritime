@@ -12,15 +12,14 @@ describe('MoreOrLessComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    template:
-      '<mrtm-more-less-text [text]="text" [index]="index" widthClass="org-details-width"></mrtm-more-less-text>',
+    imports: [MoreLessComponent],
+    standalone: true,
+    template: '<mrtm-more-less-text [text]="text" [index]="index" widthClass="org-details-width" />',
     styles: `
       .org-details-width {
         width: 210px !important;
       }
     `,
-    standalone: true,
-    imports: [MoreLessComponent],
   })
   class TestComponent {
     text: string;

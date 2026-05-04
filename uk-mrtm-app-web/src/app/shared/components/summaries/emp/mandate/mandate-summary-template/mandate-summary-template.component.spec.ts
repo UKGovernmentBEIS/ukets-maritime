@@ -39,7 +39,7 @@ describe('MandateSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Has the responsibility for compliance with UK ETS been delegated to you by a registered owner for one or more ships?',
       'No',
-      'Change',
+      'Change  whether the responsibility for compliance with UK ETS has been delegated by a registered owner for one or more ships',
     ]);
   });
 });

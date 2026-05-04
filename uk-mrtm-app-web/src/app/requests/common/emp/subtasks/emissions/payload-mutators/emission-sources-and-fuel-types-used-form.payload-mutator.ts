@@ -1,6 +1,5 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { EmpEmissionsSources, EmpShipEmissions, FuelOriginFossilTypeName } from '@mrtm/api';
 
@@ -15,6 +14,7 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
+import { isNil } from '@shared/utils';
 
 export class EmissionSourcesAndFuelTypesUsedPayloadMutator extends PayloadMutator {
   subtask = EMISSIONS_SUB_TASK;

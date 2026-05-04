@@ -1,8 +1,7 @@
-import { isNil } from 'lodash-es';
-
 import { SortEvent } from '@netz/govuk-components';
 
 import { DiffItem, ShipEmissionTableListItem } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const compareValues = <T = unknown>(
   a: T[keyof T],

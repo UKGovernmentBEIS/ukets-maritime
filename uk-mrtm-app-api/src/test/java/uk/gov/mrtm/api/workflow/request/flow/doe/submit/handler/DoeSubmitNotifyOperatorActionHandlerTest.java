@@ -11,6 +11,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskPay
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
+import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeFeeDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
@@ -71,7 +72,10 @@ class DoeSubmitNotifyOperatorActionHandlerTest {
         Doe doe = Doe.builder().maritimeEmissions(
                     DoeMaritimeEmissions.builder().determinationReason(DoeDeterminationReason.builder()
                                 .furtherDetails("furtherDetails")
-                                .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                .details(DoeDeterminationReasonDetails.builder()
+                                    .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                    .noticeText("noticeText")
+                                    .build())
                                 .build())
                             .chargeOperator(true)
                             .feeDetails(DoeFeeDetails.builder()
@@ -129,7 +133,10 @@ class DoeSubmitNotifyOperatorActionHandlerTest {
         UUID att1 = UUID.randomUUID();
         Doe doe = Doe.builder().maritimeEmissions(
                     DoeMaritimeEmissions.builder().determinationReason(DoeDeterminationReason.builder()
-                                .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                .details(DoeDeterminationReasonDetails.builder()
+                                    .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                    .noticeText("noticeText")
+                                    .build())
                                 .furtherDetails("furtherDetails")
                                 .build())
                             .chargeOperator(false)

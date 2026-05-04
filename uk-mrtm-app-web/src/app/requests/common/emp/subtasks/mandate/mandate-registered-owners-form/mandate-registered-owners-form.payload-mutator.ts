@@ -27,6 +27,7 @@ export const provideMandateRegisteredOwnersFormPayloadMutator = (
 
           payload.emissionsMonitoringPlan.mandate = {
             ...payload?.emissionsMonitoringPlan?.mandate,
+            responsibilityDeclaration: null,
             registeredOwners: registeredOwners.find(
               (registeredOwner) => registeredOwner.uniqueIdentifier === userInput.uniqueIdentifier,
             )

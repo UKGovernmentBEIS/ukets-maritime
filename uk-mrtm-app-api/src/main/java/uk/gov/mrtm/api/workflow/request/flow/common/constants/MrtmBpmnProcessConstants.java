@@ -20,6 +20,7 @@ public class MrtmBpmnProcessConstants {
     public static final String AER_EXPIRATION_DATE = MrtmRequestExpirationType.AER + _EXPIRATION_DATE;
     public static final String AER_YEAR = "aerYear";
     public static final String AER_OUTCOME = "aerOutcome";
+    public static final String AER_JULY_FIRST_EXPIRATION_DATE = "aerJulyFirstExpirationDate";
 
     public static final String AER_REVIEW_OUTCOME = "aerReviewOutcome";
 

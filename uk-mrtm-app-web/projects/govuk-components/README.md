@@ -48,21 +48,8 @@ To use the library you should first build the project:
 yarn build:govuk-components
 ```
 
-After the project builds successfully, you can either:
-- Import each individual component, if you are using standalone components
-
-or
-
-- Import the `GovukComponentsModule` into the module you plan to use a relevant component:
-
-```js
-import { GovukComponentsModule } from 'govuk-components';
-
-@NgModule({
-  imports: [GovukComponentsModule],
-})
-export class SomeModule {}
-```
+After the project builds successfully
+- Import each individual component
 
 Include necessary assets and scss in angular.json, under `build` > `options`
 ```json

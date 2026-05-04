@@ -2,6 +2,7 @@ import { jest } from '@jest/globals';
 
 Object.defineProperty(document, 'doctype', {
   value: '<!DOCTYPE html>',
+  configurable: true,
 });
 
 /**
@@ -9,12 +10,33 @@ Object.defineProperty(document, 'doctype', {
  * Workaround for JSDOM missing transform property
  */
 Object.defineProperty(document.body.style, 'transform', {
-  value: () => {
-    return {
-      enumerable: true,
-      configurable: true,
-    };
-  },
+  value: '',
+  writable: true,
+  enumerable: true,
+  configurable: true,
 });
 
-HTMLCanvasElement.prototype.getContext = <typeof HTMLCanvasElement.prototype.getContext>jest.fn();
+// Polyfill Modern Browser APIs
+window.structuredClone = window.structuredClone || jest.fn((val: unknown) => JSON.parse(JSON.stringify(val)));
+
+Object.assign(HTMLElement.prototype, {
+  scrollIntoView: jest.fn(),
+});
+
+Object.assign(HTMLCanvasElement.prototype, {
+  getContext: jest.fn(),
+});
+
+const mockShow = jest.fn(function (this: HTMLDialogElement) {
+  this.open = true;
+});
+
+const mockClose = jest.fn(function (this: HTMLDialogElement) {
+  this.open = false;
+});
+
+Object.defineProperties(HTMLDialogElement.prototype, {
+  show: { value: mockShow, writable: true },
+  showModal: { value: mockShow, writable: true },
+  close: { value: mockClose, writable: true },
+});

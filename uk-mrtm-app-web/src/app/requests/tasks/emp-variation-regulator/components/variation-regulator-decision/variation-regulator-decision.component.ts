@@ -12,11 +12,11 @@ import { existingControlContainer } from '@shared/providers';
 
 @Component({
   selector: 'mrtm-variation-regulator-decision',
-  standalone: true,
   imports: [ButtonDirective, ReactiveFormsModule, TextareaComponent, LegendDirective, FieldsetDirective],
+  standalone: true,
   templateUrl: './variation-regulator-decision.component.html',
   // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.Eager,
   viewProviders: [existingControlContainer],
 })
 export class VariationRegulatorDecisionComponent {

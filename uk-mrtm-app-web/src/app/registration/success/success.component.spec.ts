@@ -1,8 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
-import { KeycloakService } from 'keycloak-angular';
-
 import { OperatorUserDTO } from '@mrtm/api';
 
 import { mockClass } from '@netz/common/testing';
@@ -25,11 +23,7 @@ describe('SuccessComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [SuccessComponent],
-      providers: [
-        provideRouter([]),
-        { provide: AuthService, useValue: mockClass(AuthService) },
-        { provide: KeycloakService, useValue: mockClass(KeycloakService) },
-      ],
+      providers: [provideRouter([]), { provide: AuthService, useValue: mockClass(AuthService) }],
     }).compileComponents();
 
     TestBed.inject(UserRegistrationStore).setState({

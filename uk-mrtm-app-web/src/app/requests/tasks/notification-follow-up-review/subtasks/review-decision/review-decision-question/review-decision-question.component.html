@@ -11,44 +11,51 @@
     govuk-radio
     legend="What is your decision for the information submitted?"
     legendSize="medium">
-    <govuk-radio-option value="ACCEPTED" label="Accepted"></govuk-radio-option>
+    <govuk-radio-option value="ACCEPTED" label="Accepted" />
     <govuk-radio-option value="AMENDS_NEEDED" label="Operator amends needed">
       <ng-container govukConditionalContent>
         <h2 class="govuk-heading-m">Changes required by the operator</h2>
         <ng-container formArrayName="requiredChanges">
-          @for (requiredChange of requiredChangesCtrl.controls; track i; let i = $index) {
-            <fieldset [formGroupName]="i" govukFieldset id="required-changes-{{ i + 1 }}">
+          @for (requiredChange of requiredChangesCtrl.controls; track $index) {
+            <fieldset [formGroupName]="$index" govukFieldset id="required-changes-{{ $index + 1 }}">
               <div class="govuk-grid-row">
                 <div class="govuk-grid-column-two-thirds">
-                  <legend govukLegend legendSize="small">Required change {{ i + 1 }}</legend>
+                  <legend govukLegend legendSize="small">Required change {{ $index + 1 }}</legend>
                 </div>
                 <div class="govuk-grid-column-one-third govuk-!-text-align-right">
                   @if (requiredChangesCtrl?.length > 1) {
-                    <button (click)="requiredChangesCtrl.removeAt(i)" govukSecondaryButton type="button">Remove</button>
+                    <button (click)="requiredChangesCtrl.removeAt($index)" govukSecondaryButton type="button">
+                      Remove
+                    </button>
                   }
                 </div>
               </div>
-              <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+              <div
+                label="Reason"
+                [isLabelHidden]="true"
+                govuk-textarea
+                [maxLength]="10000"
+                formControlName="reason"></div>
               <mrtm-multiple-file-input
                 [baseDownloadUrl]="downloadUrl"
                 label="Upload a file (optional)"
                 listTitle="Uploaded files"
-                formControlName="files"></mrtm-multiple-file-input>
+                formControlName="files" />
             </fieldset>
             @if (requiredChangesCtrl?.length > 1) {
-              <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+              <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
             }
           }
           <button (click)="addOtherRequiredChange()" govukSecondaryButton type="button">
             Add another required change
           </button>
         </ng-container>
-        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+        <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
         <div
           formControlName="dueDate"
           label="Set a new due date for the response (optional)"
           govuk-date-input
-          legendSize="medium"
+          labelSize="medium"
           [min]="minDueDate()"></div>
       </ng-container>
     </govuk-radio-option>

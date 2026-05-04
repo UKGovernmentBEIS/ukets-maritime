@@ -2,34 +2,47 @@ package uk.gov.mrtm.api.integration.registry.setoperator.request;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.kafka.core.KafkaTemplate;
+import uk.gov.mrtm.api.account.domain.AccountReportingStatus;
+import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
+import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
+import uk.gov.mrtm.api.account.repository.AccountReportingStatusRepository;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
-import uk.gov.mrtm.api.common.constants.MrtmEmailNotificationTemplateConstants;
 import uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName;
-import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
+import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.mrtm.api.integration.registry.accountcontacts.domain.AccountContactsRegistryEvent;
+import uk.gov.mrtm.api.integration.registry.accountcontacts.request.MaritimeAccountContactsEventListenerResolver;
+import uk.gov.mrtm.api.integration.registry.accountexempt.domain.AccountExemptEvent;
+import uk.gov.mrtm.api.integration.registry.accountexempt.request.MaritimeAccountExemptEventListenerResolver;
+import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
+import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnum;
+import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.mrtm.api.integration.registry.setoperator.validate.SetOperatorRequestValidator;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
-import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
-import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEvent;
 import uk.gov.netz.integration.model.operator.OperatorUpdateEventOutcome;
 
+import java.time.Year;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -52,8 +65,6 @@ class SetOperatorResponseHandlerTest {
     @Mock
     private SetOperatorSendToRegistryProducer setOperatorSendToRegistryProducer;
     @Mock
-    private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
-    @Mock
     private RegistryIntegrationEmailProperties emailProperties;
     @Mock
     private KafkaTemplate<String, OperatorUpdateEventOutcome> setOperatorKafkaTemplate;
@@ -61,6 +72,18 @@ class SetOperatorResponseHandlerTest {
     private SetOperatorRequestValidator validator;
     @Mock
     private MrtmAccountRepository mrtmAccountRepository;
+    @Mock
+    private EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
+    @Mock
+    private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
+    @Mock
+    private NotifyRegistryEmailService notifyRegistryEmailService;
+    @Mock
+    private AccountReportingStatusRepository accountReportingStatusRepository;
+    @Mock
+    private MaritimeAccountContactsEventListenerResolver accountContactsEventListenerResolver;
+    @Mock
+    private MaritimeAccountExemptEventListenerResolver accountExemptEventListenerResolver;
 
     @Test
     void handleResponse_with_errors() {
@@ -80,6 +103,40 @@ class SetOperatorResponseHandlerTest {
             .outcome(IntegrationEventOutcome.ERROR)
             .errors(errorDetails)
             .build();
+        Map<String, String> fields = Map.of(PayloadFieldsUtils.EMITTER_ID, EMITTER_ID, PayloadFieldsUtils.OPERATOR_ID, String.valueOf(OPERATOR_ID));
+        NotifyRegistryEmailServiceParams actionFordwayEmailParams = NotifyRegistryEmailServiceParams.builder()
+            .account(mrtmAccount)
+            .emitterId(EMITTER_ID)
+            .correlationId(CORRELATION_ID)
+            .errorsForMail(List.of(error201))
+            .recipient(FORDWAY_EMAIL)
+            .isFordway(true)
+            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
+            .integrationPoint(INTEGRATION_POINT_KEY)
+            .fields(fields)
+            .build();
+        NotifyRegistryEmailServiceParams actionEmailParams = NotifyRegistryEmailServiceParams.builder()
+            .account(mrtmAccount)
+            .emitterId(EMITTER_ID)
+            .correlationId(CORRELATION_ID)
+            .errorsForMail(List.of(error203))
+            .recipient(EMAIL)
+            .isFordway(false)
+            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE)
+            .integrationPoint(INTEGRATION_POINT_KEY)
+            .fields(fields)
+            .build();
+        NotifyRegistryEmailServiceParams infoEmailParams = NotifyRegistryEmailServiceParams.builder()
+            .account(mrtmAccount)
+            .emitterId(EMITTER_ID)
+            .correlationId(CORRELATION_ID)
+            .errorsForMail(List.of(error201, error202))
+            .recipient(EMAIL)
+            .isFordway(false)
+            .templateName(MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE)
+            .integrationPoint(INTEGRATION_POINT_KEY)
+            .fields(fields)
+            .build();
 
         when(emailProperties.getEmail()).thenReturn(Map.of(REGULATOR.name(), EMAIL));
         when(emailProperties.getFordway()).thenReturn(FORDWAY_EMAIL);
@@ -88,21 +145,25 @@ class SetOperatorResponseHandlerTest {
 
         handler.handleResponse(event, CORRELATION_ID);
 
-        verify(notificationEmailService).notifyRecipient(getEmailData(List.of(error201), true, MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE), FORDWAY_EMAIL);
-        verify(notificationEmailService).notifyRecipient(getEmailData(List.of(error203), false, MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_ACTION_TEMPLATE), EMAIL);
-        verify(notificationEmailService).notifyRecipient(getEmailData(List.of(error201, error202), false, MrtmNotificationTemplateName.REGISTRY_INTEGRATION_RESPONSE_ERROR_INFO_TEMPLATE), EMAIL);
+
+        verify(notifyRegistryEmailService).notifyRegulator(actionFordwayEmailParams);
+        verify(notifyRegistryEmailService).notifyRegulator(actionEmailParams);
+        verify(notifyRegistryEmailService).notifyRegulator(infoEmailParams);
+
         verify(emailProperties).getEmail();
         verify(emailProperties).getFordway();
         verify(validator).validate(event);
-        verify(mrtmAccountRepository, times(3)).findByBusinessId(EMITTER_ID);
+        verify(mrtmAccountRepository).findByBusinessId(EMITTER_ID);
         verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate);
 
-        verifyNoMoreInteractions(notificationEmailService, emailProperties, validator, mrtmAccountRepository, setOperatorSendToRegistryProducer);
-        verifyNoInteractions(setOperatorKafkaTemplate);
+        verifyNoMoreInteractions(notifyRegistryEmailService, emailProperties, validator, mrtmAccountRepository, setOperatorSendToRegistryProducer);
+        verifyNoInteractions(setOperatorKafkaTemplate, emissionsMonitoringPlanQueryService, accountUpdatedRegistryListener,
+            accountContactsEventListenerResolver, accountExemptEventListenerResolver, accountReportingStatusRepository);
     }
 
-    @Test
-    void handleResponse_with_no_errors() {
+    @ParameterizedTest
+    @MethodSource
+    void handleResponse_with_no_errors(MrtmAccountReportingStatus reportingStatus, boolean isExempt) {
         MrtmAccount mrtmAccount = mock(MrtmAccount.class);
         OperatorUpdateEvent event = OperatorUpdateEvent.builder()
             .operatorId(OPERATOR_ID)
@@ -116,8 +177,27 @@ class SetOperatorResponseHandlerTest {
             .errors(new ArrayList<>())
             .build();
 
+        EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
+        Long accountId = 123L;
+        AccountUpdatedRegistryEvent updatedRegistryEvent = AccountUpdatedRegistryEvent.builder()
+            .accountId(accountId)
+            .emissionsMonitoringPlan(emissionsMonitoringPlan)
+            .build();
+        AccountExemptEvent accountExemptEvent = AccountExemptEvent.builder()
+            .accountId(accountId)
+            .year(Year.now())
+            .isExempt(isExempt)
+            .build();
+        AccountReportingStatus accountReportingStatus = AccountReportingStatus.builder()
+            .status(reportingStatus)
+            .year(Year.now())
+            .build();
+
+        when(mrtmAccount.getId()).thenReturn(accountId);
         when(validator.validate(event)).thenReturn(new ArrayList<>());
         when(mrtmAccountRepository.findByBusinessId(EMITTER_ID)).thenReturn(mrtmAccount);
+        when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(accountId)).thenReturn(emissionsMonitoringPlan);
+        when(accountReportingStatusRepository.findByAccountIdOrderByYearDesc(accountId)).thenReturn(List.of(accountReportingStatus));
 
         handler.handleResponse(event, CORRELATION_ID);
 
@@ -126,32 +206,24 @@ class SetOperatorResponseHandlerTest {
         verify(mrtmAccountRepository).save(mrtmAccount);
         verify(mrtmAccount).setRegistryId((int) OPERATOR_ID);
         verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate);
+        verify(emissionsMonitoringPlanQueryService).getLastestEmissionsMonitoringPlan(accountId);
+        verify(accountUpdatedRegistryListener).onAccountUpdatedEvent(updatedRegistryEvent);
+        verify(accountContactsEventListenerResolver).onAccountContactsEvent(AccountContactsRegistryEvent.builder().accountIds(Set.of(accountId)).build());
+        verify(accountExemptEventListenerResolver).onAccountExemptEvent(accountExemptEvent);
+        verify(accountReportingStatusRepository).findByAccountIdOrderByYearDesc(accountId);
 
-        verifyNoMoreInteractions(mrtmAccount, notificationEmailService, validator,
-            mrtmAccountRepository, setOperatorSendToRegistryProducer);
-        verifyNoInteractions(setOperatorKafkaTemplate, notificationEmailService, emailProperties);
+        verifyNoMoreInteractions(mrtmAccount, validator,
+            mrtmAccountRepository, setOperatorSendToRegistryProducer, emissionsMonitoringPlanQueryService,
+            accountUpdatedRegistryListener, accountContactsEventListenerResolver, accountExemptEventListenerResolver,
+            accountReportingStatusRepository);
+        verifyNoInteractions(setOperatorKafkaTemplate, notifyRegistryEmailService, emailProperties);
     }
 
-    private EmailData<EmailNotificationTemplateData> getEmailData(List<IntegrationEventErrorDetails> error, boolean isFordway,
-                                                                  String templateName) {
-        final Map<String, Object> templateParams = new HashMap<>();
-        templateParams.put(MrtmEmailNotificationTemplateConstants.EMITTER_ID, EMITTER_ID);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.ERRORS, error);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.FIELDS,
-            Map.of(PayloadFieldsUtils.EMITTER_ID, EMITTER_ID, PayloadFieldsUtils.OPERATOR_ID, String.valueOf(OPERATOR_ID)));
-        templateParams.put(MrtmEmailNotificationTemplateConstants.CORRELATION_ID, CORRELATION_ID);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.SOURCE_SYSTEM, "Maritime");
-        templateParams.put(MrtmEmailNotificationTemplateConstants.OPERATOR_NAME, ACCOUNT_NAME);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.INTEGRATION_POINT, INTEGRATION_POINT_KEY);
-        templateParams.put(MrtmEmailNotificationTemplateConstants.IS_FOR_FORDWAY, isFordway);
 
-
-        final EmailData<EmailNotificationTemplateData> emailData = EmailData.builder()
-            .notificationTemplateData(EmailNotificationTemplateData.builder()
-                .templateName(templateName)
-                .templateParams(templateParams)
-                .build())
-            .build();
-        return emailData;
+    private static Stream<Arguments> handleResponse_with_no_errors() {
+        return Stream.of(
+            Arguments.of(MrtmAccountReportingStatus.REQUIRED_TO_REPORT, false),
+            Arguments.of(MrtmAccountReportingStatus.EXEMPT, true)
+        );
     }
 }

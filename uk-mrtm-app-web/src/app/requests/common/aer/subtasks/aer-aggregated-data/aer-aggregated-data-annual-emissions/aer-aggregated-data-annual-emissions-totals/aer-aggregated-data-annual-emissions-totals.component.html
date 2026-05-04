@@ -1,12 +1,12 @@
 @if (header(); as header) {
-  <h3 class="govuk-heading-m">{{ header }}</h3>
+  <h2 class="govuk-heading-m">{{ header }}</h2>
 }
 <p class="govuk-body govuk-!-margin-bottom-1">CO2 emissions (t)</p>
 <p class="govuk-body">
   @if (!isNil(data()?.co2)) {
     {{ data()?.co2 | bigNumber: 7 }}
   } @else {
-    Not calculated yet.
+    Not calculated yet
   }
 </p>
 <p class="govuk-body govuk-!-margin-bottom-1">CH4 emissions (tCO2e)</p>
@@ -14,7 +14,7 @@
   @if (!isNil(data()?.ch4)) {
     {{ data()?.ch4 | bigNumber: 7 }}
   } @else {
-    Not calculated yet.
+    Not calculated yet
   }
 </p>
 <p class="govuk-body govuk-!-margin-bottom-1">N2O emissions (tCO2e)</p>
@@ -22,14 +22,14 @@
   @if (!isNil(data()?.n2o)) {
     {{ data()?.n2o | bigNumber: 7 }}
   } @else {
-    Not calculated yet.
+    Not calculated yet
   }
 </p>
-<h4 class="govuk-heading-s govuk-!-margin-bottom-1">Total emissions (tCO2e)</h4>
-<p class="govuk-body">
+<p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Total emissions (tCO2e)</p>
+<p class="govuk-body govuk-!-margin-bottom-6">
   @if (!isNil(data()?.total)) {
     <strong>{{ data()?.total | bigNumber: 7 }}</strong>
   } @else {
-    Not calculated yet.
+    Not calculated yet
   }
 </p>

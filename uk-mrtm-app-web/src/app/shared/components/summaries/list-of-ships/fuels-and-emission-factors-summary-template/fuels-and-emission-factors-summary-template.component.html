@@ -7,9 +7,13 @@
           [queryParams]="queryParams()"
           govukLink="summaryAction">
           Change
+          <span class="govuk-visually-hidden">fuel {{ index() + 1 }}</span>
         </a>
         @if (isDeletable()) {
-          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">Remove</a>
+          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">
+            Remove
+            <span class="govuk-visually-hidden">fuel {{ index() + 1 }}</span>
+          </a>
         }
       </ng-template>
     }

@@ -5,8 +5,8 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-emp-variation-regulator-success',
-  standalone: true,
   imports: [PanelComponent, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './emp-variation-regulator-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

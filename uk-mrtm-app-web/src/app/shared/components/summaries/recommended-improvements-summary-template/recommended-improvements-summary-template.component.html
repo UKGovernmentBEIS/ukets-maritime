@@ -5,7 +5,10 @@
       <dd govukSummaryListRowValue [notProvided]="data.exist | booleanToText"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">whether there are any recommended improvements</span>
+          </a>
         </dd>
       }
     </div>

@@ -20,7 +20,6 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-emission-sources-compliance',
-  standalone: true,
   imports: [
     EmpProcedureFormComponent,
     RadioOptionComponent,
@@ -29,8 +28,9 @@ import { WizardStepComponent } from '@shared/components';
     RadioComponent,
     ReactiveFormsModule,
   ],
-  providers: [emissionSourcesComplianceFormProvider],
+  standalone: true,
   templateUrl: './emission-sources-compliance.component.html',
+  providers: [emissionSourcesComplianceFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesComplianceComponent {
@@ -39,7 +39,7 @@ export class EmissionSourcesComplianceComponent {
   private readonly route = inject(ActivatedRoute);
 
   public readonly emissionSourcesMap = emissionSourcesMap;
-  existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
+  readonly existCtrlValue: Signal<boolean> = toSignal(this.existCtrl.valueChanges, {
     initialValue: this.existCtrl.value,
   });
 

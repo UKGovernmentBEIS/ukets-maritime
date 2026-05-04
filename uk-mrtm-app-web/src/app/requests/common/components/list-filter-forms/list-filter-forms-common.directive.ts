@@ -15,11 +15,10 @@ import {
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { isEqual, isNil } from 'lodash-es';
-
 import { AutocompleteSelectOption, AutocompleteSelectValidators } from '@shared/components/autocomplete-select';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { ShipEmissionTableListItem } from '@shared/types';
+import { isEqual, isNil } from '@shared/utils';
 
 export const ALL_SHIPS_VALUE: AutocompleteSelectOption = { text: '', data: null };
 
@@ -28,7 +27,10 @@ export abstract class ListFilterFormsCommon<T> implements AfterViewInit {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   protected readonly notificationBannerStore = inject(NotificationBannerStore);
+  protected abstract readonly EMPTY_FORM_STATE;
+  protected abstract readonly EMPTY_FILTER_STATE: T;
 
+  readonly initialFilterState = input<T>();
   readonly ships = input.required<ShipEmissionTableListItem[]>();
   readonly filterByShipLabel = input.required<string>();
   protected readonly filterByShip = new FormControl<AutocompleteSelectOption>(ALL_SHIPS_VALUE, [
@@ -38,8 +40,6 @@ export abstract class ListFilterFormsCommon<T> implements AfterViewInit {
   abstract readonly formGroup: FormGroup;
   protected readonly filterChanged = output<T>();
 
-  protected abstract readonly EMPTY_FORM_STATE;
-  protected abstract readonly EMPTY_FILTER_STATE: T;
   protected abstract readonly filterState: WritableSignal<T>;
   protected readonly hasAppliedFilters = computed<boolean>(() => !isEqual(this.filterState(), this.EMPTY_FILTER_STATE));
 
@@ -59,6 +59,10 @@ export abstract class ListFilterFormsCommon<T> implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.outletContainerRef().createEmbeddedView(this.contentTemplateRef());
+    this.setFilterState(this.initialFilterState());
+    if (!isNil(this.initialFilterState())) {
+      this.filterState.set(this.initialFilterState());
+    }
   }
 
   private rerender() {
@@ -73,6 +77,7 @@ export abstract class ListFilterFormsCommon<T> implements AfterViewInit {
   }
 
   abstract getFilterState(): T;
+  abstract setFilterState(filterState: T): void;
 
   protected runPostSubmitSideEffects(): void {}
 

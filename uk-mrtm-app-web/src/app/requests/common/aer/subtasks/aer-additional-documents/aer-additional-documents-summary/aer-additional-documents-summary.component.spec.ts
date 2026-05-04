@@ -73,10 +73,10 @@ describe('AerAerAdditionalDocumentsSummaryComponent', () => {
     expect(page.summariesContents).toEqual([
       'Do you want to upload any additional documents or information?',
       'Yes',
-      'Change',
+      'Change additional documents or information',
       'Uploaded files',
       '100.png',
-      'Change',
+      'Change uploaded files',
     ]);
   });
 

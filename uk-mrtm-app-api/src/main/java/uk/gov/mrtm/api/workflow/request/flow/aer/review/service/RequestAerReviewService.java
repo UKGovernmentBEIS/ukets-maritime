@@ -27,7 +27,7 @@ import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerApplicationRev
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerApplicationSkipReviewRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.domain.AerSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.review.mapper.AerReviewMapper;
-import uk.gov.mrtm.api.workflow.request.flow.registry.service.SendRegistryUpdatedEventAddRequestActionService;
+import uk.gov.mrtm.api.workflow.request.flow.registry.service.EmissionsUpdatedEventAddRequestActionService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
@@ -48,7 +48,7 @@ public class RequestAerReviewService {
     private final RequestService requestService;
     private final AerValidatorService aerValidatorService;
     private final ReportableEmissionsService reportableEmissionsService;
-    private final SendRegistryUpdatedEventAddRequestActionService sendRegistryUpdatedEventAddRequestActionService;
+    private final EmissionsUpdatedEventAddRequestActionService emissionsUpdatedEventAddRequestActionService;
 
     @Transactional
     public void saveReviewGroupDecision(AerSaveReviewGroupDecisionRequestTaskActionPayload taskActionPayload,
@@ -244,7 +244,7 @@ public class RequestAerReviewService {
         ReportableEmissionsUpdatedSubmittedEventDetails eventDetails = reportableEmissionsService
             .updateReportableEmissions(totalReportableEmissions, aerContainer.getReportingYear(), request.getAccountId(), false);
 
-        sendRegistryUpdatedEventAddRequestActionService.addRequestAction(request, eventDetails, userId);
+        emissionsUpdatedEventAddRequestActionService.addRequestAction(request, eventDetails, userId);
 
         AerRequestMetadata metadata = (AerRequestMetadata) request.getMetadata();
         metadata.setEmissions(totalReportableEmissions);

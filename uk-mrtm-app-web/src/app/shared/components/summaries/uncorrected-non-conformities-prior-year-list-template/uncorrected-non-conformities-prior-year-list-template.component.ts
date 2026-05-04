@@ -9,8 +9,8 @@ import { uncorrectedNonConformitiesMap, UncorrectedNonConformitiesStep } from '@
 
 @Component({
   selector: 'mrtm-uncorrected-non-conformities-prior-year-list-template',
-  standalone: true,
   imports: [RouterLink, ButtonDirective, LinkDirective, TableComponent],
+  standalone: true,
   templateUrl: './uncorrected-non-conformities-prior-year-list-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,6 +25,6 @@ export class UncorrectedNonConformitiesPriorYearListTemplateComponent {
   readonly columns: Array<GovukTableColumn> = [
     { field: 'reference', header: 'Reference', widthClass: 'app-column-width-15-per' },
     { field: 'explanation', header: 'Explanation' },
-    { field: 'actionLinks', header: '' },
+    { field: 'actionLinks', header: 'Actions', hiddenHeader: true },
   ];
 }

@@ -19,24 +19,24 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-data-gaps',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     DataGapsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-data-gaps.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewDataGapsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     dataGaps: this.store.select(empCommonQuery.selectDataGaps)(),
     originalDataGaps: this.store.select(empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan)()
-      .dataGaps,
-    variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
+      ?.dataGaps,
+    variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()?.[
       'DATA_GAPS'
     ],
     title: dataGapsMap.title,

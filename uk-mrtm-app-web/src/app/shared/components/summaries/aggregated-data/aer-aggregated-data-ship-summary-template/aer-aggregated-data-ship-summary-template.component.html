@@ -16,12 +16,15 @@
 
 <div class="govuk-grid-row">
   <div class="govuk-grid-column-two-thirds">
-    <h3 class="govuk-heading-m">Annual aggregated emissions</h3>
+    <h2 class="govuk-heading-m">Annual aggregated emissions</h2>
   </div>
   @if (editable()) {
     <div class="govuk-grid-column-one-third">
       <div class="govuk-body float-right">
-        <a govukLink [routerLink]="[wizardStep.ANNUAL_EMISSIONS]" [queryParams]="{ change: true }">Change</a>
+        <a govukLink [routerLink]="[wizardStep.ANNUAL_EMISSIONS]" [queryParams]="{ change: true }">
+          Change
+          <span class="govuk-visually-hidden">annual aggregated emissions</span>
+        </a>
       </div>
     </div>
   }
@@ -33,7 +36,8 @@
   [showSummaryComponents]="true"
   [showEmissionsColumnHeader]="true" />
 
-<h3 class="govuk-heading-m">Emissions calculations</h3>
+<h2 class="govuk-heading-m">Emissions calculations</h2>
 <mrtm-aer-aggregated-data-emissions-calculations-summary-template
   class="govuk-!-display-block govuk-!-margin-bottom-8"
+  [boldColumns]="['total']"
   [data]="totalShipEmissionsData()" />

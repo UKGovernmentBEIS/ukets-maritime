@@ -24,9 +24,6 @@ import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'mrtm-delete-user-authority',
-  templateUrl: './delete-user-authority.html',
-  standalone: true,
-  changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [
     PanelComponent,
     RouterLink,
@@ -37,6 +34,9 @@ import { AuthService } from '@core/services/auth.service';
     PendingButtonDirective,
     ButtonDirective,
   ],
+  standalone: true,
+  templateUrl: './delete-user-authority.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DeleteUserAuthorityComponent {
   private readonly authService = inject(AuthService);
@@ -49,8 +49,8 @@ export class DeleteUserAuthorityComponent {
   userId = this.route.snapshot.paramMap.get('userId');
   userAuthority = (this.route.snapshot.data as { userAuthority: UserAuthorityDTO }).userAuthority;
   isLoginEnabled = this.authStore.select(selectLoginStatus)() === 'ENABLED';
-  isDeleted = signal(false);
-  isCurrentUser = computed(() => this.userId === this.authStore.select(selectUserId)());
+  readonly isDeleted = signal(false);
+  readonly isCurrentUser = computed(() => this.userId === this.authStore.select(selectUserId)());
 
   confirm(): void {
     iif(

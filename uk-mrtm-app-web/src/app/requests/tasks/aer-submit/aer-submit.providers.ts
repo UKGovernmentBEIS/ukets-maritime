@@ -2,13 +2,14 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
-import { aerCommonSubtaskStepsProvider } from '@requests/common/aer/+state';
+import { aerCommonQuery, aerCommonSubtaskStepsProvider } from '@requests/common/aer/+state';
 import { AerCommonApiService, AerCommonService } from '@requests/common/aer/services';
 import {
   AerAdditionalDocumentsSummarySideEffect,
   AerAdditionalDocumentsUploadPayloadMutator,
 } from '@requests/common/aer/subtasks/aer-additional-documents';
 import {
+  AER_AGGREGATED_DATA_SUB_TASK,
   AerAggregatedDataAnnualEmissionsPayloadMutator,
   AerAggregatedDataDeletePayloadMutator,
   AerAggregatedDataFlowManager,
@@ -87,6 +88,7 @@ import {
   MonitoringPlanChangesSummarySideEffect,
 } from '@requests/common/aer/subtasks/monitoring-plan-changes';
 import {
+  AER_REDUCTION_CLAIM_SUB_TASK,
   AerTotalEmissionsNeedsReviewOnReductionClaimChangeSideEffect,
   ReductionClaimDetailsPayloadMutator,
   ReductionClaimExistPayloadMutator,
@@ -101,8 +103,12 @@ import {
   ReportingObligationFormPayloadMutator,
   ReportingObligationSummarySideEffect,
 } from '@requests/common/aer/subtasks/reporting-obligation';
+import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships';
+import { SECTIONS_COMPLETED_SELECTOR, SUBTASKS_AFFECTED_BY_IMPORT } from '@requests/common/third-party-data-provider';
+import { ThirdPartyDataProviderImportFlowManager } from '@requests/common/third-party-data-provider/third-party-data-provider-import';
 import { AdditionalDocumentsFlowManager } from '@requests/common/utils/additional-documents';
+import { ThirdPartyDataProviderImportPayloadMutator } from '@requests/tasks/aer-submit/payload-mutators';
 
 export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -167,6 +173,9 @@ export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
 
     // Additional Documents
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAdditionalDocumentsUploadPayloadMutator },
+
+    // Third Party Data Provider
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ThirdPartyDataProviderImportPayloadMutator },
   ]);
 }
 
@@ -237,5 +246,19 @@ export function provideAerSubmitStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: AerAggregatedDataFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ReductionClaimFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: AerTotalEmissionsFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ThirdPartyDataProviderImportFlowManager },
+  ]);
+}
+
+export function provideThirdPartyConfigurations(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    {
+      provide: SUBTASKS_AFFECTED_BY_IMPORT,
+      useValue: [EMISSIONS_SUB_TASK, AER_AGGREGATED_DATA_SUB_TASK, AER_REDUCTION_CLAIM_SUB_TASK],
+    },
+    {
+      provide: SECTIONS_COMPLETED_SELECTOR,
+      useValue: aerCommonQuery.selectAerSectionsCompleted,
+    },
   ]);
 }

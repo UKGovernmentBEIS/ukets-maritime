@@ -26,7 +26,6 @@ import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-basic-ship-details',
-  standalone: true,
   imports: [
     ConditionalContentDirective,
     WizardStepComponent,
@@ -39,8 +38,9 @@ import { isAer } from '@shared/utils';
     ReturnToShipsListTableComponent,
     DatePickerComponent,
   ],
-  providers: [basicShipDetailsFormProvider],
+  standalone: true,
   templateUrl: './basic-ship-details.component.html',
+  providers: [basicShipDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BasicShipDetailsComponent {

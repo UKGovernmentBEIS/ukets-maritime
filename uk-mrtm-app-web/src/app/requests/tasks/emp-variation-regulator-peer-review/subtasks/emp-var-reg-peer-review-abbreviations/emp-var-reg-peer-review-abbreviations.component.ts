@@ -20,25 +20,25 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-abbreviations',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AbbreviationsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-abbreviations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewAbbreviationsComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     abbreviations: this.store.select(empCommonQuery.selectAbbreviations)(),
     originalAbbreviations: this.store.select(
       empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan,
-    )().abbreviations,
-    variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
+    )()?.abbreviations,
+    variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()?.[
       'ABBREVIATIONS_AND_DEFINITIONS'
     ],
     abbreviationsMap: abbreviationsMap,

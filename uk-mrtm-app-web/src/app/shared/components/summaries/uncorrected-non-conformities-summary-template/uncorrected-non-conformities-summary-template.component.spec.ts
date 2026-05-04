@@ -59,33 +59,33 @@ describe('UncorrectedNonConformitiesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Have there been any uncorrected non-conformities with the approved emissions monitoring plan?',
       'Yes',
-      'Change',
+      'Change  whether there have been any uncorrected non-conformities with the approved emissions monitoring plan',
       'Are there any non-conformities from the previous year that have not been resolved?',
       'Yes',
-      'Change',
+      'Change  whether there are any non-conformities from the previous year that have not been resolved',
     ]);
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
       'Impact',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       'Material',
-      'Change  Remove',
+      'Change reference (D1) Remove reference (D1)',
       'D2',
       'Lorem ipsum 2',
       'Not material',
-      'Change  Remove',
+      'Change reference (D2) Remove reference (D2)',
       'Reference',
       'Explanation',
-      '',
+      'Actions',
       'E1',
       'Lorem ipsum E1',
-      'Change  Remove',
+      'Change reference (E1) Remove reference (E1)',
       'E2',
       'Lorem ipsum E2',
-      'Change  Remove',
+      'Change reference (E2) Remove reference (E2)',
     ]);
   });
 
@@ -103,7 +103,7 @@ describe('UncorrectedNonConformitiesSummaryTemplateComponent', () => {
       'Reference',
       'Explanation',
       'Impact',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       'Material',
@@ -114,7 +114,7 @@ describe('UncorrectedNonConformitiesSummaryTemplateComponent', () => {
       '',
       'Reference',
       'Explanation',
-      '',
+      'Actions',
       'E1',
       'Lorem ipsum E1',
       '',
@@ -134,10 +134,10 @@ describe('UncorrectedNonConformitiesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Have there been any uncorrected non-conformities with the approved emissions monitoring plan?',
       'No',
-      'Change',
+      'Change  whether there have been any uncorrected non-conformities with the approved emissions monitoring plan',
       'Are there any non-conformities from the previous year that have not been resolved?',
       'No',
-      'Change',
+      'Change  whether there are any non-conformities from the previous year that have not been resolved',
     ]);
     expect(page.tableContents).toEqual([]);
   });

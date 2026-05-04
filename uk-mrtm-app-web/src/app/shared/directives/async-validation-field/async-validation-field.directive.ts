@@ -7,8 +7,8 @@ import { TextInputComponent } from '@netz/govuk-components';
 
 @Directive({
   selector: 'govuk-text-input[mrtmAsyncValidationField],[govuk-text-input][netzAsyncValidationField]',
-  providers: [DestroySubject],
   standalone: true,
+  providers: [DestroySubject],
 })
 export class AsyncValidationFieldDirective implements OnInit {
   private readonly textInputComponent = inject(TextInputComponent);

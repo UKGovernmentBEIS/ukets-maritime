@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ReactiveFormsModule, UntypedFormArray, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -44,13 +44,12 @@ import { savePartiallyNotFoundOperatorError } from '@accounts/errors';
 import { OperatorAccountsStore, selectAccount } from '@accounts/store';
 import { RadioOptionComponent } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
-import { UsersTableDirective } from '@shared/directives';
+import { ScrollablePaneDirective, UsersTableDirective } from '@shared/directives';
 import { IncludesPipe } from '@shared/pipes';
 import { FormUtils } from '@shared/utils/form.utils';
 
 @Component({
   selector: 'mrtm-user-contacts-verifiers-tab',
-  standalone: true,
   imports: [
     DetailsComponent,
     SelectComponent,
@@ -65,7 +64,9 @@ import { FormUtils } from '@shared/utils/form.utils';
     LinkDirective,
     RadioOptionComponent,
     UsersTableDirective,
+    ScrollablePaneDirective,
   ],
+  standalone: true,
   templateUrl: './user-contacts-verifiers-tab.component.html',
   providers: [userContactsVerifiersTabFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -85,7 +86,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
   private readonly route = inject(ActivatedRoute);
   private readonly notificationBannerStore = inject(NotificationBannerStore);
 
-  @Input() currentTab: string;
+  readonly currentTab = input<string>();
 
   private accountId = Number(this.route.snapshot.paramMap.get('accountId'));
 
@@ -108,7 +109,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
     selectAccount,
     map((account) => account?.status === MrtmAccountStatus.CLOSED),
   );
-  isEditable = toSignal(this.operatorsManagement$.pipe(map((operators) => operators.editable)));
+  readonly isEditable = toSignal(this.operatorsManagement$.pipe(map((operators) => operators.editable)));
   verificationBody$ = this.accountVerificationBodyService.getVerificationBodyOfAccount(this.accountId).pipe(
     catchElseRethrow(
       (error) => error.status === HttpStatuses.NotFound,
@@ -116,7 +117,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
     ),
     shareReplay({ bufferSize: 1, refCount: true }),
   );
-  hasVerificationBody = toSignal(this.verificationBody$.pipe(map((value) => !!value)));
+  readonly hasVerificationBody = toSignal(this.verificationBody$.pipe(map((value) => !!value)));
 
   dataSupplier = this.accountThirdPartyDataProvidersService.getThirdPartyDataProviderOfAccount(this.accountId).pipe(
     catchElseRethrow(
@@ -126,7 +127,7 @@ export class UserContactsVerifiersTabComponent implements OnInit {
     shareReplay({ bufferSize: 1, refCount: true }),
   );
 
-  hasDataSupplier = toSignal(this.dataSupplier.pipe(map((value) => !!value)));
+  readonly hasDataSupplier = toSignal(this.dataSupplier.pipe(map((value) => !!value)));
 
   accountAuthorities$ = combineLatest([
     this.operatorsManagement$.pipe(map((operators) => operators.authorities)),

@@ -8,7 +8,10 @@
       [previous]="originalMandate() | responsibilityDeclaration: originalOperatorName()"></dd>
     @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep()?.RESPONSIBILITY_DECLARATION]" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="[wizardStep()?.RESPONSIBILITY_DECLARATION]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">declaration of delegation of UK ETS responsibility</span>
+        </a>
       </dd>
     }
   </div>

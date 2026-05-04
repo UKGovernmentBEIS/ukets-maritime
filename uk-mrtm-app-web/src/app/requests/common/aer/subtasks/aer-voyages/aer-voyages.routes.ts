@@ -7,8 +7,7 @@ import {
   canActivateVoyageEmissions,
   canActivateVoyageEmissionSummary,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.guard';
-import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
-import { AER_VOYAGE_PARAM } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import { AER_VOYAGE_PARAM, AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { aerVoyagesBacklinkResolver } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-backlink.resolver';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-subtask-list.map';
 
@@ -47,9 +46,12 @@ export const AER_VOYAGES_ROUTES: Routes = [
         children: [
           {
             path: '',
-            data: { breadcrumb: false, backlink: '../../' },
+            data: { breadcrumb: false },
             title: aerVoyagesMap.totalEmissions.title,
             canActivate: [canActivateVoyageEmissionSummary],
+            resolve: {
+              backlink: aerVoyagesBacklinkResolver(AerVoyagesWizardStep.VOYAGE_SUMMARY),
+            },
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-voyages/aer-voyage-emission-summary').then(
                 (c) => c.AerVoyageEmissionSummaryComponent,
@@ -82,9 +84,12 @@ export const AER_VOYAGES_ROUTES: Routes = [
             children: [
               {
                 path: '',
-                data: { breadcrumb: false, backlink: `../${AerVoyagesWizardStep.VOYAGE_DETAILS}` },
+                data: { breadcrumb: false },
                 title: aerVoyagesMap.totalEmissions.title,
                 canActivate: [canActivateVoyageEmissions],
+                resolve: {
+                  backlink: aerVoyagesBacklinkResolver(AerVoyagesWizardStep.FUEL_EMISSIONS),
+                },
                 loadComponent: () =>
                   import('@requests/common/aer/components/aer-emissions-calculations').then(
                     (c) => c.AerEmissionsCalculationsComponent,

@@ -2,7 +2,6 @@ import { inject } from '@angular/core';
 import { CanActivateFn } from '@angular/router';
 
 import { first, map, switchMap, tap } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { OperatorUsersService, OperatorUserStatusDTO, UsersService } from '@mrtm/api';
 
@@ -11,6 +10,7 @@ import { BusinessErrorService, catchBadRequest, ErrorCodes } from '@netz/common/
 
 import { saveNotFoundOperatorError } from '@accounts/errors';
 import { UserAuthorityStore } from '@accounts/store';
+import { isNil } from '@shared/utils';
 
 export const operatorUserGuard: CanActivateFn = (route) => {
   const authStore = inject(AuthStore);

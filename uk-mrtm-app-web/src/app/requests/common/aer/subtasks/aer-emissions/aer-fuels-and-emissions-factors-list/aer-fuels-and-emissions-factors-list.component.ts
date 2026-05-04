@@ -22,13 +22,13 @@ import { FuelsAndEmissionsFactors } from '@shared/types';
 
 @Component({
   selector: 'mrtm-aer-fuels-and-emissions-factors-list',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AerFuelsAndEmissionFactorsSummaryTemplateComponent,
     ButtonDirective,
     ReturnToShipsListTableComponent,
   ],
+  standalone: true,
   templateUrl: './aer-fuels-and-emissions-factors-list.component.html',
   providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -63,12 +63,10 @@ export class AerFuelsAndEmissionsFactorsListComponent {
 
   handleDelete(event: FuelsAndEmissionsFactors) {
     this.taskService
-      .saveSubtask(
-        EMISSIONS_SUB_TASK,
-        AerEmissionsWizardStep.FUELS_AND_EMISSIONS_LIST,
-        this.route,
-        event.uniqueIdentifier,
-      )
+      .saveSubtask(EMISSIONS_SUB_TASK, AerEmissionsWizardStep.FUELS_AND_EMISSIONS_LIST, this.route, {
+        shipId: this.shipId(),
+        fuelId: event.uniqueIdentifier,
+      })
       .pipe(takeUntil(this.destroy$))
       .subscribe();
   }

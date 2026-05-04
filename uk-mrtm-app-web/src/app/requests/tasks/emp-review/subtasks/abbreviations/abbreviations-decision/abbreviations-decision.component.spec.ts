@@ -72,19 +72,19 @@ describe('AbbreviationsDecisionComponent', () => {
     expect(page.summariesContents).toEqual([
       'Are you using any abbreviations or terminology in your application which need explanation?',
       'Yes',
-      'Change',
+      'Change  whether any abbreviations or terminology are used in your application which need explanation',
       'Abbreviation, acronym or terminology',
       'Abbreviation1',
-      'Change',
+      'Change  abbreviation, acronym or terminology (Definition 1)',
       'Definition',
       'Definition1',
-      'Change',
+      'Change definition (Definition 1)',
       'Abbreviation, acronym or terminology',
       'Abbreviation2',
-      'Change',
+      'Change  abbreviation, acronym or terminology (Definition 2)',
       'Definition',
       'Definition2',
-      'Change',
+      'Change definition (Definition 2)',
     ]);
   });
 

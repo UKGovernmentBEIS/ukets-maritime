@@ -5,7 +5,6 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { distinctUntilChanged } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -42,11 +41,10 @@ import {
   FUEL_TYPES_BY_ORIGIN,
 } from '@shared/constants';
 import { FuelsAndEmissionsFactors } from '@shared/types';
-import { isAer } from '@shared/utils';
+import { isAer, isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-fuels-and-emission-factors-form',
-  standalone: true,
   imports: [
     ShipStepTitleCustomPipe,
     WizardStepComponent,
@@ -62,8 +60,9 @@ import { isAer } from '@shared/utils';
     LinkDirective,
     RouterLink,
   ],
-  providers: [fuelsAndEmissionFactorsFormProvider],
+  standalone: true,
   templateUrl: './fuels-and-emissions-factors-form.component.html',
+  providers: [fuelsAndEmissionFactorsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelsAndEmissionsFactorsFormComponent implements OnInit {

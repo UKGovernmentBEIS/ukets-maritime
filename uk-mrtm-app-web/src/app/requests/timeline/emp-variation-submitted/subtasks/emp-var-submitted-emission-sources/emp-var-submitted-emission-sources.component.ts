@@ -38,7 +38,7 @@ export class EmpVarSubmittedEmissionSourcesComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       emissionSources: this.store.select(empVariationSubmittedQuery.selectEmissionSources)(),
       emissionSourcesMap: emissionSourcesMap,

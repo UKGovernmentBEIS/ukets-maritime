@@ -93,7 +93,7 @@ public class ExternalEmpFuelsAndEmissionsFactors {
     @NotNull
     private ExternalFuelType fuelTypeCode;
 
-    @Schema(description = "Description of the fuel type if not listed (fuelTypeCode OTHER)")
+    @Schema(description = "Description of the fuel type if not listed. Must be provided only when 'fuelTypeCode' is 'OTHER'")
     @Size(max = 30)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String otherFuelType;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { PeerReviewDecision } from '@mrtm/api';
@@ -18,7 +18,6 @@ import { PeerReviewDecisionTimelineTextMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-peer-review-decision-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -30,14 +29,15 @@ import { PeerReviewDecisionTimelineTextMap } from '@shared/types';
     NotProvidedDirective,
     PeerReviewDecisionPipe,
   ],
+  standalone: true,
   templateUrl: './peer-review-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PeerReviewDecisionSummaryTemplateComponent {
-  @Input({ required: true }) decision: PeerReviewDecision;
-  @Input({ required: true }) peerReviewer: string;
-  @Input({ required: true }) map: PeerReviewDecisionTimelineTextMap;
-  @Input() changeLink: string;
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly decision = input.required<PeerReviewDecision>();
+  readonly peerReviewer = input.required<string>();
+  readonly map = input.required<PeerReviewDecisionTimelineTextMap>();
+  readonly changeLink = input<string>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

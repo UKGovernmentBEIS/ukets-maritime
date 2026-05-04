@@ -3,20 +3,16 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 
 import { ITEM_LINK_REQUEST_TYPES_WHITELIST, ITEM_NAME_TRANSFORMER } from '@netz/common/pipes';
-import { TableComponent } from '@netz/govuk-components';
 
 import { DashboardItemsListComponent } from '@shared/dashboard';
 import * as mocks from '@shared/dashboard/testing';
 import { taskActionTypeToTitleTransformer } from '@shared/utils';
 
-/* eslint-disable @angular-eslint/component-selector */
 @Component({
-  selector: '',
+  imports: [DashboardItemsListComponent],
+  standalone: true,
   template: `
-    <mrtm-dashboard-items-list
-      [items]="items"
-      [tableColumns]="tableColumns"
-      [unassignedLabel]="'Unassigned'"></mrtm-dashboard-items-list>
+    <mrtm-dashboard-items-list [items]="items" [tableColumns]="tableColumns" unassignedLabel="Unassigned" />
   `,
 })
 class TestParentComponent {
@@ -30,13 +26,11 @@ describe('WorkflowItemsListComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TableComponent, DashboardItemsListComponent],
       providers: [
         provideRouter([]),
         { provide: ITEM_NAME_TRANSFORMER, useValue: taskActionTypeToTitleTransformer },
         { provide: ITEM_LINK_REQUEST_TYPES_WHITELIST, useValue: ['DUMMY_REQUEST_TYPE'] },
       ],
-      declarations: [TestParentComponent],
     }).compileComponents();
 
     fixture = TestBed.createComponent(TestParentComponent);

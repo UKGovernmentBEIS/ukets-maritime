@@ -4,9 +4,9 @@ import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import {
   aerVoyageStepsCompletedMap,
+  AerVoyagesWizardStep,
   isVoyageWizardCompleted,
   isWizardCompleted,
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
@@ -32,11 +32,7 @@ export const canActivateVoyageEmissionSummary: CanActivateFn = (route) => {
     return true;
   }
 
-  if (aerVoyageStepsCompletedMap.voyageDetails(voyage)) {
-    return createUrlTreeFromSnapshot(route, ['.', AerVoyagesWizardStep.FUEL_EMISSIONS]);
-  }
-
-  return createUrlTreeFromSnapshot(route, ['./', AerVoyagesWizardStep.SELECT_SHIP]);
+  return createUrlTreeFromSnapshot(route, ['./', AerVoyagesWizardStep.VOYAGE_DETAILS]);
 };
 
 export const canActivateListOfVoyages: CanActivateFn = (route: ActivatedRouteSnapshot) => {

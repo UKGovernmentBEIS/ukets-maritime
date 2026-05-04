@@ -1,5 +1,5 @@
 @if (data(); as data) {
-  <h3 class="govuk-heading-m">{{ header() }}</h3>
+  <h2 class="govuk-heading-m">{{ header() }}</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey class="summary-label">
@@ -8,7 +8,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.exist | booleanToText"></dd>
       @if (editable()) {
         <dd govukSummaryListRowActions class="govuk-!-text-align-right">
-          <a govukLink [routerLink]="[wizardStep().EXIST]" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep().EXIST]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">emissions reduction claim for eligible fuels</span>
+          </a>
         </dd>
       }
     </div>

@@ -21,8 +21,8 @@ import { EmpVariationReviewService } from '@requests/tasks/emp-variation-review/
 
 @Component({
   selector: 'mrtm-overall-decision-actions',
-  standalone: true,
   imports: [PageHeadingComponent, ReturnToTaskOrActionPageComponent, ButtonDirective, PendingButtonDirective],
+  standalone: true,
   templateUrl: './overall-decision-actions.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -78,10 +78,10 @@ describe('AdditionalDocumentsVariationReviewDecisionComponent', () => {
     expect(page.summariesContents).toEqual([
       'Do you want to upload any additional documents or information to support your application?',
       'Yes',
-      'Change',
+      'Change additional documents or information',
       'Uploaded files',
       'Not provided',
-      'Change',
+      'Change uploaded files',
     ]);
   });
 

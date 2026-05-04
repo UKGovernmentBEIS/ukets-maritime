@@ -18,6 +18,8 @@ import uk.gov.mrtm.api.account.repository.AccountReportingStatusRepository;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.account.service.reportingstatus.AccountReportingStatusHistoryCreationService;
 import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
+import uk.gov.mrtm.api.integration.registry.accountexempt.domain.AccountExemptEvent;
+import uk.gov.mrtm.api.integration.registry.accountexempt.request.MaritimeAccountExemptEventListenerResolver;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
@@ -47,6 +49,9 @@ class AccountReportingStatusHistoryCreationServiceTest {
     private AccountReportingStatusRepository reportingStatusRepository;
 
     @Mock
+    private MaritimeAccountExemptEventListenerResolver accountExemptEventListenerResolver;
+
+    @Mock
     private ApplicationEventPublisher publisher;
 
     @Mock
@@ -61,6 +66,11 @@ class AccountReportingStatusHistoryCreationServiceTest {
                 .builder().status(MrtmAccountReportingStatus.REQUIRED_TO_REPORT).reason("reason").build();
         final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
         AccountReportingStatus accountReportingStatus = AccountReportingStatus.builder().build();
+        AccountExemptEvent accountExemptEvent = AccountExemptEvent.builder()
+            .accountId(accountId)
+            .isExempt(false)
+            .year(year)
+            .build();
 
         when(reportingStatusRepository.findByAccountIdAndYear(accountId, year))
                 .thenReturn(accountReportingStatus);
@@ -84,7 +94,9 @@ class AccountReportingStatusHistoryCreationServiceTest {
         );
         verify(reportingStatusRepository).findByAccountIdAndYear(accountId, year);
         verify(reportingStatusRepository).save(accountReportingStatus);
-        verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher);
+        verify(accountExemptEventListenerResolver).onAccountExemptEvent(accountExemptEvent);
+
+        verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher, accountExemptEventListenerResolver);
     }
 
     @Test
@@ -95,6 +107,11 @@ class AccountReportingStatusHistoryCreationServiceTest {
         final AccountReportingStatusHistoryCreationDTO reportingStatusHistoryCreationDTO = AccountReportingStatusHistoryCreationDTO
             .builder().status(MrtmAccountReportingStatus.EXEMPT).reason("reason").build();
         final AppUser appUser = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).userId("userId").firstName("first name").lastName("last name").build();
+        AccountExemptEvent accountExemptEvent = AccountExemptEvent.builder()
+            .accountId(accountId)
+            .isExempt(true)
+            .year(year)
+            .build();
         AccountReportingStatus accountReportingStatus = AccountReportingStatus.builder().status(MrtmAccountReportingStatus.REQUIRED_TO_REPORT).build();
 
         when(reportingStatusRepository.findByAccountIdAndYear(accountId, year))
@@ -118,7 +135,8 @@ class AccountReportingStatusHistoryCreationServiceTest {
         );
         verify(reportingStatusRepository).findByAccountIdAndYear(accountId, year);
         verify(reportingStatusRepository).save(accountReportingStatus);
-        verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher);
+        verify(accountExemptEventListenerResolver).onAccountExemptEvent(accountExemptEvent);
+        verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher, accountExemptEventListenerResolver);
     }
 
     @Test
@@ -156,8 +174,8 @@ class AccountReportingStatusHistoryCreationServiceTest {
         assertThat(accountReportingStatus.getReportingStatusHistoryList()).hasSize(0);
 
         verify(reportingStatusRepository).findByAccountIdAndYear(accountId, year);
-        verifyNoMoreInteractions(accountQueryService, reportingStatusRepository, publisher);
-        verifyNoInteractions(publisher);
+        verifyNoMoreInteractions(accountQueryService, reportingStatusRepository);
+        verifyNoInteractions(publisher, accountExemptEventListenerResolver);
     }
 
     @Test
@@ -191,7 +209,7 @@ class AccountReportingStatusHistoryCreationServiceTest {
         verify(accountQueryService).getAccountById(accountId);
         verify(reportingStatusRepository).existsByAccountIdAndYear(accountId, year);
         verifyNoMoreInteractions(accountQueryService, reportingStatusRepository);
-        verifyNoInteractions(publisher);
+        verifyNoInteractions(publisher, accountExemptEventListenerResolver);
     }
 
 
@@ -211,6 +229,6 @@ class AccountReportingStatusHistoryCreationServiceTest {
         // Verify interactions
         verify(reportingStatusRepository).existsByAccountIdAndYear(accountId, year);
         verifyNoMoreInteractions(reportingStatusRepository);
-        verifyNoInteractions(publisher, accountQueryService);
+        verifyNoInteractions(publisher, accountQueryService, accountExemptEventListenerResolver);
     }
 }

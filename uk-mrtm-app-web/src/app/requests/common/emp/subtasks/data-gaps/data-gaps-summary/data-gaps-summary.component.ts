@@ -37,7 +37,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-data-gaps-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     DataGapsSummaryTemplateComponent,
@@ -47,6 +46,7 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './data-gaps-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,7 +55,7 @@ export class DataGapsSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const hasReview = this.store.select(empCommonQuery.selectHasReview)();
     const isEditable = this.store.select(empCommonQuery.selectIsPeerReview)()
       ? false

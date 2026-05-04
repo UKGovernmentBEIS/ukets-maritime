@@ -48,13 +48,13 @@ describe('UncorrectedNonConformitiesPriorYearListTemplateComponent', () => {
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
-      'Change  Remove',
+      'Change reference (D1) Remove reference (D1)',
       'D2',
       'Lorem ipsum 2',
-      'Change  Remove',
+      'Change reference (D2) Remove reference (D2)',
     ]);
   });
 
@@ -65,7 +65,7 @@ describe('UncorrectedNonConformitiesPriorYearListTemplateComponent', () => {
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       '',

@@ -20,17 +20,17 @@ describe('DataGapsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(DataGapsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.dataGaps = {
+    fixture.componentRef.setInput('dataGaps', {
       fuelConsumptionEstimationMethod: 'some description',
       responsiblePersonOrPosition: 'person',
       dataSources: 'data sources',
       recordsLocation: 'location',
       itSystemUsed: 'it',
-    };
-    component.wizardStep = {
+    });
+    fixture.componentRef.setInput('wizardStep', {
       DATA_GAPS_METHOD: 'data-gaps-method',
-    };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });
@@ -43,22 +43,22 @@ describe('DataGapsSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Description of method to estimate fuel consumption',
       'some description',
-      'Change',
+      'Change description of method to estimate fuel consumption',
       'Name of person or position responsible for this procedure',
       'person',
-      'Change',
+      'Change name of person or position responsible for this procedure',
       'Formulae used',
       'Not provided',
-      'Change',
+      'Change formulae used',
       'Data sources',
       'data sources',
-      'Change',
+      'Change data sources',
       'Location where records are kept',
       'location',
-      'Change',
+      'Change location where records are kept',
       'Name of IT system used',
       'it',
-      'Change',
+      'Change name of IT system used',
     ]);
   });
 });

@@ -19,7 +19,7 @@ import { AerShipEmissions } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { LinkDirective, SelectComponent } from '@netz/govuk-components';
+import { FieldsetDirective, LegendDirective, LinkDirective, SelectComponent } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
@@ -35,7 +35,6 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
 
 @Component({
   selector: 'mrtm-aer-voyage-details',
-  standalone: true,
   imports: [
     WizardStepComponent,
     ReactiveFormsModule,
@@ -44,9 +43,12 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     RouterLink,
     LinkDirective,
     DatePickerComponent,
+    FieldsetDirective,
+    LegendDirective,
   ],
-  providers: [aerVoyageDetailsFormProvider],
+  standalone: true,
   templateUrl: './aer-voyage-details.component.html',
+  providers: [aerVoyageDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerVoyageDetailsComponent implements OnInit {
@@ -60,24 +62,24 @@ export class AerVoyageDetailsComponent implements OnInit {
 
   public readonly wizardMap = aerVoyagesMap;
   public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS;
-  private currentArrivalCountry = toSignal(this.arrivalCountryCtrl.valueChanges.pipe(), {
+  private readonly currentArrivalCountry = toSignal(this.arrivalCountryCtrl.valueChanges.pipe(), {
     initialValue: this.arrivalCountryCtrl.value,
   });
-  private departureArrivalCountry = toSignal(this.departureCountryCtrl.valueChanges.pipe(), {
+  private readonly departureArrivalCountry = toSignal(this.departureCountryCtrl.valueChanges.pipe(), {
     initialValue: this.departureCountryCtrl.value,
   });
-  ship: Signal<AerShipEmissions> = computed(() => {
+  readonly ship: Signal<AerShipEmissions> = computed(() => {
     const port = this.store.select(aerCommonQuery.selectVoyage(this.voyageId()))();
 
     return this.store.select(aerCommonQuery.selectShipByImoNumber(port?.imoNumber))();
   });
-  portArrivalSelectItems = computed(() => {
+  readonly portArrivalSelectItems = computed(() => {
     const country = this.currentArrivalCountry();
     return !country
       ? []
       : AER_PORT_CODE_SELECT_ITEMS.filter((item) => item.countryCode === country || item.value === 'NOT_APPLICABLE');
   });
-  portDepartureSelectItems = computed(() => {
+  readonly portDepartureSelectItems = computed(() => {
     const country = this.departureArrivalCountry();
     return !country
       ? []

@@ -41,9 +41,14 @@ public class ExternalEmpFuelOriginTypeName {
     @Size(max = 30)
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @EqualsAndHashCode.Include
+    @Schema(description = "Description of the fuel type if not listed. Must be provided only when 'fuelTypeCode' is 'OTHER'")
     private String otherFuelType;
 
-    @Schema(description = "Emission factor of slipped fuel. Decimal number between 0.0000 and 1 (inclusive) with up to 1 integer digits and 4 fractional digits", minimum = "0")
+    @Schema(
+        nullable = true,
+        description = "Emission factor of slipped fuel. Must be provided only when 'fuelTypeCode' is 'LNG', 'BIO_LNG', 'E_LNG' or 'OTHER'. Decimal number between 0.0000 and 1 (inclusive) with up to 1 integer digits and 4 fractional digits",
+        minimum = "0"
+    )
     @PositiveOrZero
     @Digits(integer=1, fraction=4)
     @DecimalMax(value = "1")

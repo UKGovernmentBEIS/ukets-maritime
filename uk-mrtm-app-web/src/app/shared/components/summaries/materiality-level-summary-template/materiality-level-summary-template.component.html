@@ -1,38 +1,124 @@
 @if (data(); as data) {
   <dl govuk-summary-list>
+    <div govukSummaryListRow class="govuk-summary-list__row--no-actions">
+      <dt govukSummaryListRowKey>Objectives and scope of the Verification</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        To verify the Maritime Operator's annual emissions to a reasonable level of assurance for the Annual Emissions
+        Report (as summarised in the Opinion Statement) under UK ETS and confirm compliance with approved monitoring
+        requirements and approved emissions monitoring plan.
+      </dd>
+    </div>
+    <div govukSummaryListRow class="govuk-summary-list__row--no-actions">
+      <dt govukSummaryListRowKey>Responsibilities</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        <p class="govuk-body">
+          The Maritime Operator is solely responsible for the preparation and reporting of their annual greenhouse gas
+          (GHG) emissions for the purposes of UK ETS in accordance with the rules and their approved emissions
+          monitoring plan (as listed in the Opinion Statement); for any information and assessments that support the
+          reported data; for determining the Maritime Operator’s objectives in relation to GHG information and for
+          establishing and maintaining appropriate procedures, performance management and internal control systems from
+          which the reported information is derived.
+        </p>
+
+        <p class="govuk-body govuk-!-margin-0">The regulator is responsible for:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>issuing and varying applicable emissions monitoring plans to the Maritime Operator;</li>
+          <li>enforcing the requirements of the UK ETS order and the emissions monitoring plan conditions;</li>
+          <li>
+            agreeing certain aspects of the verification process, e.g. site visit waivers. Under certain circumstances,
+            the regulator may in accordance with Article 45A and 45B of the Greenhouse Gas Emissions Trading Scheme
+            Order 2020 (SI 2020/1265) determine a Maritime Operator's emissions or emissions figure for surrender for
+            the purposes of UK ETS.
+          </li>
+        </ul>
+
+        <p class="govuk-body">
+          We (as named on the Opinion Statement), in accordance with the verification contract and the UK ETS Order, are
+          responsible for carrying out the verification of a Maritime Operator's annual maritime emissions associated
+          with its maritime activity, independent of the Maritime Operator and the regulator responsible for UK ETS. It
+          is our responsibility to form an independent opinion, based on the examination of information and data
+          presented in the Annual Emissions Report, and to report that opinion to the Maritime Operator.
+        </p>
+
+        <p class="govuk-body govuk-!-margin-0">We also report if, in our opinion:</p>
+        <ul class="govuk-list govuk-list--bullet">
+          <li>
+            the Annual Emissions Report is or may be associated with misstatements (omissions, misrepresentations, or
+            errors) or non-conformities; or
+          </li>
+          <li>
+            the Maritime Operator is not complying with the Order, even if the emissions monitoring plan is approved by
+            the regulator.
+          </li>
+          <li>
+            the UK ETS lead auditor/auditor has not received all the information and explanations that they require to
+            conduct their examination to a reasonable level of assurance; or
+          </li>
+          <li>
+            improvements can be made to the Maritime Operator's performance in monitoring and reporting of emissions
+            and/or compliance with the approved emissions monitoring plan as amended by the Order.
+          </li>
+        </ul>
+      </dd>
+    </div>
+    <div govukSummaryListRow class="govuk-summary-list__row--no-actions">
+      <dt govukSummaryListRowKey>Work performed & basis of the opinion</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        We conducted our examination having regard to the verification criteria reference documents outlined below. This
+        involved examining, based upon our risk analysis, evidence to give us reasonable assurance that the amounts and
+        disclosures relating to the data have been properly prepared in accordance with the Order and principles of UK
+        ETS, as outlined in the UK ETS criteria reference documents below, and the Maritime Operator's approved
+        emissions monitoring plan. This also involved assessing where necessary estimates and judgements made by the
+        Maritime Operator in preparing the data and considering the overall adequacy of the presentation of the data in
+        the Annual Emissions Report and its potential for material misstatement.
+      </dd>
+    </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ map.materialityDetails.caption }}</dt>
-      <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.materialityDetails"></dd>
+      <dt govukSummaryListRowKey>{{ materialityLevelMap.materialityDetails.title }}</dt>
+      <dd
+        govukSummaryListRowValue
+        class="pre-wrap"
+        [notProvided]="
+          data.materialityDetails ? data.materialityDetails + materialityLevelUKASCompliance : data.materialityDetails
+        "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.DETAILS" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.DETAILS" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">materiality level</span>
+          </a>
         </dd>
       }
     </div>
-
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>{{ map.accreditationReferenceDocumentTypes.title }}</dt>
-      <dd govukSummaryListRowValue>
+      <dt govukSummaryListRowKey>Accreditation reference documents</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
         <ul class="govuk-list govuk-list--bullet">
-          @for (type of accreditationReferenceDocumentTypes(); track i; let i = $index) {
-            <li [class.govuk-!-margin-top-5]="i > 0">{{ type | accreditationReferenceDocumentTypes }}</li>
+          @for (type of accreditationReferenceDocumentTypes(); track $index) {
+            <li>{{ type | accreditationReferenceDocumentTypes }}</li>
           }
         </ul>
       </dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.REFERENCE_DOCUMENTS" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.REFERENCE_DOCUMENTS" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">accreditation reference documents</span>
+          </a>
         </dd>
       }
     </div>
 
     @if (data.accreditationReferenceDocumentTypes?.includes('OTHER')) {
       <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>{{ map.otherReference.title }}</dt>
+        <dt govukSummaryListRowKey>Reference details</dt>
         <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data.otherReference"></dd>
         @if (isEditable()) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="wizardStep.REFERENCE_DOCUMENTS" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="wizardStep.REFERENCE_DOCUMENTS" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">reference details</span>
+            </a>
           </dd>
         }
       </div>

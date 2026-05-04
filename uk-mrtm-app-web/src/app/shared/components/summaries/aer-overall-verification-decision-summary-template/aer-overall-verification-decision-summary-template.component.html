@@ -25,7 +25,10 @@
       <dd govukSummaryListRowValue [notProvided]="data.type | overallVerificationDecision"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.ASSESSMENT]" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.ASSESSMENT]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">decision</span>
+          </a>
         </dd>
       }
     </div>
@@ -33,14 +36,15 @@
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Reason</dt>
         <dd govukSummaryListRowValue>
-          @for (reason of $any(data)?.reasons; track i; let i = $index) {
-            <div class="pre-wrap" [class.govuk-!-margin-top-5]="i > 0">{{ i + 1 }}. {{ reason }}</div>
+          @for (reason of $any(data)?.reasons; track $index) {
+            <div class="pre-wrap" [class.govuk-!-margin-top-5]="!$first">{{ $index + 1 }}. {{ reason }}</div>
           }
         </dd>
         @if (isEditable()) {
           <dd govukSummaryListRowActions>
             <a govukLink [routerLink]="[wizardStep.VERIFIED_WITH_COMMENTS_LIST]" [queryParams]="queryParams()">
               Change
+              <span class="govuk-visually-hidden">reason</span>
             </a>
           </dd>
         }
@@ -51,8 +55,8 @@
         <dt govukSummaryListRowKey>Reason</dt>
         <dd govukSummaryListRowValue>
           <ul class="govuk-list govuk-list--bullet">
-            @for (reason of $any(data)?.notVerifiedReasons; track i; let i = $index) {
-              <li class="pre-wrap" [class.govuk-!-margin-top-5]="i > 0">
+            @for (reason of $any(data)?.notVerifiedReasons; track $index) {
+              <li class="pre-wrap" [class.govuk-!-margin-top-5]="!$first">
                 {{ reason.type | notVerifiedReasonType }}
                 @if (reason.details) {
                   - {{ reason.details }}
@@ -63,7 +67,10 @@
         </dd>
         @if (isEditable()) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="[wizardStep.NOT_VERIFIED_REASONS]" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="[wizardStep.NOT_VERIFIED_REASONS]" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">reason</span>
+            </a>
           </dd>
         }
       </div>

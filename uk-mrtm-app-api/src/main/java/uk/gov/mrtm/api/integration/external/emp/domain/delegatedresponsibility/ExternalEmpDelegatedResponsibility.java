@@ -38,6 +38,6 @@ public class ExternalEmpDelegatedResponsibility {
     @UniqueElements
     private Set<@NotNull @Valid ExternalEmpRegisteredOwner> registeredOwners = new HashSet<>();
 
-    @Schema(description = "Maritime Operator declares that the information provided is true. If delegatedResponsibilityUsed is true it must be true, otherwise it must be omitted")
+    @Schema(nullable = true, description = "Maritime Operator declares that the information provided is true. If delegatedResponsibilityUsed is true it must be true, otherwise it must be omitted")
     private Boolean responsibilityDeclaration;
 }

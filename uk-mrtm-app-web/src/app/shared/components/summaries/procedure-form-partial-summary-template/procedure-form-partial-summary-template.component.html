@@ -1,14 +1,17 @@
-<dl govuk-summary-list [class]="cssClass" [hasBottomMargin]="!cssClass">
+<dl govuk-summary-list [class]="cssClass()" [hasBottomMargin]="!cssClass()">
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Procedure reference</dt>
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="procedureForm?.reference"
-      [previous]="originalProcedureForm?.reference"></dd>
-    @if (isEditable) {
+      [current]="procedureForm()?.reference"
+      [previous]="originalProcedureForm()?.reference"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[currentWizardStep()]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">procedure reference ({{ a11yActionsText() }})</span>
+        </a>
       </dd>
     }
   </div>
@@ -17,11 +20,14 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="procedureForm?.version"
-      [previous]="originalProcedureForm?.version"></dd>
-    @if (isEditable) {
+      [current]="procedureForm()?.version"
+      [previous]="originalProcedureForm()?.version"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[currentWizardStep()]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">procedure version ({{ a11yActionsText() }})</span>
+        </a>
       </dd>
     }
   </div>
@@ -31,11 +37,14 @@
       govukSummaryListRowValue
       class="pre-wrap"
       htmlDiff
-      [current]="procedureForm?.description"
-      [previous]="originalProcedureForm?.description"></dd>
-    @if (isEditable) {
+      [current]="procedureForm()?.description"
+      [previous]="originalProcedureForm()?.description"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[currentWizardStep()]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">description of procedure ({{ a11yActionsText() }})</span>
+        </a>
       </dd>
     }
   </div>
@@ -44,11 +53,16 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="procedureForm?.responsiblePersonOrPosition"
-      [previous]="originalProcedureForm?.responsiblePersonOrPosition"></dd>
-    @if (isEditable) {
+      [current]="procedureForm()?.responsiblePersonOrPosition"
+      [previous]="originalProcedureForm()?.responsiblePersonOrPosition"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[currentWizardStep()]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">
+            name of person or position responsible for this procedure ({{ a11yActionsText() }})
+          </span>
+        </a>
       </dd>
     }
   </div>
@@ -57,11 +71,14 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="procedureForm?.recordsLocation"
-      [previous]="originalProcedureForm?.recordsLocation"></dd>
-    @if (isEditable) {
+      [current]="procedureForm()?.recordsLocation"
+      [previous]="originalProcedureForm()?.recordsLocation"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[currentWizardStep()]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">location where records are kept ({{ a11yActionsText() }})</span>
+        </a>
       </dd>
     }
   </div>
@@ -70,11 +87,14 @@
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="procedureForm?.itSystemUsed"
-      [previous]="originalProcedureForm?.itSystemUsed"></dd>
-    @if (isEditable) {
+      [current]="procedureForm()?.itSystemUsed"
+      [previous]="originalProcedureForm()?.itSystemUsed"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[currentWizardStep]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[currentWizardStep()]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">name of IT system used ({{ a11yActionsText() }})</span>
+        </a>
       </dd>
     }
   </div>

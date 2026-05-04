@@ -8,8 +8,8 @@ import { nonComplianceFinalDeterminationQuery } from '@requests/tasks/non-compli
 
 @Component({
   selector: 'mrtm-non-compliance-final-determination-success',
-  standalone: true,
   imports: [RouterLink, PanelComponent, LinkDirective],
+  standalone: true,
   templateUrl: './non-compliance-final-determination-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

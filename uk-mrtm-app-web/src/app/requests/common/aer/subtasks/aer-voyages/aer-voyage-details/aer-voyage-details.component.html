@@ -4,65 +4,69 @@
   [isTwoThirds]="true"
   caption="{{ wizardMap.voyageDetails.caption }} {{ ship()?.details?.name }}"
   (formSubmit)="onSubmit()">
-  <h3 class="govuk-heading-m">Departure details</h3>
-  <div
-    govuk-select
-    [options]="countrySelectItems"
-    widthClass="govuk-!-width-one-third"
-    formControlName="departureCountry"
-    label="Country code and name of departure"
-    labelSize="normal"></div>
-  <div
-    govuk-select
-    [options]="portDepartureSelectItems()"
-    formControlName="departurePort"
-    widthClass="govuk-!-width-one-third"
-    label="Port code and name of departure"
-    labelSize="normal"></div>
+  <fieldset govukFieldset id="departure-details">
+    <legend govukLegend legendSize="medium">Departure details</legend>
+    <div
+      govuk-select
+      [options]="countrySelectItems"
+      widthClass="govuk-!-width-one-third"
+      formControlName="departureCountry"
+      label="Country code and name of departure"
+      labelSize="normal"></div>
+    <div
+      govuk-select
+      [options]="portDepartureSelectItems()"
+      formControlName="departurePort"
+      widthClass="govuk-!-width-one-third"
+      label="Port code and name of departure"
+      labelSize="normal"></div>
 
-  <div
-    mrtm-date-picker
-    formControlName="departureDate"
-    [datePickerConfig]="datepickerConfig"
-    label="Date of departure"
-    hint="For example, 21/7/2024"
-    widthClass="govuk-!-width-one-third"></div>
-  <div
-    mrtm-time-input
-    formControlName="departureTime"
-    label="Actual time of departure (ATD)"
-    hint="Enter the exact time in GMT, for example 17:06:22"></div>
+    <div
+      mrtm-date-picker
+      formControlName="departureDate"
+      [datePickerConfig]="datepickerConfig"
+      label="Date of departure"
+      hint="For example, 21/7/2024"
+      widthClass="govuk-input--width-10"></div>
+    <div
+      mrtm-time-input
+      formControlName="departureTime"
+      label="Actual time of departure (ATD)"
+      hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  </fieldset>
 
-  <h3 class="govuk-heading-m">Arrival details</h3>
-  <div
-    govuk-select
-    [options]="countrySelectItems"
-    widthClass="govuk-!-width-one-third"
-    formControlName="arrivalCountry"
-    label="Country code and name of arrival"
-    labelSize="normal"></div>
-  <div
-    govuk-select
-    [options]="portArrivalSelectItems()"
-    formControlName="arrivalPort"
-    widthClass="govuk-!-width-one-third"
-    label="Port code and name of arrival"
-    labelSize="normal"></div>
-
-  <div
-    mrtm-date-picker
-    formControlName="arrivalDate"
-    [datePickerConfig]="datepickerConfig"
-    label="Date of arrival"
-    hint="For example, 21/7/2024"
-    widthClass="govuk-!-width-one-third"></div>
-  <div
-    mrtm-time-input
-    formControlName="arrivalTime"
-    label="Actual time of arrival (ATA)"
-    hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  <fieldset govukFieldset id="arrival-details">
+    <legend govukLegend legendSize="medium">Arrival details</legend>
+    <div
+      govuk-select
+      [options]="countrySelectItems"
+      widthClass="govuk-!-width-one-third"
+      formControlName="arrivalCountry"
+      label="Country code and name of arrival"
+      labelSize="normal"></div>
+    <div
+      govuk-select
+      [options]="portArrivalSelectItems()"
+      formControlName="arrivalPort"
+      widthClass="govuk-!-width-one-third"
+      label="Port code and name of arrival"
+      labelSize="normal"></div>
+    <div
+      mrtm-date-picker
+      formControlName="arrivalDate"
+      [datePickerConfig]="datepickerConfig"
+      label="Date of arrival"
+      labelSize="normal"
+      hint="For example, 21/7/2024"
+      widthClass="govuk-input--width-10"></div>
+    <div
+      mrtm-time-input
+      formControlName="arrivalTime"
+      label="Actual time of arrival (ATA)"
+      hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  </fieldset>
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
 </div>

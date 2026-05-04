@@ -3,10 +3,10 @@ import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'mrtm-back-to-top',
+  imports: [RouterLink],
   standalone: true,
   templateUrl: './back-to-top.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [RouterLink],
 })
 export class BackToTopComponent {
   scrollToTop() {

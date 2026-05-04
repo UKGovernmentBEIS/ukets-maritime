@@ -9,13 +9,13 @@ import { ReviewDecisionSummaryTemplateComponent, VoyagesListSummaryTemplateCompo
 
 @Component({
   selector: 'mrtm-aer-list-of-voyages-submitted',
-  standalone: true,
   imports: [
     VoyagesListSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './aer-list-of-voyages-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

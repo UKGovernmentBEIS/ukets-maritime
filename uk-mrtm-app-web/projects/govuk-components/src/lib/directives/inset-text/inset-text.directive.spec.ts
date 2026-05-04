@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -9,14 +9,14 @@ describe('InsetTextDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
-    standalone: true,
     imports: [InsetTextDirective],
+    standalone: true,
     template: `
       <div #insetText govukInsetText>Some text</div>
     `,
   })
   class TestComponent {
-    @ViewChild('insetText') insetTextDiv: ElementRef;
+    readonly insetTextDiv = viewChild<ElementRef>('insetText');
   }
 
   beforeEach(() => {
@@ -33,6 +33,6 @@ describe('InsetTextDirective', () => {
   });
 
   it('should have inset-text class', () => {
-    expect(fixture.componentInstance.insetTextDiv.nativeElement.classList).toContain('govuk-inset-text');
+    expect(fixture.componentInstance.insetTextDiv().nativeElement.classList).toContain('govuk-inset-text');
   });
 });

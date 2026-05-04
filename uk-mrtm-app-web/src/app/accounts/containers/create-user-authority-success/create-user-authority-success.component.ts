@@ -11,8 +11,8 @@ import { selectNewUserAuthority } from '@accounts/store/user-authority.selectors
 
 @Component({
   selector: 'mrtm-create-account-success',
-  standalone: true,
   imports: [RouterLink, PanelComponent, LinkDirective, AsyncPipe],
+  standalone: true,
   templateUrl: './create-user-authority-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

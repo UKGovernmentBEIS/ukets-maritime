@@ -13,7 +13,6 @@ import {
 
 @Component({
   selector: 'mrtm-reduction-claim-submitted',
-  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     PageHeadingComponent,
@@ -21,6 +20,7 @@ import {
     ReductionClaimDetailsSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './reduction-claim-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -29,7 +29,6 @@ export class ReductionClaimSubmittedComponent {
   public readonly map = reductionClaimMap;
   public readonly data = this.store.select(aerTimelineCommonQuery.selectReductionClaim);
   public readonly fuelPurchases = this.store.select(aerTimelineCommonQuery.selectReductionClaimDetailsListItems);
-
   readonly isReviewCompletedActionType = this.store.select(aerTimelineCommonQuery.isReviewCompletedActionType);
   readonly decision = this.store.select(
     aerTimelineCommonQuery.selectSummaryReviewGroupDecision('EMISSIONS_REDUCTION_CLAIM'),

@@ -8,26 +8,27 @@
       <h3 class="govuk-heading-s govuk-!-margin-bottom-2">List changes to include in the variation schedule</h3>
       <span class="govuk-caption-m govuk-!-margin-bottom-3">The operator will see these in the approval notice</span>
       <ng-container formArrayName="variationScheduleItems">
-        @for (
-          variationScheduleItems of variationScheduleItemsCtrl.controls;
-          track variationScheduleItems;
-          let i = $index
-        ) {
-          <fieldset govukFieldset id="variation-schedule-items-{{ i + 1 }}">
+        @for (variationScheduleItems of variationScheduleItemsCtrl.controls; track variationScheduleItems) {
+          <fieldset govukFieldset id="variation-schedule-items-{{ $index + 1 }}">
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
-                <legend govukLegend legendSize="small">Change {{ i + 1 }}</legend>
+                <legend govukLegend legendSize="small">Change {{ $index + 1 }}</legend>
               </div>
               <div class="govuk-grid-column-one-third govuk-!-text-align-right">
-                <button (click)="variationScheduleItemsCtrl.removeAt(i)" govukSecondaryButton type="button">
+                <button (click)="variationScheduleItemsCtrl.removeAt($index)" govukSecondaryButton type="button">
                   Remove
                 </button>
               </div>
             </div>
-            <div govuk-textarea [maxLength]="10000" [formControlName]="i"></div>
+            <div
+              [label]="`Change ${$index + 1}`"
+              [isLabelHidden]="true"
+              govuk-textarea
+              [maxLength]="10000"
+              [formControlName]="$index"></div>
           </fieldset>
           @if (variationScheduleItemsCtrl?.length > 1) {
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
           }
         }
         <button (click)="addAnotherVariationSchedule()" govukSecondaryButton type="button">
@@ -36,7 +37,7 @@
       </ng-container>
     </ng-container>
   </govuk-radio-option>
-  <govuk-radio-option label="Rejected" value="REJECTED"></govuk-radio-option>
+  <govuk-radio-option label="Rejected" value="REJECTED" />
   <govuk-radio-option label="Operator amends needed" value="OPERATOR_AMENDS_NEEDED">
     <ng-container govukConditionalContent>
       <h3 class="govuk-heading-s govuk-!-margin-bottom-2">Changes required by the operator</h3>
@@ -44,27 +45,34 @@
         This will be sent to the operator when you return the application
       </span>
       <ng-container formArrayName="requiredChanges">
-        @for (requiredChange of requiredChangesCtrl.controls; track requiredChange; let i = $index) {
-          <fieldset [formGroupName]="i" govukFieldset id="required-changes-{{ i + 1 }}">
+        @for (requiredChange of requiredChangesCtrl.controls; track requiredChange) {
+          <fieldset [formGroupName]="$index" govukFieldset id="required-changes-{{ $index + 1 }}">
             <div class="govuk-grid-row">
               <div class="govuk-grid-column-two-thirds">
-                <legend govukLegend legendSize="small">Required change {{ i + 1 }}</legend>
+                <legend govukLegend legendSize="small">Required change {{ $index + 1 }}</legend>
               </div>
               <div class="govuk-grid-column-one-third govuk-!-text-align-right">
                 @if (requiredChangesCtrl?.length > 1) {
-                  <button (click)="requiredChangesCtrl.removeAt(i)" govukSecondaryButton type="button">Remove</button>
+                  <button (click)="requiredChangesCtrl.removeAt($index)" govukSecondaryButton type="button">
+                    Remove
+                  </button>
                 }
               </div>
             </div>
-            <div govuk-textarea [maxLength]="10000" formControlName="reason"></div>
+            <div
+              label="Reason"
+              [isLabelHidden]="true"
+              govuk-textarea
+              [maxLength]="10000"
+              formControlName="reason"></div>
             <mrtm-multiple-file-input
               [baseDownloadUrl]="downloadUrl"
               label="Upload a file"
               listTitle="Uploaded files"
-              formControlName="files"></mrtm-multiple-file-input>
+              formControlName="files" />
           </fieldset>
           @if (requiredChangesCtrl?.length > 1) {
-            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+            <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
           }
         }
         <button (click)="addOtherRequiredChange()" govukSecondaryButton type="button">

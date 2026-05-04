@@ -5,10 +5,10 @@
 @if (improvements()?.length) {
   <button (click)="onSubmit()" netzPendingButton govukButton type="button">Continue</button>
 } @else {
-  <a govukButton [routerLink]="['../' + wizardStep.ITEM_FORM_ADD]">Add new item</a>
+  <a govukButton [routerLink]="[`../${wizardStep.ITEM_FORM_ADD}`]">Add new item</a>
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />
 </div>

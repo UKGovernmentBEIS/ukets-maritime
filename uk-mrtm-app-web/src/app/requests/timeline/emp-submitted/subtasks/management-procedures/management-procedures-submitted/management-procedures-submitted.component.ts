@@ -36,7 +36,7 @@ interface ViewModel {
 export class ManagementProceduresSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empSubmittedQuery.selectManagementProcedures)();
     return {
       managementProcedures: managementProcedures,

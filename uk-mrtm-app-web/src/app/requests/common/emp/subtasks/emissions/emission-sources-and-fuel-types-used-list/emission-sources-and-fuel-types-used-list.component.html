@@ -3,18 +3,20 @@
   {{ taskMap.emissionsSources.title }}
 </netz-page-heading>
 @if (hasNeedsReviewItems()) {
-  <div class="govuk-!-width-three-quarters">
-    <govuk-warning-text assistiveText="" class="govuk-!-width-two-thirds">
-      The highlighted emission sources have been updated due to changes made to the ‘Fuels and emissions factors’
-      question. Review the details for each source, then select Continue.
-    </govuk-warning-text>
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-three-quarters">
+      <govuk-warning-text assistiveText="" class="govuk-!-width-two-thirds">
+        The highlighted emission sources have been updated due to changes made to the ‘Fuels and emissions factors’
+        question. Review the details for each source, then select Continue.
+      </govuk-warning-text>
+    </div>
   </div>
 }
 
-@for (emissionSource of emissionSources(); track emissionSource.uniqueIdentifier; let i = $index) {
+@for (emissionSource of emissionSources(); track emissionSource.uniqueIdentifier) {
   <mrtm-emission-sources-and-fuel-types-used-summary-template
     [data]="emissionSource"
-    [index]="i"
+    [index]="$index"
     (delete)="onDelete($event)"
     [isDeletable]="true"
     [isEditable]="isEditable" />

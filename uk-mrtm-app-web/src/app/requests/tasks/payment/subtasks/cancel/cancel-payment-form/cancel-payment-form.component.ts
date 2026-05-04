@@ -15,10 +15,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-cancel-payment-form',
-  standalone: true,
   imports: [WizardStepComponent, TextareaComponent, ReactiveFormsModule],
-  providers: [cancelPaymentFormProvider],
+  standalone: true,
   templateUrl: './cancel-payment-form.component.html',
+  providers: [cancelPaymentFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CancelPaymentFormComponent {

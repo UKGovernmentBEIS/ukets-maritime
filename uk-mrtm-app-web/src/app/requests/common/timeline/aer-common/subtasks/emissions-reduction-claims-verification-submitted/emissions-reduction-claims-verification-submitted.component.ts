@@ -9,12 +9,12 @@ import { EmissionsReductionClaimsVerificationSummaryTemplateComponent } from '@s
 
 @Component({
   selector: 'mrtm-emissions-reduction-claims-verification-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     EmissionsReductionClaimsVerificationSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emissions-reduction-claims-verification-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

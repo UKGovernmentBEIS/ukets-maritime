@@ -34,7 +34,7 @@ describe('RegistryIntegrationSuccessComponent', () => {
   });
 
   it('should display all HTMLElements and submit task', () => {
-    expect(page.heading1.textContent.trim()).toEqual('Information sent to the registry');
+    expect(page.heading1.textContent).toEqual('Information sent to the registry');
     expect(page.heading3.textContent.trim()).toEqual('What happens next');
     expect(page.paragraph.textContent.trim()).toEqual(
       'You have requested that part of the EMP information can be communicated to the Registry service to create a Registry account.',

@@ -21,5 +21,6 @@ export interface AerShipAggregatedData {
   lessVoyagesInNorthernIrelandDeduction: AerPortEmissionsMeasurement;
   totalShipEmissions: string;
   surrenderEmissions: string;
+  dataInputType: 'MANUAL' | 'EXTERNAL_PROVIDER' | 'FETCH_FROM_EMP';
   fromFetch?: boolean;
 }

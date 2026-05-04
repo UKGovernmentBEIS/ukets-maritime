@@ -49,13 +49,13 @@ describe('ReportingObligationSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Are you required to submit a 2025 emissions report?',
       'No',
-      'Change',
+      'Change requirement to submit an emissions report',
       'Explain why you do not need to submit a report',
       'Lorem ipsum',
-      'Change',
+      'Change explanation for not submitting a report',
       'Upload supporting documents',
       'FileName1FileName2',
-      'Change',
+      'Change upload of supporting documents',
     ]);
   });
 

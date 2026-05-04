@@ -3,6 +3,29 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
 import {
+  COMPLIANCE_MONITORING_REPORTING_SUB_TASK,
+  DATA_GAPS_METHODOLOGIES_SUB_TASK,
+  ETS_COMPLIANCE_RULES_SUB_TASK,
+  MATERIALITY_LEVEL_SUB_TASK,
+  OPINION_STATEMENT_SUB_TASK,
+  OVERALL_VERIFICATION_DECISION_SUB_TASK,
+  RECOMMENDED_IMPROVEMENTS_SUB_TASK,
+  UNCORRECTED_MISSTATEMENTS_SUB_TASK,
+  UNCORRECTED_NON_COMPLIANCES_SUB_TASK,
+  UNCORRECTED_NON_CONFORMITIES_SUB_TASK,
+  VERIFIER_DETAILS_SUB_TASK,
+} from '@requests/common/aer';
+import { aerCommonQuery } from '@requests/common/aer/+state';
+import { EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK } from '@requests/common/aer/subtasks/emissions-reduction-claim-verification';
+import { SECTIONS_COMPLETED_SELECTOR, SUBTASKS_AFFECTED_BY_IMPORT } from '@requests/common/third-party-data-provider';
+import { ThirdPartyDataProviderImportFlowManager } from '@requests/common/third-party-data-provider/third-party-data-provider-import';
+import { ThirdPartyDataProviderImportPayloadMutator } from '@requests/tasks/aer-verification-submit/payload-mutators';
+import {
+  provideThirdPartyExtraDetails,
+  provideThirdPartyExtraWarnings,
+  provideThirdPartySuccessMessage,
+} from '@requests/tasks/aer-verification-submit/providers';
+import {
   AerVerificationSubmitApiService,
   AerVerificationSubmitService,
 } from '@requests/tasks/aer-verification-submit/services';
@@ -160,6 +183,7 @@ export function provideAerVerificationSubmitPayloadMutators(): EnvironmentProvid
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: DataGapsMethodologiesMisstatementPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: MaterialityLevelDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: MaterialityLevelReferenceDocumentsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ThirdPartyDataProviderImportPayloadMutator },
   ]);
 }
 
@@ -215,5 +239,35 @@ export function provideAerVerificationSubmitStepFlowManagers(): EnvironmentProvi
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: RecommendedImprovementsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: DataGapsMethodologiesFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MaterialityLevelFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ThirdPartyDataProviderImportFlowManager },
+  ]);
+}
+
+export function provideThirdPartyConfigurations(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    {
+      provide: SUBTASKS_AFFECTED_BY_IMPORT,
+      useValue: [
+        COMPLIANCE_MONITORING_REPORTING_SUB_TASK,
+        DATA_GAPS_METHODOLOGIES_SUB_TASK,
+        EMISSIONS_REDUCTION_CLAIMS_VERIFICATION_SUB_TASK,
+        ETS_COMPLIANCE_RULES_SUB_TASK,
+        MATERIALITY_LEVEL_SUB_TASK,
+        OPINION_STATEMENT_SUB_TASK,
+        OVERALL_VERIFICATION_DECISION_SUB_TASK,
+        RECOMMENDED_IMPROVEMENTS_SUB_TASK,
+        UNCORRECTED_MISSTATEMENTS_SUB_TASK,
+        UNCORRECTED_NON_COMPLIANCES_SUB_TASK,
+        UNCORRECTED_NON_CONFORMITIES_SUB_TASK,
+        VERIFIER_DETAILS_SUB_TASK,
+      ],
+    },
+    {
+      provide: SECTIONS_COMPLETED_SELECTOR,
+      useValue: aerCommonQuery.selectVerificationSectionsCompleted,
+    },
+    provideThirdPartyExtraWarnings(),
+    provideThirdPartyExtraDetails(),
+    provideThirdPartySuccessMessage(),
   ]);
 }

@@ -1,4 +1,4 @@
-import { UpperCasePipe } from '@angular/common';
+import { LowerCasePipe, TitleCasePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, input, Signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
@@ -16,12 +16,12 @@ import {
 
 import { AER_EMISSIONS_CALCULATIONS_STEP } from '@requests/common/aer/aer.consts';
 import { VOYAGE_OR_PORT_CALL_EMISSIONS_SUMMARY_COLUMNS } from '@shared/components/summaries/ports-and-voyages/voyage-or-port-call-emissions-summary-template/voyage-or-port-call-emissions-summary-template.consts';
+import { ScrollablePaneDirective } from '@shared/directives';
 import { BigNumberPipe } from '@shared/pipes';
 import { AerJourneyTypeEnum, AerVoyageOrPortCalculationsSummaryItemDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-voyage-or-port-call-emissions-summary-template',
-  standalone: true,
   imports: [
     TableComponent,
     BigNumberPipe,
@@ -31,8 +31,11 @@ import { AerJourneyTypeEnum, AerVoyageOrPortCalculationsSummaryItemDto } from '@
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
-    UpperCasePipe,
+    TitleCasePipe,
+    ScrollablePaneDirective,
+    LowerCasePipe,
   ],
+  standalone: true,
   templateUrl: './voyage-or-port-call-emissions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

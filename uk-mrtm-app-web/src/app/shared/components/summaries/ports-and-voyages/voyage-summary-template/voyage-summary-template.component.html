@@ -1,5 +1,5 @@
 @if (data(); as voyage) {
-  <h3 class="govuk-heading-m">Voyage details</h3>
+  <h2 class="govuk-heading-m">Voyage details</h2>
 
   <dl govuk-summary-list [hasBorders]="true">
     <div govukSummaryListRow>
@@ -9,7 +9,10 @@
       </dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">country code and name of departure</span>
+          </a>
         </dd>
       }
     </div>
@@ -18,7 +21,10 @@
       <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.departurePort?.port | selectOptionToTitle: ports }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">port code and name of departure</span>
+          </a>
         </dd>
       }
     </div>
@@ -27,7 +33,10 @@
       <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.departureTime | govukDate: 'date' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">date of departure</span>
+          </a>
         </dd>
       }
     </div>
@@ -36,7 +45,10 @@
       <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.departureTime | date: 'HH:mm:ss' : 'UTC' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">actual time of departure</span>
+          </a>
         </dd>
       }
     </div>
@@ -47,7 +59,10 @@
       </dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">country code and name of arrival</span>
+          </a>
         </dd>
       }
     </div>
@@ -56,7 +71,10 @@
       <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.arrivalPort?.port | selectOptionToTitle: ports }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">port code and name of arrival</span>
+          </a>
         </dd>
       }
     </div>
@@ -66,7 +84,10 @@
       <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.arrivalTime | govukDate: 'date' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">date of arrival</span>
+          </a>
         </dd>
       }
     </div>
@@ -75,7 +96,10 @@
       <dd govukSummaryListRowValue>{{ voyage?.voyageDetails?.arrivalTime | date: 'HH:mm:ss' : 'UTC' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.VOYAGE_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">actual time of arrival</span>
+          </a>
         </dd>
       }
     </div>
@@ -95,5 +119,6 @@
     [editable]="editable()"
     [editQueryParams]="editQueryParams()"
     [directEmissions]="voyage?.directEmissions"
-    [fuelConsumptions]="voyage?.fuelConsumptions" />
+    [fuelConsumptions]="voyage?.fuelConsumptions"
+    (addDirectEmission)="onAddDirectEmissions()" />
 }

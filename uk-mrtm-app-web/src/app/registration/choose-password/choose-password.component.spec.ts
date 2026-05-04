@@ -3,7 +3,6 @@ import { ComponentFixture, fakeAsync, inject, TestBed, tick } from '@angular/cor
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { of } from 'rxjs';
-import { provideZxvbnServiceForPSM } from 'angular-password-strength-meter/zxcvbn';
 
 import { OperatorUsersRegistrationService } from '@mrtm/api';
 
@@ -58,7 +57,6 @@ describe('ChoosePasswordComponent', () => {
       providers: [
         provideHttpClient(),
         provideRouter([]),
-        provideZxvbnServiceForPSM(),
         UserRegistrationStore,
         { provide: OperatorUsersRegistrationService, useValue: operatorUsersRegistrationService },
         { provide: PasswordService, useValue: passwordService },

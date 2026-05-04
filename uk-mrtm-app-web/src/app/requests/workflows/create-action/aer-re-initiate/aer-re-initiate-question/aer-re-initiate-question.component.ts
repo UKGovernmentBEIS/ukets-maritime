@@ -11,8 +11,8 @@ import { taskActionTypeToTitleTransformer } from '@shared/utils/transformers';
 
 @Component({
   selector: 'mrtm-aer-re-initiate-question',
-  standalone: true,
   imports: [PageHeadingComponent, ButtonDirective, RouterLink, LinkDirective],
+  standalone: true,
   templateUrl: './aer-re-initiate-question.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

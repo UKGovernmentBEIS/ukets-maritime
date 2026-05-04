@@ -14,7 +14,6 @@ import { RfiSubmitted } from '@shared/types';
 
 @Component({
   selector: 'mrtm-rfi-submitted-summary-template',
-  standalone: true,
   imports: [
     NotProvidedDirective,
     SummaryDownloadFilesComponent,
@@ -24,9 +23,10 @@ import { RfiSubmitted } from '@shared/types';
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
   ],
+  standalone: true,
   templateUrl: './rfi-submitted-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RfiSubmittedSummaryTemplateComponent {
-  data = input.required<RfiSubmitted>();
+  readonly data = input.required<RfiSubmitted>();
 }

@@ -1,14 +1,19 @@
 @if (data(); as data) {
-  <h3 class="govuk-heading-m">Total amount of each fuel type consumed</h3>
-  @for (fuelConsumption of data; track index; let index = $index) {
+  <h2 class="govuk-heading-m">Total amount of each fuel type consumed</h2>
+  @for (fuelConsumption of data; track $index) {
     <dl govuk-summary-list>
-      <h4 class="govuk-heading-s">Fuel type {{ data?.length === 1 ? '' : index + 1 }}</h4>
+      <h3 class="govuk-heading-s">Fuel type {{ data?.length === 1 ? '' : $index + 1 }}</h3>
       <div govukSummaryListRow [class.needs-review]="fuelConsumption.needsReview">
         <dt govukSummaryListRowKey>Fuel type</dt>
         <dd govukSummaryListRowValue [notProvided]="fuelConsumption?.fuelOriginTypeName | fuelOriginTitle"></dd>
         @if (editable()) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="[changeLink()]" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="[changeLink()]" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">
+                {{ fuelConsumption?.fuelOriginTypeName | fuelOriginTitle }} fuel type
+              </span>
+            </a>
           </dd>
         }
       </div>
@@ -17,7 +22,12 @@
         <dd govukSummaryListRowValue [notProvided]="fuelConsumption?.totalConsumption | bigNumber: 5"></dd>
         @if (editable()) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="[changeLink()]" [queryParams]="queryParams()">Change</a>
+            <a govukLink [routerLink]="[changeLink()]" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">
+                {{ fuelConsumption?.fuelOriginTypeName | fuelOriginTitle }} total consumption
+              </span>
+            </a>
           </dd>
         }
       </div>

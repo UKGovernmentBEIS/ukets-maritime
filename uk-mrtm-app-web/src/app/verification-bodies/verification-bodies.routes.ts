@@ -30,6 +30,7 @@ export const VERIFICATION_BODIES_ROUTES: Routes = [
     path: ':id',
     canActivate: [verificationBodyDetailsGuard],
     title: 'Verification body details',
+    data: { breadcrumb: 'Verification body details' },
     resolve: {
       verificationBodyName: () =>
         inject(VerificationBodiesStoreService).getState().currentVerificationBody?.verificationBody?.name,

@@ -8,7 +8,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.verifierContact?.name"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">name</span>
+          </a>
         </dd>
       }
     </div>
@@ -17,7 +20,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.verifierContact?.email"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">email</span>
+          </a>
         </dd>
       }
     </div>
@@ -26,7 +32,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.verifierContact?.phoneNumber"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">telephone number</span>
+          </a>
         </dd>
       }
     </div>
@@ -39,7 +48,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.verificationTeamDetails?.leadEtsAuditor"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">lead ETS auditor</span>
+          </a>
         </dd>
       }
     </div>
@@ -48,7 +60,10 @@
       <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="data?.verificationTeamDetails?.etsAuditors"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">ETS auditors</span>
+          </a>
         </dd>
       }
     </div>
@@ -60,7 +75,10 @@
         [notProvided]="data?.verificationTeamDetails?.etsTechnicalExperts"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">technical experts (ETS auditor)</span>
+          </a>
         </dd>
       }
     </div>
@@ -69,7 +87,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.verificationTeamDetails?.independentReviewer"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">independent reviewer</span>
+          </a>
         </dd>
       }
     </div>
@@ -81,7 +102,10 @@
         [notProvided]="data?.verificationTeamDetails?.technicalExperts"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">technical experts (Independent Review)</span>
+          </a>
         </dd>
       }
     </div>
@@ -90,7 +114,10 @@
       <dd govukSummaryListRowValue [notProvided]="data?.verificationTeamDetails?.authorisedSignatoryName"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">name of authorised signatory</span>
+          </a>
         </dd>
       }
     </div>

@@ -2,8 +2,8 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'secondsToMinutes',
-  pure: true,
   standalone: true,
+  pure: true,
 })
 export class SecondsToMinutesPipe implements PipeTransform {
   transform(value: number): string {

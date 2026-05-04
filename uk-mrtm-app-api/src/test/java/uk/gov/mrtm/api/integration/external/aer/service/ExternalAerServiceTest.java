@@ -7,32 +7,25 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
-import uk.gov.mrtm.api.common.exception.MrtmErrorCode;
 import uk.gov.mrtm.api.integration.external.aer.domain.ExternalAer;
 import uk.gov.mrtm.api.integration.external.aer.domain.StagingAer;
 import uk.gov.mrtm.api.integration.external.aer.domain.StagingAerEntity;
 import uk.gov.mrtm.api.integration.external.aer.repository.StagingAerRepository;
 import uk.gov.mrtm.api.integration.external.aer.transform.ExternalAerMapper;
 import uk.gov.mrtm.api.integration.external.aer.validation.ExternalAerValidator;
-import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerRequestQueryService;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
-import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
 import uk.gov.netz.api.thirdpartydataprovider.domain.ThirdPartyDataProvider;
 import uk.gov.netz.api.thirdpartydataprovider.repository.ThirdPartyDataProviderRepository;
-import uk.gov.netz.api.workflow.request.core.domain.Request;
 
 import java.time.LocalDateTime;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -54,13 +47,10 @@ class ExternalAerServiceTest {
     private ThirdPartyDataProviderRepository thirdPartyDataProviderRepository;
     @Mock
     private DateService dateService;
-    @Mock
-    private AerRequestQueryService aerRequestQueryService;
 
     @Test
     void submitAerData_staging_aer_staging_is_not_present() {
         ExternalAer external = mock(ExternalAer.class);
-        Request aerRequest = mock(Request.class);
         String companyImoNumber = "1234567";
         Year year = Year.now();
         long thirdPartyDataProviderId = 1L;
@@ -82,7 +72,6 @@ class ExternalAerServiceTest {
             .build();
 
         when(mapper.toStagingAer(external)).thenReturn(staging);
-        when(aerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, year)).thenReturn(Optional.of(aerRequest));
         when(mrtmAccountRepository.findByImoNumber(companyImoNumber)).thenReturn(Optional.ofNullable(account));
         when(thirdPartyDataProviderRepository.findById(thirdPartyDataProviderId)).thenReturn(Optional.ofNullable(thirdPartyDataProvider));
         when(stagingAerRepository.findByAccountIdAndYear(accountId, year)).thenReturn(Optional.empty());
@@ -90,8 +79,8 @@ class ExternalAerServiceTest {
 
         externalAerService.submitAerData(external, companyImoNumber, year, appUser);
         verify(mapper).toStagingAer(external);
-        verify(aerRequestQueryService).findRequestByAccountAndTypeForYear(accountId, year);
-        verify(validator).validate(staging);
+        verify(validator).validateAerRequestTaskExists(year, accountId);
+        verify(validator).validate(staging, year);
         verify(mrtmAccountRepository).findByImoNumber(companyImoNumber);
         verify(stagingAerRepository).findByAccountIdAndYear(accountId, year);
         verify(dateService).getLocalDateTime();
@@ -99,13 +88,12 @@ class ExternalAerServiceTest {
         verify(stagingAerRepository).save(expectedStagingAerEntity);
 
         verifyNoMoreInteractions(mapper, validator, mrtmAccountRepository, stagingAerRepository,
-            dateService, thirdPartyDataProviderRepository, aerRequestQueryService);
+            dateService, thirdPartyDataProviderRepository);
     }
 
     @Test
     void submitAerData_staging_aer_staging_is_present() {
         ExternalAer external = mock(ExternalAer.class);
-        Request aerRequest = mock(Request.class);
         String companyImoNumber = "1234567";
         Year year = Year.now();
         long thirdPartyDataProviderId = 1L;
@@ -134,7 +122,6 @@ class ExternalAerServiceTest {
             .build();
 
         when(mapper.toStagingAer(external)).thenReturn(staging);
-        when(aerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, year)).thenReturn(Optional.of(aerRequest));
         when(mrtmAccountRepository.findByImoNumber(companyImoNumber)).thenReturn(Optional.ofNullable(account));
         when(thirdPartyDataProviderRepository.findById(thirdPartyDataProviderId)).thenReturn(Optional.ofNullable(thirdPartyDataProvider));
         when(stagingAerRepository.findByAccountIdAndYear(accountId, year)).thenReturn(Optional.of(stagingAerEntity));
@@ -142,46 +129,15 @@ class ExternalAerServiceTest {
 
         externalAerService.submitAerData(external, companyImoNumber, year, appUser);
         verify(mapper).toStagingAer(external);
-        verify(aerRequestQueryService).findRequestByAccountAndTypeForYear(accountId, year);
-        verify(validator).validate(staging);
+        verify(validator).validateAerRequestTaskExists(year, accountId);
+        verify(validator).validate(staging, year);
         verify(mrtmAccountRepository).findByImoNumber(companyImoNumber);
         verify(stagingAerRepository).findByAccountIdAndYear(accountId, year);
         verify(thirdPartyDataProviderRepository).findById(thirdPartyDataProviderId);
         verify(dateService).getLocalDateTime();
         verify(stagingAerRepository).save(expectedStagingAerEntity);
 
-        verifyNoMoreInteractions(mapper, validator, mrtmAccountRepository, aerRequestQueryService,
+        verifyNoMoreInteractions(mapper, validator, mrtmAccountRepository,
             stagingAerRepository, dateService, thirdPartyDataProviderRepository);
-    }
-
-    @Test
-    void submitAerData_staging_aer_request_is_present() {
-        ExternalAer external = mock(ExternalAer.class);
-        String companyImoNumber = "1234567";
-        Year year = Year.now();
-        long thirdPartyDataProviderId = 1L;
-        AppUser appUser = AppUser.builder()
-            .authorities(List.of(AppAuthority.builder().thirdPartyDataProviderId(thirdPartyDataProviderId).build()))
-            .build();
-        Long accountId = 1234L;
-        MrtmAccount account = MrtmAccount.builder().id(accountId).build();
-        StagingAer  staging = mock(StagingAer.class);
-
-        when(mapper.toStagingAer(external)).thenReturn(staging);
-        when(mrtmAccountRepository.findByImoNumber(companyImoNumber)).thenReturn(Optional.ofNullable(account));
-        when(aerRequestQueryService.findRequestByAccountAndTypeForYear(accountId, year)).thenReturn(Optional.empty());
-
-        BusinessException ex = assertThrows(BusinessException.class,
-            () -> externalAerService.submitAerData(external, companyImoNumber, year, appUser));
-
-        assertThat(ex.getErrorCode()).isEqualTo(MrtmErrorCode.AER_NOT_FOUND);
-
-        verify(mapper).toStagingAer(external);
-        verify(aerRequestQueryService).findRequestByAccountAndTypeForYear(accountId, year);
-        verify(validator).validate(staging);
-        verify(mrtmAccountRepository).findByImoNumber(companyImoNumber);
-
-        verifyNoMoreInteractions(mapper, validator, mrtmAccountRepository, aerRequestQueryService, dateService);
-        verifyNoInteractions(stagingAerRepository, thirdPartyDataProviderRepository);
     }
 }

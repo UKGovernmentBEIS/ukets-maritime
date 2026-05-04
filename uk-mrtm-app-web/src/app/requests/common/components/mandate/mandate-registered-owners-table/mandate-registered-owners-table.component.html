@@ -24,10 +24,20 @@
         <span [class.govuk-!-font-weight-bold]="row.needsReview">{{ row[column.field] | govukDate }}</span>
       }
       @case ('actions') {
-        <div class="control-row justify-content-end">
-          <a class="govuk-link--no-visited-state" (click)="onEdit(row)" routerLink="." govukLink>Change</a>
-          <a class="govuk-link--no-visited-state" (click)="onDelete(row)" routerLink="." govukLink>Remove</a>
-        </div>
+        <ul class="govuk-summary-list__actions-list">
+          <li class="govuk-summary-list__actions-list-item">
+            <a govukLink routerLink="." class="govuk-link--no-visited-state" (click)="onEdit(row)">
+              Change
+              <span class="govuk-visually-hidden">associated ships for {{ row['name'] }}</span>
+            </a>
+          </li>
+          <li class="govuk-summary-list__actions-list-item">
+            <a govukLink routerLink="." class="govuk-link--no-visited-state" (click)="onDelete(row)">
+              Remove
+              <span class="govuk-visually-hidden">associated ships for {{ row['name'] }}</span>
+            </a>
+          </li>
+        </ul>
       }
       @default {
         {{ row[column.field] }}

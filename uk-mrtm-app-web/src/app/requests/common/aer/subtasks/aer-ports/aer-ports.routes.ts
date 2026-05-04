@@ -46,8 +46,11 @@ export const AER_PORTS_ROUTES: Routes = [
         children: [
           {
             path: '',
-            data: { breadcrumb: false, backlink: '../../' },
+            data: { breadcrumb: false },
             title: aerPortsMap.totalEmissions.title,
+            resolve: {
+              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.PORT_CALL_SUMMARY),
+            },
             canActivate: [canActivatePortCallSummary],
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-ports/aer-port-call-summary').then(
@@ -66,9 +69,12 @@ export const AER_PORTS_ROUTES: Routes = [
           },
           {
             path: AerPortsWizardStep.PORT_DETAILS,
-            data: { breadcrumb: false, backlink: `../${AerPortsWizardStep.SELECT_SHIP}` },
+            data: { breadcrumb: false },
             title: aerPortsMap.portDetails.title,
             canActivate: [canActivatePortDetails],
+            resolve: {
+              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.PORT_DETAILS),
+            },
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-ports/aer-port-details').then((c) => c.AerPortDetailsComponent),
           },
@@ -77,9 +83,12 @@ export const AER_PORTS_ROUTES: Routes = [
             children: [
               {
                 path: '',
-                data: { breadcrumb: false, backlink: `../${AerPortsWizardStep.PORT_DETAILS}` },
+                data: { breadcrumb: false },
                 title: aerPortsMap.totalEmissions.title,
                 canActivate: [canActivatePortEmissions],
+                resolve: {
+                  backlink: aerPortsBacklinkResolver(AerPortsWizardStep.IN_PORT_EMISSIONS),
+                },
                 loadComponent: () =>
                   import('@requests/common/aer/components/aer-emissions-calculations').then(
                     (c) => c.AerEmissionsCalculationsComponent,

@@ -13,8 +13,8 @@ import { AER_REVIEW_SKIPPED_ROUTE_PREFIX } from '@requests/timeline/aer-review-s
 
 @Component({
   selector: 'mrtm-aer-review-skipped',
-  standalone: true,
   imports: [TaskSuperListComponent],
+  standalone: true,
   templateUrl: './aer-review-skipped.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

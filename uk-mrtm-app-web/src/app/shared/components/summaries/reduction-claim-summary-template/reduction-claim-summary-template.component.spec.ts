@@ -37,7 +37,7 @@ describe('ReductionClaimSummaryTemplateComponent', () => {
   });
 
   it('should display all HTML elements', () => {
-    expect(page.heading3.textContent).toEqual('Test heading');
+    expect(page.heading2.textContent).toEqual('Test heading');
     expect(page.summariesContents).toEqual([
       'Will you be making an emissions reduction claim relating to eligible fuels?',
       'Not provided',
@@ -49,7 +49,7 @@ describe('ReductionClaimSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Will you be making an emissions reduction claim relating to eligible fuels?',
       'Yes',
-      'Change',
+      'Change emissions reduction claim for eligible fuels',
     ]);
   });
 });

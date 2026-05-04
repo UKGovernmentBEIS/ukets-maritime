@@ -1,8 +1,8 @@
 <mrtm-wizard-step
   (formSubmit)="onSubmit()"
-  [caption]="map.caption"
+  [caption]="materialityLevelMap.title"
   [formGroup]="formGroup"
-  [heading]="map.title"
+  [heading]="materialityLevelMap.materialityDetails.title"
   [showReturnLink]="true"
   [isTwoThirds]="true">
   <p class="govuk-body">
@@ -18,7 +18,7 @@
     class="govuk-!-margin-bottom-9"
     formControlName="materialityDetails"
     govuk-textarea
-    label="{{ map.materialityDetails.title }}"
+    label="What is the materiality level?"
     labelSize="small"
     [maxLength]="10000"></div>
 </mrtm-wizard-step>

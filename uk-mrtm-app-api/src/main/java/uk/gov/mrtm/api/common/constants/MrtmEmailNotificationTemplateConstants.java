@@ -14,4 +14,13 @@ public final class MrtmEmailNotificationTemplateConstants {
     public static final String FIELDS = "fields";
     public static final String IS_FOR_FORDWAY = "isFordway";
     public static final String AER_YEAR = "aerYear";
+    public static final String FIRST_NAME = "firstName";
+    public static final String LAST_NAME = "lastName";
+    public static final String TELEPHONE_COUNTRY_CODE = "telephoneCountryCode";
+    public static final String TELEPHONE_NUMBER = "telephoneNumber";
+    public static final String MOBILE_PHONE_COUNTRY_CODE = "mobilePhoneCountryCode";
+    public static final String MOBILE_NUMBER = "mobileNumber";
+    public static final String EMAIL = "email";
+    public static final String USER_TYPE = "userType";
+    public static final String CONTACT_TYPES = "contactTypes";
 }

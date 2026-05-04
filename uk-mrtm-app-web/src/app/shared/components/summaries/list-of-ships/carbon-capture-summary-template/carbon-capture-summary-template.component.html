@@ -1,23 +1,31 @@
-@if (data) {
+@if (data()) {
   <h2 class="govuk-heading-m">Application of carbon capture and storage technologies</h2>
   <dl [hasBorders]="true" govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Are carbon capture and storage technologies being applied ?</dt>
-      <dd govukSummaryListRowValue>{{ data.exist | booleanToText }}</dd>
-      @if (isEditable) {
+      <dd govukSummaryListRowValue>{{ data().exist | booleanToText }}</dd>
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">whether carbon capture and storage technologies are being applied</span>
+          </a>
         </dd>
       }
     </div>
-    @if (data?.technologies; as technologies) {
+    @if (data()?.technologies; as technologies) {
       @if (technologies.description) {
         <div govukSummaryListRow>
           <dt govukSummaryListRowKey>Describe the technology that is used for carbon capture and storage</dt>
           <dd govukSummaryListRowValue class="pre-wrap">{{ technologies.description }}</dd>
-          @if (isEditable) {
+          @if (isEditable()) {
             <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+                Change
+                <span class="govuk-visually-hidden">
+                  description of technology that is used for carbon capture and storage
+                </span>
+              </a>
             </dd>
           }
         </div>
@@ -25,11 +33,14 @@
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Uploaded file</dt>
         <dd govukSummaryListRowValue>
-          <mrtm-summary-download-files [files]="files" />
+          <mrtm-summary-download-files [files]="files()" />
         </dd>
-        @if (isEditable) {
+        @if (isEditable()) {
           <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">uploaded file</span>
+            </a>
           </dd>
         }
       </div>
@@ -43,9 +54,12 @@
               }
             </ul>
           </dd>
-          @if (isEditable) {
+          @if (isEditable()) {
             <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+                Change
+                <span class="govuk-visually-hidden">emission source this technology is applied to</span>
+              </a>
             </dd>
           }
         </div>

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { VerificationBodyCreationDTO, VerificationBodyDTO } from '@mrtm/api';
@@ -16,7 +16,6 @@ import { CountryPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-verification-body-summary',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
@@ -27,11 +26,12 @@ import { CountryPipe } from '@shared/pipes';
     LinkDirective,
     CountryPipe,
   ],
+  standalone: true,
   templateUrl: './verification-body-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationBodySummaryComponent {
-  @Input() summaryInfo: VerificationBodyCreationDTO | VerificationBodyDTO;
-  @Input() formRouterLink = 'edit';
-  @Input() editable = true;
+  readonly summaryInfo = input.required<VerificationBodyCreationDTO | VerificationBodyDTO>();
+  readonly formRouterLink = input('edit');
+  readonly editable = input(true);
 }

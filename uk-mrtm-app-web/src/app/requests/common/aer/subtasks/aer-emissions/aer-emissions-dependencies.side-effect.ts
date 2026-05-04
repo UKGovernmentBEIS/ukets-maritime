@@ -2,7 +2,6 @@ import { Provider } from '@angular/core';
 
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { AerShipEmissions } from '@mrtm/api';
 
@@ -15,6 +14,7 @@ import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissi
 import { FuelsAndEmissionsFactorsExtended } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 import { AllFuels } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const emissionSourcesDependencyCheck = (
   currentPayload: AerShipEmissions,

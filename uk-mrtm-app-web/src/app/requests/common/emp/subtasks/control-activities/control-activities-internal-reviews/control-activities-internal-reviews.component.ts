@@ -19,10 +19,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-control-activities-internal-reviews',
-  standalone: true,
   imports: [EmpProcedureFormComponent, WizardStepComponent, ReactiveFormsModule, AboutProcedureDetailsComponent],
-  providers: [controlActivitiesInternalReviewsFormProvider],
+  standalone: true,
   templateUrl: './control-activities-internal-reviews.component.html',
+  providers: [controlActivitiesInternalReviewsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ControlActivitiesInternalReviewsComponent {

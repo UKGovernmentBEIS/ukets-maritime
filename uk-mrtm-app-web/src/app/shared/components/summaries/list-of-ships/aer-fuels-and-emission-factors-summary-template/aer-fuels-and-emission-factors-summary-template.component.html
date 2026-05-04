@@ -1,36 +1,45 @@
-<div class="overflow-auto overflow-auto-table">
-  <govuk-table
-    [columns]="columns()"
-    [data]="data()"
-    description="Fuels and emissions factors"
-    emptyTableText="No items to display">
-    <ng-template let-column="column" let-row="row">
-      @switch (column.field) {
-        @case ('origin') {
-          <span [notProvided]="row | fuelOriginTitle"></span>
-        }
-        @case ('carbonDioxide') {
-          <span [notProvided]="row[column.field]"></span>
-        }
-        @case ('methane') {
-          <span [notProvided]="row[column.field]"></span>
-        }
-        @case ('nitrousOxide') {
-          <span [notProvided]="row[column.field]"></span>
-        }
-        @case ('actionLinks') {
-          <div class="control-row justify-content-end">
-            <a [routerLink]="[changeLink(), row?.uniqueIdentifier]" [queryParams]="queryParams()" govukLink>Change</a>
-
-            @if (isDeletable()) {
-              <a (click)="handleRemove($event, row)" routerLink="." govukLink>Remove</a>
-            }
-          </div>
-        }
-        @default {
-          <span [notProvided]="row[column.field]"></span>
-        }
+<govuk-table
+  [columns]="columns()"
+  [data]="data()"
+  description="Fuels and emissions factors"
+  emptyTableText="No items to display"
+  mrtmScrollablePane
+  ariaLabel="Fuels and emissions factors">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) {
+      @case ('origin') {
+        <span [notProvided]="row | fuelOriginTitle"></span>
       }
-    </ng-template>
-  </govuk-table>
-</div>
+      @case ('carbonDioxide') {
+        <span [notProvided]="row[column.field]"></span>
+      }
+      @case ('methane') {
+        <span [notProvided]="row[column.field]"></span>
+      }
+      @case ('nitrousOxide') {
+        <span [notProvided]="row[column.field]"></span>
+      }
+      @case ('actionLinks') {
+        <ul class="govuk-summary-list__actions-list">
+          <li class="govuk-summary-list__actions-list-item">
+            <a govukLink [routerLink]="[changeLink(), row?.uniqueIdentifier]" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">{{ row | fuelOriginTitle }}</span>
+            </a>
+          </li>
+          @if (isDeletable()) {
+            <li class="govuk-summary-list__actions-list-item">
+              <a govukLink routerLink="." class="govuk-link--no-visited-state" (click)="handleRemove($event, row)">
+                Remove
+                <span class="govuk-visually-hidden">{{ row | fuelOriginTitle }}</span>
+              </a>
+            </li>
+          }
+        </ul>
+      }
+      @default {
+        <span [notProvided]="row[column.field]"></span>
+      }
+    }
+  </ng-template>
+</govuk-table>

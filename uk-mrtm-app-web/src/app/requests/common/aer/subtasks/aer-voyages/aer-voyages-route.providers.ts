@@ -15,9 +15,11 @@ import {
   AER_SELECT_SHIP_SUBMIT_NEXT_STEP,
   AER_SELECT_SHIPS_ITEMS_SELECTOR,
 } from '@requests/common/aer/components';
-import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
-import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
-import { AER_VOYAGE_PARAM } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
+import {
+  AER_VOYAGE_PARAM,
+  AER_VOYAGES_SUB_TASK,
+  AerVoyagesWizardStep,
+} from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { aerVoyagesMap } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages-subtask-list.map';
 
 export const aerVoyagesRouteProviders: Array<Provider> = [

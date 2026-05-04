@@ -21,6 +21,7 @@
     <div class="govuk-grid-column-one-half">
       <mrtm-filter-by-ship-and-date-range
         type="ports"
+        [initialFilterState]="$any(this.currentPersistableComponentState()?.activeFilters ?? null)"
         [ships]="shipsWithPortCalls()"
         filterByShipLabel="View port calls per ship"
         (filterChanged)="onFilterChanged($event)" />
@@ -42,7 +43,7 @@
 
 <div>
   @if (canContinue() || !filteredPortCalls()?.length) {
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   }
   <netz-return-to-task-or-action-page />
 </div>

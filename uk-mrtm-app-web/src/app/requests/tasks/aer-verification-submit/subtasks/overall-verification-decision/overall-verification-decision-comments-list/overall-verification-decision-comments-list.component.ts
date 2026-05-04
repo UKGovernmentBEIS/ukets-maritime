@@ -17,7 +17,6 @@ import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-sub
 
 @Component({
   selector: 'mrtm-overall-verification-decision-comments-list',
-  standalone: true,
   imports: [
     RouterLink,
     ButtonDirective,
@@ -26,6 +25,7 @@ import { aerVerificationSubmitQuery } from '@requests/tasks/aer-verification-sub
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './overall-verification-decision-comments-list.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

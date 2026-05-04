@@ -16,6 +16,7 @@
 <mrtm-port-calls-list-summary-template
   [warningMessages]="warningMessages()"
   [data]="ports()"
+  [queryParams]="{ change: true }"
   [editPath]="wizardStep.LIST_OF_PORTS" />
 
 @if (canSubmit()) {
@@ -24,7 +25,7 @@
 
 <div>
   @if (canSubmit()) {
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   }
   <netz-return-to-task-or-action-page />
 </div>

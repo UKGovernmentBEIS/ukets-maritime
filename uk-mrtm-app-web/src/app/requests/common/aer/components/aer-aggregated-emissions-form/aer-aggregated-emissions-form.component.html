@@ -1,7 +1,7 @@
 <fieldset govukFieldset>
   <legend govukLegend legendSize="medium">{{ header() }}</legend>
   @if (hint(); as hint) {
-    <div class="govuk-hint">{{ hint }}</div>
+    <div class="govuk-body">{{ hint }}</div>
   }
   <div govuk-text-input formControlName="co2" label="CO2 emissions (t)" widthClass="govuk-!-width-one-third"></div>
   <div govuk-text-input formControlName="ch4" label="CH4 emissions (tCO2e)" widthClass="govuk-!-width-one-third"></div>
@@ -9,12 +9,12 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-one-third">
-      <h4 class="govuk-heading-s govuk-!-margin-bottom-1">Total emissions (tCO2e)</h4>
-      <p class="govuk-body">
+      <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Total emissions (tCO2e)</p>
+      <p class="govuk-body govuk-!-margin-bottom-6">
         @if (!isNil(controlContainer.control.get('total').value)) {
           <strong>{{ controlContainer.control.get('total').value | bigNumber: 7 }}</strong>
         } @else {
-          Not calculated yet.
+          Not calculated yet
         }
       </p>
     </div>

@@ -15,10 +15,6 @@ const operatorsWorkflowMessagesMap: WorkflowMap = {
     title: 'Make a change to your emissions monitoring plan',
     button: 'Start an emission plan variation',
   },
-  EMP_NOTIFICATION: {
-    title: 'Notify the regulator of a non-significant change to your emissions monitoring plan',
-    button: 'Start a notification',
-  },
 };
 
 const regulatorsWorkflowMessagesMap: WorkflowMap = {

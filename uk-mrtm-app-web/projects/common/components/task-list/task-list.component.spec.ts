@@ -20,7 +20,7 @@ describe('TaskListComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(TaskListComponent);
     component = fixture.componentInstance;
-    component.sections = sections;
+    fixture.componentRef.setInput('sections', sections);
     fixture.detectChanges();
   });
 

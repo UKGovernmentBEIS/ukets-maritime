@@ -4,8 +4,8 @@ import { WarningTextComponent } from '@netz/govuk-components';
 
 @Component({
   selector: 'mrtm-task-content',
-  standalone: true,
   imports: [WarningTextComponent],
+  standalone: true,
   templateUrl: './task-content.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

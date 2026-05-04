@@ -3,13 +3,13 @@
   Check your answers
 </netz-page-heading>
 
-<mrtm-voyage-summary-template [data]="voyage()" [editable]="editable()" />
+<mrtm-voyage-summary-template [data]="voyage()" [editable]="editable()" [editQueryParams]="{ change: true }" />
 
 @if (editable() && !isVoyageCompleted()) {
   <button (click)="onSubmit()" govukButton netzPendingButton type="button">Continue</button>
 }
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../']">Return to: {{ wizardMap.title }}</a>
 </div>

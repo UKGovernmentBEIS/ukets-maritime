@@ -44,11 +44,10 @@ export const EMISSIONS_ROUTES: Routes = [
   },
   {
     path: 'ships/:shipId',
-    title: emissionsSubTasksMap.title,
-    data: { breadcrumb: false },
     children: [
       {
         path: '',
+        title: emissionsSubTasksMap.title,
         data: { breadcrumb: false },
         canActivate: [canActivateEmissionsShipSummary],
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.SHIP_SUMMARY) },

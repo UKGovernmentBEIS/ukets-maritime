@@ -6,22 +6,28 @@
       }
       @case ('actionLinks') {
         @if (isEditable()) {
-          <div class="control-row justify-content-end">
-            <a
-              govukLink
-              class="govuk-link--no-visited-state"
-              [routerLink]="[editLinkPrefix() + row['reference'] + '/' + STEP_ITEM_FORM_EDIT]"
-              [queryParams]="queryParams()">
-              Change
-            </a>
-            <a
-              govukLink
-              class="govuk-link--no-visited-state"
-              [routerLink]="[editLinkPrefix() + row['reference'] + '/' + STEP_ITEM_DELETE]"
-              [queryParams]="queryParams()">
-              Remove
-            </a>
-          </div>
+          <ul class="govuk-summary-list__actions-list">
+            <li class="govuk-summary-list__actions-list-item">
+              <a
+                govukLink
+                class="govuk-link--no-visited-state"
+                [routerLink]="[`${editLinkPrefix() + row['reference']}/${STEP_ITEM_FORM_EDIT}`]"
+                [queryParams]="queryParams()">
+                Change
+                <span class="govuk-visually-hidden">reference ({{ row['reference'] }})</span>
+              </a>
+            </li>
+            <li class="govuk-summary-list__actions-list-item">
+              <a
+                govukLink
+                class="govuk-link--no-visited-state"
+                [routerLink]="[`${editLinkPrefix() + row['reference']}/${STEP_ITEM_DELETE}`]"
+                [queryParams]="queryParams()">
+                Remove
+                <span class="govuk-visually-hidden">reference ({{ row['reference'] }})</span>
+              </a>
+            </li>
+          </ul>
         }
       }
       @default {

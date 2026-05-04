@@ -53,8 +53,14 @@ Alternatively, you can also provide your own content for the summary list with t
     <dd govukSummaryListRowValue>You can work here using any angular logic.</dd>
   </div>
   <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>Another row key.</dt>
-    <dd govukSummaryListRowValue>Another row value.</dd>
+    <dt govukSummaryListRowKey>Another row key</dt>
+    <dd govukSummaryListRowValue>Another row value</dd>
+    <dd govukSummaryListRowActions>
+      <a govukLink routerLink=".">
+        Change
+        <span class="govuk-visually-hidden">another row key</span>
+      </a>
+    </dd>
   </div>
 </dl>
 ```

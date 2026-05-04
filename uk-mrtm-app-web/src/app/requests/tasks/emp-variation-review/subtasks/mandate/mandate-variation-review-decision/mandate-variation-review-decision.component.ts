@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@a
 import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { RegisteredOwnerShipDetails } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
@@ -29,10 +27,10 @@ import {
 } from '@requests/tasks/emp-variation-review/components/review-decision';
 import { EmpVariationReviewService } from '@requests/tasks/emp-variation-review/services';
 import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-mandate-variation-review-decision',
-  standalone: true,
   imports: [
     ReviewDecisionComponent,
     WizardStepComponent,
@@ -40,14 +38,15 @@ import { MandateSummaryTemplateComponent, WizardStepComponent } from '@shared/co
     ReactiveFormsModule,
     WarningTextComponent,
   ],
+  standalone: true,
   templateUrl: './mandate-variation-review-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     reviewEmpSubtaskDecisionFormProvider(MANDATE_SUB_TASK, [
       validateAllIsmShipsHaveRegisteredOwner,
       hasNeedsReviewRegisteredOwners,
     ]),
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -69,7 +68,7 @@ export class MandateVariationReviewDecisionComponent {
     () => !isNil(this.mandate?.registeredOwners.find((ro) => ro.needsReview === true)),
   );
 
-  public allShipsAssociated: Signal<boolean> = computed(() => {
+  public readonly allShipsAssociated: Signal<boolean> = computed(() => {
     const ismShips = this.store.select(empCommonQuery.selectIsmShipImoNumbers)();
     const registeredOwnersShips = new Set<RegisteredOwnerShipDetails['imoNumber']>(
       (this.mandate?.registeredOwners ?? [])

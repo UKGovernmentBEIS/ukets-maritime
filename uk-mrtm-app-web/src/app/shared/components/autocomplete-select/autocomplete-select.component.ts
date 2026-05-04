@@ -1,24 +1,21 @@
-import { NgClass } from '@angular/common';
 import {
   Component,
   computed,
   contentChild,
   ElementRef,
-  inject,
   input,
   OnInit,
   signal,
   viewChild,
   viewChildren,
 } from '@angular/core';
-import { ControlContainer, FormControl, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 
 import { takeUntil } from 'rxjs';
 
 import {
   ErrorMessageComponent,
   FormInput,
-  FormService,
   GovukWidthClass,
   LabelDirective,
   LabelSizeType,
@@ -26,13 +23,13 @@ import {
 
 import { AutocompleteSelectOption } from '@shared/components/autocomplete-select/autocomplete-select.interface';
 import { AutocompleteSelectInputScrollSyncDirective } from '@shared/components/autocomplete-select/autocomplete-select-input-scroll-sync.directive';
-import { valuesAreEqual } from '@shared/utils';
+import { isEqual } from '@shared/utils';
 
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'div[mrtm-autocomplete-select]',
+  imports: [ReactiveFormsModule, ErrorMessageComponent, AutocompleteSelectInputScrollSyncDirective],
   standalone: true,
-  imports: [ReactiveFormsModule, NgClass, ErrorMessageComponent, AutocompleteSelectInputScrollSyncDirective],
   templateUrl: './autocomplete-select.component.html',
   styleUrl: './autocomplete-select.component.scss',
 })
@@ -156,11 +153,7 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
   });
 
   constructor() {
-    const ngControl = inject(NgControl, { self: true, optional: true })!;
-    const formService = inject(FormService);
-    const container = inject(ControlContainer, { optional: true })!;
-
-    super(ngControl, formService, container);
+    super();
   }
 
   writeValue(value: AutocompleteSelectOption) {
@@ -353,7 +346,7 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
        * Autoselects an option if the queryString matches `text` of a valid option.
        * It will autocorrect queryString case if different from `option.text`.
        */
-      if (!valuesAreEqual(this.control.value, queryMatchingOption)) {
+      if (!isEqual(this.control.value, queryMatchingOption)) {
         this.setControlValue(queryMatchingOption);
       }
     } else if (this.autoselectOnBlur()) {

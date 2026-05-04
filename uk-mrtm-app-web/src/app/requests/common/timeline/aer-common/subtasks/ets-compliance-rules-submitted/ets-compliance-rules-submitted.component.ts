@@ -12,13 +12,13 @@ import {
 
 @Component({
   selector: 'mrtm-ets-compliance-rules-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     EtsComplianceRulesSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './ets-compliance-rules-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

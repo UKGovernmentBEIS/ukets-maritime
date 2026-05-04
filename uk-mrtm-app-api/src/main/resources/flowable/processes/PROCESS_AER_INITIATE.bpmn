@@ -6,8 +6,8 @@
         <timeCycle>R/2026-01-01T00:10:00/P1Y</timeCycle>
       </timerEventDefinition>
     </startEvent>
-    <serviceTask id="INITIATE_AERs" name="Initiate AERs" flowable:delegateExpression="#{initiateAersHandlerFlowable}">
-      <multiInstanceLoopCharacteristics flowable:async="true" flowable:collection="accounts" flowable:elementVariable="accountId">
+    <serviceTask id="INITIATE_AERs" name="Initiate AERs" flowable:exclusive="true" flowable:async="true" flowable:delegateExpression="#{initiateAersHandlerFlowable}">
+      <multiInstanceLoopCharacteristics isSequential="true" flowable:collection="accounts" flowable:elementVariable="accountId">
         <extensionElements />
       </multiInstanceLoopCharacteristics>
     </serviceTask>

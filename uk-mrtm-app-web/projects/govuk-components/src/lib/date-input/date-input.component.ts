@@ -1,9 +1,7 @@
 import { DatePipe } from '@angular/common';
-import { Component, DoCheck, inject, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, DoCheck, inject, input, OnDestroy, OnInit } from '@angular/core';
 import {
-  ControlContainer,
   ControlValueAccessor,
-  NgControl,
   ReactiveFormsModule,
   UntypedFormBuilder,
   ValidationErrors,
@@ -14,7 +12,7 @@ import { BehaviorSubject, combineLatest, filter, takeUntil } from 'rxjs';
 
 import { ErrorMessageComponent, GovukValidators } from '../error-message';
 import { FieldsetDirective, FieldsetHintDirective, LegendDirective, LegendSizeType } from '../fieldset';
-import { FormInput, FormService } from '../form';
+import { FormInput } from '../form';
 import { DateInputValidators } from './date-input.validators';
 
 /*
@@ -24,8 +22,8 @@ import { DateInputValidators } from './date-input.validators';
  */
 @Component({
   selector: 'div[govuk-date-input]',
-  standalone: true,
   imports: [ErrorMessageComponent, ReactiveFormsModule, FieldsetHintDirective, LegendDirective, FieldsetDirective],
+  standalone: true,
   templateUrl: './date-input.component.html',
   providers: [DatePipe],
 })
@@ -33,15 +31,16 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
   private readonly datePipe = inject(DatePipe);
   private readonly formBuilder = inject(UntypedFormBuilder);
 
-  @Input() label: string;
-  @Input() legendSize: LegendSizeType;
-  @Input() hint: string;
-  @Input() min: Date;
-  @Input() max: Date;
-  @Input() isRequired: boolean;
-  @Input() emptyMessage: string = 'Enter a date';
-  @Input() incompleteMessage: string = 'Enter a full date';
-  @Input() unrealDateMessage: string = 'Enter a real date';
+  readonly label = input<string>();
+  readonly labelSize = input<LegendSizeType>('normal');
+  readonly isLabelHidden = input(false);
+  readonly hint = input<string>();
+  readonly min = input<Date>();
+  readonly max = input<Date>();
+  readonly isRequired = input<boolean>();
+  readonly emptyMessage = input<string>('Enter a date');
+  readonly incompleteMessage = input<string>('Enter a full date');
+  readonly unrealDateMessage = input<string>('Enter a real date');
 
   formGroup = this.formBuilder.group(
     {
@@ -60,11 +59,7 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
   private onBlur: () => any;
 
   constructor() {
-    const ngControl = inject(NgControl, { self: true, optional: true })!;
-    const formService = inject(FormService);
-    const container = inject(ControlContainer, { optional: true })!;
-
-    super(ngControl, formService, container);
+    super();
   }
 
   override ngOnInit(): void {
@@ -97,12 +92,14 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
       this.touch$.next(this.control.touched);
     }
 
-    if (this.min$.getValue() !== this.min) {
-      this.min$.next(this.min);
+    const min = this.min();
+    if (this.min$.getValue() !== min) {
+      this.min$.next(min);
     }
 
-    if (this.max$.getValue() !== this.max) {
-      this.max$.next(this.max);
+    const max = this.max();
+    if (this.max$.getValue() !== max) {
+      this.max$.next(max);
     }
   }
 
@@ -178,19 +175,19 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
 
   // basic validators
   private combinedRulesValidator(): ValidationErrors {
-    const validationResults = DateInputValidators.getCombinedValidationResults(this.formGroup, this.isRequired);
+    const validationResults = DateInputValidators.getCombinedValidationResults(this.formGroup, this.isRequired());
 
     const errorMessage = validationResults?.isEmpty
-      ? this.emptyMessage
+      ? this.emptyMessage()
       : validationResults?.isIncomplete
-        ? this.incompleteMessage
+        ? this.incompleteMessage()
         : validationResults?.isUnrealDate
-          ? this.unrealDateMessage
+          ? this.unrealDateMessage()
           : '';
     return {
       ...GovukValidators.builder(
         errorMessage,
-        DateInputValidators.combinedRulesValidator(this.formGroup, this.isRequired),
+        DateInputValidators.combinedRulesValidator(this.formGroup, this.isRequired()),
       )(this.formGroup),
     };
   }
@@ -198,15 +195,15 @@ export class DateInputComponent extends FormInput implements ControlValueAccesso
   // other validators
   private beforeOrAfterDateValidator(): ValidationErrors {
     const errorMessage =
-      DateInputValidators.buildDate(this.formGroup.value) < this.min
-        ? `This date must be the same as or after ${this.datePipe.transform(this.min, 'd MMMM y')}`
-        : DateInputValidators.buildDate(this.formGroup.value) > this.max
-          ? `This date must be the same as or before ${this.datePipe.transform(this.max, 'd MMMM y')}`
+      DateInputValidators.buildDate(this.formGroup.value) < this.min()
+        ? `This date must be the same as or after ${this.datePipe.transform(this.min(), 'd MMMM y')}`
+        : DateInputValidators.buildDate(this.formGroup.value) > this.max()
+          ? `This date must be the same as or before ${this.datePipe.transform(this.max(), 'd MMMM y')}`
           : '';
     return {
       ...GovukValidators.builder(
         errorMessage,
-        DateInputValidators.minMaxDateValidator(this.min, this.max),
+        DateInputValidators.minMaxDateValidator(this.min(), this.max()),
       )(this.control),
     };
   }

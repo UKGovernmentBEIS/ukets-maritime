@@ -57,7 +57,7 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(page.queryAll('h3').map((heading) => heading.textContent)).toEqual([
+    expect(page.queryAll('h2').map((heading) => heading.textContent)).toEqual([
       'Emissions summary',
       'Emission calculations',
     ]);
@@ -66,22 +66,34 @@ describe('AerTotalEmissionsSummaryTemplateComponent', () => {
     expect(tableElements.length).toEqual(1);
 
     const totalEmissionsTable = page.query('table[aria-label="Emission calculations"]');
-    expect(totalEmissionsTable).toBeInTheDocument();
+    expect(totalEmissionsTable).toBeTruthy();
 
     expect(
       Array.from(totalEmissionsTable.querySelectorAll('thead th').values())
         .map((el) => el.textContent.trim())
         .filter(Boolean),
-    ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+    ).toEqual([
+      'Emission type',
+      'CO2 emissions (t)',
+      'CH4 emissions (tCO2e)',
+      'N2O emissions (tCO2e)',
+      'Total emissions (tCO2e)',
+    ]);
   });
 
   it('should display total emissions table', () => {
-    expect(page.totalEmissionsTableElement).toBeInTheDocument();
+    expect(page.totalEmissionsTableElement).toBeTruthy();
     expect(
       Array.from(page.totalEmissionsTableElement.querySelectorAll('thead th'))
         .map((col) => col.textContent.trim())
         .filter(Boolean),
-    ).toEqual(['CO2 emissions (t)', 'CH4 emissions (tCO2e)', 'N2O emissions (tCO2e)', 'Total emissions (tCO2e)']);
+    ).toEqual([
+      'Emission type',
+      'CO2 emissions (t)',
+      'CH4 emissions (tCO2e)',
+      'N2O emissions (tCO2e)',
+      'Total emissions (tCO2e)',
+    ]);
 
     expect(
       Array.from(page.totalEmissionsTableElement.querySelectorAll('tbody tr td:first-child')).map((col) =>

@@ -25,6 +25,8 @@
                 @case ('authorityStatus') {
                   @if (row.authorityStatus !== 'PENDING') {
                     <div
+                      label="Select authority status"
+                      [isLabelHidden]="true"
                       [options]="row.authorityStatus === 'ACCEPTED' ? authorityStatusesAccepted : authorityStatuses"
                       formControlName="authorityStatus"
                       govuk-select

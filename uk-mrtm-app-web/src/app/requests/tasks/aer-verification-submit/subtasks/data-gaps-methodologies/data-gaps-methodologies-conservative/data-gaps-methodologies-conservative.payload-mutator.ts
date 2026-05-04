@@ -21,11 +21,11 @@ export class DataGapsMethodologiesConservativePayloadMutator extends PayloadMuta
         if (!payload.verificationReport) {
           payload.verificationReport = {} as AerVerificationReport;
         }
-        if (payload.verificationReport.dataGapsMethodologies?.methodConservative !== userInput.methodConservative) {
-          payload.verificationReport.dataGapsMethodologies.methodConservative = userInput.methodConservative;
-          payload.verificationReport.dataGapsMethodologies.noConservativeMethodDetails =
-            userInput.noConservativeMethodDetails;
-        }
+
+        payload.verificationReport.dataGapsMethodologies.methodConservative = userInput.methodConservative;
+        payload.verificationReport.dataGapsMethodologies.noConservativeMethodDetails = userInput.methodConservative
+          ? null
+          : userInput.noConservativeMethodDetails;
       }),
     );
   }

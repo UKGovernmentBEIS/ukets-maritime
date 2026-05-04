@@ -6,7 +6,12 @@
     <dd govukSummaryListRowValue [notProvided]="opinionStatement()?.emissionsCorrect | booleanToText"></dd>
     @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">
+            whether the reporting and surrender obligation emissions are correct
+          </span>
+        </a>
       </dd>
     }
   </div>
@@ -18,11 +23,14 @@
         [notProvided]="
           isNil(opinionStatement()?.manuallyProvidedTotalEmissions)
             ? opinionStatement()?.manuallyProvidedTotalEmissions
-            : opinionStatement()?.manuallyProvidedTotalEmissions + ' tCO2e'
+            : `${opinionStatement()?.manuallyProvidedTotalEmissions} tCO2e`
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">{{ map.manuallyProvidedTotalEmissions.title }}</span>
+          </a>
         </dd>
       }
     </div>
@@ -33,11 +41,16 @@
         [notProvided]="
           isNil(opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction)
             ? opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction
-            : opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction + ' tCO2e'
+            : `${opinionStatement()?.manuallyProvidedLessVoyagesInNorthernIrelandDeduction} tCO2e`
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">
+              {{ map.manuallyProvidedLessVoyagesInNorthernIrelandDeduction.title }}
+            </span>
+          </a>
         </dd>
       }
     </div>
@@ -48,11 +61,16 @@
         [notProvided]="
           isNil(opinionStatement()?.manuallyProvidedSurrenderEmissions)
             ? opinionStatement()?.manuallyProvidedSurrenderEmissions
-            : opinionStatement()?.manuallyProvidedSurrenderEmissions + ' tCO2e'
+            : `${opinionStatement()?.manuallyProvidedSurrenderEmissions} tCO2e`
         "></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.EMISSIONS_FORM" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">
+              {{ map.manuallyProvidedSurrenderEmissions.title }}
+            </span>
+          </a>
         </dd>
       }
     </div>
@@ -82,7 +100,10 @@
       "></dd>
     @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="wizardStep.ADDITIONAL_CHANGES" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="wizardStep.ADDITIONAL_CHANGES" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">changes reported by the verifier</span>
+        </a>
       </dd>
     }
   </div>
@@ -98,7 +119,10 @@
       [notProvided]="opinionStatement()?.siteVisit?.type | aerSiteVisitTypeToLabel"></dd>
     @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="wizardStep.SITE_VISIT_TYPE" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="wizardStep.SITE_VISIT_TYPE" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">site verification</span>
+        </a>
       </dd>
     }
   </div>
@@ -122,7 +146,10 @@
       </dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.SITE_VISIT_IN_PERSON" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.SITE_VISIT_IN_PERSON" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">site visits</span>
+          </a>
         </dd>
       }
     </div>
@@ -141,7 +168,10 @@
       </dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.SITE_VISIT_IN_PERSON" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.SITE_VISIT_IN_PERSON" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">team members that made the site visit</span>
+          </a>
         </dd>
       }
     </div>
@@ -153,7 +183,10 @@
       <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="$any(opinionStatement()?.siteVisit)?.reason"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="wizardStep.SITE_VISIT_VIRTUAL" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="wizardStep.SITE_VISIT_VIRTUAL" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">reasons for making a virtual site visit</span>
+          </a>
         </dd>
       }
     </div>

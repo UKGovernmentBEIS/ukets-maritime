@@ -24,7 +24,7 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(OperatorDetailsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.operatorDetails = {
+    fixture.componentRef.setInput('operatorDetails', {
       operatorName: 'OOperatorAccount13',
       imoNumber: '1333333',
       contactAddress: {
@@ -46,16 +46,16 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
         registrationNumber: '111111',
       } as OrganisationStructure,
       activityDescription: 'some activities',
-    };
-    component.files = [];
-    component.wizardStep = {
+    });
+    fixture.componentRef.setInput('files', []);
+    fixture.componentRef.setInput('wizardStep', {
       OPERATOR_DETAILS_OPERATOR_FORM: 'operator',
       OPERATOR_DETAILS_UNDERTAKEN_ACTIVITIES: 'undertaken-activities',
       OPERATOR_DETAILS_LEGAL_STATUS_OF_ORGANISATION: 'legal-status-of-organisation',
       OPERATOR_DETAILS_ORGANISATION_DETAILS: 'organisation-details',
-    };
+    });
 
-    component.isEditable = true;
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });
@@ -70,25 +70,25 @@ describe('OperatorDetailsSummaryTemplateComponent', () => {
       '1333333',
       'Operator name',
       'OOperatorAccount13',
-      'Change',
+      'Change operator name',
       'Contact address',
       'Some address 1Not providedLondonCardiffGW R45 UTNot provided',
-      'Change',
+      'Change contact address',
       'Description',
       'some activities',
-      'Change',
+      'Change description of activities carried out by the Maritime Operator',
       'Organisation legal status',
       'Company',
-      'Change',
+      'Change organisation legal status',
       'Company registration number',
       '111111',
-      'Change',
+      'Change  company registration number',
       'Registered address',
       'Some address 1Not providedLondonCardiff54U H86Not provided',
-      'Change',
+      'Change  registered address',
       'Upload proof of registered address',
       'Not provided',
-      'Change',
+      'Change upload proof of registered address',
     ]);
   });
 });

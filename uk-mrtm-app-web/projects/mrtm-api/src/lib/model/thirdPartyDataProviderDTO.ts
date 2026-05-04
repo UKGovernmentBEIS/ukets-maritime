@@ -9,8 +9,8 @@
  */
 
 export interface ThirdPartyDataProviderDTO {
-  providerName?: string;
-  receivedOn?: string;
-  importedOn?: string;
-  payload?: object;
+  id: number;
+  name: string;
+  clientId: string;
+  jwksUrl: string;
 }

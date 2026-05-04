@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.integration.external.aer.domain.StagingAerEntity;
 import uk.gov.mrtm.api.integration.external.aer.repository.StagingAerRepository;
-import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderDTO;
+import uk.gov.mrtm.api.integration.external.common.domain.ThirdPartyDataProviderStagingDetailsDTO;
 import uk.gov.mrtm.api.integration.external.common.mapper.ThirdPartyDataCommonMapper;
 import uk.gov.mrtm.api.integration.external.common.service.ThirdPartyProviderService;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskType;
@@ -22,7 +22,8 @@ public class AerThirdPartyProviderViewService implements ThirdPartyProviderServi
     private final StagingAerRepository stagingAerRepository;
     private final ThirdPartyDataCommonMapper thirdPartyDataCommonMapper = Mappers.getMapper(ThirdPartyDataCommonMapper.class);
 
-    public ThirdPartyDataProviderDTO getThirdPartyDataProviderInfo(Long accountId, RequestTaskPayload requestTaskPayload) {
+    @Override
+    public ThirdPartyDataProviderStagingDetailsDTO getThirdPartyDataProviderInfo(Long accountId, RequestTaskPayload requestTaskPayload) {
         AerApplicationSubmitRequestTaskPayload taskPayload = (AerApplicationSubmitRequestTaskPayload) requestTaskPayload;
 
         Optional<StagingAerEntity> stagingEntity =
@@ -31,7 +32,8 @@ public class AerThirdPartyProviderViewService implements ThirdPartyProviderServi
         return stagingEntity.map(thirdPartyDataCommonMapper::map).orElse(null);
     }
 
+    @Override
     public List<String> getTypes() {
-        return List.of(MrtmRequestTaskType.AER_APPLICATION_SUBMIT);
+        return List.of(MrtmRequestTaskType.AER_APPLICATION_SUBMIT, MrtmRequestTaskType.AER_APPLICATION_AMENDS_SUBMIT);
     }
 }

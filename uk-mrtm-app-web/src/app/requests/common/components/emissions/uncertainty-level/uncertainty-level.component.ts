@@ -7,7 +7,14 @@ import { UncertaintyLevel } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
-import { GovukSelectOption, LabelDirective, SelectComponent, TextInputComponent } from '@netz/govuk-components';
+import {
+  FieldsetDirective,
+  GovukSelectOption,
+  LabelDirective,
+  LegendDirective,
+  SelectComponent,
+  TextInputComponent,
+} from '@netz/govuk-components';
 
 import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
 import { emissionsShipSubtaskMap, emissionsSubtaskMap } from '@requests/common/components/emissions';
@@ -25,7 +32,6 @@ import { isAer } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-uncertainty-level',
-  standalone: true,
   imports: [
     ShipStepTitleCustomPipe,
     WizardStepComponent,
@@ -35,9 +41,12 @@ import { isAer } from '@shared/utils';
     SelectOptionToTitlePipe,
     ReturnToShipsListTableComponent,
     LabelDirective,
+    FieldsetDirective,
+    LegendDirective,
   ],
-  providers: [uncertaintyLevelFormProvider],
+  standalone: true,
   templateUrl: './uncertainty-level.component.html',
+  providers: [uncertaintyLevelFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class UncertaintyLevelComponent implements OnInit {

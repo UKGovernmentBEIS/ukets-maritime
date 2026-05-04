@@ -1,12 +1,13 @@
 import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { BehaviorSubject, catchError, map, shareReplay, switchMap, take, throwError } from 'rxjs';
+import { BehaviorSubject, catchError, map, shareReplay, take, throwError } from 'rxjs';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { BusinessErrorService, ErrorCodes, isBadRequest } from '@netz/common/error';
-import { TabDirective, TabsComponent } from '@netz/govuk-components';
+import { TabDirective, TabLazyDirective, TabsComponent } from '@netz/govuk-components';
 
 import { VerifierUsersListComponent } from '@shared/components';
 import { NotificationBannerComponent, NotificationBannerStore } from '@shared/components/notification-banner';
@@ -19,19 +20,23 @@ import {
 } from '@verification-bodies/+state/verification-bodies.selectors';
 import { VerificationBodiesStoreService } from '@verification-bodies/+state/verification-bodies-store.service';
 import { VerificationBodySummaryComponent } from '@verification-bodies/components';
+import { DataSupplierTabComponent } from '@verification-bodies/components/data-supplier-tab';
+import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 
 @Component({
   selector: 'mrtm-verification-body-details',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     TabsComponent,
     TabDirective,
+    TabLazyDirective,
     VerificationBodySummaryComponent,
     AsyncPipe,
     NotificationBannerComponent,
     VerifierUsersListComponent,
+    DataSupplierTabComponent,
   ],
+  standalone: true,
   templateUrl: './verification-body-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -39,9 +44,10 @@ export class VerificationBodyDetailsComponent implements OnInit {
   readonly currentTab$: BehaviorSubject<string> = new BehaviorSubject<string>(null);
   private readonly router: Router = inject(Router);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-  public readonly verificationBodyId$ = this.activatedRoute.paramMap.pipe(
-    map((paramMap) => Number(paramMap.get('id'))),
+  public readonly verificationBodyId = toSignal(
+    this.activatedRoute.paramMap.pipe(map((paramMap) => Number(paramMap.get('id')))),
   );
+  private readonly verifierUserStore: VerifierUserStore = inject(VerifierUserStore);
   private readonly businessErrorService: BusinessErrorService = inject(BusinessErrorService);
   private readonly verificationBodiesStoreService: VerificationBodiesStoreService =
     inject(VerificationBodiesStoreService);
@@ -76,11 +82,9 @@ export class VerificationBodyDetailsComponent implements OnInit {
 
   public handleSaveChanges({ authoritiesToUpdate, form }) {
     const dirtyControlsKeys = FormUtils.findDirtyControlsKeys(form);
-    this.verificationBodyId$
+    this.verificationBodiesStoreService
+      .updateVerifierUsersStatuses(this.verificationBodyId(), authoritiesToUpdate)
       .pipe(
-        switchMap((verificationBodyId) =>
-          this.verificationBodiesStoreService.updateVerifierUsersStatuses(verificationBodyId, authoritiesToUpdate),
-        ),
         catchError((err: unknown) => {
           if (!isBadRequest(err)) {
             return throwError(() => err);
@@ -88,11 +92,7 @@ export class VerificationBodyDetailsComponent implements OnInit {
 
           switch (err?.error?.code) {
             case ErrorCodes.AUTHORITY1007:
-              return this.verificationBodyId$.pipe(
-                switchMap((verificationBodyId) =>
-                  this.businessErrorService.showError(deleteUniqueActiveVerifierError(verificationBodyId)),
-                ),
-              );
+              return this.businessErrorService.showError(deleteUniqueActiveVerifierError(this.verificationBodyId()));
             case ErrorCodes.AUTHORITY1006:
               return this.businessErrorService.showError(savePartiallyNotFoundVerifierError);
             default:
@@ -117,11 +117,6 @@ export class VerificationBodyDetailsComponent implements OnInit {
   }
 
   public handleDiscardChanges() {
-    this.verificationBodyId$
-      .pipe(
-        switchMap((verificationBodyId) => this.verificationBodiesStoreService.loadVerifierUsers(verificationBodyId)),
-        take(1),
-      )
-      .subscribe();
+    this.verificationBodiesStoreService.loadVerifierUsers(this.verificationBodyId()).pipe(take(1)).subscribe();
   }
 }

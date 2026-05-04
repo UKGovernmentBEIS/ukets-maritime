@@ -17,7 +17,7 @@ describe('MiReportUseCaseService', () => {
   class TestUseCaseService extends MiReportUseCaseService {
     public reportType: MiReportType = MiReportType.COMPLETED_WORK;
     public columnValueMapper: Record<string, (value: unknown) => unknown> = {};
-    public tableColumns: Signal<GovukTableColumn[]> = signal([
+    public readonly tableColumns: Signal<GovukTableColumn[]> = signal([
       { field: 'Col 1', header: 'Column 1' },
       { field: 'Col 2', header: 'Column 2' },
       { field: 'Col 3', header: 'Column 3' },

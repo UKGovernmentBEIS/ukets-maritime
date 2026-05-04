@@ -2,19 +2,19 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Decision status</dt>
-    <dd govukSummaryListRowValue [notProvided]="reviewDecision.type | reviewDecisionType"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue [notProvided]="reviewDecision().type | reviewDecisionType"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Official notice text</dt>
-    <dd govukSummaryListRowValue [notProvided]="reviewDecision.details?.officialNotice"></dd>
-    @if (isEditable) {
+    <dd govukSummaryListRowValue [notProvided]="reviewDecision().details?.officialNotice"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -22,20 +22,20 @@
     <dt govukSummaryListRowKey>Is an operator follow up required</dt>
     <dd
       govukSummaryListRowValue
-      [notProvided]="reviewDecision.details?.followUp?.followUpResponseRequired | booleanToText"></dd>
-    @if (isEditable) {
+      [notProvided]="reviewDecision().details?.followUp?.followUpResponseRequired | booleanToText"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
-  @if (reviewDecision.details?.followUp?.followUpResponseRequired) {
+  @if (reviewDecision().details?.followUp?.followUpResponseRequired) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Explain what the operator should cover in their response</dt>
-      <dd govukSummaryListRowValue [notProvided]="reviewDecision.details.followUp.followUpRequest"></dd>
-      @if (isEditable) {
+      <dd govukSummaryListRowValue [notProvided]="reviewDecision().details.followUp.followUpRequest"></dd>
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
         </dd>
       }
     </div>
@@ -43,21 +43,21 @@
       <dt govukSummaryListRowKey>Date response</dt>
       <dd
         govukSummaryListRowValue
-        [notProvided]="reviewDecision.details.followUp.followUpResponseExpirationDate | govukDate"></dd>
-      @if (isEditable) {
+        [notProvided]="reviewDecision().details.followUp.followUpResponseExpirationDate | govukDate"></dd>
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
         </dd>
       }
     </div>
     <div govukSummaryListRow>
       @if (userRole() === 'REGULATOR') {
         <dt govukSummaryListRowKey>Notes</dt>
-        <dd govukSummaryListRowValue [notProvided]="reviewDecision.details.notes"></dd>
+        <dd govukSummaryListRowValue [notProvided]="reviewDecision().details.notes"></dd>
       }
-      @if (isEditable) {
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
         </dd>
       }
     </div>
@@ -69,12 +69,12 @@
     <dt govukSummaryListRowKey>Users</dt>
     <dd govukSummaryListRowValue>
       @for (recipientId of recipientIds; track recipientId) {
-        <p class="govuk-body">{{ recipientId | userInfoResolver: usersInfo }}</p>
+        <p class="govuk-body">{{ recipientId | userInfoResolver: usersInfo() }}</p>
       }
     </dd>
-    @if (isEditable) {
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
@@ -82,21 +82,21 @@
     <dt govukSummaryListRowKey>Name and signature on the official notice</dt>
     <dd
       govukSummaryListRowValue
-      [notProvided]="reviewDecisionNotification.signatory | userInfoResolver: usersInfo"></dd>
-    @if (isEditable) {
+      [notProvided]="reviewDecisionNotification().signatory | userInfoResolver: usersInfo()"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Official notice</dt>
     <dd govukSummaryListRowValue>
-      <mrtm-summary-download-files [files]="[officialNotice]" />
+      <mrtm-summary-download-files [files]="[officialNotice()]" />
     </dd>
-    @if (isEditable) {
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
       </dd>
     }
   </div>

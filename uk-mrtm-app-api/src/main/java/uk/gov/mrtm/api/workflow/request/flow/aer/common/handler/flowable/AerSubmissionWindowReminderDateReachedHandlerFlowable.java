@@ -40,6 +40,9 @@ public class AerSubmissionWindowReminderDateReachedHandlerFlowable implements Ja
         final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
 
         final Request request = requestService.findRequestById(requestId);
+
+        // TODO remove exception and make it return in case contact not found.
+        //  Update also AerSubmissionWindowReminderDateReachedHandler
         final UserInfoDTO accountPrimaryContact =
             requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
                 .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));

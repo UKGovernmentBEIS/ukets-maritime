@@ -1,33 +1,24 @@
-import { formatDate, NgClass, SlicePipe } from '@angular/common';
+import { formatDate, SlicePipe } from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
+  computed,
   contentChild,
   ElementRef,
-  HostListener,
   inject,
-  Input,
   input,
   OnInit,
   Renderer2,
   viewChild,
 } from '@angular/core';
-import {
-  AbstractControl,
-  ControlContainer,
-  ControlValueAccessor,
-  NgControl,
-  ReactiveFormsModule,
-  ValidatorFn,
-} from '@angular/forms';
+import { AbstractControl, ControlValueAccessor, ReactiveFormsModule, ValidatorFn } from '@angular/forms';
 
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs';
 
 import {
   ErrorMessageComponent,
   FormInput,
-  FormService,
   GovukValidators,
   GovukWidthClass,
   LabelDirective,
@@ -43,67 +34,52 @@ import { DatePickerService } from '@shared/components/date-picker/date-picker.se
 import { DatePickerButtonComponent } from '@shared/components/date-picker/date-picker-button/date-picker-button.component';
 import { DatePickerChunkPipe } from '@shared/components/date-picker/pipes/date-picker-chunk.pipe';
 
-/*
-  eslint-disable
-  @angular-eslint/component-selector,
-  @angular-eslint/prefer-on-push-component-change-detection
- */
 @Component({
   selector: 'div[mrtm-date-picker]',
+  imports: [ErrorMessageComponent, SlicePipe, DatePickerChunkPipe, DatePickerButtonComponent, ReactiveFormsModule],
   standalone: true,
-  imports: [
-    ErrorMessageComponent,
-    NgClass,
-    SlicePipe,
-    DatePickerChunkPipe,
-    DatePickerButtonComponent,
-    ReactiveFormsModule,
-  ],
   templateUrl: './date-picker.component.html',
   styleUrl: './date-picker.component.scss',
   providers: [DatePickerService],
-  changeDetection: ChangeDetectionStrategy.Default,
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    '(document:click)': 'onBackgroundClick($event)',
+  },
 })
 export class DatePickerComponent extends FormInput implements ControlValueAccessor, OnInit, AfterViewInit {
   public readonly datePickerService = inject(DatePickerService);
   private readonly renderer = inject(Renderer2);
-  protected readonly elementRef = inject(ElementRef);
+  private readonly elementRef = inject(ElementRef);
 
-  currentLabel = 'Insert date';
-  currentLabelSize = 'govuk-label';
-  isLabelHidden = true;
+  readonly label = input<string>();
+  readonly labelSize = input<LabelSizeType>('normal');
+  readonly isLabelHidden = input(false);
+  readonly hint = input<string>();
+  readonly widthClass = input<GovukWidthClass>('govuk-!-width-full');
+  readonly invalidDateFormatMessage = input<string>('Enter a valid date');
+  readonly datePickerConfig = input<DatePickerConfig>(datePickerConfigDefaults);
+
+  readonly templateLabel = contentChild(LabelDirective);
+  readonly input = viewChild<ElementRef<HTMLInputElement>>('input');
+
+  readonly currentLabelSize = computed(() => {
+    switch (this.labelSize()) {
+      case 'small':
+        return 'govuk-label govuk-label--s';
+      case 'medium':
+        return 'govuk-label govuk-label--m';
+      case 'large':
+        return 'govuk-label govuk-label--l';
+      default:
+        return 'govuk-label';
+    }
+  });
+
   disabled: boolean;
   titleId: string;
   private readonly INVALID_DATE = 'INVALID_DATE';
   private dateFormat = 'dd/MM/yyyy';
 
-  readonly hint = input<string>();
-  readonly invalidDateFormatMessage = input<string>('Enter a valid date');
-  readonly widthClass = input<GovukWidthClass>('govuk-!-width-full');
-  readonly datePickerConfig = input<DatePickerConfig>(datePickerConfigDefaults);
-  readonly templateLabel = contentChild(LabelDirective);
-  readonly input = viewChild<ElementRef<HTMLInputElement>>('input');
-  @Input() set label(label: string) {
-    this.currentLabel = label;
-    this.isLabelHidden = false;
-  }
-  @Input() set labelSize(size: LabelSizeType) {
-    switch (size) {
-      case 'small':
-        this.currentLabelSize = 'govuk-label govuk-label--s';
-        break;
-      case 'medium':
-        this.currentLabelSize = 'govuk-label govuk-label--m';
-        break;
-      case 'large':
-        this.currentLabelSize = 'govuk-label govuk-label--l';
-        break;
-      default:
-        this.currentLabelSize = 'govuk-label';
-        break;
-    }
-  }
-  @HostListener('document:click', ['$event'])
   onBackgroundClick(event: Event) {
     this.datePickerService.onBackgroundClick(event);
   }
@@ -111,11 +87,7 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
   onTouched: () => any;
 
   constructor() {
-    const ngControl = inject(NgControl, { self: true, optional: true })!;
-    const formService = inject(FormService);
-    const container = inject(ControlContainer, { optional: true })!;
-
-    super(ngControl, formService, container);
+    super();
   }
 
   override ngOnInit(): void {
@@ -123,7 +95,7 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
   }
 
   ngAfterViewInit(): void {
-    this.dateFormat = this.datePickerConfig()?.leadingZeros ? 'dd/MM/yyyy' : 'd/M/yyyy';
+    this.dateFormat = this.datePickerConfig()?.leadingZeros ? this.dateFormat : 'd/M/yyyy';
     this.titleId = `datepicker-title-${this.identifier}`;
     this.datePickerService.init(this.datePickerConfig(), this.elementRef);
     this.datePickerService.updateCalendar();

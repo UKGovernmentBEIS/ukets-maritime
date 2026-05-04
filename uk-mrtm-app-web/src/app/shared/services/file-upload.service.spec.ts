@@ -7,7 +7,7 @@ import { merge, Observable } from 'rxjs';
 import { FileUuidDTO } from '@mrtm/api';
 
 import { HttpStatuses } from '@netz/common/error';
-import { testSchedulerFactory } from '@netz/common/testing/marble-helpers';
+import { testSchedulerFactory } from '@netz/common/testing';
 import { MessageValidationErrors } from '@netz/govuk-components';
 
 import { FileUploadService } from '@shared/services';

@@ -9,11 +9,14 @@
   <div class="govuk-grid-row">
     @if (contact$ | async; as contact) {
       <div class="govuk-grid-column-two-thirds">
-        <govuk-panel title="The external contact {{ contact.name }} has been deleted"></govuk-panel>
-        <a [routerLink]="['/user/regulators']" fragment="external-contacts" govukLink>
-          Return to: Regulator users and contacts page
-        </a>
+        <govuk-panel title="The external contact {{ contact.name }} has been deleted" />
       </div>
     }
+  </div>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <a [routerLink]="['/user/regulators']" fragment="external-contacts" govukLink>
+      Return to: Regulator users and contacts page
+    </a>
   </div>
 }

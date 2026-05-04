@@ -9,8 +9,8 @@ import { AccountClosureStateService } from '@requests/tasks/account-closure/serv
 
 @Component({
   selector: 'mrtm-account-closure-confirmation',
-  standalone: true,
   imports: [ButtonDirective, PageHeadingComponent, PendingButtonDirective],
+  standalone: true,
   templateUrl: './account-closure-confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

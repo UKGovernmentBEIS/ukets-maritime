@@ -18,6 +18,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Service for managing cryptographic keys used in OAuth 2.0 Private Key JWT Client Authentication.
+ *
+ * <p>Manages RSA key pairs for signing client assertions and provides public keys via JWKS
+ * for the authorization server to verify JWT signatures.
+ *
+ */
 @Service
 public class KeyManagementService {
 
@@ -41,8 +48,10 @@ public class KeyManagementService {
   }
 
   private void loadKeysFromApplicationProperties() throws ParseException {
-    this.jwkSet = JWKSet.parse(this.jwkSetJon);
-    this.signingKey = (RSAKey) jwkSet.getKeys().get(0);
+    if (jwkSetJon != null && !jwkSetJon.isEmpty()) {
+      this.jwkSet = JWKSet.parse(this.jwkSetJon);
+      this.signingKey = (RSAKey) jwkSet.getKeys().get(0);
+    }
   }
 
   private void initializeJwkSetMap() throws JOSEException {
@@ -75,6 +84,14 @@ public class KeyManagementService {
     return signingKey;
   }
 
+  /**
+   * Returns the public JWK Set to be exposed at the JWKS endpoint.
+   *
+   * <p>The authorization server fetches public keys from this set to verify the signature
+   * of client assertion JWTs. Only public key material is returned; private keys are never exposed.
+   *
+   * @return the public JWK Set (without private key material)
+   */
   public JWKSet getPublicJwkSet() {
     return jwkSet.toPublicJWKSet();
   }

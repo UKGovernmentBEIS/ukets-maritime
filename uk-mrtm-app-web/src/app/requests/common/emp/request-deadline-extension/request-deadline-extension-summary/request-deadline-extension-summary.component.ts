@@ -28,7 +28,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-request-deadline-extension-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
@@ -36,6 +35,7 @@ interface ViewModel {
     ButtonDirective,
     RequestDeadlineExtensionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './request-deadline-extension-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -47,7 +47,7 @@ export class RequestDeadlineExtensionSummaryComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly notifyUsersService: NotifyUsersService = inject(NotifyUsersService);
-  private readonly accountId = this.taskStore.select(requestTaskQuery.selectRequestInfo)().accountId;
+  private readonly accountId = this.taskStore.select(requestTaskQuery.selectRequestTaskAccountId)();
   private readonly requestTaskId = this.taskStore.select(requestTaskQuery.selectRequestTaskId)();
   private readonly allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
   private readonly assignees = toSignal(this.notifyUsersService.getAssignees(this.requestTaskId));

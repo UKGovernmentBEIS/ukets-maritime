@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
-import { GovukComponentsModule } from '@netz/govuk-components';
+import { SummaryListComponent } from '@netz/govuk-components';
 
 import { GroupedSummaryListDirective } from '@shared/directives';
 
@@ -11,15 +11,12 @@ describe('GroupedSummaryListDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
   let element: HTMLElement;
 
-  @Component({ template: '<dl govuk-summary-list mrtmGroupedSummaryList [details]="[]"></dl>' })
+  @Component({
+    imports: [GroupedSummaryListDirective, SummaryListComponent],
+    standalone: true,
+    template: '<dl govuk-summary-list mrtmGroupedSummaryList [details]="[]"></dl>',
+  })
   class TestComponent {}
-
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [GovukComponentsModule, GroupedSummaryListDirective],
-      declarations: [TestComponent],
-    }).compileComponents();
-  });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(TestComponent);

@@ -47,7 +47,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-management-procedures-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ManagementProceduresSummaryTemplateComponent,
@@ -57,6 +56,7 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './management-procedures-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -65,7 +65,7 @@ export class ManagementProceduresSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empCommonQuery.selectManagementProcedures)();
     const originalManagementProcedures = this.store.select(
       empVariationRegulatorQuery.selectOriginalManagementProcedures,

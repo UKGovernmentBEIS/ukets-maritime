@@ -7,213 +7,226 @@
 
 
 	<changeSet id="0_1_0_add_account_users_contacts_report_type" author="dimopoulosc@unisystems.gr">
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<validCheckSum>1:any</validCheckSum>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="ENGLAND" />
 			<column name="type" value="LIST_OF_ACCOUNTS_USERS_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="NORTHERN_IRELAND" />
 			<column name="type" value="LIST_OF_ACCOUNTS_USERS_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="OPRED" />
 			<column name="type" value="LIST_OF_ACCOUNTS_USERS_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="SCOTLAND" />
 			<column name="type" value="LIST_OF_ACCOUNTS_USERS_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="WALES" />
 			<column name="type" value="LIST_OF_ACCOUNTS_USERS_CONTACTS" />
 		</insert>
 		<rollback>
 			<sql>
 				delete
-				from mi_report
+				from mi_report_system
 				where type = 'LIST_OF_ACCOUNTS_USERS_CONTACTS';
 			</sql>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="0_1_0_add_account_and_assigned_regulator_contact_site_report_type" author="dimopoulosc@unisystems.gr">
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<validCheckSum>1:any</validCheckSum>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="ENGLAND" />
 			<column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="NORTHERN_IRELAND" />
 			<column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="OPRED" />
 			<column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="SCOTLAND" />
 			<column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="WALES" />
 			<column name="type" value="LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS" />
 		</insert>
 		<rollback>
 			<sql>
 				delete
-				from mi_report
+				from mi_report_system
 				where type = 'LIST_OF_ACCOUNTS_ASSIGNED_REGULATOR_SITE_CONTACTS';
 			</sql>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="0_1_0_add_regulator_outstanding_request_tasks_report_type" author="dimopoulosc@unisystems.gr">
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<validCheckSum>1:any</validCheckSum>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="ENGLAND" />
 			<column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="NORTHERN_IRELAND" />
 			<column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="OPRED" />
 			<column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="SCOTLAND" />
 			<column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="WALES" />
 			<column name="type" value="REGULATOR_OUTSTANDING_REQUEST_TASKS" />
 		</insert>
 		<rollback>
 			<sql>
 				delete
-				from mi_report
+				from mi_report_system
 				where type = 'REGULATOR_OUTSTANDING_REQUEST_TASKS';
 			</sql>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="0_1_0_add_completed_work_report_type" author="dimopoulosc@unisystems.gr">
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<validCheckSum>1:any</validCheckSum>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="ENGLAND" />
 			<column name="type" value="COMPLETED_WORK" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="NORTHERN_IRELAND" />
 			<column name="type" value="COMPLETED_WORK" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="OPRED" />
 			<column name="type" value="COMPLETED_WORK" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="SCOTLAND" />
 			<column name="type" value="COMPLETED_WORK" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="WALES" />
 			<column name="type" value="COMPLETED_WORK" />
 		</insert>
 		<rollback>
 			<sql>
 				delete
-				from mi_report
+				from mi_report_system
 				where type = 'COMPLETED_WORK';
 			</sql>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="0_1_0_custom_report_type" author="dimopoulosc@unisystems.gr">
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<validCheckSum>1:any</validCheckSum>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="ENGLAND" />
 			<column name="type" value="CUSTOM" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="NORTHERN_IRELAND" />
 			<column name="type" value="CUSTOM" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="OPRED" />
 			<column name="type" value="CUSTOM" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="SCOTLAND" />
 			<column name="type" value="CUSTOM" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="WALES" />
 			<column name="type" value="CUSTOM" />
 		</insert>
 		<rollback>
 			<sql>
 				delete
-				from mi_report
+				from mi_report_system
 				where type = 'CUSTOM';
 			</sql>
 		</rollback>
 	</changeSet>
 
 	<changeSet id="0_1_0_add_verification_body_and_users_report_type" author="dimopoulosc@unisystems.gr">
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<validCheckSum>1:any</validCheckSum>
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="ENGLAND" />
 			<column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="NORTHERN_IRELAND" />
 			<column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="OPRED" />
 			<column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="SCOTLAND" />
 			<column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
 		</insert>
-		<insert tableName="mi_report">
-			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report)" />
+		<insert tableName="mi_report_system">
+			<column name="id" valueComputed="(SELECT COALESCE(MAX(id), 0) + 1 FROM mi_report_system)" />
 			<column name="competent_authority" value="WALES" />
 			<column name="type" value="LIST_OF_VERIFICATION_BODY_USERS" />
 		</insert>
 		<rollback>
 			<sql>
 				delete
-				from mi_report
+				from mi_report_system
 				where type = 'LIST_OF_VERIFICATION_BODY_USERS';
 			</sql>
 		</rollback>
+	</changeSet>
+
+	<changeSet id="0_1_0_delete_custom_mi_report_system_entries" author="P44065">
+		<sql>
+			delete from mi_report_system where type = 'CUSTOM';
+		</sql>
+		<rollback />
 	</changeSet>
 
 </databaseChangeLog>

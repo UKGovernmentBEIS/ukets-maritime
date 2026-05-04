@@ -21,15 +21,11 @@ export class DataGapsMethodologiesMisstatementPayloadMutator extends PayloadMuta
         if (!payload.verificationReport) {
           payload.verificationReport = {} as AerVerificationReport;
         }
-        if (
-          payload.verificationReport.dataGapsMethodologies?.materialMisstatementExist !==
-          userInput.materialMisstatementExist
-        ) {
-          payload.verificationReport.dataGapsMethodologies.materialMisstatementExist =
-            userInput.materialMisstatementExist;
-          payload.verificationReport.dataGapsMethodologies.materialMisstatementDetails =
-            userInput.materialMisstatementDetails;
-        }
+
+        payload.verificationReport.dataGapsMethodologies.materialMisstatementExist =
+          userInput.materialMisstatementExist;
+        payload.verificationReport.dataGapsMethodologies.materialMisstatementDetails =
+          !userInput.materialMisstatementExist ? null : userInput.materialMisstatementDetails;
       }),
     );
   }

@@ -75,6 +75,7 @@ describe('AerAggregatedDataUploadComponent', () => {
 
   const expectedValidAggregatedData = [
     {
+      dataInputType: 'MANUAL',
       emissionsBetweenUKAndNIVoyages: {
         ch4: '12.87654',
         co2: '500.12345',
@@ -113,6 +114,7 @@ describe('AerAggregatedDataUploadComponent', () => {
       uniqueIdentifier: '11111111-1111-4111-a111-111111111111',
     },
     {
+      dataInputType: 'MANUAL',
       emissionsBetweenUKAndNIVoyages: {
         ch4: '8.76543',
         co2: '340.987',
@@ -216,7 +218,7 @@ describe('AerAggregatedDataUploadComponent', () => {
   it('should display all HTMLElements and form with 0 errors', () => {
     expect(page.errorSummary).toBeFalsy();
     expect(page.heading1).toBeTruthy();
-    expect(page.heading1.textContent.trim()).toEqual('Upload the aggregated data for ships file');
+    expect(page.heading1.textContent).toEqual('Upload the aggregated data for ships file');
     expect(page.errorSummary).toBeFalsy();
     expect(page.uploadFileButton).toBeTruthy();
     expect(page.submitButton).toBeTruthy();

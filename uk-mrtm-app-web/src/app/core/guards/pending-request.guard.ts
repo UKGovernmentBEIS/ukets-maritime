@@ -14,7 +14,7 @@ export class PendingRequestGuard implements CanDeactivate<PendingRequest> {
 
   canDeactivate(component: PendingRequest | any): boolean | Observable<boolean> {
     return (
-      this.router.getCurrentNavigation()?.extras?.state?.forceNavigation ||
+      this.router.currentNavigation()?.extras?.state?.forceNavigation ||
       combineLatest([
         this.pendingRequest.isRequestPending$,
         ...(this.isPendingRequest(component) ? [component.pendingRequest.isRequestPending$] : []),

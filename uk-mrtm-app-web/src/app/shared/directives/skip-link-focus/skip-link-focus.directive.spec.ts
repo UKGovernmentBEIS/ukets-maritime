@@ -9,9 +9,9 @@ import { SkipLinkFocusDirective } from '@shared/directives';
 
 describe('SkipLinkFocusDirective', () => {
   @Component({
-    template: '<govuk-skip-link></govuk-skip-link><router-outlet mrtmSkipLinkFocus></router-outlet>',
-    standalone: true,
     imports: [SkipLinkComponent, RouterOutlet, SkipLinkFocusDirective],
+    standalone: true,
+    template: '<govuk-skip-link /><router-outlet mrtmSkipLinkFocus />',
   })
   class TestComponent {}
 

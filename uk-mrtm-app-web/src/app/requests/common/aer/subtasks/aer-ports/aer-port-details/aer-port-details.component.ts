@@ -18,7 +18,7 @@ import { AerShipEmissions } from '@mrtm/api';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { LinkDirective, SelectComponent } from '@netz/govuk-components';
+import { FieldsetDirective, LegendDirective, LinkDirective, SelectComponent } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
@@ -34,7 +34,6 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
 
 @Component({
   selector: 'mrtm-aer-port-details',
-  standalone: true,
   imports: [
     WizardStepComponent,
     SelectComponent,
@@ -43,9 +42,12 @@ import { AER_PORT_CODE_SELECT_ITEMS, AER_PORT_COUNTRY_SELECT_ITEMS } from '@shar
     RouterLink,
     TimeInputComponent,
     DatePickerComponent,
+    FieldsetDirective,
+    LegendDirective,
   ],
-  providers: [aerPortDetailsFormProvider],
+  standalone: true,
   templateUrl: './aer-port-details.component.html',
+  providers: [aerPortDetailsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerPortDetailsComponent {
@@ -58,8 +60,10 @@ export class AerPortDetailsComponent {
 
   public readonly wizardMap = aerPortsMap;
   public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS.filter((x) => x.value === 'GB');
-  private currentCountry = toSignal(this.countryCtrl.valueChanges.pipe(), { initialValue: this.countryCtrl.value });
-  public portSelectItems = computed(() => {
+  private readonly currentCountry = toSignal(this.countryCtrl.valueChanges.pipe(), {
+    initialValue: this.countryCtrl.value,
+  });
+  public readonly portSelectItems = computed(() => {
     const country = this.currentCountry();
     return !country
       ? []

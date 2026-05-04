@@ -2,11 +2,11 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ContentChild,
+  contentChild,
   inject,
-  Input,
+  input,
   TemplateRef,
-  ViewChild,
+  viewChild,
 } from '@angular/core';
 import { ControlValueAccessor } from '@angular/forms';
 
@@ -14,20 +14,20 @@ import { ConditionalContentDirective } from '../../directives';
 
 @Component({
   selector: 'govuk-checkbox',
+  imports: [],
   standalone: true,
   templateUrl: './checkbox.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [],
 })
 export class CheckboxComponent<T> implements ControlValueAccessor {
   readonly changeDetectorRef = inject(ChangeDetectorRef);
 
-  @Input() value: T;
-  @Input() label: string;
-  @Input() hint?: string;
-  @ContentChild(ConditionalContentDirective) readonly conditional: ConditionalContentDirective;
-  @ViewChild('conditionalTemplate', { static: true }) conditionalTemplate: TemplateRef<any>;
-  @ViewChild('checkboxTemplate', { static: true }) optionTemplate: TemplateRef<any>;
+  readonly value = input<T>();
+  readonly label = input<string>();
+  readonly hint = input<string>();
+  readonly conditional = contentChild(ConditionalContentDirective);
+  readonly conditionalTemplate = viewChild<TemplateRef<any>>('conditionalTemplate');
+  readonly optionTemplate = viewChild<TemplateRef<any>>('checkboxTemplate');
 
   isChecked: boolean;
   index: number;
@@ -68,9 +68,9 @@ export class CheckboxComponent<T> implements ControlValueAccessor {
 
   private setConditionalDisabledState() {
     if (this.isChecked && !this.isDisabled) {
-      this.conditional?.enableControls();
+      this.conditional()?.enableControls();
     } else {
-      this.conditional?.disableControls();
+      this.conditional()?.disableControls();
     }
   }
 }

@@ -26,12 +26,12 @@ interface ViewModel {
   empReviewDecisionDTO: EmpVariationReviewDecisionDto;
   isEditable: boolean;
   isSubTaskCompleted: boolean;
+  showDecisionDetails: boolean;
   wizardStep: { [s: string]: string };
 }
 
 @Component({
   selector: 'mrtm-review-variation-details-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     VariationDetailsSummaryTemplateComponent,
@@ -40,6 +40,7 @@ interface ViewModel {
     ReturnToTaskOrActionPageComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './variation-details-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -48,7 +49,7 @@ export class VariationDetailsSummaryComponent {
     TaskService<EmpVariationReviewTaskPayload>,
   );
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const empVariationDetails = this.store.select(empVariationQuery.selectEmpVariationDetails)();
 
     return {
@@ -57,6 +58,8 @@ export class VariationDetailsSummaryComponent {
       empReviewDecisionDTO: this.store.select(empVariationReviewQuery.selectEmpVariationDetailsReviewDecisionDTO)(),
       isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),
       isSubTaskCompleted: this.store.select(empVariationReviewQuery.selectIsVariationReviewDetailsSubtaskCompleted)(),
+      showDecisionDetails:
+        this.store.select(requestTaskQuery.selectRequestTaskType)() !== 'EMP_VARIATION_WAIT_FOR_AMENDS',
       wizardStep: VariationDetailsWizardStep,
     };
   });

@@ -18,10 +18,13 @@ export class DeleteRegisteredOwnerPayloadMutator extends PayloadMutator {
   ): Observable<EmpTaskPayload> {
     return of(
       produce(currentPayload, (payload: EmpTaskPayload) => {
-        payload.emissionsMonitoringPlan.mandate.registeredOwners =
-          payload.emissionsMonitoringPlan.mandate.registeredOwners.filter(
+        payload.emissionsMonitoringPlan.mandate = {
+          ...payload.emissionsMonitoringPlan.mandate,
+          responsibilityDeclaration: null,
+          registeredOwners: payload.emissionsMonitoringPlan.mandate.registeredOwners.filter(
             (registeredOwner) => registeredOwner.uniqueIdentifier !== userInput,
-          );
+          ),
+        };
       }),
     );
   }

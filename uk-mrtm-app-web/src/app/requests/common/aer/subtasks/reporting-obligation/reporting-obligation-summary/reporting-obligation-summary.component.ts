@@ -16,7 +16,6 @@ import { ReportingObligationSummaryTemplateComponent } from '@shared/components'
 
 @Component({
   selector: 'mrtm-reporting-obligation-summary',
-  standalone: true,
   imports: [
     ButtonDirective,
     PageHeadingComponent,
@@ -24,6 +23,7 @@ import { ReportingObligationSummaryTemplateComponent } from '@shared/components'
     ReportingObligationSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
   ],
+  standalone: true,
   templateUrl: './reporting-obligation-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

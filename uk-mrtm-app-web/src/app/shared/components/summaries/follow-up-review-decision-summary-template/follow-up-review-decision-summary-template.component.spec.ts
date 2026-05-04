@@ -20,7 +20,7 @@ describe('FollowUpReviewDecisionSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(FollowUpReviewDecisionSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.followUpReviewDecision = {
+    fixture.componentRef.setInput('followUpReviewDecision', {
       type: 'AMENDS_NEEDED',
       requiredChanges: [
         {
@@ -34,7 +34,7 @@ describe('FollowUpReviewDecisionSummaryTemplateComponent', () => {
       ],
       notes: 'some notes',
       dueDate: '2027-01-01',
-    };
+    });
 
     page = new Page(fixture);
     fixture.detectChanges();

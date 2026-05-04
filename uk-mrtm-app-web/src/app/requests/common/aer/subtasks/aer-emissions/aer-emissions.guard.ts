@@ -7,7 +7,6 @@ import { aerCommonQuery } from '@requests/common/aer/+state';
 import { isShipWizardCompleted } from '@requests/common/aer/subtasks/aer-emissions';
 import {
   AerEmissionsWizardStep,
-  getNextIncompleteShipStep,
   isWizardCompleted,
 } from '@requests/common/aer/subtasks/aer-emissions/aer-emissions.helpers';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
@@ -24,9 +23,22 @@ export const canActivateAerEmissionsShipSummary: CanActivateFn = (route) => {
 
   return (
     !isEditable ||
+    ship?.dataInputType === 'EXTERNAL_PROVIDER' ||
     (isEditable && isShipWizardCompleted(ship)) ||
-    createUrlTreeFromSnapshot(route, [`./${getNextIncompleteShipStep(ship)}`])
+    createUrlTreeFromSnapshot(route, [`./${AerEmissionsWizardStep.BASIC_DETAILS}`])
   );
+};
+
+export const canActivateAerEmissionsShipEdit: CanActivateFn = (route) => {
+  const shipId = route.params['shipId'];
+  if (!shipId) {
+    return false;
+  }
+  const store = inject(RequestTaskStore);
+
+  const isEditable = store.select(aerCommonQuery.selectIsShipEditable(shipId))();
+
+  return isEditable || createUrlTreeFromSnapshot(route, ['../']);
 };
 
 export const canActivateAerEmissionsSummary: CanActivateFn = (route) => {

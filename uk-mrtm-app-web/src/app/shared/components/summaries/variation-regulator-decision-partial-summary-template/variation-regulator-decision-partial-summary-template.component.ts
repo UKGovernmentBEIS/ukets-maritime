@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpAcceptedVariationDecisionDetails } from '@mrtm/api';
@@ -16,7 +16,6 @@ import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-variation-regulator-decision-partial-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     RouterLink,
@@ -27,14 +26,16 @@ import { NotProvidedDirective } from '@shared/directives';
     NotProvidedDirective,
     SummaryListRowActionsDirective,
   ],
+  standalone: true,
   templateUrl: './variation-regulator-decision-partial-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VariationRegulatorDecisionPartialSummaryTemplateComponent {
-  @Input({ required: true }) variationDecisionDetails: EmpAcceptedVariationDecisionDetails;
-  @Input() wizardStep: { [s: string]: string };
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
-
+  readonly variationDecisionDetails = input.required<EmpAcceptedVariationDecisionDetails>();
+  readonly wizardStep = input<{
+    [s: string]: string;
+  }>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
   readonly showNotes = input<boolean>(true);
 }

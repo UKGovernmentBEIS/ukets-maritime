@@ -1,26 +1,32 @@
 <dl govuk-summary-list>
   <div govukSummaryListRow>
-    <dt govukSummaryListRowKey>{{ additionalDocumentsMap.additionalDocumentsUpload.title }}</dt>
+    <dt govukSummaryListRowKey>{{ additionalDocumentsMap().additionalDocumentsUpload.title }}</dt>
     <dd
       govukSummaryListRowValue
       htmlDiff
-      [current]="additionalDocuments?.exist | booleanToText"
-      [previous]="originalAdditionalDocuments?.exist | booleanToText"></dd>
-    @if (isEditable) {
+      [current]="additionalDocuments()?.exist | booleanToText"
+      [previous]="originalAdditionalDocuments()?.exist | booleanToText"></dd>
+    @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep.ADDITIONAL_DOCUMENTS_UPLOAD]" [queryParams]="queryParams">Change</a>
+        <a govukLink [routerLink]="[wizardStep().ADDITIONAL_DOCUMENTS_UPLOAD]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">additional documents or information</span>
+        </a>
       </dd>
     }
   </div>
-  @if (additionalDocuments?.exist) {
+  @if (additionalDocuments()?.exist) {
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Uploaded files</dt>
       <dd govukSummaryListRowValue>
-        <mrtm-summary-download-files [files]="files" [originalFiles]="originalFiles" />
+        <mrtm-summary-download-files [files]="files()" [originalFiles]="originalFiles()" />
       </dd>
-      @if (isEditable) {
+      @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.ADDITIONAL_DOCUMENTS_UPLOAD]" [queryParams]="queryParams">Change</a>
+          <a govukLink [routerLink]="[wizardStep().ADDITIONAL_DOCUMENTS_UPLOAD]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">uploaded files</span>
+          </a>
         </dd>
       }
     </div>

@@ -9,13 +9,13 @@ import { OpinionStatementSummaryTemplateComponent, ReviewDecisionSummaryTemplate
 
 @Component({
   selector: 'mrtm-opinion-statement-submitted',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     OpinionStatementSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './opinion-statement-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

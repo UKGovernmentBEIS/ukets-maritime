@@ -4,7 +4,6 @@ import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil, isNumber } from 'lodash-es';
 
 import { TaskService } from '@netz/common/forms';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -21,13 +20,13 @@ import { reductionClaimFuelPurchaseFormProvider } from '@requests/common/aer/sub
 import { ReductionClaimFuelPurchaseFormModel } from '@requests/common/aer/subtasks/reduction-claim/reduction-claim-fuel-purchase/reduction-claim-fuel-purchase.types';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { MultipleFileInputComponent, WizardStepComponent } from '@shared/components';
+import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe } from '@shared/pipes';
-import { bigNumberUtils } from '@shared/utils';
+import { bigNumberUtils, isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-reduction-claim-fuel-purchase',
-  standalone: true,
   imports: [
     WizardStepComponent,
     LinkDirective,
@@ -36,9 +35,12 @@ import BigNumber from 'bignumber.js';
     SelectComponent,
     ReactiveFormsModule,
     MultipleFileInputComponent,
+    NotProvidedDirective,
+    FuelOriginTitlePipe,
   ],
-  providers: [reductionClaimFuelPurchaseFormProvider],
+  standalone: true,
   templateUrl: './reduction-claim-fuel-purchase.component.html',
+  providers: [reductionClaimFuelPurchaseFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReductionClaimFuelPurchaseComponent {
@@ -56,12 +58,20 @@ export class ReductionClaimFuelPurchaseComponent {
   public readonly wizardMap = reductionClaimMap;
   public readonly isNil: typeof isNil = isNil;
   public readonly downloadUrl: Signal<string> = this.store.select(requestTaskQuery.selectTasksDownloadUrl);
-  private readonly isChange = this.route.snapshot.queryParamMap.get('change') === 'true';
+  public readonly currentFuelPurchase = computed(() => {
+    const fuelPurchaseId = this.route.snapshot.paramMap.get('fuelPurchaseId');
+    if (fuelPurchaseId) {
+      return this.store.select(aerCommonQuery.selectReductionClaimFuelPurchase(fuelPurchaseId))();
+    }
+    return null;
+  });
+  private readonly isChange = !isNil(this.route.snapshot.paramMap.get('fuelPurchaseId'));
+
   protected readonly heading = computed(() => {
     return this.isChange ? this.wizardMap.purchaseEdit : this.wizardMap.purchaseAdd;
   });
 
-  public fuelTypeSelectItems = computed(() =>
+  public readonly fuelTypeSelectItems = computed(() =>
     this.store
       .select(aerCommonQuery.selectSupersetOfFuelTypes)()
       .map<GovukSelectOption>((shipFuel) => ({
@@ -83,8 +93,8 @@ export class ReductionClaimFuelPurchaseComponent {
       if (
         isNil(smfMass) ||
         isNil(co2EmissionFactor) ||
-        !isNumber(+smfMass) ||
-        !isNumber(+co2EmissionFactor) ||
+        typeof +smfMass !== 'number' ||
+        typeof +co2EmissionFactor !== 'number' ||
         new BigNumber(smfMass).isNaN() ||
         new BigNumber(co2EmissionFactor).isNaN()
       ) {

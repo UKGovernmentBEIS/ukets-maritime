@@ -70,22 +70,22 @@ describe('DataGapsDecisionComponent', () => {
     expect(page.summariesContents).toEqual([
       'Description of method to estimate fuel consumption',
       'test fuelConsumptionEstimationMethod',
-      'Change',
+      'Change description of method to estimate fuel consumption',
       'Name of person or position responsible for this procedure',
       'test responsiblePersonOrPosition',
-      'Change',
+      'Change name of person or position responsible for this procedure',
       'Formulae used',
       'test formulaeUsed',
-      'Change',
+      'Change formulae used',
       'Data sources',
       'test dataSources',
-      'Change',
+      'Change data sources',
       'Location where records are kept',
       'test recordsLocation',
-      'Change',
+      'Change location where records are kept',
       'Name of IT system used',
       'test itSystemUsed',
-      'Change',
+      'Change name of IT system used',
     ]);
   });
 

@@ -16,7 +16,6 @@ import { EmpPeerReviewDecisionDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emp-peer-review-decision-summary-template',
-  standalone: true,
   imports: [
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
@@ -28,6 +27,7 @@ import { EmpPeerReviewDecisionDto } from '@shared/types';
     LinkDirective,
     PeerReviewDecisionPipe,
   ],
+  standalone: true,
   templateUrl: './emp-peer-review-decision-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

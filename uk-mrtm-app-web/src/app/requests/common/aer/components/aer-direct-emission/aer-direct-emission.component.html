@@ -8,10 +8,10 @@
   <div govuk-text-input label="CH4 emissions (tCO2e)" formControlName="ch4" widthClass="govuk-!-width-one-third"></div>
   <div govuk-text-input label="N2O emissions (tCO2e)" formControlName="n2o" widthClass="govuk-!-width-one-third"></div>
 
-  <h4 class="govuk-heading-s">Total emissions (tCO2e)</h4>
-  <p class="govuk-heading-s">{{ form?.value?.total }}</p>
+  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Total emissions (tCO2e)</p>
+  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-6">{{ form?.value?.total }}</p>
 </mrtm-wizard-step>
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../']" fragment="directEmissions">Return to: {{ wizardMap.totalEmissions.title }}</a>
 </div>

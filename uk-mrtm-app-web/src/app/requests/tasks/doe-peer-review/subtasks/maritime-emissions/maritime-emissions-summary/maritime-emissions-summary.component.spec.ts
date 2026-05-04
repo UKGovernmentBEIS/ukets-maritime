@@ -59,6 +59,8 @@ describe('MaritimeEmissionsSummaryComponent', () => {
     expect(page.summariesContents).toEqual([
       'Why are you determining the maritime emissions or emissions figure for surrender?',
       'Correcting a non-material misstatement',
+      'Notice text',
+      'test notice text',
       'Further details',
       'test further details',
       'Select whether you are determining maritime emissions or only the emissions figure for surrender',

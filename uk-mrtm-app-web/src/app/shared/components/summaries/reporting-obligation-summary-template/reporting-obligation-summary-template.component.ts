@@ -18,7 +18,6 @@ import { AttachedFile, SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-reporting-obligation-summary-template',
-  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -30,6 +29,7 @@ import { AttachedFile, SubTaskListMap } from '@shared/types';
     SummaryListRowActionsDirective,
     SummaryDownloadFilesComponent,
   ],
+  standalone: true,
   templateUrl: './reporting-obligation-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

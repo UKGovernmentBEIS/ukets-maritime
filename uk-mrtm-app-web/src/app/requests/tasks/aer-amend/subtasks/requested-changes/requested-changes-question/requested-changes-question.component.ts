@@ -21,7 +21,6 @@ import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepCompone
 
 @Component({
   selector: 'mrtm-aer-requested-changes-question',
-  standalone: true,
   imports: [
     ReturnToTaskOrActionPageComponent,
     CheckboxComponent,
@@ -30,6 +29,7 @@ import { ReviewReturnForAmendsSubtaskSummaryTemplateComponent, WizardStepCompone
     ReactiveFormsModule,
     ReviewReturnForAmendsSubtaskSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './requested-changes-question.component.html',
   providers: [requestedChangesQuestionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,

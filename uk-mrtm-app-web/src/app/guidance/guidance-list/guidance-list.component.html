@@ -7,13 +7,15 @@
           View guidance materials by:
         </label>
         <div
+          label="Select competent authority"
+          [isLabelHidden]="true"
           govuk-select
           class="govuk-!-margin-0"
           formControlName="selectedCa"
           [options]="filterCaSelectOptions()"></div>
       </div>
     </form>
-    <hr class="govuk-section-break govuk-section-break--visible govuk-!-margin-top-2" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   </div>
 }
 <div class="govuk-grid-row">
@@ -36,9 +38,9 @@
     </div>
   }
 </div>
-<div class="govuk-!-width-two-thirds">
-  @if (sections(); as sections) {
-    @if (sections.length) {
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-two-thirds">
+    @if (sections(); as sections) {
       @for (section of sections; track section) {
         <div class="govuk-!-margin-bottom-3">
           <h3 class="govuk-heading-m">{{ section.name }}</h3>
@@ -47,7 +49,7 @@
               @for (
                 document of section.guidanceDocuments.slice(
                   0,
-                  section.guidanceDocuments.length > 5 && !this.expandedSections.has(section.id)
+                  section.guidanceDocuments.length > 5 && !expandedSections.has(section.id)
                     ? 5
                     : section.guidanceDocuments.length
                 );
@@ -80,11 +82,11 @@
           } @else {
             <p class="govuk-body">No documents added</p>
           }
-          <hr class="govuk-section-break govuk-section-break--visible" />
+          <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
         </div>
+      } @empty {
+        <p class="govuk-body">No items to display</p>
       }
-    } @else {
-      <p class="govuk-body">No items to display</p>
     }
-  }
+  </div>
 </div>

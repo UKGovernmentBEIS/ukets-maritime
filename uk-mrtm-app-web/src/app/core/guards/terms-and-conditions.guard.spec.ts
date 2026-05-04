@@ -2,7 +2,6 @@ import { TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
 import { lastValueFrom, of } from 'rxjs';
-import { KeycloakService } from 'keycloak-angular';
 
 import { AuthoritiesService, TermsAndConditionsService, UsersService } from '@mrtm/api';
 
@@ -13,7 +12,6 @@ import { ConfigStore } from '@core/config';
 import {
   mockAuthorityService,
   mockAuthService,
-  mockKeycloakService,
   mockTermsAndConditionsService,
   mockUsersService,
 } from '@core/guards/core-guards.mock';
@@ -35,7 +33,6 @@ describe('TermsAndConditionsGuard', () => {
     TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
-        { provide: KeycloakService, useValue: mockKeycloakService },
         { provide: UsersService, useValue: mockUsersService },
         { provide: AuthoritiesService, useValue: mockAuthorityService },
         { provide: TermsAndConditionsService, useValue: mockTermsAndConditionsService },

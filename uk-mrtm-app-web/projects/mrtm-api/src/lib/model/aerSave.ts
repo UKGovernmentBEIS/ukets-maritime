@@ -9,7 +9,7 @@
  */
 import { AdditionalDocuments } from './additionalDocuments';
 import { AerAggregatedDataSave } from './aerAggregatedDataSave';
-import { AerEmissions } from './aerEmissions';
+import { AerEmissionsSave } from './aerEmissionsSave';
 import { AerMonitoringPlanChanges } from './aerMonitoringPlanChanges';
 import { AerOperatorDetails } from './aerOperatorDetails';
 import { AerPortEmissionsSave } from './aerPortEmissionsSave';
@@ -19,7 +19,7 @@ import { AerVoyageEmissionsSave } from './aerVoyageEmissionsSave';
 export interface AerSave {
   operatorDetails: AerOperatorDetails;
   additionalDocuments: AdditionalDocuments;
-  emissions: AerEmissions;
+  emissions: AerEmissionsSave;
   aerMonitoringPlanChanges: AerMonitoringPlanChanges;
   portEmissions?: AerPortEmissionsSave;
   voyageEmissions?: AerVoyageEmissionsSave;

@@ -6,18 +6,17 @@
     "sourceMap": true,
     "declaration": false,
     "experimentalDecorators": true,
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "importHelpers": true,
     "esModuleInterop": true,
     "target": "ES2022",
-    "module": "ES2022",
-    "lib": ["ES2022", "dom"],
+    "module": "preserve",
     "strictPropertyInitialization": false,
     "strictNullChecks": false,
     "paths": {
-      "@netz/govuk-components": ["dist/govuk-components"],
-      "@mrtm/api": ["dist/mrtm-api"],
-      "@netz/common/*": ["dist/common/*"],
+      "@netz/govuk-components": ["./dist/govuk-components"],
+      "@mrtm/api": ["./dist/mrtm-api"],
+      "@netz/common/*": ["./dist/common/*"],
       "@accessibility/*": ["src/app/accessibility/*"],
       "@accounts/*": ["src/app/accounts/*"],
       "@batch-variations/*": ["src/app/batch-variations/*"],
@@ -54,7 +53,6 @@
   },
   "exclude": ["**/node_modules/*", "**/coverage/*", "**/dist/*", "**/node/*"],
   "angularCompilerOptions": {
-    "fullTemplateTypeCheck": true,
     "strictInjectionParameters": false,
     "strictTemplates": true
   }

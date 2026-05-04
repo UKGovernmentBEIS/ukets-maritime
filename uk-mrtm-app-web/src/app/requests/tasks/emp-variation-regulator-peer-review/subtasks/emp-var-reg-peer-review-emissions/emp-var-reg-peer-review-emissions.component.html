@@ -1,7 +1,5 @@
 @if (vm(); as vm) {
-  <netz-page-heading
-    caption="List of ships and calculation of maritime emissions"
-    class="govuk-grid-column-three-quarters">
+  <netz-page-heading caption="List of ships and calculation of maritime emissions">
     Check your answers
   </netz-page-heading>
   <mrtm-list-of-ships-summary-template
@@ -11,7 +9,7 @@
   <mrtm-variation-regulator-decision-partial-summary-template
     [variationDecisionDetails]="vm.variationDecisionDetails" />
   <div>
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
     <netz-return-to-task-or-action-page />
   </div>
 }

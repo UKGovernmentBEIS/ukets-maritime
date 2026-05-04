@@ -11,7 +11,13 @@
       [previous]="originalMandate()?.exist | booleanToText"></dd>
     @if (isEditable()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="[wizardStep()?.RESPONSIBILITY]" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="[wizardStep()?.RESPONSIBILITY]" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">
+            whether the responsibility for compliance with UK ETS has been delegated by a registered owner for one or
+            more ships
+          </span>
+        </a>
       </dd>
     }
   </div>

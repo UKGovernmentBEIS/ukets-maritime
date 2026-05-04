@@ -75,7 +75,8 @@ public class EmpVariationNotifyOperatorRegulatorLedActionHandlerTest {
         verify(workflowService, times(1)).completeTask(requestTask.getProcessTaskId(),
                 Map.of(BpmnProcessConstants.REQUEST_ID, requestTask.getRequest().getId(),
                         MrtmBpmnProcessConstants.EMP_VARIATION_SUBMIT_OUTCOME, EmpVariationSubmitOutcome.SUBMITTED,
-                        BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.NOTIFY_OPERATOR)
+                        BpmnProcessConstants.REVIEW_OUTCOME, ReviewOutcome.NOTIFY_OPERATOR,
+                        BpmnProcessConstants.SKIP_PAYMENT, true)
         );
 
         assertThat(request.getSubmissionDate()).isNotNull();

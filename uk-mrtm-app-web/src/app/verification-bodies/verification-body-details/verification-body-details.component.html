@@ -6,13 +6,18 @@
     <h2 class="govuk-heading-m">Details</h2>
     <mrtm-verification-body-summary [summaryInfo]="summaryInfo$ | async" />
   </ng-template>
-  <ng-template govukTab id="contacts" label="Contacts">
+  <ng-template govukTabLazy govukTab id="contacts" label="Contacts">
     <h2 class="govuk-heading-m">Contacts</h2>
     <mrtm-verifier-users-list
       (discardChanges)="handleDiscardChanges()"
       (saveChanges)="handleSaveChanges($event)"
       [authorities]="authorities$"
       [editable]="isEditable$ | async"
-      [verificationBodyId]="verificationBodyId$ | async" />
+      editVerifierSubpath="./verifiers"
+      [verificationBodyId]="verificationBodyId()" />
+  </ng-template>
+  <ng-template govukTabLazy id="data-supplier" label="Data supplier">
+    <h2 class="govuk-heading-m">Data supplier</h2>
+    <mrtm-data-supplier-tab />
   </ng-template>
 </govuk-tabs>

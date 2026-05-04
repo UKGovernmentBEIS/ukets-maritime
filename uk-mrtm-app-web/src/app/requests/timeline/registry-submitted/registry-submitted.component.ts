@@ -8,8 +8,8 @@ import { RegistrySubmittedSummaryTemplateComponent } from '@shared/components/su
 
 @Component({
   selector: 'mrtm-registry-submitted',
-  standalone: true,
   imports: [RegistrySubmittedSummaryTemplateComponent],
+  standalone: true,
   templateUrl: './registry-submitted.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

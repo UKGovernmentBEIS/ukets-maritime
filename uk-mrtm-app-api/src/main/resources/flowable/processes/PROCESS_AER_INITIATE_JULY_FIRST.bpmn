@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.21.0">
+  <process id="PROCESS_AER_INITIATE_JULY_FIRST" name="Initiate AER Process for accounts on July 1st" isExecutable="true">
+    <startEvent id="initiate">
+      <timerEventDefinition>
+        <timeDate xsi:type="tFormalExpression">2026-07-01</timeDate>
+      </timerEventDefinition>
+    </startEvent>
+    <serviceTask id="INITIATE_AERs" name="Initiate AERs" flowable:exclusive="true" flowable:async="true" flowable:delegateExpression="#{initiateAersHandlerFlowable}">
+      <multiInstanceLoopCharacteristics isSequential="true" flowable:collection="accounts" flowable:elementVariable="accountId">
+        <extensionElements />
+      </multiInstanceLoopCharacteristics>
+    </serviceTask>
+    <sequenceFlow id="Flow_0dxofed" sourceRef="initiate" targetRef="Activity_0oxidf0" />
+    <endEvent id="Event_1xbvtyg">
+      <incoming>Flow_0fr4f8y</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_0ijas6o" sourceRef="INITIATE_AERs" targetRef="Event_1xbvtyg" />
+    <serviceTask id="Activity_00ly68k" name="Collect accounts for AER" flowable:delegateExpression="#{collectAccountsForAerHandlerFlowable}">
+      <incoming>Flow_01xymyn</incoming>
+    </serviceTask>
+    <sequenceFlow id="Flow_1vc6u6t" sourceRef="Activity_00ly68k" targetRef="INITIATE_AERs" />
+    <sequenceFlow id="Flow_184j1ey" sourceRef="Activity_0oxidf0" targetRef="Gateway_1ey9pj2" />
+    <serviceTask id="Activity_0oxidf0" name="Calculate expiration date" flowable:delegateExpression="#{calculateAerJulyFirstExpirationDateHandlerFlowable}">
+      <incoming>Flow_0dxofed</incoming>
+      <outgoing>Flow_184j1ey</outgoing>
+    </serviceTask>
+    <exclusiveGateway id="Gateway_1ey9pj2" default="Flow_01xymyn">
+      <incoming>Flow_184j1ey</incoming>
+      <outgoing>Flow_01xymyn</outgoing>
+      <outgoing>Flow_0fr4f8y</outgoing>
+    </exclusiveGateway>
+    <sequenceFlow id="Flow_01xymyn" sourceRef="Gateway_1ey9pj2" targetRef="Activity_00ly68k" />
+    <sequenceFlow id="Flow_0fr4f8y" sourceRef="Gateway_1ey9pj2" targetRef="Event_1xbvtyg">
+      <conditionExpression xsi:type="tFormalExpression">${flowableDateUtils.isDateInThePast(aerJulyFirstExpirationDate)}</conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_AER_INITIATE_JULY_FIRST">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROCESS_AER_INITIATE_JULY_FIRST" bpmnElement="PROCESS_AER_INITIATE_JULY_FIRST">
+      <bpmndi:BPMNShape id="BPMNShape_initiate" bpmnElement="initiate">
+        <omgdc:Bounds x="154" y="99" width="31" height="31" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_INITIATE_AERs" bpmnElement="INITIATE_AERs">
+        <omgdc:Bounds x="621" y="75" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Event_1xbvtyg" bpmnElement="Event_1xbvtyg">
+        <omgdc:Bounds x="792" y="101" width="28" height="28" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Activity_00ly68k" bpmnElement="Activity_00ly68k">
+        <omgdc:Bounds x="460" y="75" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0iegbfv_di" bpmnElement="Activity_0oxidf0">
+        <omgdc:Bounds x="240" y="75" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ey9pj2_di" bpmnElement="Gateway_1ey9pj2" isMarkerVisible="true">
+        <omgdc:Bounds x="365" y="90" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0dxofed" bpmnElement="Flow_0dxofed" flowable:sourceDockerX="15.5" flowable:sourceDockerY="15.5" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="185" y="115" />
+        <omgdi:waypoint x="240" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_0ijas6o" bpmnElement="Flow_0ijas6o" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="14.0" flowable:targetDockerY="14.0">
+        <omgdi:waypoint x="721" y="115" />
+        <omgdi:waypoint x="792" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1vc6u6t" bpmnElement="Flow_1vc6u6t" flowable:sourceDockerX="50.0" flowable:sourceDockerY="40.0" flowable:targetDockerX="50.0" flowable:targetDockerY="40.0">
+        <omgdi:waypoint x="560" y="115" />
+        <omgdi:waypoint x="621" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_184j1ey_di" bpmnElement="Flow_184j1ey">
+        <omgdi:waypoint x="340" y="115" />
+        <omgdi:waypoint x="365" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_01xymyn_di" bpmnElement="Flow_01xymyn">
+        <omgdi:waypoint x="415" y="115" />
+        <omgdi:waypoint x="460" y="115" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0fr4f8y_di" bpmnElement="Flow_0fr4f8y">
+        <omgdi:waypoint x="390" y="140" />
+        <omgdi:waypoint x="390" y="250" />
+        <omgdi:waypoint x="806" y="250" />
+        <omgdi:waypoint x="806" y="130" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

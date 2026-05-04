@@ -8,9 +8,9 @@ import { existingControlContainer } from '@shared/providers/control-container.fa
 // eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-verification-body-form',
-  standalone: true,
   imports: [TextInputComponent, ReactiveFormsModule],
-  viewProviders: [existingControlContainer],
+  standalone: true,
   templateUrl: './verification-body-form.component.html',
+  viewProviders: [existingControlContainer],
 })
 export class VerificationBodyFormComponent {}

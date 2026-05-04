@@ -7,7 +7,10 @@
       <dd govukSummaryListRowValue>{{ port?.portDetails?.visit?.country | selectOptionToTitle: countries }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">country code and name</span>
+          </a>
         </dd>
       }
     </div>
@@ -16,7 +19,10 @@
       <dd govukSummaryListRowValue>{{ port?.portDetails?.visit?.port | selectOptionToTitle: ports }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">port code and name</span>
+          </a>
         </dd>
       }
     </div>
@@ -25,7 +31,10 @@
       <dd govukSummaryListRowValue>{{ port?.portDetails?.arrivalTime | govukDate: 'date' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">date of arrival</span>
+          </a>
         </dd>
       }
     </div>
@@ -34,7 +43,10 @@
       <dd govukSummaryListRowValue>{{ port?.portDetails?.arrivalTime | date: 'HH:mm:ss' : 'UTC' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">actual time of arrival</span>
+          </a>
         </dd>
       }
     </div>
@@ -43,7 +55,10 @@
       <dd govukSummaryListRowValue>{{ port?.portDetails?.departureTime | govukDate: 'date' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">date of departure</span>
+          </a>
         </dd>
       }
     </div>
@@ -52,7 +67,10 @@
       <dd govukSummaryListRowValue>{{ port?.portDetails?.departureTime | date: 'HH:mm:ss' : 'UTC' }}</dd>
       @if (editable()) {
         <dd govukSummaryListColumnActions>
-          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PORT_DETAILS]" [queryParams]="editQueryParams()">
+            Change
+            <span class="govuk-visually-hidden">actual time of departure</span>
+          </a>
         </dd>
       }
     </div>
@@ -71,5 +89,6 @@
     [fuelConsumptionsEditPath]="[wizardStep.IN_PORT_EMISSIONS, wizardStep.FUEL_CONSUMPTION].join('/')"
     [editQueryParams]="{ change: true }"
     [directEmissions]="port?.directEmissions"
-    [fuelConsumptions]="port?.fuelConsumptions" />
+    [fuelConsumptions]="port?.fuelConsumptions"
+    (addDirectEmission)="onAddDirectEmissions()" />
 }

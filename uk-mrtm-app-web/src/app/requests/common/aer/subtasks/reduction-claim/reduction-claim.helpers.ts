@@ -1,6 +1,6 @@
-import { isNil } from 'lodash-es';
-
 import { AerSmf } from '@mrtm/api';
+
+import { isNil } from '@shared/utils';
 
 export const AER_REDUCTION_CLAIM_SUB_TASK = 'smf';
 
@@ -13,7 +13,10 @@ export enum ReductionClaimWizardStep {
 }
 
 export const aerSmfDetailsCompleted = (data: AerSmf): boolean =>
-  (!isNil(data?.exist) && !data?.exist) || (data?.exist && !isNil(data?.smfDetails.purchases?.length));
+  (!isNil(data?.exist) && !data?.exist) ||
+  (data?.exist &&
+    !isNil(data?.smfDetails.purchases?.length) &&
+    data?.smfDetails?.purchases?.every((purchase) => purchase?.evidenceFiles?.length > 0));
 
 export const aerReductionClaimStepsCompleted: Record<keyof AerSmf, (data: AerSmf) => boolean> = {
   exist: (data: AerSmf) => !isNil(data?.exist),

@@ -31,7 +31,7 @@ interface ViewModel {
 export class EmissionSourcesSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       emissionSources: this.store.select(empSubmittedQuery.selectEmissionSources)(),
       emissionSourcesMap: emissionSourcesMap,

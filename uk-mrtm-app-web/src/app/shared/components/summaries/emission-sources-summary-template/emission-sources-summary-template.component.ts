@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpEmissionSources } from '@mrtm/api';
@@ -19,7 +19,6 @@ import { SubTaskListMap } from '@shared/types';
 
 @Component({
   selector: 'mrtm-emission-sources-summary-template',
-  standalone: true,
   imports: [
     BooleanToTextPipe,
     LinkDirective,
@@ -32,14 +31,17 @@ import { SubTaskListMap } from '@shared/types';
     ProcedureFormPartialSummaryTemplateComponent,
     HtmlDiffDirective,
   ],
+  standalone: true,
   templateUrl: './emission-sources-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionSourcesSummaryTemplateComponent {
-  @Input({ required: true }) emissionSources: EmpEmissionSources;
-  @Input() originalEmissionSources: EmpEmissionSources;
-  @Input({ required: true }) emissionSourcesMap: SubTaskListMap<EmpEmissionSources>;
-  @Input() wizardStep: { [s: string]: string };
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
+  readonly emissionSources = input.required<EmpEmissionSources>();
+  readonly originalEmissionSources = input<EmpEmissionSources>();
+  readonly emissionSourcesMap = input.required<SubTaskListMap<EmpEmissionSources>>();
+  readonly wizardStep = input<{
+    [s: string]: string;
+  }>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
 }

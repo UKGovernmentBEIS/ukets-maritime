@@ -44,7 +44,7 @@ describe('MandateResponsibilityDeclarationSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Declaration of delegation of UK ETS responsibility',
       'I certify that I am authorised by TEST OPERATOR to make this declaration on its behalf and believe that the information provided is true.',
-      'Change',
+      'Change declaration of delegation of UK ETS responsibility',
     ]);
   });
 });

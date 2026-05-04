@@ -3,7 +3,6 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { catchError, combineLatest, map, switchMap, take, throwError } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { PageHeadingComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
@@ -12,13 +11,13 @@ import { UserFullNamePipe } from '@netz/common/pipes';
 import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { deleteUniqueActiveVerifierError } from '@shared/errors';
+import { isNil } from '@shared/utils';
 import { selectUserAuthority } from '@verifiers/+state/verifier-user.selectors';
 import { VerifierUserStore } from '@verifiers/+state/verifier-user.store';
 import { saveNotFoundVerifierError } from '@verifiers/errors/business-error';
 
 @Component({
   selector: 'mrtm-delete',
-  standalone: true,
   imports: [
     ButtonDirective,
     LinkDirective,
@@ -29,6 +28,7 @@ import { saveNotFoundVerifierError } from '@verifiers/errors/business-error';
     AsyncPipe,
     UserFullNamePipe,
   ],
+  standalone: true,
   templateUrl: './delete.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

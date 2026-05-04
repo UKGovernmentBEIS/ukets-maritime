@@ -20,7 +20,7 @@ describe('ConfirmationComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(ConfirmationComponent);
     component = fixture.componentInstance;
-    component.verificationAccount = 'Test account';
+    fixture.componentRef.setInput('verificationAccount', 'Test account');
     fixture.detectChanges();
   });
 

@@ -38,7 +38,7 @@ export class EmpVarSubmittedAbbreviationsComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     abbreviations: this.store.select(empVariationSubmittedQuery.selectAbbreviations)(),
     abbreviationsMap: abbreviationsMap,
     reviewGroupDecision: this.store.select(empVariationSubmittedQuery.selectReviewGroupDecision('abbreviations'))(),

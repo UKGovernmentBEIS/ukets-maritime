@@ -10,6 +10,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionT
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.Doe;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeApplicationSubmittedRequestActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReason;
+import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonDetails;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeDeterminationReasonType;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeMaritimeEmissions;
 import uk.gov.mrtm.api.workflow.request.flow.doe.common.domain.DoeRequestPayload;
@@ -48,9 +49,13 @@ class DoeAddSubmittedRequestActionServiceTest {
     void add_when_primary_contact_exists() {
         String requestId = "1";
 
-        Doe doe = Doe.builder().maritimeEmissions(DoeMaritimeEmissions.builder().determinationReason(DoeDeterminationReason.builder()
+        Doe doe = Doe.builder().maritimeEmissions(DoeMaritimeEmissions.builder().determinationReason(
+                    DoeDeterminationReason.builder()
+                        .details(DoeDeterminationReasonDetails.builder()
+                            .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                            .noticeText("noticeText")
+                            .build())
                         .furtherDetails("details")
-                        .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
                         .build())
                     .build())
                 .build();
@@ -102,7 +107,10 @@ class DoeAddSubmittedRequestActionServiceTest {
                             DoeMaritimeEmissions.builder()
                                     .determinationReason(DoeDeterminationReason.builder()
                                     .furtherDetails("details")
-                                    .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                    .details(DoeDeterminationReasonDetails.builder()
+                                        .type(DoeDeterminationReasonType.CORRECTING_NON_MATERIAL_MISSTATEMENT)
+                                        .noticeText("noticeText")
+                                        .build())
                                     .build())
                         .build())
                 .build();

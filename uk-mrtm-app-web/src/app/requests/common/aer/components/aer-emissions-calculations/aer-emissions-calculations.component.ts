@@ -4,7 +4,6 @@ import { UntypedFormGroup, ValidationErrors } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
 import { map, take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerFuelConsumption, AerShipEmissions } from '@mrtm/api';
 
@@ -35,11 +34,11 @@ import {
 } from '@shared/components';
 import { NotificationBannerStore } from '@shared/components/notification-banner';
 import { AerJourneyTypeEnum, FuelsAndEmissionsFactors } from '@shared/types';
+import { isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-emissions-calculations',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ButtonDirective,
@@ -51,6 +50,7 @@ import BigNumber from 'bignumber.js';
     WarningTextComponent,
     FuelConsumptionAndDirectEmissionsSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './aer-emissions-calculations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -84,7 +84,7 @@ export class AerEmissionsCalculationsComponent {
     return calculations;
   });
 
-  public ship: Signal<AerShipEmissions> = computed(() =>
+  public readonly ship: Signal<AerShipEmissions> = computed(() =>
     this.store.select(this.relatedShipSelector(this.objectId()))(),
   );
 

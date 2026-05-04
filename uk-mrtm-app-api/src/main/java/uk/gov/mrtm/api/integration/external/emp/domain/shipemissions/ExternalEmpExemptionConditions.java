@@ -22,5 +22,6 @@ public class ExternalEmpExemptionConditions {
     private Boolean derogationCodeUsed;
 
     @Min(301)
+    @Schema(nullable = true, description = "Minimum number of voyages. Required only when 'derogationCodeUsed' is true, otherwise must be omitted")
     private Integer minimumNumberOfVoyages;
 }

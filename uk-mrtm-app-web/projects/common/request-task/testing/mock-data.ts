@@ -8,8 +8,11 @@ export const mockRequestTask: RequestTaskState = {
   requestTaskItem: {
     allowedRequestTaskActions: [],
     requestInfo: {
-      accountId: 1,
-      competentAuthority: 'ENGLAND',
+      resourceType: 'ACCOUNT',
+      resources: {
+        ACCOUNT: '1',
+        CA: 'ENGLAND',
+      },
     },
     requestTask: {
       assignable: true,
@@ -26,6 +29,8 @@ export const mockRequestTask: RequestTaskState = {
 
 export const mockRequestTaskStateBuild = (payload?: RequestTaskPayload): RequestTaskState => {
   return produce(mockRequestTask, (state) => {
-    state.requestTaskItem.requestTask.payload = payload;
+    if (payload) {
+      state.requestTaskItem.requestTask.payload = payload;
+    }
   });
 };

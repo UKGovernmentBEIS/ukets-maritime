@@ -7,6 +7,7 @@ export interface GovukTableColumn<T = any> {
   isSortable?: boolean;
   isHeader?: boolean;
   isNumeric?: boolean;
+  hiddenHeader?: boolean;
 }
 
 export interface SortEvent<T = any> {

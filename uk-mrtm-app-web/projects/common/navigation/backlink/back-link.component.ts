@@ -1,5 +1,5 @@
 import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, DestroyRef, inject, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, input } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ActivatedRouteSnapshot, Data, NavigationEnd, Router } from '@angular/router';
 
@@ -12,6 +12,7 @@ import { RouteBacklink } from './backlink.interface';
 
 @Component({
   selector: 'netz-back-link',
+  imports: [GovukBackLinkComponent, AsyncPipe],
   standalone: true,
   template: `
     @if (backlink$ | async; as backlink) {
@@ -19,17 +20,16 @@ import { RouteBacklink } from './backlink.interface';
         [link]="backlink.link"
         [route]="backlink.route"
         [fragment]="backlink?.fragment"
-        [inverse]="inverse"></govuk-back-link>
+        [inverse]="inverse()" />
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [GovukBackLinkComponent, AsyncPipe],
 })
 export class BackLinkComponent {
   readonly router = inject(Router);
   private readonly destroy$ = inject(DestroyRef);
 
-  @Input() inverse = false;
+  readonly inverse = input(false);
   protected backlink$ = new BehaviorSubject<{ link: string; route: ActivatedRouteSnapshot; fragment?: string }>(null);
 
   constructor() {

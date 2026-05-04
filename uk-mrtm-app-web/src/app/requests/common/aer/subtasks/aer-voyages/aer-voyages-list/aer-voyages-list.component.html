@@ -21,6 +21,7 @@
     <div class="govuk-grid-column-one-half">
       <mrtm-filter-by-ship-and-date-range
         type="voyages"
+        [initialFilterState]="$any(this.currentPersistableComponentState()?.activeFilters ?? null)"
         [ships]="shipsWithVoyages()"
         filterByShipLabel="View voyages per ship"
         (filterChanged)="onFilterChanged($event)" />
@@ -28,7 +29,7 @@
   </div>
 }
 
-<h3 class="govuk-heading-m">{{ voyagesListHeader() }}</h3>
+<h2 class="govuk-heading-m">{{ voyagesListHeader() }}</h2>
 
 <mrtm-voyages-list-summary-template
   [editable]="editable()"
@@ -42,8 +43,6 @@
 }
 
 <div>
-  @if (canContinue() || !filteredVoyages()?.length) {
-    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-  }
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <netz-return-to-task-or-action-page />
 </div>

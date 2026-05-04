@@ -39,7 +39,7 @@ class InitiateAersHandlerFlowableTest {
         initiateAersHandler.execute(execution);
 
         // Verify
-        verify(aerCreationService, timeout(1000).times(1)).createRequestAer(accountId1, Year.now());
+        verify(aerCreationService, timeout(1000).times(1)).createRequestAerWithNewTransaction(accountId1, Year.now());
     }
 
     @Test
@@ -52,13 +52,13 @@ class InitiateAersHandlerFlowableTest {
 
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(aerCreationService)
-            .createRequestAer(accountId1, year);
+            .createRequestAerWithNewTransaction(accountId1, year);
 
         // Invoke
         initiateAersHandler.execute(execution);
 
         // Verify
-        verify(aerCreationService, timeout(1000).times(1)).createRequestAer(accountId1, year);
+        verify(aerCreationService, timeout(1000).times(1)).createRequestAerWithNewTransaction(accountId1, year);
         verifyNoMoreInteractions(aerCreationService);
     }
 }

@@ -43,17 +43,21 @@ describe('RecommendedImprovementsSummaryTemplateComponent', () => {
   });
 
   it('should display all HTML elements', () => {
-    expect(page.summariesContents).toEqual(['Are there any recommended improvements?', 'Yes', 'Change']);
+    expect(page.summariesContents).toEqual([
+      'Are there any recommended improvements?',
+      'Yes',
+      'Change whether there are any recommended improvements',
+    ]);
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
-      'Change  Remove',
+      'Change reference (D1) Remove reference (D1)',
       'D2',
       'Lorem ipsum 2',
-      'Change  Remove',
+      'Change reference (D2) Remove reference (D2)',
     ]);
   });
 
@@ -65,7 +69,7 @@ describe('RecommendedImprovementsSummaryTemplateComponent', () => {
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       '',
@@ -81,7 +85,11 @@ describe('RecommendedImprovementsSummaryTemplateComponent', () => {
     });
     fixture.detectChanges();
 
-    expect(page.summariesContents).toEqual(['Are there any recommended improvements?', 'No', 'Change']);
+    expect(page.summariesContents).toEqual([
+      'Are there any recommended improvements?',
+      'No',
+      'Change whether there are any recommended improvements',
+    ]);
     expect(page.tableContents).toEqual([]);
   });
 });

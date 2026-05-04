@@ -14,7 +14,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
 import { take } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import { AerPortEmissionsMeasurement } from '@mrtm/api';
 
@@ -36,10 +35,10 @@ import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/
 import { calculateTotalEmissionsFromVoyagesAndPortsMeasurement } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-annual-emissions',
-  standalone: true,
   imports: [
     WizardStepComponent,
     RouterLink,
@@ -48,8 +47,9 @@ import { WizardStepComponent } from '@shared/components';
     ReactiveFormsModule,
     AerAggregatedDataAnnualEmissionsTotalsComponent,
   ],
-  providers: [aerAggregatedDataAnnualEmissionsFormProvider],
+  standalone: true,
   templateUrl: './aer-aggregated-data-annual-emissions.component.html',
+  providers: [aerAggregatedDataAnnualEmissionsFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerAggregatedDataAnnualEmissionsComponent implements OnInit {

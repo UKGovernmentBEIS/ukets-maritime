@@ -48,21 +48,21 @@ describe('UncorrectedMisstatementsSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Are there any misstatements that were not corrected before issuing this report?',
       'Yes',
-      'Change',
+      'Change  whether there are any misstatements that were not corrected before issuing this report',
     ]);
     expect(page.tableContents).toEqual([
       'Reference',
       'Explanation',
       'Impact',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       'Material',
-      'Change  Remove',
+      'Change reference (D1) Remove reference (D1)',
       'D2',
       'Lorem ipsum 2',
       'Not material',
-      'Change  Remove',
+      'Change reference (D2) Remove reference (D2)',
     ]);
   });
 
@@ -78,7 +78,7 @@ describe('UncorrectedMisstatementsSummaryTemplateComponent', () => {
       'Reference',
       'Explanation',
       'Impact',
-      '',
+      'Actions',
       'D1',
       'Lorem ipsum 1',
       'Material',
@@ -99,7 +99,7 @@ describe('UncorrectedMisstatementsSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Are there any misstatements that were not corrected before issuing this report?',
       'No',
-      'Change',
+      'Change  whether there are any misstatements that were not corrected before issuing this report',
     ]);
     expect(page.tableContents).toEqual([]);
   });

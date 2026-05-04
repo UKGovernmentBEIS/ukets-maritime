@@ -10,13 +10,13 @@ import { VariationRegulatorDecisionPartialSummaryTemplateComponent } from '@shar
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-mandate',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     MandateSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-mandate.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,11 +25,11 @@ export class EmpVarRegPeerReviewMandateComponent {
 
   mandate = this.store.select(empCommonQuery.selectMandate)();
   originalMandate = this.store.select(empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan)()
-    .mandate;
+    ?.mandate;
   operatorName = this.store.select(empCommonQuery.selectOperatorDetails)()?.operatorName;
   originalOperatorName = this.store.select(empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan)()
     ?.operatorDetails?.operatorName;
-  variationDecisionDetails = this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
+  variationDecisionDetails = this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()?.[
     'MANDATE'
   ];
   mandateMap = mandateMap;

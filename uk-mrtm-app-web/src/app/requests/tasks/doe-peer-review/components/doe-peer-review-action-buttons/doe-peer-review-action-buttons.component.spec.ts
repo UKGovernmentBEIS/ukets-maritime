@@ -1,23 +1,26 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
-import { ActivatedRouteStub } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { DoePeerReviewActionButtonsComponent } from '@requests/tasks/doe-peer-review/components';
-import { screen } from '@testing-library/angular';
 
 describe('DoePeerReviewActionButtonsComponent', () => {
   let component: DoePeerReviewActionButtonsComponent;
   let fixture: ComponentFixture<DoePeerReviewActionButtonsComponent>;
+  let page: Page;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  class Page extends BasePage<DoePeerReviewActionButtonsComponent> {}
+
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [DoePeerReviewActionButtonsComponent],
       providers: [{ provide: ActivatedRoute, useValue: new ActivatedRouteStub() }],
-    }).compileComponents();
+    });
 
     fixture = TestBed.createComponent(DoePeerReviewActionButtonsComponent);
     component = fixture.componentInstance;
+    page = new Page(fixture);
     fixture.detectChanges();
   });
 
@@ -26,8 +29,6 @@ describe('DoePeerReviewActionButtonsComponent', () => {
   });
 
   it('should display button with correct label', () => {
-    const button = screen.getByRole('link');
-    expect(button).toBeInTheDocument();
-    expect(button.textContent).toEqual('Peer review decision');
+    expect(page.query('a').textContent).toEqual('Peer review decision');
   });
 });

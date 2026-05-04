@@ -1,0 +1,9 @@
+@if (data(); as data) {
+  <mrtm-reduction-claim-summary-template [data]="data" />
+  @if (data.exist) {
+    @if (wizardMap()?.smfDetails?.title; as title) {
+      <h2 class="govuk-heading-m">{{ title }}</h2>
+    }
+    <mrtm-reduction-claim-details-summary-template [data]="fuelPurchases()" [dataSupplierName]="dataSupplierName()" />
+  }
+}

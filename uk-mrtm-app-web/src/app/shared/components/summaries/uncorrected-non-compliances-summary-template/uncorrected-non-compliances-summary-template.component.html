@@ -5,7 +5,13 @@
       <dd govukSummaryListRowValue [notProvided]="data.exist | booleanToText"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">
+              whether there have been any non-compliances with the maritime monitoring and reporting requirements in the
+              UK ETS Order
+            </span>
+          </a>
         </dd>
       }
     </div>

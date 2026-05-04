@@ -42,6 +42,7 @@
     <include file="db/migration/changelogs/document_template_ddl.xml" />
     
     <include file="db/migration/changelogs/request_ddl.xml" />
+    <include file="db/migration/changelogs/request.xml" />
     <include file="db/migration/changelogs/request_payment_ddl.xml" />
     
     <include file="db/migration/changelogs/camunda_schema.xml" />

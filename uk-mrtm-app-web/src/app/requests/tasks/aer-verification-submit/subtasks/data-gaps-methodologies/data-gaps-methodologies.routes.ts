@@ -16,9 +16,9 @@ export const DATA_GAPS_METHODOLOGIES_ROUTES: Routes = [
     canActivate: [canActivateDataGapsMethodologiesSummary],
     data: { breadcrumb: false, backlink: '../../' },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-summary'
-      ).then((c) => c.DataGapsMethodologiesSummaryComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-summary').then(
+        (c) => c.DataGapsMethodologiesSummaryComponent,
+      ),
   },
   {
     path: DataGapsMethodologiesStep.METHOD_REQUIRED,
@@ -29,9 +29,9 @@ export const DATA_GAPS_METHODOLOGIES_ROUTES: Routes = [
       backlink: backlinkResolver(DataGapsMethodologiesStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-required'
-      ).then((c) => c.DataGapsMethodologiesRequiredComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-required').then(
+        (c) => c.DataGapsMethodologiesRequiredComponent,
+      ),
   },
   {
     path: DataGapsMethodologiesStep.METHOD_APPROVED,
@@ -42,9 +42,9 @@ export const DATA_GAPS_METHODOLOGIES_ROUTES: Routes = [
       backlink: backlinkResolver(DataGapsMethodologiesStep.SUMMARY, DataGapsMethodologiesStep.METHOD_REQUIRED),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-approved'
-      ).then((c) => c.DataGapsMethodologiesApprovedComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-approved').then(
+        (c) => c.DataGapsMethodologiesApprovedComponent,
+      ),
   },
   {
     path: DataGapsMethodologiesStep.METHOD_CONSERVATIVE,
@@ -55,9 +55,9 @@ export const DATA_GAPS_METHODOLOGIES_ROUTES: Routes = [
       backlink: backlinkResolver(DataGapsMethodologiesStep.SUMMARY, DataGapsMethodologiesStep.METHOD_APPROVED),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-conservative'
-      ).then((c) => c.DataGapsMethodologiesConservativeComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-conservative').then(
+        (c) => c.DataGapsMethodologiesConservativeComponent,
+      ),
   },
   {
     path: DataGapsMethodologiesStep.MATERIAL_MISSTATEMENT,
@@ -68,8 +68,8 @@ export const DATA_GAPS_METHODOLOGIES_ROUTES: Routes = [
       backlink: backlinkResolver(DataGapsMethodologiesStep.SUMMARY, DataGapsMethodologiesStep.METHOD_CONSERVATIVE),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-misstatement'
-      ).then((c) => c.DataGapsMethodologiesMisstatementComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/data-gaps-methodologies/data-gaps-methodologies-misstatement').then(
+        (c) => c.DataGapsMethodologiesMisstatementComponent,
+      ),
   },
 ];

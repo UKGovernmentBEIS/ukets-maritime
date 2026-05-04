@@ -22,15 +22,15 @@ import { aerDirectEmissionFormProvider } from '@requests/common/aer/components/a
 import { AerDirectEmissionsFormGroupModel } from '@requests/common/aer/components/aer-direct-emission/aer-direct-emission.types';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { WizardStepComponent } from '@shared/components';
-import { bigNumberUtils } from '@shared/utils';
+import { bigNumberUtils, isNil } from '@shared/utils';
 import BigNumber from 'bignumber.js';
 
 @Component({
   selector: 'mrtm-aer-direct-emission',
-  standalone: true,
   imports: [WizardStepComponent, TextInputComponent, ReactiveFormsModule, LinkDirective, RouterLink],
-  providers: [aerDirectEmissionFormProvider],
+  standalone: true,
   templateUrl: './aer-direct-emission.component.html',
+  providers: [aerDirectEmissionFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AerDirectEmissionComponent {
@@ -45,7 +45,7 @@ export class AerDirectEmissionComponent {
   private readonly objectId: Signal<string> = toSignal(
     this.activatedRoute.params.pipe(map((param) => param?.[this.routeParamKey])),
   );
-  public ship: Signal<AerShipEmissions> = computed(() =>
+  public readonly ship: Signal<AerShipEmissions> = computed(() =>
     this.store.select(this.relatedShipSelector(this.objectId()))(),
   );
 
@@ -72,4 +72,6 @@ export class AerDirectEmissionComponent {
       .pipe(take(1))
       .subscribe();
   }
+
+  protected readonly isNil = isNil;
 }

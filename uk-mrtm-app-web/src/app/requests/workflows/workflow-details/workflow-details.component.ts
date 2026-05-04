@@ -32,7 +32,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-workflow-details',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     TagComponent,
@@ -46,6 +45,7 @@ interface ViewModel {
     NotesListComponent,
     RelatedActionsComponent,
   ],
+  standalone: true,
   templateUrl: './workflow-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

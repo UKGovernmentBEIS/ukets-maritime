@@ -11,8 +11,8 @@ export const expectBusinessErrorToBe = async (error: BusinessError) => {
 
 @Component({
   selector: 'netz-business-error',
+  standalone: true,
   template: '',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
 })
 export class BusinessErrorStubComponent {}

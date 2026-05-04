@@ -1,5 +1,3 @@
-import { isNil } from 'lodash-es';
-
 import {
   AdditionalDocuments,
   AerApplicationAmendsSubmitRequestTaskPayload,
@@ -45,15 +43,17 @@ import { AerVerifierDetails } from '@requests/common/aer/aer.types';
 import { getAerJourneyType } from '@requests/common/aer/subtasks/aer-voyages';
 import {
   AerAggregatedDataSummaryItemDto,
+  AerDataInitialSourceType,
   AerJourneyTypeEnum,
   AerPortSummaryItemDto,
+  AerShipEmissionTableListItem,
   AerVoyageSummaryItemDto,
   AttachedFile,
   ReductionClaimDetailsListItemDto,
   ReviewDecisionDto,
   ReviewDecisionUnion,
-  ShipEmissionTableListItem,
 } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 const selectPayload: StateSelector<
   RequestActionState,
@@ -114,13 +114,15 @@ const selectShips: StateSelector<RequestActionState, AerShipEmissions[]> = creat
   (payload) => payload?.ships ?? [],
 );
 
-const selectListOfShips: StateSelector<RequestActionState, ShipEmissionTableListItem[]> = createDescendingSelector(
+const selectListOfShips: StateSelector<RequestActionState, AerShipEmissionTableListItem[]> = createDescendingSelector(
   selectShips,
   (ships) =>
     ships.map((x) => ({
       uniqueIdentifier: x.uniqueIdentifier,
       ...x.details,
       status: TaskItemStatus.COMPLETED,
+      dataInputType:
+        x?.dataInputType === 'MANUAL' ? AerDataInitialSourceType.MANUAL : AerDataInitialSourceType.EXTERNAL_PROVIDER,
     })),
 );
 
@@ -234,6 +236,12 @@ const selectAggregatedDataList: StateSelector<
     shipName: data?.relatedShip?.details?.name,
     status: TaskItemStatus.COMPLETED,
     canViewDetails: true,
+    dataInputType:
+      data?.dataInputType === 'MANUAL'
+        ? data?.fromFetch
+          ? AerDataInitialSourceType.FROM_FETCH_PORTS_OR_VOYAGES
+          : AerDataInitialSourceType.MANUAL
+        : AerDataInitialSourceType.EXTERNAL_PROVIDER,
   })),
 );
 

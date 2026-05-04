@@ -3,8 +3,8 @@
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Attached documents</dt>
     <dd govukSummaryListRowValue>
-      @if (emailTemplate.documentTemplates?.length > 0) {
-        @for (documentTemplate of emailTemplate.documentTemplates; track documentTemplate) {
+      @if (emailTemplate().documentTemplates?.length > 0) {
+        @for (documentTemplate of emailTemplate().documentTemplates; track documentTemplate) {
           <a routerLink="." govukLink (click)="navigateToDocumentTemplate(documentTemplate.id)">
             View {{ documentTemplate.name }} document template
           </a>
@@ -17,14 +17,14 @@
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Event trigger</dt>
-    <dd govukSummaryListRowValue>{{ emailTemplate.eventTrigger }}</dd>
+    <dd govukSummaryListRowValue>{{ emailTemplate().eventTrigger }}</dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Workflow</dt>
-    <dd govukSummaryListRowValue>{{ emailTemplate.workflow }}</dd>
+    <dd govukSummaryListRowValue>{{ emailTemplate().workflow }}</dd>
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Last changed</dt>
-    <dd govukSummaryListRowValue>{{ emailTemplate.lastUpdatedDate | govukDate }}</dd>
+    <dd govukSummaryListRowValue>{{ emailTemplate().lastUpdatedDate | govukDate }}</dd>
   </div>
 </dl>

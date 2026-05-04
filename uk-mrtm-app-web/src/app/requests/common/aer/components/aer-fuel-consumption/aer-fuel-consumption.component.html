@@ -41,17 +41,19 @@
       widthClass="govuk-!-width-one-third"></div>
   }
 
-  <h4 class="govuk-heading-s">Consumption (tonnes)</h4>
-  @if (isNil(formGroup?.value?.totalConsumption)) {
-    <p class="govuk-body">Not calculated yet</p>
-  } @else {
-    <p class="govuk-heading-s">{{ formGroup?.value?.totalConsumption }}</p>
-  }
+  <p class="govuk-body govuk-!-font-weight-bold govuk-!-margin-bottom-1">Consumption (tonnes)</p>
+  <p class="govuk-body govuk-!-margin-bottom-6">
+    @if (isNil(formGroup?.value?.totalConsumption)) {
+      Not calculated yet
+    } @else {
+      <strong>{{ formGroup?.value?.totalConsumption }}</strong>
+    }
+  </p>
 </mrtm-wizard-step>
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
-  <a govukLink [routerLink]="this.fuelConsumptionId() ? ['../../'] : ['../']">
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <a govukLink [routerLink]="fuelConsumptionId() ? ['../../'] : ['../']">
     Return to: {{ wizardMap.totalEmissions.title }}
   </a>
 </div>

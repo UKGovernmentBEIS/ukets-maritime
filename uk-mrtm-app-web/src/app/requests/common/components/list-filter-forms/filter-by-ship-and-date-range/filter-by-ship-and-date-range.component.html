@@ -1,4 +1,4 @@
-<ng-container #outletContainer></ng-container>
+<ng-container #outletContainer />
 
 <ng-template #contentTemplate>
   <form [formGroup]="formGroup" (submit)="onSubmit()" #formElement>
@@ -28,39 +28,33 @@
             legend="Search a specific period"
             legendSize="small"
             hint="For example, 17/5/2024">
-            <div class="govuk-grid-row row-container">
-              @if (type() === 'ports') {
-                <div class="govuk-grid-column-one-half">
-                  <div
-                    mrtm-date-picker
-                    formControlName="arrivalDate"
-                    label="Arrival"
-                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
-                </div>
-                <div class="govuk-grid-column-one-half">
-                  <div
-                    mrtm-date-picker
-                    formControlName="departureDate"
-                    label="Departure"
-                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
-                </div>
-              } @else if (type() === 'voyages') {
-                <div class="govuk-grid-column-one-half">
-                  <div
-                    mrtm-date-picker
-                    formControlName="departureDate"
-                    label="Departure"
-                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
-                </div>
-                <div class="govuk-grid-column-one-half">
-                  <div
-                    mrtm-date-picker
-                    formControlName="arrivalDate"
-                    label="Arrival"
-                    invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
-                </div>
-              }
-            </div>
+            @if (type() === 'ports') {
+              <div
+                mrtm-date-picker
+                formControlName="arrivalDate"
+                label="Arrival"
+                widthClass="govuk-input--width-10"
+                invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+              <div
+                mrtm-date-picker
+                formControlName="departureDate"
+                label="Departure"
+                widthClass="govuk-input--width-10"
+                invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+            } @else if (type() === 'voyages') {
+              <div
+                mrtm-date-picker
+                formControlName="departureDate"
+                label="Departure"
+                widthClass="govuk-input--width-10"
+                invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+              <div
+                mrtm-date-picker
+                formControlName="arrivalDate"
+                label="Arrival"
+                widthClass="govuk-input--width-10"
+                invalidDateFormatMessage="The format should be 'DD/MM/YYYY'"></div>
+            }
           </div>
         </div>
       </div>

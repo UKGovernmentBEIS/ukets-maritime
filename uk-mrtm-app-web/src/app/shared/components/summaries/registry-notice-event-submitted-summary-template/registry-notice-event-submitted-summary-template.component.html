@@ -1,0 +1,21 @@
+@if (data(); as data) {
+  <h2 class="govuk-heading-m">Operator details</h2>
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>UK ETS Registry ID</dt>
+      <dd govukSummaryListRowValue>{{ data?.registryId }}</dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Notification type</dt>
+      <dd govukSummaryListRowValue>{{ data?.type | registryNoticeEventType }}</dd>
+    </div>
+    @if (data?.officialNotice) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Notification</dt>
+        <dd govukSummaryListRowValue>
+          <mrtm-summary-download-files [files]="[data?.officialNotice]" />
+        </dd>
+      </div>
+    }
+  </dl>
+}

@@ -18,10 +18,10 @@ import { WizardStepComponent } from '@shared/components';
 
 @Component({
   selector: 'mrtm-variation-details-summary-form',
-  standalone: true,
   imports: [WizardStepComponent, TextareaComponent, ReactiveFormsModule],
-  providers: [variationDetailsSummaryFormProvider],
+  standalone: true,
   templateUrl: './variation-details-summary-form.component.html',
+  providers: [variationDetailsSummaryFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VariationDetailsSummaryFormComponent {

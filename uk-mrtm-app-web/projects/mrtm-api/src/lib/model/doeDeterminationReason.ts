@@ -7,11 +7,9 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
+import { DoeDeterminationReasonDetails } from './doeDeterminationReasonDetails';
 
 export interface DoeDeterminationReason {
-  type:
-    | 'VERIFIED_REPORT_NOT_SUBMITTED_IN_ACCORDANCE_WITH_ORDER'
-    | 'CORRECTING_NON_MATERIAL_MISSTATEMENT'
-    | 'IMPOSING_OR_CONSIDERING_IMPOSING_CIVIL_PENALTY_IN_ACCORDANCE_WITH_ORDER';
+  details: DoeDeterminationReasonDetails;
   furtherDetails?: string;
 }

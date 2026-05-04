@@ -10,11 +10,11 @@ import {
 
 @Component({
   selector: 'mrtm-non-compliance-initial-penalty-notice-submitted',
-  standalone: true,
   imports: [
     NonComplianceInitialPenaltyNoticeUploadSummaryTemplateComponent,
     NonComplianceNotifiedUsersSummaryTemplateComponent,
   ],
+  standalone: true,
   template: `
     <mrtm-non-compliance-initial-penalty-notice-upload-summary-template
       [data]="data()"

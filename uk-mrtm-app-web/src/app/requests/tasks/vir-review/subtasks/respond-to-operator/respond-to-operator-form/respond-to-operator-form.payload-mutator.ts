@@ -1,6 +1,5 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { RegulatorImprovementResponse, RegulatorReviewResponse } from '@mrtm/api';
 
@@ -11,6 +10,7 @@ import { RESPOND_TO_OPERATOR_SUBTASK } from '@requests/common/vir';
 import { VirRespondToOperatorWizardStep } from '@requests/tasks/vir-review/subtasks/respond-to-operator/respond-to-operator.helpers';
 import { RespondToOperatorFormModel } from '@requests/tasks/vir-review/subtasks/respond-to-operator/respond-to-operator-form/respond-to-operator-form.types';
 import { VirReviewTaskPayload } from '@requests/tasks/vir-review/vir-review.types';
+import { isNil } from '@shared/utils';
 
 export class RespondToOperatorFormPayloadMutator extends PayloadMutator {
   public readonly subtask: string = RESPOND_TO_OPERATOR_SUBTASK;

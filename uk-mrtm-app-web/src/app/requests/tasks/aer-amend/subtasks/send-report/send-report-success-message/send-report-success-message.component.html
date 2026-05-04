@@ -1,5 +1,5 @@
 @if (verificationBody) {
-  <govuk-panel title="Report sent for verification"></govuk-panel>
+  <govuk-panel title="Report sent for verification" />
   <h3 class="govuk-heading-m">What happens next</h3>
   <div class="govuk-body">
     Your report has been sent to {{ verificationBody.name }}. You can recall your report at any time before the
@@ -10,11 +10,12 @@
     statement. You will then be able to submit your report to the regulator.
   </div>
 } @else {
-  <govuk-panel title="Sent to regulator for review"></govuk-panel>
+  <govuk-panel title="Sent to regulator for review" />
   <h3 class="govuk-heading-m">What happens next</h3>
   <div class="govuk-body">The regulator will continue their review.</div>
 }
 
 <div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink routerLink="/dashboard">Return to: Dashboard</a>
 </div>

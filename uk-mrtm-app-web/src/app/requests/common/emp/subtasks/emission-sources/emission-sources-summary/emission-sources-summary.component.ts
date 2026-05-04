@@ -37,7 +37,6 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emission-sources-summary',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     EmissionSourcesSummaryTemplateComponent,
@@ -47,6 +46,7 @@ interface ViewModel {
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
     ReviewDecisionSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emission-sources-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -55,7 +55,7 @@ export class EmissionSourcesSummaryComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const hasReview = this.store.select(empCommonQuery.selectHasReview)();
     const isEditable = this.store.select(empCommonQuery.selectIsPeerReview)()
       ? false

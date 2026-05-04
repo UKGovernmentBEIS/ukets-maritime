@@ -27,9 +27,9 @@ export const OPINION_STATEMENT_ROUTES: Routes = [
       backlink: backlinkResolver(OpinionStatementStep.SUMMARY, '../../'),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-emissions-form'
-      ).then((c) => c.OpinionStatementEmissionsFormComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-emissions-form').then(
+        (c) => c.OpinionStatementEmissionsFormComponent,
+      ),
   },
   {
     path: OpinionStatementStep.ADDITIONAL_CHANGES,
@@ -40,9 +40,9 @@ export const OPINION_STATEMENT_ROUTES: Routes = [
       backlink: backlinkResolver(OpinionStatementStep.SUMMARY, OpinionStatementStep.EMISSIONS_FORM),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-additional-changes'
-      ).then((c) => c.OpinionStatementAdditionalChangesComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-additional-changes').then(
+        (c) => c.OpinionStatementAdditionalChangesComponent,
+      ),
   },
   {
     path: OpinionStatementStep.SITE_VISIT_TYPE,
@@ -53,9 +53,9 @@ export const OPINION_STATEMENT_ROUTES: Routes = [
       backlink: backlinkResolver(OpinionStatementStep.SUMMARY, OpinionStatementStep.ADDITIONAL_CHANGES),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-type'
-      ).then((c) => c.OpinionStatementSiteVisitTypeComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-type').then(
+        (c) => c.OpinionStatementSiteVisitTypeComponent,
+      ),
   },
   {
     path: OpinionStatementStep.SITE_VISIT_IN_PERSON,
@@ -66,9 +66,9 @@ export const OPINION_STATEMENT_ROUTES: Routes = [
       backlink: backlinkResolver(OpinionStatementStep.SUMMARY, OpinionStatementStep.SITE_VISIT_TYPE),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-in-person'
-      ).then((c) => c.OpinionStatementSiteVisitInPersonComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-in-person').then(
+        (c) => c.OpinionStatementSiteVisitInPersonComponent,
+      ),
   },
   {
     path: OpinionStatementStep.SITE_VISIT_VIRTUAL,
@@ -79,8 +79,8 @@ export const OPINION_STATEMENT_ROUTES: Routes = [
       backlink: backlinkResolver(OpinionStatementStep.SUMMARY, OpinionStatementStep.SITE_VISIT_TYPE),
     },
     loadComponent: () =>
-      import(
-        '@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-virtual'
-      ).then((c) => c.OpinionStatementSiteVisitVirtualComponent),
+      import('@requests/tasks/aer-verification-submit/subtasks/opinion-statement/opinion-statement-site-visit-virtual').then(
+        (c) => c.OpinionStatementSiteVisitVirtualComponent,
+      ),
   },
 ];

@@ -16,17 +16,17 @@
   </div>
 
   <ng-container formArrayName="abbreviationDefinitions">
-    @for (abbreviationDef of abbrDefFormArray.controls; track abbreviationDef; let i = $index) {
-      <fieldset [formGroupName]="i" govukFieldset id="abbreviation-def-{{ i }}">
+    @for (abbreviationDef of abbrDefFormArray.controls; track abbreviationDef) {
+      <fieldset [formGroupName]="$index" govukFieldset id="abbreviation-def-{{ $index }}">
         <div class="govuk-grid-row">
           <div class="govuk-grid-column-two-thirds">
-            <legend legendSize="medium" govukLegend>Definition {{ i + 1 }}</legend>
+            <legend legendSize="medium" govukLegend>Definition {{ $index + 1 }}</legend>
           </div>
           <div class="govuk-grid-column-one-third govuk-!-text-align-right">
             @if (abbrDefFormArray.length > 1) {
               <button
                 govukSecondaryButton
-                (click)="removeAbbrDefFormGroup(i)"
+                (click)="removeAbbrDefFormGroup($index)"
                 type="button"
                 class="govuk-!-margin-bottom-0">
                 Remove

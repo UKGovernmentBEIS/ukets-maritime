@@ -2,8 +2,9 @@ import { EnvironmentProviders, makeEnvironmentProviders } from '@angular/core';
 
 import { PAYLOAD_MUTATORS, SIDE_EFFECTS, TaskApiService, TaskService, WIZARD_FLOW_MANAGERS } from '@netz/common/forms';
 
+import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { UPLOAD_SHIPS_XML_SERVICE } from '@requests/common/components/emissions/upload-ships';
-import { empCommonSubtaskStepsProvider } from '@requests/common/emp';
+import { empCommonQuery, empCommonSubtaskStepsProvider } from '@requests/common/emp';
 import {
   AbbreviationsFlowManager,
   AbbreviationsQuestionPayloadMutator,
@@ -14,6 +15,7 @@ import {
   AdditionalDocumentsUploadPayloadMutator,
 } from '@requests/common/emp/subtasks/additional-documents';
 import {
+  CONTROL_ACTIVITIES_SUB_TASK,
   ControlActivitiesCorrectionsAndCorrectivesPayloadMutator,
   ControlActivitiesDocumentationPayloadMutator,
   ControlActivitiesFlowManager,
@@ -23,11 +25,13 @@ import {
   ControlActivitiesSummarySideEffect,
 } from '@requests/common/emp/subtasks/control-activities';
 import {
+  DATA_GAPS_SUB_TASK,
   DataGapsFlowManager,
   DataGapsMethodPayloadMutator,
   DataGapsSummarySideEffect,
 } from '@requests/common/emp/subtasks/data-gaps';
 import {
+  EMISSION_SOURCES_SUB_TASK,
   EmissionSourceFlowManager,
   EmissionSourcesCompletionPayloadMutator,
   EmissionSourcesCompliancePayloadMutator,
@@ -43,6 +47,7 @@ import {
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { EmpShipsXmlService } from '@requests/common/emp/subtasks/emissions/services';
 import {
+  GREENHOUSE_GAS_SUB_TASK,
   GreenhouseGasCrossChecksPayloadMutator,
   GreenhouseGasFlowManager,
   GreenhouseGasFuelPayloadMutator,
@@ -52,6 +57,7 @@ import {
   GreenhouseGasVoyagesPayloadMutator,
 } from '@requests/common/emp/subtasks/greenhouse-gas';
 import {
+  MANAGEMENT_PROCEDURES_SUB_TASK,
   ManagementProceduresAdequacyPayloadMutator,
   ManagementProceduresDataFlowPayloadMutator,
   ManagementProceduresFlowManager,
@@ -60,6 +66,7 @@ import {
   ManagementProceduresSummarySideEffect,
 } from '@requests/common/emp/subtasks/management-procedures';
 import {
+  MANDATE_SUB_TASK,
   MandateFlowManager,
   provideMandatePayloadMutators,
   provideMandateSideEffects,
@@ -72,12 +79,11 @@ import {
   OrganisationDetailsPayloadMutator,
   UndertakenActivitiesPayloadMutator,
 } from '@requests/common/emp/subtasks/operator-details';
+import { SECTIONS_COMPLETED_SELECTOR, SUBTASKS_AFFECTED_BY_IMPORT } from '@requests/common/third-party-data-provider';
+import { ThirdPartyDataProviderImportFlowManager } from '@requests/common/third-party-data-provider/third-party-data-provider-import';
 import { AdditionalDocumentsFlowManager } from '@requests/common/utils/additional-documents';
+import { ThirdPartyDataProviderImportPayloadMutator } from '@requests/tasks/emp-submit/payload-mutators';
 import { EmpApiService, EmpService } from '@requests/tasks/emp-submit/services';
-import {
-  ThirdPartyDataProviderImportFlowManager,
-  ThirdPartyDataProviderImportPayloadMutator,
-} from '@requests/tasks/emp-submit/third-party-data-provider/third-party-data-provider-import';
 
 export function provideEmpSubmitPayloadMutators(): EnvironmentProviders {
   return makeEnvironmentProviders([
@@ -152,5 +158,26 @@ export function provideEmpSubmitStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: MandateFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ThirdPartyDataProviderImportFlowManager },
+  ]);
+}
+
+export function provideThirdPartyConfigurations(): EnvironmentProviders {
+  return makeEnvironmentProviders([
+    {
+      provide: SUBTASKS_AFFECTED_BY_IMPORT,
+      useValue: [
+        EMISSIONS_SUB_TASK,
+        EMISSION_SOURCES_SUB_TASK,
+        GREENHOUSE_GAS_SUB_TASK,
+        DATA_GAPS_SUB_TASK,
+        MANDATE_SUB_TASK,
+        MANAGEMENT_PROCEDURES_SUB_TASK,
+        CONTROL_ACTIVITIES_SUB_TASK,
+      ],
+    },
+    {
+      provide: SECTIONS_COMPLETED_SELECTOR,
+      useValue: empCommonQuery.selectEmpSectionsCompleted,
+    },
   ]);
 }

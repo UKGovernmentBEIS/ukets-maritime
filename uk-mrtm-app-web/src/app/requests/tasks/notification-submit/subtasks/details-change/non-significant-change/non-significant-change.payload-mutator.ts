@@ -1,6 +1,5 @@
 import { Observable, of } from 'rxjs';
 import { produce } from 'immer';
-import { isNil } from 'lodash-es';
 
 import { PayloadMutator } from '@netz/common/forms';
 
@@ -11,7 +10,7 @@ import {
   DetailsChangeWizardStep,
 } from '@requests/tasks/notification-submit/subtasks/details-change/details-change.helper';
 import { NonSignificantChangeFormType } from '@requests/tasks/notification-submit/subtasks/details-change/non-significant-change/non-significant-change.types';
-import { createFileUploadPayload, transformToTaskAttachments } from '@shared/utils';
+import { createFileUploadPayload, isNil, transformToTaskAttachments } from '@shared/utils';
 
 export class NonSignificantChangePayloadMutator extends PayloadMutator {
   subtask = DETAILS_CHANGE_SUB_TASK;

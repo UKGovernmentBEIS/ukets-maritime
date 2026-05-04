@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { ConditionalContentDirective } from '../../directives';
@@ -14,7 +14,6 @@ describe('RadioOptionComponent', () => {
   let element: HTMLElement;
 
   @Component({
-    standalone: true,
     imports: [
       RadioComponent,
       ReactiveFormsModule,
@@ -22,9 +21,10 @@ describe('RadioOptionComponent', () => {
       ConditionalContentDirective,
       TextInputComponent,
     ],
+    standalone: true,
     template: `
       <div govuk-radio [formControl]="control">
-        <govuk-radio-option [value]="1" label="First"></govuk-radio-option>
+        <govuk-radio-option [value]="1" label="First" />
         <govuk-radio-option [value]="2">
           <ng-container govukLabel>Second</ng-container>
           <ng-container govukConditionalContent>
@@ -42,7 +42,7 @@ describe('RadioOptionComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
+      providers: [ControlContainer],
     }).compileComponents();
   });
 

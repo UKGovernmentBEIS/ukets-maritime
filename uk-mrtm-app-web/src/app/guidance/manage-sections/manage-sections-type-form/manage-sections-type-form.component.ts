@@ -4,15 +4,12 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { GuidanceSectionDTO, RegulatorCurrentUserDTO } from '@mrtm/api';
 
 import { AuthStore, selectUser } from '@netz/common/auth';
 import {
   ConditionalContentDirective,
   GovukSelectOption,
-  LegendDirective,
   LinkDirective,
   RadioComponent,
   RadioOptionComponent,
@@ -24,10 +21,10 @@ import { MANAGE_GUIDANCE_FORM } from '@guidance/guidance.constants';
 import { manageSectionsTypeFormProvider } from '@guidance/manage-sections/manage-sections-type-form/manage-sections-type-form.provider';
 import { ManageSectionsFromModel } from '@guidance/manage-sections/manage-sections-type-form/manage-sections-type-form.types';
 import { WizardStepComponent } from '@shared/components';
+import { isNil } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-manage-sections-type-form',
-  standalone: true,
   imports: [
     WizardStepComponent,
     RadioComponent,
@@ -38,10 +35,10 @@ import { WizardStepComponent } from '@shared/components';
     SelectComponent,
     LinkDirective,
     RouterLink,
-    LegendDirective,
   ],
-  providers: [manageSectionsTypeFormProvider],
+  standalone: true,
   templateUrl: './manage-sections-type-form.component.html',
+  providers: [manageSectionsTypeFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ManageSectionsTypeFormComponent implements OnInit {

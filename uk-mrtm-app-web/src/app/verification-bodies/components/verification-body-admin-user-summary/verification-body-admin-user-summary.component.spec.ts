@@ -11,8 +11,10 @@ import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/
 
 @Component({
   selector: 'mrtm-test-parent',
+  imports: [VerificationBodyAdminUserSummaryComponent],
+  standalone: true,
   template: `
-    <mrtm-verification-body-admin-user-summary [summaryInfo]="summaryInfo"></mrtm-verification-body-admin-user-summary>
+    <mrtm-verification-body-admin-user-summary [summaryInfo]="summaryInfo" />
   `,
 })
 class TestParentComponent {
@@ -24,8 +26,6 @@ describe('VerificationBodyAdminUserSummaryComponent', () => {
   let fixture: ComponentFixture<TestParentComponent>;
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TestParentComponent],
-      imports: [VerificationBodyAdminUserSummaryComponent],
       providers: [{ provide: ActivatedRoute, useValue: new ActivatedRouteStub() }],
     }).compileComponents();
 

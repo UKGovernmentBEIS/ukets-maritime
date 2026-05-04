@@ -15,6 +15,13 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Service for creating and signing JWT client assertions for OAuth 2.0 Private Key JWT Client Authentication.
+ *
+ * <p>Creates client assertion JWTs signed with the client's private key. The authorization server
+ * verifies the signature using the client's public key from the JWKS endpoint.
+ *
+ */
 @Service
 public class JwtService {
 
@@ -27,6 +34,17 @@ public class JwtService {
     this.keycloakAudience = keycloakAudience;
   }
 
+  /**
+   * Generates and signs a JWT client assertion for OAuth 2.0 Private Key JWT authentication.
+   *
+   * <p>Creates a JWT with required claims (iss, sub, aud, jti, iat, exp), signs it with the
+   * provided RSA private key using RS256 algorithm, and returns the serialized token.
+   *
+   * @param clientId the OAuth client ID (used as both issuer and subject in the JWT)
+   * @param rsaKey the RSA key pair containing the private key for signing
+   * @return the serialized signed JWT string in compact form
+   * @throws Exception if signing fails or key operations fail
+   */
   public String generateAndSignJwt(String clientId, RSAKey rsaKey) throws Exception {
     Instant now = Instant.now();
 

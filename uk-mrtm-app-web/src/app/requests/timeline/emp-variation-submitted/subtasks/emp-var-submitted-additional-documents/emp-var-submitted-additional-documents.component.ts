@@ -42,7 +42,7 @@ export class EmpVarSubmittedAdditionalDocumentsComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
   private readonly authStore: AuthStore = inject(AuthStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const additionalDocuments = this.store.select(empVariationSubmittedQuery.selectAdditionalDocuments)();
     return {
       additionalDocuments: additionalDocuments,

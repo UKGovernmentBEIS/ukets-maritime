@@ -20,7 +20,7 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(EmissionSourcesSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.emissionSources = {
+    fixture.componentRef.setInput('emissionSources', {
       listCompletion: {
         reference: 'list completion ref',
         version: 'list completion  version',
@@ -43,8 +43,8 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
       emissionCompliance: {
         exist: false,
       },
-    };
-    component.emissionSourcesMap = {
+    });
+    fixture.componentRef.setInput('emissionSourcesMap', {
       title: 'Procedures related to emissions sources and emissions factors',
       listCompletion: {
         title: 'Manage the completeness of the list of ships and emission sources',
@@ -56,13 +56,13 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
         title: 'Emissions reduction claim',
         caption: 'Will you be making an emissions reduction claim relating to eligible fuels?',
       },
-    };
-    component.wizardStep = {
+    });
+    fixture.componentRef.setInput('wizardStep', {
       LIST_COMPLETION: 'completion',
       EMISSION_FACTORS: 'factors',
       EMISSION_COMPLIANCE: 'compliance',
-    };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });
@@ -75,46 +75,46 @@ describe('EmissionSourcesSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Procedure reference',
       'list completion ref',
-      'Change',
+      'Change procedure reference (Manage the completeness of the list of ships and emission sources)',
       'Procedure version',
       'list completion  version',
-      'Change',
+      'Change procedure version (Manage the completeness of the list of ships and emission sources)',
       'Description of procedure',
       'list completion  description',
-      'Change',
+      'Change description of procedure (Manage the completeness of the list of ships and emission sources)',
       'Name of person or position responsible for this procedure',
       'list completion person',
-      'Change',
+      'Change  name of person or position responsible for this procedure (Manage the completeness of the list of ships and emission sources)',
       'Location where records are kept',
       'list completion location',
-      'Change',
+      'Change location where records are kept (Manage the completeness of the list of ships and emission sources)',
       'Name of IT system used',
       'list completion it',
-      'Change',
+      'Change name of IT system used (Manage the completeness of the list of ships and emission sources)',
       'Are you using default values for all emissions factors?',
       'No',
-      'Change',
+      'Change whether using default values for all emissions factors',
       'Procedure reference',
       'ef ref',
-      'Change',
+      'Change procedure reference (Determination of emission factors)',
       'Procedure version',
       'ef ver',
-      'Change',
+      'Change procedure version (Determination of emission factors)',
       'Description of procedure',
       'ef desc',
-      'Change',
+      'Change description of procedure (Determination of emission factors)',
       'Name of person or position responsible for this procedure',
       'ef per',
-      'Change',
+      'Change  name of person or position responsible for this procedure (Determination of emission factors)',
       'Location where records are kept',
       'ef loc',
-      'Change',
+      'Change location where records are kept (Determination of emission factors)',
       'Name of IT system used',
       'Not provided',
-      'Change',
+      'Change name of IT system used (Determination of emission factors)',
       'Will you be making an emissions reduction claim relating to eligible fuels?',
       'No',
-      'Change',
+      'Change emissions reduction claim relating to eligible fuels',
     ]);
   });
 });

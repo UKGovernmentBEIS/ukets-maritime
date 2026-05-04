@@ -9,11 +9,11 @@ import { AerAggregatedEmissionsFormComponent } from '@requests/common/aer/compon
 
 describe('AerAggregatedEmissionsFormComponent', () => {
   @Component({
+    imports: [ReactiveFormsModule, AerAggregatedEmissionsFormComponent],
+    standalone: true,
     template: `
       <form [formGroup]="formGroup"><mrtm-aer-aggregated-emissions-form formGroupName="testGroup" /></form>
     `,
-    standalone: true,
-    imports: [ReactiveFormsModule, AerAggregatedEmissionsFormComponent],
   })
   class TestComponent {
     formGroup: FormGroup = new FormGroup({
@@ -50,8 +50,8 @@ describe('AerAggregatedEmissionsFormComponent', () => {
       'N2O emissions (tCO2e)',
     ]);
 
-    expect(page.query('h4')?.textContent?.trim()).toEqual('Total emissions (tCO2e)');
-    expect(page.query('p.govuk-body').textContent?.trim()).toEqual('Not calculated yet.');
+    expect(page.paragraphs.at(0)?.textContent?.trim()).toEqual('Total emissions (tCO2e)');
+    expect(page.paragraphs.at(1).textContent?.trim()).toEqual('Not calculated yet');
   });
 
   it('should calculate total emissions', async () => {
@@ -62,6 +62,6 @@ describe('AerAggregatedEmissionsFormComponent', () => {
     await new Promise((resolve) => setTimeout(resolve, 1000));
     fixture.detectChanges(true);
 
-    expect(page.query('p.govuk-body').textContent?.trim()).toEqual('36');
+    expect(page.paragraphs.at(1).textContent?.trim()).toEqual('36');
   });
 });

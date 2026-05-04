@@ -2,34 +2,33 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
 import { RequestActionStore } from '@netz/common/store';
-import { ActivatedRouteStub } from '@netz/common/testing';
+import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
 import { emissionSourcesMap } from '@requests/common/emp/subtasks/subtask-list.map';
 import { mockSubmittedStateBuild } from '@requests/common/emp/testing/emp-action-data.mock';
 import { mockEmpEmissionSources } from '@requests/common/emp/testing/emp-data.mock';
 import { taskProviders } from '@requests/common/task.providers';
 import { EmissionSourcesSubmittedComponent } from '@requests/timeline/emp-submitted/subtasks/emission-sources';
-import { screen } from '@testing-library/angular';
 
 describe('EmissionSourcesSubmittedComponent', () => {
   let fixture: ComponentFixture<EmissionSourcesSubmittedComponent>;
   let component: EmissionSourcesSubmittedComponent;
   let store: RequestActionStore;
+  let page: Page;
 
   const activatedRouteStub = new ActivatedRouteStub();
 
-  const createComponent = () => {
-    fixture = TestBed.createComponent(EmissionSourcesSubmittedComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-    jest.clearAllMocks();
-  };
+  class Page extends BasePage<EmissionSourcesSubmittedComponent> {
+    get summaryListTerms(): string[] {
+      return this.queryAll('dt').map((dt) => dt.textContent.trim());
+    }
+  }
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
+  beforeEach(() => {
+    TestBed.configureTestingModule({
       imports: [EmissionSourcesSubmittedComponent],
       providers: [{ provide: ActivatedRoute, useValue: activatedRouteStub }, ...taskProviders],
-    }).compileComponents();
+    });
 
     store = TestBed.inject(RequestActionStore);
     store.setState(
@@ -37,7 +36,11 @@ describe('EmissionSourcesSubmittedComponent', () => {
         sources: mockEmpEmissionSources,
       }),
     );
-    createComponent();
+    fixture = TestBed.createComponent(EmissionSourcesSubmittedComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+    page = new Page(fixture);
+    jest.clearAllMocks();
   });
 
   it('should create', () => {
@@ -45,22 +48,15 @@ describe('EmissionSourcesSubmittedComponent', () => {
   });
 
   it('should display all HTMLElements', () => {
-    expect(screen.getAllByRole('heading')[0].textContent).toEqual(
-      'Procedures related to emissions sources and emissions factors',
-    );
+    expect(page.heading1.textContent).toEqual('Procedures related to emissions sources and emissions factors');
 
-    const summarySections = screen
-      .getAllByRole('heading')
-      .slice(1)
-      .map((section) => section.textContent);
-
-    expect(summarySections).toEqual([
+    expect(page.queryAll('h2').map((item) => item.textContent.trim())).toEqual([
       emissionSourcesMap.listCompletion.title,
       emissionSourcesMap.emissionFactors.title,
       emissionSourcesMap.emissionCompliance.title,
     ]);
 
-    expect([...new Set(screen.getAllByRole('term').map((term) => term.textContent.trim()))]).toEqual([
+    expect([...new Set(page.summaryListTerms)]).toEqual([
       'Procedure reference',
       'Procedure version',
       'Description of procedure',

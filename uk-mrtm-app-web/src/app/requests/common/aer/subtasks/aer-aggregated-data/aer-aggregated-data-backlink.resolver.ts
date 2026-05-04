@@ -1,11 +1,13 @@
+import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 
-import { isNil } from 'lodash-es';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import {
   AER_AGGREGATED_DATA_PARAM,
   AerAggregatedDataWizardStep,
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
+import { isNil } from '@shared/utils';
 
 const selectShipBacklinkResolver = (returnToSummary: boolean, activatedRoute: ActivatedRouteSnapshot): string => {
   const dataId = activatedRoute.params?.[AER_AGGREGATED_DATA_PARAM];
@@ -17,7 +19,7 @@ const selectFuelConsumptionBacklinkResolver = (
   activatedRoute: ActivatedRouteSnapshot,
 ): string => {
   const dataId = activatedRoute.params?.[AER_AGGREGATED_DATA_PARAM];
-  return returnToSummary ? '../' : !isNil(dataId) ? `../${AerAggregatedDataWizardStep.SELECT_SHIP}` : '../';
+  return returnToSummary ? '../' : !isNil(dataId) ? `../../` : '../';
 };
 
 const selectAnnualEmissionsBacklinkResolver = (
@@ -40,13 +42,17 @@ const stepBacklinkResolvers: Partial<
   [AerAggregatedDataWizardStep.FUEL_CONSUMPTION]: selectFuelConsumptionBacklinkResolver,
   [AerAggregatedDataWizardStep.ANNUAL_EMISSIONS]: selectAnnualEmissionsBacklinkResolver,
   [AerAggregatedDataWizardStep.SHIP_EMISSIONS]: shipEmissionsSummaryBacklinkResolver,
+  [AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY]: (returnToSummary: boolean) =>
+    returnToSummary ? '../../' : '../',
 };
 
 export const aerAggregatedDataBacklinkResolver =
   (step: AerAggregatedDataWizardStep): ResolveFn<unknown> =>
   (route: ActivatedRouteSnapshot) => {
     const isChange = route.queryParamMap.get('change') === 'true';
-
+    const store = inject(RequestTaskStore);
+    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
     const resolverFn = stepBacklinkResolvers[step];
-    return resolverFn ? resolverFn(!!isChange, route) : './';
+
+    return resolverFn ? resolverFn(isChange || !isEditable, route) : './';
   };

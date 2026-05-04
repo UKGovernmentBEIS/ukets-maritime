@@ -20,18 +20,18 @@ describe('AbbreviationsSummaryTemplateComponent', () => {
 
     fixture = TestBed.createComponent(AbbreviationsSummaryTemplateComponent);
     component = fixture.componentInstance;
-    component.abbreviations = {
+    fixture.componentRef.setInput('abbreviations', {
       exist: true,
       abbreviationDefinitions: [{ abbreviation: 'Abbreviation1', definition: 'definition 1' }],
-    };
-    component.abbreviationsMap = {
+    });
+    fixture.componentRef.setInput('abbreviationsMap', {
       title: 'List of definitions and abbreviations',
       abbreviationsQuestion: {
         title: 'Are you using any abbreviations or terminology in your application which need explanation?',
       },
-    };
-    component.wizardStep = { ABBREVIATIONS_QUESTION: 'abbreviations-question', SUMMARY: '../' };
-    component.isEditable = true;
+    });
+    fixture.componentRef.setInput('wizardStep', { ABBREVIATIONS_QUESTION: 'abbreviations-question', SUMMARY: '../' });
+    fixture.componentRef.setInput('isEditable', true);
     page = new Page(fixture);
     fixture.detectChanges();
   });
@@ -44,13 +44,13 @@ describe('AbbreviationsSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Are you using any abbreviations or terminology in your application which need explanation?',
       'Yes',
-      'Change',
+      'Change  whether any abbreviations or terminology are used in your application which need explanation',
       'Abbreviation, acronym or terminology',
       'Abbreviation1',
-      'Change',
+      'Change  abbreviation, acronym or terminology (Definition 1)',
       'Definition',
       'definition 1',
-      'Change',
+      'Change definition (Definition 1)',
     ]);
   });
 });

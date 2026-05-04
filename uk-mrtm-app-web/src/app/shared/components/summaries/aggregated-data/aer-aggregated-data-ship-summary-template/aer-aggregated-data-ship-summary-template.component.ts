@@ -16,7 +16,6 @@ import { AerAggregatedDataEmissionDto, AerAggregatedDataShipSummary } from '@sha
 
 @Component({
   selector: 'mrtm-aer-aggregated-data-ship-summary-template',
-  standalone: true,
   imports: [
     RouterLink,
     LinkDirective,
@@ -24,6 +23,7 @@ import { AerAggregatedDataEmissionDto, AerAggregatedDataShipSummary } from '@sha
     AerAggregatedDataFuelConsumptionsSummaryTemplateComponent,
     ButtonDirective,
   ],
+  standalone: true,
   templateUrl: './aer-aggregated-data-ship-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

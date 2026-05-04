@@ -20,26 +20,26 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-emission-sources',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     EmissionSourcesSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-emission-sources.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewEmissionSourcesComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     return {
       emissionSources: this.store.select(empCommonQuery.selectEmissionSources)(),
       originalEmissionSources: this.store.select(
         empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan,
-      )().sources,
-      variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
+      )()?.sources,
+      variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()?.[
         'EMISSION_SOURCES'
       ],
       emissionSourcesMap: emissionSourcesMap,

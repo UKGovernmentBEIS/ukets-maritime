@@ -15,13 +15,13 @@ import { formatDateFromString } from '@shared/utils';
  */
 @Injectable()
 export class DatePickerService {
-  dialogTitle: WritableSignal<string> = signal('');
-  isDialogOpen: WritableSignal<boolean> = signal(false);
-  calendarDates: WritableSignal<CalendarDate[]> = signal([]);
-  inputDate: WritableSignal<Date | null> = signal(null);
-  dayLabels: WritableSignal<DayOfWeek[]> = signal(dayLabels);
-  excludedDates: WritableSignal<Date[] | null> = signal(null);
-  excludedDays: WritableSignal<number[] | null> = signal(null);
+  readonly dialogTitle: WritableSignal<string> = signal('');
+  readonly isDialogOpen: WritableSignal<boolean> = signal(false);
+  readonly calendarDates: WritableSignal<CalendarDate[]> = signal([]);
+  readonly inputDate: WritableSignal<Date | null> = signal(null);
+  readonly dayLabels: WritableSignal<DayOfWeek[]> = signal(dayLabels);
+  readonly excludedDates: WritableSignal<Date[] | null> = signal(null);
+  readonly excludedDays: WritableSignal<number[] | null> = signal(null);
 
   private config!: DatePickerConfig;
   private elementRef: ElementRef;
@@ -285,13 +285,14 @@ export class DatePickerService {
    * and updates the calendar
    */
   private openDialog() {
-    this.isDialogOpen.set(true);
     this.setMinAndMaxDatesOnCalendar();
     this.currentDate = this.inputDate() ?? new Date();
     this.currentDate.setHours(0, 0, 0, 0);
 
     this.updateCalendar();
     this.setCurrentDate();
+    this.setDialogPosition();
+    this.isDialogOpen.set(true);
   }
 
   /**
@@ -430,7 +431,7 @@ export class DatePickerService {
    * Use with events on DatePickerComponent.
    * @param event - KeyboardEvent that was triggered
    */
-  onDateKeyPress(event: KeyboardEvent) {
+  onDateKeyPress(event: KeyboardEvent): void {
     let calendarNavKey = true;
 
     switch (event.key) {
@@ -467,6 +468,35 @@ export class DatePickerService {
       event.preventDefault();
       event.stopPropagation();
     }
+  }
+
+  /**
+   * Sets the position of the dialog relative to the input.
+   * If the dialog overflows to the right side of the viewport, it is positioned to the right of the input instead.
+   */
+  private setDialogPosition(): void {
+    requestAnimationFrame(() => {
+      const dialog: HTMLElement = this.elementRef.nativeElement.querySelector('.moj-datepicker__dialog');
+      const input: HTMLElement = this.elementRef.nativeElement.querySelector('.govuk-input__wrapper');
+      if (!dialog || !input) {
+        return;
+      }
+
+      const inputLeft = input.getBoundingClientRect().left;
+      const dialogWidth = dialog.offsetWidth;
+      const scrollbarOffset = 10;
+      const spaceToRight = window.innerWidth - (inputLeft + dialogWidth + scrollbarOffset);
+
+      dialog.style.top = `${input.offsetHeight + 3}px`;
+
+      if (spaceToRight >= 0) {
+        dialog.style.left = '0';
+        dialog.style.right = 'auto';
+      } else {
+        dialog.style.right = '0';
+        dialog.style.left = 'auto';
+      }
+    });
   }
 
   /**

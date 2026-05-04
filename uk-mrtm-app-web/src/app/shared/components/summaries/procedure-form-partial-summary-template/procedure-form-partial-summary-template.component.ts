@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpProcedureForm, EmpProcedureFormWithFiles } from '@mrtm/api';
@@ -16,7 +16,6 @@ import { HtmlDiffDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-procedure-form-partial-summary-template',
-  standalone: true,
   imports: [
     LinkDirective,
     SummaryListRowDirective,
@@ -27,14 +26,16 @@ import { HtmlDiffDirective } from '@shared/directives';
     SummaryListComponent,
     HtmlDiffDirective,
   ],
+  standalone: true,
   templateUrl: './procedure-form-partial-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProcedureFormPartialSummaryTemplateComponent {
-  @Input({ required: true }) procedureForm: EmpProcedureForm | EmpProcedureFormWithFiles;
-  @Input() originalProcedureForm: EmpProcedureForm | EmpProcedureFormWithFiles;
-  @Input() currentWizardStep: string;
-  @Input() isEditable = false;
-  @Input() queryParams: Params = {};
-  @Input() cssClass: string | null = null;
+  readonly procedureForm = input.required<EmpProcedureForm | EmpProcedureFormWithFiles>();
+  readonly a11yActionsText = input.required<string>();
+  readonly originalProcedureForm = input<EmpProcedureForm | EmpProcedureFormWithFiles>();
+  readonly currentWizardStep = input<string>();
+  readonly isEditable = input(false);
+  readonly queryParams = input<Params>({});
+  readonly cssClass = input<string | null>(null);
 }

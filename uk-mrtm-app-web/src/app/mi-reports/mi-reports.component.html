@@ -1,20 +1,19 @@
 <netz-page-heading size="xl">MI Reports</netz-page-heading>
 
-<div class="overflow-auto overflow-auto-table govuk-!-padding-1">
-  <govuk-table id="mi-reports" [columns]="tableColumns" [data]="currentPageData$ | async">
-    <ng-template let-column="column" let-row="row">
-      @switch (column.field) {
-        @default {
-          <a [routerLink]="miReportTypeLinkMap[row.miReportType]" govukLink>{{ row[column.field] }}</a>
-        }
+<govuk-table id="mi-reports" [columns]="tableColumns" [data]="currentPageData()">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) {
+      @default {
+        <a [routerLink]="miReportTypeLinkMap[row.miReportType]" govukLink>{{ row[column.field] }}</a>
       }
-    </ng-template>
-  </govuk-table>
-  @if ((totalPages$ | async) > pageSize) {
-    <govuk-pagination
-      fragment="mi-reports"
-      (currentPageChange)="currentPage$.next($event)"
-      [count]="totalPages$ | async"
-      [pageSize]="pageSize"></govuk-pagination>
-  }
-</div>
+    }
+  </ng-template>
+</govuk-table>
+
+@if (data()?.length > pageSize) {
+  <govuk-pagination
+    fragment="mi-reports"
+    [count]="data().length"
+    [pageSize]="pageSize"
+    (currentPageChange)="currentPage.set($event)" />
+}

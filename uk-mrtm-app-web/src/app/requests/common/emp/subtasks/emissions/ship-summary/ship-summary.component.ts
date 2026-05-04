@@ -22,7 +22,6 @@ import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-ship-summary',
-  standalone: true,
   imports: [
     ShipSummaryTemplateComponent,
     ButtonDirective,
@@ -30,6 +29,7 @@ import { AttachedFile } from '@shared/types';
     ReturnToShipsListTableComponent,
     PageHeadingComponent,
   ],
+  standalone: true,
   templateUrl: './ship-summary.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -2,18 +2,18 @@
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>First name</dt>
     <dd govukSummaryListRowValue>{{ modifiedUserInfo.firstName }}</dd>
-    @if (changeLink) {
+    @if (changeLink()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
       </dd>
     }
   </div>
   <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Last name</dt>
     <dd govukSummaryListRowValue>{{ modifiedUserInfo.lastName }}</dd>
-    @if (changeLink) {
+    @if (changeLink()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
       </dd>
     }
   </div>
@@ -21,9 +21,9 @@
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Email address</dt>
       <dd govukSummaryListRowValue>{{ $any(modifiedUserInfo).email }}</dd>
-      @if (changeLink) {
+      @if (changeLink()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
+          <a govukLink [routerLink]="changeLink()" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
         </dd>
       }
     </div>
@@ -33,9 +33,9 @@
     <dd govukSummaryListRowValue>
       {{ modifiedUserInfo.phoneNumber.countryCode | phoneNumber }} {{ modifiedUserInfo.phoneNumber.number }}
     </dd>
-    @if (changeLink) {
+    @if (changeLink()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
       </dd>
     }
   </div>
@@ -48,9 +48,9 @@
         <span class="govuk-hint">Not provided</span>
       }
     </dd>
-    @if (changeLink) {
+    @if (changeLink()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
+        <a govukLink [routerLink]="changeLink()" [relativeTo]="route" [queryParams]="changeQueryParams">Change</a>
       </dd>
     }
   </div>

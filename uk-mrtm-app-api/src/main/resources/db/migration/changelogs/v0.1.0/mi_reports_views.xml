@@ -205,7 +205,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_drop_account_mrtm_emp_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_drop_account_mrtm_emp_views" author="dimopoulosc@unisystems" runOrder="first" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             drop view if exists sch_report_sepa.account_mrtm cascade;
@@ -223,7 +223,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_create_account_mrtm_emp_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_create_account_mrtm_emp_views" author="dimopoulosc@unisystems" runOrder="last" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             create or replace view sch_report_sepa.account_mrtm as select acc_mrtm.* from account_mrtm acc_mrtm join account acc on acc.id=acc_mrtm.id where acc.competent_authority = 'SCOTLAND';
@@ -241,7 +241,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_drop_request_resource_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_drop_request_resource_views" author="dimopoulosc@unisystems" runOrder="first" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             drop view if exists sch_report_sepa.request_resource cascade;
@@ -253,7 +253,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_create_request_resource_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_create_request_resource_views" author="dimopoulosc@unisystems" runOrder="last" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             create or replace view sch_report_sepa.request_resource as (select rr.* FROM request_resource rr  WHERE rr.resource_type = 'CA' and rr.resource_id = 'SCOTLAND' UNION select acc.* FROM request_resource ca JOIN request_resource acc ON ca.request_id = acc.request_id  WHERE acc.resource_type = 'ACCOUNT' and ca.resource_type = 'CA' and ca.resource_id = 'SCOTLAND');
@@ -265,7 +265,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_drop_account_reporting_status_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_drop_account_reporting_status_views" author="dimopoulosc@unisystems" runOrder="first" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             drop view if exists sch_report_sepa.account_reporting_status cascade;
@@ -278,7 +278,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_create_account_reporting_status_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_create_account_reporting_status_views" author="dimopoulosc@unisystems" runOrder="last" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             create or replace view sch_report_sepa.account_reporting_status as select ars.* from account_reporting_status ars join account acc on acc.id=ars.account_id where acc.competent_authority = 'SCOTLAND';
@@ -291,7 +291,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_drop_aer_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_drop_aer_views" author="dimopoulosc@unisystems" runOrder="first" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             drop view if exists sch_report_sepa.rpt_aer cascade;
@@ -303,7 +303,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_create_aer_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_create_aer_views" author="dimopoulosc@unisystems" runOrder="last" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             create or replace view sch_report_sepa.rpt_aer as select s.* from rpt_aer s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
@@ -315,7 +315,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_drop_rpt_reportable_emissions_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_drop_rpt_reportable_emissions_views" author="dimopoulosc@unisystems" runOrder="first" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             drop view if exists sch_report_sepa.rpt_reportable_emissions cascade;
@@ -327,7 +327,7 @@
         <rollback/>
     </changeSet>
 
-    <changeSet id="0_1_0_create_rpt_reportable_emissions_views" author="dimopoulosc@unisystems" runAlways="true">
+    <changeSet id="0_1_0_create_rpt_reportable_emissions_views" author="dimopoulosc@unisystems" runOrder="last" runAlways="true">
         <validCheckSum>ANY</validCheckSum>
         <sql>
             create or replace view sch_report_sepa.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'SCOTLAND');
@@ -335,6 +335,78 @@
             create or replace view sch_report_nrw.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'WALES');
             create or replace view sch_report_niea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'NORTHERN_IRELAND');
             create or replace view sch_report_ea.rpt_reportable_emissions as select s.* from rpt_reportable_emissions s where exists (select null from account a where a.id = s.account_id and a.competent_authority = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_emp_staging_views" author="P44065" runOrder="first" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.emp_staging cascade;
+            drop view if exists sch_report_opred.emp_staging cascade;
+            drop view if exists sch_report_nrw.emp_staging cascade;
+            drop view if exists sch_report_niea.emp_staging cascade;
+            drop view if exists sch_report_ea.emp_staging cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_emp_staging_views" author="P44065" runOrder="last" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.emp_staging as select emp_stg.* from sch_third_party_data.emp_staging emp_stg where exists (select null from account a where a.id = emp_stg.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_opred.emp_staging as select emp_stg.* from sch_third_party_data.emp_staging emp_stg where exists (select null from account a where a.id = emp_stg.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_nrw.emp_staging as select emp_stg.* from sch_third_party_data.emp_staging emp_stg where exists (select null from account a where a.id = emp_stg.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_niea.emp_staging as select emp_stg.* from sch_third_party_data.emp_staging emp_stg where exists (select null from account a where a.id = emp_stg.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_ea.emp_staging as select emp_stg.* from sch_third_party_data.emp_staging emp_stg where exists (select null from account a where a.id = emp_stg.account_id and a.competent_authority = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_aer_staging_views" author="P44065" runOrder="first" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.aer_staging cascade;
+            drop view if exists sch_report_opred.aer_staging cascade;
+            drop view if exists sch_report_nrw.aer_staging cascade;
+            drop view if exists sch_report_niea.aer_staging cascade;
+            drop view if exists sch_report_ea.aer_staging cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_aer_staging_views" author="P44065" runOrder="last" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.aer_staging as select aer_stg.* from sch_third_party_data.aer_staging aer_stg where exists (select null from account a where a.id = aer_stg.account_id and a.competent_authority = 'SCOTLAND');
+            create or replace view sch_report_opred.aer_staging as select aer_stg.* from sch_third_party_data.aer_staging aer_stg where exists (select null from account a where a.id = aer_stg.account_id and a.competent_authority = 'OPRED');
+            create or replace view sch_report_nrw.aer_staging as select aer_stg.* from sch_third_party_data.aer_staging aer_stg where exists (select null from account a where a.id = aer_stg.account_id and a.competent_authority = 'WALES');
+            create or replace view sch_report_niea.aer_staging as select aer_stg.* from sch_third_party_data.aer_staging aer_stg where exists (select null from account a where a.id = aer_stg.account_id and a.competent_authority = 'NORTHERN_IRELAND');
+            create or replace view sch_report_ea.aer_staging as select aer_stg.* from sch_third_party_data.aer_staging aer_stg where exists (select null from account a where a.id = aer_stg.account_id and a.competent_authority = 'ENGLAND');
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_drop_request_account_views" author="P44065" runOrder="first" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.request_account cascade;
+            drop view if exists sch_report_opred.request_account cascade;
+            drop view if exists sch_report_nrw.request_account cascade;
+            drop view if exists sch_report_niea.request_account cascade;
+            drop view if exists sch_report_ea.request_account cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_1_0_create_request_account_views" author="P44065" runOrder="last" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.request_account as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'ENGLAND';
+            create or replace view sch_report_opred.request_account as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'ENGLAND';
+            create or replace view sch_report_nrw.request_account as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'ENGLAND';
+            create or replace view sch_report_niea.request_account as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'ENGLAND';
+            create or replace view sch_report_ea.request_account as SELECT r.id, r.type_id, r.status, r.creation_date, ca.resource_id AS competent_authority, acc.resource_id AS account_id, r.payload, r.submission_date, r.metadata, r.end_date FROM request r JOIN request_resource ca ON r.id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON r.id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'ENGLAND';
         </sql>
         <rollback/>
     </changeSet>

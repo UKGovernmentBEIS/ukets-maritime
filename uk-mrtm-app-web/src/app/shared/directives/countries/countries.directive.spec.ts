@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ControlContainer, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
 import { SelectComponent } from '@netz/govuk-components';
@@ -14,6 +14,7 @@ describe('CountriesDirective', () => {
   let fixture: ComponentFixture<TestComponent>;
 
   @Component({
+    imports: [CountriesDirective, ReactiveFormsModule, SelectComponent],
     template: '<div govuk-select mrtmCountries [formControl]="country" label="Country"> </div>',
   })
   class TestComponent {
@@ -22,9 +23,7 @@ describe('CountriesDirective', () => {
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule, SelectComponent, CountriesDirective],
-      declarations: [TestComponent],
-      providers: [{ provide: CountryService, useClass: CountryServiceStub }],
+      providers: [{ provide: CountryService, useClass: CountryServiceStub }, ControlContainer],
     }).createComponent(TestComponent);
 
     fixture.detectChanges();

@@ -10,31 +10,25 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import {
-  CompetentAuthorityPipe,
-  CountryPipe,
-  LegalStatusTypeDisplayTextPipe,
-  OrganisationDetailsAddressTitlePipe,
-} from '@shared/pipes';
+import { RegistryOrganisationStructureSummaryTemplateComponent } from '@shared/components/summaries/registry-organisation-structure-summary-template/registry-organisation-structure-summary-template.component';
+import { CompetentAuthorityPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-registry-operator-details-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowDirective,
     SummaryListRowKeyDirective,
     SummaryListRowValueDirective,
-    LegalStatusTypeDisplayTextPipe,
-    CountryPipe,
-    OrganisationDetailsAddressTitlePipe,
     GovukDatePipe,
     CompetentAuthorityPipe,
+    RegistryOrganisationStructureSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './registry-operator-details-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class RegistryOperatorDetailsSummaryTemplateComponent {
-  operatorDetails = input.required<EmpOperatorDetails>();
-  account = input.required<MrtmAccountViewDTO>();
+  readonly operatorDetails = input.required<EmpOperatorDetails>();
+  readonly account = input.required<MrtmAccountViewDTO>();
 }

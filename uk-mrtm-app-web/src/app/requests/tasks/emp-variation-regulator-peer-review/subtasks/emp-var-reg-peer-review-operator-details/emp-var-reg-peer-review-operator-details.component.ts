@@ -22,23 +22,23 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-emp-var-reg-peer-review-operator-details',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     OperatorDetailsSummaryTemplateComponent,
     ReturnToTaskOrActionPageComponent,
     VariationRegulatorDecisionPartialSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './emp-var-reg-peer-review-operator-details.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmpVarRegPeerReviewOperatorDetailsComponent {
   private readonly store = inject(RequestTaskStore);
 
-  vm: Signal<ViewModel> = computed(() => {
+  readonly vm: Signal<ViewModel> = computed(() => {
     const originalOperatorDetails = this.store.select(
       empVariationRegulatorPeerReviewQuery.selectOriginalEmissionsMonitoringPlan,
-    )().operatorDetails;
+    )()?.operatorDetails;
     const empOperatorDetails = this.store.select(empCommonQuery.selectOperatorDetails)();
     return {
       operatorDetails: empOperatorDetails,
@@ -48,7 +48,7 @@ export class EmpVarRegPeerReviewOperatorDetailsComponent {
           (empOperatorDetails?.organisationStructure as LimitedCompanyOrganisation)?.evidenceFiles,
         ),
       )(),
-      variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()[
+      variationDecisionDetails: this.store.select(empVariationRegulatorPeerReviewQuery.selectReviewGroupDecisions)()?.[
         'MARITIME_OPERATOR_DETAILS'
       ],
       originalOperatorDetails: originalOperatorDetails,

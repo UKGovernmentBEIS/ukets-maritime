@@ -7,7 +7,12 @@
     <dd govukSummaryListRowValue notProvided="{{ monitoringPlanChanges()?.changesExist | booleanToText }}"></dd>
     @if (isEditable() && changeLink()) {
       <dd govukSummaryListRowActions>
-        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">
+            whether there were changes to the emissions monitoring plan during the scheme year
+          </span>
+        </a>
       </dd>
     }
   </div>
@@ -18,7 +23,10 @@
       <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="monitoringPlanChanges()?.changes"></dd>
       @if (isEditable() && changeLink()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">description of changes</span>
+          </a>
         </dd>
       }
     </div>

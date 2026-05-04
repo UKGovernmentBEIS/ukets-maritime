@@ -10,8 +10,8 @@ import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 
 @Component({
   selector: 'mrtm-send-application-confirmation',
-  standalone: true,
   imports: [ButtonDirective, PageHeadingComponent, PendingButtonDirective, ReturnToTaskOrActionPageComponent],
+  standalone: true,
   templateUrl: './send-application-confirmation.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

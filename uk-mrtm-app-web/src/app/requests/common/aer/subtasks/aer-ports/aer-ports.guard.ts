@@ -1,8 +1,7 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
-import { RequestTaskStore } from '@netz/common/store';
-import { requestTaskQuery } from '@netz/common/store';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
 import {
@@ -33,11 +32,7 @@ export const canActivatePortCallSummary: CanActivateFn = (route: ActivatedRouteS
     return true;
   }
 
-  if (aerPortStepsCompletedMap.portDetails(port)) {
-    return createUrlTreeFromSnapshot(route, ['.', AerPortsWizardStep.IN_PORT_EMISSIONS]);
-  }
-
-  return createUrlTreeFromSnapshot(route, ['.', AerPortsWizardStep.SELECT_SHIP]);
+  return createUrlTreeFromSnapshot(route, ['.', AerPortsWizardStep.PORT_DETAILS]);
 };
 
 export const canActivateListOfPorts: CanActivateFn = (route: ActivatedRouteSnapshot) => {

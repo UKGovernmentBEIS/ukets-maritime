@@ -37,6 +37,22 @@ public class EmulatorController {
     logger.info("Initializing EmulatorController");
   }
 
+  /**
+   * JWKS (JSON Web Key Set) endpoint - exposes public keys for JWT signature verification.
+   *
+   * <p><b>Purpose:</b><br>
+   * This endpoint is called by the authorization server (Keycloak) to retrieve the client's
+   * public keys. The authorization server uses these keys to verify the signature of client assertion
+   * JWTs during the authentication process.
+   *
+   * <p><b>Access:</b>
+   * <ul>
+   *   <li>This endpoint is publicly accessible (no authentication required)</li>
+   *   <li>Returns only public key material - private keys are never exposed</li>
+   * </ul>
+   *
+   * @return JSON object containing the public JWK Set
+   */
   @GetMapping("/jwks")
   public Map<String, Object> getJwks() {
     logger.info("Serving jwk public key");
@@ -63,6 +79,28 @@ public class EmulatorController {
     return retrieveAccessToken(clientId, clientAssertion);
   }
 
+  /**
+   *
+   * <p>This method performs the token request for OAuth 2.0 Private Key JWT Client Authentication.
+   *
+   * <p><b>Token Request Parameters (RFC 7523):</b>
+   * <ul>
+   *   <li><b>grant_type:</b> "client_credentials" - indicates this is a client credentials flow</li>
+   *   <li><b>client_id:</b> The OAuth client identifier</li>
+   *   <li><b>client_assertion_type:</b> "urn:ietf:params:oauth:client-assertion-type:jwt-bearer"
+   *       - specifies that authentication uses a JWT</li>
+   *   <li><b>client_assertion:</b> The signed JWT token that proves the client's identity</li>
+   * </ul>
+   *
+   * <p><b>Response:</b><br>
+   * On success, returns a JSON response containing the access token, token type, and expiration time.
+   *
+   * @param clientId the OAuth client ID
+   * @param clientAssertion the signed JWT client assertion
+   * @return ResponseEntity containing the token response or error details
+   *
+   *
+   */
   private ResponseEntity<String> retrieveAccessToken(String clientId, String clientAssertion) {
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);

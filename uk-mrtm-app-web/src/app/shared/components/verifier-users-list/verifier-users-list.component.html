@@ -1,9 +1,9 @@
-@if (editable) {
+@if (editable()) {
   @switch (userRole$ | async) {
     @case ('REGULATOR') {
       <a
-        [routerLink]="['/user/verifiers/add', 'verifier_admin']"
-        [queryParams]="{ verificationBodyId }"
+        [routerLink]="[editVerifierSubpath(), 'add', 'verifier_admin']"
+        [queryParams]="{ verificationBodyId: verificationBodyId() }"
         govukButton
         id="reg-add-user"
         type="button">
@@ -52,15 +52,18 @@
 
 <form (submit)="handleSubmit()" [formGroup]="form" id="verifier-users-form" name="verifier users">
   <govuk-table
-    [columns]="editable ? tableColumns : readonlyTableColumns"
-    [data]="authorities | async"
+    [columns]="editable() ? tableColumns : readonlyTableColumns"
+    [data]="authorities() | async"
     formArrayName="verifierUsers">
     <ng-template let-column="column" let-index="index" let-row="row">
       <ng-container [formGroupName]="index">
         @switch (column.field) {
           @case ('name') {
-            @if (editable || (userId$ | async) === row.userId) {
-              <a [routerLink]="['/user/verifiers', row.userId]" [queryParams]="{ verificationBodyId }" govukLink>
+            @if (editable() || (userId$ | async) === row.userId) {
+              <a
+                [routerLink]="[editVerifierSubpath(), row.userId]"
+                [queryParams]="{ verificationBodyId: verificationBodyId() }"
+                govukLink>
                 {{ row | userFullName }}
               </a>
             } @else {
@@ -68,8 +71,10 @@
             }
           }
           @case ('roleCode') {
-            @if (row.authorityStatus !== 'DISABLED' && row.authorityStatus !== 'PENDING' && editable) {
+            @if (row.authorityStatus !== 'DISABLED' && row.authorityStatus !== 'PENDING' && editable()) {
               <div
+                label="Change role"
+                [isLabelHidden]="true"
                 [options]="verifierUserTypes"
                 formControlName="roleCode"
                 govuk-select
@@ -79,10 +84,12 @@
             }
           }
           @case ('authorityStatus') {
-            @if (row.authorityStatus === 'PENDING' || editable === false) {
+            @if (row.authorityStatus === 'PENDING' || editable() === false) {
               Awaiting confirmation
             } @else {
               <div
+                label="Change authority status"
+                [isLabelHidden]="true"
                 [options]="
                   row.authorityStatus === 'ACCEPTED'
                     ? verifierUsersAcceptedStatuses
@@ -99,7 +106,7 @@
             <div class="govuk-!-text-align-right">
               <a
                 [routerLink]="['/user/verifiers', row.userId, 'delete']"
-                [queryParams]="{ verificationBodyId }"
+                [queryParams]="{ verificationBodyId: verificationBodyId() }"
                 govukLink>
                 Delete
               </a>
@@ -109,7 +116,7 @@
       </ng-container>
     </ng-template>
   </govuk-table>
-  @if (editable && (authorities | async)?.length > 0) {
+  @if (editable() && (authorities() | async)?.length > 0) {
     <div class="govuk-button-group">
       <button govukButton netzPendingButton type="submit">Save</button>
       <button (click)="handleDiscardChanges()" govukSecondaryButton type="button">Discard changes</button>

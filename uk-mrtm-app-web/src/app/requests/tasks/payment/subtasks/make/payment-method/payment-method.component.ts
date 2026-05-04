@@ -21,18 +21,18 @@ import { PAYMENT_METHOD_SELECT_OPTIONS } from '@shared/constants';
 
 @Component({
   selector: 'mrtm-payment-method',
-  standalone: true,
   imports: [WizardStepComponent, FormsModule, ReactiveFormsModule, RadioComponent, RadioOptionComponent],
-  providers: [paymentMethodFormProvider],
+  standalone: true,
   templateUrl: './payment-method.component.html',
+  providers: [paymentMethodFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentMethodComponent {
   private readonly store = inject(RequestTaskStore);
   private readonly taskService = inject(TaskService<PaymentTaskPayload>);
   private readonly activatedRoute = inject(ActivatedRoute);
-
   public readonly form: FormGroup = inject(TASK_FORM);
+
   public readonly options = computed(() => {
     const availablePaymentMethods = this.store.select(paymentQuery.selectAvailablePaymentMethods)();
 

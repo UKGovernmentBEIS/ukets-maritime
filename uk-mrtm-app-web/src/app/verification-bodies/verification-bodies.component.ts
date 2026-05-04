@@ -29,7 +29,6 @@ import {
 
 @Component({
   selector: 'mrtm-verification-bodies',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     AsyncPipe,
@@ -39,8 +38,9 @@ import {
     PendingButtonDirective,
     NotificationBannerComponent,
   ],
-  providers: [createVerificationBodiesFormProvider],
+  standalone: true,
   templateUrl: './verification-bodies.component.html',
+  providers: [createVerificationBodiesFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class VerificationBodiesComponent implements OnInit {

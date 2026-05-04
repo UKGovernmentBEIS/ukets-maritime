@@ -12,7 +12,7 @@ import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_TOTAL_EMISSIONS_SUB_TASK } from '@requests/common/aer/subtasks/aer-total-emissions';
 import { AER_VOYAGES_SUB_TASK } from '@requests/common/aer/subtasks/aer-voyages';
 import { MONITORING_PLAN_CHANGES_SUB_TASK } from '@requests/common/aer/subtasks/monitoring-plan-changes';
-import { AER_REDUCTION_CLAIM_SUB_TASK } from '@requests/common/aer/subtasks/reduction-claim';
+import { AER_REDUCTION_CLAIM_SUB_TASK, reductionClaimMap } from '@requests/common/aer/subtasks/reduction-claim';
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { OPERATOR_DETAILS_SUB_TASK } from '@requests/common/components/operator-details';
 import { ADDITIONAL_DOCUMENTS_SUB_TASK } from '@requests/common/utils/additional-documents';
@@ -26,7 +26,7 @@ import {
   MonitoringPlanChangesSummaryTemplateComponent,
   OperatorDetailsSummaryTemplateComponent,
   PortCallsListSummaryTemplateComponent,
-  ReductionClaimSummaryTemplateComponent,
+  ReductionClaimSubmittedSummaryTemplateComponent,
   VoyagesListSummaryTemplateComponent,
 } from '@shared/components';
 
@@ -85,9 +85,12 @@ const provideReductionClaimSubtaskSummary: Provider = {
   deps: [RequestTaskStore],
   useFactory: (store: RequestTaskStore): AerReviewSummaryDetailsSection => {
     return {
-      component: ReductionClaimSummaryTemplateComponent,
+      component: ReductionClaimSubmittedSummaryTemplateComponent,
       inputs: computed(() => ({
         data: store.select(aerCommonQuery.selectReductionClaim)(),
+        wizardMap: reductionClaimMap,
+        fuelPurchases: store.select(aerCommonQuery.selectReductionClaimDetailsListItems)(),
+        dataSupplierName: store.select(aerCommonQuery.selectThirdPartyDataProviderName)(),
       })),
     };
   },

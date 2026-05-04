@@ -1,0 +1,2939 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Maritime External API",
+    "description": "Maritime External API Specification",
+    "version": "3.0.2"
+  },
+  "servers": [
+    {
+      "url": "https://manage-emissions-reporting.service.gov.uk/maritime/api",
+      "description": "Production environment"
+    },
+    {
+      "url": "https://qa1.manage-emissions-reporting.service.gov.uk/maritime/api",
+      "description": "UAT environment"
+    }
+  ],
+  "security": [
+    {
+      "bearerAuth": []
+    }
+  ],
+  "paths": {
+    "/external/v1.0/accounts/{company-imo-number}/emp": {
+      "put": {
+        "tags": [
+          "Maritime emissions monitoring plan API"
+        ],
+        "summary": "Saves or updates maritime emissions monitoring plan data",
+        "operationId": "submitEmissionsMonitoringPlanData",
+        "parameters": [
+          {
+            "name": "company-imo-number",
+            "in": "path",
+            "description": "The company IMO number",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{7}$",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalEmissionsMonitoringPlan"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "404": {
+            "description": "Not Found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t\n\t\n Error Code | Description \t\nFORM1001 | Form validation failed \t\nFORM1002 | Parameters validation failed \t\nEMP1001 | Business validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/v1.0/accounts/{company-imo-number}/aer/{year}": {
+      "put": {
+        "tags": [
+          "Maritime annual emissions report API"
+        ],
+        "summary": "Saves or updates maritime annual emissions report data. This endpoint will be available from 1 July 2026 in production environment",
+        "operationId": "submitAerData",
+        "parameters": [
+          {
+            "name": "company-imo-number",
+            "in": "path",
+            "description": "The company IMO number",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{7}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "The year of the annual emissions report. Accepts the current year and possibly previous years with AER (based on the first year of maritime activity of the account)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalAer"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t\n\t\n Error Code | Description \t\nFORM1001 | Form validation failed \t\nFORM1002 | Parameters validation failed \t\nAER1004 | Business validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found\t\n\t\n Error Code | Description \t\nAER1007 | AER does not exist for specific year",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/external/v1.0/accounts/{company-imo-number}/aer/{year}/verification": {
+      "put": {
+        "tags": [
+          "Maritime annual emissions report verification API"
+        ],
+        "summary": "Saves or updates maritime annual emissions report verification data. This endpoint will be available from 1 July 2026 in production environment",
+        "operationId": "submitAerVerificationData",
+        "parameters": [
+          {
+            "name": "company-imo-number",
+            "in": "path",
+            "description": "The company IMO number",
+            "required": true,
+            "schema": {
+              "pattern": "^\\d{7}$",
+              "type": "string"
+            }
+          },
+          {
+            "name": "year",
+            "in": "path",
+            "description": "The year of the annual emissions report being verified. Accepts the current year and possibly previous years with AER (based on the first year of maritime activity of the account)",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExternalAerVerification"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "429": {
+            "description": "Too Many Requests",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "204": {
+            "description": "No Content"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not Found\t\n\t\n Error Code | Description \t\nAER1007 | AER does not exist for specific year",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request\t\n\t\n Error Code | Description \t\nFORM1001 | Form validation failed \t\nFORM1002 | Parameters validation failed \t\nAER1005 | Business validation error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExternalErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ExternalEmpOutsourcedActivitiesProcedure": {
+        "required": [
+          "outsourcedActivitiesExists"
+        ],
+        "type": "object",
+        "properties": {
+          "outsourcedActivitiesExists": {
+            "type": "boolean",
+            "description": "If true, the related procedure data are required, otherwise must be omitted"
+          },
+          "details": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          }
+        },
+        "description": "Outsourced Activities"
+      },
+      "ExternalEmpDelegatedResponsibility": {
+        "required": [
+          "delegatedResponsibilityUsed"
+        ],
+        "type": "object",
+        "properties": {
+          "delegatedResponsibilityUsed": {
+            "type": "boolean",
+            "description": "Delegation of UK ETS compliance by registered ship owners. If true, registeredOwners and responsibilityDeclaration are required otherwise they must be omitted"
+          },
+          "registeredOwners": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpRegisteredOwner"
+            }
+          },
+          "responsibilityDeclaration": {
+            "type": "boolean",
+            "description": "Maritime Operator declares that the information provided is true. If delegatedResponsibilityUsed is true it must be true, otherwise it must be omitted",
+            "nullable": true
+          }
+        },
+        "description": "Delegated UK ETS responsibility"
+      },
+      "ExternalAerNotVerifiedDecisionReason": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Decision reason type that the report cannot be verified",
+            "enum": [
+              "UNCORRECTED_MATERIAL_MISSTATEMENT",
+              "UNCORRECTED_MATERIAL_NON_CONFORMITY",
+              "VERIFICATION_DATA_OR_INFORMATION_LIMITATIONS",
+              "SCOPE_LIMITATIONS_DUE_TO_LACK_OF_CLARITY",
+              "SCOPE_LIMITATIONS_OF_APPROVED_MONITORING_PLAN",
+              "NOT_APPROVED_MONITORING_PLAN_BY_REGULATOR",
+              "ANOTHER_REASON"
+            ]
+          },
+          "details": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Decision reason details. Must be provided if type is 'VERIFICATION_DATA_OR_INFORMATION_LIMITATIONS', 'SCOPE_LIMITATIONS_DUE_TO_LACK_OF_CLARITY', 'SCOPE_LIMITATIONS_OF_APPROVED_MONITORING_PLAN', 'NOT_APPROVED_MONITORING_PLAN_BY_REGULATOR' or 'ANOTHER_REASON'"
+          }
+        },
+        "description": "List the reasons for your decision. Provide only when type is 'NOT_VERIFIED'"
+      },
+      "ExternalAerAggregatedDataEmissionsMeasurements": {
+        "required": [
+          "tch4eqTotal",
+          "tco2Total",
+          "tn2oeqTotal"
+        ],
+        "type": "object",
+        "properties": {
+          "tco2Total": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Carbon dioxide. Positive or zero decimal number with fraction part max 7 digits"
+          },
+          "tch4eqTotal": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Methane. Positive or zero decimal number with fraction part max 7 digits"
+          },
+          "tn2oeqTotal": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Nitrous oxide. Positive or zero decimal number with fraction part max 7 digits"
+          }
+        }
+      },
+      "ExternalErrorResponse": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          },
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Violation"
+            }
+          }
+        }
+      },
+      "ExternalVerifierComment": {
+        "required": [
+          "explanation"
+        ],
+        "type": "object",
+        "properties": {
+          "explanation": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Give as much detail as possible, including: the nature and size of the non-compliance and which element of the non-compliance it relates to"
+          }
+        },
+        "description": "Recommended improvements. Required only when 'exist' is true, otherwise must be omitted"
+      },
+      "ExternalEmpEmissionsProcedures": {
+        "required": [
+          "emissionFactorsProcedure",
+          "emissionSourcesProcedure",
+          "reductionClaimProcedure"
+        ],
+        "type": "object",
+        "properties": {
+          "emissionSourcesProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "emissionFactorsProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpEmissionFactorsProcedure"
+          },
+          "reductionClaimProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpReductionClaimProcedure"
+          }
+        },
+        "description": "Procedures related to emissions sources and emissions factors"
+      },
+      "ExternalEmpShipDetails": {
+        "required": [
+          "companyNature",
+          "flag",
+          "grossTonnage",
+          "iceClassPolarCode",
+          "name",
+          "shipImoNumber",
+          "shipType"
+        ],
+        "type": "object",
+        "properties": {
+          "shipImoNumber": {
+            "pattern": "^\\d{7}$",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the Ship as stated on IMO GISIS"
+          },
+          "shipType": {
+            "type": "string",
+            "enum": [
+              "PAX",
+              "RORO",
+              "CONT",
+              "OIL",
+              "CHEM",
+              "LNG",
+              "GAS",
+              "BULK",
+              "GENERAL",
+              "RCV",
+              "VEH",
+              "COMB",
+              "ROPAX",
+              "CONT_RORO",
+              "CRUISE",
+              "OFFSHORE",
+              "OTHER"
+            ]
+          },
+          "grossTonnage": {
+            "maximum": 999999999,
+            "minimum": 5000,
+            "type": "integer",
+            "format": "int32"
+          },
+          "flag": {
+            "type": "string",
+            "description": "Code of the flag",
+            "enum": [
+              "AE",
+              "AF",
+              "AG",
+              "AI",
+              "AL",
+              "AM",
+              "AO",
+              "AR",
+              "AS",
+              "AT",
+              "AU",
+              "AW",
+              "AZ",
+              "BA",
+              "BB",
+              "BD",
+              "BE",
+              "BG",
+              "BH",
+              "BJ",
+              "BM",
+              "BN",
+              "BO",
+              "BQ",
+              "BR",
+              "BS",
+              "BY",
+              "BZ",
+              "CA",
+              "CD",
+              "CG",
+              "CH",
+              "CI",
+              "CK",
+              "CL",
+              "CM",
+              "CN",
+              "CO",
+              "CR",
+              "CU",
+              "CV",
+              "CW",
+              "CY",
+              "CZ",
+              "DE",
+              "DJ",
+              "DK",
+              "DM",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "ER",
+              "ES",
+              "ET",
+              "FI",
+              "FJ",
+              "FK",
+              "FM",
+              "FO",
+              "FR",
+              "GA",
+              "GB",
+              "GD",
+              "GE",
+              "GG",
+              "GH",
+              "GI",
+              "GM",
+              "GN",
+              "GQ",
+              "GR",
+              "GT",
+              "GW",
+              "GY",
+              "HK",
+              "HN",
+              "HR",
+              "HT",
+              "HU",
+              "ID",
+              "IE",
+              "IL",
+              "IM",
+              "IN",
+              "IQ",
+              "IR",
+              "IS",
+              "IT",
+              "JE",
+              "JM",
+              "JO",
+              "JP",
+              "KE",
+              "KG",
+              "KH",
+              "KI",
+              "KM",
+              "KN",
+              "KP",
+              "KR",
+              "KW",
+              "KY",
+              "KZ",
+              "LA",
+              "LB",
+              "LC",
+              "LK",
+              "LR",
+              "LT",
+              "LU",
+              "LV",
+              "LY",
+              "MA",
+              "MC",
+              "MD",
+              "ME",
+              "MG",
+              "MH",
+              "ML",
+              "MM",
+              "MN",
+              "MO",
+              "MR",
+              "MS",
+              "MT",
+              "MU",
+              "MV",
+              "MX",
+              "MY",
+              "MZ",
+              "NA",
+              "NE",
+              "NG",
+              "NI",
+              "NL",
+              "NO",
+              "NR",
+              "NZ",
+              "OM",
+              "PA",
+              "PE",
+              "PF",
+              "PG",
+              "PH",
+              "PK",
+              "PL",
+              "PT",
+              "PW",
+              "PY",
+              "QA",
+              "RO",
+              "RS",
+              "RU",
+              "SA",
+              "SB",
+              "SC",
+              "SL",
+              "SD",
+              "SE",
+              "SG",
+              "SH",
+              "SI",
+              "SK",
+              "SN",
+              "SO",
+              "SR",
+              "SS",
+              "ST",
+              "SV",
+              "SX",
+              "SY",
+              "TC",
+              "TF",
+              "TG",
+              "TH",
+              "TJ",
+              "TM",
+              "TN",
+              "TO",
+              "TR",
+              "TT",
+              "TV",
+              "TW",
+              "TZ",
+              "UA",
+              "UG",
+              "US",
+              "UY",
+              "UZ",
+              "VC",
+              "VE",
+              "VG",
+              "VI",
+              "VN",
+              "VU",
+              "WS",
+              "YE",
+              "ZA",
+              "ZW"
+            ]
+          },
+          "iceClassPolarCode": {
+            "type": "string",
+            "description": "Ice class polar code",
+            "enum": [
+              "PC1",
+              "PC2",
+              "PC3",
+              "PC4",
+              "PC5",
+              "PC6",
+              "PC7",
+              "IC",
+              "IB",
+              "IA",
+              "IA_SUPER",
+              "NA"
+            ]
+          },
+          "companyNature": {
+            "type": "string",
+            "description": "Nature of the company for the ship referenced in this EMP",
+            "enum": [
+              "SHIPOWNER",
+              "ISM_COMPANY"
+            ]
+          }
+        },
+        "description": "Ships and emission details"
+      },
+      "ExternalAerDataGapsMethodologies": {
+        "required": [
+          "methodRequired"
+        ],
+        "type": "object",
+        "properties": {
+          "methodRequired": {
+            "type": "boolean",
+            "description": "Indicates if a data gap method required during the reporting year"
+          },
+          "methodApproved": {
+            "type": "boolean",
+            "description": "Indicates if the data gap method has already been approved by the regulator. Required only when 'methodRequired' is true, otherwise must be omitted",
+            "nullable": true
+          },
+          "methodConservative": {
+            "type": "boolean",
+            "description": "Indicates if the method used was conservative. Required only when 'methodApproved' is false, otherwise must be omitted",
+            "nullable": true
+          },
+          "noConservativeMethodDetails": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Non conservative method details. Required only when 'methodConservative' is false, otherwise must be omitted"
+          },
+          "materialMisstatementExist": {
+            "type": "boolean",
+            "description": "Indicates if method led to a material misstatement. Required only when 'methodApproved' is false, otherwise must be omitted",
+            "nullable": true
+          },
+          "materialMisstatementDetails": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Material misstatement details. Required only when 'materialMisstatementExist' is true, otherwise must be omitted"
+          }
+        },
+        "description": "Methodologies to close data gaps"
+      },
+      "ExternalAer": {
+        "required": [
+          "emissions",
+          "reductionClaim",
+          "shipParticulars"
+        ],
+        "type": "object",
+        "properties": {
+          "shipParticulars": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Ships and emission details",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerShipEmissions"
+            }
+          },
+          "reductionClaim": {
+            "$ref": "#/components/schemas/ExternalAerReductionClaim"
+          },
+          "emissions": {
+            "$ref": "#/components/schemas/ExternalAerAggregatedDataEmissions"
+          }
+        },
+        "description": "The annual emissions report data"
+      },
+      "ExternalAerRecommendedImprovements": {
+        "required": [
+          "exist"
+        ],
+        "type": "object",
+        "properties": {
+          "exist": {
+            "type": "boolean",
+            "description": "Indicates if there are any recommended improvements"
+          },
+          "recommendedImprovements": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Recommended improvements. Required only when 'exist' is true, otherwise must be omitted",
+            "items": {
+              "$ref": "#/components/schemas/ExternalVerifierComment"
+            }
+          }
+        },
+        "description": "Recommended improvements"
+      },
+      "ExternalEmpCarbonCapture": {
+        "required": [
+          "captureAndStorageApplied"
+        ],
+        "type": "object",
+        "properties": {
+          "captureAndStorageApplied": {
+            "type": "boolean",
+            "description": "Are carbon capture and storage technologies being applied. If true, technology and emissionSourceName are required"
+          },
+          "technology": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Technology that is used for carbon capture and storage"
+          },
+          "emissionSourceName": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Emission source names this technology is applied to",
+            "items": {
+              "type": "string",
+              "description": "Emission source names this technology is applied to"
+            }
+          }
+        },
+        "description": "Application of carbon capture and storage technologies"
+      },
+      "ExternalAerFuelsAndEmissionsFactors": {
+        "required": [
+          "fuelOriginCode",
+          "fuelTypeCode",
+          "ttwEFCarbonDioxide",
+          "ttwEFMethane",
+          "ttwEFNitrousOxide"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelOriginCode": {
+            "type": "string",
+            "enum": [
+              "FOSSIL",
+              "BIOFUEL",
+              "RFNBO"
+            ]
+          },
+          "fuelTypeCode": {
+            "type": "string",
+            "enum": [
+              "ETHANOL",
+              "BIO_DIESEL",
+              "HVO",
+              "BIO_LNG",
+              "BIO_METHANOL",
+              "BIO_H2",
+              "HFO",
+              "LFO",
+              "MDO",
+              "MGO",
+              "LNG",
+              "LPG_BUTANE",
+              "LPG_PROPANE",
+              "H2",
+              "NH3",
+              "METHANOL",
+              "E_DIESEL",
+              "E_METHANOL",
+              "E_LNG",
+              "E_H2",
+              "E_NH3",
+              "E_LPG",
+              "E_DME",
+              "OTHER"
+            ]
+          },
+          "otherFuelType": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Description of the fuel type if not listed. Must be provided only when fuelTypeCode 'OTHER'"
+          },
+          "ttwEFCarbonDioxide": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits"
+          },
+          "ttwEFMethane": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for methane. Positive or zero decimal number with integer part max 12 digits"
+          },
+          "ttwEFNitrousOxide": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for nitrousOxide. Positive or zero decimal number with integer part max 12 digits"
+          }
+        }
+      },
+      "ExternalAerShipEmissions": {
+        "required": [
+          "derogations",
+          "emissionsSources",
+          "fuelTypes",
+          "shipDetails",
+          "uncertaintyLevel"
+        ],
+        "type": "object",
+        "properties": {
+          "shipDetails": {
+            "$ref": "#/components/schemas/ExternalAerShipDetails"
+          },
+          "fuelTypes": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerFuelsAndEmissionsFactors"
+            }
+          },
+          "emissionsSources": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerEmissionsSources"
+            }
+          },
+          "uncertaintyLevel": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Level of uncertainty associated with the fuel monitoring methods",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpUncertaintyLevel"
+            }
+          },
+          "derogations": {
+            "$ref": "#/components/schemas/ExternalAerDerogations"
+          }
+        },
+        "description": "Ships and emission details"
+      },
+      "ExternalEmpFuelConsumptionProcedures": {
+        "required": [
+          "bunkeringCrossChecksProcedure",
+          "equipmentQualityAssuranceProcedure",
+          "fuelBunkeredAndInTanksProcedure",
+          "informationManagementProcedure",
+          "voyagesCompletenessProcedure"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelBunkeredAndInTanksProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "bunkeringCrossChecksProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "informationManagementProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "equipmentQualityAssuranceProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "voyagesCompletenessProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          }
+        },
+        "description": "Procedures related to the monitoring of greenhouse gas emissions and fuel consumption"
+      },
+      "ExternalEmpDataGaps": {
+        "required": [
+          "dataSources",
+          "fuelConsumptionEstimationMethod",
+          "locationOfRecords",
+          "responsiblePerson"
+        ],
+        "type": "object",
+        "properties": {
+          "formulaeUsed": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "fuelConsumptionEstimationMethod": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "responsiblePerson": {
+            "maxLength": 250,
+            "minLength": 1,
+            "type": "string"
+          },
+          "dataSources": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "locationOfRecords": {
+            "maxLength": 250,
+            "minLength": 1,
+            "type": "string"
+          },
+          "itSystem": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "ExternalAerAggregatedDataFuelConsumption": {
+        "required": [
+          "amount",
+          "fuelOriginCode",
+          "fuelTypeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelOriginCode": {
+            "type": "string",
+            "enum": [
+              "FOSSIL",
+              "BIOFUEL",
+              "RFNBO"
+            ]
+          },
+          "fuelTypeCode": {
+            "type": "string",
+            "enum": [
+              "ETHANOL",
+              "BIO_DIESEL",
+              "HVO",
+              "BIO_LNG",
+              "BIO_METHANOL",
+              "BIO_H2",
+              "HFO",
+              "LFO",
+              "MDO",
+              "MGO",
+              "LNG",
+              "LPG_BUTANE",
+              "LPG_PROPANE",
+              "H2",
+              "NH3",
+              "METHANOL",
+              "E_DIESEL",
+              "E_METHANOL",
+              "E_LNG",
+              "E_H2",
+              "E_NH3",
+              "E_LPG",
+              "E_DME",
+              "OTHER"
+            ]
+          },
+          "otherFuelType": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Description of the fuel type if not listed. Must be provided only when 'fuelTypeCode' is 'OTHER'"
+          },
+          "amount": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Fuel consumption amount. Positive or zero decimal number with fraction part max 5 digits"
+          }
+        }
+      },
+      "ExternalAerReductionClaimPurchase": {
+        "required": [
+          "batchNumber",
+          "fuelMass",
+          "fuelOriginCode",
+          "fuelTypeCode",
+          "ttwEFCarbonDioxide"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelOriginCode": {
+            "type": "string",
+            "enum": [
+              "FOSSIL",
+              "BIOFUEL",
+              "RFNBO"
+            ]
+          },
+          "fuelTypeCode": {
+            "type": "string",
+            "enum": [
+              "ETHANOL",
+              "BIO_DIESEL",
+              "HVO",
+              "BIO_LNG",
+              "BIO_METHANOL",
+              "BIO_H2",
+              "HFO",
+              "LFO",
+              "MDO",
+              "MGO",
+              "LNG",
+              "LPG_BUTANE",
+              "LPG_PROPANE",
+              "H2",
+              "NH3",
+              "METHANOL",
+              "E_DIESEL",
+              "E_METHANOL",
+              "E_LNG",
+              "E_H2",
+              "E_NH3",
+              "E_LPG",
+              "E_DME",
+              "OTHER"
+            ]
+          },
+          "otherFuelType": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Description of the fuel type if not listed. Must be provided only when 'fuelTypeCode' is 'OTHER'"
+          },
+          "batchNumber": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string"
+          },
+          "fuelMass": {
+            "minimum": 0,
+            "exclusiveMinimum": true,
+            "type": "number",
+            "description": "Fuel mass. Positive decimal number with fraction part max 5 digits"
+          },
+          "ttwEFCarbonDioxide": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits"
+          }
+        }
+      },
+      "ExternalEmpShipEmissions": {
+        "required": [
+          "ccsCcu",
+          "conditionsOfExemption",
+          "emissionsSources",
+          "fuelTypes",
+          "measuringEquipment",
+          "shipDetails",
+          "uncertaintyLevel"
+        ],
+        "type": "object",
+        "properties": {
+          "shipDetails": {
+            "$ref": "#/components/schemas/ExternalEmpShipDetails"
+          },
+          "fuelTypes": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpFuelsAndEmissionsFactors"
+            }
+          },
+          "emissionsSources": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpEmissionsSources"
+            }
+          },
+          "uncertaintyLevel": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Level of uncertainty associated with the fuel monitoring methods",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpUncertaintyLevel"
+            }
+          },
+          "ccsCcu": {
+            "$ref": "#/components/schemas/ExternalEmpCarbonCapture"
+          },
+          "measuringEquipment": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Description of the measurement instruments involved",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpMeasurementDescription"
+            }
+          },
+          "conditionsOfExemption": {
+            "$ref": "#/components/schemas/ExternalEmpExemptionConditions"
+          }
+        },
+        "description": "Ships and emission details"
+      },
+      "ExternalEmpRegisteredOwner": {
+        "required": [
+          "agreementDate",
+          "companyImoNumber",
+          "contactName",
+          "email",
+          "name",
+          "ships"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Registered owner name"
+          },
+          "companyImoNumber": {
+            "pattern": "^\\d{7}$",
+            "type": "string"
+          },
+          "contactName": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "email": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "agreementDate": {
+            "type": "string",
+            "description": "Date of written agreement (past or present)",
+            "format": "date"
+          },
+          "ships": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Associated ships",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpRegisteredOwnerShipDetails"
+            }
+          }
+        }
+      },
+      "ExternalAerEmissionsReductionClaimVerification": {
+        "required": [
+          "complianceWithEmpRequirementsExist",
+          "evidenceAllCriteriaMetExist",
+          "noDoubleCountingConfirmation",
+          "reviewResults",
+          "smfBatchClaimsReviewed"
+        ],
+        "type": "object",
+        "properties": {
+          "smfBatchClaimsReviewed": {
+            "type": "boolean",
+            "description": "Indicates if maritime operator's eligible fuel batch claims has been reviewed"
+          },
+          "batchReferencesNotReviewed": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "List the batch references that were not reviewed. Required only when 'smfBatchClaimsReviewed' is false, otherwise must be omitted"
+          },
+          "dataSampling": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Describes how data sampling was carried out and what documents were reviewed. Required only when 'smfBatchClaimsReviewed' is false, otherwise must be omitted"
+          },
+          "reviewResults": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Describes the results of your review. State if: the emissions reduction claim is supported by sufficient and appropriate internal and external evidence and the amount of reductions from the use of eligible fuel is fair and accurate"
+          },
+          "noDoubleCountingConfirmation": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Describes the steps taken to confirm none of the eligible fuel included in the emissions reduction claim relating to the scheme year had been sold or used elsewhere by the maritime operator to claim an emission reduction, or financial benefit, in any other mandatory or voluntary scheme"
+          },
+          "evidenceAllCriteriaMetExist": {
+            "type": "boolean",
+            "description": "Indicates if all of the batch claims reviewed contain evidence that shows the eligibility criteria were met"
+          },
+          "noCriteriaMetIssues": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Identified issues. Required only when 'evidenceAllCriteriaMetExist' is false, otherwise must be omitted"
+          },
+          "complianceWithEmpRequirementsExist": {
+            "type": "boolean",
+            "description": "Indicates if the maritime operator’s emissions reduction claim is compliant with their emissions monitoring plan, the legislation and regulator guidance"
+          },
+          "notCompliedWithEmpRequirementsAspects": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Not complied aspects. Required only when 'complianceWithEmpRequirementsExist' is false, otherwise must be omitted"
+          }
+        },
+        "description": "Verify the emission reduction claim"
+      },
+      "ExternalEmissionsMonitoringPlan": {
+        "required": [
+          "dataGaps",
+          "delegatedResponsibility",
+          "procedures",
+          "shipParticulars"
+        ],
+        "type": "object",
+        "properties": {
+          "shipParticulars": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Ships and emission details",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpShipEmissions"
+            }
+          },
+          "delegatedResponsibility": {
+            "$ref": "#/components/schemas/ExternalEmpDelegatedResponsibility"
+          },
+          "procedures": {
+            "$ref": "#/components/schemas/ExternalEmpProcedures"
+          },
+          "dataGaps": {
+            "$ref": "#/components/schemas/ExternalEmpDataGaps"
+          }
+        },
+        "description": "The emissions monitoring plan data"
+      },
+      "ExternalAerReductionClaim": {
+        "required": [
+          "reductionClaimApplied"
+        ],
+        "type": "object",
+        "properties": {
+          "reductionClaimApplied": {
+            "type": "boolean",
+            "description": "If true, the reduction claim data are required, otherwise must be omitted"
+          },
+          "reductionClaimDetails": {
+            "$ref": "#/components/schemas/ExternalAerReductionClaimDetails"
+          }
+        }
+      },
+      "ExternalAerVerificationDecision": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Assessment of this report",
+            "enum": [
+              "VERIFIED_AS_SATISFACTORY",
+              "VERIFIED_AS_SATISFACTORY_WITH_COMMENTS",
+              "NOT_VERIFIED"
+            ]
+          },
+          "comments": {
+            "type": "array",
+            "description": "List the comments for your decision. Provide only when type is 'VERIFIED_AS_SATISFACTORY_WITH_COMMENTS'",
+            "items": {
+              "maxLength": 10000,
+              "minLength": 0,
+              "type": "string",
+              "description": "List the comments for your decision. Provide only when type is 'VERIFIED_AS_SATISFACTORY_WITH_COMMENTS'"
+            }
+          },
+          "notVerifiedReasons": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "List the reasons for your decision. Provide only when type is 'NOT_VERIFIED'",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerNotVerifiedDecisionReason"
+            }
+          }
+        },
+        "description": "Overall decision"
+      },
+      "ExternalEmpProcedureForm": {
+        "required": [
+          "description",
+          "locationOfRecords",
+          "referenceExistingProcedure",
+          "responsiblePerson"
+        ],
+        "type": "object",
+        "properties": {
+          "referenceExistingProcedure": {
+            "maxLength": 250,
+            "minLength": 1,
+            "type": "string"
+          },
+          "versionExistingProcedure": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string"
+          },
+          "description": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string"
+          },
+          "responsiblePerson": {
+            "maxLength": 250,
+            "minLength": 1,
+            "type": "string"
+          },
+          "locationOfRecords": {
+            "maxLength": 250,
+            "minLength": 1,
+            "type": "string"
+          },
+          "itSystem": {
+            "maxLength": 250,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "ExternalEmpFuelsAndEmissionsFactors": {
+        "required": [
+          "fuelOriginCode",
+          "fuelTypeCode",
+          "methodDensityBunkerCode",
+          "methodDensityTankCode",
+          "ttwEFCarbonDioxide",
+          "ttwEFMethane",
+          "ttwEFNitrousOxide"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelOriginCode": {
+            "type": "string",
+            "enum": [
+              "FOSSIL",
+              "BIOFUEL",
+              "RFNBO"
+            ]
+          },
+          "fuelTypeCode": {
+            "type": "string",
+            "enum": [
+              "ETHANOL",
+              "BIO_DIESEL",
+              "HVO",
+              "BIO_LNG",
+              "BIO_METHANOL",
+              "BIO_H2",
+              "HFO",
+              "LFO",
+              "MDO",
+              "MGO",
+              "LNG",
+              "LPG_BUTANE",
+              "LPG_PROPANE",
+              "H2",
+              "NH3",
+              "METHANOL",
+              "E_DIESEL",
+              "E_METHANOL",
+              "E_LNG",
+              "E_H2",
+              "E_NH3",
+              "E_LPG",
+              "E_DME",
+              "OTHER"
+            ]
+          },
+          "otherFuelType": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Description of the fuel type if not listed. Must be provided only when 'fuelTypeCode' is 'OTHER'"
+          },
+          "ttwEFCarbonDioxide": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for carbonDioxide. Positive or zero decimal number with integer part max 12 digits"
+          },
+          "ttwEFMethane": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for methane. Positive or zero decimal number with integer part max 12 digits"
+          },
+          "ttwEFNitrousOxide": {
+            "minimum": 0,
+            "type": "number",
+            "description": "Tank to wake emission factor for nitrousOxide. Positive or zero decimal number with integer part max 12 digits"
+          },
+          "methodDensityBunkerCode": {
+            "type": "string",
+            "enum": [
+              "ON_BOARD_MEASUREMENT_SYSTEMS",
+              "FUEL_SUPPLIER",
+              "LABORATORY_TEST",
+              "NA"
+            ]
+          },
+          "methodDensityTankCode": {
+            "type": "string",
+            "enum": [
+              "MEASUREMENT_SYSTEMS",
+              "FUEL_SUPPLIER",
+              "LABORATORY_TEST",
+              "NA"
+            ]
+          }
+        }
+      },
+      "ExternalEmpRegisteredOwnerShipDetails": {
+        "required": [
+          "name",
+          "shipImoNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "shipImoNumber": {
+            "pattern": "^\\d{7}$",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "description": "Associated ships"
+      },
+      "ExternalAerVerifierContact": {
+        "required": [
+          "email",
+          "name",
+          "phoneNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "description": "Verifier contact name"
+          },
+          "email": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Verifier contact email"
+          },
+          "phoneNumber": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Verifier contact telephone number"
+          }
+        },
+        "description": "Verifier contact"
+      },
+      "ExternalEmpManagementProcedures": {
+        "required": [
+          "adequacyCheckProcedure",
+          "dataFlowActivitiesProcedure",
+          "monitoringReportingRoles",
+          "riskAssessmentProcedure"
+        ],
+        "type": "object",
+        "properties": {
+          "monitoringReportingRoles": {
+            "type": "array",
+            "description": "Monitoring and reporting roles",
+            "items": {
+              "$ref": "#/components/schemas/EmpMonitoringReportingRole"
+            }
+          },
+          "adequacyCheckProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "dataFlowActivitiesProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "riskAssessmentProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          }
+        },
+        "description": "Management procedures"
+      },
+      "ExternalEmpMeasurementDescription": {
+        "required": [
+          "emissionSourceName",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 250,
+            "minLength": 1,
+            "type": "string"
+          },
+          "technicalDescription": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string"
+          },
+          "emissionSourceName": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Emission source names this device is used for",
+            "items": {
+              "type": "string",
+              "description": "Emission source names this device is used for"
+            }
+          }
+        },
+        "description": "Description of the measurement instruments involved"
+      },
+      "Violation": {
+        "type": "object",
+        "properties": {
+          "fieldName": {
+            "type": "string"
+          },
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "ExternalAerUncorrectedNonConformities": {
+        "required": [
+          "exist",
+          "existPriorYearIssues"
+        ],
+        "type": "object",
+        "properties": {
+          "exist": {
+            "type": "boolean",
+            "description": "Indicates if there have been any uncorrected non-conformities with the approved emissions monitoring plan"
+          },
+          "uncorrectedNonConformities": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Non-conformities with the approved emissions monitoring plan. Required only when 'exist' is true, otherwise must be omitted",
+            "items": {
+              "$ref": "#/components/schemas/ExternalUncorrectedItem"
+            }
+          },
+          "existPriorYearIssues": {
+            "type": "boolean",
+            "description": "Indicates if there are any non-conformities from the previous year that have not been resolved"
+          },
+          "priorYearIssues": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Non-conformities from the previous year that have not been resolved. Required only when 'existPriorYearIssues' is true, otherwise must be omitted",
+            "items": {
+              "$ref": "#/components/schemas/ExternalVerifierComment"
+            }
+          }
+        },
+        "description": "Uncorrected non-conformities"
+      },
+      "ExternalAerVerification": {
+        "required": [
+          "complianceMonitoringReporting",
+          "dataGapsMethodologies",
+          "etsComplianceRules",
+          "informationOfOpinionRelevance",
+          "opinionStatement",
+          "overallDecision",
+          "recommendedImprovements",
+          "uncorrectedMisstatements",
+          "uncorrectedNonCompliances",
+          "uncorrectedNonConformities",
+          "verificationTeamDetails",
+          "verifierContact"
+        ],
+        "type": "object",
+        "properties": {
+          "verifierContact": {
+            "$ref": "#/components/schemas/ExternalAerVerifierContact"
+          },
+          "verificationTeamDetails": {
+            "$ref": "#/components/schemas/ExternalAerVerificationTeamDetails"
+          },
+          "opinionStatement": {
+            "$ref": "#/components/schemas/ExternalAerOpinionStatement"
+          },
+          "etsComplianceRules": {
+            "$ref": "#/components/schemas/ExternalAerEtsComplianceRules"
+          },
+          "complianceMonitoringReporting": {
+            "$ref": "#/components/schemas/ExternalAerComplianceMonitoringReporting"
+          },
+          "emissionsReductionClaimVerification": {
+            "$ref": "#/components/schemas/ExternalAerEmissionsReductionClaimVerification"
+          },
+          "overallDecision": {
+            "$ref": "#/components/schemas/ExternalAerVerificationDecision"
+          },
+          "uncorrectedMisstatements": {
+            "$ref": "#/components/schemas/ExternalAerUncorrectedMisstatements"
+          },
+          "uncorrectedNonConformities": {
+            "$ref": "#/components/schemas/ExternalAerUncorrectedNonConformities"
+          },
+          "uncorrectedNonCompliances": {
+            "$ref": "#/components/schemas/ExternalAerUncorrectedNonCompliances"
+          },
+          "recommendedImprovements": {
+            "$ref": "#/components/schemas/ExternalAerRecommendedImprovements"
+          },
+          "dataGapsMethodologies": {
+            "$ref": "#/components/schemas/ExternalAerDataGapsMethodologies"
+          },
+          "informationOfOpinionRelevance": {
+            "$ref": "#/components/schemas/ExternalAerInformationOfOpinionRelevance"
+          }
+        },
+        "description": "The annual emissions report verification data"
+      },
+      "EmpMonitoringReportingRole": {
+        "required": [
+          "jobTitle",
+          "mainDuties"
+        ],
+        "type": "object",
+        "properties": {
+          "jobTitle": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "mainDuties": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "ExternalAerAggregatedDataAnnualEmission": {
+        "required": [
+          "emissions",
+          "etsEmissionsBetweenUkAndNiPort",
+          "etsEmissionsBetweenUkPort",
+          "etsEmissionsWithinUkPort"
+        ],
+        "type": "object",
+        "properties": {
+          "emissions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerAggregatedDataFuelConsumption"
+            }
+          },
+          "etsEmissionsWithinUkPort": {
+            "$ref": "#/components/schemas/ExternalAerAggregatedDataEmissionsMeasurements"
+          },
+          "etsEmissionsBetweenUkPort": {
+            "$ref": "#/components/schemas/ExternalAerAggregatedDataEmissionsMeasurements"
+          },
+          "etsEmissionsBetweenUkAndNiPort": {
+            "$ref": "#/components/schemas/ExternalAerAggregatedDataEmissionsMeasurements"
+          }
+        }
+      },
+      "ExternalEmpExemptionConditions": {
+        "required": [
+          "derogationCodeUsed"
+        ],
+        "type": "object",
+        "properties": {
+          "derogationCodeUsed": {
+            "type": "boolean",
+            "description": "Derogation for monitoring the amount of fuel consumed used. If true, minimumNumberOfVoyages is required"
+          },
+          "minimumNumberOfVoyages": {
+            "minimum": 301,
+            "type": "integer",
+            "description": "Minimum number of voyages. Required only when 'derogationCodeUsed' is true, otherwise must be omitted",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "description": "Conditions of exemption from per voyage reporting"
+      },
+      "ExternalAerUncorrectedNonCompliances": {
+        "required": [
+          "exist"
+        ],
+        "type": "object",
+        "properties": {
+          "exist": {
+            "type": "boolean",
+            "description": "Indicates if there have been any non-compliances with the maritime monitoring and reporting requirements in the UK ETS Order"
+          },
+          "uncorrectedNonCompliances": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Non-compliances with the maritime monitoring and reporting requirements. Required only when 'exist' is true, otherwise must be omitted",
+            "items": {
+              "$ref": "#/components/schemas/ExternalUncorrectedItem"
+            }
+          }
+        },
+        "description": "Uncorrected non-compliances"
+      },
+      "ExternalAerVerificationTeamDetails": {
+        "required": [
+          "authorisedSignatoryName",
+          "etsAuditors",
+          "etsTechnicalExperts",
+          "independentReviewer",
+          "leadEtsAuditor",
+          "technicalExperts"
+        ],
+        "type": "object",
+        "properties": {
+          "leadEtsAuditor": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "description": "Lead ETS auditor"
+          },
+          "etsAuditors": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "ETS auditors"
+          },
+          "etsTechnicalExperts": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Technical experts (ETS auditor)"
+          },
+          "independentReviewer": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "description": "Independent reviewer"
+          },
+          "technicalExperts": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Technical experts (Independent Review)"
+          },
+          "authorisedSignatoryName": {
+            "maxLength": 500,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of authorised signatory"
+          }
+        },
+        "description": "Verification team details"
+      },
+      "ExternalEmpFuelOriginTypeName": {
+        "required": [
+          "fuelOriginCode",
+          "fuelTypeCode"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelOriginCode": {
+            "type": "string",
+            "enum": [
+              "FOSSIL",
+              "BIOFUEL",
+              "RFNBO"
+            ]
+          },
+          "fuelTypeCode": {
+            "type": "string",
+            "enum": [
+              "ETHANOL",
+              "BIO_DIESEL",
+              "HVO",
+              "BIO_LNG",
+              "BIO_METHANOL",
+              "BIO_H2",
+              "HFO",
+              "LFO",
+              "MDO",
+              "MGO",
+              "LNG",
+              "LPG_BUTANE",
+              "LPG_PROPANE",
+              "H2",
+              "NH3",
+              "METHANOL",
+              "E_DIESEL",
+              "E_METHANOL",
+              "E_LNG",
+              "E_H2",
+              "E_NH3",
+              "E_LPG",
+              "E_DME",
+              "OTHER"
+            ]
+          },
+          "otherFuelType": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "description": "Description of the fuel type if not listed. Must be provided only when 'fuelTypeCode' is 'OTHER'"
+          },
+          "slipPercentage": {
+            "maximum": 1,
+            "exclusiveMaximum": false,
+            "minimum": 0,
+            "type": "number",
+            "description": "Emission factor of slipped fuel. Must be provided only when 'fuelTypeCode' is 'LNG', 'BIO_LNG', 'E_LNG' or 'OTHER'. Decimal number between 0.0000 and 1 (inclusive) with up to 1 integer digits and 4 fractional digits",
+            "nullable": true
+          }
+        }
+      },
+      "ExternalAerShipDetails": {
+        "required": [
+          "allYear",
+          "companyNature",
+          "flag",
+          "grossTonnage",
+          "iceClassPolarCode",
+          "name",
+          "shipImoNumber",
+          "shipType"
+        ],
+        "type": "object",
+        "properties": {
+          "shipImoNumber": {
+            "pattern": "^\\d{7}$",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string",
+            "description": "Name of the Ship as stated on IMO GISIS"
+          },
+          "shipType": {
+            "type": "string",
+            "enum": [
+              "PAX",
+              "RORO",
+              "CONT",
+              "OIL",
+              "CHEM",
+              "LNG",
+              "GAS",
+              "BULK",
+              "GENERAL",
+              "RCV",
+              "VEH",
+              "COMB",
+              "ROPAX",
+              "CONT_RORO",
+              "CRUISE",
+              "OFFSHORE",
+              "OTHER"
+            ]
+          },
+          "grossTonnage": {
+            "maximum": 999999999,
+            "minimum": 5000,
+            "type": "integer",
+            "format": "int32"
+          },
+          "flag": {
+            "type": "string",
+            "description": "Code of the flag",
+            "enum": [
+              "AE",
+              "AF",
+              "AG",
+              "AI",
+              "AL",
+              "AM",
+              "AO",
+              "AR",
+              "AS",
+              "AT",
+              "AU",
+              "AW",
+              "AZ",
+              "BA",
+              "BB",
+              "BD",
+              "BE",
+              "BG",
+              "BH",
+              "BJ",
+              "BM",
+              "BN",
+              "BO",
+              "BQ",
+              "BR",
+              "BS",
+              "BY",
+              "BZ",
+              "CA",
+              "CD",
+              "CG",
+              "CH",
+              "CI",
+              "CK",
+              "CL",
+              "CM",
+              "CN",
+              "CO",
+              "CR",
+              "CU",
+              "CV",
+              "CW",
+              "CY",
+              "CZ",
+              "DE",
+              "DJ",
+              "DK",
+              "DM",
+              "DO",
+              "DZ",
+              "EC",
+              "EE",
+              "EG",
+              "ER",
+              "ES",
+              "ET",
+              "FI",
+              "FJ",
+              "FK",
+              "FM",
+              "FO",
+              "FR",
+              "GA",
+              "GB",
+              "GD",
+              "GE",
+              "GG",
+              "GH",
+              "GI",
+              "GM",
+              "GN",
+              "GQ",
+              "GR",
+              "GT",
+              "GW",
+              "GY",
+              "HK",
+              "HN",
+              "HR",
+              "HT",
+              "HU",
+              "ID",
+              "IE",
+              "IL",
+              "IM",
+              "IN",
+              "IQ",
+              "IR",
+              "IS",
+              "IT",
+              "JE",
+              "JM",
+              "JO",
+              "JP",
+              "KE",
+              "KG",
+              "KH",
+              "KI",
+              "KM",
+              "KN",
+              "KP",
+              "KR",
+              "KW",
+              "KY",
+              "KZ",
+              "LA",
+              "LB",
+              "LC",
+              "LK",
+              "LR",
+              "LT",
+              "LU",
+              "LV",
+              "LY",
+              "MA",
+              "MC",
+              "MD",
+              "ME",
+              "MG",
+              "MH",
+              "ML",
+              "MM",
+              "MN",
+              "MO",
+              "MR",
+              "MS",
+              "MT",
+              "MU",
+              "MV",
+              "MX",
+              "MY",
+              "MZ",
+              "NA",
+              "NE",
+              "NG",
+              "NI",
+              "NL",
+              "NO",
+              "NR",
+              "NZ",
+              "OM",
+              "PA",
+              "PE",
+              "PF",
+              "PG",
+              "PH",
+              "PK",
+              "PL",
+              "PT",
+              "PW",
+              "PY",
+              "QA",
+              "RO",
+              "RS",
+              "RU",
+              "SA",
+              "SB",
+              "SC",
+              "SL",
+              "SD",
+              "SE",
+              "SG",
+              "SH",
+              "SI",
+              "SK",
+              "SN",
+              "SO",
+              "SR",
+              "SS",
+              "ST",
+              "SV",
+              "SX",
+              "SY",
+              "TC",
+              "TF",
+              "TG",
+              "TH",
+              "TJ",
+              "TM",
+              "TN",
+              "TO",
+              "TR",
+              "TT",
+              "TV",
+              "TW",
+              "TZ",
+              "UA",
+              "UG",
+              "US",
+              "UY",
+              "UZ",
+              "VC",
+              "VE",
+              "VG",
+              "VI",
+              "VN",
+              "VU",
+              "WS",
+              "YE",
+              "ZA",
+              "ZW"
+            ]
+          },
+          "iceClassPolarCode": {
+            "type": "string",
+            "description": "Ice class polar code",
+            "enum": [
+              "PC1",
+              "PC2",
+              "PC3",
+              "PC4",
+              "PC5",
+              "PC6",
+              "PC7",
+              "IC",
+              "IB",
+              "IA",
+              "IA_SUPER",
+              "NA"
+            ]
+          },
+          "companyNature": {
+            "type": "string",
+            "description": "Nature of the company for the ship referenced in this EMP",
+            "enum": [
+              "SHIPOWNER",
+              "ISM_COMPANY"
+            ]
+          },
+          "allYear": {
+            "type": "boolean",
+            "description": "Indicates if the reporting period of the ship covers the entire year"
+          },
+          "from": {
+            "type": "string",
+            "description": "Start date of the period. Required only when 'allYear' is false, otherwise must be omitted",
+            "format": "date",
+            "nullable": true
+          },
+          "to": {
+            "type": "string",
+            "description": "End date of the period. Required only when 'allYear' is false, otherwise must be omitted",
+            "format": "date",
+            "nullable": true
+          }
+        },
+        "description": "Ships and emission details"
+      },
+      "ExternalAerOpinionStatement": {
+        "required": [
+          "additionalChangesNotCovered",
+          "emissionsCorrect",
+          "siteVisit"
+        ],
+        "type": "object",
+        "properties": {
+          "emissionsCorrect": {
+            "type": "boolean",
+            "description": "Indicates if the reporting and surrender obligation emissions are correct"
+          },
+          "manuallyProvidedTotalEmissions": {
+            "type": "number",
+            "description": "Total verified maritime emissions for the scheme year. Required only when 'emissionsCorrect' is false, otherwise must be omitted",
+            "nullable": true
+          },
+          "manuallyProvidedSurrenderEmissions": {
+            "type": "number",
+            "description": "Emissions figure for surrender for the scheme year. Required only when 'emissionsCorrect' is false, otherwise must be omitted",
+            "nullable": true
+          },
+          "manuallyProvidedLessVoyagesInNorthernIrelandDeduction": {
+            "type": "number",
+            "description": "Less Northern Ireland surrender deduction. Required only when 'emissionsCorrect' is false, otherwise must be omitted",
+            "nullable": true
+          },
+          "additionalChangesNotCovered": {
+            "type": "boolean",
+            "description": "Indicates if there are any changes to the emissions monitoring plan during the scheme year"
+          },
+          "additionalChangesNotCoveredDetails": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "List the agreed changes, including the date and type of communication. Required only when 'additionalChangesNotCovered' is true, otherwise must be omitted"
+          },
+          "siteVisit": {
+            "$ref": "#/components/schemas/ExternalAerSiteVisit"
+          }
+        },
+        "description": "Opinion statement"
+      },
+      "ExternalAerReductionClaimDetails": {
+        "required": [
+          "fuelPurchaseList"
+        ],
+        "type": "object",
+        "properties": {
+          "fuelPurchaseList": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerReductionClaimPurchase"
+            }
+          }
+        }
+      },
+      "ExternalAerUncorrectedMisstatements": {
+        "required": [
+          "exist"
+        ],
+        "type": "object",
+        "properties": {
+          "exist": {
+            "type": "boolean",
+            "description": "Indicates if there are any misstatements that were not corrected before issuing this report"
+          },
+          "uncorrectedMisstatements": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Misstatements not corrected before issuing this report. Required only when 'exist' is true, otherwise must be omitted",
+            "items": {
+              "$ref": "#/components/schemas/ExternalUncorrectedItem"
+            }
+          }
+        },
+        "description": "Uncorrected misstatements"
+      },
+      "ExternalEmpControlActivitiesProcedures": {
+        "required": [
+          "correctionsProcedure",
+          "dataReviewProcedure",
+          "documentationProcedure",
+          "outsourcedActivitiesProcedure",
+          "qaItProcedure"
+        ],
+        "type": "object",
+        "properties": {
+          "qaItProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "dataReviewProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "correctionsProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          },
+          "outsourcedActivitiesProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpOutsourcedActivitiesProcedure"
+          },
+          "documentationProcedure": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          }
+        },
+        "description": "Control Activities procedures"
+      },
+      "ExternalAerAggregatedDataShipEmissions": {
+        "required": [
+          "annualEmission",
+          "shipImoNumber"
+        ],
+        "type": "object",
+        "properties": {
+          "shipImoNumber": {
+            "maxLength": 7,
+            "minLength": 1,
+            "type": "string"
+          },
+          "annualEmission": {
+            "$ref": "#/components/schemas/ExternalAerAggregatedDataAnnualEmission"
+          }
+        }
+      },
+      "ExternalUncorrectedItem": {
+        "required": [
+          "explanation",
+          "materialEffect"
+        ],
+        "type": "object",
+        "properties": {
+          "explanation": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Give as much detail as possible, including: the nature and size of the non-compliance and which element of the non-compliance it relates to"
+          },
+          "materialEffect": {
+            "type": "boolean",
+            "description": "Indicates if there is a material effect on the total emissions reported"
+          }
+        },
+        "description": "Non-compliances with the maritime monitoring and reporting requirements. Required only when 'exist' is true, otherwise must be omitted"
+      },
+      "ExternalAerComplianceMonitoringReporting": {
+        "required": [
+          "accuracyCompliant",
+          "comparabilityCompliant",
+          "completenessCompliant",
+          "consistencyCompliant",
+          "integrityCompliant",
+          "transparencyCompliant"
+        ],
+        "type": "object",
+        "properties": {
+          "accuracyCompliant": {
+            "type": "boolean",
+            "description": "Indicates the accuracy of the report"
+          },
+          "accuracyNonCompliantReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason report was not accurate. Required only when 'accuracyCompliant' is false, otherwise must be omitted"
+          },
+          "completenessCompliant": {
+            "type": "boolean",
+            "description": "Indicates the completeness of the report"
+          },
+          "completenessNonCompliantReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason report was not complete. Required only when 'completenessCompliant' is false, otherwise must be omitted"
+          },
+          "consistencyCompliant": {
+            "type": "boolean",
+            "description": "Indicates the consistency of report"
+          },
+          "consistencyNonCompliantReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason report was not consistent. Required only when 'consistencyCompliant' is false, otherwise must be omitted"
+          },
+          "comparabilityCompliant": {
+            "type": "boolean",
+            "description": "Indicates the comparability of report"
+          },
+          "comparabilityNonCompliantReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason report was not comparable. Required only when 'comparabilityCompliant' is false, otherwise must be omitted"
+          },
+          "transparencyCompliant": {
+            "type": "boolean",
+            "description": "Indicates the transparency of report"
+          },
+          "transparencyNonCompliantReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason report was not transparent. Required only when 'transparencyCompliant' is false, otherwise must be omitted"
+          },
+          "integrityCompliant": {
+            "type": "boolean",
+            "description": "Indicates the integrity of methodology"
+          },
+          "integrityNonCompliantReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason report lacked integrity. Required only when 'integrityCompliant' is false, otherwise must be omitted"
+          }
+        },
+        "description": "Compliance with monitoring and reporting principles"
+      },
+      "ExternalAerInPersonSiteVisitDatesDetails": {
+        "required": [
+          "numberOfDays",
+          "startDate"
+        ],
+        "type": "object",
+        "properties": {
+          "startDate": {
+            "type": "string",
+            "description": "Visit start date",
+            "format": "date"
+          },
+          "numberOfDays": {
+            "type": "integer",
+            "description": "Number of days the team was on site",
+            "format": "int32"
+          }
+        },
+        "description": "In person site visits details. Provide only when visit type is 'IN_PERSON'"
+      },
+      "ExternalEmpProcedures": {
+        "required": [
+          "controlActivitiesProcedures",
+          "emissionsProcedures",
+          "fuelConsumptionProcedures",
+          "managementProcedures"
+        ],
+        "type": "object",
+        "properties": {
+          "emissionsProcedures": {
+            "$ref": "#/components/schemas/ExternalEmpEmissionsProcedures"
+          },
+          "fuelConsumptionProcedures": {
+            "$ref": "#/components/schemas/ExternalEmpFuelConsumptionProcedures"
+          },
+          "managementProcedures": {
+            "$ref": "#/components/schemas/ExternalEmpManagementProcedures"
+          },
+          "controlActivitiesProcedures": {
+            "$ref": "#/components/schemas/ExternalEmpControlActivitiesProcedures"
+          }
+        }
+      },
+      "ExternalAerAggregatedDataEmissions": {
+        "required": [
+          "shipEmissions"
+        ],
+        "type": "object",
+        "properties": {
+          "shipEmissions": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerAggregatedDataShipEmissions"
+            }
+          }
+        }
+      },
+      "ExternalAerInformationOfOpinionRelevance": {
+        "required": [
+          "accreditationReferenceDocumentTypes",
+          "materialityDetails"
+        ],
+        "type": "object",
+        "properties": {
+          "materialityDetails": {
+            "maxLength": 10000,
+            "minLength": 1,
+            "type": "string",
+            "description": "Materiality level"
+          },
+          "accreditationReferenceDocumentTypes": {
+            "uniqueItems": true,
+            "type": "array",
+            "description": "Reference documents that are appropriate to the accreditation you hold",
+            "items": {
+              "type": "string",
+              "description": "Reference documents that are appropriate to the accreditation you hold",
+              "enum": [
+                "SI_2020_1265",
+                "EN_ISO_14065_2020",
+                "EN_ISO_14064_3_2019",
+                "IAF_MD_6_2023",
+                "AUTHORITY_GUIDANCE",
+                "OTHER"
+              ]
+            }
+          },
+          "otherReference": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reference details. Required only when 'accreditationReferenceDocumentTypes' contains 'OTHER', otherwise must be omitted"
+          }
+        },
+        "description": "Further information of relevance to the opinion"
+      },
+      "ExternalEmpEmissionFactorsProcedure": {
+        "required": [
+          "defaultFactorsUsed"
+        ],
+        "type": "object",
+        "properties": {
+          "defaultFactorsUsed": {
+            "type": "boolean",
+            "description": "If false, the related procedure data are required, otherwise must be omitted"
+          },
+          "emissionFactorsProcedureDetails": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          }
+        },
+        "description": "Determination of emission factors procedure"
+      },
+      "ExternalAerEtsComplianceRules": {
+        "required": [
+          "competentAuthorityGuidanceMet",
+          "controlActivitiesDocumented",
+          "dataVerificationCompleted",
+          "detailSourceDataVerified",
+          "etsOrderRequirementsMet",
+          "methodsApplyingMissingDataUsed",
+          "monitoringApproachAppliedCorrectly",
+          "monitoringPlanRequirementsMet",
+          "nonConformities",
+          "proceduresMonitoringPlanDocumented"
+        ],
+        "type": "object",
+        "properties": {
+          "monitoringPlanRequirementsMet": {
+            "type": "boolean",
+            "description": "Indicates if the emissions monitoring plan requirements and conditions been met"
+          },
+          "monitoringPlanRequirementsNotMetReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason monitoring plan requirements were not met. Required only when 'monitoringPlanRequirementsMet' is false, otherwise must be omitted"
+          },
+          "etsOrderRequirementsMet": {
+            "type": "boolean",
+            "description": "Indicates if the requirements of the UK ETS Order been met"
+          },
+          "etsOrderRequirementsNotMetReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason UK ETS Order requirements were not met. Required only when 'etsOrderRequirementsMet' is false, otherwise must be omitted"
+          },
+          "detailSourceDataVerified": {
+            "type": "boolean",
+            "description": "Indicates if the detail and source of data have be verified"
+          },
+          "detailSourceDataNotVerifiedReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason detail and source of data have not be verified. Required only when 'detailSourceDataVerified' is false, otherwise must be omitted"
+          },
+          "partOfSiteVerification": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Part of site verification justification. Required only when 'detailSourceDataVerified' is true, otherwise must be omitted"
+          },
+          "controlActivitiesDocumented": {
+            "type": "boolean",
+            "description": "Indicates if control activities documented, implemented, maintained and effective to reduce any risks"
+          },
+          "controlActivitiesNotDocumentedReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason control activities were not documented, implemented, maintained and effective to reduce any risks. Required only when 'controlActivitiesDocumented' is false, otherwise must be omitted"
+          },
+          "proceduresMonitoringPlanDocumented": {
+            "type": "boolean",
+            "description": "Indicates if procedures in the emissions monitoring plan documented, implemented, maintained and effective to reduce any risks"
+          },
+          "proceduresMonitoringPlanNotDocumentedReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason procedures in the emissions monitoring plan were not documented, implemented, maintained and effective to reduce any risks. Required only when 'proceduresMonitoringPlanDocumented' is false, otherwise must be omitted"
+          },
+          "dataVerificationCompleted": {
+            "type": "boolean",
+            "description": "Indicates if data verification has been completed as required"
+          },
+          "dataVerificationNotCompletedReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason data verification was not completed as required. Required only when 'dataVerificationCompleted' is false, otherwise must be omitted"
+          },
+          "monitoringApproachAppliedCorrectly": {
+            "type": "boolean",
+            "description": "Indicates if the monitoring approaches been applied correctly"
+          },
+          "monitoringApproachNotAppliedCorrectlyReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason monitoring approaches have not been applied correctly. Required only when 'monitoringApproachAppliedCorrectly' is false, otherwise must be omitted"
+          },
+          "methodsApplyingMissingDataUsed": {
+            "type": "boolean",
+            "description": "Indicates if methods used for applying missing data were appropriate"
+          },
+          "methodsApplyingMissingDataNotUsedReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason methods used for applying missing data were not appropriate. Required only when 'methodsApplyingMissingDataUsed' is false, otherwise must be omitted"
+          },
+          "competentAuthorityGuidanceMet": {
+            "type": "boolean",
+            "description": "Indicates if the regulator guidance has been met"
+          },
+          "competentAuthorityGuidanceNotMetReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason regulator guidance has not been met. Required only when 'competentAuthorityGuidanceMet' is false, otherwise must be omitted"
+          },
+          "nonConformities": {
+            "type": "string",
+            "description": "Indicates if non-conformities from last year been corrected",
+            "enum": [
+              "YES",
+              "NO",
+              "NOT_APPLICABLE"
+            ]
+          },
+          "nonConformitiesDetails": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reason non-conformities from last year have not been corrected. Required only when 'nonConformities' is 'NO', otherwise must be omitted"
+          }
+        },
+        "description": "Compliance with ETS rules"
+      },
+      "ExternalAerDerogations": {
+        "required": [
+          "exceptionFromPerVoyageMonitoring"
+        ],
+        "type": "object",
+        "properties": {
+          "exceptionFromPerVoyageMonitoring": {
+            "type": "boolean"
+          }
+        },
+        "description": "Exemption from per voyage monitoring"
+      },
+      "ExternalEmpUncertaintyLevel": {
+        "required": [
+          "levelOfUncertaintyTypeCode",
+          "monitoringMethodCode",
+          "shipSpecificUncertainty"
+        ],
+        "type": "object",
+        "properties": {
+          "monitoringMethodCode": {
+            "type": "string",
+            "enum": [
+              "BDN",
+              "BUNKER_TANK",
+              "FLOW_METERS",
+              "DIRECT"
+            ]
+          },
+          "levelOfUncertaintyTypeCode": {
+            "type": "string",
+            "enum": [
+              "DEFAULT",
+              "SHIP_SPECIFIC"
+            ]
+          },
+          "shipSpecificUncertainty": {
+            "maximum": 100,
+            "exclusiveMaximum": false,
+            "minimum": 0,
+            "type": "number",
+            "description": "Specific value for the level of uncertainty. Decimal number between 0 and 100 (inclusive) with up to 3 integer digits and 2 fractional digits"
+          }
+        },
+        "description": "Level of uncertainty associated with the fuel monitoring methods"
+      },
+      "ExternalEmpEmissionsSources": {
+        "required": [
+          "emissionSourceClassCode",
+          "emissionSourceTypeCode",
+          "fuelTypeCodes",
+          "monitoringMethods",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "emissionSourceTypeCode": {
+            "type": "string",
+            "enum": [
+              "MAIN_ENGINE",
+              "AUX_ENGINE",
+              "GAS_TURBINE",
+              "BOILER",
+              "INERT_GAS_GENERATOR",
+              "FUEL_CELLS",
+              "WASTE_INCINERATOR",
+              "OTHER"
+            ]
+          },
+          "emissionSourceClassCode": {
+            "type": "string",
+            "enum": [
+              "BOILERS",
+              "FUEL_CELLS",
+              "GAS_TURBINE",
+              "ICE",
+              "INERT_GAS_GENERATOR",
+              "LNG_DIESEL_DFSS",
+              "LNG_LBSI",
+              "LNG_OTTO_DFMS",
+              "LNG_OTTO_DFSS",
+              "WASTE_INCINERATORS"
+            ]
+          },
+          "fuelTypeCodes": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpFuelOriginTypeName"
+            }
+          },
+          "monitoringMethods": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "BDN",
+                "BUNKER_TANK",
+                "FLOW_METERS",
+                "DIRECT"
+              ]
+            }
+          },
+          "identificationNumber": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          }
+        }
+      },
+      "ExternalEmpReductionClaimProcedure": {
+        "required": [
+          "emissionsReductionClaimExists"
+        ],
+        "type": "object",
+        "properties": {
+          "emissionsReductionClaimExists": {
+            "type": "boolean",
+            "description": "If true, the related procedure data are required, otherwise must be omitted"
+          },
+          "reductionClaimProcedureDetails": {
+            "$ref": "#/components/schemas/ExternalEmpProcedureForm"
+          }
+        },
+        "description": "Emissions reduction claim procedure"
+      },
+      "ExternalAerEmissionsSources": {
+        "required": [
+          "emissionSourceClassCode",
+          "emissionSourceTypeCode",
+          "fuelTypeCodes",
+          "monitoringMethods",
+          "name"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "emissionSourceTypeCode": {
+            "type": "string",
+            "enum": [
+              "MAIN_ENGINE",
+              "AUX_ENGINE",
+              "GAS_TURBINE",
+              "BOILER",
+              "INERT_GAS_GENERATOR",
+              "FUEL_CELLS",
+              "WASTE_INCINERATOR",
+              "OTHER"
+            ]
+          },
+          "emissionSourceClassCode": {
+            "type": "string",
+            "enum": [
+              "BOILERS",
+              "FUEL_CELLS",
+              "GAS_TURBINE",
+              "ICE",
+              "INERT_GAS_GENERATOR",
+              "LNG_DIESEL_DFSS",
+              "LNG_LBSI",
+              "LNG_OTTO_DFMS",
+              "LNG_OTTO_DFSS",
+              "WASTE_INCINERATORS"
+            ]
+          },
+          "fuelTypeCodes": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/ExternalEmpFuelOriginTypeName"
+            }
+          },
+          "monitoringMethods": {
+            "uniqueItems": true,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "enum": [
+                "BDN",
+                "BUNKER_TANK",
+                "FLOW_METERS",
+                "DIRECT"
+              ]
+            }
+          }
+        }
+      },
+      "ExternalAerSiteVisit": {
+        "required": [
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Site visit kind",
+            "enum": [
+              "IN_PERSON",
+              "VIRTUAL"
+            ]
+          },
+          "siteVisitDetails": {
+            "type": "array",
+            "description": "In person site visits details. Provide only when visit type is 'IN_PERSON'",
+            "items": {
+              "$ref": "#/components/schemas/ExternalAerInPersonSiteVisitDatesDetails"
+            }
+          },
+          "teamMembers": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "The names of the lead auditors and any technical experts involved. Separate the names with a comma, for example John Smith, Jane Smith. Provide only when visit type is 'IN_PERSON'"
+          },
+          "inPersonVisitReason": {
+            "maxLength": 10000,
+            "minLength": 0,
+            "type": "string",
+            "description": "Reasons for making a virtual visit. Provide only when visit type is 'VIRTUAL'"
+          }
+        },
+        "description": "Site verification"
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

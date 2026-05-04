@@ -93,7 +93,7 @@
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_0xwu20n">
       <bpmn:incoming>Flow_1hv2s0d</bpmn:incoming>
-      <bpmn:incoming>Flow_1hdtlcs</bpmn:incoming>
+      <bpmn:incoming>Flow_16gjhba</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1mgsto7" sourceRef="Activity_11lfq4t" targetRef="Event_1435rl5" />
     <bpmn:serviceTask id="Activity_11lfq4t" name="Update Workflow status to CANCELLED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
@@ -141,7 +141,7 @@
     <bpmn:sequenceFlow id="Flow_1czvs4b" sourceRef="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" targetRef="Gateway_1p5poiy" />
     <bpmn:userTask id="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" name="Regulator:&#10;Submit EMP Variation Aplication">
       <bpmn:incoming>Flow_1ugr8qr</bpmn:incoming>
-      <bpmn:incoming>Flow_1f1w9dk</bpmn:incoming>
+      <bpmn:incoming>Flow_1n11i8a</bpmn:incoming>
       <bpmn:outgoing>Flow_1czvs4b</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:exclusiveGateway id="Gateway_1p5poiy" name="what is the submit outcome?" default="Flow_1tc0wml">
@@ -208,7 +208,7 @@
       <bpmn:incoming>Flow_1q7bccj</bpmn:incoming>
       <bpmn:outgoing>Flow_0ru8iix</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:sequenceFlow id="Flow_1hdtlcs" sourceRef="Activity_0fqgr7w" targetRef="Event_0xwu20n" />
+    <bpmn:sequenceFlow id="Flow_1hdtlcs" sourceRef="Activity_0fqgr7w" targetRef="Activity_1j1xob0" />
     <bpmn:serviceTask id="Activity_0fqgr7w" name="Update Workflow status to APPROVED" camunda:delegateExpression="#{requestUpdateStatusHandler}">
       <bpmn:extensionElements>
         <camunda:inputOutput>
@@ -260,8 +260,8 @@
         <camunda:in source="${false}" target="expires" />
         <camunda:in source="skipPayment" target="skipPayment" />
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1fhjewm</bpmn:incoming>
-      <bpmn:outgoing>Flow_0gys3l4</bpmn:outgoing>
+      <bpmn:incoming>Flow_1hdtlcs</bpmn:incoming>
+      <bpmn:outgoing>Flow_16gjhba</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:serviceTask id="Activity_00ear9f" name="Populate request metadata" camunda:delegateExpression="#{empVariationApprovedPopulateRequestMetadataHandler}">
       <bpmn:incoming>Flow_0lb9t5v</bpmn:incoming>
@@ -271,18 +271,8 @@
     <bpmn:sequenceFlow id="Flow_04bbuo6" name="submitted" sourceRef="Gateway_0kxajqi" targetRef="Activity_0la8qh3">
       <bpmn:conditionExpression xsi:type="bpmn:tFormalExpression">${empVariationSubmitOutcome=='SUBMITTED'}</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:parallelGateway id="Gateway_15xf941">
-      <bpmn:incoming>Flow_1n11i8a</bpmn:incoming>
-      <bpmn:outgoing>Flow_1fhjewm</bpmn:outgoing>
-      <bpmn:outgoing>Flow_1f1w9dk</bpmn:outgoing>
-    </bpmn:parallelGateway>
-    <bpmn:sequenceFlow id="Flow_1n11i8a" sourceRef="Activity_1snl8xz" targetRef="Gateway_15xf941" />
-    <bpmn:endEvent id="Event_0x9r9bc">
-      <bpmn:incoming>Flow_0gys3l4</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0gys3l4" sourceRef="Activity_1j1xob0" targetRef="Event_0x9r9bc" />
-    <bpmn:sequenceFlow id="Flow_1fhjewm" sourceRef="Gateway_15xf941" targetRef="Activity_1j1xob0" />
-    <bpmn:sequenceFlow id="Flow_1f1w9dk" sourceRef="Gateway_15xf941" targetRef="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" />
+    <bpmn:sequenceFlow id="Flow_1n11i8a" sourceRef="Activity_1snl8xz" targetRef="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT" />
+    <bpmn:sequenceFlow id="Flow_16gjhba" sourceRef="Activity_1j1xob0" targetRef="Event_0xwu20n" />
     <bpmn:textAnnotation id="TextAnnotation_105sg2r">
       <bpmn:text>requestId</bpmn:text>
     </bpmn:textAnnotation>
@@ -358,6 +348,9 @@
         <dc:Bounds x="1450" y="360" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0ya6g3z_di" bpmnElement="Activity_1snl8xz">
+        <dc:Bounds x="170" y="460" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_04zo5uq_di" bpmnElement="EMP_VARIATION_REGULATOR_LED_APPLICATION_SUBMIT">
         <dc:Bounds x="420" y="780" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -426,18 +419,9 @@
       <bpmndi:BPMNShape id="Activity_1tia0t9_di" bpmnElement="Activity_00ear9f">
         <dc:Bounds x="1150" y="80" width="100" height="80" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0ya6g3z_di" bpmnElement="Activity_1snl8xz">
-        <dc:Bounds x="170" y="460" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_15xf941_di" bpmnElement="Gateway_15xf941">
-        <dc:Bounds x="195" y="795" width="50" height="50" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0a0psva_di" bpmnElement="Activity_1j1xob0">
-        <dc:Bounds x="420" y="1030" width="100" height="80" />
+        <dc:Bounds x="1920" y="780" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_0x9r9bc_di" bpmnElement="Event_0x9r9bc">
-        <dc:Bounds x="2082" y="1052" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_105sg2r_di" bpmnElement="TextAnnotation_105sg2r" bioc:stroke="#1e88e5" bioc:fill="#bbdefb" color:background-color="#bbdefb" color:border-color="#1e88e5">
         <dc:Bounds x="160" y="302" width="70" height="30" />
@@ -604,7 +588,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1hdtlcs_di" bpmnElement="Flow_1hdtlcs">
         <di:waypoint x="1860" y="820" />
-        <di:waypoint x="2092" y="820" />
+        <di:waypoint x="1920" y="820" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_14dhuyl_di" bpmnElement="Flow_14dhuyl">
         <di:waypoint x="1380" y="120" />
@@ -645,26 +629,18 @@
           <dc:Bounds x="701" y="243" width="48" height="14" />
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1n11i8a_di" bpmnElement="Flow_1n11i8a">
+        <di:waypoint x="220" y="540" />
+        <di:waypoint x="220" y="820" />
+        <di:waypoint x="420" y="820" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_0imzgfa_di" bpmnElement="Association_0imzgfa">
         <di:waypoint x="145" y="270" />
         <di:waypoint x="178" y="302" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1n11i8a_di" bpmnElement="Flow_1n11i8a">
-        <di:waypoint x="220" y="540" />
-        <di:waypoint x="220" y="795" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0gys3l4_di" bpmnElement="Flow_0gys3l4">
-        <di:waypoint x="520" y="1070" />
-        <di:waypoint x="2082" y="1070" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1fhjewm_di" bpmnElement="Flow_1fhjewm">
-        <di:waypoint x="220" y="845" />
-        <di:waypoint x="220" y="1070" />
-        <di:waypoint x="420" y="1070" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1f1w9dk_di" bpmnElement="Flow_1f1w9dk">
-        <di:waypoint x="245" y="820" />
-        <di:waypoint x="420" y="820" />
+      <bpmndi:BPMNEdge id="Flow_16gjhba_di" bpmnElement="Flow_16gjhba">
+        <di:waypoint x="2020" y="820" />
+        <di:waypoint x="2092" y="820" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

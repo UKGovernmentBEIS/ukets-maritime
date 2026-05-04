@@ -7,8 +7,8 @@ import { RequestDeadlineExtensionStore } from '@requests/common/emp/request-dead
 
 @Component({
   selector: 'mrtm-request-deadline-extension-success',
-  standalone: true,
   imports: [LinkDirective, RouterLink, PanelComponent],
+  standalone: true,
   templateUrl: './request-deadline-extension-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -1,7 +1,7 @@
 import { inject } from '@angular/core';
 import { ResolveFn } from '@angular/router';
 
-import { RequestTaskStore } from '@netz/common/store';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
@@ -53,8 +53,9 @@ export const emissionsBacklinkResolver =
     const shipId = route.params.shipId;
     const isChange = route.queryParamMap.get('change') === 'true';
     const store = inject(RequestTaskStore);
+    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
     const ship = store.select(empCommonQuery.selectShip(shipId))();
 
     const resolverFn = stepBacklinkResolvers[step];
-    return resolverFn ? resolverFn(isShipWizardCompleted(ship) && isChange) : '/';
+    return resolverFn ? resolverFn(isShipWizardCompleted(ship) && (isChange || !isEditable)) : '/';
   };

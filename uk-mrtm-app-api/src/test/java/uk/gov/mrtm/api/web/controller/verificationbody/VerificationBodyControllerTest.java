@@ -41,6 +41,7 @@ import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
+import uk.gov.netz.api.verificationbody.service.VerificationBodyViewService;
 
 import java.util.List;
 
@@ -84,6 +85,9 @@ class VerificationBodyControllerTest {
     private RoleAuthorizationService roleAuthorizationService;
 
     @Mock
+    private VerificationBodyViewService verificationBodyViewService;
+
+    @Mock
     private Validator validator;
 
     private MockMvc mockMvc;
@@ -122,7 +126,7 @@ class VerificationBodyControllerTest {
                 .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(verificationBodyQueryService.getVerificationBodies(user)).thenReturn(verificationBodyInfoResponse);
+        when(verificationBodyViewService.getVerificationBodies(user)).thenReturn(verificationBodyInfoResponse);
 
         mockMvc.perform(MockMvcRequestBuilders.get(CONTROLLER_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -148,7 +152,7 @@ class VerificationBodyControllerTest {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
 
-        verify(verificationBodyQueryService, never()).getVerificationBodies(any());
+        verify(verificationBodyViewService, never()).getVerificationBodies(any());
     }
     
     @Test
@@ -158,7 +162,7 @@ class VerificationBodyControllerTest {
         AppUser user = AppUser.builder().userId("userId").build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(verificationBodyQueryService.getVerificationBodyById(verificationBodyId))
+        when(verificationBodyQueryService.getVerificationBodyDTOById(verificationBodyId))
             .thenReturn(verificationBodyDTO);
         
         mockMvc.perform(

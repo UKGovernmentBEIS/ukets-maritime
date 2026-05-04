@@ -15,7 +15,6 @@ import {
   switchMap,
   takeUntil,
 } from 'rxjs';
-import { isNil } from 'lodash-es';
 
 import {
   AuthoritiesService,
@@ -54,6 +53,7 @@ import { NotificationBannerStore } from '@shared/components/notification-banner'
 import { FileType } from '@shared/constants';
 import { IncludesPipe, SubmitIfEmptyPipe } from '@shared/pipes';
 import { UuidFilePair } from '@shared/types';
+import { isNil } from '@shared/utils';
 
 interface RegulatorTableRow {
   permission: string;
@@ -63,10 +63,6 @@ interface RegulatorTableRow {
 
 @Component({
   selector: 'mrtm-details',
-  templateUrl: './details.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [DestroySubject],
-  standalone: true,
   imports: [
     ErrorSummaryComponent,
     PageHeadingComponent,
@@ -86,6 +82,10 @@ interface RegulatorTableRow {
     TwoFaLinkComponent,
     SubmitIfEmptyPipe,
   ],
+  standalone: true,
+  templateUrl: './details.component.html',
+  providers: [DestroySubject],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailsComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);

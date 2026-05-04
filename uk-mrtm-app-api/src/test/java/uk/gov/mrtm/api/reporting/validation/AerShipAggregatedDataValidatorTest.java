@@ -23,8 +23,14 @@ import uk.gov.mrtm.api.reporting.domain.emissions.fuel.AerFuelsAndEmissionsFacto
 import uk.gov.mrtm.api.reporting.domain.emissions.fuel.fossil.AerFossilFuels;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPort;
 import uk.gov.mrtm.api.reporting.domain.ports.AerPortEmissions;
+import uk.gov.mrtm.api.reporting.domain.ports.AerPortVisit;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyage;
+import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageDetails;
 import uk.gov.mrtm.api.reporting.domain.voyages.AerVoyageEmissions;
+import uk.gov.mrtm.api.reporting.enumeration.PortCodes1;
+import uk.gov.mrtm.api.reporting.enumeration.PortCodes2;
+import uk.gov.mrtm.api.reporting.enumeration.PortCodesNorthernIreland;
+import uk.gov.mrtm.api.reporting.enumeration.PortCountries;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerValidationResult;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerViolation;
 
@@ -54,11 +60,11 @@ class AerShipAggregatedDataValidatorTest {
 
     @ParameterizedTest
     @MethodSource("validScenarios")
-    void validate_is_valid(boolean isFromFetch, boolean hasPorts, boolean hasVoyages) {
+    void validate_is_valid(boolean isFromFetch, boolean hasPorts, boolean hasVoyages, AerVoyage aerVoyage) {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
         AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), hasPorts, hasVoyages, isFromFetch, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), hasPorts, hasVoyages, aerVoyage, isFromFetch, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -67,14 +73,36 @@ class AerShipAggregatedDataValidatorTest {
     }
 
     public static Stream<Arguments> validScenarios() {
+
+        AerVoyage aerVoyage1 = getAerVoyage(PortCountries.GB, PortCodesNorthernIreland.GBLDY.name(), PortCountries.GB, PortCodes1.GBAYW.name());
+        AerVoyage aerVoyage2 = getAerVoyage(PortCountries.GB, PortCodes1.GBABD.name(), PortCountries.GB, PortCodes1.GBAYW.name());
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
+        AerVoyage aerVoyageInternational = getAerVoyage(PortCountries.US, PortCodes2.USBAL.name(), PortCountries.CU, PortCodes1.CUHAV.name());
+
         return Stream.of(
-            Arguments.of(true, false, true),
-            Arguments.of(true, true, false),
-            Arguments.of(true, true, true),
-            Arguments.of(false, true, true),
-            Arguments.of(false, true, false),
-            Arguments.of(false, true, true),
-            Arguments.of(false, false, false)
+            Arguments.of(true, false, true, aerVoyage1),
+            Arguments.of(true, false, true, aerVoyage2),
+
+            Arguments.of(true, true, true, aerVoyageEu),
+            Arguments.of(true, true, true, aerVoyageInternational),
+            Arguments.of(true, true, false, null),
+
+            Arguments.of(true, true, true, aerVoyage1),
+            Arguments.of(true, true, true, aerVoyage2),
+
+            Arguments.of(false, true, true, aerVoyage1),
+            Arguments.of(false, true, true, aerVoyage2),
+
+            Arguments.of(false, true, true, aerVoyageEu),
+            Arguments.of(false, true, true, aerVoyageInternational),
+            Arguments.of(false, true, false, null),
+
+            Arguments.of(false, true, true, aerVoyage1),
+            Arguments.of(false, true, true, aerVoyage2),
+
+            Arguments.of(false, false, true, aerVoyageEu),
+            Arguments.of(false, false, true, aerVoyageInternational),
+            Arguments.of(false, false, false, null)
         );
     }
 
@@ -82,8 +110,9 @@ class AerShipAggregatedDataValidatorTest {
     void validate_ship_not_found_in_list_of_ships() {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
         AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
         AerContainer aerContainer = getAerContainer("7654321",
-            fuelsAndEmissionsFactors, new HashSet<>(), true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), true, true, aerVoyageEu, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -98,8 +127,9 @@ class AerShipAggregatedDataValidatorTest {
     @MethodSource("negativeEmissionsMeasurementScenarios")
     void validate_negative_emissions_input(AerPortEmissionsMeasurement emissionsMeasurement) {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), true, true, aerVoyageEu, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -142,8 +172,9 @@ class AerShipAggregatedDataValidatorTest {
     void validate_total_emissions_negative_or_zero() {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
         AerPortEmissionsMeasurement emissionsMeasurement = getZeroAerPortEmissionsMeasurement();
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), true, true, aerVoyageEu, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -154,12 +185,14 @@ class AerShipAggregatedDataValidatorTest {
             .containsExactlyInAnyOrder(Set.of(IMO_NUMBER).toArray());
     }
 
-    @Test
-    void validate_aggregated_data_fetched_ship_not_found_in_ports_or_voyages() {
+    @ParameterizedTest
+    @MethodSource("invalidFetchedShipsScenarios")
+    void validate_aggregated_data_fetched_ship_not_found_in_ports_or_voyages(boolean isFromFetch,
+                                                                             boolean hasVoyages, AerVoyage aerVoyage) {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors = getAerFuelsAndEmissionsFactors();
         AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, new HashSet<>(), false, false, true, emissionsMeasurement);
+            fuelsAndEmissionsFactors, new HashSet<>(), false, hasVoyages, aerVoyage, isFromFetch, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -168,13 +201,26 @@ class AerShipAggregatedDataValidatorTest {
             aerViolation.getMessage().equals(AGGREGATED_DATA_FETCHED_SHIP_NOT_FOUND_IN_PORTS_OR_VOYAGES.getMessage()));
     }
 
+    public static Stream<Arguments> invalidFetchedShipsScenarios() {
+
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
+        AerVoyage aerVoyageInternational = getAerVoyage(PortCountries.US, PortCodes2.USBAL.name(), PortCountries.CU, PortCodes1.CUHAV.name());
+
+        return Stream.of(
+            Arguments.of(true, true, aerVoyageEu),
+            Arguments.of(true, true, aerVoyageInternational),
+            Arguments.of(true, false, null)
+        );
+    }
+
     @ParameterizedTest
     @MethodSource("invalidFuelConsumptionScenarios")
     void validate_invalid_fuel_consumption(Set<AerAggregatedDataFuelConsumption> fuelConsumptions,
                                            Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors) {
         AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, fuelConsumptions, true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, fuelConsumptions, true, true, aerVoyageEu, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -196,7 +242,7 @@ class AerShipAggregatedDataValidatorTest {
             .uniqueIdentifier(UUID.randomUUID())
             .build();
 
-        Set<AerAggregatedDataFuelConsumption> aerSmfPurchases1 = Set.of(
+        Set<AerAggregatedDataFuelConsumption> aerFuelConsumption1 = Set.of(
             AerAggregatedDataFuelConsumption.builder()
                 .fuelOriginTypeName(
                     AerFuelOriginFossilTypeName.builder()
@@ -212,7 +258,7 @@ class AerShipAggregatedDataValidatorTest {
         );
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors1 = Set.of(h2);
 
-        Set<AerAggregatedDataFuelConsumption> aerSmfPurchases2 = Set.of(
+        Set<AerAggregatedDataFuelConsumption> aerFuelConsumption2 = Set.of(
             AerAggregatedDataFuelConsumption.builder()
                 .fuelOriginTypeName(methanol)
                 .build()
@@ -220,8 +266,8 @@ class AerShipAggregatedDataValidatorTest {
         Set<AerFuelsAndEmissionsFactors> fuelsAndEmissionsFactors2 = Set.of(h2);
 
         return Stream.of(
-            Arguments.of(aerSmfPurchases1, fuelsAndEmissionsFactors1),
-            Arguments.of(aerSmfPurchases2, fuelsAndEmissionsFactors2)
+            Arguments.of(aerFuelConsumption1, fuelsAndEmissionsFactors1),
+            Arguments.of(aerFuelConsumption2, fuelsAndEmissionsFactors2)
         );
     }
 
@@ -250,8 +296,9 @@ class AerShipAggregatedDataValidatorTest {
         );
 
         AerPortEmissionsMeasurement emissionsMeasurement = getAerPortEmissionsMeasurement();
+        AerVoyage aerVoyageEu = getAerVoyage(PortCountries.GR, PortCodes2.GRKAK.name(), PortCountries.IT, PortCodes2.ITAMA.name());
         AerContainer aerContainer = getAerContainer(IMO_NUMBER,
-            fuelsAndEmissionsFactors, fuelConsumptions, true, true, false, emissionsMeasurement);
+            fuelsAndEmissionsFactors, fuelConsumptions, true, true, aerVoyageEu, false, emissionsMeasurement);
 
         AerValidationResult result = validator.validate(aerContainer, ACCOUNT_ID);
 
@@ -265,6 +312,7 @@ class AerShipAggregatedDataValidatorTest {
                                          Set<AerAggregatedDataFuelConsumption> fuelConsumptions,
                                          boolean hasPorts,
                                          boolean hasVoyages,
+                                         AerVoyage aerVoyage,
                                          boolean isFromFetch,
                                          AerPortEmissionsMeasurement emissionsMeasurement) {
         return AerContainer
@@ -294,7 +342,7 @@ class AerShipAggregatedDataValidatorTest {
                     )
                     .voyageEmissions(
                         AerVoyageEmissions.builder()
-                            .voyages(hasVoyages ? Set.of(AerVoyage.builder().imoNumber(IMO_NUMBER).build()): new HashSet<>())
+                            .voyages(hasVoyages ? Set.of(aerVoyage): new HashSet<>())
                             .build()
                     )
                     .emissions(
@@ -316,6 +364,17 @@ class AerShipAggregatedDataValidatorTest {
                     )
                     .build()
             )
+            .build();
+    }
+
+    private static AerVoyage getAerVoyage(PortCountries fromCountry, String fromPort,
+                                   PortCountries toCountry, String toPort) {
+        return AerVoyage.builder()
+            .imoNumber(IMO_NUMBER)
+            .voyageDetails(AerVoyageDetails.builder()
+                .departurePort(AerPortVisit.builder().country(fromCountry).port(fromPort).build())
+                .arrivalPort(AerPortVisit.builder().country(toCountry).port(toPort).build())
+                .build())
             .build();
     }
 

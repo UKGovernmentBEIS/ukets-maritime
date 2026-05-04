@@ -2,8 +2,6 @@ import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { isNil } from 'lodash-es';
-
 import { EmpRegisteredOwner } from '@mrtm/api';
 
 import { RequestTaskStore } from '@netz/common/store';
@@ -16,6 +14,7 @@ import {
   MandateRegisteredOwnersFormModel,
 } from '@requests/common/emp/subtasks/mandate/mandate-registered-owners-form/mandate-registered-owners-form.types';
 import { TASK_FORM } from '@requests/common/task-form.token';
+import { isNil } from '@shared/utils';
 import { todayOrPastDateValidator } from '@shared/validators';
 
 const uniqueImoNumberValidation =

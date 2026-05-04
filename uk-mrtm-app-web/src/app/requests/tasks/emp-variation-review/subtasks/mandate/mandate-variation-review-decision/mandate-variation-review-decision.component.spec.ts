@@ -1,13 +1,13 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { of } from 'rxjs';
 
 import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
-import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
+import { BasePage, MockType } from '@netz/common/testing';
 
 import { MANDATE_SUB_TASK, MandateWizardStep } from '@requests/common/emp/subtasks/mandate';
 import { emissionsMock } from '@requests/common/emp/testing/emissions.mock';
@@ -24,8 +24,8 @@ describe('MandateVariationReviewDecisionComponent', () => {
   let fixture: ComponentFixture<MandateVariationReviewDecisionComponent>;
   let page: Page;
   let store: RequestTaskStore;
+  let route: ActivatedRoute;
 
-  const route = new ActivatedRouteStub();
   const taskService: MockType<EmpVariationReviewService> = {
     saveReviewDecision: jest.fn().mockReturnValue(of({})),
   };
@@ -51,7 +51,7 @@ describe('MandateVariationReviewDecisionComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: ActivatedRoute, useValue: route },
+        provideRouter([]),
         { provide: TaskService, useValue: taskService },
         ...taskProviders,
       ],
@@ -60,6 +60,7 @@ describe('MandateVariationReviewDecisionComponent', () => {
 
   beforeEach(() => {
     store = TestBed.inject(RequestTaskStore);
+    route = TestBed.inject(ActivatedRoute);
     store.setState(
       mockStateBuild(
         {
@@ -81,10 +82,10 @@ describe('MandateVariationReviewDecisionComponent', () => {
     expect(page.summariesContents).toEqual([
       'Has the responsibility for compliance with UK ETS been delegated to you by a registered owner for one or more ships?',
       'Yes',
-      'Change',
+      'Change  whether the responsibility for compliance with UK ETS has been delegated by a registered owner for one or more ships',
       'Declaration of delegation of UK ETS responsibility',
       'I certify that I am authorised by Test Maritime Operator Ltd to make this declaration on its behalf and believe that the information provided is true.',
-      'Change',
+      'Change declaration of delegation of UK ETS responsibility',
     ]);
     expect(page.tableContents).toEqual([
       'Registered owner name and IMO number',

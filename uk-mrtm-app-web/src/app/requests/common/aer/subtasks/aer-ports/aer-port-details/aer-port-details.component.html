@@ -4,52 +4,58 @@
   [isTwoThirds]="true"
   caption="New port call for {{ ship()?.details?.name }}"
   [heading]="wizardMap.portDetails.title">
-  <h3 class="govuk-heading-m">Port details</h3>
-  <div
-    govuk-select
-    [options]="countrySelectItems"
-    widthClass="govuk-!-width-one-third"
-    formControlName="country"
-    label="Country code and name "
-    labelSize="normal"></div>
-  <div
-    govuk-select
-    [options]="portSelectItems()"
-    formControlName="port"
-    widthClass="govuk-!-width-one-third"
-    label="Port code and name "
-    labelSize="normal"></div>
+  <fieldset govukFieldset id="port-details">
+    <legend govukLegend legendSize="medium">Port details</legend>
+    <div
+      govuk-select
+      [options]="countrySelectItems"
+      widthClass="govuk-!-width-one-third"
+      formControlName="country"
+      label="Country code and name "
+      labelSize="normal"></div>
+    <div
+      govuk-select
+      [options]="portSelectItems()"
+      formControlName="port"
+      widthClass="govuk-!-width-one-third"
+      label="Port code and name "
+      labelSize="normal"></div>
+  </fieldset>
 
-  <h3 class="govuk-heading-m">Arrival details</h3>
-  <div
-    mrtm-date-picker
-    formControlName="arrivalDate"
-    [datePickerConfig]="datepickerConfig"
-    label="Date of arrival"
-    hint="For example, 21/7/2024"
-    widthClass="govuk-!-width-one-third"></div>
-  <div
-    mrtm-time-input
-    formControlName="arrivalTime"
-    label="Actual time of arrival (ATA)"
-    hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  <fieldset govukFieldset id="arrival-details">
+    <legend govukLegend legendSize="medium">Arrival details</legend>
+    <div
+      mrtm-date-picker
+      formControlName="arrivalDate"
+      [datePickerConfig]="datepickerConfig"
+      label="Date of arrival"
+      hint="For example, 21/7/2024"
+      widthClass="govuk-input--width-10"></div>
+    <div
+      mrtm-time-input
+      formControlName="arrivalTime"
+      label="Actual time of arrival (ATA)"
+      hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  </fieldset>
 
-  <h3 class="govuk-heading-m">Departure details</h3>
-  <div
-    mrtm-date-picker
-    formControlName="departureDate"
-    [datePickerConfig]="datepickerConfig"
-    label="Date of departure"
-    hint="For example, 21/7/2024"
-    widthClass="govuk-!-width-one-third"></div>
-  <div
-    mrtm-time-input
-    formControlName="departureTime"
-    label="Actual time of departure (ATD)"
-    hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  <fieldset govukFieldset id="departure-details">
+    <legend govukLegend legendSize="medium">Departure details</legend>
+    <div
+      mrtm-date-picker
+      formControlName="departureDate"
+      [datePickerConfig]="datepickerConfig"
+      label="Date of departure"
+      hint="For example, 21/7/2024"
+      widthClass="govuk-input--width-10"></div>
+    <div
+      mrtm-time-input
+      formControlName="departureTime"
+      label="Actual time of departure (ATD)"
+      hint="Enter the exact time in GMT, for example 17:06:22"></div>
+  </fieldset>
 </mrtm-wizard-step>
 
 <div>
-  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" />
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
   <a govukLink [routerLink]="['../../']">Return to: {{ wizardMap.title }}</a>
 </div>

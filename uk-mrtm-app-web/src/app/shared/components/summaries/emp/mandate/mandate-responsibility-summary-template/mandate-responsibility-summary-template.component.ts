@@ -17,7 +17,6 @@ import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-mandate-responsibility-summary-template',
-  standalone: true,
   imports: [
     SummaryListComponent,
     SummaryListRowActionsDirective,
@@ -29,13 +28,14 @@ import { BooleanToTextPipe } from '@shared/pipes';
     RouterLink,
     HtmlDiffDirective,
   ],
+  standalone: true,
   templateUrl: './mandate-responsibility-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MandateResponsibilitySummaryTemplateComponent {
-  mandate: InputSignal<EmpMandate> = input.required<EmpMandate>();
-  originalMandate: InputSignal<EmpMandate> = input<EmpMandate>();
-  isEditable: InputSignal<boolean> = input<boolean>(false);
-  queryParams: InputSignal<Params> = input<Params>();
-  wizardStep: InputSignal<Record<string, string>> = input<Record<string, string>>();
+  readonly mandate: InputSignal<EmpMandate> = input.required<EmpMandate>();
+  readonly originalMandate: InputSignal<EmpMandate> = input<EmpMandate>();
+  readonly isEditable: InputSignal<boolean> = input<boolean>(false);
+  readonly queryParams: InputSignal<Params> = input<Params>();
+  readonly wizardStep: InputSignal<Record<string, string>> = input<Record<string, string>>();
 }

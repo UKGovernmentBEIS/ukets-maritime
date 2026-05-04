@@ -33,11 +33,11 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-abbreviations-variation-review-decision',
-  standalone: true,
   imports: [AbbreviationsSummaryTemplateComponent, ReviewDecisionComponent, WizardStepComponent, ReactiveFormsModule],
+  standalone: true,
   templateUrl: './abbreviations-variation-review-decision.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [reviewEmpSubtaskDecisionFormProvider(ABBREVIATIONS_SUB_TASK)],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AbbreviationsVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
@@ -47,7 +47,7 @@ export class AbbreviationsVariationReviewDecisionComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
-  vm: Signal<ViewModel> = computed(() => ({
+  readonly vm: Signal<ViewModel> = computed(() => ({
     abbreviations: this.store.select(empCommonQuery.selectAbbreviations)(),
     originalAbbreviations: this.store.select(empVariationReviewQuery.selectOriginalAbbreviations)(),
     abbreviationsMap: abbreviationsMap,

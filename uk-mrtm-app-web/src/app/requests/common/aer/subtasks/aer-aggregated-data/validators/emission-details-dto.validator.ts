@@ -149,6 +149,7 @@ export class EmissionDetailsDtoValidator {
           emissionDetails?.annualEmission?.emissions,
         ),
         fromFetch: false,
+        dataInputType: 'MANUAL',
       };
     }
 

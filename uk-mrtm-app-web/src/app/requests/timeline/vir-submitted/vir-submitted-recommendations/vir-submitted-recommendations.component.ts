@@ -10,12 +10,12 @@ import { VirOperatorResponseSummaryTemplateComponent } from '@shared/components/
 
 @Component({
   selector: 'mrtm-vir-submitted-recommendations',
-  standalone: true,
   imports: [
     PageHeadingComponent,
     VirVerifierRecommendationSummaryTemplateComponent,
     VirOperatorResponseSummaryTemplateComponent,
   ],
+  standalone: true,
   templateUrl: './vir-submitted-recommendations.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

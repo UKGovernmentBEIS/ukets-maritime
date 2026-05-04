@@ -6,7 +6,12 @@
       <dd govukSummaryListRowValue [notProvided]="data.exist | booleanToText"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.EXIST_FORM]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">
+              whether there have been any uncorrected non-conformities with the approved emissions monitoring plan
+            </span>
+          </a>
         </dd>
       }
     </div>
@@ -28,7 +33,12 @@
       <dd govukSummaryListRowValue [notProvided]="data.existPriorYearIssues | booleanToText"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="[wizardStep.PRIOR_YEAR_ISSUES_EXIST_FORM]" [queryParams]="queryParams()">Change</a>
+          <a govukLink [routerLink]="[wizardStep.PRIOR_YEAR_ISSUES_EXIST_FORM]" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">
+              whether there are any non-conformities from the previous year that have not been resolved
+            </span>
+          </a>
         </dd>
       }
     </div>

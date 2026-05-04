@@ -10,11 +10,11 @@ import {
 
 @Component({
   selector: 'mrtm-non-compliance-notice-of-intent-submitted',
-  standalone: true,
   imports: [
     NonComplianceNoticeOfIntentUploadSummaryTemplateComponent,
     NonComplianceNotifiedUsersSummaryTemplateComponent,
   ],
+  standalone: true,
   template: `
     <mrtm-non-compliance-notice-of-intent-upload-summary-template
       [data]="data()"
