@@ -32,10 +32,12 @@ describe('TimeoutBannerService', () => {
 
     (keycloakService.keycloakEvents as any) = signal(null);
     (keycloakService.updateToken as any) = jest.fn().mockResolvedValue(true);
-    Object.defineProperty(keycloakService, 'keycloakInstance', {
-      value: {
-        refreshTokenParsed: mockRefreshTokenParsed,
-      },
+    Object.defineProperty(keycloakService, 'refreshTokenParsed', {
+      get: () => mockRefreshTokenParsed,
+      configurable: true,
+    });
+    Object.defineProperty(keycloakService, 'isAuthenticated', {
+      get: () => true,
       configurable: true,
     });
   });
@@ -77,7 +79,7 @@ describe('TimeoutBannerService', () => {
     (keycloakService.keycloakEvents as any).set({
       type: KeycloakEventType.OnAuthRefreshSuccess,
     });
-    expect(service.countDownTime()).toBeGreaterThanOrEqual(0);
+    expect(service['countDownTime']()).toBeGreaterThanOrEqual(0);
   });
 
   it('should cleanup on destroy', () => {

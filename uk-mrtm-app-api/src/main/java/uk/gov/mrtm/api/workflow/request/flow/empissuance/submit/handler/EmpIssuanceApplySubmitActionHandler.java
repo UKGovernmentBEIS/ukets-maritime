@@ -29,6 +29,9 @@ public class EmpIssuanceApplySubmitActionHandler implements RequestTaskActionHan
     @Value("${govuk-pay.empIssuancePaymentIsActive}")
     private boolean empIssuancePaymentIsActive;
 
+    @Value("${feature-flag.emp.payment.skip-before-date}")
+    private LocalDateTime empPaymentSkipBeforeDate;
+
     @Override
     public RequestTaskPayload process(Long requestTaskId, String requestTaskActionType, AppUser appUser, RequestTaskActionEmptyPayload payload) {
         RequestTask requestTask = requestTaskService.findTaskById(requestTaskId);
@@ -37,9 +40,11 @@ public class EmpIssuanceApplySubmitActionHandler implements RequestTaskActionHan
 
         requestTask.getRequest().setSubmissionDate(LocalDateTime.now());
 
+        boolean shouldSkipPaymentBeforeDate = requestTask.getRequest().getCreationDate().isBefore(empPaymentSkipBeforeDate);
+
         workflowService.completeTask(
                 requestTask.getProcessTaskId(),
-                Map.of(BpmnProcessConstants.SKIP_PAYMENT, !empIssuancePaymentIsActive)
+                Map.of(BpmnProcessConstants.SKIP_PAYMENT, !empIssuancePaymentIsActive || shouldSkipPaymentBeforeDate)
         );
 
         return requestTask.getPayload();

@@ -1,4 +1,4 @@
-import { effect, inject, Injectable, OnDestroy, signal } from '@angular/core';
+import { computed, effect, inject, Injectable, OnDestroy, signal } from '@angular/core';
 
 import { AuthService, KeycloakEventType, KeycloakService } from '@core/services';
 import { environment } from '@environments/environment';
@@ -8,50 +8,51 @@ export class TimeoutBannerService implements OnDestroy {
   private readonly keycloak = inject(KeycloakService);
   private readonly authService = inject(AuthService);
 
-  private get refreshTokenParsed() {
-    return this.keycloak.keycloakInstance?.refreshTokenParsed;
-  }
-
-  private get refreshTokenParsedExp() {
-    return this.refreshTokenParsed?.exp;
-  }
-
-  private get refreshTokenParsedIat() {
-    return this.refreshTokenParsed?.iat;
-  }
-
-  private get refreshTokenExpOffset() {
-    return this.refreshTokenParsedExp - this.refreshTokenParsedIat;
-  }
-
-  private initialRefreshTokenExpOffset: number | undefined;
-
-  readonly timeOffsetSeconds = environment.timeoutBanner.timeOffsetSeconds;
-  readonly countDownTime = signal(0);
-  readonly timeExtensionAllowed = signal(true);
+  private readonly initialRefreshTokenExpOffset = signal<number | undefined>(undefined);
   readonly isVisible = signal(false);
+  readonly timeExtensionAllowed = signal(true);
 
-  private countdownTimeout = null;
-  private bannerTimeout = null;
+  // Derive state reactively from the keycloak signal and auth events
+  private readonly refreshTokenParsed = computed(() => {
+    this.keycloak.keycloakEvents(); // Track events to re-evaluate when token changes
+
+    return this.keycloak.refreshTokenParsed;
+  });
+  private readonly refreshTokenParsedExp = computed(() => this.refreshTokenParsed()?.exp);
+  private readonly refreshTokenParsedIat = computed(() => this.refreshTokenParsed()?.iat);
+  readonly hasValidToken = computed(
+    () => this.refreshTokenParsedExp() !== undefined && this.refreshTokenParsedIat() !== undefined,
+  );
+  private readonly refreshTokenExpOffset = computed(() => {
+    const exp = this.refreshTokenParsedExp();
+    const iat = this.refreshTokenParsedIat();
+    return exp !== undefined && iat !== undefined ? exp - iat : 0;
+  });
+  // Compute how many milliseconds to wait before showing the banner
+  private readonly countDownTime = computed(() => {
+    if (!this.hasValidToken()) return 0;
+
+    const expiryMs = (this.refreshTokenParsedExp() ?? 0) * 1000;
+    const msUntilExpiry = expiryMs - Date.now();
+    const msOffset = this.timeOffsetSeconds * 1000;
+
+    return Math.max(0, msUntilExpiry - msOffset);
+  });
+
+  private countdownTimeout: ReturnType<typeof setTimeout> | null = null;
+  private bannerTimeout: ReturnType<typeof setTimeout> | null = null;
   private scheduledExpiryTime: number | null = null;
+  readonly timeOffsetSeconds = environment.timeoutBanner.timeOffsetSeconds;
 
   constructor() {
+    // Handle Authentication Events
     effect(() => {
       const event = this.keycloak.keycloakEvents();
       if (!event) return;
 
       switch (event.type) {
         case KeycloakEventType.OnAuthRefreshSuccess:
-          this.updateCountdownTime();
-          // Set initial offset on first refresh event if not yet set
-          if (this.initialRefreshTokenExpOffset === undefined && this.hasValidToken()) {
-            this.initialRefreshTokenExpOffset = this.refreshTokenExpOffset;
-          } else if (
-            this.initialRefreshTokenExpOffset !== undefined &&
-            this.refreshTokenExpOffset < this.initialRefreshTokenExpOffset
-          ) {
-            this.timeExtensionAllowed.set(false);
-          }
+          this.handleRefreshSuccess();
           break;
         case KeycloakEventType.OnAuthLogout:
           this.idleLogout();
@@ -59,113 +60,101 @@ export class TimeoutBannerService implements OnDestroy {
       }
     });
 
-    // Schedule banner display based on countdown
+    // Manage Banner Visibility Lifecycle
     effect(() => {
-      const countDownTime = this.countDownTime();
-      const currentExpiryTime = this.refreshTokenParsedExp;
+      const countDown = this.countDownTime();
+      const currentExpiry = this.refreshTokenParsedExp();
+      const visible = this.isVisible();
 
-      if (countDownTime <= 0 || !this.hasValidToken()) return;
+      // Avoid rescheduling if banner is already up
+      if (visible || countDown <= 0 || !this.hasValidToken()) {
+        return;
+      }
 
-      // If banner is already visible, don't reschedule
-      if (this.isVisible()) return;
-
-      // Only reschedule if the expiry time changed significantly (> 60 seconds difference)
-      // This prevents constant rescheduling on token refresh when expiry extends by ~40-60s
+      // Optimization: Only reschedule if the expiry time changed significantly (> 60s)
       if (this.scheduledExpiryTime !== null) {
-        const expiryDiff = Math.abs(currentExpiryTime - this.scheduledExpiryTime);
+        const expiryDiff = Math.abs((currentExpiry ?? 0) - this.scheduledExpiryTime);
         if (expiryDiff < 60) return;
       }
 
-      // Clear any existing timeout
-      if (this.countdownTimeout) {
-        clearTimeout(this.countdownTimeout);
-        this.countdownTimeout = null;
-      }
+      this.clearTimeouts();
+      this.scheduledExpiryTime = currentExpiry ?? null;
 
-      this.scheduledExpiryTime = currentExpiryTime;
       this.countdownTimeout = setTimeout(() => {
         this.isVisible.set(true);
-      }, countDownTime);
+      }, countDown);
     });
 
-    // Handle banner display and automatic logout
+    // Handle Automatic Logout when Banner is shown
     effect(() => {
-      const isVisible = this.isVisible();
-
-      // Clear any existing timeout
-      if (this.bannerTimeout) {
-        clearTimeout(this.bannerTimeout);
-        this.bannerTimeout = null;
+      if (!this.isVisible()) {
+        if (this.bannerTimeout) {
+          clearTimeout(this.bannerTimeout);
+          this.bannerTimeout = null;
+        }
+        return;
       }
 
-      if (!isVisible) return;
-
-      // Token expires at refreshTokenParsedExp * 1000 milliseconds
-      // Show banner at (refreshTokenParsedExp - timeOffsetSeconds) * 1000
-      // So wait until expiration: timeOffsetSeconds * 1000 milliseconds from when banner shows
+      // When banner becomes visible, start the final countdown to logout
       this.bannerTimeout = setTimeout(() => {
-        this.isVisible.set(false);
         this.idleLogout();
       }, this.timeOffsetSeconds * 1000);
     });
+  }
 
-    // Initialize countdown when token becomes available
-    effect(() => {
-      // Trigger on any auth event to ensure we recalculate if needed
-      this.keycloak.keycloakEvents();
+  private handleRefreshSuccess() {
+    const offset = this.refreshTokenExpOffset();
+    const initial = this.initialRefreshTokenExpOffset();
+
+    if (initial === undefined) {
       if (this.hasValidToken()) {
-        this.updateCountdownTime();
+        this.initialRefreshTokenExpOffset.set(offset);
       }
-    });
-  }
-
-  private hasValidToken(): boolean {
-    return this.refreshTokenParsedExp !== undefined && this.refreshTokenParsedIat !== undefined;
-  }
-
-  private updateCountdownTime(): void {
-    if (this.hasValidToken()) {
-      this.countDownTime.set(this.calculateCountdownTime());
+    } else if (offset < initial) {
+      // If the new refresh token lifetime is shorter than initial, extension might no longer be possible
+      this.timeExtensionAllowed.set(false);
     }
   }
 
-  extendSession() {
-    if (this.keycloak?.keycloakInstance) {
-      this.keycloak.updateToken(-1).then(() => {
-        this.scheduledExpiryTime = null; // Reset so banner can be rescheduled with new expiry
-        this.isVisible.set(false);
-      });
+  extendSession(): void {
+    if (this.keycloak.isAuthenticated) {
+      this.keycloak
+        .updateToken(-1)
+        .then(() => {
+          this.clearTimeouts();
+        })
+        .catch(() => {
+          this.clearTimeouts();
+          this.authService.logout(`timed-out?idle=NaN`);
+        });
     }
   }
 
-  signOut() {
-    this.isVisible.set(false);
+  signOut(): void {
+    this.clearTimeouts();
     this.authService.logout();
   }
 
-  private idleLogout() {
-    const idleTime = this.refreshTokenParsedExp - this.refreshTokenParsedIat;
-    this.authService.logout('timed-out?idle=' + idleTime);
+  private idleLogout(): void {
+    const idleTime = (this.refreshTokenParsedExp() ?? 0) - (this.refreshTokenParsedIat() ?? 0);
+    this.clearTimeouts();
+    this.authService.logout(`timed-out?idle=${idleTime}`);
   }
 
-  private calculateCountdownTime(): number {
-    // Calculate milliseconds until token expiration, minus the offset (when to show banner)
-    // Using absolute expiry time (exp) ensures countdown is stable across token refreshes
-    const nowMs = Date.now();
-    const expiryMs = this.refreshTokenParsedExp * 1000;
-    const msUntilExpiry = expiryMs - nowMs;
-    const msOffset = this.timeOffsetSeconds * 1000;
-
-    return msUntilExpiry - msOffset;
-  }
-
-  ngOnDestroy(): void {
+  private clearTimeouts(): void {
     if (this.countdownTimeout) {
       clearTimeout(this.countdownTimeout);
+      this.countdownTimeout = null;
     }
     if (this.bannerTimeout) {
       clearTimeout(this.bannerTimeout);
+      this.bannerTimeout = null;
     }
     this.scheduledExpiryTime = null;
+    this.isVisible.set(false);
+  }
+
+  ngOnDestroy(): void {
+    this.clearTimeouts();
   }
 }
