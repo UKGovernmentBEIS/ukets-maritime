@@ -43,6 +43,6 @@ describe('AmendSendVariationSuccessComponent', () => {
   });
 
   it('should display correct header and content', () => {
-    expect(page.heading1.textContent).toEqual('Application sent to regulator');
+    expect(page.heading1.textContent).toEqual('Variation application sent to regulator');
   });
 });
