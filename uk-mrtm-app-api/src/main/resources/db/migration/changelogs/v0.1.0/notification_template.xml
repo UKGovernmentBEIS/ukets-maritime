@@ -7324,7 +7324,35 @@ This is an automatic email - please do not reply to this address.'
         </sql>
     </changeSet>
 
+    <changeSet id="0_1_0_fix_generic_email_notification_template_to_be_null_safe_when_accountServiceContactFirstName_is_missing" author="P44065">
+        <sql>
+            UPDATE notification_template
+            SET text='Dear ${(accountServiceContactFirstName)!}
 
+Please find attached a communication from your regulator.
 
+If you have any queries, please contact ${competentAuthorityEmail}
+
+Kind regards,
+
+${competentAuthorityName}'
+            WHERE name = 'Generic email template';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET text='Dear ${accountServiceContactFirstName}
+
+                Please find attached a communication from your regulator.
+
+                If you have any queries, please contact ${competentAuthorityEmail}
+
+                Kind regards,
+
+                ${competentAuthorityName}'
+                WHERE name = 'Generic email template';
+            </sql>
+        </rollback>
+    </changeSet>
 
 </databaseChangeLog>
