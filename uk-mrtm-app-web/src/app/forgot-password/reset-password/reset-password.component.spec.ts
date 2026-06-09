@@ -7,18 +7,16 @@ import { of, throwError } from 'rxjs';
 import { ForgotPasswordService } from '@mrtm/api';
 
 import { ErrorCodes, PageNotFoundComponent } from '@netz/common/error';
-import { BasePage, mockClass, MockType } from '@netz/common/testing';
+import { BasePage, MockType } from '@netz/common/testing';
 
 import { ResetPasswordComponent } from '@forgot-password/reset-password/reset-password.component';
 import { ResetPasswordStore } from '@forgot-password/store/reset-password.store';
-import { PasswordService } from '@shared/services';
 
 describe('ResetPasswordComponent', () => {
   let component: ResetPasswordComponent;
   let fixture: ComponentFixture<ResetPasswordComponent>;
   let page: Page;
   let router: Router;
-  let passwordService: jest.Mocked<PasswordService>;
   let resetPasswordStore: ResetPasswordStore;
 
   class Page extends BasePage<ResetPasswordComponent> {
@@ -48,7 +46,6 @@ describe('ResetPasswordComponent', () => {
   };
 
   beforeEach(async () => {
-    passwordService = mockClass(PasswordService);
     await TestBed.configureTestingModule({
       imports: [ResetPasswordComponent],
       providers: [
@@ -60,7 +57,6 @@ describe('ResetPasswordComponent', () => {
         ]),
         ResetPasswordStore,
         { provide: ForgotPasswordService, useValue: forgotPasswordService },
-        { provide: PasswordService, useValue: passwordService },
       ],
     }).compileComponents();
   });
@@ -70,7 +66,6 @@ describe('ResetPasswordComponent', () => {
     fixture = TestBed.createComponent(ResetPasswordComponent);
     component = fixture.componentInstance;
     page = new Page(fixture);
-    passwordService.isBlacklistedPassword.mockReturnValue(of(false));
     resetPasswordStore = TestBed.inject(ResetPasswordStore);
 
     resetPasswordStore.setState({

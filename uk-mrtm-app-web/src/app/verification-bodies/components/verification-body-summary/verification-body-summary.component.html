@@ -9,6 +9,15 @@
     }
   </div>
   <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Name of the National Accreditation body</dt>
+    <dd govukSummaryListRowValue>{{ summaryInfo()?.accreditationBodyName }}</dd>
+    @if (editable()) {
+      <dd govukSummaryListRowActions>
+        <a [routerLink]="[formRouterLink()]" govukLink>Change</a>
+      </dd>
+    }
+  </div>
+  <div govukSummaryListRow>
     <dt govukSummaryListRowKey>Accreditation reference number</dt>
     <dd govukSummaryListRowValue>{{ summaryInfo()?.accreditationReferenceNumber }}</dd>
     @if (editable()) {

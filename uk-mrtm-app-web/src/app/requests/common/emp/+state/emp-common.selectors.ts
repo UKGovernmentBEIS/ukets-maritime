@@ -157,15 +157,14 @@ const selectShips: StateSelector<
     .sort((a, b) => a?.details?.name?.localeCompare(b?.details?.name)),
 );
 
-const selectListOfShips: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> = createAggregateSelector(
+const selectListOfShips: StateSelector<RequestTaskState, ShipEmissionTableListItem[]> = createDescendingSelector(
   selectShips,
-  selectEmpSectionsCompleted,
-  (ships, completed) =>
+  (ships) =>
     ships.map((x) => ({
       uniqueIdentifier: x.uniqueIdentifier,
       ...x.details,
-      status: (completed?.[`${EMISSIONS_SUB_TASK}-ship-${x.uniqueIdentifier}`] ??
-        TaskItemStatus.COMPLETED) as TaskItemStatus,
+      status: x?.status,
+      source: x,
     })),
 );
 

@@ -25,7 +25,7 @@ public class MaritimeOutstandingRequestTask extends OutstandingRequestTask {
     private String imoNumber;
 
     @JsonProperty("Account status")
-    private MrtmAccountStatus accountStatus;
+    private String accountStatus;
 
     public MaritimeOutstandingRequestTask(String accountId,
                                           String accountName,
@@ -36,7 +36,7 @@ public class MaritimeOutstandingRequestTask extends OutstandingRequestTask {
                                           LocalDate requestTaskDueDate,
                                           LocalDate requestTaskPausedDate,
                                           String imoNumber,
-                                          MrtmAccountStatus accountStatus) {
+                                          String accountStatus) {
         super(accountId, accountName, requestId, requestType, requestTaskType, requestTaskAssignee, requestTaskDueDate, requestTaskPausedDate);
         this.imoNumber = imoNumber;
         this.accountStatus = accountStatus;

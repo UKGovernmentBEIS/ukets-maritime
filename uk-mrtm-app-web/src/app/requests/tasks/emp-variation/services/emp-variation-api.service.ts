@@ -6,6 +6,7 @@ import { EmpVariationSaveApplicationRequestTaskActionPayload, RequestTaskActionP
 
 import {
   BusinessErrorService,
+  catchBadRequest,
   catchNotFoundRequest,
   catchTaskReassignedBadRequest,
   ErrorCodes,
@@ -16,7 +17,8 @@ import { TaskApiService } from '@netz/common/forms';
 import { PendingRequestService } from '@netz/common/services';
 import { requestTaskQuery } from '@netz/common/store';
 
-import { EmpVariationTaskPayload } from '@requests/common/emp';
+import { EmpTaskPayload, EmpVariationTaskPayload } from '@requests/common/emp';
+import { empSubmitValidationError } from '@requests/tasks/emp-submit/errors';
 import { SaveActionTypes } from '@shared/types';
 
 @Injectable()
@@ -73,6 +75,21 @@ export class EmpVariationApiService extends TaskApiService<EmpVariationTaskPaylo
     );
   }
 
+  importThirdPartyData(payload: EmpTaskPayload): Observable<EmpTaskPayload> {
+    return this.service.processRequestTaskAction(this.createImportThirdPartyDataAction(payload)).pipe(
+      catchNotFoundRequest(ErrorCodes.NOTFOUND1001, () =>
+        this.businessErrorService.showErrorForceNavigation(taskNotFoundError),
+      ),
+      catchTaskReassignedBadRequest(() =>
+        this.businessErrorService.showErrorForceNavigation(requestTaskReassignedError()),
+      ),
+      catchBadRequest(ErrorCodes.FORM1001, () => {
+        const taskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
+        return this.businessErrorService.showError(empSubmitValidationError(taskId));
+      }),
+    );
+  }
+
   private createSaveAction(payload: EmpVariationSaveApplicationRequestTaskActionPayload): RequestTaskActionProcessDTO {
     const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
     const { actionType, actionPayloadType } = this.saveActionTypes;
@@ -109,5 +126,37 @@ export class EmpVariationApiService extends TaskApiService<EmpVariationTaskPaylo
         payloadType: actionPayloadType,
       },
     } as RequestTaskActionProcessDTO;
+  }
+
+  private createImportThirdPartyDataAction(payload: EmpVariationTaskPayload): RequestTaskActionProcessDTO {
+    const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
+    const { emissionsMonitoringPlan, empSectionsCompleted, empVariationDetailsCompleted, empVariationDetails } =
+      payload;
+    const { actionType, actionPayloadType } = this.importThirdPartyDataActionTypes;
+
+    return {
+      requestTaskId,
+      requestTaskActionType: actionType,
+      requestTaskActionPayload: {
+        payloadType: actionPayloadType,
+        emissionsMonitoringPlan,
+        empSectionsCompleted,
+        empVariationDetailsCompleted,
+        empVariationDetails,
+      },
+    } as RequestTaskActionProcessDTO;
+  }
+
+  private get importThirdPartyDataActionTypes(): SaveActionTypes {
+    const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
+
+    switch (taskType) {
+      case 'EMP_VARIATION_APPLICATION_SUBMIT':
+      default:
+        return {
+          actionType: 'EMP_VARIATION_IMPORT_THIRD_PARTY_DATA_APPLICATION',
+          actionPayloadType: 'EMP_VARIATION_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD',
+        };
+    }
   }
 }

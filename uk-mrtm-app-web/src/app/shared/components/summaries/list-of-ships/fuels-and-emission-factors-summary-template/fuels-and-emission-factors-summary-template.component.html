@@ -1,51 +1,76 @@
-@if (data(); as data) {
-  <div govuk-summary-card title="Fuel {{ index() + 1 }}">
-    @if (isEditable()) {
-      <ng-template #actions>
+<div govuk-summary-card [title]="cardTitle()">
+  @if (isEditable()) {
+    <ng-template #actions>
+      @if (fuelEmissionsFactor()?.uniqueIdentifier) {
         <a
-          [routerLink]="[changeLink(), data?.uniqueIdentifier]"
+          [routerLink]="[changeLink(), fuelEmissionsFactor().uniqueIdentifier]"
           [queryParams]="queryParams()"
-          govukLink="summaryAction">
+          govukLink="summaryAction"
+          class="govuk-link--no-visited-state">
           Change
           <span class="govuk-visually-hidden">fuel {{ index() + 1 }}</span>
         </a>
-        @if (isDeletable()) {
-          <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink=".">
-            Remove
-            <span class="govuk-visually-hidden">fuel {{ index() + 1 }}</span>
-          </a>
-        }
-      </ng-template>
-    }
-    <dl [hasBottomMargin]="false" govuk-summary-list>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Fuel origin</dt>
-        <dd govukSummaryListRowValue [notProvided]="data | fuelOriginTitle"></dd>
-      </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Tank to Wake emission factor for carbon dioxide</dt>
-        <dd govukSummaryListRowValue [notProvided]="data?.carbonDioxide"></dd>
-      </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Tank to Wake emission factor for methane</dt>
-        <dd govukSummaryListRowValue [notProvided]="data?.methane"></dd>
-      </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Tank to Wake emission factor for nitrous oxide</dt>
-        <dd govukSummaryListRowValue [notProvided]="data?.nitrousOxide"></dd>
-      </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Method to determine density - fuel bunkered</dt>
-        <dd
-          govukSummaryListRowValue
-          [notProvided]="data?.densityMethodBunker | selectOptionToTitle: densityMethodBunkerOptions"></dd>
-      </div>
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Method to determine density - fuel in tanks</dt>
-        <dd
-          govukSummaryListRowValue
-          [notProvided]="data?.densityMethodTank | selectOptionToTitle: densityMethodTankOptions"></dd>
-      </div>
-    </dl>
-  </div>
-}
+      }
+      @if (isDeletable() && fuelEmissionsFactor()?.uniqueIdentifier) {
+        <a (click)="handleRemove($event)" govukLink="summaryAction" routerLink="." class="govuk-link--no-visited-state">
+          Remove
+          <span class="govuk-visually-hidden">fuel {{ index() + 1 }}</span>
+        </a>
+      }
+    </ng-template>
+  }
+  <dl [hasBottomMargin]="false" govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Fuel origin</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="fuelEmissionsFactor() | fuelOriginTitle"
+        [previous]="originalFuelEmissionsFactor() | fuelOriginTitle"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Tank to Wake emission factor for carbon dioxide</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="fuelEmissionsFactor()?.carbonDioxide"
+        [previous]="originalFuelEmissionsFactor()?.carbonDioxide"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Tank to Wake emission factor for methane</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="fuelEmissionsFactor()?.methane"
+        [previous]="originalFuelEmissionsFactor()?.methane"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Tank to Wake emission factor for nitrous oxide</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="fuelEmissionsFactor()?.nitrousOxide"
+        [previous]="originalFuelEmissionsFactor()?.nitrousOxide"></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Method to determine density - fuel bunkered</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="fuelEmissionsFactor()?.densityMethodBunker | selectOptionToTitle: densityMethodBunkerOptions"
+        [previous]="
+          originalFuelEmissionsFactor()?.densityMethodBunker | selectOptionToTitle: densityMethodBunkerOptions
+        "></dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Method to determine density - fuel in tanks</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="fuelEmissionsFactor()?.densityMethodTank | selectOptionToTitle: densityMethodTankOptions"
+        [previous]="
+          originalFuelEmissionsFactor()?.densityMethodTank | selectOptionToTitle: densityMethodTankOptions
+        "></dd>
+    </div>
+  </dl>
+</div>

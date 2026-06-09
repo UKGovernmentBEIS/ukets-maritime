@@ -49,7 +49,7 @@ public class EmpMandateValidator implements EmpContextValidator {
             if (imoNumberExists) {
                 empViolations.add(new EmissionsMonitoringPlanViolation(
                     "delegatedResponsibility",
-                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER));
+                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_ACCOUNT_IMO_NUMBER));
             }
 
             final Set<String> invalidShipImoNumbers = validateShipImoNumbers(mandate, emissions);
@@ -58,6 +58,14 @@ public class EmpMandateValidator implements EmpContextValidator {
                     "delegatedResponsibility",
                     EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP,
                     invalidShipImoNumbers.toArray()));
+            }
+
+            final Set<String> invalidOwnerImoNumbers = validateShipImoNumbersDoNotExistInRegisteredOwner(mandate, emissions);
+            if (!invalidOwnerImoNumbers.isEmpty()) {
+                empViolations.add(new EmissionsMonitoringPlanViolation(
+                    "delegatedResponsibility",
+                    EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_SHIP_IMO_NUMBER,
+                    invalidOwnerImoNumbers.toArray()));
             }
 
             final Set<String> duplicateShipImoNumbers = validateDuplicateShipsAcrossOwners(mandate);
@@ -110,6 +118,22 @@ public class EmpMandateValidator implements EmpContextValidator {
                 .map(RegisteredOwnerShipDetails::getImoNumber)
                 .filter(shipImo -> !allShipImoNumbers.contains(shipImo))
                 .collect(Collectors.toSet());
+    }
+
+    private Set<String> validateShipImoNumbersDoNotExistInRegisteredOwner(EmpMandate mandate,
+                                                                          EmpEmissions emissions) {
+        final Set<String> shipImoNumbers = emissions.getShips().stream()
+            .map(EmpShipEmissions::getDetails)
+            .map(ShipDetails::getImoNumber)
+            .collect(Collectors.toSet());
+
+        final Set<String> ownerImoNumbers = mandate.getRegisteredOwners().stream()
+            .map(EmpRegisteredOwner::getImoNumber)
+            .collect(Collectors.toSet());
+
+        return ownerImoNumbers.stream()
+            .filter(shipImoNumbers::contains)
+            .collect(Collectors.toSet());
     }
 
     private Set<String> validateDuplicateShipsAcrossOwners(EmpMandate mandate) {

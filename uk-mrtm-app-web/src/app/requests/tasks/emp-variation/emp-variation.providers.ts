@@ -87,10 +87,12 @@ import {
   VariationDetailsSummarySideEffect,
 } from '@requests/common/emp/subtasks/variation-details';
 import { provideEmpAmendResetReviewDecisionSubtaskSideEffect } from '@requests/common/emp/utils';
+import { ThirdPartyDataProviderImportFlowManager } from '@requests/common/third-party-data-provider/third-party-data-provider-import';
 import {
   ADDITIONAL_DOCUMENTS_SUB_TASK,
   AdditionalDocumentsFlowManager,
 } from '@requests/common/utils/additional-documents';
+import { ThirdPartyDataProviderImportPayloadMutator } from '@requests/tasks/emp-variation/payload-mutators';
 import { EmpVariationApiService, EmpVariationService } from '@requests/tasks/emp-variation/services';
 
 export function provideEmpVariationPayloadMutators(): EnvironmentProviders {
@@ -119,6 +121,7 @@ export function provideEmpVariationPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompletionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesCompliancePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: EmissionSourcesFactorsPayloadMutator },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: ThirdPartyDataProviderImportPayloadMutator },
     ...provideEmpEmissionsSubtaskCommonPayloadMutators(),
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: VariationDetailsPayloadMutator },
     ...provideMandatePayloadMutators(),
@@ -177,5 +180,6 @@ export function provideEmpVariationStepFlowManagers(): EnvironmentProviders {
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionSourceFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: EmissionsFlowManager },
     { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: VariationDetailsFlowManager },
+    { provide: WIZARD_FLOW_MANAGERS, multi: true, useClass: ThirdPartyDataProviderImportFlowManager },
   ]);
 }

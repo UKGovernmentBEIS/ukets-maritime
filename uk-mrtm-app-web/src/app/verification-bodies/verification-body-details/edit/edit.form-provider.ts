@@ -1,7 +1,7 @@
 import { InjectionToken, Provider } from '@angular/core';
 import { FormBuilder, FormControl } from '@angular/forms';
 
-import { AddressDTO, VerificationBodyDTO } from '@mrtm/api';
+import { AddressDTO, VerificationBodyCreationDTO, VerificationBodyDTO } from '@mrtm/api';
 
 import { GovukValidators } from '@netz/govuk-components';
 
@@ -27,6 +27,18 @@ export const editVerificationBodyFormProvider: Provider = {
           ),
         ],
       }),
+      accreditationBodyName: new FormControl<VerificationBodyCreationDTO['accreditationBodyName'] | null>(
+        state?.accreditationBodyName,
+        {
+          validators: [
+            GovukValidators.required('Enter the name of the National Accreditation body'),
+            GovukValidators.maxLength(
+              255,
+              'Name of National Accreditation body should not be more than 255 characters',
+            ),
+          ],
+        },
+      ),
       accreditationReferenceNumber: new FormControl<VerificationBodyDTO['accreditationReferenceNumber'] | null>(
         state?.accreditationReferenceNumber,
         {

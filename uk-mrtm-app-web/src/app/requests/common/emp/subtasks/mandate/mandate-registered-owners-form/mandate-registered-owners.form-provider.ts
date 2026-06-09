@@ -2,7 +2,7 @@ import { Provider } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
-import { EmpRegisteredOwner } from '@mrtm/api';
+import { EmpOperatorDetails, EmpRegisteredOwner, EmpShipEmissions } from '@mrtm/api';
 
 import { RequestTaskStore } from '@netz/common/store';
 import { GovukValidators } from '@netz/govuk-components';
@@ -21,13 +21,19 @@ const uniqueImoNumberValidation =
   (
     registeredOwners: Array<EmpRegisteredOwner>,
     registeredOwnerId: EmpRegisteredOwner['uniqueIdentifier'],
+    ships: Array<EmpShipEmissions>,
+    companyImoNumber: EmpOperatorDetails['imoNumber'],
   ): ValidatorFn =>
   (control: AbstractControl): ValidationErrors => {
+    const currentValue = control.value;
+
     if (
       (registeredOwners ?? []).filter(
         (registeredOwner) =>
-          registeredOwner.uniqueIdentifier !== registeredOwnerId && registeredOwner?.imoNumber === control.value,
-      ).length > 0
+          registeredOwner.uniqueIdentifier !== registeredOwnerId && registeredOwner?.imoNumber === currentValue,
+      ).length > 0 ||
+      companyImoNumber === currentValue ||
+      ships.some((ship) => ship?.details?.imoNumber === currentValue)
     ) {
       return { imoNumber: 'The IMO number you entered is already in use. Enter a unique IMO number' };
     }
@@ -64,7 +70,12 @@ export const mandateRegisteredOwnersFormProvider: Provider = {
         validators: [
           GovukValidators.required('Enter an IMO number'),
           GovukValidators.pattern(/^\d{7}$/, 'The IMO Number must be 7 digits'),
-          uniqueImoNumberValidation(store.select(empCommonQuery.selectMandateRegisteredOwners)(), registeredOwnerId),
+          uniqueImoNumberValidation(
+            store.select(empCommonQuery.selectMandateRegisteredOwners)(),
+            registeredOwnerId,
+            store.select(empCommonQuery.selectShips)(),
+            store.select(empCommonQuery.selectOperatorDetails)()?.imoNumber,
+          ),
         ],
       }),
       contactName: formBuilder.control<MandateRegisteredOwnersFormModel['contactName'] | null>(

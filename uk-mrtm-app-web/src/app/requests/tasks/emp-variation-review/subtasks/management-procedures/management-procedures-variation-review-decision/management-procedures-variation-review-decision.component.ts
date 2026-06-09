@@ -72,13 +72,15 @@ export class ManagementProceduresVariationReviewDecisionComponent {
         empCommonQuery.selectAttachedFiles(managementProcedures?.dataFlowActivities?.files),
       )(),
       originalDataFlowFiles: this.store.select(
-        empVariationReviewQuery.selectOriginalAttachedFiles(managementProcedures?.dataFlowActivities?.files),
+        empVariationReviewQuery.selectOriginalAttachedFiles(originalManagementProcedures?.dataFlowActivities?.files),
       )(),
       riskAssessmentFiles: this.store.select(
         empCommonQuery.selectAttachedFiles(managementProcedures?.riskAssessmentProcedures?.files),
       )(),
       originalRiskAssessmentFiles: this.store.select(
-        empVariationReviewQuery.selectOriginalAttachedFiles(managementProcedures?.riskAssessmentProcedures?.files),
+        empVariationReviewQuery.selectOriginalAttachedFiles(
+          originalManagementProcedures?.riskAssessmentProcedures?.files,
+        ),
       )(),
       isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),
       managementProceduresMap: managementProceduresMap,

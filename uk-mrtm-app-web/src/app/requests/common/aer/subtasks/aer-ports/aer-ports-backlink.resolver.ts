@@ -18,21 +18,38 @@ const selectShipBacklinkResolver = (
   return returnToSummary ? '../' : !isNil(portId) ? '../../' : '../';
 };
 
+const portDetailsBacklinkResolver = (
+  returnToSummary: boolean,
+  ports: Array<AerPort>,
+  activatedRoute: ActivatedRouteSnapshot,
+  isNewEntry: boolean,
+): string => {
+  switch (true) {
+    case returnToSummary && isNewEntry:
+    case returnToSummary:
+      return '../';
+    case isNewEntry:
+      return `../${AerPortsWizardStep.SELECT_SHIP}`;
+    default:
+      return '../../';
+  }
+};
+
 const stepBacklinkResolvers: Partial<
   Record<
     AerPortsWizardStep,
-    (returnToSummary: boolean, ports: Array<AerPort>, activatedRoute: ActivatedRouteSnapshot) => string
+    (returnToSummary: boolean, ports: Array<AerPort>, activatedRoute: ActivatedRouteSnapshot, isNew: boolean) => string
   >
 > = {
   [AerPortsWizardStep.SELECT_SHIP]: selectShipBacklinkResolver,
-  [AerPortsWizardStep.PORT_DETAILS]: (returnToSummary: boolean) => (returnToSummary ? '../' : '../../'),
+  [AerPortsWizardStep.PORT_DETAILS]: portDetailsBacklinkResolver,
   [AerPortsWizardStep.IN_PORT_EMISSIONS]: (returnToSummary: boolean) =>
     returnToSummary ? '../' : `../${AerPortsWizardStep.PORT_DETAILS}`,
   [AerPortsWizardStep.PORT_CALL_SUMMARY]: (returnToSummary: boolean) => (returnToSummary ? '../../' : '../'),
 };
 
 export const aerPortsBacklinkResolver =
-  (step: AerPortsWizardStep): ResolveFn<any> =>
+  (step: AerPortsWizardStep, isNew: boolean = false): ResolveFn<any> =>
   (route: ActivatedRouteSnapshot) => {
     const isChange = route.queryParamMap.get('change') === 'true';
     const store = inject(RequestTaskStore);
@@ -40,5 +57,5 @@ export const aerPortsBacklinkResolver =
     const ports = store.select(aerCommonQuery.selectPorts)();
 
     const resolverFn = stepBacklinkResolvers[step];
-    return resolverFn ? resolverFn(isChange || !isEditable, ports, route) : '/';
+    return resolverFn ? resolverFn(isChange || !isEditable, ports, route, isNew) : '/';
   };

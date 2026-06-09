@@ -10,7 +10,7 @@ import { filter, Subscription } from 'rxjs';
     '[class.govuk-link]': 'hasSimpleLink',
     '[class.govuk-breadcrumbs__link]': 'hasBreadcrumbsLink',
     '[class.govuk-footer__link]': 'hasFooterLink',
-    '[class.govuk-header__link]': 'hasHeaderLink',
+    '[class.govuk-header-legacy__link]': 'hasHeaderLink',
     '[class.govuk-notification-banner__link]': 'hasNotificationLink',
   },
 })
@@ -82,7 +82,7 @@ export class LinkDirective implements OnDestroy, OnInit {
       case 'footer':
         return 'govuk-footer__list-item';
       case 'header':
-        return 'govuk-header__navigation-item';
+        return 'govuk-header-legacy__navigation-item';
       case 'breadcrumb':
         return 'govuk-breadcrumbs__list-item';
       case 'summaryAction':
@@ -95,7 +95,7 @@ export class LinkDirective implements OnDestroy, OnInit {
   private getActiveLiClassName(): string {
     switch (this.navLinkType()) {
       case 'header':
-        return 'govuk-header__navigation-item--active';
+        return 'govuk-header-legacy__navigation-item--active';
       default:
         return null;
     }

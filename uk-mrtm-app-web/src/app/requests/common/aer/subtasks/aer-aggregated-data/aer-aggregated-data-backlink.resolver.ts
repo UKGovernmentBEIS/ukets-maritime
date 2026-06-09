@@ -17,9 +17,16 @@ const selectShipBacklinkResolver = (returnToSummary: boolean, activatedRoute: Ac
 const selectFuelConsumptionBacklinkResolver = (
   returnToSummary: boolean,
   activatedRoute: ActivatedRouteSnapshot,
+  isNewEntry: boolean,
 ): string => {
-  const dataId = activatedRoute.params?.[AER_AGGREGATED_DATA_PARAM];
-  return returnToSummary ? '../' : !isNil(dataId) ? `../../` : '../';
+  switch (true) {
+    case returnToSummary:
+      return '../';
+    case isNewEntry:
+      return `../${AerAggregatedDataWizardStep.SELECT_SHIP}`;
+    default:
+      return '../../';
+  }
 };
 
 const selectAnnualEmissionsBacklinkResolver = (
@@ -36,7 +43,10 @@ const shipEmissionsSummaryBacklinkResolver = (returnToSummary: boolean, activate
 };
 
 const stepBacklinkResolvers: Partial<
-  Record<AerAggregatedDataWizardStep, (returnToSummary: boolean, activatedRoute: ActivatedRouteSnapshot) => string>
+  Record<
+    AerAggregatedDataWizardStep,
+    (returnToSummary: boolean, activatedRoute: ActivatedRouteSnapshot, isNew: boolean) => string
+  >
 > = {
   [AerAggregatedDataWizardStep.SELECT_SHIP]: selectShipBacklinkResolver,
   [AerAggregatedDataWizardStep.FUEL_CONSUMPTION]: selectFuelConsumptionBacklinkResolver,
@@ -47,12 +57,12 @@ const stepBacklinkResolvers: Partial<
 };
 
 export const aerAggregatedDataBacklinkResolver =
-  (step: AerAggregatedDataWizardStep): ResolveFn<unknown> =>
+  (step: AerAggregatedDataWizardStep, isNew: boolean = false): ResolveFn<unknown> =>
   (route: ActivatedRouteSnapshot) => {
     const isChange = route.queryParamMap.get('change') === 'true';
     const store = inject(RequestTaskStore);
     const isEditable = store.select(requestTaskQuery.selectIsEditable)();
     const resolverFn = stepBacklinkResolvers[step];
 
-    return resolverFn ? resolverFn(isChange || !isEditable, route) : './';
+    return resolverFn ? resolverFn(isChange || !isEditable, route, isNew) : './';
   };

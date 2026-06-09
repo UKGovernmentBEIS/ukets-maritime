@@ -6,12 +6,17 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountIdAndNameDTO;
+import uk.gov.mrtm.api.account.domain.dto.MrtmAccountInfoDTO;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountViewDTO;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.account.transform.MrtmAccountMapper;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.authorization.verifier.VerifierAccountAccessService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -23,6 +28,7 @@ import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 public class MrtmAccountQueryService {
 
     private final MrtmAccountRepository accountRepository;
+    private final VerifierAccountAccessService verifierAccountAccessService;
     private final MrtmAccountMapper accountMapper;
 
     public MrtmAccount getAccountById(Long accountId) {
@@ -78,5 +84,30 @@ public class MrtmAccountQueryService {
             CompetentAuthorityEnum ca, Set<MrtmAccountStatus> statuses) {
         return accountRepository.findAllByCAAndStatusesAndEmissionTradingSchemes(ca,
                 statuses == null ? Set.of() : statuses);
+    }
+
+    public List<MrtmAccountInfoDTO> getMrtmAccountsInfoByUser(AppUser user) {
+        switch (user.getRoleType()) {
+            case RoleTypeConstants.OPERATOR -> {
+                return user.getAccounts().isEmpty()
+                    ? Collections.emptyList()
+                    : accountRepository.findAllByAccountIdIn(user.getAccounts());
+            }
+
+            case RoleTypeConstants.REGULATOR -> {
+                return accountRepository.findAllByCA(user.getCompetentAuthority());
+            }
+
+            case RoleTypeConstants.VERIFIER -> {
+                final Set<Long> accounts = verifierAccountAccessService.findAuthorizedAccountIds(user);
+                return accounts.isEmpty()
+                    ? Collections.emptyList()
+                    : accountRepository.findAllByAccountIdIn(accounts);
+            }
+
+            default -> throw new UnsupportedOperationException(
+                String.format("Fetching accounts for role type %s is not supported", user.getRoleType())
+            );
+        }
     }
 }

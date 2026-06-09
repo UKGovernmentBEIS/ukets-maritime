@@ -4,7 +4,7 @@
   "peerDependencies": {
     "@angular/common": "^21.2.0",
     "@angular/core": "^21.2.0",
-    "govuk-frontend": "5.3.0"
+    "govuk-frontend": "6.1.0"
   },
   "dependencies": {
     "tslib": "^2.8.1"

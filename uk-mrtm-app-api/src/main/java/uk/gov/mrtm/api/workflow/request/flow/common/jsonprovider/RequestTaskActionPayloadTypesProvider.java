@@ -83,6 +83,7 @@ import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequest
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_NOTIFICATION_REVIEW_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_NOTIFICATION_SAVE_APPLICATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_NOTIFICATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_REGULATOR_LED_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_REQUEST_PEER_REVIEW_PAYLOAD;
@@ -152,6 +153,7 @@ public class RequestTaskActionPayloadTypesProvider implements JsonSubTypesProvid
 
                 // EMP_VARIATION
                 new NamedType(EmpVariationSaveApplicationRequestTaskActionPayload.class, EMP_VARIATION_SAVE_APPLICATION_PAYLOAD),
+                new NamedType(EmpVariationSaveApplicationRequestTaskActionPayload.class, EMP_VARIATION_IMPORT_THIRD_PARTY_DATA_APPLICATION_PAYLOAD),
                 new NamedType(EmpVariationSaveApplicationReviewRequestTaskActionPayload.class, EMP_VARIATION_SAVE_APPLICATION_REVIEW_PAYLOAD),
                 new NamedType(EmpVariationSaveDetailsReviewGroupDecisionRequestTaskActionPayload.class, EMP_VARIATION_SAVE_DETAILS_REVIEW_GROUP_DECISION_PAYLOAD),
                 new NamedType(EmpVariationSaveReviewDeterminationRequestTaskActionPayload.class, EMP_VARIATION_SAVE_REVIEW_DETERMINATION_PAYLOAD),

@@ -13,6 +13,7 @@ export interface VerificationBodyDTO {
   id?: number;
   name?: string;
   accreditationReferenceNumber?: string;
+  accreditationBodyName?: string;
   status?: 'ACTIVE' | 'PENDING' | 'DISABLED';
   address?: AddressDTO;
   emissionTradingSchemes?: Array<string>;

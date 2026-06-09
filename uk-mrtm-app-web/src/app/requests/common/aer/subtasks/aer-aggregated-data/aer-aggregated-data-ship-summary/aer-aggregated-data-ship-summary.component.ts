@@ -13,6 +13,7 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective, WarningTextComponent } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
+import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import {
   AER_AGGREGATED_DATA_SUB_TASK,
@@ -67,6 +68,8 @@ export class AerAggregatedDataShipSummaryComponent {
   });
   private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
   private readonly store = inject(RequestTaskStore);
+
+  readonly isAddNewAggregatedData = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   readonly aggregatedData: Signal<
     AerAggregatedDataShipSummary & {
       status: TaskItemStatus;
@@ -131,7 +134,9 @@ export class AerAggregatedDataShipSummaryComponent {
     this.service
       .saveSubtask(
         AER_AGGREGATED_DATA_SUB_TASK,
-        AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY,
+        this.isAddNewAggregatedData
+          ? AerAggregatedDataWizardStep.NEW_AGGREGATED_DATA_SUMMARY
+          : AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY,
         this.activatedRoute,
         this.dataId(),
       )

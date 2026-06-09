@@ -1,11 +1,12 @@
-import { ChangeDetectionStrategy, Component, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
-import { EmpEmissionsSources, EmpShipEmissions } from '@mrtm/api';
+import { EmpEmissionsSources } from '@mrtm/api';
 
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent } from '@shared/components';
+import { mergeDiffArray } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-emissions-sources-and-fuel-types-used-list-summary-template',
@@ -15,14 +16,21 @@ import { EmissionSourcesAndFuelTypesUsedSummaryTemplateComponent } from '@shared
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class EmissionsSourcesAndFuelTypesUsedListSummaryTemplateComponent {
-  readonly data = input.required<EmpShipEmissions['emissionsSources']>();
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
+  readonly emissionSources = input.required<EmpEmissionsSources[]>();
+  readonly originalEmissionSources = input<EmpEmissionsSources[]>();
   readonly changeLinkForm = input<string>();
   readonly changeLinkList = input<string>();
   readonly isEditable = input<boolean>(false);
   readonly queryParams = input<Params>({});
+
   readonly delete = output<EmpEmissionsSources>();
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
+
+  readonly combinedFuelsEmissionSources = computed(() =>
+    mergeDiffArray<EmpEmissionsSources>(this.emissionSources(), this.originalEmissionSources()),
+  );
 
   handleAddAnother(): void {
     this.router.navigate(['./', this.changeLinkForm(), crypto.randomUUID()], {

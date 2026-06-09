@@ -1,4 +1,3 @@
-@use 'sass:map';
 @use 'base' as govuk;
 
 [aria-sort] button,
@@ -8,7 +7,7 @@
   margin: 0;
   padding: 0;
   border-width: 0;
-  color: map.get(govuk.$govuk-colours, 'blue');
+  color: govuk.govuk-colour("blue");
   background-color: transparent;
   -webkit-box-shadow: 0 0 0 0;
   -moz-box-shadow: 0 0 0 0;

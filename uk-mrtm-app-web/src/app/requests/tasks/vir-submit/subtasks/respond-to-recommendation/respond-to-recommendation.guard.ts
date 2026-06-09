@@ -1,6 +1,8 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivateFn, createUrlTreeFromSnapshot } from '@angular/router';
 
+import { OperatorImprovementResponse } from '@mrtm/api';
+
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { TaskItemStatus } from '@requests/common';
@@ -26,28 +28,37 @@ export const canActivateVirRespondToRecommendationSummary: CanActivateFn = (rout
   );
 };
 
-export const canActivateUploadEvidenceQuestionForm: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+function resolveUploadEvidenceStep(
+  route: ActivatedRouteSnapshot,
+  canProceed: (isEditable: boolean, operatorResponse: OperatorImprovementResponse) => boolean,
+  fallbackStep: VirRespondToRecommendationWizardStep,
+) {
   const store = inject(RequestTaskStore);
   const key = route.params?.['key'];
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
   const operatorResponse = store.select(virCommonQuery.selectOperatorResponseData(key))();
+  const isChange = route.queryParams?.['change'] === 'true';
 
-  return (
-    (isEditable && wizardStepCompletedMap.RESPOND_TO(operatorResponse)) ||
-    createUrlTreeFromSnapshot(route, ['../', VirRespondToRecommendationWizardStep.RESPOND_TO])
+  if (!isChange && isWizardCompleted(operatorResponse)) {
+    return createUrlTreeFromSnapshot(route, [VirRespondToRecommendationWizardStep.SUMMARY]);
+  }
+
+  return canProceed(isEditable, operatorResponse) || createUrlTreeFromSnapshot(route, ['../', fallbackStep]);
+}
+
+export const canActivateUploadEvidenceQuestionForm: CanActivateFn = (route: ActivatedRouteSnapshot) =>
+  resolveUploadEvidenceStep(
+    route,
+    (isEditable, operatorResponse) => isEditable && wizardStepCompletedMap.RESPOND_TO(operatorResponse),
+    VirRespondToRecommendationWizardStep.RESPOND_TO,
   );
-};
 
-export const canActivateUploadEvidenceForm: CanActivateFn = (route: ActivatedRouteSnapshot) => {
-  const store = inject(RequestTaskStore);
-  const key = route.params?.['key'];
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
-  const operatorResponse = store.select(virCommonQuery.selectOperatorResponseData(key))();
-
-  return (
-    (isEditable &&
+export const canActivateUploadEvidenceForm: CanActivateFn = (route: ActivatedRouteSnapshot) =>
+  resolveUploadEvidenceStep(
+    route,
+    (isEditable, operatorResponse) =>
+      isEditable &&
       wizardStepCompletedMap.UPLOAD_EVIDENCE_QUESTION(operatorResponse) &&
-      operatorResponse?.uploadEvidence === true) ||
-    createUrlTreeFromSnapshot(route, ['../', VirRespondToRecommendationWizardStep.UPLOAD_EVIDENCE_QUESTION])
+      operatorResponse?.uploadEvidence === true,
+    VirRespondToRecommendationWizardStep.UPLOAD_EVIDENCE_QUESTION,
   );
-};

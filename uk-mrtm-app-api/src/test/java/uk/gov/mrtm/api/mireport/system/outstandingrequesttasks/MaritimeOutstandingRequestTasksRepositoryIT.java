@@ -50,6 +50,7 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
 
     @Test
     void findOutstandingRequestTaskByCaAndParams_without_user_ids() {
+        createRequestAccountView();
         UUID assigne1 = UUID.randomUUID();
         UUID assigne2 = UUID.randomUUID();
         UUID assigne3 = UUID.randomUUID();
@@ -59,7 +60,7 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
         String imoNumber3 = "0000003";
         String imoNumber4 = "0000004";
 
-        MrtmAccount acc1 = createAccount(1L, "account1", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, imoNumber1);
+        MrtmAccount acc1 = createAccount(1L, "account1", imoNumber1);
 
         RequestType empIssuanceRequestType = createRequestType(MrtmRequestType.EMP_ISSUANCE);
         RequestType empVariationRequestType = createRequestType(MrtmRequestType.EMP_VARIATION);
@@ -70,15 +71,15 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
         createRequestTask(acc1EmpIssRequest, empIssuanceRequestTaskType, assigne1,
                 LocalDate.now().plusDays(10), LocalDate.now().plusDays(5));
 
-        MrtmAccount acc2 = createAccount(2L, "account2", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, imoNumber2);
+        MrtmAccount acc2 = createAccount(2L, "account2", imoNumber2);
         Request acc2EmpVariationAppReview = createRequest(acc2, "NEW2", RequestStatuses.IN_PROGRESS, empVariationRequestType);
         createRequestTask(acc2EmpVariationAppReview, empVariationRequestTaskType, assigne2, null, null);
 
-        MrtmAccount acc3 = createAccount(3L, "account3", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, imoNumber3);
+        MrtmAccount acc3 = createAccount(3L, "account3", imoNumber3);
         Request acc3EmpVariationAppReview = createRequest(acc3, "NEW3", RequestStatuses.IN_PROGRESS, empVariationRequestType);
         createRequestTask(acc3EmpVariationAppReview, empVariationRequestTaskType, assigne3, null, null);
 
-        MrtmAccount acc4 = createAccount(4L, "account4", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.SCOTLAND, imoNumber4);
+        MrtmAccount acc4 = createAccount(4L, "account4", imoNumber4);
         Request acc4EmpVariationAppReview = createRequest(acc4, "NEW4", RequestStatuses.IN_PROGRESS, empVariationRequestType);
         createRequestTask(acc4EmpVariationAppReview, empVariationRequestTaskType, assigne4, null, null);
 
@@ -101,9 +102,9 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
         assertThat(mrtmOutstandingRequestTasks).extracting(MaritimeOutstandingRequestTask::getImoNumber).containsOnly(imoNumber1, imoNumber2, imoNumber3, imoNumber4);
     }
 
-
     @Test
     void findOutstandingRequestTaskByCaAndParams_with_provided_user_ids() {
+        createRequestAccountView();
         UUID user1 = UUID.randomUUID();
         UUID user2 = UUID.randomUUID();
         UUID user3 = UUID.randomUUID();
@@ -119,20 +120,20 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
         RequestTaskType empVariationRequestTaskType = createRequestTaskType(MrtmRequestTaskType.EMP_VARIATION_APPLICATION_REVIEW, empVariationRequestType);
 
 
-        MrtmAccount acc1 = createAccount(1L, "account1", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, imoNumber1);
+        MrtmAccount acc1 = createAccount(1L, "account1", imoNumber1);
         Request acc1EmpIssRequest = createRequest(acc1, "NEW1", RequestStatuses.IN_PROGRESS, empIssuanceRequestType);
         createRequestTask(acc1EmpIssRequest, empIssuanceRequestTaskType, user1,
                 LocalDate.now().plusDays(10), LocalDate.now().plusDays(5));
 
-        MrtmAccount acc2 = createAccount(2L, "account2", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, imoNumber2);
+        MrtmAccount acc2 = createAccount(2L, "account2", imoNumber2);
         Request acc2EmpVariationAppReview = createRequest(acc2, "NEW2", RequestStatuses.IN_PROGRESS, empVariationRequestType);
         createRequestTask(acc2EmpVariationAppReview, empVariationRequestTaskType, user2, null, null);
 
-        MrtmAccount acc3 = createAccount(3L, "account3", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, imoNumber3);
+        MrtmAccount acc3 = createAccount(3L, "account3", imoNumber3);
         Request acc3EmpVariationAppReview = createRequest(acc3, "NEW3", RequestStatuses.IN_PROGRESS, empVariationRequestType);
         createRequestTask(acc3EmpVariationAppReview, empVariationRequestTaskType, user3, null, null);
 
-        MrtmAccount acc4 = createAccount(4L, "account4", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.SCOTLAND, imoNumber4);
+        MrtmAccount acc4 = createAccount(4L, "account4", imoNumber4);
         Request acc4EmpVariationAppReview = createRequest(acc4, "NEW4", RequestStatuses.IN_PROGRESS, empVariationRequestType);
         createRequestTask(acc4EmpVariationAppReview, empVariationRequestTaskType, user4, null, null);
 
@@ -157,14 +158,13 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
 
     }
 
-    private MrtmAccount createAccount(Long id, String name, MrtmAccountStatus status,
-                                      CompetentAuthorityEnum competentAuthority, String imoNumber) {
+    private MrtmAccount createAccount(Long id, String name, String imoNumber) {
 
         MrtmAccount account = MrtmAccount.builder()
                 .id(id)
                 .name(name)
-                .status(status)
-                .competentAuthority(competentAuthority)
+                .status(MrtmAccountStatus.LIVE)
+                .competentAuthority(CompetentAuthorityEnum.ENGLAND)
                 .emissionTradingScheme(MrtmEmissionTradingScheme.UK_MARITIME_EMISSION_TRADING_SCHEME)
                 .firstMaritimeActivityDate(LocalDate.of(2022, 1, 1))
                 .businessId(String.valueOf(id))
@@ -245,6 +245,33 @@ class MaritimeOutstandingRequestTasksRepositoryIT extends AbstractContainerBaseT
         entityManager.persist(requestTaskType);
         flushAndClear();
         return requestTaskType;
+    }
+
+    private void createRequestAccountView() {
+        entityManager
+            .createNativeQuery("""
+                CREATE OR REPLACE VIEW request_account AS
+                SELECT
+                    r.id,
+                    r.type_id,
+                    r.status,
+                    r.creation_date,
+                    ca.resource_id AS competent_authority,
+                    acc.resource_id AS account_id,
+                    r.payload,
+                    r.submission_date,
+                    r.metadata,
+                    r.end_date
+                FROM request r
+                JOIN request_resource ca
+                  ON r.id = ca.request_id
+                 AND ca.resource_type = 'CA'
+                LEFT JOIN request_resource acc
+                  ON r.id = acc.request_id
+                 AND acc.resource_type = 'ACCOUNT'
+                WHERE ca.resource_id = 'ENGLAND'
+            """)
+            .executeUpdate();
     }
 
     private void flushAndClear() {

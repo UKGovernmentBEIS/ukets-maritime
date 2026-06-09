@@ -12,7 +12,7 @@ import java.util.List;
 @Configuration
 public class MrtmSwaggerConfig {
     private final BuildProperties buildProperties;
-    private static final String EXTERNAL_API_VERSION = "3.0.2";
+    private static final String EXTERNAL_API_VERSION = "4.0.0";
 
     public MrtmSwaggerConfig(BuildProperties buildProperties) {
         this.buildProperties = buildProperties;

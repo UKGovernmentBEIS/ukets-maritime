@@ -124,7 +124,7 @@ export const EMP_VARIATION_SUBMITTED_ROUTES: Routes = [
             title: emissionsSubTasksMap.title,
             data: { breadcrumb: false, backlink: '../../' },
             loadComponent: () =>
-              import('@requests/timeline/emp-variation-submitted/subtasks/emp-var-submitted-ship/').then(
+              import('@requests/timeline/emp-variation-submitted/subtasks/emp-var-submitted-ship').then(
                 (c) => c.EmpVarSubmittedShipComponent,
               ),
           },

@@ -1,9 +1,9 @@
-@if (data()?.length > 0) {
+@if (combinedFuelsEmissionsFactors()?.length > 0) {
   <div class="govuk-grid-row">
     <h2 class="govuk-heading-m govuk-grid-column-two-thirds">Fuels and emissions factors</h2>
     @if (isEditable()) {
       <div class="govuk-grid-column-one-third govuk-!-text-align-right govuk-body">
-        <a govukLink [routerLink]="changeLinkList()" [queryParams]="queryParams()">
+        <a govukLink class="govuk-link--no-visited-state" [routerLink]="changeLinkList()" [queryParams]="queryParams()">
           Change
           <span class="govuk-visually-hidden">fuels and emissions factors</span>
         </a>
@@ -11,10 +11,11 @@
     }
   </div>
 
-  @for (factor of data(); track factor.uniqueIdentifier) {
+  @for (factor of combinedFuelsEmissionsFactors(); track $index) {
     <mrtm-fuels-and-emission-factors-summary-template
+      [fuelEmissionsFactor]="factor?.current"
+      [originalFuelEmissionsFactor]="factor?.previous"
       (delete)="onDeleteFuelEmission($event)"
-      [data]="factor"
       [changeLink]="changeLinkForm()"
       [index]="$index"
       [isEditable]="isEditable()" />

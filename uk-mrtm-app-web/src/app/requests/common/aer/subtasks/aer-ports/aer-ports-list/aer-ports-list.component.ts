@@ -51,6 +51,7 @@ export class AerPortsListComponent extends PaginationStatePersistableComponent {
   );
   private readonly allPortCalls = this.store.select(aerCommonQuery.selectPortsList);
 
+  readonly randomUUID = signal(crypto.randomUUID());
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly wizardStep = AerPortsWizardStep;
   readonly wizardMap = aerPortsMap;

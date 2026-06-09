@@ -1,0 +1,35 @@
+<form [formGroup]="formGroup" (submit)="onSubmit()">
+  <govuk-details
+    summary="Filters"
+    class="filter-by-ship-and-date-range__details"
+    [bottomSpacing]="4"
+    [bottomContentPadding]="0"
+    [openOnInit]="false">
+    <div class="govuk-grid-row">
+      <div
+        mrtm-autocomplete-select
+        inputFieldType="search"
+        [options]="accountsSuggestions()"
+        label="Search by ID or account name"
+        noOptionsFoundText="No matching results"
+        formControlName="accountId"
+        widthClass="govuk-!-width-one-half"></div>
+      <div
+        govuk-select
+        [options]="workflowFilterItems()"
+        label="Filter by workflow"
+        formControlName="workflowType"
+        widthClass="govuk-!-width-one-half"></div>
+      <div
+        govuk-select
+        [options]="orderByFilterItems"
+        label="Sort by"
+        widthClass="govuk-!-width-one-half"
+        formControlName="orderBy"></div>
+    </div>
+    <button govukSecondaryButton type="submit">Apply</button>
+  </govuk-details>
+  @if (hasAppliedFilters()) {
+    <a govukLink class="govuk-!-font-size-19" [routerLink]="[]" (click)="onClearFiltersClick()">Clear all filters</a>
+  }
+</form>

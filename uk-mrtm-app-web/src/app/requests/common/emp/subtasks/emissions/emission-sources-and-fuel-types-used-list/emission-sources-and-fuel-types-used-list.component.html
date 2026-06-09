@@ -15,7 +15,7 @@
 
 @for (emissionSource of emissionSources(); track emissionSource.uniqueIdentifier) {
   <mrtm-emission-sources-and-fuel-types-used-summary-template
-    [data]="emissionSource"
+    [emissionSource]="emissionSource"
     [index]="$index"
     (delete)="onDelete($event)"
     [isDeletable]="true"

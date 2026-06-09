@@ -1,8 +1,8 @@
 @use 'base' as govuk;
 
-$dropdown-button-colour: govuk.govuk-colour('light-grey');
-$dropdown-button-hover-colour: govuk.govuk-shade($dropdown-button-colour, 52%);
-$dropdown-button-shadow-colour: govuk.govuk-shade($dropdown-button-colour, 40%);
+$dropdown-button-colour: govuk.govuk-colour("black", $variant: "tint-95");
+$dropdown-button-hover-colour: #767676;
+$dropdown-button-shadow-colour: #949494;
 
 :host {
   display: block;

@@ -3,6 +3,7 @@
   [columns]="columns()"
   [data]="paginatedData()"
   (sort)="sort.set($event)"
+  [rowCssClasses]="needsReview"
   description="Ships and emission details list"
   emptyTableText="No items to display"
   mrtmScrollablePane

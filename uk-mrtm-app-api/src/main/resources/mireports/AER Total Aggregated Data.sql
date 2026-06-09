@@ -2,12 +2,15 @@
 
 WITH allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data FROM rpt_aer aer
                  UNION ALL
-                 SELECT  CAST(rr.resource_id AS BIGINT) account_id, (rt.payload ->> 'reportingYear')::int reporting_year, rt.payload aer_data FROM request r JOIN request_type reqType on reqType.id = r.type_id
-                                                                                                                                                             JOIN request_task rt on r.id = rt.request_id JOIN request_task_type rtt on rtt.id = rt.type_id JOIN request_resource rr on (r.id = rr.request_id AND rr.resource_type = 'ACCOUNT')
+                 SELECT  CAST(r.account_id AS BIGINT) account_id, (rt.payload ->> 'reportingYear')::int reporting_year, rt.payload aer_data
+                 FROM request_account r
+                     JOIN request_type reqType on reqType.id = r.type_id
+                     JOIN request_task rt on r.id = rt.request_id
+                     JOIN request_task_type rtt on rtt.id = rt.type_id
                  WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
 ),sectionOperatorDetails
     AS (
-        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.status "Account status", ars.status "Reporting status", p.id "EMPlan Id", aer.reporting_year "Reporting year",
+        SELECT a.id account_id, a.business_id "Account Id", a.name "Account name", am.imo_number "IMO", am.registry_id "Registry ID", am.status "Account status", ars.status "Reporting status", p.id "EMPlan Id", aer.reporting_year "Reporting year",
                CASE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
     WHEN 'LIMITED_COMPANY' THEN 'Limited Company' WHEN 'INDIVIDUAL' THEN 'Individual' WHEN 'PARTNERSHIP' THEN 'Partnership' ELSE p.data -> 'emissionsMonitoringPlan' -> 'operatorDetails' -> 'organisationStructure' ->> 'legalStatusType'
 END legalStatus, p.data
@@ -31,7 +34,7 @@ aer_data -> 'aer' -> 'totalEmissions'->'lessAnyERC'->>'total' lessAnyERC,
 aer_data -> 'aer' -> 'totalEmissions' ->'lessVoyagesInNorthernIrelandDeduction'->>'total' northernIrelandDeduction,
 aer_data -> 'aer' -> 'totalEmissions'->> 'surrenderEmissions' surrenderEmissions
 FROM allAERs)
-SELECT "Account Id", "Account name", "IMO", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMPlan Id", o.legalStatus "Legal status",
+SELECT "Account Id", "Account name", "IMO", "Registry ID", "Account status", "Reporting year" "Reporting Year",  "Reporting status", "EMPlan Id", o.legalStatus "Legal status",
        totalEmissions "Total emissions from all ships",
        lessAnyERC "Less emissions reduction claim", northernIrelandDeduction "Northern Ireland deduction",
        surrenderEmissions "Emissions figure for surrender"

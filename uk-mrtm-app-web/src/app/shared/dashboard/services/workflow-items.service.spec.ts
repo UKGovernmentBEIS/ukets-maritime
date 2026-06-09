@@ -2,7 +2,12 @@ import { TestBed } from '@angular/core/testing';
 
 import { firstValueFrom, of } from 'rxjs';
 
-import { ItemsAssignedToMeService, ItemsAssignedToOthersService, UnassignedItemsService } from '@mrtm/api';
+import {
+  ItemsAssignedToMeService,
+  ItemsAssignedToOthersService,
+  ItemSearchCriteriaDTO,
+  UnassignedItemsService,
+} from '@mrtm/api';
 
 import { WorkflowItemsService } from '@shared/dashboard';
 
@@ -17,6 +22,10 @@ describe('WorkflowItemsService', () => {
   };
   const unassignedItemsService = {
     getUnassignedItems: jest.fn().mockReturnValue(of({})),
+  };
+
+  const searchCriteria: ItemSearchCriteriaDTO = {
+    orderBy: 'NEWEST_FIRST',
   };
 
   beforeEach(() => {
@@ -42,22 +51,22 @@ describe('WorkflowItemsService', () => {
   });
 
   it('should call assigned-to-me service method with appropriate account type', async () => {
-    await firstValueFrom(service.getItems('assigned-to-me', 1, 10));
-    expect(itemsAssignedToMeService.getAssignedItems).toHaveBeenCalledWith(0, 10);
+    await firstValueFrom(service.getItems('assigned-to-me', 1, 10, 'NEWEST_FIRST'));
+    expect(itemsAssignedToMeService.getAssignedItems).toHaveBeenCalledWith(0, 10, searchCriteria);
     expect(itemsAssignedToOthersService.getAssignedToOthersItems).not.toHaveBeenCalled();
     expect(unassignedItemsService.getUnassignedItems).not.toHaveBeenCalled();
   });
 
   it('should call assigned-to-others service method with appropriate account type', async () => {
-    await firstValueFrom(service.getItems('assigned-to-others', 1, 10));
-    expect(itemsAssignedToOthersService.getAssignedToOthersItems).toHaveBeenCalledWith(0, 10);
+    await firstValueFrom(service.getItems('assigned-to-others', 1, 10, 'NEWEST_FIRST'));
+    expect(itemsAssignedToOthersService.getAssignedToOthersItems).toHaveBeenCalledWith(0, 10, searchCriteria);
     expect(itemsAssignedToMeService.getAssignedItems).not.toHaveBeenCalled();
     expect(unassignedItemsService.getUnassignedItems).not.toHaveBeenCalled();
   });
 
   it('should call unassigned service method with appropriate account type', async () => {
-    await firstValueFrom(service.getItems('unassigned', 1, 10));
-    expect(unassignedItemsService.getUnassignedItems).toHaveBeenCalledWith(0, 10);
+    await firstValueFrom(service.getItems('unassigned', 1, 10, 'NEWEST_FIRST'));
+    expect(unassignedItemsService.getUnassignedItems).toHaveBeenCalledWith(0, 10, searchCriteria);
     expect(itemsAssignedToMeService.getAssignedItems).not.toHaveBeenCalled();
     expect(itemsAssignedToOthersService.getAssignedToOthersItems).not.toHaveBeenCalled();
   });

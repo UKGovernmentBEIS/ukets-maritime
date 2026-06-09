@@ -388,25 +388,25 @@ export class CaExternalContactsService {
     id: number,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<CaExternalContactDTO>;
   public getCaExternalContactById(
     id: number,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpResponse<CaExternalContactDTO>>;
   public getCaExternalContactById(
     id: number,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpEvent<CaExternalContactDTO>>;
   public getCaExternalContactById(
     id: number,
     observe: any = 'body',
     reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling getCaExternalContactById.');
@@ -423,7 +423,7 @@ export class CaExternalContactsService {
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['application/json', '*/*'];
+      const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {

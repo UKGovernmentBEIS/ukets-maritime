@@ -15,6 +15,7 @@ export const TASK_ROUTE_PREFIX_MAP: Record<string, string> = {
   AER_APPLICATION_VERIFICATION_SUBMIT: 'verify-aer',
   AER_AMEND_APPLICATION_VERIFICATION_SUBMIT: 'verify-aer',
   EMP_ISSUANCE_APPLICATION_SUBMIT: 'emp',
+  EMP_VARIATION_APPLICATION_SUBMIT: 'emp-variation',
 };
 
 export const SECTIONS_COMPLETED_SELECTOR = new InjectionToken<

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.account.domain.AccountReportingStatus;
 import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
+import uk.gov.mrtm.api.account.enumeration.AccountSearchKey;
 import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
 import uk.gov.mrtm.api.account.repository.AccountReportingStatusRepository;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
@@ -26,7 +27,9 @@ import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnu
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.mrtm.api.integration.registry.setoperator.validate.SetOperatorRequestValidator;
 import uk.gov.netz.api.account.domain.Account;
+import uk.gov.netz.api.account.service.AccountSearchAdditionalKeywordService;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
+import uk.gov.netz.api.kafka.utils.KafkaConstants;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.ContactPoint;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
@@ -59,12 +62,22 @@ public class SetOperatorResponseHandler {
     private final EmissionsMonitoringPlanQueryService emissionsMonitoringPlanQueryService;
     private final MaritimeAccountContactsEventListenerResolver accountContactsEventListenerResolver;
     private final MaritimeAccountExemptEventListenerResolver accountExemptEventListenerResolver;
+    private final AccountSearchAdditionalKeywordService accountSearchAdditionalKeywordService;
 
-    public void handleResponse(OperatorUpdateEvent event, String correlationId) {
-        log.info("Set operator outcome with correlationId {} and emitter ID {}", correlationId, event.getEmitterId());
+    public void handleResponse(OperatorUpdateEvent event, String correlationId, String parentCorrelationId) {
+        log.info("Set operator outcome with correlationId {}, parentCorrelationId {} and emitter ID {}",
+                correlationId, parentCorrelationId, event.getEmitterId());
+
+        if (parentCorrelationId == null) {
+            log.warn("Inbound Set Operator ID request did not include {} header; outbound Set Operator ID Response "
+                            + "cannot satisfy required parentCorrelationId. Upstream Registry/METS contract gap.",
+                    KafkaConstants.CORRELATION_PARENT_ID_HEADER);
+        }
+
         OperatorUpdateEventOutcome eventOutcome = process(event, correlationId);
 
-        setOperatorSendToRegistryProducer.produce(eventOutcome, setOperatorKafkaTemplate);
+        setOperatorSendToRegistryProducer.produce(
+                eventOutcome, setOperatorKafkaTemplate, correlationId, parentCorrelationId);
     }
 
     private OperatorUpdateEventOutcome process(OperatorUpdateEvent event, String correlationId) {
@@ -73,6 +86,7 @@ public class SetOperatorResponseHandler {
         if (errors.isEmpty()) {
             MrtmAccount account = mrtmAccountRepository.findByBusinessId(event.getEmitterId());
             saveOperatorId(account, event.getOperatorId());
+            storeRegistryIdSearchKeyword(account, event.getOperatorId());
             sendUpdateAccountEvent(account.getId());
             sendAccountContactsEvent(account.getId());
             sendAccountExemptEvent(account.getId());
@@ -176,6 +190,12 @@ public class SetOperatorResponseHandler {
     private void saveOperatorId(MrtmAccount account, Long operatorId) {
         account.setRegistryId(operatorId.intValue());
         mrtmAccountRepository.save(account);
+    }
+
+    private void storeRegistryIdSearchKeyword(MrtmAccount account, Long operatorId) {
+        accountSearchAdditionalKeywordService.storeKeywordsForAccount(
+            account.getId(),
+            Map.of(AccountSearchKey.REGISTRY_ID.name(), String.valueOf(operatorId)));
     }
 
     private void sendAccountExemptEvent(Long accountId) {

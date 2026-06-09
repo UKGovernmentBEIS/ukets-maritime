@@ -26,7 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.DUPLICATE_SHIP_IMO_ACROSS_REGISTERED_OWNERS;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_ISM_SHIPS_AND_REGISTERED_OWNERS;
-import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER;
+import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_ACCOUNT_IMO_NUMBER;
+import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_SHIP_IMO_NUMBER;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_SHIP_NAME;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanViolation.ViolationMessage.SHIP_NOT_ASSOCIATED_WITH_REGISTERED_OWNER;
@@ -139,7 +140,7 @@ class EmpMandateValidatorTest {
     }
 
     @Test
-    void validate_imo_number_already_exist_invalid() {
+    void validate_invalid_registered_owner_imo_number_match_account_imo_number() {
         Long accountId = 1L;
         String ownerImoNumber1 = "1234567";
         String ownerImoNumber2 = "8765432";
@@ -169,7 +170,43 @@ class EmpMandateValidatorTest {
         final EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, accountId);
         assertFalse(result.isValid());
         assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getMessage)
-                .containsExactly(INVALID_REGISTERED_OWNER_IMO_NUMBER.getMessage());
+            .containsExactly(INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_ACCOUNT_IMO_NUMBER.getMessage());
+    }
+
+    @Test
+    void validate_invalid_registered_owner_imo_number_match_ship_imo_number() {
+        Long accountId = 1L;
+        String accountImoNumber = "0000000";
+        String ownerImoNumber1 = "8765432";
+        String shipImoNumber1 = "1111111";
+        String shipImoNumber2 = "2222222";
+        String shipImoNumber3 = "3333333";
+        String shipImoNumber4 = "4444444";
+        String shipImoNumber5 = "5555555";
+
+        String shipName1 = "ship1";
+        String shipName2 = "ship2";
+        String shipName3 = "ship3";
+        String shipName4 = "ship4";
+        String shipName5 = "ship5";
+
+        final Set<EmpShipEmissions> shipEmissions = Set.of(buildEmpShipEmissions(shipImoNumber1, shipName1, ReportingResponsibilityNature.ISM_COMPANY),
+            buildEmpShipEmissions(shipImoNumber2, shipName2, ReportingResponsibilityNature.ISM_COMPANY),
+            buildEmpShipEmissions(shipImoNumber3, shipName3, ReportingResponsibilityNature.ISM_COMPANY),
+            buildEmpShipEmissions(shipImoNumber4, shipName4, ReportingResponsibilityNature.ISM_COMPANY),
+            buildEmpShipEmissions(shipImoNumber5, shipName5, ReportingResponsibilityNature.SHIPOWNER));
+        final Map<String, String> registeredShips1 = Map.of(shipImoNumber1, shipName1, shipImoNumber2, shipName2);
+        final EmpRegisteredOwner registeredOwner1 = buildRegisteredOwner(shipImoNumber1, registeredShips1);
+        final Map<String, String> registeredShips2 = Map.of(shipImoNumber3, shipName3, shipImoNumber4, shipName4);
+        final EmpRegisteredOwner registeredOwner2 = buildRegisteredOwner(ownerImoNumber1, registeredShips2);
+        final EmissionsMonitoringPlanContainer empContainer = buildEmissionsMonitoringPlanContainer(shipEmissions, Set.of(registeredOwner1, registeredOwner2), accountImoNumber);
+
+        final EmissionsMonitoringPlanValidationResult result = validator.validate(empContainer, accountId);
+        assertFalse(result.isValid());
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getMessage)
+            .containsExactly(INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_SHIP_IMO_NUMBER.getMessage());
+        assertThat(result.getEmpViolations()).extracting(EmissionsMonitoringPlanViolation::getData)
+            .containsExactly(Set.of(shipImoNumber1).toArray());
     }
 
     @Test

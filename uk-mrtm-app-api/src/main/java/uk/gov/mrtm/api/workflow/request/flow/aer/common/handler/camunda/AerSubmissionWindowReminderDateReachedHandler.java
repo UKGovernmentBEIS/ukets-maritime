@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.common.handler.camunda;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
@@ -10,8 +11,6 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestMetadata;
 import uk.gov.netz.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.netz.api.account.service.AccountQueryService;
-import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
@@ -25,7 +24,9 @@ import uk.gov.netz.api.workflow.utils.NotificationTemplateConstants;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AerSubmissionWindowReminderDateReachedHandler implements JavaDelegate {
@@ -40,12 +41,19 @@ public class AerSubmissionWindowReminderDateReachedHandler implements JavaDelega
         final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
 
         final Request request = requestService.findRequestById(requestId);
-        final UserInfoDTO accountPrimaryContact =
-            requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
-                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
+        final Optional<UserInfoDTO> accountPrimaryContact =
+            requestAccountContactQueryService.getRequestAccountPrimaryContact(request);
 
-        AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();
+        final AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();
 
+        if (accountPrimaryContact.isEmpty()) {
+            log.warn("Skipping AER submission window reminder: primary contact not found "
+                    + "[requestId='{}', accountId={}, reminderType=SUBMISSION_WINDOW]",
+                requestId, request.getAccountId());
+            return;
+        }
+
+        final UserInfoDTO primaryContact = accountPrimaryContact.get();
         final Long accountId = request.getAccountId();
         final AccountInfoDTO accountInfo = accountQueryService.getAccountInfoDTOById(accountId);
 
@@ -53,7 +61,7 @@ public class AerSubmissionWindowReminderDateReachedHandler implements JavaDelega
         templateParams.put(NotificationTemplateConstants.WORKFLOW, request.getType().getDescription());
         templateParams.put(NotificationTemplateConstants.WORKFLOW_TASK, NotificationTemplateWorkflowTaskType.getDescription(MrtmRequestType.AER));
         templateParams.put(NotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME, "3 months");
-        templateParams.put(NotificationTemplateConstants.WORKFLOW_USER, accountPrimaryContact.getFullName());
+        templateParams.put(NotificationTemplateConstants.WORKFLOW_USER, primaryContact.getFullName());
         templateParams.put(NotificationTemplateConstants.ACCOUNT_NAME, accountInfo.getName());
         templateParams.put(NotificationTemplateConstants.ACCOUNT_BUSINESS_ID, accountInfo.getBusinessId());
         templateParams.put(MrtmEmailNotificationTemplateConstants.AER_YEAR, requestMetadata.getYear());
@@ -66,6 +74,6 @@ public class AerSubmissionWindowReminderDateReachedHandler implements JavaDelega
                 .build())
             .build();
 
-        notificationEmailService.notifyRecipient(emailData, accountPrimaryContact.getEmail());
+        notificationEmailService.notifyRecipient(emailData, primaryContact.getEmail());
     }
 }

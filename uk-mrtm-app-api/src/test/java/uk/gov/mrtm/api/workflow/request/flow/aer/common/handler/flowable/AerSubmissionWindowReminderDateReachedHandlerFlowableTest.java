@@ -14,8 +14,6 @@ import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmNotificationTe
 import uk.gov.netz.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.netz.api.account.service.AccountQueryService;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
-import uk.gov.netz.api.common.exception.BusinessException;
-import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
@@ -36,8 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -60,7 +57,7 @@ class AerSubmissionWindowReminderDateReachedHandlerFlowableTest {
     private NotificationEmailService<EmailNotificationTemplateData> notificationEmailService;
 
     @Test
-    void test() throws Exception {
+    void test() {
         new MrtmNotificationTemplateWorkflowTaskType();
 
         String requestId = "1";
@@ -119,9 +116,10 @@ class AerSubmissionWindowReminderDateReachedHandlerFlowableTest {
     }
 
     @Test
-    void test_throws_exception_when_primary_contact_not_found() {
+    void test_logs_and_skips_when_primary_contact_not_found() {
         String requestId = "1";
         Request request = Request.builder()
+            .metadata(AerRequestMetadata.builder().year(Year.now()).build())
             .build();
 
         DelegateExecution execution = mock(DelegateExecution.class);
@@ -130,11 +128,7 @@ class AerSubmissionWindowReminderDateReachedHandlerFlowableTest {
         when(requestService.findRequestById(requestId)).thenReturn(request);
         when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request)).thenReturn(Optional.empty());
 
-        BusinessException be = assertThrows(BusinessException.class, () -> {
-            handler.execute(execution);
-        });
-
-        assertThat(be.getErrorCode()).isEqualTo(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND);
+        assertThatCode(() -> handler.execute(execution)).doesNotThrowAnyException();
 
         verify(execution).getVariable(BpmnProcessConstants.REQUEST_ID);
         verify(requestService).findRequestById(requestId);

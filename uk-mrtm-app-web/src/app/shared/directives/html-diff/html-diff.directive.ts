@@ -18,7 +18,7 @@ export class HtmlDiffDirective {
 
   readonly previous = input<string | null>(null);
   readonly current = input.required<string>();
-  readonly isFiles = input<boolean>(false);
+  readonly isSingleToken = input<boolean>(true);
 
   constructor() {
     effect(() => {
@@ -28,8 +28,8 @@ export class HtmlDiffDirective {
         const previousSanitized = this.sanitize(this.previous());
         const currentSanitized = this.sanitize(this.current());
         const diff = this.htmlDiffProvider
-          ? this.isFiles()
-            ? this.diffService.fileNameDiff(previousSanitized, currentSanitized)
+          ? this.isSingleToken()
+            ? this.diffService.singleTokenDiff(previousSanitized, currentSanitized)
             : this.diffService.diff(previousSanitized, currentSanitized)
           : currentSanitized;
 

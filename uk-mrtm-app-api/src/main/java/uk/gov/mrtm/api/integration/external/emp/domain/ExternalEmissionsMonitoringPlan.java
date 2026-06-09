@@ -25,7 +25,7 @@ import java.util.Set;
 @Builder
 public class ExternalEmissionsMonitoringPlan {
 
-    @Schema(description = "Ships and emission details")
+    @Schema(description = "Ships and emission details. All ships related to the EMP must be provided")
     @Builder.Default
     @Valid
     @NotEmpty

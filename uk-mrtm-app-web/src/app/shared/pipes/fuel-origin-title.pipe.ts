@@ -22,11 +22,14 @@ export class FuelOriginTitlePipe implements PipeTransform {
         : `\n<strong>Methane slip:</strong> ${fuelOriginTypeName?.methaneSlip}`
       : null;
 
-    const { origin, type, name } = value as FossilFuels;
+    const currentFossilFuel = value as FossilFuels;
+    const origin = currentFossilFuel?.origin;
+    const type = currentFossilFuel?.type;
+    const name = currentFossilFuel?.name;
 
     const fuelFragment = [
       FUEL_ORIGIN_TITLE[origin],
-      FUEL_TYPES_BY_ORIGIN[origin].find((x) => x.value === type)?.text,
+      FUEL_TYPES_BY_ORIGIN[origin]?.find((x) => x.value === type)?.text,
       name,
     ]
       .filter(Boolean)

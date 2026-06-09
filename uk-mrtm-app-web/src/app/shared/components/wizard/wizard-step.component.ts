@@ -1,9 +1,8 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output, signal } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
-import { BehaviorSubject, filter, startWith, take } from 'rxjs';
+import { filter, startWith, take } from 'rxjs';
 
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { PendingButtonDirective } from '@netz/common/directives';
@@ -13,7 +12,6 @@ import { ButtonDirective, ErrorSummaryComponent, LinkDirective } from '@netz/gov
   selector: 'mrtm-wizard-step',
   imports: [
     ReactiveFormsModule,
-    AsyncPipe,
     PageHeadingComponent,
     PendingButtonDirective,
     RouterLink,
@@ -38,9 +36,10 @@ export class WizardStepComponent {
   readonly cancelLinkPath = input<string>();
   readonly isTwoThirds = input<boolean>(false);
   readonly size = input<'l' | 'xl'>('l');
+
   readonly formSubmit = output<UntypedFormGroup>();
 
-  isSummaryDisplayedSubject = new BehaviorSubject(false);
+  public readonly isSummaryDisplayed = signal(false);
 
   onSubmit(): void {
     this.formGroup()
@@ -56,7 +55,7 @@ export class WizardStepComponent {
             break;
           case 'INVALID':
             this.formGroup().markAllAsTouched();
-            this.isSummaryDisplayedSubject.next(true);
+            this.isSummaryDisplayed.update(() => true);
             break;
         }
       });

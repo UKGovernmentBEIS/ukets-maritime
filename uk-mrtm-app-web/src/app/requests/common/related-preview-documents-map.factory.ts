@@ -83,11 +83,11 @@ export const taskRelatedPreviewDocumentsMapFactory = (store: RequestTaskStore): 
         visibleInNotify: true,
       },
     ];
-    const doeSubmitPreviewDocuments = [
+    const doeSubmitPreviewDocuments = (isPeerReview: boolean) => [
       {
         filename: 'letter_preview.pdf',
         documentType: 'DOE_SUBMITTED',
-        visibleInRelatedActions: false,
+        visibleInRelatedActions: isPeerReview,
         visibleInNotify: true,
       },
     ];
@@ -116,7 +116,8 @@ export const taskRelatedPreviewDocumentsMapFactory = (store: RequestTaskStore): 
       EMP_NOTIFICATION_APPLICATION_REVIEW: empNotificationPreviewDocuments,
       EMP_NOTIFICATION_APPLICATION_PEER_REVIEW: empNotificationPreviewDocuments,
       EMP_NOTIFICATION_WAIT_FOR_PEER_REVIEW: empNotificationPreviewDocuments,
-      DOE_APPLICATION_SUBMIT: doeSubmitPreviewDocuments,
+      DOE_APPLICATION_SUBMIT: doeSubmitPreviewDocuments(false),
+      DOE_APPLICATION_PEER_REVIEW: doeSubmitPreviewDocuments(true),
       VIR_APPLICATION_REVIEW: virApplicationReviewPreviewDocuments,
     };
   });

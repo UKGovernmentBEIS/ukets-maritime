@@ -314,6 +314,23 @@ class ExceptionControllerAdviceTest {
     }
 
     @Test
+    void handleSecurityException() {
+        final ErrorCode expectedErrorCode = ErrorCode.INVALID_FILE_TYPE;
+
+        ResponseEntity<ErrorResponse> errorResponseEntity =
+            exceptionControllerAdvice.handleSecurityException(new SecurityException("blocked"));
+
+        assertNotNull(errorResponseEntity);
+        assertEquals(expectedErrorCode.getHttpStatus(), errorResponseEntity.getStatusCode());
+
+        ErrorResponse errorResponse = errorResponseEntity.getBody();
+        assertNotNull(errorResponse);
+        assertEquals(expectedErrorCode.getCode(), errorResponse.getCode());
+        assertEquals(expectedErrorCode.getMessage(), errorResponse.getMessage());
+        assertThat(errorResponse.getData()).isEmpty();
+    }
+
+    @Test
     void handleConstraintViolationException_form_violation() {
         final ErrorCode expectedErrorCode = ErrorCode.FORM_VALIDATION;
         final EmailDTO emailDTO = new EmailDTO("invalidEmail");

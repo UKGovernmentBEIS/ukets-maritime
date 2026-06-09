@@ -89,6 +89,11 @@ public class ExternalAerFuelsAndEmissionsFactors {
     private FuelOrigin fuelOriginCode;
 
     @NotNull
+    @Schema(description =
+        "For fuelOriginCode FOSSIL allowed values: HFO, LFO, MDO, MGO, LNG, LPG_BUTANE, LPG_PROPANE, H2, NH3, METHANOL, OTHER. " +
+        "For fuelOriginCode BIOFUEL allowed values:  ETHANOL, BIO_DIESEL, HVO, BIO_LNG, BIO_METHANOL, BIO_H2, OTHER. " +
+        "For fuelOriginCode RFNBO allowed values: E_DIESEL, E_METHANOL, E_LNG, E_H2, E_NH3, E_LPG, E_DME, OTHER. " +
+        "Use OTHER only if the fuel type is not listed for the corresponding fuel origin code")
     private ExternalFuelType fuelTypeCode;
 
     @Schema(description = "Description of the fuel type if not listed. Must be provided only when fuelTypeCode 'OTHER'")

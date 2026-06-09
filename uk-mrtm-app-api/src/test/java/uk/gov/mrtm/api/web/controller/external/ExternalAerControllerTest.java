@@ -1,6 +1,8 @@
 package uk.gov.mrtm.api.web.controller.external;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -11,8 +13,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.aop.framework.AopProxy;
 import org.springframework.aop.framework.DefaultAopProxyFactory;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.EmissionSourceClass;
@@ -41,6 +45,7 @@ import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmp
 import uk.gov.mrtm.api.integration.external.emp.enums.ExternalFuelType;
 import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
 import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
+import uk.gov.mrtm.api.web.controller.exception.ExternalIntegrationExceptionControllerAdvice;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
@@ -52,13 +57,17 @@ import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.Year;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.hasItem;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.constants.MonitoringMethod.BDN;
 
@@ -104,9 +113,20 @@ class ExternalAerControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
+        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        messageSource.setBasename("classpath:validatorMessages");
+        messageSource.setDefaultEncoding("UTF-8");
+
+        LocalValidatorFactoryBean validatorFactoryBean = new LocalValidatorFactoryBean();
+        validatorFactoryBean.setValidationMessageSource(messageSource);
+        validatorFactoryBean.afterPropertiesSet();
+
         mockMvc = MockMvcBuilders.standaloneSetup(controller)
             .setCustomArgumentResolvers(new AppUserArgumentResolver(appSecurityComponent))
-            .setControllerAdvice(new ExceptionControllerAdvice())
+            .setValidator(validatorFactoryBean)
+            .setControllerAdvice(
+                new ExternalIntegrationExceptionControllerAdvice(),
+                new ExceptionControllerAdvice())
             .build();
     }
 
@@ -128,6 +148,71 @@ class ExternalAerControllerTest {
 
         verify(appSecurityComponent).getAuthenticatedUser();
         verify(externalAerService).submitAerData(emissionsMonitoringPlan, IMO_NUMBER, YEAR, appUser);
+    }
+
+    @Test
+    void submitAerData_invalidShipTypeEnum_returnsForm1001WithIndexedPath() throws Exception {
+        ObjectNode payloadNode = objectMapper.valueToTree(createAer());
+        ((ObjectNode) ((ArrayNode) payloadNode.get("shipParticulars")).get(0).get("shipDetails"))
+            .put("shipType", "INVALID_SHIP_TYPE");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(CONTROLLER_PATH + "/" + IMO_NUMBER + "/aer/" + YEAR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(payloadNode)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("FORM1001"))
+            .andExpect(jsonPath("$.data[0].fieldName")
+                .value("shipParticulars[0].shipDetails.shipType"))
+            .andExpect(jsonPath("$.data[0].message", containsString("INVALID_SHIP_TYPE")))
+            .andExpect(jsonPath("$.data[0].message", containsString("Accepted values")));
+    }
+
+    @Test
+    void submitAerData_allYearTrueWithFromTo_returnsForm1001WithIndexedPath() throws Exception {
+        ExternalAer aer = createAer();
+        aer.setShipParticulars(new LinkedHashSet<>(List.of(
+            createExternalAerShipEmissions("9362267", false, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 8, 31)),
+            createExternalAerShipEmissions("8812629", true, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31))
+        )));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(CONTROLLER_PATH + "/" + IMO_NUMBER + "/aer/" + YEAR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(aer)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("FORM1001"))
+            .andExpect(jsonPath("$.data[?(@.fieldName == 'shipParticulars[1].shipDetails')]").exists())
+            .andExpect(jsonPath("$.data[*].message", hasItem(containsString("All year and from to dates are not mutually valid"))));
+    }
+
+    @Test
+    void submitAerData_malformedJson_returnsInvalidRequestFormat() throws Exception {
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(CONTROLLER_PATH + "/" + IMO_NUMBER + "/aer/" + YEAR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content("{"))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("INVALID_REQUEST_FORMAT"))
+            .andExpect(jsonPath("$.data[0].fieldName").value("requestBody"))
+            .andExpect(jsonPath("$.data[0].message").value("Invalid request body value"));
+    }
+
+    @Test
+    void submitAerData_invalidDateFormat_returnsForm1001WithIndexedPath() throws Exception {
+        ObjectNode payloadNode = objectMapper.valueToTree(createAer());
+        ((ObjectNode) ((ArrayNode) payloadNode.get("shipParticulars")).get(0).get("shipDetails"))
+            .put("from", "31/01/2026");
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.put(CONTROLLER_PATH + "/" + IMO_NUMBER + "/aer/" + YEAR)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(payloadNode)))
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value("FORM1001"))
+            .andExpect(jsonPath("$.data[0].fieldName")
+                .value("shipParticulars[0].shipDetails.from"))
+            .andExpect(jsonPath("$.data[0].message", containsString("31/01/2026")));
     }
 
     private ExternalAer createAer() {
@@ -160,14 +245,20 @@ class ExternalAerControllerTest {
     }
 
     private ExternalAerShipEmissions createExternalAerShipEmissions() {
+        return createExternalAerShipEmissions("9876543", true, null, null);
+    }
+
+    private ExternalAerShipEmissions createExternalAerShipEmissions(
+        String shipImoNumber, boolean allYear, LocalDate from, LocalDate to) {
         Set<ExternalAerFuelsAndEmissionsFactors> fuelTypes = new LinkedHashSet<>();
         fuelTypes.add(createExternalAerFuelsAndEmissionsFactors());
 
-
         return ExternalAerShipEmissions.builder()
             .shipDetails(ExternalAerShipDetails.builder()
-                .shipImoNumber("9876543")
-                .allYear(true)
+                .shipImoNumber(shipImoNumber)
+                .allYear(allYear)
+                .from(from)
+                .to(to)
                 .name("ship details name")
                 .shipType(ShipType.BULK)
                 .grossTonnage(5000)

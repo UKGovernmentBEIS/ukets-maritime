@@ -6,6 +6,7 @@ import { TaskService } from '@netz/common/forms';
 import { RequestTaskStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage, MockType } from '@netz/common/testing';
 
+import { TaskItemStatus } from '@requests/common';
 import { taskProviders } from '@requests/common/task.providers';
 import {
   mockDoePeerReviewMaritimeEmissions,
@@ -42,7 +43,13 @@ describe('MaritimeEmissionsSummaryComponent', () => {
     });
 
     store = TestBed.inject(RequestTaskStore);
-    store.setState(mockStateBuild({ maritimeEmissions: mockDoePeerReviewMaritimeEmissions }));
+    store.setState(
+      mockStateBuild(
+        { maritimeEmissions: mockDoePeerReviewMaritimeEmissions },
+        { maritimeEmissions: TaskItemStatus.IN_PROGRESS },
+        { [mockDoePeerReviewMaritimeEmissions.totalMaritimeEmissions.supportingDocuments[0]]: '100.png' },
+      ),
+    );
 
     fixture = TestBed.createComponent(MaritimeEmissionsSummaryComponent);
     page = new Page(fixture);
@@ -74,7 +81,7 @@ describe('MaritimeEmissionsSummaryComponent', () => {
       'How have you calculated the emissions?',
       'test another data source',
       'Supporting documents',
-      'Not provided',
+      '100.png',
       'Do you need to charge the operator a fee?',
       'Yes',
       'Billable hours',

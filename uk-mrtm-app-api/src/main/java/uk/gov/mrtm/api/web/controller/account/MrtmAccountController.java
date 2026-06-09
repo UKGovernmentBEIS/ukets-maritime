@@ -2,6 +2,7 @@ package uk.gov.mrtm.api.web.controller.account;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -25,16 +26,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountDTO;
+import uk.gov.mrtm.api.account.domain.dto.MrtmAccountInfoDTO;
 import uk.gov.mrtm.api.account.service.MrtmAccountCreateService;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.web.constants.SwaggerApiInfo;
 import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
-import uk.gov.netz.api.security.AuthorizedRole;
 import uk.gov.netz.api.account.domain.dto.AccountSearchCriteria;
 import uk.gov.netz.api.account.domain.dto.AccountSearchResults;
+import uk.gov.netz.api.account.service.AccountQueryService;
 import uk.gov.netz.api.account.service.AccountSearchServiceDelegator;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.security.AuthorizedRole;
+
+import java.util.List;
 
 import static uk.gov.mrtm.api.web.constants.SwaggerApiInfo.CREATED;
 import static uk.gov.mrtm.api.web.constants.SwaggerApiInfo.CREATE_MARITIME_ACCOUNT_BAD_REQUEST;
@@ -56,6 +61,7 @@ public class MrtmAccountController {
     private final MrtmAccountCreateService mrtmAccountCreateService;
     private final MrtmAccountQueryService mrtmAccountQueryService;
     private final AccountSearchServiceDelegator accountSearchServiceDelegator;
+    private final AccountQueryService accountQueryService;
 
     @PostMapping
     @Operation(summary = "Creates a maritime account")
@@ -110,5 +116,18 @@ public class MrtmAccountController {
                                 .sortBy(AccountSearchCriteria.SortBy.ACCOUNT_BUSINESS_ID)
                                 .direction(Sort.Direction.ASC)
                                 .build()), HttpStatus.OK);
+    }
+
+    @GetMapping("/info")
+    @Operation(summary = "Retrieves basic information about the maritime accounts the current user is associated with")
+    @ApiResponse(responseCode = "200", description = OK,
+        content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, array = @ArraySchema(schema = @Schema(implementation = MrtmAccountInfoDTO.class))))
+    @ApiResponse(responseCode = "429", description = SwaggerApiInfo.TOO_MANY_REQUESTS,
+        content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @AuthorizedRole(roleType = {OPERATOR, REGULATOR, VERIFIER})
+    public ResponseEntity<List<MrtmAccountInfoDTO>> getMrtmAccountsInfoByUser (
+        @Parameter(hidden = true) AppUser appUser) {
+        return new ResponseEntity<>(mrtmAccountQueryService.getMrtmAccountsInfoByUser(appUser), HttpStatus.OK);
     }
 }

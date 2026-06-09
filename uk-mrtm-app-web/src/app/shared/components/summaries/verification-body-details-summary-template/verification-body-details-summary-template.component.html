@@ -24,13 +24,12 @@
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Accreditation number</dt>
-      <dd govukSummaryListRowValue>{{ data.accreditationReferenceNumber }}</dd>
+      <dd govukSummaryListRowValue>{{ data?.accreditationReferenceNumber }}</dd>
     </div>
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Accreditation body</dt>
+      <dt govukSummaryListRowKey>National Accreditation body</dt>
       <dd govukSummaryListRowValue>
-        <!-- TODO MRTM-1616 -->
-        UKAS
+        {{ data?.accreditationBodyName }}
       </dd>
     </div>
   </dl>

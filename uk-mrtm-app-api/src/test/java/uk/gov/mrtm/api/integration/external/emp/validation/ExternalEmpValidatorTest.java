@@ -73,7 +73,7 @@ class ExternalEmpValidatorTest {
         EmpMandate mandate = mock(EmpMandate.class);
         EmissionsMonitoringPlanValidationResult mandateError = EmissionsMonitoringPlanValidationResult.builder()
             .valid(false)
-            .empViolations(List.of(new EmissionsMonitoringPlanViolation("a", EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER, "b")))
+            .empViolations(List.of(new EmissionsMonitoringPlanViolation("a", EmissionsMonitoringPlanViolation.ViolationMessage.INVALID_REGISTERED_OWNER_IMO_NUMBER_MATCH_ACCOUNT_IMO_NUMBER, "b")))
             .build();
         EmissionsMonitoringPlanValidationResult emissionsError = EmissionsMonitoringPlanValidationResult.builder()
             .valid(false)
@@ -91,7 +91,7 @@ class ExternalEmpValidatorTest {
         assertThat(be.getErrorCode()).isEqualTo(MrtmErrorCode.INVALID_EMP);
         assertThat(be.getData()).hasSize(2);
         assertEquals(be.getData()[0].getFieldName(), "a");
-        assertEquals(be.getData()[0].getMessage(), "Registered owner IMO number already exists | ErrorData: [b]");
+        assertEquals(be.getData()[0].getMessage(), "Registered owner IMO number should not match company IMO number | ErrorData: [b]");
         assertEquals(be.getData()[1].getFieldName(), "c");
         assertEquals(be.getData()[1].getMessage(), "EMP contains multiple emission sources with the same name about the same ship | ErrorData: [d]");
         verify(empMandateValidator).validate(mandate, emissions, companyImoNumber);

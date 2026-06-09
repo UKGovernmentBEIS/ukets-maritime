@@ -7,17 +7,15 @@ import { of } from 'rxjs';
 import { OperatorUsersRegistrationService } from '@mrtm/api';
 
 import { PageHeadingComponent } from '@netz/common/components';
-import { BasePage, mockClass, MockType } from '@netz/common/testing';
+import { BasePage, MockType } from '@netz/common/testing';
 
 import { ChoosePasswordComponent } from '@registration/choose-password/choose-password.component';
 import { UserRegistrationStore } from '@registration/store/user-registration.store';
-import { PasswordService } from '@shared/services';
 
 describe('ChoosePasswordComponent', () => {
   let component: ChoosePasswordComponent;
   let fixture: ComponentFixture<ChoosePasswordComponent>;
   let page: Page;
-  let passwordService: jest.Mocked<PasswordService>;
 
   class Page extends BasePage<ChoosePasswordComponent> {
     get emailValue() {
@@ -50,8 +48,6 @@ describe('ChoosePasswordComponent', () => {
   };
 
   beforeEach(async () => {
-    passwordService = mockClass(PasswordService);
-
     await TestBed.configureTestingModule({
       imports: [ChoosePasswordComponent, PageHeadingComponent],
       providers: [
@@ -59,7 +55,6 @@ describe('ChoosePasswordComponent', () => {
         provideRouter([]),
         UserRegistrationStore,
         { provide: OperatorUsersRegistrationService, useValue: operatorUsersRegistrationService },
-        { provide: PasswordService, useValue: passwordService },
       ],
     }).compileComponents();
   });
@@ -79,7 +74,6 @@ describe('ChoosePasswordComponent', () => {
   it('should fill form from store', inject(
     [UserRegistrationStore],
     fakeAsync((store: UserRegistrationStore) => {
-      passwordService.blacklisted.mockReturnValue(of(null));
       store.setState({ password: 'password', email: 'test@netz.uk' });
 
       tick();
@@ -93,7 +87,6 @@ describe('ChoosePasswordComponent', () => {
 
   it('should submit only if form valid', inject([Router], (router: Router) => {
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
-    passwordService.blacklisted.mockReturnValue(of(null));
 
     page.passwordValue = '';
     page.repeatedPasswordValue = '';
@@ -119,8 +112,6 @@ describe('ChoosePasswordComponent', () => {
       const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
       const token = 'thisisatoken';
       const password = 'ThisIsAStrongP@ssw0rd';
-
-      passwordService.blacklisted.mockReturnValue(of(null));
 
       store.setState({
         invitationStatus: 'ALREADY_REGISTERED_SET_PASSWORD_ONLY',

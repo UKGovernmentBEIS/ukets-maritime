@@ -11,11 +11,12 @@ import {
   TemplateRef,
 } from '@angular/core';
 
+import { SafeHtmlPipe } from '../pipes';
 import { GovukTableColumn, SortEvent } from './table.interface';
 
 @Component({
   selector: 'govuk-table',
-  imports: [NgTemplateOutlet],
+  imports: [NgTemplateOutlet, SafeHtmlPipe],
   standalone: true,
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',

@@ -59,6 +59,7 @@ describe('MaritimeEmissionsSummaryComponent', () => {
       mockStateBuild(
         { maritimeEmissions: mockDoeMaritimeEmissions },
         { maritimeEmissions: TaskItemStatus.IN_PROGRESS },
+        { [mockDoeMaritimeEmissions.totalMaritimeEmissions.supportingDocuments[0]]: '100.png' },
       ),
     );
     authStore = TestBed.inject(AuthStore);
@@ -97,7 +98,7 @@ describe('MaritimeEmissionsSummaryComponent', () => {
       'test another data source',
       'Change',
       'Supporting documents',
-      'Not provided',
+      '100.png',
       'Change',
       'Do you need to charge the operator a fee?',
       'Yes',

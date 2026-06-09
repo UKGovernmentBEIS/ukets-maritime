@@ -76,6 +76,8 @@ class EmpThirdPartyProviderViewServiceTest {
 
     @Test
     void getTypes() {
-        assertThat(service.getTypes()).isEqualTo(List.of(MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_SUBMIT));
+        assertThat(service.getTypes()).isEqualTo(List.of(
+            MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_SUBMIT,
+            MrtmRequestTaskType.EMP_VARIATION_APPLICATION_SUBMIT));
     }
 }

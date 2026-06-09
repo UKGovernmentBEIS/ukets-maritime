@@ -9,5 +9,5 @@
 
 <div>
   <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
-  <a [routerLink]="['../']" govukLink>Return to: {{ wizardMap.title }}</a>
+  <a [routerLink]="isAddNewPortCall ? ['../../'] : ['../']" govukLink>Return to: {{ wizardMap.title }}</a>
 </div>

@@ -12,6 +12,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import uk.gov.mrtm.api.account.domain.AccountReportingStatus;
 import uk.gov.mrtm.api.account.domain.AccountUpdatedRegistryEvent;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
+import uk.gov.mrtm.api.account.enumeration.AccountSearchKey;
 import uk.gov.mrtm.api.account.enumeration.MrtmAccountReportingStatus;
 import uk.gov.mrtm.api.account.repository.AccountReportingStatusRepository;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
@@ -29,6 +30,7 @@ import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryCompetentAuthorityEnum;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
 import uk.gov.mrtm.api.integration.registry.setoperator.validate.SetOperatorRequestValidator;
+import uk.gov.netz.api.account.service.AccountSearchAdditionalKeywordService;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
 import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
@@ -50,7 +52,8 @@ import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class SetOperatorResponseHandlerTest {
-    private static final String CORRELATION_ID = "correlation-id";
+    private static final String CORRELATION_ID = "B";
+    private static final String PARENT_CORRELATION_ID = "O";
     private static final long OPERATOR_ID = 1L;
     private static final String EMITTER_ID = "emitterId";
     private static final String EMAIL = "email@email";
@@ -84,6 +87,8 @@ class SetOperatorResponseHandlerTest {
     private MaritimeAccountContactsEventListenerResolver accountContactsEventListenerResolver;
     @Mock
     private MaritimeAccountExemptEventListenerResolver accountExemptEventListenerResolver;
+    @Mock
+    private AccountSearchAdditionalKeywordService accountSearchAdditionalKeywordService;
 
     @Test
     void handleResponse_with_errors() {
@@ -143,7 +148,7 @@ class SetOperatorResponseHandlerTest {
         when(validator.validate(event)).thenReturn(errorDetails);
         when(mrtmAccountRepository.findByBusinessId(EMITTER_ID)).thenReturn(mrtmAccount);
 
-        handler.handleResponse(event, CORRELATION_ID);
+        handler.handleResponse(event, CORRELATION_ID, PARENT_CORRELATION_ID);
 
 
         verify(notifyRegistryEmailService).notifyRegulator(actionFordwayEmailParams);
@@ -154,16 +159,19 @@ class SetOperatorResponseHandlerTest {
         verify(emailProperties).getFordway();
         verify(validator).validate(event);
         verify(mrtmAccountRepository).findByBusinessId(EMITTER_ID);
-        verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate);
+        verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate,
+                CORRELATION_ID, PARENT_CORRELATION_ID);
 
         verifyNoMoreInteractions(notifyRegistryEmailService, emailProperties, validator, mrtmAccountRepository, setOperatorSendToRegistryProducer);
         verifyNoInteractions(setOperatorKafkaTemplate, emissionsMonitoringPlanQueryService, accountUpdatedRegistryListener,
-            accountContactsEventListenerResolver, accountExemptEventListenerResolver, accountReportingStatusRepository);
+            accountContactsEventListenerResolver, accountExemptEventListenerResolver, accountReportingStatusRepository,
+            accountSearchAdditionalKeywordService);
     }
 
     @ParameterizedTest
     @MethodSource
     void handleResponse_with_no_errors(MrtmAccountReportingStatus reportingStatus, boolean isExempt) {
+        Long accountId = 123L;
         MrtmAccount mrtmAccount = mock(MrtmAccount.class);
         OperatorUpdateEvent event = OperatorUpdateEvent.builder()
             .operatorId(OPERATOR_ID)
@@ -178,7 +186,6 @@ class SetOperatorResponseHandlerTest {
             .build();
 
         EmissionsMonitoringPlan emissionsMonitoringPlan = mock(EmissionsMonitoringPlan.class);
-        Long accountId = 123L;
         AccountUpdatedRegistryEvent updatedRegistryEvent = AccountUpdatedRegistryEvent.builder()
             .accountId(accountId)
             .emissionsMonitoringPlan(emissionsMonitoringPlan)
@@ -199,13 +206,16 @@ class SetOperatorResponseHandlerTest {
         when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(accountId)).thenReturn(emissionsMonitoringPlan);
         when(accountReportingStatusRepository.findByAccountIdOrderByYearDesc(accountId)).thenReturn(List.of(accountReportingStatus));
 
-        handler.handleResponse(event, CORRELATION_ID);
+        handler.handleResponse(event, CORRELATION_ID, PARENT_CORRELATION_ID);
 
         verify(validator).validate(event);
         verify(mrtmAccountRepository).findByBusinessId(EMITTER_ID);
         verify(mrtmAccountRepository).save(mrtmAccount);
         verify(mrtmAccount).setRegistryId((int) OPERATOR_ID);
-        verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate);
+        verify(accountSearchAdditionalKeywordService).storeKeywordsForAccount(accountId,
+            Map.of(AccountSearchKey.REGISTRY_ID.name(), String.valueOf(OPERATOR_ID)));
+        verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate,
+            CORRELATION_ID, PARENT_CORRELATION_ID);
         verify(emissionsMonitoringPlanQueryService).getLastestEmissionsMonitoringPlan(accountId);
         verify(accountUpdatedRegistryListener).onAccountUpdatedEvent(updatedRegistryEvent);
         verify(accountContactsEventListenerResolver).onAccountContactsEvent(AccountContactsRegistryEvent.builder().accountIds(Set.of(accountId)).build());
@@ -215,7 +225,7 @@ class SetOperatorResponseHandlerTest {
         verifyNoMoreInteractions(mrtmAccount, validator,
             mrtmAccountRepository, setOperatorSendToRegistryProducer, emissionsMonitoringPlanQueryService,
             accountUpdatedRegistryListener, accountContactsEventListenerResolver, accountExemptEventListenerResolver,
-            accountReportingStatusRepository);
+            accountReportingStatusRepository, accountSearchAdditionalKeywordService);
         verifyNoInteractions(setOperatorKafkaTemplate, notifyRegistryEmailService, emailProperties);
     }
 
@@ -225,5 +235,33 @@ class SetOperatorResponseHandlerTest {
             Arguments.of(MrtmAccountReportingStatus.REQUIRED_TO_REPORT, false),
             Arguments.of(MrtmAccountReportingStatus.EXEMPT, true)
         );
+    }
+
+    @Test
+    void handleResponse_forwards_null_parent_when_inbound_parent_missing() {
+        Long accountId = 123L;
+        MrtmAccount mrtmAccount = mock(MrtmAccount.class);
+        OperatorUpdateEvent event = OperatorUpdateEvent.builder()
+            .operatorId(OPERATOR_ID)
+            .emitterId(EMITTER_ID)
+            .regulator(REGULATOR.name())
+            .build();
+
+        OperatorUpdateEventOutcome outcome = OperatorUpdateEventOutcome.builder()
+            .event(event)
+            .outcome(IntegrationEventOutcome.SUCCESS)
+            .errors(new ArrayList<>())
+            .build();
+
+        when(mrtmAccount.getId()).thenReturn(accountId);
+        when(validator.validate(event)).thenReturn(new ArrayList<>());
+        when(mrtmAccountRepository.findByBusinessId(EMITTER_ID)).thenReturn(mrtmAccount);
+        when(emissionsMonitoringPlanQueryService.getLastestEmissionsMonitoringPlan(accountId)).thenReturn(mock(EmissionsMonitoringPlan.class));
+        when(accountReportingStatusRepository.findByAccountIdOrderByYearDesc(accountId)).thenReturn(new ArrayList<>());
+
+        handler.handleResponse(event, CORRELATION_ID, null);
+
+        verify(setOperatorSendToRegistryProducer).produce(outcome, setOperatorKafkaTemplate,
+            CORRELATION_ID, null);
     }
 }

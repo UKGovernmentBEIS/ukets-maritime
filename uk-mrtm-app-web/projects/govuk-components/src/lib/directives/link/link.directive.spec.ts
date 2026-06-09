@@ -68,14 +68,14 @@ describe('LinkDirective', () => {
 
   it('should add navigation link class (header link)', () => {
     const testElement: HTMLElement = fixture.componentInstance.headerLink().nativeElement;
-    expect(testElement.classList).toContain('govuk-header__link');
+    expect(testElement.classList).toContain('govuk-header-legacy__link');
   });
 
   it('should add anchor inside li element (header link)', () => {
     const testElement: HTMLElement = fixture.componentInstance.headerLink().nativeElement;
     const parentElement: HTMLElement = testElement.parentElement;
     expect(parentElement.tagName).toEqual('LI');
-    expect(parentElement.classList).toContain('govuk-header__navigation-item');
+    expect(parentElement.classList).toContain('govuk-header-legacy__navigation-item');
   });
 
   it('should add navigation link class (footer link)', () => {
@@ -102,13 +102,13 @@ describe('LinkDirective', () => {
   it('should apply the active class to li element', () => {
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelector('.govuk-header__navigation-item--active')).toBeFalsy();
+    expect(element.querySelector('.govuk-header-legacy__navigation-item--active')).toBeFalsy();
 
     hostComponent.headerLink().nativeElement.click();
 
     fixture.detectChanges();
 
-    expect(element.querySelector('.govuk-header__navigation-item--active')).toBeTruthy();
+    expect(element.querySelector('.govuk-header-legacy__navigation-item--active')).toBeTruthy();
   });
 
   it('should apply the link class to simple links', () => {
