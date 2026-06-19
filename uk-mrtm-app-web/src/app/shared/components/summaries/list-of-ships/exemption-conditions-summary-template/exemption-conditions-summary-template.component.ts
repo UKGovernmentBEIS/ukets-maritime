@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
-import { ExemptionConditions } from '@mrtm/api';
+import { EmpShipEmissions } from '@mrtm/api';
 
 import {
   LinkDirective,
@@ -12,7 +12,6 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { HtmlDiffDirective } from '@shared/directives';
 import { BooleanToTextPipe } from '@shared/pipes';
 
 @Component({
@@ -26,15 +25,13 @@ import { BooleanToTextPipe } from '@shared/pipes';
     LinkDirective,
     RouterLink,
     BooleanToTextPipe,
-    HtmlDiffDirective,
   ],
   standalone: true,
   templateUrl: './exemption-conditions-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ExemptionConditionsSummaryTemplateComponent {
-  readonly exemptionConditions = input.required<ExemptionConditions>();
-  readonly originalExemptionConditions = input<ExemptionConditions>();
+  public readonly data = input.required<EmpShipEmissions['exemptionConditions']>();
   readonly changeLink = input<string>();
   readonly isEditable = input(false);
   readonly queryParams = input<Params>({});

@@ -1,7 +1,6 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.common.handler.flowable;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Service;
@@ -11,6 +10,8 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestMetadata;
 import uk.gov.netz.api.account.domain.dto.AccountInfoDTO;
 import uk.gov.netz.api.account.service.AccountQueryService;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailData;
 import uk.gov.netz.api.notificationapi.mail.domain.EmailNotificationTemplateData;
 import uk.gov.netz.api.notificationapi.mail.service.NotificationEmailService;
@@ -24,9 +25,7 @@ import uk.gov.netz.api.workflow.utils.NotificationTemplateConstants;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
-@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AerSubmissionWindowReminderDateReachedHandlerFlowable implements JavaDelegate {
@@ -41,19 +40,15 @@ public class AerSubmissionWindowReminderDateReachedHandlerFlowable implements Ja
         final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
 
         final Request request = requestService.findRequestById(requestId);
-        final Optional<UserInfoDTO> accountPrimaryContact =
-            requestAccountContactQueryService.getRequestAccountPrimaryContact(request);
 
-        final AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();
+        // TODO remove exception and make it return in case contact not found.
+        //  Update also AerSubmissionWindowReminderDateReachedHandler
+        final UserInfoDTO accountPrimaryContact =
+            requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
 
-        if (accountPrimaryContact.isEmpty()) {
-            log.warn("Skipping AER submission window reminder: primary contact not found "
-                    + "[requestId='{}', accountId={}, reminderType=SUBMISSION_WINDOW]",
-                requestId, request.getAccountId());
-            return;
-        }
+        AerRequestMetadata requestMetadata = (AerRequestMetadata) request.getMetadata();
 
-        final UserInfoDTO primaryContact = accountPrimaryContact.get();
         final Long accountId = request.getAccountId();
         final AccountInfoDTO accountInfo = accountQueryService.getAccountInfoDTOById(accountId);
 
@@ -61,7 +56,7 @@ public class AerSubmissionWindowReminderDateReachedHandlerFlowable implements Ja
         templateParams.put(NotificationTemplateConstants.WORKFLOW, request.getType().getDescription());
         templateParams.put(NotificationTemplateConstants.WORKFLOW_TASK, NotificationTemplateWorkflowTaskType.getDescription(MrtmRequestType.AER));
         templateParams.put(NotificationTemplateConstants.WORKFLOW_EXPIRATION_TIME, "3 months");
-        templateParams.put(NotificationTemplateConstants.WORKFLOW_USER, primaryContact.getFullName());
+        templateParams.put(NotificationTemplateConstants.WORKFLOW_USER, accountPrimaryContact.getFullName());
         templateParams.put(NotificationTemplateConstants.ACCOUNT_NAME, accountInfo.getName());
         templateParams.put(NotificationTemplateConstants.ACCOUNT_BUSINESS_ID, accountInfo.getBusinessId());
         templateParams.put(MrtmEmailNotificationTemplateConstants.AER_YEAR, requestMetadata.getYear());
@@ -74,6 +69,6 @@ public class AerSubmissionWindowReminderDateReachedHandlerFlowable implements Ja
                 .build())
             .build();
 
-        notificationEmailService.notifyRecipient(emailData, primaryContact.getEmail());
+        notificationEmailService.notifyRecipient(emailData, accountPrimaryContact.getEmail());
     }
 }

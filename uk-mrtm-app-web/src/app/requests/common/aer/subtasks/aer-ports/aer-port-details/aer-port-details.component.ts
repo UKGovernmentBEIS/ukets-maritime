@@ -21,7 +21,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { FieldsetDirective, LegendDirective, LinkDirective, SelectComponent } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { aerPortDetailsFormProvider } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.form-provider';
 import { AerPortDetailsFormGroupModel } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
@@ -57,7 +56,6 @@ export class AerPortDetailsComponent {
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService<AerSubmitTaskPayload>);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
-  public readonly isAddNewPortCall = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   public readonly portId: InputSignal<string> = input<string>();
 
   public readonly wizardMap = aerPortsMap;

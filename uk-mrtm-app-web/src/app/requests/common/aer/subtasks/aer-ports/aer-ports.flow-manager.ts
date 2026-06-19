@@ -25,7 +25,6 @@ export class AerPortsFlowManager extends WizardFlowManager {
       case AerPortsWizardStep.IN_PORT_EMISSIONS:
       case AerPortsWizardStep.PORT_CALL_SUMMARY:
         return of('../');
-      case AerPortsWizardStep.NEW_PORT_CALL_SUMMARY:
       default:
         return of('../../');
     }

@@ -9,7 +9,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { mapAggregatedDataToTotalShipEmissionsItems } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.helpers';
 import { aerAggregatedDataSubtasksListMap } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-subtasks-list.map';
 import {
@@ -41,7 +40,6 @@ export class AerAggregatedDataShipEmissionsCalculatedComponent {
   private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
   private readonly form: UntypedFormGroup = new UntypedFormGroup({});
 
-  public readonly isAddNewAggregatedData = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   public readonly wizardMap = aerAggregatedDataSubtasksListMap;
   public readonly dataId: InputSignal<string> = input<string>();
   public readonly data: Signal<AerShipAggregatedData> = computed(() =>

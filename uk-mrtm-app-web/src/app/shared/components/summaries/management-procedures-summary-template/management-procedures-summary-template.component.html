@@ -1,11 +1,6 @@
 <h2 class="govuk-heading-m">{{ managementProceduresMap().monitoringReportingRoles.title }}</h2>
-@for (role of combinedMonitoringReportingRoles(); track $index) {
-  <!-- eslint-disable @angular-eslint/template/elements-content -->
-  <h3
-    class="govuk-heading-s"
-    htmlDiff
-    [current]="role?.current ? `Role ${$index + 1}` : undefined"
-    [previous]="role?.previous ? `Role ${$index + 1}` : undefined"></h3>
+@for (role of combinedMonitoringReportingRoles(); track role) {
+  <h3 class="govuk-heading-s">Role {{ $index + 1 }}</h3>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Job title</dt>

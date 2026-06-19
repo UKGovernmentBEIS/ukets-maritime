@@ -54,7 +54,6 @@ export class AerVoyagesListComponent extends PaginationStatePersistableComponent
     (this.currentPersistableComponentState()?.activeFilters as FilterByShipAndDateRange) ?? null,
   );
 
-  readonly randomUUID = signal(crypto.randomUUID());
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly wizardMap = aerVoyagesMap;
   readonly wizardStep = AerVoyagesWizardStep;

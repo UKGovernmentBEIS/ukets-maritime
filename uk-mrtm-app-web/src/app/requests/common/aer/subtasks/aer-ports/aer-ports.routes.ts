@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import {
   canActivateListOfPorts,
   canActivatePortCallSummary,
@@ -33,96 +32,14 @@ export const AER_PORTS_ROUTES: Routes = [
           import('@requests/common/aer/subtasks/aer-ports/aer-ports-list').then((c) => c.AerPortsListComponent),
       },
       {
-        path: `add/:${AER_PORT_PARAM}`,
-        providers: [
-          {
-            provide: AER_SUBTASK_NEW_ENTRY_FLOW,
-            useValue: true,
-          },
-        ],
-        children: [
-          {
-            path: '',
-            data: { breadcrumb: false },
-            title: aerPortsMap.totalEmissions.title,
-            resolve: {
-              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.PORT_CALL_SUMMARY),
-            },
-            canActivate: [canActivatePortCallSummary],
-            loadComponent: () =>
-              import('@requests/common/aer/subtasks/aer-ports/aer-port-call-summary').then(
-                (c) => c.AerPortCallSummaryComponent,
-              ),
-          },
-          {
-            path: AerPortsWizardStep.SELECT_SHIP,
-            data: { breadcrumb: false, backlink: '../../../' },
-            title: aerPortsMap.imoNumber.title,
-            loadComponent: () =>
-              import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
-          },
-          {
-            path: AerPortsWizardStep.PORT_DETAILS,
-            data: { breadcrumb: false },
-            title: aerPortsMap.portDetails.title,
-            canActivate: [canActivatePortDetails],
-            resolve: {
-              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.PORT_DETAILS, true),
-            },
-            loadComponent: () =>
-              import('@requests/common/aer/subtasks/aer-ports/aer-port-details').then((c) => c.AerPortDetailsComponent),
-          },
-          {
-            path: AerPortsWizardStep.IN_PORT_EMISSIONS,
-            children: [
-              {
-                path: '',
-                data: { breadcrumb: false },
-                title: aerPortsMap.totalEmissions.title,
-                canActivate: [canActivatePortEmissions],
-                resolve: {
-                  backlink: aerPortsBacklinkResolver(AerPortsWizardStep.IN_PORT_EMISSIONS),
-                },
-                loadComponent: () =>
-                  import('@requests/common/aer/components/aer-emissions-calculations').then(
-                    (c) => c.AerEmissionsCalculationsComponent,
-                  ),
-              },
-              {
-                path: AerPortsWizardStep.DIRECT_EMISSIONS,
-                data: { breadcrumb: false, backlink: '../', backlinkFragment: 'directEmissions' },
-                title: aerPortsMap.directEmissions.title,
-                loadComponent: () =>
-                  import('@requests/common/aer/components/aer-direct-emission').then(
-                    (c) => c.AerDirectEmissionComponent,
-                  ),
-              },
-              {
-                path: AerPortsWizardStep.FUEL_CONSUMPTION,
-                children: [
-                  {
-                    path: '',
-                    data: { breadcrumb: false, backlink: '../' },
-                    title: aerPortsMap.fuelConsumptions.title,
-                    loadComponent: () =>
-                      import('@requests/common/aer/components/aer-fuel-consumption').then(
-                        (c) => c.AerFuelConsumptionComponent,
-                      ),
-                  },
-                  {
-                    path: `:fuelConsumptionId`,
-                    data: { breadcrumb: false, backlink: '../../' },
-                    title: aerPortsMap.fuelConsumptions.title,
-                    loadComponent: () =>
-                      import('@requests/common/aer/components/aer-fuel-consumption').then(
-                        (c) => c.AerFuelConsumptionComponent,
-                      ),
-                  },
-                ],
-              },
-            ],
-          },
-        ],
+        path: AerPortsWizardStep.SELECT_SHIP,
+        data: { breadcrumb: false },
+        title: aerPortsMap.imoNumber.title,
+        resolve: {
+          backlink: aerPortsBacklinkResolver(AerPortsWizardStep.SELECT_SHIP),
+        },
+        loadComponent: () =>
+          import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
       },
       {
         path: `:${AER_PORT_PARAM}`,
@@ -139,6 +56,16 @@ export const AER_PORTS_ROUTES: Routes = [
               import('@requests/common/aer/subtasks/aer-ports/aer-port-call-summary').then(
                 (c) => c.AerPortCallSummaryComponent,
               ),
+          },
+          {
+            path: AerPortsWizardStep.SELECT_SHIP,
+            data: { breadcrumb: false },
+            title: aerPortsMap.imoNumber.title,
+            resolve: {
+              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.SELECT_SHIP),
+            },
+            loadComponent: () =>
+              import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
           },
           {
             path: AerPortsWizardStep.PORT_DETAILS,

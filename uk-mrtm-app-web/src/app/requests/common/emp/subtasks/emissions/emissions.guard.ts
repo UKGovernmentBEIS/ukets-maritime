@@ -5,10 +5,7 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
-import {
-  isAnyEmissionsNeedsReview,
-  isShipWizardCompleted,
-} from '@requests/common/emp/subtasks/emissions/emissions.wizard';
+import { isShipWizardCompleted } from '@requests/common/emp/subtasks/emissions/emissions.wizard';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
 export const canActivateEmissionsShipSummary: CanActivateFn = (route) => {
@@ -16,11 +13,10 @@ export const canActivateEmissionsShipSummary: CanActivateFn = (route) => {
   const shipId = route.params['shipId'] ?? crypto.randomUUID();
   const ship = store.select(empCommonQuery.selectShip(shipId))();
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
-  const sectionsCompleted = store.select(empCommonQuery.selectEmpSectionsCompleted)();
 
   return (
     !isEditable ||
-    (isEditable && isShipWizardCompleted(ship) && !isAnyEmissionsNeedsReview(ship, sectionsCompleted)) ||
+    (isEditable && isShipWizardCompleted(ship)) ||
     createUrlTreeFromSnapshot(route, ['./', EmissionsWizardStep.BASIC_DETAILS])
   );
 };
@@ -75,22 +71,3 @@ export const canActivateEmissionsSummary: CanActivateFn = (route) => {
     createUrlTreeFromSnapshot(route, ['./', EmissionsWizardStep.LIST_OF_SHIPS])
   );
 };
-
-export const canActivateEmissionsShipStep =
-  (fallbackUrl = `../${EmissionsWizardStep.SUMMARY}`): CanActivateFn =>
-  (route) => {
-    const store = inject(RequestTaskStore);
-    const change = route.queryParamMap.get('change') === 'true';
-    const shipId = route.params['shipId'] ?? crypto.randomUUID();
-    const ship = store.select(empCommonQuery.selectShip(shipId))();
-    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
-    const sectionsCompleted = store.select(empCommonQuery.selectEmpSectionsCompleted)();
-
-    return (
-      !isEditable ||
-      !isShipWizardCompleted(ship) ||
-      isAnyEmissionsNeedsReview(ship, sectionsCompleted) ||
-      change ||
-      createUrlTreeFromSnapshot(route, [fallbackUrl])
-    );
-  };

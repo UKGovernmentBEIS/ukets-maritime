@@ -1,3 +1,12 @@
-<mrtm-wizard-step (formSubmit)="onSubmit()" [formGroup]="form" heading="Activate your account" [isTwoThirds]="true">
-  <mrtm-password />
-</mrtm-wizard-step>
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-one-half">
+    @if (isSummaryDisplayed | async) {
+      <govuk-error-summary [form]="form" />
+    }
+    <netz-page-heading>Activate your account</netz-page-heading>
+    <form (ngSubmit)="submitPassword()" [formGroup]="form">
+      <mrtm-password />
+      <button netzPendingButton govukButton type="submit">Submit</button>
+    </form>
+  </div>
+</div>

@@ -27,7 +27,6 @@ export enum AerPortsWizardStep {
   DELETE_PORT = 'delete',
   DELETE_FUEL_CONSUMPTION = AER_DELETE_FUEL_CONSUMPTION_STEP,
   DELETE_DIRECT_EMISSIONS = AER_DELETE_DIRECT_EMISSIONS_STEP,
-  NEW_PORT_CALL_SUMMARY = 'new-port-call-summary',
 }
 
 export const AER_PORT_PARAM = 'portId';

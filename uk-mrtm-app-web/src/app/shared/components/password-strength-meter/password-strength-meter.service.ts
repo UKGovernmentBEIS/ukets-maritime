@@ -1,5 +1,4 @@
 import { inject, Injectable } from '@angular/core';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 
 import { zxcvbn, zxcvbnOptions } from '@zxcvbn-ts/core';
 
@@ -8,14 +7,13 @@ import {
   ZXCVBN_CONFIG,
   ZxcvbnConfigType,
 } from '@shared/components/password-strength-meter/password-strength-meter.types';
-import { isEmpty } from '@shared/utils';
 import { translations } from '@zxcvbn-ts/language-en';
 
 export const DEFAULT_ZXVBN_CONFIG: ZxcvbnConfigType = {
   translations: translations,
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class PasswordStrengthMeterService {
   readonly options = inject<ZxcvbnConfigType>(ZXCVBN_CONFIG, { optional: true });
 
@@ -51,15 +49,5 @@ export class PasswordStrengthMeterService {
   scoreWithFeedback(password: string): FeedbackResult {
     const result = zxcvbn(password);
     return { score: result.score, feedback: result.feedback };
-  }
-
-  strongValidator(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (isEmpty(control?.value)) {
-        return null;
-      }
-
-      return this.score(control?.value) > 2 ? null : { weakPassword: 'Enter a strong password' };
-    };
   }
 }

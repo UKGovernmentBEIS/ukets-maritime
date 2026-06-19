@@ -52,8 +52,8 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
 
     @Test
     void findExecutedRequestActions_results_when_only_mandatory_parameters_applied() {
-        createRequestAccountView();
-        MrtmAccount acc1 = createAccount(1L, "account", "0000001");
+
+        MrtmAccount acc1 = createAccount(1L, "account", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, "0000001");
         RequestType requestType = createRequestType(MrtmRequestType.EMP_ISSUANCE);
         Request acc1Request = createRequest(acc1, "NEW1", RequestStatuses.COMPLETED, requestType);
         createRequestAction(acc1Request,
@@ -66,7 +66,7 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
                 "regulator");
         EmissionsMonitoringPlanEntity acc1Emp = createEmp(1L, "UK-W-AV-000001");
 
-        MrtmAccount acc2 = createAccount(2L, "account2", "0000002");
+        MrtmAccount acc2 = createAccount(2L, "account2", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.ENGLAND, "0000002");
         Request acc2Request = createRequest(acc2, "NEW2", RequestStatuses.IN_PROGRESS, requestType);
         createRequestAction(acc2Request,
                 MrtmRequestActionType.EMP_ISSUANCE_APPLICATION_SUBMITTED,
@@ -118,8 +118,7 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
 
     @Test
     void findExecutedRequestActions_results_when_all_parameters_applied() {
-        createRequestAccountView();
-        MrtmAccount acc1 = createAccount(1L, "account", "0000001");
+        MrtmAccount acc1 = createAccount(1L, "account", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, "0000001");
         RequestType requestType = createRequestType(MrtmRequestType.EMP_ISSUANCE);
         Request acc1Request = createRequest(acc1, "NEW1", RequestStatuses.COMPLETED, requestType);
         createRequestAction(acc1Request,
@@ -131,7 +130,7 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
                 LocalDateTime.of(2022, 1, 6, 15, 45),
                 "regulator");
 
-        MrtmAccount acc2 = createAccount(2L, "account2", "0000002");
+        MrtmAccount acc2 = createAccount(2L, "account2", MrtmAccountStatus.LIVE, CompetentAuthorityEnum.WALES, "0000002");
         Request acc2Request = createRequest(acc2, "NEW2", RequestStatuses.IN_PROGRESS, requestType);
         createRequestAction(acc2Request,
                 MrtmRequestActionType.EMP_ISSUANCE_APPLICATION_SUBMITTED,
@@ -158,13 +157,14 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
     }
 
 
-    private MrtmAccount createAccount(Long id, String name, String imoNumber) {
+    private MrtmAccount createAccount(Long id, String name, MrtmAccountStatus status,
+                                      CompetentAuthorityEnum competentAuthority, String imoNumber) {
 
         MrtmAccount account = MrtmAccount.builder()
                 .id(id)
                 .name(name)
-                .status(MrtmAccountStatus.LIVE)
-                .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+                .status(status)
+                .competentAuthority(competentAuthority)
                 .emissionTradingScheme(MrtmEmissionTradingScheme.UK_MARITIME_EMISSION_TRADING_SCHEME)
                 .firstMaritimeActivityDate(LocalDate.of(2022, 1, 1))
                 .businessId(String.valueOf(id))
@@ -237,33 +237,6 @@ class MaritimeExecutedRequestActionsRepositoryIT extends AbstractContainerBaseTe
         emp.setConsolidationNumber(1);
         entityManager.persist(emp);
         return emp;
-    }
-
-    private void createRequestAccountView() {
-        entityManager
-            .createNativeQuery("""
-                CREATE OR REPLACE VIEW request_account AS
-                SELECT
-                    r.id,
-                    r.type_id,
-                    r.status,
-                    r.creation_date,
-                    ca.resource_id AS competent_authority,
-                    acc.resource_id AS account_id,
-                    r.payload,
-                    r.submission_date,
-                    r.metadata,
-                    r.end_date
-                FROM request r
-                JOIN request_resource ca
-                  ON r.id = ca.request_id
-                 AND ca.resource_type = 'CA'
-                LEFT JOIN request_resource acc
-                  ON r.id = acc.request_id
-                 AND acc.resource_type = 'ACCOUNT'
-                WHERE ca.resource_id = 'ENGLAND'
-            """)
-            .executeUpdate();
     }
 
     private void flushAndClear() {

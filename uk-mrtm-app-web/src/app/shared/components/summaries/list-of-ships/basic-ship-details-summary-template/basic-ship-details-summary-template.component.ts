@@ -19,7 +19,6 @@ import {
   SHIP_ICE_CLASS_SELECT_ITEMS,
   SHIP_TYPE_SELECT_ITEMS,
 } from '@shared/constants';
-import { HtmlDiffDirective } from '@shared/directives';
 import { SelectOptionToTitlePipe } from '@shared/pipes';
 import { isNil } from '@shared/utils';
 
@@ -35,7 +34,6 @@ import { isNil } from '@shared/utils';
     RouterLink,
     SelectOptionToTitlePipe,
     GovukDatePipe,
-    HtmlDiffDirective,
   ],
   standalone: true,
   templateUrl: './basic-ship-details-summary-template.component.html',
@@ -47,8 +45,7 @@ export class BasicShipDetailsSummaryTemplateComponent {
   public readonly iceClassSelectItems = SHIP_ICE_CLASS_SELECT_ITEMS;
   public readonly reportingResponsibilitySelectItems = EMP_SHIP_REPORTING_RESPONSIBILITY_SELECT_ITEMS;
 
-  public readonly shipDetails = input.required<EmpShipEmissions['details'] | AerShipEmissions['details']>();
-  public readonly originalShipDetails = input<EmpShipEmissions['details'] | AerShipEmissions['details']>();
+  public readonly data = input.required<EmpShipEmissions['details'] | AerShipEmissions['details']>();
   public readonly changeLink = input<string>();
   public readonly isEditable = input<boolean>(false);
   public readonly queryParams = input<Params>({});

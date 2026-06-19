@@ -27,18 +27,6 @@ export const createVerificationBodyFormProvider: Provider = {
           ),
         ],
       }),
-      accreditationBodyName: new FormControl<VerificationBodyCreationDTO['accreditationBodyName'] | null>(
-        state?.accreditationBodyName,
-        {
-          validators: [
-            GovukValidators.required('Enter the name of the National Accreditation body'),
-            GovukValidators.maxLength(
-              255,
-              'Name of National Accreditation body should not be more than 255 characters',
-            ),
-          ],
-        },
-      ),
       accreditationReferenceNumber: new FormControl<VerificationBodyCreationDTO['accreditationReferenceNumber'] | null>(
         state?.accreditationReferenceNumber,
         {

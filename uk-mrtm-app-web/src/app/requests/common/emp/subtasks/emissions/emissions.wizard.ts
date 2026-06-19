@@ -8,8 +8,6 @@ import {
   ShipDetails,
 } from '@mrtm/api';
 
-import { EmpCommonTaskPayload, TaskItemStatus } from '@requests/common';
-import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { EmpFuelsAndEmissionsFactorsExtended } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.types';
 import { AllFuelOriginTypeName } from '@shared/types';
 import { isLNG, isNil } from '@shared/utils';
@@ -85,21 +83,6 @@ export const uncertaintyLevelValidator = (ship: EmpShipEmissions): boolean => {
   );
 
   return uncertaintyLevel?.length === monitoringMethodSet.size && uncertaintyLevelItemsValid;
-};
-
-export const isAnyEmissionsNeedsReview = (
-  ship: EmpShipEmissions,
-  sectionsCompleted: EmpCommonTaskPayload['empSectionsCompleted'],
-): boolean => {
-  for (const emission of ship?.emissionsSources ?? []) {
-    if (
-      sectionsCompleted?.[`${EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP}-${emission.uniqueIdentifier}`] ===
-      TaskItemStatus.NEEDS_REVIEW
-    ) {
-      return true;
-    }
-  }
-  return false;
 };
 
 export const measurementsValidator = (measurements: MeasurementDescription[]): boolean =>

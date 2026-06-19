@@ -11,6 +11,6 @@ describe('OperatorAccountsStatusColorPipe', () => {
     expect(pipe.transform('NEW')).toEqual('blue');
     expect(pipe.transform('LIVE')).toEqual('green');
     expect(pipe.transform('CLOSED')).toEqual('grey');
-    expect(pipe.transform('WITHDRAWN')).toEqual('orange');
+    expect(pipe.transform('WITHDRAWN')).toEqual('red');
   });
 });

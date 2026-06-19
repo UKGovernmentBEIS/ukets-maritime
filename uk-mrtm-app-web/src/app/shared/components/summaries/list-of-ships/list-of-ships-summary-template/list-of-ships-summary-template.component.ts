@@ -54,14 +54,12 @@ import { mergeDiffShips } from '@shared/utils';
 })
 export class ListOfShipsSummaryTemplateComponent extends PaginationStatePersistableComponent {
   hasHtmlDiff = inject(HTML_DIFF, { optional: true });
-
   readonly data = input.required<(ShipEmissionTableListItem | AerShipEmissionTableListItem)[]>();
   readonly originalShips = input<(ShipEmissionTableListItem | AerShipEmissionTableListItem)[]>();
   readonly editUrl = input<string>();
   readonly queryParams = input<Params>({});
   readonly dataSupplierName = input<string>();
   readonly withPagination = input<boolean>(true);
-
   readonly columns = computed(() => {
     return (
       this.data()
@@ -88,7 +86,6 @@ export class ListOfShipsSummaryTemplateComponent extends PaginationStatePersista
       this.pageSize(),
     );
   });
-  readonly needsReview = this.onDefineRowAdditionalStyle.bind(this);
 
   onPageChange(page: number): void {
     this.currentPage.set(page);
@@ -98,13 +95,5 @@ export class ListOfShipsSummaryTemplateComponent extends PaginationStatePersista
     return {
       currentSorting: this.sort(),
     };
-  }
-
-  onDefineRowAdditionalStyle(
-    item: DiffItem<ShipEmissionTableListItem | AerShipEmissionTableListItem>,
-  ): string | undefined {
-    return this.hasHtmlDiff && JSON.stringify(item?.previous?.source) !== JSON.stringify(item?.current?.source)
-      ? 'needs-review'
-      : undefined;
   }
 }

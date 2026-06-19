@@ -1,20 +1,19 @@
-@if (combinedFuelsEmissionSources()?.length > 0) {
+@if (data()?.length > 0) {
   <div class="govuk-grid-row">
     <h2 class="govuk-heading-m govuk-grid-column-two-thirds">Emissions sources and fuel types used</h2>
     @if (isEditable()) {
       <div class="govuk-grid-column-one-third govuk-!-text-align-right govuk-body">
-        <a govukLink class="govuk-link--no-visited-state" [routerLink]="changeLinkList()" [queryParams]="queryParams()">
+        <a govukLink [routerLink]="changeLinkList()" [queryParams]="queryParams()">
           Change
           <span class="govuk-visually-hidden">emissions sources and fuel types used</span>
         </a>
       </div>
     }
   </div>
-  @for (emission of combinedFuelsEmissionSources(); track $index) {
+  @for (emission of data(); track emission.uniqueIdentifier) {
     <mrtm-emission-sources-and-fuel-types-used-summary-template
-      [emissionSource]="emission?.current"
-      [originalEmissionSource]="emission?.previous"
       (delete)="onDeleteEmissionSource($event)"
+      [data]="emission"
       [changeLink]="changeLinkForm()"
       [index]="$index"
       [isEditable]="isEditable()" />

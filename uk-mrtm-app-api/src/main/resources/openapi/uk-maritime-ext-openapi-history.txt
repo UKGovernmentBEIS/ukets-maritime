@@ -1,20 +1,12 @@
 -----------------------------------------------------------------------------------
-MARITIME OpenApi file 	(08-05-2026) Version 4.0.0
------------------------------------------------------------------------------------
-- AER
-    1. Updated documentation
-- AER Verifier form
-    1. Updated documentation
-- EMP
-    1. Added new API to fetch approved EMP information
-    2. Updated documentation
-
------------------------------------------------------------------------------------
 MARITIME OpenApi file 	(06-04-2026) Version 3.0.2
 -----------------------------------------------------------------------------------
 
+- EMP
+- AER
 - AER Verifier form
     1. Updated documentation to explicitly specify nullable fields (except string data types)
+
 - EMP
 - AER
     1. Updated fuels documentation and validation messages to clearly explain when slipPercentage

@@ -1,76 +1,61 @@
-<h2 class="govuk-heading-m">Description of the measurement instruments involved</h2>
-@for (measurement of combinedMeasurements(); track measurement; let index = $index) {
-  <!-- eslint-disable @angular-eslint/template/elements-content -->
-  <h3
-    class="govuk-heading-s"
-    htmlDiff
-    [current]="measurement?.current ? `Measurement Device ${index + 1}` : undefined"
-    [previous]="measurement?.previous ? `Measurement Device ${index + 1}` : undefined"></h3>
-  <dl govuk-summary-list>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Name of measurement device</dt>
-      <dd
-        govukSummaryListRowValue
-        htmlDiff
-        [current]="measurement?.current?.name"
-        [previous]="measurement?.previous?.name"></dd>
-      @if (isEditable() && measurement?.current) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-            Change
-            <span class="govuk-visually-hidden">name of measurement device (Measurement Device {{ index + 1 }})</span>
-          </a>
-        </dd>
-      }
-    </div>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Technical description</dt>
-      <dd
-        govukSummaryListRowValue
-        class="pre-wrap"
-        htmlDiff
-        [current]="measurement?.current?.technicalDescription"
-        [previous]="measurement?.previous?.technicalDescription"></dd>
-      @if (isEditable() && measurement?.current) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-            Change
-            <span class="govuk-visually-hidden">technical description (Measurement Device {{ index + 1 }})</span>
-          </a>
-        </dd>
-      }
-    </div>
-    <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Emission source this device is used for</dt>
-      <dd govukSummaryListRowValue>
-        @if (
-          combinedEmissionSources(measurement?.current?.emissionSources, measurement?.previous?.emissionSources);
-          as sources
-        ) {
-          <ul class="govuk-list govuk-list--bullet">
-            @for (source of sources; track $index) {
-              <li htmlDiff [current]="source?.current" [previous]="source?.previous"></li>
-            }
-          </ul>
-        } @else {
-          <span [notProvided]="undefined"></span>
+@if (data()?.length) {
+  <h2 class="govuk-heading-m">Description of the measurement instruments involved</h2>
+  @for (measurement of data(); track measurement; let index = $index) {
+    <h3 class="govuk-heading-s">Measurement Device {{ index + 1 }}</h3>
+    <dl govuk-summary-list>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Name of measurement device</dt>
+        <dd govukSummaryListRowValue [notProvided]="measurement?.name"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">name of measurement device (Measurement Device {{ index + 1 }})</span>
+            </a>
+          </dd>
         }
-      </dd>
-      @if (isEditable() && measurement?.current) {
-        <dd govukSummaryListRowActions>
-          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-            Change
-            <span class="govuk-visually-hidden">
-              emission source this device is used for (Measurement Device {{ index + 1 }})
-            </span>
-          </a>
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Technical description</dt>
+        <dd govukSummaryListRowValue class="pre-wrap" [notProvided]="measurement?.technicalDescription"></dd>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">technical description (Measurement Device {{ index + 1 }})</span>
+            </a>
+          </dd>
+        }
+      </div>
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Emission source this device is used for</dt>
+        <dd govukSummaryListRowValue>
+          @if (measurement?.emissionSources?.length) {
+            <ul class="govuk-list govuk-list--bullet">
+              @for (source of measurement.emissionSources; track source) {
+                <li>{{ source }}</li>
+              }
+            </ul>
+          } @else {
+            <span [notProvided]="undefined"></span>
+          }
         </dd>
-      }
-    </div>
-  </dl>
-}
-@if (isEditable()) {
-  <p class="govuk-body">
-    <button (click)="handleAddAnother()" govukButton govukSecondaryButton type="button">Add another item</button>
-  </p>
+        @if (isEditable()) {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">
+                emission source this device is used for (Measurement Device {{ index + 1 }})
+              </span>
+            </a>
+          </dd>
+        }
+      </div>
+    </dl>
+  }
+  @if (isEditable()) {
+    <p class="govuk-body">
+      <button (click)="handleAddAnother()" govukButton govukSecondaryButton type="button">Add another item</button>
+    </p>
+  }
 }

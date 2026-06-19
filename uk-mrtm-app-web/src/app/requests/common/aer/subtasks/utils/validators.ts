@@ -99,7 +99,7 @@ export const sameReportingYearValidator =
     !control.valid ||
     isNil(control.value) ||
     !(control.value instanceof Date) ||
-    new Date(control.value).getFullYear() === reportingYear
+    new Date(control.value).getUTCFullYear() === reportingYear
       ? null
       : { incorrectReportingYear: `The date must be within the reporting period of ${reportingYear}` };
 

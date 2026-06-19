@@ -13,7 +13,6 @@ export class RequestStatusTagColorPipe implements PipeTransform {
     switch (status) {
       case 'CANCELLED':
       case 'CLOSED':
-      case 'EXEMPT':
         return 'grey';
 
       case 'COMPLETED':
@@ -21,12 +20,11 @@ export class RequestStatusTagColorPipe implements PipeTransform {
         return 'green';
 
       case 'IN_PROGRESS':
-        return 'teal';
+        return 'blue';
 
       case 'WITHDRAWN':
-        return 'orange';
-
       case 'REJECTED':
+      case 'EXEMPT':
         return 'red';
 
       case 'MIGRATED':

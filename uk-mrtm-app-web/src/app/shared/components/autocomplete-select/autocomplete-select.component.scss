@@ -79,7 +79,7 @@
   }
 
   &__option--odd {
-    background-color: govuk.govuk-colour("black", $variant: "tint-95");
+    background-color: govuk.govuk-colour('light-grey');
   }
 
   &__option--focused,
@@ -91,7 +91,7 @@
   }
 
   &__option--no-results {
-    background-color: govuk.govuk-colour("black", $variant: "tint-95");
+    background-color: govuk.govuk-colour('light-grey');
     color: govuk.$govuk-secondary-text-colour;
     cursor: not-allowed;
   }

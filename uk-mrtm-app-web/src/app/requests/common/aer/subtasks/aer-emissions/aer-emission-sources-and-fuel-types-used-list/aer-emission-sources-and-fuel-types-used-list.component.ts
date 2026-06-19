@@ -88,8 +88,6 @@ export class AerEmissionSourcesAndFuelTypesUsedListComponent {
   onAddItem(): void {
     this.router.navigate(['../../' + AerEmissionsWizardStep.EMISSION_SOURCES_FORM, crypto.randomUUID()], {
       relativeTo: this.route,
-      queryParams: { change: true },
-      queryParamsHandling: 'merge',
     });
   }
 

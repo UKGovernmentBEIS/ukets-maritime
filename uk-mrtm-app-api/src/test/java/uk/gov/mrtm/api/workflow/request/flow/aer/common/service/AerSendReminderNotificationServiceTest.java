@@ -6,7 +6,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmNotificationTemplateWorkflowTaskType;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
@@ -16,14 +15,11 @@ import uk.gov.netz.api.workflow.request.flow.common.service.RequestAccountContac
 import uk.gov.netz.api.workflow.request.flow.common.service.RequestExpirationReminderService;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.NotificationTemplateExpirationReminderParams;
 
-import java.time.Year;
 import java.util.Date;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThatCode;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -99,49 +95,5 @@ class AerSendReminderNotificationServiceTest {
             .getRequestAccountPrimaryContact(request);
         verify(requestExpirationReminderService, times(1))
             .sendExpirationReminderNotification(requestId, params);
-    }
-
-    @Test
-    void sendFirstReminderNotification_logs_and_skips_when_primary_contact_missing() {
-        final String requestId = "AEM-001";
-        final Date deadline = new Date();
-        final Request request = Request.builder()
-            .id(requestId)
-            .metadata(AerRequestMetadata.builder().year(Year.now()).build())
-            .build();
-
-        when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
-            .thenReturn(Optional.empty());
-
-        assertThatCode(() -> service.sendFirstReminderNotification(requestId, deadline))
-            .doesNotThrowAnyException();
-
-        verify(requestService, times(1)).findRequestById(requestId);
-        verify(requestAccountContactQueryService, times(1))
-            .getRequestAccountPrimaryContact(request);
-        verifyNoInteractions(requestExpirationReminderService);
-    }
-
-    @Test
-    void sendSecondReminderNotification_logs_and_skips_when_primary_contact_missing() {
-        final String requestId = "AEM-001";
-        final Date deadline = new Date();
-        final Request request = Request.builder()
-            .id(requestId)
-            .metadata(AerRequestMetadata.builder().year(Year.now()).build())
-            .build();
-
-        when(requestService.findRequestById(requestId)).thenReturn(request);
-        when(requestAccountContactQueryService.getRequestAccountPrimaryContact(request))
-            .thenReturn(Optional.empty());
-
-        assertThatCode(() -> service.sendSecondReminderNotification(requestId, deadline))
-            .doesNotThrowAnyException();
-
-        verify(requestService, times(1)).findRequestById(requestId);
-        verify(requestAccountContactQueryService, times(1))
-            .getRequestAccountPrimaryContact(request);
-        verifyNoInteractions(requestExpirationReminderService);
     }
 }

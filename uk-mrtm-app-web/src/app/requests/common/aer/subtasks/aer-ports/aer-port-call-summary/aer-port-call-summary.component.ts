@@ -13,7 +13,6 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AerPortsWizardStep } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
@@ -44,7 +43,6 @@ export class AerPortCallSummaryComponent {
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService);
 
-  public readonly isAddNewPortCall = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   public readonly portId: InputSignal<string> = input<string>();
   public readonly wizardMap = aerPortsMap;
   public readonly form = new UntypedFormGroup({});
@@ -79,12 +77,7 @@ export class AerPortCallSummaryComponent {
     }
 
     this.taskService
-      .saveSubtask(
-        AER_PORTS_SUB_TASK,
-        this.isAddNewPortCall ? AerPortsWizardStep.NEW_PORT_CALL_SUMMARY : AerPortsWizardStep.PORT_CALL_SUMMARY,
-        this.activatedRoute,
-        this.portId(),
-      )
+      .saveSubtask(AER_PORTS_SUB_TASK, AerPortsWizardStep.PORT_CALL_SUMMARY, this.activatedRoute, this.portId())
       .pipe(take(1))
       .subscribe();
   }

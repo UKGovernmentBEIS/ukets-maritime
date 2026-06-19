@@ -16,7 +16,7 @@ export class OperatorAccountsStatusColorPipe implements PipeTransform {
       case 'LIVE':
         return 'green';
       case 'WITHDRAWN':
-        return 'orange';
+        return 'red';
       default:
         return 'grey';
     }

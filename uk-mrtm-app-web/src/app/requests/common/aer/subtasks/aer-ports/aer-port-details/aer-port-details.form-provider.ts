@@ -16,7 +16,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-ports/aer-port-details/aer-port-details.types';
 import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { convertToUTCDate, isNil, mergeDatesToDate } from '@shared/utils';
+import { isNil, mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherPortCall =
   (
@@ -100,22 +100,20 @@ export const aerPortDetailsFormProvider: Provider = {
         port: formBuilder.control<AerPortDetailsModel['port'] | null>(port?.portDetails?.visit?.port, {
           validators: [GovukValidators.required('Enter a port')],
         }),
-        arrivalDate: formBuilder.control<AerPortDetailsModel['arrivalDate'] | Date | null>(
-          !isNil(port?.portDetails?.arrivalTime) ? convertToUTCDate(new Date(port?.portDetails?.arrivalTime)) : null,
+        arrivalDate: formBuilder.control<AerPortDetailsModel['arrivalDate'] | null>(
+          !isNil(port?.portDetails?.arrivalTime) ? new Date(port?.portDetails?.arrivalTime) : null,
           {
             validators: [GovukValidators.required('Enter date of arrival'), sameReportingYearValidator(+reportingYear)],
           },
         ),
-        arrivalTime: formBuilder.control<AerPortDetailsModel['arrivalDate'] | Date | null>(
+        arrivalTime: formBuilder.control<AerPortDetailsModel['arrivalDate'] | null>(
           !isNil(port?.portDetails?.arrivalTime) ? new Date(port?.portDetails?.arrivalTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of arrival')],
           },
         ),
-        departureDate: formBuilder.control<AerPortDetailsModel['departureTime'] | Date | null>(
-          !isNil(port?.portDetails?.departureTime)
-            ? convertToUTCDate(new Date(port?.portDetails?.departureTime))
-            : null,
+        departureDate: formBuilder.control<AerPortDetailsModel['departureTime'] | null>(
+          !isNil(port?.portDetails?.departureTime) ? new Date(port?.portDetails?.departureTime) : null,
           {
             validators: [
               GovukValidators.required('Enter date of departure'),
@@ -123,7 +121,7 @@ export const aerPortDetailsFormProvider: Provider = {
             ],
           },
         ),
-        departureTime: formBuilder.control<AerPortDetailsModel['departureTime'] | Date | null>(
+        departureTime: formBuilder.control<AerPortDetailsModel['departureTime'] | null>(
           !isNil(port?.portDetails?.departureTime) ? new Date(port?.portDetails?.departureTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of departure')],

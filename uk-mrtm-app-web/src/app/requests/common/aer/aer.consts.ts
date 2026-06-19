@@ -22,9 +22,6 @@ export const AER_FUEL_CONSUMPTION_STEP = 'fuel-consumption';
 export const AER_DELETE_FUEL_CONSUMPTION_STEP = 'delete-fuel-consumption';
 
 export const AER_SUBTASK: InjectionToken<string> = new InjectionToken<string>('Aer subtask');
-export const AER_SUBTASK_NEW_ENTRY_FLOW: InjectionToken<boolean> = new InjectionToken<boolean>(
-  'Aer subtask new entry flow',
-);
 export const AER_OBJECT_ROUTE_KEY: InjectionToken<string> = new InjectionToken<string>('Aer object route key');
 export const AER_RELATED_SHIP_SELECTOR = new InjectionToken<
   (objectId: (AerPort | AerVoyage)['uniqueIdentifier']) => StateSelector<RequestTaskState, AerShipEmissions>

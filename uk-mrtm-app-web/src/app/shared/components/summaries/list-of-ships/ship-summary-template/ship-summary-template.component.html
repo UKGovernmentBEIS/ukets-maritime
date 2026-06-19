@@ -1,48 +1,40 @@
 <mrtm-basic-ship-details-summary-template
-  [shipDetails]="shipEmissions()?.details"
-  [originalShipDetails]="originalShipEmissions()?.details"
   [changeLink]="changeLinks()?.['details']?.link"
+  [data]="data().details"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['details']?.queryParams" />
 <mrtm-fuels-and-emission-factors-list-summary-template
-  [fuelsEmissionsFactors]="shipEmissions()?.fuelsAndEmissionsFactors"
-  [originalFuelsEmissionsFactors]="originalShipEmissions()?.fuelsAndEmissionsFactors"
   (delete)="onDeleteFuelsAndEmissionsFactor($event)"
   [changeLinkForm]="changeLinks()?.['fuelsAndEmissionsFactors']?.link"
   [changeLinkList]="changeLinks()?.['fuelsAndEmissionsFactorsList']?.link"
+  [data]="data().fuelsAndEmissionsFactors"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['fuelsAndEmissionsFactors']?.queryParams" />
 <mrtm-emissions-sources-and-fuel-types-used-list-summary-template
-  [emissionSources]="shipEmissions()?.emissionsSources"
-  [originalEmissionSources]="originalShipEmissions()?.emissionsSources"
   (delete)="onDeleteEmissionSource($event)"
   [changeLinkForm]="changeLinks()?.['emissionsSources']?.link"
   [changeLinkList]="changeLinks()?.['emissionsSourcesList']?.link"
+  [data]="data().emissionsSources"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['emissionsSources']?.queryParams" />
 <mrtm-uncertainty-level-summary-template
-  [uncertaintyLevels]="shipEmissions()?.uncertaintyLevel"
-  [originalUncertaintyLevels]="originalShipEmissions()?.uncertaintyLevel"
   [changeLink]="changeLinks()?.['uncertaintyLevel']?.link"
+  [data]="data().uncertaintyLevel"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['uncertaintyLevel']?.queryParams" />
 <mrtm-measurements-summary-template
-  [measurements]="shipEmissions()?.measurements"
-  [originalMeasurements]="originalShipEmissions()?.measurements"
   [changeLink]="changeLinks()?.['measurements']?.link"
+  [data]="data().measurements"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['measurements']?.queryParams" />
 <mrtm-carbon-capture-summary-template
-  [carbonCapture]="shipEmissions()?.carbonCapture"
-  [originalCarbonCapture]="originalShipEmissions()?.carbonCapture"
   [changeLink]="changeLinks()?.['carbonCapture']?.link"
+  [data]="data().carbonCapture"
   [files]="carbonCaptureFiles()"
-  [originalFiles]="originalCarbonCaptureFiles()"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['carbonCapture']?.queryParams" />
 <mrtm-exemption-conditions-summary-template
-  [exemptionConditions]="shipEmissions()?.exemptionConditions"
-  [originalExemptionConditions]="originalShipEmissions()?.exemptionConditions"
   [changeLink]="changeLinks()?.['exemptionConditions']?.link"
+  [data]="data().exemptionConditions"
   [isEditable]="isEditable()"
   [queryParams]="changeLinks()?.['exemptionConditions']?.queryParams" />

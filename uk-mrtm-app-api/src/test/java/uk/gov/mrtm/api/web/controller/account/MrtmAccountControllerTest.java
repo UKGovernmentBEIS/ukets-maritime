@@ -18,7 +18,6 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountDTO;
-import uk.gov.mrtm.api.account.domain.dto.MrtmAccountInfoDTO;
 import uk.gov.mrtm.api.account.service.MrtmAccountCreateService;
 import uk.gov.mrtm.api.account.service.MrtmAccountQueryService;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
@@ -44,7 +43,6 @@ import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
@@ -61,7 +59,6 @@ class MrtmAccountControllerTest {
 
     private static final String CONTROLLER_PATH = "/v1.0/mrtm/accounts";
     private static final String IMO_NUMBER_CONTROLLER_PATH = "/imo-number/";
-    private static final String INFO_CONTROLLER_PATH = "/info";
 
     private static final String ACCOUNT_NAME = "accountName";
     private static final String IMO_NUMBER = "0000000";
@@ -273,45 +270,6 @@ class MrtmAccountControllerTest {
                         .param("size", String.valueOf(criteria.getPaging().getPageSize()))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
-
-        verifyNoInteractions(mrtmAccountQueryService);
-    }
-
-    @Test
-    void getMrtmAccountsInfoByUser() throws Exception {
-        final AppUser user = AppUser.builder().userId("userId").build();
-
-        final List<MrtmAccountInfoDTO> results = List.of(
-            new MrtmAccountInfoDTO(1L, "account1", "EM00009")
-        );
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        when(mrtmAccountQueryService.getMrtmAccountsInfoByUser(user)).thenReturn(results);
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get(CONTROLLER_PATH + INFO_CONTROLLER_PATH)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.[0].id").value(1L))
-            .andExpect(jsonPath("$.[0].name").value("account1"))
-            .andExpect(jsonPath("$.[0].businessId").value("EM00009"));
-
-        verify(mrtmAccountQueryService).getMrtmAccountsInfoByUser(user);
-    }
-
-    @Test
-    void getMrtmAccountsInfoByUser_forbidden() throws Exception {
-        final AppUser user = AppUser.builder().userId("userId").build();
-
-        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
-        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(roleAuthorizationService)
-            .evaluate(user, new String[]{OPERATOR, REGULATOR, VERIFIER});
-
-        mockMvc.perform(MockMvcRequestBuilders
-                .get(CONTROLLER_PATH + INFO_CONTROLLER_PATH)
-                .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isForbidden());
 
         verifyNoInteractions(mrtmAccountQueryService);
     }

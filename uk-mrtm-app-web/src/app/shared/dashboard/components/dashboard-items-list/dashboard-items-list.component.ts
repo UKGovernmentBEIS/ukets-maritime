@@ -30,7 +30,6 @@ import { ScrollablePaneDirective } from '@shared/directives';
 })
 export class DashboardItemsListComponent {
   readonly items = input<MrtmItemDTO[]>();
-  readonly emptyTableText = input<string>('No tasks found');
   readonly tableColumns = input<GovukTableColumn<MrtmItemDTO>[]>();
   readonly unassignedLabel = input<string>();
 

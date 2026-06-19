@@ -1,19 +1,27 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { combineLatest, filter, takeUntil, tap } from 'rxjs';
 
+import { PageHeadingComponent } from '@netz/common/components';
 import { DestroySubject } from '@netz/common/services';
-import { GovukValidators } from '@netz/govuk-components';
+import { ButtonDirective, ErrorSummaryComponent, GovukValidators } from '@netz/govuk-components';
 
 import { UserRegistrationStore } from '@registration/store/user-registration.store';
-import { UserInputComponent, WizardStepComponent } from '@shared/components';
+import { UserInputComponent } from '@shared/components';
 import { phoneInputWithCountyCodeSelectValidators } from '@shared/validators';
 
 @Component({
   selector: 'mrtm-contact-details',
-  imports: [ReactiveFormsModule, UserInputComponent, WizardStepComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    ErrorSummaryComponent,
+    PageHeadingComponent,
+    ButtonDirective,
+    UserInputComponent,
+  ],
   standalone: true,
   templateUrl: './contact-details.component.html',
   providers: [DestroySubject],
@@ -26,7 +34,8 @@ export class ContactDetailsComponent implements OnInit {
   private readonly fb = inject(UntypedFormBuilder);
   private readonly destroy$ = inject(DestroySubject);
 
-  protected readonly form: UntypedFormGroup = this.fb.group({
+  isSummaryDisplayed = false;
+  form: UntypedFormGroup = this.fb.group({
     firstName: [
       null,
       [
@@ -60,20 +69,24 @@ export class ContactDetailsComponent implements OnInit {
       .subscribe();
   }
 
-  onSubmit(): void {
-    const { ...model } = this.form.value;
-    this.store.setState({ ...this.store.getState(), userRegistrationDTO: model });
+  submitContactDetails(): void {
+    if (this.form.valid) {
+      const { ...model } = this.form.value;
+      this.store.setState({ ...this.store.getState(), userRegistrationDTO: model });
 
-    this.router.navigate(
-      [
-        this.store.getState().isSummarized ||
-        this.store.getState().invitationStatus === 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD'
-          ? '../summary'
-          : '../choose-password',
-      ],
-      {
-        relativeTo: this.route,
-      },
-    );
+      this.router.navigate(
+        [
+          this.store.getState().isSummarized ||
+          this.store.getState().invitationStatus === 'PENDING_TO_REGISTERED_SET_REGISTER_FORM_NO_PASSWORD'
+            ? '../summary'
+            : '../choose-password',
+        ],
+        {
+          relativeTo: this.route,
+        },
+      );
+    } else {
+      this.isSummaryDisplayed = true;
+    }
   }
 }

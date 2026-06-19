@@ -53,7 +53,7 @@ $moj-datepicker-mid-grey: #949494;
   &[aria-disabled="true"],
   &[aria-disabled="true"]:hover {
     color: govuk.$govuk-text-colour;
-    background-color: govuk.govuk-colour("black", $variant: "tint-95");
+    background-color: govuk.govuk-colour("light-grey");
     text-decoration: line-through;
     cursor: not-allowed;
   }

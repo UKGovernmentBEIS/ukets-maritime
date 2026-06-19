@@ -24,7 +24,6 @@ export class AerAggregatedDataFlowManager extends WizardFlowManager {
         return of(`../${AerAggregatedDataWizardStep.LIST_OF_AGGREGATED_DATA}`);
       case AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY:
         return of('../');
-      case AerAggregatedDataWizardStep.LIST_OF_AGGREGATED_DATA:
       default:
         return of('../../');
     }

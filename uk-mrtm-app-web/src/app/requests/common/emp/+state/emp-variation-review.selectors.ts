@@ -11,8 +11,6 @@ import {
   EmpMandate,
   EmpMonitoringGreenhouseGas,
   EmpOperatorDetails,
-  EmpShipEmissions,
-  ShipDetails,
 } from '@mrtm/api';
 
 import { createAggregateSelector, createDescendingSelector, RequestTaskState, StateSelector } from '@netz/common/store';
@@ -325,21 +323,8 @@ const selectOriginalListOfShips: StateSelector<RequestTaskState, ShipEmissionTab
       uniqueIdentifier: x.uniqueIdentifier,
       ...x.details,
       status: TaskItemStatus.COMPLETED,
-      source: { ...x, status: TaskItemStatus.COMPLETED },
     })),
   );
-
-const selectOriginalShip = (
-  shipId: EmpShipEmissions['uniqueIdentifier'],
-): StateSelector<RequestTaskState, EmpShipEmissions> =>
-  createDescendingSelector(selectOriginalEmissions, (emissions) =>
-    emissions?.ships?.find((ship) => ship.uniqueIdentifier === shipId),
-  );
-
-const selectOriginalShipDetails = (
-  shipId: EmpShipEmissions['uniqueIdentifier'],
-): StateSelector<RequestTaskState, ShipDetails> =>
-  createDescendingSelector(selectOriginalShip(shipId), (ship) => ship?.details);
 
 const selectOriginalEmissionSources: StateSelector<RequestTaskState, EmpEmissionSources> = createDescendingSelector(
   selectOriginalEmissionsMonitoringPlan,
@@ -432,8 +417,6 @@ export const empVariationReviewQuery = {
   selectAnySubtaskNeedsAmend,
   selectOriginalOperatorDetails,
   selectOriginalListOfShips,
-  selectOriginalShip,
-  selectOriginalShipDetails,
   selectOriginalEmissionSources,
   selectOriginalGreenhouseGas,
   selectOriginalDataGaps,

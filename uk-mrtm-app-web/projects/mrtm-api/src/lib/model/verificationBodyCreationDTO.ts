@@ -16,7 +16,6 @@ import { AdminVerifierUserInvitationDTO } from './adminVerifierUserInvitationDTO
 export interface VerificationBodyCreationDTO {
   name: string;
   accreditationReferenceNumber: string;
-  accreditationBodyName: string;
   address: AddressDTO;
   emissionTradingSchemes: Array<string>;
   adminVerifierUserInvitation: AdminVerifierUserInvitationDTO;

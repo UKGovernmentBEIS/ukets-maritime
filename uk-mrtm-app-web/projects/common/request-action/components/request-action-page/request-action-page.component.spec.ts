@@ -12,47 +12,47 @@ import { REQUEST_ACTION_PAGE_CONTENT } from '../../request-action.providers';
 import { RequestActionPageContentFactoryMap } from '../../request-action.types';
 import { RequestActionPageComponent } from './request-action-page.component';
 
+@Component({
+  standalone: true,
+  template: `
+    <h1>TEST CONTENT</h1>
+  `,
+})
+class MockContentComponent {}
+
+const sections = [
+  {
+    title: 'TEST_SECTION_1',
+    tasks: [{ link: '.', linkText: 'TEST_SUBTASK_1_1', status: 'COMPLETED' }],
+  },
+  {
+    title: 'TEST_SECTION_2',
+    tasks: [{ link: '.', linkText: 'TEST_SUBTASK_2_1', status: 'COMPLETED' }],
+  },
+];
+
+function getContent(type: 'component' | 'sections'): RequestActionPageContentFactoryMap {
+  return {
+    RFI_SUBMITTED: () => {
+      const store = inject(RequestActionStore);
+      const submitter = store.select(requestActionQuery.selectSubmitter)();
+      return {
+        header: `Original application submitted by ${submitter}`,
+        component: type === 'component' ? MockContentComponent : undefined,
+        sections: type === 'sections' ? sections : undefined,
+      };
+    },
+  };
+}
+
 describe('RequestActionComponent', () => {
   let component: RequestActionPageComponent;
   let fixture: ComponentFixture<RequestActionPageComponent>;
   let store: RequestActionStore;
   let page: Page;
 
-  const map: TaskStatusTagMap = { COMPLETED: { text: 'Completed', color: 'blue', style: 'fill' } };
+  const map: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
   const relatedPrintableItemsMap: RelatedPrintableItemsMap = {};
-
-  @Component({
-    standalone: true,
-    template: `
-      <h1>TEST CONTENT</h1>
-    `,
-  })
-  class MockContentComponent {}
-
-  const sections = [
-    {
-      title: 'TEST_SECTION_1',
-      tasks: [{ link: '.', linkText: 'TEST_SUBTASK_1_1', status: 'COMPLETED' }],
-    },
-    {
-      title: 'TEST_SECTION_2',
-      tasks: [{ link: '.', linkText: 'TEST_SUBTASK_2_1', status: 'COMPLETED' }],
-    },
-  ];
-
-  function getContent(type: 'component' | 'sections'): RequestActionPageContentFactoryMap {
-    return {
-      RFI_SUBMITTED: () => {
-        const store = inject(RequestActionStore);
-        const submitter = store.select(requestActionQuery.selectSubmitter)();
-        return {
-          header: `Original application submitted by ${submitter}`,
-          component: type === 'component' ? MockContentComponent : undefined,
-          sections: type === 'sections' ? sections : undefined,
-        };
-      },
-    };
-  }
 
   class Page extends BasePage<RequestActionPageComponent> {}
 

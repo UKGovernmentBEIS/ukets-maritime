@@ -1,12 +1,10 @@
 @if (data(); as ship) {
   <netz-page-heading>{{ ship?.details?.name }}</netz-page-heading>
   <mrtm-ship-summary-template
-    [shipEmissions]="ship"
-    [originalShipEmissions]="originalShipEmissions()"
+    [data]="ship"
     [isEditable]="isEditable"
     [changeLinks]="changeLinks"
-    [carbonCaptureFiles]="carbonCaptureFiles()"
-    [originalCarbonCaptureFiles]="originalCarbonCaptureFiles()"
+    [carbonCaptureFiles]="getCarbonCaptureFiles(ship?.carbonCapture?.technologies?.files)"
     (deleteEmissionsSource)="onDeleteEmissionSource($event)"
     (deleteFuelsAndEmissionsFactor)="onDeleteFuelsAndEmissions($event)" />
 

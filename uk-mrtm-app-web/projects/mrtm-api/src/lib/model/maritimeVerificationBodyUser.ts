@@ -15,8 +15,4 @@ export interface MaritimeVerificationBodyUser {
   Accreditation_reference_number?: string;
   User_role?: string;
   User_status?: string;
-  Name?: string;
-  Email?: string;
-  Telephone?: string;
-  Last_login?: string;
 }

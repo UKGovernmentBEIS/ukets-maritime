@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { take } from 'rxjs';
@@ -13,11 +13,12 @@ import { ButtonDirective } from '@netz/govuk-components';
 
 import { EMISSIONS_SUB_TASK } from '@requests/common/components/emissions/emissions.helpers';
 import { ReturnToShipsListTableComponent } from '@requests/common/components/emissions/return-to-ships-list-table';
-import { empCommonQuery, empVariationRegulatorQuery, empVariationReviewQuery } from '@requests/common/emp/+state';
+import { empCommonQuery } from '@requests/common/emp/+state';
 import { EmpTaskPayload } from '@requests/common/emp/emp.types';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { EMP_SHIP_SUMMARY_CHANGE_LINKS_MAP } from '@requests/common/emp/subtasks/emissions/ship-summary/ship-summary.consts';
 import { ShipSummaryTemplateComponent } from '@shared/components';
+import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-ship-summary',
@@ -45,18 +46,7 @@ export class ShipSummaryComponent {
     ? false
     : this.store.select(requestTaskQuery.selectIsEditable)();
   readonly data = this.store.select(empCommonQuery.selectShip(this.shipId));
-  readonly originalShipEmissions = this.store.select(empVariationReviewQuery.selectOriginalShip(this.shipId));
   readonly isShipCompleted = this.store.select(empCommonQuery.selectIsShipStatusCompleted(this.shipId));
-  readonly carbonCaptureFiles = computed(() =>
-    this.store.select(empCommonQuery.selectAttachedFiles(this.data()?.carbonCapture?.technologies?.files))(),
-  );
-  readonly originalCarbonCaptureFiles = computed(() =>
-    this.store.select(
-      empVariationRegulatorQuery.selectOriginalAttachedFiles(
-        this.originalShipEmissions()?.carbonCapture?.technologies?.files,
-      ),
-    )(),
-  );
 
   constructor() {
     if (this.route.snapshot.queryParams?.['change'] === 'true') {
@@ -87,5 +77,9 @@ export class ShipSummaryComponent {
       )
       .pipe(take(1))
       .subscribe();
+  }
+
+  getCarbonCaptureFiles(files: Array<string>): AttachedFile[] {
+    return this.store.select(empCommonQuery.selectAttachedFiles(files))();
   }
 }

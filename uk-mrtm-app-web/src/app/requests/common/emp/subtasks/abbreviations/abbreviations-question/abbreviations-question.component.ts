@@ -75,7 +75,7 @@ export class AbbreviationsQuestionComponent {
 
   addAbbrDefFormGroup() {
     if (this.form.valid && this.form.touched) {
-      this.wizardStepComponent().isSummaryDisplayed.update(() => false);
+      this.wizardStepComponent().isSummaryDisplayedSubject.next(false);
     }
     const abbreviationDefinitionsFormArray = this.abbrDefFormArray;
     abbreviationDefinitionsFormArray.push(addAbbreviationDefinitionGroup());

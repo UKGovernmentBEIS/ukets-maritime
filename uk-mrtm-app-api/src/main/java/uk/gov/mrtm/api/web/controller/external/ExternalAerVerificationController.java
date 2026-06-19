@@ -42,7 +42,7 @@ public class ExternalAerVerificationController {
     private final ExternalAerVerificationService externalAerVerificationService;
 
     @PutMapping(path = "/{company-imo-number}/aer/{year}/verification", consumes = MediaType.APPLICATION_JSON_VALUE)
-    @Operation(summary = "Saves or updates maritime annual emissions report verification data into the staging area. Data can be imported via the Maritime website. This endpoint will be available from 1 July 2026 in production environment")
+    @Operation(summary = "Saves or updates maritime annual emissions report verification data. This endpoint will be available from 1 July 2026 in production environment")
     @ApiResponse(responseCode = "204", description = NO_CONTENT)
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.EXTERNAL_SAVE_AER_VERIFICATION_BAD_REQUEST,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ExternalErrorResponse.class))})

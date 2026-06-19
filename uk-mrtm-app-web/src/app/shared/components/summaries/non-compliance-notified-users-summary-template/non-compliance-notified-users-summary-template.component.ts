@@ -27,5 +27,4 @@ import { UserInfoResolverPipe } from '@shared/pipes';
 export class NonComplianceNotifiedUsersSummaryTemplateComponent {
   readonly notifiedUsersInfo = input.required<{ [key: string]: RequestActionUserInfo }>();
   readonly notifiedUsersIds = computed(() => Object.keys(this.notifiedUsersInfo() ?? {}));
-  readonly externalContacts = input<Array<string>>([]);
 }

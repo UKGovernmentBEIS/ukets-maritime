@@ -90,7 +90,6 @@ const selectOriginalListOfShips: StateSelector<RequestTaskState, ShipEmissionTab
       uniqueIdentifier: x.uniqueIdentifier,
       ...x.details,
       status: TaskItemStatus.COMPLETED,
-      source: { ...x, status: TaskItemStatus.COMPLETED },
     })),
   );
 

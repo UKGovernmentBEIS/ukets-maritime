@@ -18,31 +18,14 @@ const selectShipBacklinkResolver = (
   return returnToSummary ? '../' : !isNil(voyageId) ? '../../' : '../';
 };
 
-const voyageDetailsBacklinkResolver = (
-  returnToSummary: boolean,
-  voyages: Array<AerVoyage>,
-  activatedRoute: ActivatedRouteSnapshot,
-  isNewEntry: boolean,
-): string => {
-  switch (true) {
-    case returnToSummary:
-      return '../';
-    case isNewEntry:
-      return `../${AerVoyagesWizardStep.SELECT_SHIP}`;
-    default:
-      return '../../';
-  }
+const voyageDetailsBacklinkResolver = (returnToSummary: boolean): string => {
+  return returnToSummary ? '../' : '../../';
 };
 
 const stepBacklinkResolvers: Partial<
   Record<
     AerVoyagesWizardStep,
-    (
-      returnToSummary: boolean,
-      voyages: Array<AerVoyage>,
-      activatedRoute: ActivatedRouteSnapshot,
-      isNewEntry: boolean,
-    ) => string
+    (returnToSummary: boolean, voyages: Array<AerVoyage>, activatedRoute: ActivatedRouteSnapshot) => string
   >
 > = {
   [AerVoyagesWizardStep.SELECT_SHIP]: selectShipBacklinkResolver,
@@ -53,7 +36,7 @@ const stepBacklinkResolvers: Partial<
 };
 
 export const aerVoyagesBacklinkResolver =
-  (step: AerVoyagesWizardStep, isNew: boolean = false): ResolveFn<any> =>
+  (step: AerVoyagesWizardStep): ResolveFn<any> =>
   (route: ActivatedRouteSnapshot) => {
     const isChange = route.queryParamMap.get('change') === 'true';
     const store = inject(RequestTaskStore);
@@ -61,5 +44,5 @@ export const aerVoyagesBacklinkResolver =
     const voyages = store.select(aerCommonQuery.selectVoyages)();
 
     const resolverFn = stepBacklinkResolvers[step];
-    return resolverFn ? resolverFn(isChange || !isEditable, voyages, route, isNew) : '/';
+    return resolverFn ? resolverFn(isChange || !isEditable, voyages, route) : '/';
   };

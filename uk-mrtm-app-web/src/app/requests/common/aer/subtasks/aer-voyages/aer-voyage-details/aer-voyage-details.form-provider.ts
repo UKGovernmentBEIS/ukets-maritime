@@ -20,7 +20,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyage-details/aer-voyage-details.types';
 import { arrivalDepartureDateValidator, sameReportingYearValidator } from '@requests/common/aer/subtasks/utils';
 import { TASK_FORM } from '@requests/common/task-form.token';
-import { convertToUTCDate, isNil, mergeDatesToDate } from '@shared/utils';
+import { isNil, mergeDatesToDate } from '@shared/utils';
 
 const arrivalDepartureDateTimeOverlapOtherVoyage =
   (
@@ -122,20 +122,20 @@ export const aerVoyageDetailsFormProvider: Provider = {
             validators: [GovukValidators.required('Enter an arrival port')],
           },
         ),
-        arrivalDate: formBuilder.control<AerVoyageDetailsFormModel['arrivalDate'] | Date | null>(
-          !isNil(voyageDetails?.arrivalTime) ? convertToUTCDate(new Date(voyageDetails?.arrivalTime)) : null,
+        arrivalDate: formBuilder.control<AerVoyageDetailsFormModel['arrivalDate'] | null>(
+          !isNil(voyageDetails?.arrivalTime) ? new Date(voyageDetails?.arrivalTime) : null,
           {
             validators: [GovukValidators.required('Enter date of arrival'), sameReportingYearValidator(+reportingYear)],
           },
         ),
-        arrivalTime: formBuilder.control<AerVoyageDetailsFormModel['arrivalDate'] | Date | null>(
+        arrivalTime: formBuilder.control<AerVoyageDetailsFormModel['arrivalDate'] | null>(
           !isNil(voyageDetails?.arrivalTime) ? new Date(voyageDetails?.arrivalTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of arrival')],
           },
         ),
-        departureDate: formBuilder.control<AerVoyageDetailsFormModel['departureTime'] | Date | null>(
-          !isNil(voyageDetails?.departureTime) ? convertToUTCDate(new Date(voyageDetails?.departureTime)) : null,
+        departureDate: formBuilder.control<AerVoyageDetailsFormModel['departureTime'] | null>(
+          !isNil(voyageDetails?.departureTime) ? new Date(voyageDetails?.departureTime) : null,
           {
             validators: [
               GovukValidators.required('Enter date of departure'),
@@ -143,7 +143,7 @@ export const aerVoyageDetailsFormProvider: Provider = {
             ],
           },
         ),
-        departureTime: formBuilder.control<AerVoyageDetailsFormModel['departureTime'] | Date | null>(
+        departureTime: formBuilder.control<AerVoyageDetailsFormModel['departureTime'] | null>(
           !isNil(voyageDetails?.departureTime) ? new Date(voyageDetails?.departureTime) : null,
           {
             validators: [GovukValidators.required('Enter actual time of departure')],

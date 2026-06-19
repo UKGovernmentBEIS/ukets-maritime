@@ -11,10 +11,10 @@ import { DestroySubject } from '@netz/common/services';
 import {
   FooterComponent,
   HeaderActionsListComponent,
-  HeaderLegacyComponent,
+  HeaderComponent,
+  HeaderNavListComponent,
   LinkDirective,
   MetaInfoComponent,
-  NavListLegacyComponent,
   SkipLinkComponent,
 } from '@netz/govuk-components';
 
@@ -39,11 +39,11 @@ interface Permissions {
   selector: 'mrtm-root',
   imports: [
     CookiesContainerComponent,
-    HeaderLegacyComponent,
+    HeaderComponent,
     SkipLinkComponent,
     HeaderActionsListComponent,
     RouterLink,
-    NavListLegacyComponent,
+    HeaderNavListComponent,
     LinkDirective,
     PhaseBarComponent,
     BreadcrumbsComponent,

@@ -13,23 +13,21 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
-import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.authorization.rules.services.AppUserAuthorizationService;
 import uk.gov.netz.api.authorization.rules.services.RoleAuthorizationService;
-import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.domain.PagingRequest;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.exception.ErrorCode;
+import uk.gov.mrtm.api.web.config.AppUserArgumentResolver;
+import uk.gov.mrtm.api.web.controller.exception.ExceptionControllerAdvice;
 import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.netz.api.security.AuthorizedRoleAspect;
-import uk.gov.netz.api.workflow.request.application.item.domain.ItemOrderBy;
 import uk.gov.netz.api.workflow.request.application.item.domain.dto.ItemDTOResponse;
-import uk.gov.netz.api.workflow.request.application.item.domain.dto.ItemSearchCriteriaDTO;
 import uk.gov.netz.api.workflow.request.application.item.service.ItemUnassignedRegulatorService;
 import uk.gov.netz.api.workflow.request.application.item.service.ItemUnassignedService;
 
@@ -103,17 +101,17 @@ class ItemUnassignedControllerTest {
         ItemDTOResponse itemDTOResponse = ItemDTOResponse.builder().totalItems(1L).build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(itemUnassignedRegulatorService.getUnassignedItems(appUser, PAGING, getItemSearchCriteria()))
+        when(itemUnassignedRegulatorService.getUnassignedItems(appUser, PAGING))
                 .thenReturn(itemDTOResponse);
         when(itemUnassignedRegulatorService.getRoleType()).thenReturn(RoleTypeConstants.REGULATOR);
 
         mockMvc.perform(MockMvcRequestBuilders
-                .get(BASE_PATH + "/" + UNASSIGNED + "?page=0&size=10&requestType=REQUEST_TYPE&searchTerm=searchTerm")
+                .get(BASE_PATH + "/" + UNASSIGNED + "?page=0&size=10")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
 
         verify(itemUnassignedRegulatorService, times(1))
-                .getUnassignedItems(appUser, PAGING, getItemSearchCriteria());
+                .getUnassignedItems(appUser, PAGING);
     }
 
     @Test
@@ -127,11 +125,11 @@ class ItemUnassignedControllerTest {
 
 
         mockMvc.perform(MockMvcRequestBuilders
-            .get(BASE_PATH + "/" + UNASSIGNED + "?page=0&size=10&requestType=REQUEST_TYPE")
+            .get(BASE_PATH + "/" + UNASSIGNED + "?page=0&size=10")
             .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isForbidden());
 
-        verify(itemUnassignedRegulatorService, never()).getUnassignedItems(any(), any(PagingRequest.class), any());
+        verify(itemUnassignedRegulatorService, never()).getUnassignedItems(any(), any(PagingRequest.class));
     }
 
     private AppUser buildMockappUser(String roleType) {
@@ -144,9 +142,5 @@ class ItemUnassignedControllerTest {
             .authorities(List.of(appAuthority))
             .roleType(roleType)
             .build();
-    }
-
-    private ItemSearchCriteriaDTO getItemSearchCriteria() {
-        return ItemSearchCriteriaDTO.builder().orderBy(ItemOrderBy.NEWEST_FIRST).requestType("REQUEST_TYPE").searchTerm("searchTerm").build();
     }
 }

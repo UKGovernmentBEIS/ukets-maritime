@@ -8,9 +8,7 @@ describe('StatusTagColorPipe', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      providers: [
-        { provide: TASK_STATUS_TAG_MAP, useValue: { COMPLETED: { text: 'Completed', color: 'blue', style: 'fill' } } },
-      ],
+      providers: [{ provide: TASK_STATUS_TAG_MAP, useValue: { COMPLETED: { text: 'COMPLETED', color: 'blue' } } }],
     }).compileComponents();
 
     TestBed.runInInjectionContext(() => {

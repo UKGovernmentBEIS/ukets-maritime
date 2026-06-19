@@ -13,7 +13,6 @@ import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import {
   AER_VOYAGES_SUB_TASK,
@@ -46,7 +45,6 @@ export class AerVoyageEmissionSummaryComponent {
   private readonly taskService: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly notificationBannerStore: NotificationBannerStore = inject(NotificationBannerStore);
 
-  readonly isAddNewVoyage = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   readonly form = new UntypedFormGroup({});
   readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   readonly voyageId: InputSignal<string> = input<string>();
@@ -86,9 +84,7 @@ export class AerVoyageEmissionSummaryComponent {
     this.taskService
       .saveSubtask(
         AER_VOYAGES_SUB_TASK,
-        this.isAddNewVoyage
-          ? AerVoyagesWizardStep.NEW_FUEL_EMISSIONS_SUMMARY
-          : AerVoyagesWizardStep.FUEL_EMISSIONS_SUMMARY,
+        AerVoyagesWizardStep.FUEL_EMISSIONS_SUMMARY,
         this.activatedRoute,
         this.voyageId(),
       )

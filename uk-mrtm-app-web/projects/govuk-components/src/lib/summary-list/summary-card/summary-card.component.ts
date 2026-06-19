@@ -8,7 +8,7 @@ import { ChangeDetectionStrategy, Component, contentChild, input, TemplateRef } 
   standalone: true,
   template: `
     <div class="govuk-summary-card__title-wrapper">
-      <h2 class="govuk-summary-card__title" [innerHTML]="title()"></h2>
+      <h2 class="govuk-summary-card__title">{{ title() }}</h2>
       @if (this.actions(); as actions) {
         <ul class="govuk-summary-card__actions">
           <ng-container [ngTemplateOutlet]="actions" />

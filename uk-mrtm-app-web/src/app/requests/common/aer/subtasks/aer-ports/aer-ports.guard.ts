@@ -44,7 +44,6 @@ export const canActivateListOfPorts: CanActivateFn = (route: ActivatedRouteSnaps
 
 export const canActivatePortDetails: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const portId = route?.params?.portId;
-
   if (!portId) {
     return false;
   }
@@ -64,14 +63,10 @@ export const canActivatePortEmissions: CanActivateFn = (route: ActivatedRouteSna
   if (!portId) {
     return false;
   }
-  const change = route.queryParamMap.get('change') === 'true';
-  const store = inject(RequestTaskStore);
-  const port = store.select(aerCommonQuery.selectPort(portId))();
-  const isPortCompleted = isPortWizardCompleted(port);
 
-  if (isPortCompleted && !change) {
-    return createUrlTreeFromSnapshot(route, ['../']);
-  }
+  const store = inject(RequestTaskStore);
+
+  const port = store.select(aerCommonQuery.selectPort(portId))();
 
   return (
     aerPortStepsCompletedMap.portDetails(port) ||

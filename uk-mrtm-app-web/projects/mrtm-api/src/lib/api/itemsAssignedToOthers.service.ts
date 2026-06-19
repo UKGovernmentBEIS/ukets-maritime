@@ -24,7 +24,6 @@ import { Observable } from 'rxjs';
 import { Configuration } from '../configuration';
 import { CustomHttpParameterCodec } from '../encoder';
 import { ItemDTOResponse } from '../model/itemDTOResponse';
-import { ItemSearchCriteriaDTO } from '../model/itemSearchCriteriaDTO';
 import { BASE_PATH } from '../variables';
 
 @Injectable({
@@ -98,14 +97,12 @@ export class ItemsAssignedToOthersService {
    * Retrieves the items assigned to users different than the logged-in user of the same role type who participate in the same accounts
    * @param page The page number starting from zero
    * @param size The page size
-   * @param searchCriteria The task search criteria
    * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
    * @param reportProgress flag to report request and response progress.
    */
   public getAssignedToOthersItems(
     page: number,
     size: number,
-    searchCriteria: ItemSearchCriteriaDTO,
     observe?: 'body',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
@@ -113,7 +110,6 @@ export class ItemsAssignedToOthersService {
   public getAssignedToOthersItems(
     page: number,
     size: number,
-    searchCriteria: ItemSearchCriteriaDTO,
     observe?: 'response',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
@@ -121,7 +117,6 @@ export class ItemsAssignedToOthersService {
   public getAssignedToOthersItems(
     page: number,
     size: number,
-    searchCriteria: ItemSearchCriteriaDTO,
     observe?: 'events',
     reportProgress?: boolean,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
@@ -129,7 +124,6 @@ export class ItemsAssignedToOthersService {
   public getAssignedToOthersItems(
     page: number,
     size: number,
-    searchCriteria: ItemSearchCriteriaDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
     options?: { httpHeaderAccept?: 'application/json'; context?: HttpContext; transferCache?: boolean },
@@ -140,9 +134,6 @@ export class ItemsAssignedToOthersService {
     if (size === null || size === undefined) {
       throw new Error('Required parameter size was null or undefined when calling getAssignedToOthersItems.');
     }
-    if (searchCriteria === null || searchCriteria === undefined) {
-      throw new Error('Required parameter searchCriteria was null or undefined when calling getAssignedToOthersItems.');
-    }
 
     let localVarQueryParameters = new HttpParams({ encoder: this.encoder });
     if (page !== undefined && page !== null) {
@@ -150,9 +141,6 @@ export class ItemsAssignedToOthersService {
     }
     if (size !== undefined && size !== null) {
       localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>size, 'size');
-    }
-    if (searchCriteria !== undefined && searchCriteria !== null) {
-      localVarQueryParameters = this.addToHttpParams(localVarQueryParameters, <any>searchCriteria, 'searchCriteria');
     }
 
     let localVarHeaders = this.defaultHeaders;

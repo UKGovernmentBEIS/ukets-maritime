@@ -4,14 +4,12 @@ import { backlinkResolver } from '@requests/common';
 import { deleteShipsGuard } from '@requests/common/components/emissions/delete-ships/';
 import {
   canActivateEmissionsDecision,
-  canActivateEmissionsShipStep,
   canActivateEmissionsShipSummary,
   canActivateEmissionsSummary,
 } from '@requests/common/emp/subtasks/emissions/emissions.guard';
 import { EmissionsWizardStep } from '@requests/common/emp/subtasks/emissions/emissions.helpers';
 import { emissionsBacklinkResolver } from '@requests/common/emp/subtasks/emissions/emissions-backlink.resolver';
 import { emissionShipSubtasksMap, emissionsSubTasksMap } from '@requests/common/emp/subtasks/subtask-list.map';
-import { HTML_DIFF } from '@shared/directives';
 
 export const EMISSIONS_ROUTES: Routes = [
   {
@@ -56,7 +54,7 @@ export const EMISSIONS_ROUTES: Routes = [
     data: { breadcrumb: false },
     canActivate: [deleteShipsGuard],
     loadComponent: () =>
-      import('@requests/common/components/emissions/delete-ships').then((c) => c.DeleteShipsComponent),
+      import('@requests/common/components/emissions/delete-ships/').then((c) => c.DeleteShipsComponent),
   },
   {
     path: 'ships/:shipId',
@@ -75,7 +73,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.details.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.BASIC_DETAILS) },
-        canActivate: [canActivateEmissionsShipStep()],
         loadComponent: () =>
           import('@requests/common/components/emissions/basic-ship-details').then((c) => c.BasicShipDetailsComponent),
       },
@@ -84,8 +81,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.fuelsAndEmissionsFactors.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.FUELS_AND_EMISSIONS_LIST) },
-        canActivate: [canActivateEmissionsShipStep()],
-        providers: [{ provide: HTML_DIFF, useValue: false }],
         loadComponent: () =>
           import('@requests/common/emp/subtasks/emissions/fuels-and-emission-factors-list').then(
             (c) => c.FuelsAndEmissionFactorsListComponent,
@@ -106,8 +101,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.emissionsSources.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.EMISSION_SOURCES_LIST) },
-        canActivate: [canActivateEmissionsShipStep()],
-        providers: [{ provide: HTML_DIFF, useValue: false }],
         loadComponent: () =>
           import('@requests/common/emp/subtasks/emissions/emission-sources-and-fuel-types-used-list').then(
             (c) => c.EmissionSourcesAndFuelTypesUsedListComponent,
@@ -119,7 +112,7 @@ export const EMISSIONS_ROUTES: Routes = [
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.EMISSION_SOURCES_FORM) },
         loadComponent: () =>
-          import('@requests/common/components/emissions/emission-sources-and-fuel-types-used-form').then(
+          import('@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/').then(
             (c) => c.EmissionSourcesAndFuelTypesUsedFormComponent,
           ),
       },
@@ -128,7 +121,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.uncertaintyLevel.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.UNCERTAINTY_LEVEL) },
-        canActivate: [canActivateEmissionsShipStep('../')],
         loadComponent: () =>
           import('@requests/common/components/emissions/uncertainty-level').then((c) => c.UncertaintyLevelComponent),
       },
@@ -137,7 +129,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.measurements.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.MEASUREMENTS) },
-        canActivate: [canActivateEmissionsShipStep('../')],
         loadComponent: () => import('@requests/common/emp/subtasks/emissions').then((c) => c.MeasurementsComponent),
       },
       {
@@ -145,7 +136,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.carbonCapture.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.CARBON_CAPTURE) },
-        canActivate: [canActivateEmissionsShipStep('../')],
         loadComponent: () => import('@requests/common/emp/subtasks/emissions').then((c) => c.CarbonCaptureComponent),
       },
       {
@@ -153,7 +143,6 @@ export const EMISSIONS_ROUTES: Routes = [
         title: emissionShipSubtasksMap.exemptionConditions.title,
         data: { breadcrumb: false },
         resolve: { backlink: emissionsBacklinkResolver(EmissionsWizardStep.EXEMPTION_CONDITIONS) },
-        canActivate: [canActivateEmissionsShipStep('../')],
         loadComponent: () =>
           import('@requests/common/emp/subtasks/emissions').then((c) => c.ExemptionConditionsComponent),
       },

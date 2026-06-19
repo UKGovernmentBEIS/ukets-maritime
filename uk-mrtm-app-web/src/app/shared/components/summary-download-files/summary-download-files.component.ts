@@ -1,27 +1,39 @@
-import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { LinkDirective } from '@netz/govuk-components';
 
-import { HTML_DIFF } from '@shared/directives';
+import { HtmlDiffDirective } from '@shared/directives';
 import { AttachedFile } from '@shared/types';
-import { isNullOrEmpty, mergeDiffArray } from '@shared/utils';
+import { mergeDiffArray } from '@shared/utils';
 
 @Component({
   selector: 'mrtm-summary-download-files',
-  imports: [LinkDirective, RouterLink, NgTemplateOutlet],
+  imports: [LinkDirective, RouterLink, HtmlDiffDirective],
   standalone: true,
-  templateUrl: './summary-download-files.component.html',
+  template: `
+    @for (file of combinedFiles(); track file) {
+      <!-- eslint-disable-next-line @angular-eslint/template/elements-content-->
+      <a
+        [routerLink]="file?.current?.downloadUrl"
+        govukLink
+        target="_blank"
+        htmlDiff
+        [isFiles]="true"
+        [current]="file?.current?.fileName"
+        [previous]="file?.previous?.fileName"></a>
+      @if (!$last && combinedFiles()?.length > 1) {
+        <br />
+      }
+    } @empty {
+      <span class="govuk-hint">Not provided</span>
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SummaryDownloadFilesComponent {
-  readonly htmlDiffProvider: boolean = inject(HTML_DIFF, { optional: true });
-
   readonly files = input.required<AttachedFile[]>();
   readonly originalFiles = input<AttachedFile[]>(null);
 
   readonly combinedFiles = computed(() => mergeDiffArray<AttachedFile>(this.files(), this.originalFiles()));
-
-  protected readonly isNullOrEmpty = isNullOrEmpty;
 }

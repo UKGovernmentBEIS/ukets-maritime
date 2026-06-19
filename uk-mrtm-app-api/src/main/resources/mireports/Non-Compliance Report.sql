@@ -70,7 +70,8 @@ with r1 as (
      from account              a
 left join account_mrtm         am on am.id = a.id
 left join emp                  p on p.account_id = a.id
-join request_account r on a.id = CAST(r.account_id AS bigint)
+join request_resource rr on (rr.resource_type = 'ACCOUNT' and am.id =CAST(rr.resource_id AS bigint))
+join request r on r.id = rr.request_id
 join request_type rt on r.type_id = rt.id
 left join r1 on r1.id = r.id
 left join r2 on r2.id = r.id

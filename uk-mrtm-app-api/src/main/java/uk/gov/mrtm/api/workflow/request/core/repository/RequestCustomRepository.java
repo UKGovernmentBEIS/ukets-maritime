@@ -38,7 +38,7 @@ public class RequestCustomRepository {
 
     @Transactional(readOnly = true)
     public List<Request> findByRequestTypeAndResourceAndMetadataYear(String requestType, String resourceType,
-                                                                     String resourceId, int year) {
+                                                                         String resourceId, int year) {
         final List<Request> resultList = entityManager.createNativeQuery("SELECT r.* FROM request r "
                         + "JOIN request_resource rr ON r.id = rr.request_id "
                         + "JOIN request_type rt ON r.type_id = rt.id "
@@ -53,24 +53,4 @@ public class RequestCustomRepository {
                 .getResultList();
         return resultList;
     }
-
-    @Transactional(readOnly = true)
-    public Request findLatestByRequestTypesAndResourceAndStatus(Set<String> requestTypes, String resourceType,
-                                                                String resourceId, Set<String> requestStatuses) {
-        return (Request) entityManager.createNativeQuery("SELECT r.* FROM request r "
-                + "JOIN request_resource rr ON r.id = rr.request_id "
-                + "JOIN request_type rt ON r.type_id = rt.id "
-                + "WHERE rr.resource_type = :resourceType "
-                + "AND rr.resource_id = :resourceId "
-                + "AND rt.code in (:requestTypes) "
-                + "AND r.status in (:requestStatuses) "
-                + "ORDER BY r.submission_date desc "
-                + "FETCH FIRST 1 ROW ONLY ", Request.class)
-            .setParameter("resourceType", resourceType)
-            .setParameter("resourceId", resourceId)
-            .setParameter("requestTypes", requestTypes)
-            .setParameter("requestStatuses", requestStatuses)
-            .getSingleResult();
-    }
-
 }

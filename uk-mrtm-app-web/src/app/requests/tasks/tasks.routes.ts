@@ -8,7 +8,6 @@ import {
 } from '@netz/common/request-task';
 import { RequestTaskStore } from '@netz/common/store';
 
-import { taskTitleResolver } from '@requests/common';
 import {
   AER_AMEND_ROUTE_PREFIX,
   AER_ROUTE_PREFIX,
@@ -47,10 +46,6 @@ export const TASKS_ROUTES: Routes = [
     canActivate: [getRequestTaskPageDefaultCanActivateGuard()],
     canDeactivate: [getRequestTaskPageCanDeactivateGuard()],
     providers: taskProviders,
-    data: { breadcrumb: ({ taskTitle }) => taskTitle },
-    resolve: {
-      taskTitle: taskTitleResolver,
-    },
     children: [
       {
         path: '',

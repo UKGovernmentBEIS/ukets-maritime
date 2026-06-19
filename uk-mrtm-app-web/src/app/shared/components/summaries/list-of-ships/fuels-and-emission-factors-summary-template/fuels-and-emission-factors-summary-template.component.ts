@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { Params, RouterLink } from '@angular/router';
 
 import { EmpFuelsAndEmissionsFactors } from '@mrtm/api';
@@ -13,8 +13,7 @@ import {
 } from '@netz/govuk-components';
 
 import { DENSITY_METHOD_BUNKER_SELECT_ITEMS, DENSITY_METHOD_TANK_SELECT_ITEMS } from '@shared/constants';
-import { HTML_DIFF, HtmlDiffDirective } from '@shared/directives';
-import { HtmlDiffService } from '@shared/directives/html-diff/html-diff.service';
+import { NotProvidedDirective } from '@shared/directives';
 import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
 
 @Component({
@@ -29,42 +28,26 @@ import { FuelOriginTitlePipe, SelectOptionToTitlePipe } from '@shared/pipes';
     SummaryListRowValueDirective,
     FuelOriginTitlePipe,
     SelectOptionToTitlePipe,
-    HtmlDiffDirective,
+    NotProvidedDirective,
   ],
   standalone: true,
   templateUrl: './fuels-and-emission-factors-summary-template.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FuelsAndEmissionFactorsSummaryTemplateComponent {
-  private readonly hasHtmlDiff = inject(HTML_DIFF, { optional: true });
-  private readonly diffService = inject(HtmlDiffService);
+  public readonly densityMethodBunkerOptions = DENSITY_METHOD_BUNKER_SELECT_ITEMS;
+  public readonly densityMethodTankOptions = DENSITY_METHOD_TANK_SELECT_ITEMS;
 
-  readonly index = input.required<number>();
-  readonly fuelEmissionsFactor = input.required<EmpFuelsAndEmissionsFactors>();
-  readonly originalFuelEmissionsFactor = input<EmpFuelsAndEmissionsFactors>();
-  readonly changeLink = input<string>('../');
-  readonly isEditable = input<boolean>(false);
-  readonly isDeletable = input<boolean>(false);
-  readonly queryParams = input<Params>({ change: true });
+  public readonly index = input.required<number>();
+  public readonly data = input.required<EmpFuelsAndEmissionsFactors>();
+  public readonly changeLink = input<string>('../');
+  public readonly isEditable = input<boolean>(false);
+  public readonly isDeletable = input<boolean>(false);
+  public readonly queryParams = input<Params>({ change: true });
+  public readonly delete = output<EmpFuelsAndEmissionsFactors>();
 
-  readonly delete = output<EmpFuelsAndEmissionsFactors>();
-
-  readonly cardTitle = computed(() => {
-    const currentTitle = this.fuelEmissionsFactor() ? `Fuel ${this.index() + 1}` : null;
-    const previousTitle = this.originalFuelEmissionsFactor() ? `Fuel ${this.index() + 1}` : null;
-
-    if (this.hasHtmlDiff) {
-      return this.diffService.singleTokenDiff(previousTitle, currentTitle);
-    }
-
-    return currentTitle;
-  });
-
-  readonly densityMethodBunkerOptions = DENSITY_METHOD_BUNKER_SELECT_ITEMS;
-  readonly densityMethodTankOptions = DENSITY_METHOD_TANK_SELECT_ITEMS;
-
-  handleRemove(event: Event): void {
+  public handleRemove(event: Event): void {
     event.preventDefault();
-    this.delete.emit(this.fuelEmissionsFactor());
+    this.delete.emit(this.data());
   }
 }

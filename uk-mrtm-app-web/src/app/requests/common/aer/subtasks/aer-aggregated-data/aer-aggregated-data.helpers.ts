@@ -11,6 +11,7 @@ import { AerAggregatedDataEmissionDto } from '@shared/types';
 import { isNil } from '@shared/utils';
 
 export const AER_AGGREGATED_DATA_SUB_TASK = 'aggregatedData';
+
 export const AER_AGGREGATED_DATA_SUB_TASK_PATH = 'aggregated-data';
 
 export const AER_AGGREGATED_DATA_PARAM = 'dataId';
@@ -26,7 +27,6 @@ export enum AerAggregatedDataWizardStep {
   SHIP_EMISSIONS = 'ship-emissions',
   FETCH_FROM_VOYAGES_AND_PORTS = 'import',
   UPLOAD_AGGREGATED_DATA = 'upload-aggregated-data',
-  NEW_AGGREGATED_DATA_SUMMARY = 'new-aggregated-data-summary',
 }
 
 export const mapAggregatedDataToTotalShipEmissionsItems = (

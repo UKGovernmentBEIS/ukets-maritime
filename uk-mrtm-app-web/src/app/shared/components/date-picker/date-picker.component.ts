@@ -144,10 +144,11 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
     this.control.updateValueAndValidity();
   }
 
-  writeValue(value: Date | null): void {
+  writeValue(value: Date | string | null): void {
     if (value && this.input()) {
+      const dateValue = value instanceof Date ? value : new Date(value);
       this.renderer.setProperty(this.input().nativeElement, 'value', this.convertDateToHumanDate(value));
-      this.datePickerService.inputDate.set(value);
+      this.datePickerService.inputDate.set(this.toLocalDate(dateValue));
     }
   }
 
@@ -155,7 +156,8 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
     this.onChange = (dateHuman: string) => {
       const convertedDate = this.convertHumanDateToDate(dateHuman);
       fn(convertedDate);
-      const inputValue = convertedDate && convertedDate !== this.INVALID_DATE ? new Date(convertedDate) : null;
+      const inputValue =
+        convertedDate && convertedDate !== this.INVALID_DATE ? this.toLocalDate(new Date(convertedDate)) : null;
       this.datePickerService.inputDate.set(inputValue);
     };
   }
@@ -226,8 +228,9 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
     }
     event.preventDefault();
     event.stopPropagation();
-    this.writeValue(calendarDate.date);
-    this.onChange(this.convertDateToHumanDate(calendarDate.date.toISOString()));
+    const utcDate = this.toUtcDate(calendarDate.date);
+    this.writeValue(utcDate);
+    this.onChange(this.convertDateToHumanDate(utcDate.toISOString()));
     this.datePickerService.selectDate(calendarDate);
   }
 
@@ -275,7 +278,7 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
     const [day, month, year] = dateString.split('/').map(Number);
     const date = this.parseHumanDate(dateString);
 
-    return date.getFullYear() === year && date.getMonth() === month - 1 && date.getDate() === day;
+    return date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
   }
 
   private parseHumanDate(dateString: string): Date {
@@ -284,6 +287,27 @@ export class DatePickerComponent extends FormInput implements ControlValueAccess
   }
 
   private convertDateToHumanDate(value: string | number | Date): string {
-    return formatDate(value, this.dateFormat, 'en-GB');
+    return formatDate(value, this.dateFormat, 'en-GB', 'UTC');
+  }
+
+  /**
+   * Converts a UTC-midnight date (as produced by parseHumanDate / the control value)
+   * into a local-midnight date representing the same calendar day.
+   * The date picker calendar works in local time, so the inputDate must be local
+   * to highlight the correct day regardless of the user's timezone.
+   */
+  private toLocalDate(value: Date): Date {
+    return new Date(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate());
+  }
+
+  /**
+   * Converts a local-midnight date (as produced by the calendar) into a UTC-midnight
+   * date representing the same calendar day.
+   * The calendar works in local time, while parsing/formatting and the payload are
+   * UTC-based, so a selected calendar date must be normalized to UTC midnight to keep
+   * the input text, calendar highlight and payload consistent regardless of timezone.
+   */
+  private toUtcDate(value: Date): Date {
+    return new Date(Date.UTC(value.getFullYear(), value.getMonth(), value.getDate()));
   }
 }

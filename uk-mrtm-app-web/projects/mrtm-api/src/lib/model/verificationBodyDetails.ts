@@ -12,7 +12,6 @@ import { AddressDTO } from './addressDTO';
 export interface VerificationBodyDetails {
   name?: string;
   accreditationReferenceNumber?: string;
-  accreditationBodyName?: string;
   address?: AddressDTO;
   emissionTradingSchemes?: Array<string>;
 }

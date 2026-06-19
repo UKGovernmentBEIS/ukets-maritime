@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { map, of, take } from 'rxjs';
@@ -7,27 +7,30 @@ import { map, of, take } from 'rxjs';
 import { ForgotPasswordService } from '@mrtm/api';
 
 import { catchBadRequest, ErrorCodes } from '@netz/common/error';
+import { ButtonDirective, ErrorSummaryComponent } from '@netz/govuk-components';
 
 import { ResetPasswordStore } from '@forgot-password/store/reset-password.store';
-import { PasswordComponent, WizardStepComponent } from '@shared/components';
+import { PasswordComponent } from '@shared/components';
 import { PASSWORD_FORM, passwordFormProvider } from '@shared/providers';
 
 @Component({
   selector: 'mrtm-reset-password',
-  imports: [ReactiveFormsModule, PasswordComponent, WizardStepComponent],
+  imports: [ErrorSummaryComponent, FormsModule, ReactiveFormsModule, ButtonDirective, PasswordComponent],
   standalone: true,
   templateUrl: './reset-password.component.html',
   providers: [passwordFormProvider],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ResetPasswordComponent implements OnInit {
-  protected readonly form = inject<UntypedFormGroup>(PASSWORD_FORM);
+  readonly form = inject<UntypedFormGroup>(PASSWORD_FORM);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly store = inject(ResetPasswordStore);
   private readonly forgotPasswordService = inject(ForgotPasswordService);
 
+  isSummaryDisplayed = false;
   token: string;
+  email: string;
 
   ngOnInit(): void {
     this.token = this.route.snapshot.queryParamMap.get('token');
@@ -59,11 +62,15 @@ export class ResetPasswordComponent implements OnInit {
       .subscribe();
   }
 
-  onSubmit(): void {
-    this.store.setState({ ...this.store.getState(), password: this.form.get('password').value, token: this.token });
+  submitPassword(): void {
+    if (this.form.valid) {
+      this.store.setState({ ...this.store.getState(), password: this.form.get('password').value, token: this.token });
 
-    this.router.navigate(['../otp'], {
-      relativeTo: this.route,
-    });
+      this.router.navigate(['../otp'], {
+        relativeTo: this.route,
+      });
+    } else {
+      this.isSummaryDisplayed = true;
+    }
   }
 }

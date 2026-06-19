@@ -1,4 +1,4 @@
-import { RegisteredOwnerShipDetails, UncertaintyLevel } from '@mrtm/api';
+import { RegisteredOwnerShipDetails } from '@mrtm/api';
 
 import { DiffItem, MandateRegisteredOwnerTableListItem, ShipEmissionTableListItem } from '@shared/types';
 
@@ -16,54 +16,6 @@ export const mergeDiffArray = <T>(currentArray: Array<T>, previousArray: Array<T
   }
 
   return resultArray;
-};
-
-/**
- * Groups UncertaintyLevel[] by monitoringMethod to DiffItem<UncertaintyLevel>[]
- * and sorts them according to the constant provided in the monitoringMethodMap
- */
-export const mergeDiffUncertaintyLevels = (
-  currentArray: UncertaintyLevel[],
-  previousArray: UncertaintyLevel[],
-  monitoringMethodMap: Record<
-    UncertaintyLevel['monitoringMethod'],
-    {
-      text: string;
-      hint: string;
-    }
-  >,
-): DiffItem<UncertaintyLevel>[] => {
-  const map = new Map<string, DiffItem<UncertaintyLevel>>();
-
-  if (previousArray?.length) {
-    for (const owner of previousArray) {
-      if (!map.has(owner.monitoringMethod)) {
-        map.set(owner.monitoringMethod, { previous: owner });
-      } else {
-        map.get(owner.monitoringMethod).previous = owner;
-      }
-    }
-  }
-
-  if (currentArray?.length) {
-    for (const owner of currentArray) {
-      if (!map.has(owner.monitoringMethod)) {
-        map.set(owner.monitoringMethod, { current: owner });
-      } else {
-        map.get(owner.monitoringMethod).current = owner;
-      }
-    }
-  }
-
-  const methodOrder = Object.keys(monitoringMethodMap);
-
-  return (
-    Array.from(map.values()).sort((a, b) => {
-      const methodA = a?.current?.monitoringMethod ?? a?.previous?.monitoringMethod;
-      const methodB = b?.current?.monitoringMethod ?? b?.previous?.monitoringMethod;
-      return methodOrder.indexOf(methodA) - methodOrder.indexOf(methodB);
-    }) ?? []
-  );
 };
 
 /**

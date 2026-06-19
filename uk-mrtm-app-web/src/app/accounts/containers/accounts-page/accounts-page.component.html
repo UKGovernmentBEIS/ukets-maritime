@@ -3,7 +3,7 @@
     <govuk-error-summary [form]="searchForm" />
   }
   <netz-page-heading size="xl">Accounts</netz-page-heading>
-  <span class="govuk-hint">Enter Emitter ID, name, IMO number or Registry ID</span>
+  <span class="govuk-hint">Enter ID, name or IMO number</span>
   <div class="govuk-grid-row">
     <form (ngSubmit)="onSearch()" [formGroup]="searchForm" id="search-form">
       <div class="govuk-grid-column-full">

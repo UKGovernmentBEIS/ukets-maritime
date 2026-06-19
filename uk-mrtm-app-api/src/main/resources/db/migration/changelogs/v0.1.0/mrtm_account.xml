@@ -292,27 +292,6 @@
         </sql>
     </changeSet>
 
-    <changeSet id="0_1_0_mrtm_account_search_additional_keyword_backfill_registry_id" author="pkouris">
-        <sql>
-            INSERT INTO public.account_search_additional_keyword (id, account_id, key, value)
-            SELECT nextval('account_search_additional_keyword_seq'),
-                   mac.id,
-                   'REGISTRY_ID',
-                   CAST(mac.registry_id AS varchar(255))
-            FROM public.account_mrtm mac
-            WHERE mac.registry_id IS NOT NULL
-              AND NOT EXISTS (
-                SELECT 1
-                FROM public.account_search_additional_keyword ask
-                WHERE ask.account_id = mac.id
-                  AND ask.key = 'REGISTRY_ID'
-              );
-        </sql>
-        <rollback>
-            DELETE FROM public.account_search_additional_keyword WHERE key = 'REGISTRY_ID';
-        </rollback>
-    </changeSet>
-
     <changeSet id="0_1_0_ACCOUNT_MRTM_ADD_REGISTERED_ADDRESS_STATE_COLUMNS" author="tsaktsirasl@unisystems.gr">
         <addColumn tableName="account_mrtm">
             <column name="reg_address_line1" type="varchar(255)" />

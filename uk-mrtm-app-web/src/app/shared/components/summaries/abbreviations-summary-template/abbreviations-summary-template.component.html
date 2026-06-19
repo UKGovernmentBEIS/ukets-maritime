@@ -19,13 +19,8 @@
   </div>
 </dl>
 
-@for (abbrDef of combinedAbbreviationDefinitions(); track $index) {
-  <!-- eslint-disable @angular-eslint/template/elements-content -->
-  <h2
-    class="govuk-heading-m"
-    htmlDiff
-    [current]="abbrDef?.current ? `Definition ${$index + 1}` : undefined"
-    [previous]="abbrDef?.previous ? `Definition ${$index + 1}` : undefined"></h2>
+@for (abbrDef of combinedAbbreviationDefinitions(); track abbrDef) {
+  <h2 class="govuk-heading-m">Definition {{ $index + 1 }}</h2>
   <dl govuk-summary-list>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Abbreviation, acronym or terminology</dt>

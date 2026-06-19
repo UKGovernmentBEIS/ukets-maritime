@@ -82,10 +82,8 @@ class MaritimeVerificationBodyUsersRepositoryIT extends AbstractContainerBaseTes
                 .name(name)
                 .status(status)
                 .address(createAddress())
-                .accreditationBodyName("accreditationBodyName")
                 .createdDate(LocalDateTime.now())
                 .accreditationReferenceNumber(accreditationReferenceNumber)
-                .accreditationBodyName("UKAS")
                 .emissionTradingSchemes(emissionTradingSchemes)
                 .build();
 

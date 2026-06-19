@@ -59,7 +59,7 @@ describe('AppComponent', () => {
     }
 
     get navList() {
-      return this.query<HTMLDivElement>('govuk-header-nav-list-legacy');
+      return this.query<HTMLDivElement>('govuk-header-nav-list');
     }
 
     get breadcrumbs() {

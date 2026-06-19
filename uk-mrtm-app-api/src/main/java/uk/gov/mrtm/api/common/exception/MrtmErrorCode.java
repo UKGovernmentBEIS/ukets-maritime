@@ -16,7 +16,6 @@ public enum MrtmErrorCode implements NetzErrorCode {
     INVALID_EMP("EMP1001", HttpStatus.BAD_REQUEST, "Invalid Emissions Monitoring Plan"),
     INVALID_EMP_REVIEW("EMP1002", HttpStatus.BAD_REQUEST, "Invalid Emissions Monitoring Plan review"),
     INVALID_EMP_VARIATION_REVIEW("EMP1004", HttpStatus.BAD_REQUEST, "Invalid Emissions Monitoring Plan variation review"),
-    EMP_NOT_FOUND("EMP1005", HttpStatus.NOT_FOUND, "No emissions monitoring plan found"),
 
     /**Emissions Monitoring Plan notification error codes */
     INVALID_EMP_NOTIFICATION("EMPNOTIFICATION1001", HttpStatus.BAD_REQUEST, "Invalid EMP notification"),

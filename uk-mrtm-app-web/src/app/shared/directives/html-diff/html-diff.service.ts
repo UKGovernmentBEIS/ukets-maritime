@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 
 import { Match, Operation, OperationMap } from '@shared/directives/html-diff/html-diff.type';
-import { isNullOrEmpty } from '@shared/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -397,6 +396,10 @@ export class HtmlDiffService {
     return rendering;
   }
 
+  private isNullOrEmpty(value: any) {
+    return value === null || value === undefined || value === '';
+  }
+
   diff(before: string, after: string): string {
     if (before === after) {
       return before;
@@ -409,16 +412,16 @@ export class HtmlDiffService {
     return this.renderOperations(beforeTokens, afterTokens, ops);
   }
 
-  singleTokenDiff(before: string, after: string): string {
+  fileNameDiff(before: string, after: string): string {
     if (before === after) {
       return before;
     }
 
-    if (isNullOrEmpty(before)) {
+    if (this.isNullOrEmpty(before)) {
       return `<ins class="diffmod">${after}</ins>`;
     }
 
-    if (isNullOrEmpty(after)) {
+    if (this.isNullOrEmpty(after)) {
       return `<del class="diffmod">${before}</del>`;
     }
 

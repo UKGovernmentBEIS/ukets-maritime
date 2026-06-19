@@ -1,9 +1,10 @@
 package uk.gov.mrtm.api.workflow.request.flow.aer.common.service;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
+import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.common.exception.ErrorCode;
 import uk.gov.netz.api.userinfoapi.UserInfoDTO;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
@@ -14,9 +15,7 @@ import uk.gov.netz.api.workflow.request.flow.common.service.RequestExpirationRem
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.NotificationTemplateExpirationReminderParams;
 
 import java.util.Date;
-import java.util.Optional;
 
-@Log4j2
 @Service
 @RequiredArgsConstructor
 public class AerSendReminderNotificationService {
@@ -37,20 +36,14 @@ public class AerSendReminderNotificationService {
                                           final ExpirationReminderType expirationType) {
 
         final Request request = requestService.findRequestById(requestId);
-        final Optional<UserInfoDTO> accountPrimaryContact =
-            requestAccountContactQueryService.getRequestAccountPrimaryContact(request);
-
-        if (accountPrimaryContact.isEmpty()) {
-            log.warn("Skipping AER reminder notification: primary contact not found "
-                    + "[requestId='{}', accountId={}, reminderType={}]",
-                requestId, request.getAccountId(), expirationType);
-            return;
-        }
+        final UserInfoDTO accountPrimaryContact =
+            requestAccountContactQueryService.getRequestAccountPrimaryContact(request)
+                .orElseThrow(() -> new BusinessException(ErrorCode.ACCOUNT_CONTACT_TYPE_PRIMARY_CONTACT_NOT_FOUND));
 
         requestExpirationReminderService.sendExpirationReminderNotification(requestId,
             NotificationTemplateExpirationReminderParams.builder()
                 .workflowTask(NotificationTemplateWorkflowTaskType.getDescription(MrtmRequestType.AER))
-                .recipient(accountPrimaryContact.get())
+                .recipient(accountPrimaryContact)
                 .expirationTime(expirationType.getDescription())
                 .expirationTimeLong(expirationType.getDescriptionLong())
                 .deadline(deadline)

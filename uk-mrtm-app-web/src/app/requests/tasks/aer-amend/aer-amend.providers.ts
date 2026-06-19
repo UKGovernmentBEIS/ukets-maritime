@@ -16,11 +16,10 @@ import {
   AerAggregatedDataListSummarySideEffect,
   AerAggregatedDataSelectShipPayloadMutator,
   AerAggregatedDataShipDeletedSideEffect,
+  AerAggregatedDataShipSummaryPayloadMutator,
   AerAggregatedDataUploadPayloadMutator,
-  AerAggregatedDataWizardStep,
   AerFetchFromVoyagesAndPortsPayloadMutator,
   AerTotalEmissionsNeedsReviewOnAerAggregatedDataChangeSideEffect,
-  provideAerAggregatedDataShipSummaryPayloadMutator,
 } from '@requests/common/aer/subtasks/aer-aggregated-data';
 import {
   AerBasicShipDetailPayloadMutator,
@@ -50,6 +49,7 @@ import {
 } from '@requests/common/aer/subtasks/aer-operator-details';
 import {
   AerPortAggregatedDataSideEffect,
+  AerPortCallSummaryPayloadMutator,
   AerPortDeleteDirectEmissionPayloadMutator,
   AerPortDeleteFuelConsumptionPayloadMutator,
   AerPortDeletePayloadMutator,
@@ -61,8 +61,6 @@ import {
   AerPortsFlowManager,
   AerPortsSummarySideEffect,
   AerPortsUploadPayloadMutator,
-  AerPortsWizardStep,
-  provideAerPortCallSummaryPayloadMutator,
 } from '@requests/common/aer/subtasks/aer-ports';
 import {
   AerTotalEmissionsFlowManager,
@@ -76,13 +74,12 @@ import {
   AerVoyageDetailsPayloadMutator,
   AerVoyageDirectEmissionPayloadMutator,
   AerVoyageEmissionShipDeletedSideEffect,
+  AerVoyageEmissionSummaryPayloadMutator,
   AerVoyageFuelConsumptionPayloadMutator,
   AerVoyageSelectShipPayloadMutator,
   AerVoyagesFlowManager,
   AerVoyagesSummarySideEffect,
-  AerVoyagesWizardStep,
   AerVoyageUploadPayloadMutator,
-  provideAerVoyageEmissionSummaryPayloadMutator,
 } from '@requests/common/aer/subtasks/aer-voyages';
 import {
   MonitoringPlanChangesFlowManager,
@@ -149,16 +146,7 @@ export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerPortDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerPortDirectEmissionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerPortFuelConsumptionPayloadMutator },
-    {
-      provide: PAYLOAD_MUTATORS,
-      multi: true,
-      useValue: provideAerPortCallSummaryPayloadMutator(AerPortsWizardStep.PORT_CALL_SUMMARY),
-    },
-    {
-      provide: PAYLOAD_MUTATORS,
-      multi: true,
-      useValue: provideAerPortCallSummaryPayloadMutator(AerPortsWizardStep.NEW_PORT_CALL_SUMMARY),
-    },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerPortCallSummaryPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerPortsUploadPayloadMutator },
 
     // Voyages
@@ -169,16 +157,7 @@ export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerVoyageDetailsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerVoyageDirectEmissionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerVoyageFuelConsumptionPayloadMutator },
-    {
-      provide: PAYLOAD_MUTATORS,
-      multi: true,
-      useValue: provideAerVoyageEmissionSummaryPayloadMutator(AerVoyagesWizardStep.FUEL_EMISSIONS_SUMMARY),
-    },
-    {
-      provide: PAYLOAD_MUTATORS,
-      multi: true,
-      useValue: provideAerVoyageEmissionSummaryPayloadMutator(AerVoyagesWizardStep.NEW_FUEL_EMISSIONS_SUMMARY),
-    },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerVoyageEmissionSummaryPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerVoyageUploadPayloadMutator },
 
     // Aggregated Data
@@ -186,18 +165,7 @@ export function provideAerSubmitPayloadMutators(): EnvironmentProviders {
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataDeletePayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataFuelConsumptionPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataAnnualEmissionsPayloadMutator },
-    {
-      provide: PAYLOAD_MUTATORS,
-      multi: true,
-      useValue: provideAerAggregatedDataShipSummaryPayloadMutator(AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY),
-    },
-    {
-      provide: PAYLOAD_MUTATORS,
-      multi: true,
-      useValue: provideAerAggregatedDataShipSummaryPayloadMutator(
-        AerAggregatedDataWizardStep.NEW_AGGREGATED_DATA_SUMMARY,
-      ),
-    },
+    { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataShipSummaryPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerFetchFromVoyagesAndPortsPayloadMutator },
     { provide: PAYLOAD_MUTATORS, multi: true, useClass: AerAggregatedDataUploadPayloadMutator },
 

@@ -10,9 +10,7 @@
   </div>
   <div class="govuk-grid-column-one-third">
     <div class="govuk-button-group float-right">
-      <a govukLink govukSecondaryButton [routerLink]="['./add', randomUUID(), wizardStep.SELECT_SHIP]">
-        Add new voyage
-      </a>
+      <a govukLink govukSecondaryButton [routerLink]="['./', wizardStep.SELECT_SHIP]">Add new voyage</a>
       <a govukLink govukSecondaryButton [routerLink]="['../', wizardStep.UPLOAD_VOYAGES]">Upload file</a>
     </div>
   </div>

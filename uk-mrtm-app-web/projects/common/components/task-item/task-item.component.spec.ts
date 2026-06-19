@@ -10,7 +10,7 @@ import { TaskItemComponent } from './task-item.component';
 describe('TaskItemComponent', () => {
   let component: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
-  const map: TaskStatusTagMap = { COMPLETED: { text: 'Completed', color: 'blue', style: 'fill' } };
+  const map: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
 
   @Component({
     imports: [TaskItemComponent],
@@ -61,7 +61,6 @@ describe('TaskItemComponent', () => {
       expect(item.querySelector('a').textContent.trim()).toEqual(tasks[index].linkText);
       expect(item.querySelector('a').href).toContain(tasks[index].link);
     });
-
     expect(items[0].querySelector('strong').classList.contains('govuk-tag--blue')).toBeTruthy();
     expect(items[1].querySelector('strong').classList.contains('govuk-tag--blue')).toBeTruthy();
     expect(items[2].querySelector('strong').classList.contains('govuk-tag--blue')).toBeTruthy();

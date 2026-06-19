@@ -1,25 +1,33 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
-import { ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
+import { Component, inject } from '@angular/core';
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder } from '@angular/forms';
 
 import { ForgotPasswordService } from '@mrtm/api';
 
-import { GovukValidators, TextInputComponent } from '@netz/govuk-components';
+import { ButtonDirective, GovukValidators, TextInputComponent } from '@netz/govuk-components';
 
 import { EmailSentComponent } from '@forgot-password/email-sent/email-sent.component';
-import { WizardStepComponent } from '@shared/components';
+import { BackToTopComponent } from '@shared/components';
 
+// eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-submit-email',
-  imports: [ReactiveFormsModule, TextInputComponent, EmailSentComponent, WizardStepComponent],
+  imports: [
+    FormsModule,
+    ReactiveFormsModule,
+    TextInputComponent,
+    ButtonDirective,
+    BackToTopComponent,
+    EmailSentComponent,
+  ],
   standalone: true,
   templateUrl: './submit-email.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitEmailComponent {
   private readonly forgotPasswordService = inject(ForgotPasswordService);
   private readonly fb = inject(UntypedFormBuilder);
 
-  readonly isEmailSent = signal(false);
+  isSummaryDisplayed: boolean;
+  isEmailSent: boolean;
 
   form = this.fb.group({
     email: [
@@ -33,12 +41,16 @@ export class SubmitEmailComponent {
   });
 
   onSubmit(): void {
-    this.forgotPasswordService.sendResetPasswordEmail({ email: this.form.get('email').value }).subscribe(() => {
-      this.isEmailSent.update(() => true);
-    });
+    if (this.form.valid) {
+      this.forgotPasswordService.sendResetPasswordEmail({ email: this.form.get('email').value }).subscribe(() => {
+        this.isEmailSent = true;
+      });
+    } else {
+      this.isSummaryDisplayed = true;
+    }
   }
 
   retryResetPassword() {
-    this.isEmailSent.update(() => false);
+    this.isEmailSent = false;
   }
 }

@@ -3,8 +3,6 @@ import { Routes } from '@angular/router';
 import { PayloadMutatorsHandler, SideEffectsHandler } from '@netz/common/forms';
 
 import { SEND_VARIATION_SUCCESS_COMPONENT } from '@requests/common/emp/subtasks/send-variation';
-import { IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH } from '@requests/common/third-party-data-provider';
-import { provideThirdPartyConfigurations } from '@requests/tasks/emp-submit/emp-submit.providers';
 import { SubmitSendVariationSuccessComponent } from '@requests/tasks/emp-variation/components/submit-send-variation-success';
 import {
   provideEmpVariationPayloadMutators,
@@ -24,7 +22,6 @@ export const EMP_VARIATION_ROUTES: Routes = [
       provideEmpVariationSideEffects(),
       provideEmpVariationTaskServices(),
       provideEmpVariationStepFlowManagers(),
-      provideThirdPartyConfigurations(),
     ],
     canActivate: [resetPersistableStateGuard],
     children: [
@@ -82,14 +79,6 @@ export const EMP_VARIATION_ROUTES: Routes = [
         path: 'send-variation',
         providers: [{ provide: SEND_VARIATION_SUCCESS_COMPONENT, useValue: SubmitSendVariationSuccessComponent }],
         loadChildren: () => import('@requests/common/emp/subtasks/send-variation').then((r) => r.SEND_VARIATION_ROUTES),
-      },
-      {
-        path: IMPORT_THIRD_PARTY_DATA_PROVIDER_ROUTE_PATH,
-        data: { backlink: '../../', breadcrumb: false },
-        loadComponent: () =>
-          import('@requests/common/third-party-data-provider/third-party-data-provider-import').then(
-            (c) => c.ThirdPartyDataProviderImportComponent,
-          ),
       },
     ],
   },

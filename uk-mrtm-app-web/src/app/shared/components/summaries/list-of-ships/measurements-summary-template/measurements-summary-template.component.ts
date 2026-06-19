@@ -1,7 +1,7 @@
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { ActivatedRoute, Params, Router, RouterLink } from '@angular/router';
 
-import { MeasurementDescription } from '@mrtm/api';
+import { EmpShipEmissions } from '@mrtm/api';
 
 import {
   ButtonDirective,
@@ -13,9 +13,7 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
-import { monitoringMethodMap } from '@shared/constants';
-import { HtmlDiffDirective, NotProvidedDirective } from '@shared/directives';
-import { mergeDiffArray } from '@shared/utils';
+import { NotProvidedDirective } from '@shared/directives';
 
 @Component({
   selector: 'mrtm-measurements-summary-template',
@@ -29,7 +27,6 @@ import { mergeDiffArray } from '@shared/utils';
     RouterLink,
     ButtonDirective,
     NotProvidedDirective,
-    HtmlDiffDirective,
   ],
   standalone: true,
   templateUrl: './measurements-summary-template.component.html',
@@ -39,23 +36,12 @@ export class MeasurementsSummaryTemplateComponent {
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
-  readonly measurements = input.required<MeasurementDescription[]>();
-  readonly originalMeasurements = input<MeasurementDescription[]>();
+  readonly data = input.required<EmpShipEmissions['measurements']>();
   readonly changeLink = input<string>();
   readonly isEditable = input<boolean>(false);
   readonly queryParams = input<Params>({});
 
-  readonly combinedMeasurements = computed(() =>
-    mergeDiffArray<MeasurementDescription>(this.measurements(), this.originalMeasurements()),
-  );
-
-  protected readonly monitoringMethodMap = monitoringMethodMap;
-
-  combinedEmissionSources(emissionSources: string[], originalEmissionSources: string[]) {
-    return mergeDiffArray<string>(emissionSources, originalEmissionSources);
-  }
-
-  handleAddAnother(): void {
+  public handleAddAnother(): void {
     this.router.navigate(['./', this.changeLink()], { relativeTo: this.route, queryParams: this.queryParams() });
   }
 }

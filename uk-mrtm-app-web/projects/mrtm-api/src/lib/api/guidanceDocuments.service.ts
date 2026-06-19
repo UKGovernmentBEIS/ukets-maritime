@@ -512,7 +512,7 @@ export class GuidanceDocumentsService {
     saveGuidanceDocumentDTO: SaveGuidanceDocumentDTO,
     observe?: 'body',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
   ): Observable<GuidanceDocumentDTO>;
   public updateGuidanceDocument(
     id: number,
@@ -520,7 +520,7 @@ export class GuidanceDocumentsService {
     saveGuidanceDocumentDTO: SaveGuidanceDocumentDTO,
     observe?: 'response',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpResponse<GuidanceDocumentDTO>>;
   public updateGuidanceDocument(
     id: number,
@@ -528,7 +528,7 @@ export class GuidanceDocumentsService {
     saveGuidanceDocumentDTO: SaveGuidanceDocumentDTO,
     observe?: 'events',
     reportProgress?: boolean,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
   ): Observable<HttpEvent<GuidanceDocumentDTO>>;
   public updateGuidanceDocument(
     id: number,
@@ -536,7 +536,7 @@ export class GuidanceDocumentsService {
     saveGuidanceDocumentDTO: SaveGuidanceDocumentDTO,
     observe: any = 'body',
     reportProgress: boolean = false,
-    options?: { httpHeaderAccept?: '*/*' | 'application/json'; context?: HttpContext; transferCache?: boolean },
+    options?: { httpHeaderAccept?: 'application/json' | '*/*'; context?: HttpContext; transferCache?: boolean },
   ): Observable<any> {
     if (id === null || id === undefined) {
       throw new Error('Required parameter id was null or undefined when calling updateGuidanceDocument.');
@@ -561,7 +561,7 @@ export class GuidanceDocumentsService {
     let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
     if (localVarHttpHeaderAcceptSelected === undefined) {
       // to determine the Accept header
-      const httpHeaderAccepts: string[] = ['*/*', 'application/json'];
+      const httpHeaderAccepts: string[] = ['application/json', '*/*'];
       localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
     }
     if (localVarHttpHeaderAcceptSelected !== undefined) {

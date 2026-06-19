@@ -51,15 +51,9 @@ export const canActivateAggregatedDataEdit: CanActivateFn = (route: ActivatedRou
     return false;
   }
 
-  const change = route.queryParamMap.get('change') === 'true';
   const store = inject(RequestTaskStore);
   const editable = store.select(requestTaskQuery.selectIsEditable)();
   const aggregatedData = store.select(aerCommonQuery.selectAggregatedDataItem(dataId))();
-  const isAggregatedDataCompleted = isAggregatedDataWizardCompleted(aggregatedData);
-
-  if (isAggregatedDataCompleted && !change) {
-    return createUrlTreeFromSnapshot(route, ['../']);
-  }
 
   return (
     (!aggregatedData?.fromFetch && aggregatedData.dataInputType !== 'EXTERNAL_PROVIDER' && editable) ||

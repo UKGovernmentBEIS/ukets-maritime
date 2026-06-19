@@ -2,7 +2,7 @@ import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { RegulatorUsersRegistrationService } from '@mrtm/api';
 
@@ -10,6 +10,7 @@ import { ErrorCodes } from '@netz/common/error';
 import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
 
 import { RegulatorInvitationComponent } from '@invitation/regulator-invitation/regulator-invitation.component';
+import { PasswordService } from '@shared/services';
 
 describe('RegulatorInvitationComponent', () => {
   let component: RegulatorInvitationComponent;
@@ -18,6 +19,7 @@ describe('RegulatorInvitationComponent', () => {
   let router: Router;
   let route: ActivatedRoute;
   let regulatorUsersRegistrationService: jest.Mocked<RegulatorUsersRegistrationService>;
+  let passwordService: Partial<jest.Mocked<PasswordService>>;
 
   class Page extends BasePage<RegulatorInvitationComponent> {
     get emailValue() {
@@ -39,6 +41,7 @@ describe('RegulatorInvitationComponent', () => {
 
   beforeEach(async () => {
     regulatorUsersRegistrationService = mockClass(RegulatorUsersRegistrationService);
+    passwordService = mockClass(PasswordService);
     const activatedRoute = new ActivatedRouteStub(
       undefined,
       { token: 'token' },
@@ -52,6 +55,7 @@ describe('RegulatorInvitationComponent', () => {
       providers: [
         provideHttpClient(),
         { provide: RegulatorUsersRegistrationService, useValue: regulatorUsersRegistrationService },
+        { provide: PasswordService, useValue: passwordService },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
     }).compileComponents();
@@ -81,6 +85,8 @@ describe('RegulatorInvitationComponent', () => {
       throwError(() => new HttpErrorResponse({ error: { code: ErrorCodes.EMAIL1001 }, status: 400 })),
     );
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
+    passwordService.blacklisted.mockReturnValue(of(null));
+    passwordService.strong.mockReturnValue(null);
 
     component.form.get('password').setValue('ThisIsAStrongP@ssw0rd');
     component.form.get('validatePassword').setValue('ThisIsAStrongP@ssw0rd');
@@ -122,6 +128,8 @@ describe('RegulatorInvitationComponent', () => {
 
     expect(regulatorUsersRegistrationService.acceptAuthorityAndActivateRegulatorUserFromInvite).not.toHaveBeenCalled();
 
+    passwordService.blacklisted.mockReturnValue(of(null));
+    passwordService.strong.mockReturnValue(null);
     page.passwordValue = 'ThisIsAStrongP@ssw0rd';
     page.repeatedPasswordValue = 'ThisIsAStrongP@ssw0rd';
     fixture.detectChanges();

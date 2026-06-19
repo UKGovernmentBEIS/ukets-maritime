@@ -23,7 +23,6 @@ import {
   AER_RELATED_SHIP_SELECTOR,
   AER_SUBTASK,
   AER_SUBTASK_LIST_MAP,
-  AER_SUBTASK_NEW_ENTRY_FLOW,
 } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AER_EMISSIONS_CALCULATIONS_SELECTOR } from '@requests/common/aer/components/aer-emissions-calculations/aer-emissions-calculations.types';
@@ -67,7 +66,6 @@ export class AerEmissionsCalculationsComponent {
   private readonly form: UntypedFormGroup = new UntypedFormGroup({});
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
 
-  public readonly isAddNewEntryFlow = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   public readonly wizardStep = AerPortsWizardStep;
   public readonly wizardMap = inject(AER_SUBTASK_LIST_MAP);

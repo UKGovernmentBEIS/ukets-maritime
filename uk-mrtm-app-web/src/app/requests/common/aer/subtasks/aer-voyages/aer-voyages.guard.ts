@@ -65,13 +65,8 @@ export const canActivateVoyageEmissions: CanActivateFn = (route: ActivatedRouteS
   }
 
   const store = inject(RequestTaskStore);
-  const change = route.queryParamMap.get('change') === 'true';
-  const voyage = store.select(aerCommonQuery.selectVoyage(voyageId))();
-  const isVoyageCompleted = isVoyageWizardCompleted(voyage);
 
-  if (isVoyageCompleted && !change) {
-    return createUrlTreeFromSnapshot(route, ['../']);
-  }
+  const voyage = store.select(aerCommonQuery.selectVoyage(voyageId))();
 
   return (
     aerVoyageStepsCompletedMap.voyageDetails(voyage) ||

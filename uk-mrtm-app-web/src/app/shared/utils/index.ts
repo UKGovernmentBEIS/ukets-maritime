@@ -10,7 +10,6 @@ export * from './is-empty';
 export * from './is-equal';
 export * from './is-lng';
 export * from './is-nil';
-export * from './is-null-or-empty';
 export * from './is-vir';
 export * from './keyvalue-order';
 export * from './merge-diff-array';

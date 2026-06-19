@@ -2,7 +2,7 @@ import { NgComponentOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, input, Type } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { StatusTagColorPipe, StatusTagStylePipe, StatusTagTextPipe } from '@netz/common/pipes';
+import { StatusTagColorPipe, StatusTagTextPipe } from '@netz/common/pipes';
 import { LinkDirective, TagComponent, WarningTextComponent } from '@netz/govuk-components';
 
 /* eslint-disable @angular-eslint/component-selector */
@@ -13,10 +13,9 @@ import { LinkDirective, TagComponent, WarningTextComponent } from '@netz/govuk-c
     StatusTagColorPipe,
     StatusTagTextPipe,
     LinkDirective,
+    TagComponent,
     WarningTextComponent,
     NgComponentOutlet,
-    StatusTagStylePipe,
-    TagComponent,
   ],
   standalone: true,
   templateUrl: './task-item.component.html',

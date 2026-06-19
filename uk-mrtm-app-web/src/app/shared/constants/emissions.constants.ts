@@ -335,7 +335,7 @@ export const DENSITY_METHOD_TANK_SELECT_ITEMS: GovukSelectOption<EmpFuelsAndEmis
 ];
 
 export const monitoringMethodMap: Record<
-  UncertaintyLevel['monitoringMethod'],
+  'BDN' | 'BUNKER_TANK' | 'FLOW_METERS' | 'DIRECT',
   {
     text: string;
     hint: string;

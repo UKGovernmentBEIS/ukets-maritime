@@ -1,4 +1,4 @@
-import { DecimalPipe, NgTemplateOutlet } from '@angular/common';
+import { DecimalPipe, NgClass, NgTemplateOutlet } from '@angular/common';
 import {
   AfterViewInit,
   Component,
@@ -30,7 +30,7 @@ import { HTMLInputType } from './text-input.type';
  */
 @Component({
   selector: 'div[govuk-text-input]',
-  imports: [ErrorMessageComponent, NgTemplateOutlet],
+  imports: [ErrorMessageComponent, NgClass, NgTemplateOutlet],
   standalone: true,
   templateUrl: './text-input.component.html',
   providers: [DecimalPipe],

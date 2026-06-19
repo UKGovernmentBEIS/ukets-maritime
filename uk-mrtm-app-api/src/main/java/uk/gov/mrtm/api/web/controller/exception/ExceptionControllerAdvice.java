@@ -198,13 +198,6 @@ public class ExceptionControllerAdvice {
         return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.RESOURCE_NOT_FOUND);
     }
 
-    @ExceptionHandler(SecurityException.class)
-    @ResponseBody
-    public ResponseEntity<ErrorResponse> handleSecurityException(SecurityException ex) {
-        log.error("File blocked by the content security filter", ex);
-        return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.INVALID_FILE_TYPE);
-    }
-
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleGenericException(Exception e) {

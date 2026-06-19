@@ -1,13 +1,9 @@
-@use 'govuk-frontend/dist/govuk/index' as govuk;
-
 ins.diffmod,
 del.diffmod,
 ins.diffins,
 del.diffdel {
-  margin-top: -2px;
-  margin-bottom: -3px;
-  padding: 2px 8px 3px;
-  border-radius: 1px;
+  padding: 1px 5px 1px 4px;
+  border-radius: 5px;
 }
 
 del.diffmod + ins.diffmod,
@@ -18,12 +14,10 @@ del.diffdel + ins.diffins {
 ins.diffmod,
 ins.diffins {
   text-decoration: none;
-  color: govuk.govuk-colour("green", $variant: "shade-50");
-  background-color: govuk.govuk-colour("green", $variant: "tint-80");
+  background-color: #acf2bd;
 }
 
 del.diffmod,
 del.diffdel {
-  color: govuk.govuk-colour("red", $variant: "shade-50");
-  background-color: govuk.govuk-colour("red", $variant: "tint-80");
+  background-color: #fdb9c0;
 }

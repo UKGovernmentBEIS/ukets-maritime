@@ -54,8 +54,6 @@ export class AerFuelsAndEmissionsFactorsListComponent {
   handleAddItem(): void {
     this.router.navigate(['../../' + AerEmissionsWizardStep.FUELS_AND_EMISSIONS_FORM, crypto.randomUUID()], {
       relativeTo: this.route,
-      queryParams: { change: true },
-      queryParamsHandling: 'merge',
     });
   }
 

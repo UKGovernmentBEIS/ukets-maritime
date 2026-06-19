@@ -45,8 +45,6 @@ describe('NonComplianceNotifiedUsersSummaryTemplateComponent', () => {
       'Users',
       'Operator1 User, Operator admin - Primary contact, Service contact, Financial contact' +
         'Operator2 User, Operator admin - Secondary contact',
-      'External contacts',
-      'Not provided',
     ]);
   });
 });

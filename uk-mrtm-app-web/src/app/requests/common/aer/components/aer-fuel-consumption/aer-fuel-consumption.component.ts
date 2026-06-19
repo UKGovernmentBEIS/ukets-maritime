@@ -256,11 +256,7 @@ export class AerFuelConsumptionComponent {
       .saveSubtask(this.subtask, AER_FUEL_CONSUMPTION_STEP, this.activatedRoute, this.formGroup.getRawValue())
       .pipe(take(1))
       .subscribe(() => {
-        this.router.navigate(this.fuelConsumptionId() ? ['../../'] : ['../'], {
-          relativeTo: this.activatedRoute,
-          queryParams: { change: true },
-          queryParamsHandling: 'merge',
-        });
+        this.router.navigate(this.fuelConsumptionId() ? ['../../'] : ['../'], { relativeTo: this.activatedRoute });
       });
   }
 }

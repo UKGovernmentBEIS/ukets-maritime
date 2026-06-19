@@ -29,24 +29,17 @@ export const canActivateAerEmissionsShipSummary: CanActivateFn = (route) => {
   );
 };
 
-export const canActivateAerEmissionsShipEdit =
-  (summaryPath: string = '../'): CanActivateFn =>
-  (route) => {
-    const shipId = route.params['shipId'];
-    if (!shipId) {
-      return false;
-    }
+export const canActivateAerEmissionsShipEdit: CanActivateFn = (route) => {
+  const shipId = route.params['shipId'];
+  if (!shipId) {
+    return false;
+  }
+  const store = inject(RequestTaskStore);
 
-    const isChange = route.queryParams?.['change'] === 'true';
-    const store = inject(RequestTaskStore);
+  const isEditable = store.select(aerCommonQuery.selectIsShipEditable(shipId))();
 
-    const isEditable = store.select(aerCommonQuery.selectIsShipEditable(shipId))();
-    const ship = store.select(aerCommonQuery.selectShip(shipId))();
-
-    return (
-      (isEditable && (isChange || !isShipWizardCompleted(ship))) || createUrlTreeFromSnapshot(route, [summaryPath])
-    );
-  };
+  return isEditable || createUrlTreeFromSnapshot(route, ['../']);
+};
 
 export const canActivateAerEmissionsSummary: CanActivateFn = (route) => {
   const store = inject(RequestTaskStore);

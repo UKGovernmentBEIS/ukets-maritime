@@ -24,7 +24,7 @@ import java.util.Set;
 @Builder
 public class ExternalAer {
 
-    @Schema(description = "Ships and emission details. All ships related to the AER must be provided")
+    @Schema(description = "Ships and emission details")
     @Builder.Default
     @Valid
     @NotEmpty

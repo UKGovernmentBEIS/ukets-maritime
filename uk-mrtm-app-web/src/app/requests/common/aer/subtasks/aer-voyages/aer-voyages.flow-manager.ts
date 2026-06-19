@@ -24,7 +24,6 @@ export class AerVoyagesFlowManager extends WizardFlowManager {
       case AerVoyagesWizardStep.DELETE_DIRECT_EMISSIONS:
       case AerVoyagesWizardStep.DELETE_FUEL_CONSUMPTION:
         return of('./');
-      case AerVoyagesWizardStep.NEW_FUEL_EMISSIONS_SUMMARY:
       default:
         return of('../../');
     }

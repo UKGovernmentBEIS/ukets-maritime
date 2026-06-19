@@ -9,7 +9,7 @@ import { TaskItemListComponent } from './task-item-list.component';
 describe('TaskItemListComponent', () => {
   let component: TaskItemListComponent;
   let fixture: ComponentFixture<TaskItemListComponent>;
-  const map: TaskStatusTagMap = { COMPLETED: { text: 'Completed', color: 'blue', style: 'fill' } };
+  const map: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

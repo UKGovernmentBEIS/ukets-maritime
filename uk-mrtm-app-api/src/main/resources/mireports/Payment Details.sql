@@ -57,7 +57,8 @@ with r1 as (
           r4.cancelled_Date                    "Cancelled Date"
      from account              a
      join account_mrtm am on am.id = a.id
-     join request_account r on a.id = CAST(r.account_id AS bigint)
+     join request_resource rr on (rr.resource_type = 'ACCOUNT' and rr.resource_id = a.id::VARCHAR)
+     join request              r  on rr.request_id = r.id
      join r4                      on r4.request_id = r.id
     left join account_reporting_status ars on a.id = ars.account_id
     left join request_type t on r.type_id = t.id

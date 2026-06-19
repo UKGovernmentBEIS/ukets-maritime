@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmpProcedureForm;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmpProcedureFormWithFiles;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.controlactivities.EmpControlActivities;
@@ -135,29 +134,15 @@ class ExternalEmpMapperTest {
             .thenReturn(EMISSION_SOURCE)
             .thenReturn(EMP_SHIP_EMISSIONS_ID);
 
-        ExternalEmissionsMonitoringPlan expectedExternal = createExternalEmissionsMonitoringPlan(captureAndStorageApplied,
+        ExternalEmissionsMonitoringPlan external = createExternalEmissionsMonitoringPlan(captureAndStorageApplied,
             derogationCodeUsed, defaultFactorsUsed, emissionsReductionClaimExists, delegatedResponsibilityUsed, outsourcedActivitiesExists);
 
-        StagingEmissionsMonitoringPlan expectedStaging = createStagingEmissionsMonitoringPlan(captureAndStorageApplied,
+        StagingEmissionsMonitoringPlan expected = createStagingEmissionsMonitoringPlan(captureAndStorageApplied,
             derogationCodeUsed, defaultFactorsUsed, emissionsReductionClaimExists, delegatedResponsibilityUsed, outsourcedActivitiesExists);
 
-        StagingEmissionsMonitoringPlan actualStaging = externalEmpMapper.toStagingEmissionsMonitoringPlan(expectedExternal);
+        StagingEmissionsMonitoringPlan actual = externalEmpMapper.toStagingEmissionsMonitoringPlan(external);
 
-        assertEquals(expectedStaging, actualStaging);
-
-        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder()
-            .emissions(actualStaging.getEmissions())
-            .mandate(actualStaging.getMandate())
-            .sources(actualStaging.getSources())
-            .greenhouseGas(actualStaging.getGreenhouseGas())
-            .managementProcedures(actualStaging.getManagementProcedures())
-            .controlActivities(actualStaging.getControlActivities())
-            .dataGaps(actualStaging.getDataGaps())
-            .build();
-
-        ExternalEmissionsMonitoringPlan actualExternal = externalEmpMapper.toExternalEmissionsMonitoringPlan(emissionsMonitoringPlan);
-
-        assertEquals(expectedExternal, actualExternal);
+        assertEquals(expected, actual);
     }
 
     @Test
@@ -177,29 +162,15 @@ class ExternalEmpMapperTest {
             .thenReturn(EMISSION_SOURCE)
             .thenReturn(EMP_SHIP_EMISSIONS_ID);
 
-        ExternalEmissionsMonitoringPlan expectedExternal = createExternalEmissionsMonitoringPlan(captureAndStorageApplied,
+        ExternalEmissionsMonitoringPlan external = createExternalEmissionsMonitoringPlan(captureAndStorageApplied,
             derogationCodeUsed, defaultFactorsUsed, emissionsReductionClaimExists, delegatedResponsibilityUsed, outsourcedActivitiesExists);
 
-        StagingEmissionsMonitoringPlan expectedStaging = createStagingEmissionsMonitoringPlan(captureAndStorageApplied,
+        StagingEmissionsMonitoringPlan expected = createStagingEmissionsMonitoringPlan(captureAndStorageApplied,
             derogationCodeUsed, defaultFactorsUsed, emissionsReductionClaimExists, delegatedResponsibilityUsed, outsourcedActivitiesExists);
 
-        StagingEmissionsMonitoringPlan actualStaging = externalEmpMapper.toStagingEmissionsMonitoringPlan(expectedExternal);
+        StagingEmissionsMonitoringPlan actual = externalEmpMapper.toStagingEmissionsMonitoringPlan(external);
 
-        assertEquals(expectedStaging, actualStaging);
-
-        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder()
-            .emissions(actualStaging.getEmissions())
-            .mandate(actualStaging.getMandate())
-            .sources(actualStaging.getSources())
-            .greenhouseGas(actualStaging.getGreenhouseGas())
-            .managementProcedures(actualStaging.getManagementProcedures())
-            .controlActivities(actualStaging.getControlActivities())
-            .dataGaps(actualStaging.getDataGaps())
-            .build();
-
-        ExternalEmissionsMonitoringPlan actualExternal = externalEmpMapper.toExternalEmissionsMonitoringPlan(emissionsMonitoringPlan);
-
-        assertEquals(expectedExternal, actualExternal);
+        assertEquals(expected, actual);
     }
 
     private StagingEmissionsMonitoringPlan createStagingEmissionsMonitoringPlan(boolean captureAndStorageApplied, boolean derogationCodeUsed,
@@ -307,7 +278,7 @@ class ExternalEmpMapperTest {
                 .correctionsProcedure(createExternalEmpProcedureForm("correctionsProcedure"))
                 .outsourcedActivitiesProcedure(ExternalEmpOutsourcedActivitiesProcedure.builder()
                     .outsourcedActivitiesExists(outsourcedActivitiesExists)
-                    .details(outsourcedActivitiesExists ? createExternalEmpProcedureForm("outsourcedActivitiesProcedure") : null)
+                    .details(createExternalEmpProcedureForm("outsourcedActivitiesProcedure"))
                     .build())
                 .documentationProcedure(createExternalEmpProcedureForm("documentationProcedure"))
                 .build())

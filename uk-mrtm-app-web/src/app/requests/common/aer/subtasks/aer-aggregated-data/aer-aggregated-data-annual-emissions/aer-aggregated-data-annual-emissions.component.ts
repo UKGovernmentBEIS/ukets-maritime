@@ -22,7 +22,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { LinkDirective } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { AerAggregatedEmissionsFormComponent, fieldValidators } from '@requests/common/aer/components';
 import {
@@ -57,8 +56,6 @@ export class AerAggregatedDataAnnualEmissionsComponent implements OnInit {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<AerSubmitTaskPayload> = inject(TaskService);
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
-
-  public readonly isAddNewAggregatedData = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   public readonly form = inject(TASK_FORM);
   public readonly wizardMap = aerAggregatedDataSubtasksListMap;
   public readonly dataId: InputSignal<string> = input<string>();

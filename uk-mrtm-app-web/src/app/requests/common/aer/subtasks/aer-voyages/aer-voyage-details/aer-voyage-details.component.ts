@@ -22,7 +22,6 @@ import { RequestTaskStore } from '@netz/common/store';
 import { FieldsetDirective, LegendDirective, LinkDirective, SelectComponent } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
-import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import { aerVoyageDetailsFormProvider } from '@requests/common/aer/subtasks/aer-voyages/aer-voyage-details/aer-voyage-details.form-provider';
 import {
@@ -60,7 +59,7 @@ export class AerVoyageDetailsComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
 
   public readonly voyageId: InputSignal<string> = input<string>();
-  public readonly isAddNewVoyage = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
+
   public readonly wizardMap = aerVoyagesMap;
   public readonly countrySelectItems = AER_PORT_COUNTRY_SELECT_ITEMS;
   private readonly currentArrivalCountry = toSignal(this.arrivalCountryCtrl.valueChanges.pipe(), {
