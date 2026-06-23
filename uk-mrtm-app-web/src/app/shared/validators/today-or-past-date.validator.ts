@@ -1,6 +1,6 @@
 import { AbstractControl, ValidatorFn } from '@angular/forms';
 
-import { isBefore, isSameDay } from 'date-fns';
+import { isAfter, startOfDay } from 'date-fns';
 
 export function todayOrPastDateValidator(message?: string): ValidatorFn {
   return (control: AbstractControl): { [key: string]: string } | null => {
@@ -10,16 +10,21 @@ export function todayOrPastDateValidator(message?: string): ValidatorFn {
       return null;
     }
 
-    const date = value instanceof Date ? value : new Date(value);
+    const inputDate = value instanceof Date ? value : new Date(value);
 
-    if (isNaN(date.getTime())) {
+    if (isNaN(inputDate.getTime())) {
       return null;
     }
 
     const today = new Date();
 
-    return isSameDay(date, today) || isBefore(date, today)
-      ? null
-      : { futureDateError: message ?? 'The date must be today or in the past' };
+    const inputMidnight = startOfDay(
+      new Date(inputDate.getUTCFullYear(), inputDate.getUTCMonth(), inputDate.getUTCDate()),
+    );
+    const todayMidnight = startOfDay(today);
+
+    return isAfter(inputMidnight, todayMidnight)
+      ? { futureDateError: message ?? 'The date must be today or in the past' }
+      : null;
   };
 }

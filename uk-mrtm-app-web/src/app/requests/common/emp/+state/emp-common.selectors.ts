@@ -253,9 +253,13 @@ const selectIsVariationRegulator: StateSelector<RequestTaskState, boolean> = cre
 const selectHasReview: StateSelector<RequestTaskState, boolean> = createDescendingSelector(
   requestTaskQuery.selectRequestTaskType,
   (requestTaskType) =>
-    requestTaskType === 'EMP_ISSUANCE_APPLICATION_REVIEW' ||
-    requestTaskType === 'EMP_ISSUANCE_APPLICATION_PEER_REVIEW' ||
-    requestTaskType === 'EMP_VARIATION_APPLICATION_REVIEW',
+    [
+      'EMP_ISSUANCE_APPLICATION_REVIEW',
+      'EMP_ISSUANCE_APPLICATION_PEER_REVIEW',
+      'EMP_ISSUANCE_WAIT_FOR_PEER_REVIEW',
+      'EMP_VARIATION_APPLICATION_REVIEW',
+      'EMP_VARIATION_APPLICATION_PEER_REVIEW',
+    ].includes(requestTaskType),
 );
 
 const selectIsPeerReview: StateSelector<RequestTaskState, boolean> = createDescendingSelector(
