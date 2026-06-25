@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -15,6 +14,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import uk.gov.mrtm.api.emissionsmonitoringplan.validation.PastOrPresentPlusDays;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueElements;
 import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 
@@ -50,7 +50,7 @@ public class ExternalEmpRegisteredOwner {
 
     @Schema(description = "Date of written agreement (past or present)")
     @NotNull
-    @PastOrPresent
+    @PastOrPresentPlusDays
     private LocalDate agreementDate;
 
     @Schema(description = "Associated ships")
