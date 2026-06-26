@@ -32,6 +32,7 @@ describe('VerificationBodyFormComponent', () => {
   class TestComponent {
     formGroup = new FormGroup<Record<string, FormControl>>({
       name: new FormControl<VerificationBodyCreationDTO['name'] | null>(null),
+      accreditationBodyName: new FormControl<VerificationBodyCreationDTO['accreditationBodyName'] | null>(null),
       accreditationReferenceNumber: new FormControl<VerificationBodyCreationDTO['accreditationReferenceNumber'] | null>(
         null,
       ),
@@ -54,6 +55,6 @@ describe('VerificationBodyFormComponent', () => {
   });
 
   it('should show all applicable inputs', () => {
-    expect(page.allInputs).toHaveLength(2);
+    expect(page.allInputs).toHaveLength(3);
   });
 });

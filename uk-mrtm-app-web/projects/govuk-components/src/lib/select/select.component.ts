@@ -1,4 +1,3 @@
-import { NgClass } from '@angular/common';
 import { Component, computed, contentChild, input, model } from '@angular/core';
 import { ControlValueAccessor, ReactiveFormsModule } from '@angular/forms';
 
@@ -16,7 +15,7 @@ import { GovukSelectWidthClass } from './select.type';
 */
 @Component({
   selector: 'div[govuk-select]',
-  imports: [ReactiveFormsModule, NgClass, FormErrorDirective, ErrorMessageComponent],
+  imports: [ReactiveFormsModule, FormErrorDirective, ErrorMessageComponent],
   standalone: true,
   templateUrl: './select.component.html',
 })

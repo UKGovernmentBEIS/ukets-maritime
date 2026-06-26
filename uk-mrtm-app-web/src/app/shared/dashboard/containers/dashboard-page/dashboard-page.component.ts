@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@a
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
-import { switchMap } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs';
 
 import { MrtmItemDTO } from '@mrtm/api';
 
@@ -23,21 +23,26 @@ import {
   TabsComponent,
 } from '@netz/govuk-components';
 
+import { AutocompleteSelectOption } from '@shared/components';
 import { requestTypesWhitelistForItemLinkPipe } from '@shared/constants';
 import {
-  DashboardItemsListComponent,
+  DashboardStore,
+  initialDashboardFiltersAndOrderByState,
   initialState,
+  selectFilters,
   WorkflowItemsAssignmentType,
-  WorkflowItemsService,
-} from '@shared/dashboard';
-import { daysRemainingTransformer, taskActionTypeToTitleTransformer } from '@shared/utils';
+} from '@shared/dashboard/+store';
+import { DashboardFiltersComponent } from '@shared/dashboard/components/dashboard-filters';
+import { DashboardItemsListComponent } from '@shared/dashboard/components/dashboard-items-list';
+import { WorkflowItemsService } from '@shared/dashboard/services';
+import { daysRemainingTransformer, isEqual, taskActionTypeToTitleTransformer } from '@shared/utils';
 
 const DEFAULT_TABLE_COLUMNS: GovukTableColumn<MrtmItemDTO>[] = [
   { field: 'taskType', header: 'Task', isSortable: false },
-  { field: 'taskAssignee', header: 'Assigned to', isSortable: false },
-  { field: 'daysRemaining', header: 'Days remaining', isSortable: false },
-  { field: 'requestId', header: 'Workflow ID', isSortable: false },
-  { field: 'accountName', header: 'Maritime operator', isSortable: false },
+  { field: 'taskAssignee', header: 'Assigned to', isSortable: false, widthClass: 'app-column-width-15-per' },
+  { field: 'daysRemaining', header: 'Days remaining', isSortable: false, widthClass: 'app-column-width-15-per' },
+  { field: 'requestId', header: 'Workflow ID', isSortable: false, widthClass: 'app-column-width-20-per' },
+  { field: 'accountName', header: 'Maritime operator', isSortable: false, widthClass: 'app-column-width-15-per' },
 ];
 
 const getTableColumns = (activeTab: WorkflowItemsAssignmentType): GovukTableColumn<MrtmItemDTO>[] => {
@@ -57,6 +62,7 @@ const getTableColumns = (activeTab: WorkflowItemsAssignmentType): GovukTableColu
     RouterLink,
     PaginationComponent,
     TabLazyDirective,
+    DashboardFiltersComponent,
   ],
   standalone: true,
   templateUrl: './dashboard-page.component.html',
@@ -71,10 +77,17 @@ const getTableColumns = (activeTab: WorkflowItemsAssignmentType): GovukTableColu
 })
 export class DashboardPageComponent {
   private readonly workflowItemsService = inject(WorkflowItemsService);
+
   private readonly authStore = inject(AuthStore);
   private readonly activatedRoute = inject(ActivatedRoute);
   private readonly router = inject(Router);
+  private readonly store = inject(DashboardStore);
 
+  readonly filters = this.store.select(selectFilters);
+  readonly isLoading = signal<boolean>(false);
+  readonly hasAppliedFilters = computed<boolean>(
+    () => !isEqual(this.filters(), initialDashboardFiltersAndOrderByState),
+  );
   pageSize = initialState.paging.pageSize;
   role = this.authStore.select(selectUserRoleType);
   readonly activeTab = signal(
@@ -92,22 +105,40 @@ export class DashboardPageComponent {
     activeTab: this.activeTab(),
     page: this.page(),
   }));
+
+  readonly relatedAccounts = toSignal(
+    this.workflowItemsService.getRelatedAccounts().pipe(
+      map((accounts) =>
+        accounts.map<AutocompleteSelectOption>((account) => ({
+          data: account.businessId,
+          text: `${account.name} (ID: ${account.businessId})`,
+        })),
+      ),
+    ),
+    {
+      initialValue: [],
+    },
+  );
+
   private readonly response = toSignal(
-    toObservable(this.params).pipe(
-      switchMap(
-        ({ activeTab, page }) => this.workflowItemsService.getItems(activeTab, page, this.pageSize),
-        // of({
-        //   items: [
-        //     {
-        //       taskAssigneeType: 'REGULATOR',
-        //       creationDate: new Date('2020-11-27T10:13:49Z').toISOString(),
-        //       requestId: '40',
-        //       taskId: 19,
-        //       daysRemaining: 3,
-        //     },
-        //   ],
-        //   totalItems: 1,
-        // } as ItemDTOResponse),
+    toObservable(
+      computed(() => ({
+        params: this.params(),
+        filters: this.filters(),
+      })),
+    ).pipe(
+      tap(() => this.isLoading.set(true)),
+      switchMap(({ params: { activeTab, page }, filters }) =>
+        this.workflowItemsService
+          .getItems(
+            activeTab,
+            page,
+            this.pageSize,
+            filters?.orderBy ?? 'NEWEST_FIRST',
+            filters.accountId?.data,
+            filters.workflowType,
+          )
+          .pipe(tap(() => this.isLoading.set(false))),
       ),
     ),
     {
@@ -117,8 +148,23 @@ export class DashboardPageComponent {
       },
     },
   );
-  readonly items = computed(() => this.response().items);
+  readonly items = computed(() => (this.isLoading() ? [] : this.response().items));
   readonly total = computed(() => this.response().totalItems);
+
+  readonly emptyTableText = computed(() =>
+    this.isLoading()
+      ? ''
+      : this.hasAppliedFilters()
+        ? `<h4 class="govuk-heading-s">There are no matching results.</h4>
+      <p class="govuk-body">Improve your search by:</p>
+      <ul class="govuk-list govuk-list--bullet">
+        <li>removing filters</li>
+        <li>double-checking your spelling</li>
+        <li>using fewer keywords</li>
+        <li>searching for something less specific</li>
+      </ul>`
+        : 'No tasks found',
+  );
 
   changePage(page: number) {
     this.page.update(() => page);

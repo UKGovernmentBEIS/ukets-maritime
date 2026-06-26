@@ -53,7 +53,7 @@
     } @else {
       <netz-page-heading>
         You need to create a sign in or
-        <a govukLink [routerLink]="['/contact-us']">contact your regulator or administrator</a>
+        <a govukLink href="/contact-us">contact your regulator or administrator</a>
         to create a sign in for you.
       </netz-page-heading>
       <a
@@ -89,7 +89,7 @@
     <p class="govuk-body">
       If your account was created by your regulator, they will now activate your account. You'll receive an email once
       your account has been activated.
-      <a govukLink routerLink="/contact-us">Contact your regulator</a>
+      <a govukLink href="/contact-us">Contact your regulator</a>
       if your account has not been activated after 2 working days.
     </p>
   </ng-template>

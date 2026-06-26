@@ -9,7 +9,14 @@ import {
   provideZoneChangeDetection,
 } from '@angular/core';
 import { Title } from '@angular/platform-browser';
-import { provideRouter, withComponentInputBinding, withInMemoryScrolling, withRouterConfig } from '@angular/router';
+import {
+  NavigationError,
+  provideRouter,
+  withComponentInputBinding,
+  withInMemoryScrolling,
+  withNavigationErrorHandler,
+  withRouterConfig,
+} from '@angular/router';
 
 import { firstValueFrom } from 'rxjs';
 import { KeycloakConfig } from 'keycloak-js';
@@ -19,6 +26,7 @@ import { ApiModule, Configuration } from '@mrtm/api';
 import { ConfigService } from '@core/config';
 import { httpErrorInterceptor, keycloakBearerInterceptor, pendingRequestInterceptor } from '@core/interceptors';
 import { AuthService, GlobalErrorHandlingService, KeycloakService, LatestTermsService } from '@core/services';
+import { isChunkLoadError, reloadForStaleChunk } from '@core/util';
 import { environment } from '@environments/environment';
 
 import { APP_ROUTES, routerOptions } from './app.routes';
@@ -52,6 +60,14 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig(routerOptions),
       withComponentInputBinding(),
       withInMemoryScrolling({ scrollPositionRestoration: 'enabled', anchorScrolling: 'enabled' }),
+      // During a rolling deployment a lazy route may reference a chunk hash that the freshly-rolled-out
+      // pods no longer serve. Reload to the attempted URL to pull the new index.html and recover,
+      // instead of letting the failure fall through to the generic /error/500 page.
+      withNavigationErrorHandler((event: NavigationError) => {
+        if (isChunkLoadError(event.error)) {
+          reloadForStaleChunk();
+        }
+      }),
     ),
   ],
 };

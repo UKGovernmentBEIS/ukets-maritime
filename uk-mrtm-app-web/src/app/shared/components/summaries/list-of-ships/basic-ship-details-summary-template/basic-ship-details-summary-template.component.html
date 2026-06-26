@@ -1,116 +1,135 @@
-@if (data(); as data) {
+@if (shipDetails(); as shipDetails) {
   <h2 class="govuk-heading-m">Basic ship details</h2>
   <dl [hasBorders]="true" govuk-summary-list>
-    @if (data?.imoNumber) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>IMO Number</dt>
-        <dd govukSummaryListRowValue>{{ data.imoNumber }}</dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">IMO number</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
-    @if (data?.name) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Name</dt>
-        <dd govukSummaryListRowValue>{{ data.name }}</dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">name</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
-    @if (data?.type) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Type</dt>
-        <dd govukSummaryListRowValue>{{ data.type | selectOptionToTitle: shipTypeSelectItems }}</dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">type</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
-    @if (data?.grossTonnage) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Gross tonnage</dt>
-        <dd govukSummaryListRowValue>{{ data.grossTonnage }}</dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">gross tonnage</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
-    @if (data?.flagState) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Flag state</dt>
-        <dd govukSummaryListRowValue>{{ data.flagState | selectOptionToTitle: flagStateSelectItems }}</dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">flag state</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
-    @if (data?.iceClass) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Ice class</dt>
-        <dd govukSummaryListRowValue>{{ data.iceClass | selectOptionToTitle: iceClassSelectItems }}</dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">Ice class</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
-
-    @if (data?.natureOfReportingResponsibility) {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Nature of reporting responsibility</dt>
-        <dd govukSummaryListRowValue>
-          {{ data.natureOfReportingResponsibility | selectOptionToTitle: reportingResponsibilitySelectItems }}
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>IMO Number</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="shipDetails?.imoNumber"
+        [previous]="originalShipDetails()?.imoNumber"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">IMO number</span>
+          </a>
         </dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">nature of reporting responsibility</span>
-            </a>
-          </dd>
-        }
-      </div>
-    }
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Name</dt>
+      <dd govukSummaryListRowValue htmlDiff [current]="shipDetails?.name" [previous]="originalShipDetails()?.name"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">name</span>
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Type</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="shipDetails?.type | selectOptionToTitle: shipTypeSelectItems"
+        [previous]="originalShipDetails()?.type | selectOptionToTitle: shipTypeSelectItems"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">type</span>
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Gross tonnage</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="shipDetails?.grossTonnage?.toString()"
+        [previous]="originalShipDetails()?.grossTonnage?.toString()"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">gross tonnage</span>
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Flag state</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="shipDetails?.flagState | selectOptionToTitle: flagStateSelectItems"
+        [previous]="originalShipDetails()?.flagState | selectOptionToTitle: flagStateSelectItems"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">flag state</span>
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Ice class</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="shipDetails?.iceClass | selectOptionToTitle: iceClassSelectItems"
+        [previous]="originalShipDetails()?.iceClass | selectOptionToTitle: iceClassSelectItems"></dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">Ice class</span>
+          </a>
+        </dd>
+      }
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Nature of reporting responsibility</dt>
+      <dd
+        govukSummaryListRowValue
+        htmlDiff
+        [current]="
+          shipDetails?.natureOfReportingResponsibility | selectOptionToTitle: reportingResponsibilitySelectItems
+        "
+        [previous]="
+          originalShipDetails()?.natureOfReportingResponsibility
+            | selectOptionToTitle: reportingResponsibilitySelectItems
+        "></dd>
+
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">nature of reporting responsibility</span>
+          </a>
+        </dd>
+      }
+    </div>
 
     @if (isAer()) {
       <div govukSummaryListRow>
         <dt govukSummaryListRowKey>Date</dt>
         <dd govukSummaryListRowValue>
-          @if ($any(data)?.allYear) {
+          @if ($any(shipDetails)?.allYear) {
             All year
           } @else {
-            From {{ $any(data)?.from | govukDate }} to {{ $any(data)?.to | govukDate }}
+            From {{ $any(shipDetails)?.from | govukDate }} to {{ $any(shipDetails)?.to | govukDate }}
           }
         </dd>
         @if (isEditable()) {

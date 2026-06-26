@@ -12,7 +12,7 @@ export class UserTypePipe implements PipeTransform {
       case 'operator':
         return 'operator user';
       case 'consultant_agent':
-        return 'consultant/agent';
+        return 'consultant or agent';
       case 'emitter_contact':
         return 'emitter contact user';
       default:

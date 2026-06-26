@@ -28,9 +28,11 @@ import { AttachedFile } from '@shared/types';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ShipSummaryTemplateComponent {
-  readonly data = input.required<EmpShipEmissions>();
+  readonly shipEmissions = input.required<EmpShipEmissions>();
+  readonly originalShipEmissions = input<EmpShipEmissions>();
   readonly isEditable = input<boolean>(false);
   readonly carbonCaptureFiles = input<AttachedFile[]>();
+  readonly originalCarbonCaptureFiles = input<AttachedFile[]>();
   readonly changeLinks = input<
     Partial<
       Record<

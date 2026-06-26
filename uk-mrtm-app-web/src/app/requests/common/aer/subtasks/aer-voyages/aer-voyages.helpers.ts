@@ -30,6 +30,7 @@ export enum AerVoyagesWizardStep {
   UPLOAD_VOYAGES = 'upload-voyages',
   DELETE_FUEL_CONSUMPTION = AER_DELETE_FUEL_CONSUMPTION_STEP,
   DELETE_DIRECT_EMISSIONS = AER_DELETE_DIRECT_EMISSIONS_STEP,
+  NEW_FUEL_EMISSIONS_SUMMARY = 'new-fuel-emissions-summary',
 }
 
 export const getAerJourneyType = (voyageDetails: AerVoyageDetails): AerJourneyTypeEnum => {

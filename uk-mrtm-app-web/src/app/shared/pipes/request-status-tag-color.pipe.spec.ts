@@ -15,6 +15,8 @@ describe('RequestStatusTagColorPipe', () => {
     expect(transformation).toEqual('grey');
     transformation = pipe.transform('CLOSED');
     expect(transformation).toEqual('grey');
+    transformation = pipe.transform('EXEMPT');
+    expect(transformation).toEqual('grey');
 
     transformation = pipe.transform('COMPLETED');
     expect(transformation).toEqual('green');
@@ -22,14 +24,12 @@ describe('RequestStatusTagColorPipe', () => {
     expect(transformation).toEqual('green');
 
     transformation = pipe.transform('IN_PROGRESS');
-    expect(transformation).toEqual('blue');
+    expect(transformation).toEqual('teal');
 
     transformation = pipe.transform('WITHDRAWN');
-    expect(transformation).toEqual('red');
+    expect(transformation).toEqual('orange');
 
     transformation = pipe.transform('REJECTED');
-    expect(transformation).toEqual('red');
-    transformation = pipe.transform('EXEMPT');
     expect(transformation).toEqual('red');
 
     transformation = pipe.transform('MIGRATED');

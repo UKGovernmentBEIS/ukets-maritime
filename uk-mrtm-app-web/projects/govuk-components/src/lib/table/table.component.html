@@ -61,9 +61,10 @@
     } @empty {
       @if (emptyTableText()) {
         <tr class="govuk-table__row">
-          <td class="govuk-table__cell govuk-table__cell--empty--no-bottom-border" [attr.colspan]="columns().length">
-            {{ emptyTableText() }}
-          </td>
+          <td
+            class="govuk-table__cell govuk-table__cell--empty--no-bottom-border"
+            [attr.colspan]="columns().length"
+            [innerHTML]="emptyTableText() | safeHtml"></td>
         </tr>
       }
     }

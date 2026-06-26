@@ -87,7 +87,7 @@ export const reductionClaimFuelPurchaseFormProvider: Provider = {
             GovukValidators.positiveOrZeroNumber(
               'The emission factor for carbon dioxide should be greater than or equal 0',
             ),
-            GovukValidators.maxIntegerAndDecimalsValidator(12, 5),
+            GovukValidators.maxDecimalValidator(12),
           ],
         },
       ),

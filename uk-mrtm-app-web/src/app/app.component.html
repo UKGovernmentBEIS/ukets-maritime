@@ -3,18 +3,18 @@
 }
 
 <govuk-skip-link />
-<govuk-header title="Manage your UK Emissions Trading Scheme Reporting">
+<govuk-header-legacy title="Manage your UK Emissions Trading Scheme Reporting">
   <govuk-header-actions-list>
     <span aria-label="Maritime view">Maritime view</span>
     @if ((isLoggedIn$ | async) && (isGatewayServiceEnabled$ | async)) {
-      <a class="govuk-header__link" [href]="serviceGatewayUrl">Change service</a>
+      <a class="govuk-header-legacy__link" [href]="serviceGatewayUrl">Change service</a>
     }
     @if (isLoggedIn$ | async) {
-      <a routerLink class="govuk-header__link" (click)="logout($event)">Sign out</a>
+      <a routerLink class="govuk-header-legacy__link" (click)="logout($event)">Sign out</a>
     }
   </govuk-header-actions-list>
   @if (permissions$ | async; as permissions) {
-    <govuk-header-nav-list identifier="navigation" ariaLabel="Primary navigation">
+    <govuk-header-nav-list-legacy identifier="navigation" ariaLabel="Primary navigation">
       @if (permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers) {
         <a govukLink="header" [routerLink]="['/dashboard']">Tasks</a>
       }
@@ -39,9 +39,9 @@
       @if (permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers) {
         <a govukLink="header" [routerLink]="['/guidance']">Guidance</a>
       }
-    </govuk-header-nav-list>
+    </govuk-header-nav-list-legacy>
   }
-</govuk-header>
+</govuk-header-legacy>
 
 <div class="govuk-width-container">
   <mrtm-phase-bar />
@@ -55,7 +55,7 @@
 <govuk-footer>
   <govuk-footer-meta-info>
     <a govukLink="meta" href="/privacy-notice">Privacy Notice</a>
-    <a govukLink="meta" routerLink="/contact-us">Contact us</a>
+    <a govukLink="meta" href="/contact-us">Contact us</a>
     <a govukLink="meta" routerLink="/accessibility">Accessibility Statement</a>
     <a govukLink="meta" routerLink="/legislation">Legislation</a>
   </govuk-footer-meta-info>

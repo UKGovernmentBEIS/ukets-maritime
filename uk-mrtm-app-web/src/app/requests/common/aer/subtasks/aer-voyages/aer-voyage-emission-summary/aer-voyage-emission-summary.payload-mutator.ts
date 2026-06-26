@@ -12,19 +12,21 @@ import {
 } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
-export class AerVoyageEmissionSummaryPayloadMutator extends PayloadMutator {
-  public readonly subtask = AER_VOYAGES_SUB_TASK;
-  public readonly step = AerVoyagesWizardStep.FUEL_EMISSIONS_SUMMARY;
-
-  public apply(
-    currentPayload: AerSubmitTaskPayload,
-    userInput: AerPort['uniqueIdentifier'],
-  ): Observable<AerSubmitTaskPayload> {
-    return of(
-      produce(currentPayload, (payload: AerSubmitTaskPayload) => {
-        payload.aerSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
-        payload.aerSectionsCompleted[`${this.subtask}-voyage-${userInput}`] = TaskItemStatus.COMPLETED;
-      }),
-    );
-  }
-}
+export const provideAerVoyageEmissionSummaryPayloadMutator = (
+  step: AerVoyagesWizardStep.NEW_FUEL_EMISSIONS_SUMMARY | AerVoyagesWizardStep.FUEL_EMISSIONS_SUMMARY,
+): PayloadMutator =>
+  ({
+    subtask: AER_VOYAGES_SUB_TASK,
+    step,
+    apply: (
+      currentPayload: AerSubmitTaskPayload,
+      userInput: AerPort['uniqueIdentifier'],
+    ): Observable<AerSubmitTaskPayload> => {
+      return of(
+        produce(currentPayload, (payload: AerSubmitTaskPayload) => {
+          payload.aerSectionsCompleted[AER_VOYAGES_SUB_TASK] = TaskItemStatus.IN_PROGRESS;
+          payload.aerSectionsCompleted[`${AER_VOYAGES_SUB_TASK}-voyage-${userInput}`] = TaskItemStatus.COMPLETED;
+        }),
+      );
+    },
+  }) as PayloadMutator;

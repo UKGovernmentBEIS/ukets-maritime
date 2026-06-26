@@ -10,11 +10,10 @@ accounts_of_interest as (
      where (select imoNumber from parameters) is null or am.imo_number = (select imoNumber from parameters)
 ),
 aers_all_years as (
-    select CAST(rr.resource_id AS BIGINT) account_id, r.id request_id, r.status,
+    select CAST(r.account_id AS BIGINT) account_id, r.id request_id, r.status,
            cast(r.metadata ->> 'year' as integer) reporting_year
-      from request r
+      from request_account r
       join request_type rt on rt.id = r.type_id
-      join request_resource rr on (r.id = rr.request_id AND rr.resource_type = 'ACCOUNT')
      where rt.code = 'AER'
        and ((select reportingYear from parameters) is null or cast(r.metadata ->> 'year' as integer) = (select reportingYear from parameters))
 ),

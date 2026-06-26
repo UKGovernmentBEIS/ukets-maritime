@@ -64,7 +64,7 @@ const sectionsA: TaskSection[] = [
       {
         link: 'test-link',
         linkText: 'TEST_SUBTASK_A',
-        status: 'COMPLETED',
+        status: 'Completed',
       },
     ],
   },
@@ -77,13 +77,13 @@ const sectionsB: TaskSection[] = [
       {
         link: 'test-link',
         linkText: 'TEST_SUBTASK_B',
-        status: 'COMPLETED',
+        status: 'Completed',
       },
     ],
   },
 ];
 
-const statusTagMap: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
+const statusTagMap: TaskStatusTagMap = { Completed: { text: 'Completed', color: 'blue', style: 'fill' } };
 
 const contentWithSections: Record<string, RequestTaskPageContentFactory> = {
   TEST_TYPE: () => ({
@@ -155,7 +155,7 @@ describe('RequestTaskPageComponent', () => {
 
   it('should show sections provided', async () => {
     await createModule(contentWithSections);
-    expect(page.listContents).toEqual(['SECTION_A_TITLETEST_SUBTASK_A COMPLETED', 'TEST_SUBTASK_A COMPLETED']);
+    expect(page.listContents).toEqual(['SECTION_A_TITLETEST_SUBTASK_A Completed', 'TEST_SUBTASK_A Completed']);
   });
 
   it('should show components provided', async () => {

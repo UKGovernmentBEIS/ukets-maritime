@@ -1,23 +1,16 @@
-import { Component, inject, input, signal } from '@angular/core';
-import { ControlContainer, FormGroupDirective, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
+import { ControlContainer, FormGroupDirective, ReactiveFormsModule } from '@angular/forms';
 
-import { ButtonDirective, TagComponent, TextInputComponent } from '@netz/govuk-components';
+import { ButtonDirective, TextInputComponent } from '@netz/govuk-components';
 
 import { PasswordStrengthMeterComponent } from '@shared/components/password-strength-meter';
 
-// eslint-disable-next-line @angular-eslint/prefer-on-push-component-change-detection
 @Component({
   selector: 'mrtm-password',
-  imports: [
-    TextInputComponent,
-    FormsModule,
-    ReactiveFormsModule,
-    ButtonDirective,
-    PasswordStrengthMeterComponent,
-    TagComponent,
-  ],
+  imports: [TextInputComponent, ReactiveFormsModule, ButtonDirective, PasswordStrengthMeterComponent],
   standalone: true,
   templateUrl: './password.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   viewProviders: [{ provide: ControlContainer, useExisting: FormGroupDirective }],
 })
 export class PasswordComponent {
@@ -27,9 +20,8 @@ export class PasswordComponent {
   readonly confirmPasswordLabel = input('Re-enter your password');
   readonly includeActivationMessage = input(true);
 
-  protected readonly showLabel = signal<'Show' | 'Hide'>('Show');
-  protected readonly passwordInputType = signal<'password' | 'text'>('password');
-  protected readonly passwordStrength = signal<number | null>(null);
+  readonly showLabel = signal<'Show' | 'Hide'>('Show');
+  readonly passwordInputType = signal<'password' | 'text'>('password');
 
   togglePassword() {
     if (this.showLabel() === 'Show') {

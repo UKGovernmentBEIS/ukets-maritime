@@ -8,4 +8,16 @@
       }
     </dd>
   </div>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>External contacts</dt>
+    <dd govukSummaryListRowValue>
+      @if (externalContacts()?.length) {
+        @for (recipientId of externalContacts(); track recipientId) {
+          <p class="govuk-body">{{ recipientId }}</p>
+        }
+      } @else {
+        <span class="govuk-hint">Not provided</span>
+      }
+    </dd>
+  </div>
 </dl>

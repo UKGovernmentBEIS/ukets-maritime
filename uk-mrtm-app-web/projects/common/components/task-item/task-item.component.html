@@ -17,9 +17,17 @@
     }
   </div>
   @if (status()) {
-    <govuk-tag [color]="status() | statusTagColor" class="app-task-list__tag">
-      {{ status() | statusTagText }}
-    </govuk-tag>
+    @if ((status() | statusTagStyle) === 'fill') {
+      <govuk-tag [color]="status() | statusTagColor" class="app-task-list__tag">
+        {{ status() | statusTagText }}
+      </govuk-tag>
+    } @else {
+      <div
+        class="app-task-list__tag"
+        [class.govuk-task-list__status--cannot-start-yet]="(status() | statusTagStyle) === 'tinted'">
+        {{ status() | statusTagText }}
+      </div>
+    }
   }
 </div>
 <ng-content />

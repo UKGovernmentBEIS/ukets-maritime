@@ -19,6 +19,7 @@ import {
 } from '@netz/govuk-components';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
+import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerSubmitTaskPayload } from '@requests/common/aer/aer.types';
 import {
   AER_AGGREGATED_DATA_SUB_TASK,
@@ -62,6 +63,7 @@ export class AerAggregatedDataFuelConsumptionComponent {
   private readonly fuelOriginTitlePipe: FuelOriginTitlePipe = new FuelOriginTitlePipe();
   private readonly activatedRoute: ActivatedRoute = inject(ActivatedRoute);
 
+  public readonly isAddNewAggregatedData = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
   public form: FormGroup = inject(TASK_FORM);
   public readonly dataId: InputSignal<string> = input<string>();
   public readonly wizardMap: SubTaskListMap<AerShipAggregatedData> = aerAggregatedDataSubtasksListMap;

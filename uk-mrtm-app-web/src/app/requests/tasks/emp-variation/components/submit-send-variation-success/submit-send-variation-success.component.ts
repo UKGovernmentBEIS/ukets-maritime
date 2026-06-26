@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
-  selector: 'mrtm-send-variation-confirmation',
+  selector: 'mrtm-submit-send-variation-success',
   imports: [PanelComponent, RouterLink, LinkDirective],
   standalone: true,
   templateUrl: './submit-send-variation-success.component.html',

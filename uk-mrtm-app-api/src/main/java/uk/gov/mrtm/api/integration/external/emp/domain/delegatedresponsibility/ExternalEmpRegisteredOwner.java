@@ -34,8 +34,11 @@ public class ExternalEmpRegisteredOwner {
     @Size(min = 1, max = 255)
     private String name;
 
-    @NotBlank
-    @Pattern(regexp = "^\\d{7}$")
+    @NotBlank(message = "Company IMO number is required")
+    @Pattern(
+            regexp = "^\\d{7}$",
+            message = "Company IMO number must contain exactly 7 digits"
+    )
     @UniqueField
     private String companyImoNumber;
 

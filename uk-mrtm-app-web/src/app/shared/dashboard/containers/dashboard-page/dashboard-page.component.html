@@ -23,10 +23,12 @@
 </govuk-tabs>
 <ng-template #tabTemplate let-header="header" let-tab="tab" let-unassigned="unassigned">
   <h2 class="govuk-heading-m">{{ header }}</h2>
+  <mrtm-dashboard-filters [accounts]="relatedAccounts()" />
   @if (activeTab() === tab) {
     <mrtm-dashboard-items-list
       id="items-list"
       [items]="items()"
+      [emptyTableText]="emptyTableText()"
       [tableColumns]="tableColumns()"
       [unassignedLabel]="unassigned" />
   }

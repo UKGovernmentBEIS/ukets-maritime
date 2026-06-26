@@ -1,6 +1,8 @@
 import { Routes } from '@angular/router';
 
+import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import {
+  canActivateAggregatedDataEdit,
   canActivateAggregatedDataListSummary,
   canActivateAggregatedDataSummary,
 } from '@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data.guard';
@@ -40,17 +42,13 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
           ),
       },
       {
-        path: AerAggregatedDataWizardStep.SELECT_SHIP,
-        data: { breadcrumb: false },
-        title: aerAggregatedDataSubtasksListMap.imoNumber.title,
-        resolve: {
-          backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.SELECT_SHIP),
-        },
-        loadComponent: () =>
-          import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
-      },
-      {
-        path: `:${AER_AGGREGATED_DATA_PARAM}`,
+        path: `add/:${AER_AGGREGATED_DATA_PARAM}`,
+        providers: [
+          {
+            provide: AER_SUBTASK_NEW_ENTRY_FLOW,
+            useValue: true,
+          },
+        ],
         children: [
           {
             path: '',
@@ -67,14 +65,66 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
           },
           {
             path: AerAggregatedDataWizardStep.SELECT_SHIP,
-            data: { breadcrumb: false },
+            data: { breadcrumb: false, backlink: '../../../' },
             title: aerPortsMap.imoNumber.title,
+            loadComponent: () =>
+              import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
+          },
+          {
+            path: AerAggregatedDataWizardStep.FUEL_CONSUMPTION,
+            data: { breadcrumb: false },
             resolve: {
-              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.SELECT_SHIP),
+              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.FUEL_CONSUMPTION, true),
             },
             // canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
-              import('@requests/common/aer/components/aer-select-ship').then((c) => c.AerSelectShipComponent),
+              import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-fuel-consumption').then(
+                (c) => c.AerAggregatedDataFuelConsumptionComponent,
+              ),
+          },
+          {
+            path: AerAggregatedDataWizardStep.ANNUAL_EMISSIONS,
+            data: { breadcrumb: false },
+            title: aerAggregatedDataSubtasksListMap.annualAggregatedEmissions.title,
+            resolve: {
+              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.ANNUAL_EMISSIONS),
+            },
+            // canActivate: [canActivateAggregatedDataEdit],
+            loadComponent: () =>
+              import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions').then(
+                (c) => c.AerAggregatedDataAnnualEmissionsComponent,
+              ),
+          },
+          {
+            path: AerAggregatedDataWizardStep.SHIP_EMISSIONS,
+            data: { breadcrumb: false },
+            title: aerAggregatedDataSubtasksListMap.totalShipEmissions.title,
+            resolve: {
+              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.SHIP_EMISSIONS),
+            },
+            // canActivate: [canActivateAggregatedDataEdit],
+            loadComponent: () =>
+              import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-ship-emissions-calculated').then(
+                (c) => c.AerAggregatedDataShipEmissionsCalculatedComponent,
+              ),
+          },
+        ],
+      },
+      {
+        path: `:${AER_AGGREGATED_DATA_PARAM}`,
+        children: [
+          {
+            path: '',
+            title: aerAggregatedDataSubtasksListMap.title,
+            data: { breadcrumb: false },
+            canActivate: [canActivateAggregatedDataSummary],
+            resolve: {
+              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY),
+            },
+            loadComponent: () =>
+              import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-ship-summary').then(
+                (c) => c.AerAggregatedDataShipSummaryComponent,
+              ),
           },
           {
             path: AerAggregatedDataWizardStep.FUEL_CONSUMPTION,
@@ -95,7 +145,7 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
             resolve: {
               backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.ANNUAL_EMISSIONS),
             },
-            // canActivate: [canActivateAggregatedDataEdit],
+            canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-aggregated-data/aer-aggregated-data-annual-emissions').then(
                 (c) => c.AerAggregatedDataAnnualEmissionsComponent,

@@ -198,7 +198,9 @@ export class AerAggregatedDataListComponent extends PaginationStatePersistableCo
     this.formGroup.reset();
     this.notificationBannerStore.reset();
 
-    this.router.navigate([this.wizardStep.SELECT_SHIP], { relativeTo: this.activatedRoute });
+    this.router.navigate(['add', crypto.randomUUID(), this.wizardStep.SELECT_SHIP], {
+      relativeTo: this.activatedRoute,
+    });
   }
 
   public getExtraState(): Pick<PersistablePaginationState, 'currentSorting' | 'activeFilters'> {

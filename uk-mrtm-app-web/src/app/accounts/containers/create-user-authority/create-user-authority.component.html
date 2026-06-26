@@ -1,8 +1,8 @@
 <mrtm-wizard-step
   (formSubmit)="handleSubmit()"
   [formGroup]="form"
-  caption="Add new user"
-  heading="Add an {{ userType$ | async | userType }}">
+  caption="Add a new user"
+  heading="Enter {{ userType$ | async | userType }} details">
   @switch (userType$ | async) {
     @case ('operator_admin') {
       <mrtm-operator-admin-info />

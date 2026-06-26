@@ -2,7 +2,7 @@ import { HttpErrorResponse, provideHttpClient } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { of, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
 
 import { VerifierUsersRegistrationService } from '@mrtm/api';
 
@@ -10,7 +10,6 @@ import { ErrorCodes } from '@netz/common/error';
 import { ActivatedRouteStub, BasePage, mockClass } from '@netz/common/testing';
 
 import { VerifierInvitationComponent } from '@invitation/verifier-invitation/verifier-invitation.component';
-import { PasswordService } from '@shared/services';
 
 describe('VerifierInvitationComponent', () => {
   let component: VerifierInvitationComponent;
@@ -19,7 +18,6 @@ describe('VerifierInvitationComponent', () => {
   let router: Router;
   let route: ActivatedRoute;
   let verifierUsersRegistrationService: jest.Mocked<VerifierUsersRegistrationService>;
-  let passwordService: Partial<jest.Mocked<PasswordService>>;
 
   class Page extends BasePage<VerifierInvitationComponent> {
     get emailValue() {
@@ -41,7 +39,6 @@ describe('VerifierInvitationComponent', () => {
 
   beforeEach(async () => {
     verifierUsersRegistrationService = mockClass(VerifierUsersRegistrationService);
-    passwordService = mockClass(PasswordService);
 
     const activatedRoute = new ActivatedRouteStub(
       undefined,
@@ -56,7 +53,6 @@ describe('VerifierInvitationComponent', () => {
       providers: [
         provideHttpClient(),
         { provide: VerifierUsersRegistrationService, useValue: verifierUsersRegistrationService },
-        { provide: PasswordService, useValue: passwordService },
         { provide: ActivatedRoute, useValue: activatedRoute },
       ],
     }).compileComponents();
@@ -86,8 +82,6 @@ describe('VerifierInvitationComponent', () => {
       throwError(() => new HttpErrorResponse({ error: { code: ErrorCodes.EMAIL1001 }, status: 400 })),
     );
     const navigateSpy = jest.spyOn(router, 'navigate').mockImplementation();
-    passwordService.blacklisted.mockReturnValue(of(null));
-    passwordService.strong.mockReturnValue(null);
 
     component.form.get('password').setValue('ThisIsAStrongP@ssw0rd');
     component.form.get('validatePassword').setValue('ThisIsAStrongP@ssw0rd');
@@ -129,8 +123,6 @@ describe('VerifierInvitationComponent', () => {
 
     expect(verifierUsersRegistrationService.acceptAuthorityAndActivateVerifierUserFromInvite).not.toHaveBeenCalled();
 
-    passwordService.blacklisted.mockReturnValue(of(null));
-    passwordService.strong.mockReturnValue(null);
     page.passwordValue = 'ThisIsAStrongP@ssw0rd';
     page.repeatedPasswordValue = 'ThisIsAStrongP@ssw0rd';
     fixture.detectChanges();

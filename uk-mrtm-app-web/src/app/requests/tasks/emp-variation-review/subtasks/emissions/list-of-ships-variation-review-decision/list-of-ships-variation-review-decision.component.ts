@@ -45,7 +45,6 @@ import { ListOfShipsSummaryTemplateComponent } from '@shared/components/summarie
 })
 export class ListOfShipsVariationReviewDecisionComponent {
   protected readonly form: ReviewDecisionFormModel = inject(VARIATION_REVIEW_DECISION_FORM);
-  private readonly formGroup = new UntypedFormGroup({});
   private readonly notificationBannerStore = inject(NotificationBannerStore);
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly service: TaskService<EmpVariationReviewTaskPayload> = inject(
@@ -53,6 +52,7 @@ export class ListOfShipsVariationReviewDecisionComponent {
   );
   private readonly route: ActivatedRoute = inject(ActivatedRoute);
 
+  private readonly formGroup = new UntypedFormGroup({});
   readonly wizardStep = transformWizardStepDecision(EmissionsWizardStep);
   readonly emissionsSubTasksMap = emissionsSubTasksMap;
   readonly ships = this.store.select(empCommonQuery.selectListOfShips);

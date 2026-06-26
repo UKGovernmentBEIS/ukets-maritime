@@ -31,6 +31,9 @@ public class EmpThirdPartyProviderViewService implements ThirdPartyProviderServi
 
     @Override
     public List<String> getTypes() {
-        return List.of(MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_SUBMIT);
+        return List.of(
+            MrtmRequestTaskType.EMP_ISSUANCE_APPLICATION_SUBMIT,
+            MrtmRequestTaskType.EMP_VARIATION_APPLICATION_SUBMIT
+        );
     }
 }

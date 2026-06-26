@@ -1,45 +1,52 @@
-@if (data()?.length) {
-  <h2 class="govuk-heading-m">Level of uncertainty associated with the fuel monitoring methods</h2>
-  @for (item of data(); track item.monitoringMethod) {
-    <h3 class="govuk-heading-s">{{ monitoringMethodMap[item.monitoringMethod].text }}</h3>
-    <dl [hasBorders]="true" govuk-summary-list>
-      @if (item.methodApproach) {
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Approach used</dt>
-          <dd govukSummaryListRowValue>{{ item.methodApproach | selectOptionToTitle: methodApproachSelectOptions }}</dd>
-          @if (isEditable() && item.monitoringMethod !== 'DIRECT') {
-            <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-                Change
-                <span class="govuk-visually-hidden">
-                  {{ monitoringMethodMap[item.monitoringMethod].text }} approach used
-                </span>
-              </a>
-            </dd>
-          }
-        </div>
-      }
-      @if (!isNil(item.value)) {
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Uncertainty value (%)</dt>
-          <dd govukSummaryListRowValue>
-            @if (item.methodApproach === 'DEFAULT') {
-              ±
-            }
-            {{ item.value }}
+<h2 class="govuk-heading-m">Level of uncertainty associated with the fuel monitoring methods</h2>
+@for (item of combinedUncertaintyLevels(); track $index) {
+  <!-- eslint-disable @angular-eslint/template/elements-content -->
+  <h3
+    class="govuk-heading-s"
+    htmlDiff
+    [current]="monitoringMethodMap[item?.current?.monitoringMethod]?.text"
+    [previous]="monitoringMethodMap[item?.previous?.monitoringMethod]?.text"></h3>
+  <dl [hasBorders]="true" govuk-summary-list>
+    @if (item?.current?.methodApproach || item?.previous?.methodApproach) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Approach used</dt>
+        <dd
+          govukSummaryListRowValue
+          htmlDiff
+          [current]="item?.current?.methodApproach | selectOptionToTitle: methodApproachSelectOptions"
+          [previous]="item?.previous?.methodApproach | selectOptionToTitle: methodApproachSelectOptions"></dd>
+        @if (isEditable() && item?.current?.monitoringMethod && item?.current?.monitoringMethod !== 'DIRECT') {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">
+                {{ monitoringMethodMap[item?.current?.monitoringMethod]?.text }} approach used
+              </span>
+            </a>
           </dd>
-          @if (isEditable() && item.methodApproach !== 'DEFAULT') {
-            <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-                Change
-                <span class="govuk-visually-hidden">
-                  {{ monitoringMethodMap[item.monitoringMethod].text }} uncertainty value
-                </span>
-              </a>
-            </dd>
-          }
-        </div>
-      }
-    </dl>
-  }
+        }
+      </div>
+    }
+    @if (!isNil(item?.current?.value) || !isNil(item?.previous?.value)) {
+      <div govukSummaryListRow>
+        <dt govukSummaryListRowKey>Uncertainty value (%)</dt>
+        <dd govukSummaryListRowValue>
+          <span
+            htmlDiff
+            [current]="item?.current | uncertaintyLevelValue"
+            [previous]="item?.previous | uncertaintyLevelValue"></span>
+        </dd>
+        @if (isEditable() && item?.current?.methodApproach && item?.current?.methodApproach !== 'DEFAULT') {
+          <dd govukSummaryListRowActions>
+            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+              Change
+              <span class="govuk-visually-hidden">
+                {{ monitoringMethodMap[item?.current?.monitoringMethod]?.text }} uncertainty value
+              </span>
+            </a>
+          </dd>
+        }
+      </div>
+    }
+  </dl>
 }

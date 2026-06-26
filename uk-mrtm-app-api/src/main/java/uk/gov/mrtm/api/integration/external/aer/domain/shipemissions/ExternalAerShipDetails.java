@@ -34,7 +34,10 @@ import java.time.LocalDate;
 public class ExternalAerShipDetails {
 
     @NotBlank
-    @Pattern(regexp = "^\\d{7}$")
+    @Pattern(
+        regexp = "^\\d{7}$",
+        message = "Ship IMO number must contain exactly 7 digits"
+    )
     @UniqueField
     private String shipImoNumber;
 

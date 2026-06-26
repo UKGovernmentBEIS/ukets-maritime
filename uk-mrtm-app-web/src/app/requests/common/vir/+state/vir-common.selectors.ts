@@ -63,7 +63,7 @@ const selectVirVerifierRecommendationDataByKey = (
   createDescendingSelector(selectVirVerifierRecommendationData, (payload) => payload?.[key?.toUpperCase()]);
 
 const selectOperatorResponseData = (key: string): StateSelector<RequestTaskState, OperatorImprovementResponse> =>
-  createDescendingSelector(selectPayload, (payload) => payload?.operatorImprovementResponses?.[key.toUpperCase()]);
+  createDescendingSelector(selectPayload, (payload) => payload?.operatorImprovementResponses?.[key?.toUpperCase()]);
 
 const selectOperatorResponseSummaryData = (
   key: string,

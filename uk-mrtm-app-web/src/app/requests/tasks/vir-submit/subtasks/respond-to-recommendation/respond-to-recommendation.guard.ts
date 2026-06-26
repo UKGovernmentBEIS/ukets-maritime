@@ -9,7 +9,6 @@ import { virSubmitQuery } from '@requests/tasks/vir-submit/+state';
 import {
   isWizardCompleted,
   VirRespondToRecommendationWizardStep,
-  wizardStepCompletedMap,
 } from '@requests/tasks/vir-submit/subtasks/respond-to-recommendation/respond-to-recommendation.helpers';
 
 export const canActivateVirRespondToRecommendationSummary: CanActivateFn = (route: ActivatedRouteSnapshot) => {
@@ -26,28 +25,16 @@ export const canActivateVirRespondToRecommendationSummary: CanActivateFn = (rout
   );
 };
 
-export const canActivateUploadEvidenceQuestionForm: CanActivateFn = (route: ActivatedRouteSnapshot) => {
+export const canActivateVirRespondToRecommendationStep: CanActivateFn = (route: ActivatedRouteSnapshot) => {
   const store = inject(RequestTaskStore);
   const key = route.params?.['key'];
-  const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+  const isChange = route.queryParamMap.get('change') === 'true';
   const operatorResponse = store.select(virCommonQuery.selectOperatorResponseData(key))();
 
-  return (
-    (isEditable && wizardStepCompletedMap.RESPOND_TO(operatorResponse)) ||
-    createUrlTreeFromSnapshot(route, ['../', VirRespondToRecommendationWizardStep.RESPOND_TO])
-  );
-};
-
-export const canActivateUploadEvidenceForm: CanActivateFn = (route: ActivatedRouteSnapshot) => {
-  const store = inject(RequestTaskStore);
-  const key = route.params?.['key'];
   const isEditable = store.select(requestTaskQuery.selectIsEditable)();
-  const operatorResponse = store.select(virCommonQuery.selectOperatorResponseData(key))();
 
   return (
-    (isEditable &&
-      wizardStepCompletedMap.UPLOAD_EVIDENCE_QUESTION(operatorResponse) &&
-      operatorResponse?.uploadEvidence === true) ||
-    createUrlTreeFromSnapshot(route, ['../', VirRespondToRecommendationWizardStep.UPLOAD_EVIDENCE_QUESTION])
+    ((!isWizardCompleted(operatorResponse) || isChange) && isEditable) ||
+    createUrlTreeFromSnapshot(route, [VirRespondToRecommendationWizardStep.SUMMARY])
   );
 };

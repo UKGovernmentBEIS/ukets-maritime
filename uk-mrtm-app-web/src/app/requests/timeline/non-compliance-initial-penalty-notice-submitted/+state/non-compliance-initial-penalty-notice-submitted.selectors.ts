@@ -42,9 +42,15 @@ const selectAttachedFiles = (files?: string[]): StateSelector<RequestActionState
 const selectNotifiedUsersInfo: StateSelector<RequestActionState, { [key: string]: RequestActionUserInfo }> =
   createDescendingSelector(selectPayload, (payload) => payload?.usersInfo);
 
+const selectExternalContactsIds: StateSelector<RequestActionState, Array<number>> = createDescendingSelector(
+  selectPayload,
+  (payload) => payload?.externalContacts ?? [],
+);
+
 export const nonComplianceInitialPenaltyNoticeSubmittedQuery = {
   selectPayload,
   selectNonComplianceInitialPenaltyNoticeUpload,
   selectAttachedFiles,
   selectNotifiedUsersInfo,
+  selectExternalContactsIds,
 };

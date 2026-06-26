@@ -39,12 +39,6 @@ export const APP_ROUTES: Routes = [
         loadComponent: () => import('@accessibility/accessibility.component').then((c) => c.AccessibilityComponent),
       },
       {
-        path: 'contact-us',
-        title: 'Contact us',
-        data: { breadcrumb: true },
-        loadComponent: () => import('@contact-us/contact-us.component').then((c) => c.ContactUsComponent),
-      },
-      {
         path: 'legislation',
         title: 'Legislation',
         data: { breadcrumb: true },

@@ -363,6 +363,8 @@ export class AutocompleteSelectComponent extends FormInput implements OnInit {
 
   private setControlValue(option: AutocompleteSelectOption) {
     this.control.setValue(option);
+    this.control.markAsDirty();
+    this.control.markAsTouched();
   }
 
   private quietlySetQueryControlValue(queryString: string) {

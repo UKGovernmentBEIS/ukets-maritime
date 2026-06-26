@@ -1,7 +1,7 @@
 @if (data()?.details) {
   <mrtm-basic-ship-details-summary-template
     [changeLink]="changeLinks()?.['details']?.link"
-    [data]="data()?.details"
+    [shipDetails]="data()?.details"
     [isEditable]="isEditable()"
     [queryParams]="changeLinks()?.['details']?.queryParams"
     [isAer]="true" />
@@ -73,7 +73,7 @@
 @if (data()?.uncertaintyLevel) {
   <mrtm-uncertainty-level-summary-template
     [changeLink]="changeLinks()?.['uncertaintyLevel']?.link"
-    [data]="data()?.uncertaintyLevel"
+    [uncertaintyLevels]="data()?.uncertaintyLevel"
     [isEditable]="isEditable()"
     [queryParams]="changeLinks()?.['uncertaintyLevel']?.queryParams" />
 }

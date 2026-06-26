@@ -65,6 +65,7 @@ describe('AdditionalDocumentsDecisionComponent', () => {
       mockStateBuild(
         { additionalDocuments: mockAdditionalDocuments },
         { additionalDocuments: TaskItemStatus.IN_PROGRESS },
+        { [mockAdditionalDocuments.documents[0]]: '100.png' },
       ),
     );
     createComponent();
@@ -80,7 +81,7 @@ describe('AdditionalDocumentsDecisionComponent', () => {
       'Yes',
       'Change additional documents or information',
       'Uploaded files',
-      'Not provided',
+      '100.png',
       'Change uploaded files',
     ]);
   });

@@ -19,6 +19,7 @@ export * from './notification-review-decision-type.pipe';
 export * from './seconds-to-minutes.pipe';
 export * from './submit-if-empty.pipe';
 export * from './text-ellipsis.pipe';
+export * from './uncertainty-level-value.pipe';
 export * from './optional-field-label.pipe';
 export * from './user-contact.pipe';
 export * from './user-info-resolver.pipe';

@@ -20,7 +20,6 @@
       "@accessibility/*": ["src/app/accessibility/*"],
       "@accounts/*": ["src/app/accounts/*"],
       "@batch-variations/*": ["src/app/batch-variations/*"],
-      "@contact-us/*": ["src/app/contact-us/*"],
       "@cookies/*": ["src/app/cookies/*"],
       "@core/*": ["src/app/core/*"],
       "@data-suppliers/*": ["src/app/data-suppliers/*"],

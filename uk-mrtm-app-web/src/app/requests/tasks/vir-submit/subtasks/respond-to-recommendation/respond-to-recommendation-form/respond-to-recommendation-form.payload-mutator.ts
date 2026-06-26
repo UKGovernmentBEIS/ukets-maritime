@@ -23,6 +23,7 @@ export class RespondToRecommendationFormPayloadMutator extends PayloadMutator {
     return of(
       produce(currentPayload, (payload: VirSubmitTaskPayload) => {
         const { key, ...formData } = userInput;
+
         if (isNil(payload?.operatorImprovementResponses)) {
           payload.operatorImprovementResponses = {};
         }
@@ -32,6 +33,12 @@ export class RespondToRecommendationFormPayloadMutator extends PayloadMutator {
           ...formData,
           addressedDate: formData.isAddressed ? formData.addressedDate : undefined,
         } as OperatorImprovementResponse;
+
+        // Reset next 2 steps when there is a change in isAddressed
+        if (currentPayload.operatorImprovementResponses[key].isAddressed !== formData.isAddressed) {
+          delete payload.operatorImprovementResponses[key].uploadEvidence;
+          delete payload.operatorImprovementResponses[key].files;
+        }
 
         payload.sectionsCompleted[`${this.subtask}-${key}`] = TaskItemStatus.IN_PROGRESS;
       }),

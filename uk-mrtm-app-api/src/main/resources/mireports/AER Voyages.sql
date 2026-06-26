@@ -211,8 +211,11 @@ WITH port_countries AS (
 ),
      allAERs as (SELECT account_id, aer.year reporting_year, aer.data aer_data FROM rpt_aer aer
                  UNION ALL
-                 SELECT  CAST(rr.resource_id AS BIGINT) account_id, (rt.payload ->> 'reportingYear')::int reporting_year, rt.payload aer_data FROM request r JOIN request_type reqType on reqType.id = r.type_id
-                                                                                                                                                             JOIN request_task rt on r.id = rt.request_id JOIN request_task_type rtt on rtt.id = rt.type_id JOIN request_resource rr on (r.id = rr.request_id AND rr.resource_type = 'ACCOUNT')
+                 SELECT  CAST(r.account_id AS BIGINT) account_id, (rt.payload ->> 'reportingYear')::int reporting_year, rt.payload aer_data
+                 FROM request_account r
+                     JOIN request_type reqType on reqType.id = r.type_id
+                     JOIN request_task rt on r.id = rt.request_id
+                     JOIN request_task_type rtt on rtt.id = rt.type_id
                  WHERE reqType.code = 'AER' AND rtt.code = 'AER_APPLICATION_REVIEW'
      ), sectionOperatorDetails
          AS (

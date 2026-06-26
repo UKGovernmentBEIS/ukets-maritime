@@ -162,6 +162,36 @@ class RequestTaskAttachmentControllerTest {
     }
 
     @Test
+    void uploadRequestTaskAttachment_invalidFileContent() throws Exception {
+        AppUser authUser = AppUser.builder().userId("id").build();
+        Long requestTaskId = 1L;
+        String requestTaskActionType = "RDE_UPLOAD_ATTACHMENT";
+        RequestTaskAttachmentActionProcessDTO requestTaskAttachmentActionProcessDTO = RequestTaskAttachmentActionProcessDTO.builder()
+            .requestTaskId(requestTaskId)
+            .requestTaskActionType(requestTaskActionType)
+            .build();
+        MockMultipartFile attachmentFile = new MockMultipartFile("attachment", "filename.txt", "text/plain", "content".getBytes());
+        MockMultipartFile requestTaskActionDetails = new MockMultipartFile("requestTaskActionDetails", "", "application/json",
+            mapper.writeValueAsString(requestTaskAttachmentActionProcessDTO).getBytes());
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(authUser);
+        when(requestTaskAttachmentUploadService.uploadAttachment(
+            org.mockito.ArgumentMatchers.eq(requestTaskId),
+            org.mockito.ArgumentMatchers.eq(requestTaskActionType),
+            org.mockito.ArgumentMatchers.eq(authUser),
+            org.mockito.ArgumentMatchers.any(FileDTO.class)))
+            .thenThrow(new SecurityException("File blocked by content validator"));
+
+        mockMvc.perform(
+                MockMvcRequestBuilders.multipart(BASE_PATH + "/upload")
+                    .file(attachmentFile)
+                    .file(requestTaskActionDetails)
+            )
+            .andExpect(status().isBadRequest())
+            .andExpect(jsonPath("$.code").value(ErrorCode.INVALID_FILE_TYPE.getCode()));
+    }
+
+    @Test
     void generateRequestTaskGetFileAttachmentToken() throws Exception {
         Long requestTaskId = 1L;
         UUID attachmentUuid = UUID.randomUUID();

@@ -1,7 +1,7 @@
 <form (ngSubmit)="onSubmit()" [formGroup]="formGroup()">
   <div class="govuk-grid-row">
     <div [class]="isTwoThirds() ? 'govuk-grid-column-two-thirds' : 'govuk-grid-column-full'">
-      @if (isSummaryDisplayedSubject | async) {
+      @if (isSummaryDisplayed()) {
         <govuk-error-summary [form]="formGroup()" />
       }
       <netz-page-heading [caption]="caption()" [size]="size()">{{ heading() }}</netz-page-heading>

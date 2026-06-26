@@ -2,6 +2,7 @@ package uk.gov.mrtm.api.integration.external.emp.transform;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmpProcedureForm;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmpProcedureFormWithFiles;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.controlactivities.EmpControlActivities;
@@ -23,6 +24,8 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.efuel.EmpEF
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.fuel.fossil.EmpFossilFuels;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.measurementdescription.MeasurementDescription;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.EmpEmissionsSources;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.sources.FuelOriginTypeName;
+import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissions.uncertainty.UncertaintyLevel;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissionsources.EmpEmissionCompliance;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissionsources.EmpEmissionFactors;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.emissionsources.EmpEmissionSources;
@@ -37,17 +40,30 @@ import uk.gov.mrtm.api.integration.external.emp.domain.ExternalEmissionsMonitori
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.datagaps.ExternalEmpDataGaps;
 import uk.gov.mrtm.api.integration.external.emp.domain.delegatedresponsibility.ExternalEmpDelegatedResponsibility;
+import uk.gov.mrtm.api.integration.external.emp.domain.delegatedresponsibility.ExternalEmpRegisteredOwner;
+import uk.gov.mrtm.api.integration.external.emp.domain.delegatedresponsibility.ExternalEmpRegisteredOwnerShipDetails;
 import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpControlActivitiesProcedures;
+import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpEmissionFactorsProcedure;
 import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpEmissionsProcedures;
 import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpFuelConsumptionProcedures;
 import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpManagementProcedures;
+import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpOutsourcedActivitiesProcedure;
 import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpProcedureForm;
+import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpProcedures;
+import uk.gov.mrtm.api.integration.external.emp.domain.procedures.ExternalEmpReductionClaimProcedure;
+import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpCarbonCapture;
 import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpEmissionsSources;
+import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpExemptionConditions;
+import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpFuelOriginTypeName;
 import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpFuelsAndEmissionsFactors;
 import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpMeasurementDescription;
+import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpShipDetails;
 import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpShipEmissions;
+import uk.gov.mrtm.api.integration.external.emp.domain.shipemissions.ExternalEmpUncertaintyLevel;
+import uk.gov.mrtm.api.integration.external.emp.enums.ExternalFuelType;
 
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -75,6 +91,253 @@ public class ExternalEmpMapper extends ExternalCommonMapper {
             .dataGaps(dataGaps)
             .sources(sources)
             .emissions(emissions)
+            .build();
+    }
+
+    public ExternalEmissionsMonitoringPlan toExternalEmissionsMonitoringPlan(EmissionsMonitoringPlan emp) {
+
+        Set<ExternalEmpShipEmissions> shipParticulars = toExternalEmpShipEmissions(emp.getEmissions());
+        ExternalEmpDelegatedResponsibility delegatedResponsibility = toExternalEmpDelegatedResponsibility(emp.getMandate());
+        ExternalEmpProcedures procedures = toExternalEmpProcedures(emp.getGreenhouseGas(), emp.getManagementProcedures(), emp.getControlActivities(), emp.getSources());
+        ExternalEmpDataGaps dataGaps = toExternalEmpDataGaps(emp.getDataGaps());
+
+        return ExternalEmissionsMonitoringPlan.builder()
+            .shipParticulars(shipParticulars)
+            .delegatedResponsibility(delegatedResponsibility)
+            .procedures(procedures)
+            .dataGaps(dataGaps)
+            .build();
+    }
+
+    private Set<ExternalEmpShipEmissions> toExternalEmpShipEmissions(EmpEmissions emissions) {
+        return emissions.getShips().stream()
+            .map(ship -> ExternalEmpShipEmissions.builder()
+                .shipDetails(toExternalEmpShipDetails(ship.getDetails()))
+                .fuelTypes(toExternalEmpFuelsAndEmissionsFactors(ship.getFuelsAndEmissionsFactors()))
+                .emissionsSources(toExternalEmpEmissionsSources(ship.getEmissionsSources()))
+                .uncertaintyLevel(toExternalEmpUncertaintyLevel(ship.getUncertaintyLevel()))
+                .ccsCcu(toExternalEmpCarbonCapture(ship.getCarbonCapture()))
+                .measuringEquipment(toExternalEmpMeasurementDescription(ship.getMeasurements()))
+                .conditionsOfExemption(toExternalEmpExemptionConditions(ship.getExemptionConditions()))
+                .build())
+            .collect(Collectors.toSet());
+    }
+
+    private Set<ExternalEmpFuelsAndEmissionsFactors> toExternalEmpFuelsAndEmissionsFactors(Set<EmpFuelsAndEmissionsFactors> fuelsAndEmissionsFactors) {
+        return fuelsAndEmissionsFactors.stream()
+            .map(factors ->
+                ExternalEmpFuelsAndEmissionsFactors.builder()
+                    .fuelOriginCode(factors.getOrigin())
+                    .fuelTypeCode(ExternalFuelType.valueOf(factors.getTypeAsString()))
+                    .otherFuelType(factors.getName())
+                    .ttwEFCarbonDioxide(factors.getCarbonDioxide())
+                    .ttwEFMethane(factors.getMethane())
+                    .ttwEFNitrousOxide(factors.getNitrousOxide())
+                    .methodDensityBunkerCode(factors.getDensityMethodBunker())
+                    .methodDensityTankCode(factors.getDensityMethodTank())
+                    .build()
+            )
+            .collect(Collectors.toSet());
+    }
+
+    private Set<ExternalEmpEmissionsSources> toExternalEmpEmissionsSources(Set<EmpEmissionsSources> emissionsSources) {
+        return emissionsSources.stream()
+            .map(source ->
+                ExternalEmpEmissionsSources.builder()
+                    .name(source.getName())
+                    .emissionSourceTypeCode(source.getType())
+                    .emissionSourceClassCode(source.getSourceClass())
+                    .fuelTypeCodes(toExternalEmpFuelOriginTypeName(source.getFuelDetails()))
+                    .monitoringMethods(source.getMonitoringMethod())
+                    .identificationNumber(source.getReferenceNumber())
+                    .build())
+            .collect(Collectors.toSet());
+    }
+
+    private Set<ExternalEmpFuelOriginTypeName> toExternalEmpFuelOriginTypeName(Set<FuelOriginTypeName> fuelDetails) {
+        return fuelDetails.stream()
+            .map(fuelOriginTypeName ->
+                ExternalEmpFuelOriginTypeName.builder()
+                    .fuelOriginCode(fuelOriginTypeName.getOrigin())
+                    .fuelTypeCode(ExternalFuelType.valueOf(fuelOriginTypeName.getTypeAsString()))
+                    .otherFuelType(fuelOriginTypeName.getName())
+                    .slipPercentage(fuelOriginTypeName.getMethaneSlip())
+                    .build())
+            .collect(Collectors.toSet());
+    }
+
+    private Set<ExternalEmpUncertaintyLevel> toExternalEmpUncertaintyLevel(Set<UncertaintyLevel> uncertaintyLevel) {
+        return uncertaintyLevel.stream()
+            .map(level ->
+                ExternalEmpUncertaintyLevel.builder()
+                    .monitoringMethodCode(level.getMonitoringMethod())
+                    .levelOfUncertaintyTypeCode(level.getMethodApproach())
+                    .shipSpecificUncertainty(level.getValue())
+                    .build())
+            .collect(Collectors.toSet());
+    }
+
+    private ExternalEmpCarbonCapture toExternalEmpCarbonCapture(EmpCarbonCapture carbonCapture) {
+        return ExternalEmpCarbonCapture.builder()
+            .captureAndStorageApplied(carbonCapture.getExist())
+            .technology(Optional.ofNullable(carbonCapture.getTechnologies()).map(EmpCarbonCaptureTechnologies::getDescription).orElse(null))
+            .emissionSourceName(Optional.ofNullable(carbonCapture.getTechnologies()).map(EmpCarbonCaptureTechnologies::getTechnologyEmissionSources).orElse(new HashSet<>()))
+            .build();
+    }
+
+    private Set<ExternalEmpMeasurementDescription> toExternalEmpMeasurementDescription(Set<MeasurementDescription> measurements) {
+        return measurements.stream().map(measurement ->
+                ExternalEmpMeasurementDescription.builder()
+                    .name(measurement.getName())
+                    .technicalDescription(measurement.getTechnicalDescription())
+                    .emissionSourceName(measurement.getEmissionSources())
+                    .build())
+            .collect(Collectors.toSet());
+    }
+
+    private ExternalEmpExemptionConditions toExternalEmpExemptionConditions(ExemptionConditions exemptionConditions) {
+        return ExternalEmpExemptionConditions.builder()
+            .derogationCodeUsed(exemptionConditions.getExist())
+            .minimumNumberOfVoyages(exemptionConditions.getMinVoyages())
+            .build();
+    }
+
+    private ExternalEmpShipDetails toExternalEmpShipDetails(ShipDetails details) {
+        return ExternalEmpShipDetails.builder()
+            .shipImoNumber(details.getImoNumber())
+            .name(details.getName())
+            .shipType(details.getType())
+            .grossTonnage(details.getGrossTonnage())
+            .flag(details.getFlagState())
+            .iceClassPolarCode(details.getIceClass())
+            .companyNature(details.getNatureOfReportingResponsibility())
+            .build();
+    }
+
+    private ExternalEmpProcedures toExternalEmpProcedures(EmpMonitoringGreenhouseGas greenhouseGas,
+                                                          EmpManagementProcedures managementProcedures,
+                                                          EmpControlActivities controlActivities,
+                                                          EmpEmissionSources sources) {
+
+        return ExternalEmpProcedures.builder()
+            .emissionsProcedures(toEmissionsProcedures(sources))
+            .fuelConsumptionProcedures(toFuelConsumptionProcedures(greenhouseGas))
+            .managementProcedures(toManagementProcedures(managementProcedures))
+            .controlActivitiesProcedures(toControlActivitiesProcedures(controlActivities))
+            .build();
+    }
+
+    private ExternalEmpEmissionsProcedures toEmissionsProcedures(EmpEmissionSources sources) {
+        return ExternalEmpEmissionsProcedures.builder()
+            .emissionSourcesProcedure(toExternalEmpProcedureForm(sources.getListCompletion()))
+            .emissionFactorsProcedure(toExternalEmpEmissionFactorsProcedure(sources.getEmissionFactors()))
+            .reductionClaimProcedure(toExternalEmpReductionClaimProcedure(sources.getEmissionCompliance()))
+            .build();
+    }
+
+    private ExternalEmpReductionClaimProcedure toExternalEmpReductionClaimProcedure(EmpEmissionCompliance emissionCompliance) {
+        return ExternalEmpReductionClaimProcedure.builder()
+            .emissionsReductionClaimExists(emissionCompliance.isExist())
+            .reductionClaimProcedureDetails(toExternalEmpProcedureForm(emissionCompliance.getCriteria()))
+            .build();
+    }
+
+    private ExternalEmpEmissionFactorsProcedure toExternalEmpEmissionFactorsProcedure(EmpEmissionFactors emissionFactors) {
+        return ExternalEmpEmissionFactorsProcedure.builder()
+            .defaultFactorsUsed(emissionFactors.isExist())
+            .emissionFactorsProcedureDetails(toExternalEmpProcedureForm(emissionFactors.getFactors()))
+            .build();
+    }
+
+    private ExternalEmpManagementProcedures toManagementProcedures(EmpManagementProcedures managementProcedures) {
+        return ExternalEmpManagementProcedures.builder()
+            .monitoringReportingRoles(managementProcedures.getMonitoringReportingRoles())
+            .adequacyCheckProcedure(toExternalEmpProcedureForm(managementProcedures.getRegularCheckOfAdequacy()))
+            .dataFlowActivitiesProcedure(toExternalEmpProcedureForm(managementProcedures.getDataFlowActivities()))
+            .riskAssessmentProcedure(toExternalEmpProcedureForm(managementProcedures.getRiskAssessmentProcedures()))
+            .build();
+    }
+
+    private ExternalEmpControlActivitiesProcedures toControlActivitiesProcedures(EmpControlActivities controlActivities) {
+        return ExternalEmpControlActivitiesProcedures.builder()
+            .qaItProcedure(toExternalEmpProcedureForm(controlActivities.getQualityAssurance()))
+            .dataReviewProcedure(toExternalEmpProcedureForm(controlActivities.getInternalReviews()))
+            .correctionsProcedure(toExternalEmpProcedureForm(controlActivities.getCorrections()))
+            .outsourcedActivitiesProcedure(toExternalEmpOutsourcedActivitiesProcedure(controlActivities.getOutsourcedActivities()))
+            .documentationProcedure(toExternalEmpProcedureForm(controlActivities.getDocumentation()))
+            .build();
+    }
+
+    private ExternalEmpOutsourcedActivitiesProcedure toExternalEmpOutsourcedActivitiesProcedure(EmpOutsourcedActivities outsourcedActivities) {
+        return ExternalEmpOutsourcedActivitiesProcedure.builder()
+            .outsourcedActivitiesExists(outsourcedActivities.getExist())
+            .details(toExternalEmpProcedureForm(outsourcedActivities.getDetails()))
+            .build();
+    }
+
+    private ExternalEmpFuelConsumptionProcedures toFuelConsumptionProcedures(EmpMonitoringGreenhouseGas greenhouseGas) {
+        return ExternalEmpFuelConsumptionProcedures.builder()
+            .fuelBunkeredAndInTanksProcedure(toExternalEmpProcedureForm(greenhouseGas.getFuel()))
+            .bunkeringCrossChecksProcedure(toExternalEmpProcedureForm(greenhouseGas.getCrossChecks()))
+            .informationManagementProcedure(toExternalEmpProcedureForm(greenhouseGas.getInformation()))
+            .equipmentQualityAssuranceProcedure(toExternalEmpProcedureForm(greenhouseGas.getQaEquipment()))
+            .voyagesCompletenessProcedure(toExternalEmpProcedureForm(greenhouseGas.getVoyages()))
+            .build();
+    }
+
+    private ExternalEmpProcedureForm toExternalEmpProcedureForm(EmpProcedureForm empProcedureForm) {
+        if (empProcedureForm == null) {
+            return null;
+        }
+
+        return ExternalEmpProcedureForm.builder()
+            .referenceExistingProcedure(empProcedureForm.getReference())
+            .versionExistingProcedure(empProcedureForm.getVersion())
+            .description(empProcedureForm.getDescription())
+            .responsiblePerson(empProcedureForm.getResponsiblePersonOrPosition())
+            .locationOfRecords(empProcedureForm.getRecordsLocation())
+            .itSystem(empProcedureForm.getItSystemUsed())
+            .build();
+    }
+
+    private ExternalEmpDelegatedResponsibility toExternalEmpDelegatedResponsibility(EmpMandate mandate) {
+        return ExternalEmpDelegatedResponsibility.builder()
+            .delegatedResponsibilityUsed(mandate.getExist())
+            .registeredOwners(toExternalEmpRegisteredOwner(mandate.getRegisteredOwners()))
+            .responsibilityDeclaration(mandate.getResponsibilityDeclaration())
+            .build();
+    }
+
+    private Set<ExternalEmpRegisteredOwner> toExternalEmpRegisteredOwner(Set<EmpRegisteredOwner> registeredOwners) {
+        return registeredOwners.stream().map(owner ->
+            ExternalEmpRegisteredOwner.builder()
+                .name(owner.getName())
+                .companyImoNumber(owner.getImoNumber())
+                .contactName(owner.getContactName())
+                .email(owner.getEmail())
+                .agreementDate(owner.getEffectiveDate())
+                .ships(toExternalEmpRegisteredOwnerShipDetails(owner.getShips()))
+                .build()
+        ).collect(Collectors.toSet());
+    }
+
+    private Set<ExternalEmpRegisteredOwnerShipDetails> toExternalEmpRegisteredOwnerShipDetails(Set<RegisteredOwnerShipDetails> ships) {
+        return ships.stream().map(ship ->
+            ExternalEmpRegisteredOwnerShipDetails.builder()
+                .name(ship.getName())
+                .shipImoNumber(ship.getImoNumber())
+                .build()
+        ).collect(Collectors.toSet());
+    }
+
+    private ExternalEmpDataGaps toExternalEmpDataGaps(EmpDataGaps dataGaps) {
+        return ExternalEmpDataGaps.builder()
+            .formulaeUsed(dataGaps.getFormulaeUsed())
+            .fuelConsumptionEstimationMethod(dataGaps.getFuelConsumptionEstimationMethod())
+            .responsiblePerson(dataGaps.getResponsiblePersonOrPosition())
+            .dataSources(dataGaps.getDataSources())
+            .locationOfRecords(dataGaps.getRecordsLocation())
+            .itSystem(dataGaps.getItSystemUsed())
             .build();
     }
 
@@ -129,12 +392,8 @@ public class ExternalEmpMapper extends ExternalCommonMapper {
     }
 
     private EmpControlActivities toEmpControlActivities(ExternalEmpControlActivitiesProcedures controlActivities) {
-        EmpProcedureForm details = null;
         Boolean activitiesExists = controlActivities.getOutsourcedActivitiesProcedure().getOutsourcedActivitiesExists();
-
-        if (activitiesExists) {
-            details = toEmpProcedureForm(controlActivities.getOutsourcedActivitiesProcedure().getDetails());
-        }
+        EmpProcedureForm details = toEmpProcedureForm(controlActivities.getOutsourcedActivitiesProcedure().getDetails());
 
         return EmpControlActivities.builder()
             .qualityAssurance(toEmpProcedureForm(controlActivities.getQaItProcedure()))
@@ -161,16 +420,10 @@ public class ExternalEmpMapper extends ExternalCommonMapper {
 
     private EmpEmissionSources toEmpEmissionSources(ExternalEmpEmissionsProcedures emissionsProcedures) {
         Boolean defaultFactorsUsed = emissionsProcedures.getEmissionFactorsProcedure().getDefaultFactorsUsed();
-        EmpProcedureForm factors = null;
-        if (!defaultFactorsUsed) {
-            factors = toEmpProcedureForm(emissionsProcedures.getEmissionFactorsProcedure().getEmissionFactorsProcedureDetails());
-        }
+        EmpProcedureForm factors = toEmpProcedureForm(emissionsProcedures.getEmissionFactorsProcedure().getEmissionFactorsProcedureDetails());
 
         Boolean emissionsReductionClaimExists = emissionsProcedures.getReductionClaimProcedure().getEmissionsReductionClaimExists();
-        EmpProcedureForm criteria = null;
-        if (emissionsReductionClaimExists) {
-            criteria = toEmpProcedureForm(emissionsProcedures.getReductionClaimProcedure().getReductionClaimProcedureDetails());
-        }
+        EmpProcedureForm criteria = toEmpProcedureForm(emissionsProcedures.getReductionClaimProcedure().getReductionClaimProcedureDetails());
 
         return EmpEmissionSources.builder()
             .listCompletion(toEmpProcedureForm(emissionsProcedures.getEmissionSourcesProcedure()))
@@ -317,6 +570,10 @@ public class ExternalEmpMapper extends ExternalCommonMapper {
     }
 
     private EmpProcedureForm toEmpProcedureForm(ExternalEmpProcedureForm empProcedureForm) {
+        if (empProcedureForm == null) {
+            return null;
+        }
+
         return EmpProcedureForm.builder()
             .reference(empProcedureForm.getReferenceExistingProcedure())
             .version(empProcedureForm.getVersionExistingProcedure())

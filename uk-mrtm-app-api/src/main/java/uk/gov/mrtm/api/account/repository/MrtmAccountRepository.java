@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountIdAndNameDTO;
+import uk.gov.mrtm.api.account.domain.dto.MrtmAccountInfoDTO;
 import uk.gov.netz.api.account.repository.AccountBaseRepository;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
@@ -64,4 +65,16 @@ public interface MrtmAccountRepository extends AccountBaseRepository<MrtmAccount
             + "and (:#{#statuses.size() == 0} = true or acc_mrtm.status in :#{#statuses.![name()]}) ", nativeQuery = true)
     Set<MrtmAccountIdAndNameDTO> findAllByCAAndStatusesAndEmissionTradingSchemes(
             CompetentAuthorityEnum competentAuthority, Set<MrtmAccountStatus> statuses);
+
+    @Transactional(readOnly = true)
+    @Query(value = "select acc.id as id, acc.name as name, acc.business_id as businessId "
+        + "from account acc "
+        + "where acc.competent_authority = :#{#competentAuthority.name()}", nativeQuery = true)
+    List<MrtmAccountInfoDTO> findAllByCA(CompetentAuthorityEnum competentAuthority);
+
+    @Transactional(readOnly = true)
+    @Query(value = "select acc.id as id, acc.name as name, acc.business_id as businessId "
+        + "from account acc "
+        + "where acc.id in :#{#accountIds}", nativeQuery = true)
+    List<MrtmAccountInfoDTO> findAllByAccountIdIn(Set<Long> accountIds);
 }

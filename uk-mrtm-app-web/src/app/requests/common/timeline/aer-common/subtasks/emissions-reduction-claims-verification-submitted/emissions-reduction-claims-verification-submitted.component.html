@@ -1,3 +1,8 @@
 <netz-page-heading [caption]="map.title">{{ map.title }}</netz-page-heading>
 <mrtm-emissions-reduction-claims-verification-summary-template [data]="emissionsReductionClaimVerification()" />
+
+@if (isReviewCompletedActionType() && decision()) {
+  <mrtm-review-decision-summary-template [reviewDecision]="decision()" />
+}
+
 <netz-return-to-task-or-action-page />

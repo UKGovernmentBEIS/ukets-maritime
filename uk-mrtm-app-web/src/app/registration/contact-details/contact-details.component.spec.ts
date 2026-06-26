@@ -1,4 +1,4 @@
-import { ChangeDetectorRef, Component } from '@angular/core';
+import { Component } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute, provideRouter, Router } from '@angular/router';
 
@@ -105,13 +105,6 @@ describe('ContactDetailsComponent', () => {
     },
   };
 
-  // Making Angular aware of changes in component tests With OnPush Change Detection
-  async function runOnPushChangeDetection(fixture: ComponentFixture<any>): Promise<void> {
-    const changeDetectorRef = fixture.debugElement.injector.get<ChangeDetectorRef>(ChangeDetectorRef);
-    changeDetectorRef.detectChanges();
-    return fixture.whenStable();
-  }
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [ContactDetailsComponent, PageHeadingComponent],
@@ -139,7 +132,6 @@ describe('ContactDetailsComponent', () => {
 
   it('should fill form from state', async () => {
     store.setState({ userRegistrationDTO: mockContactDetails, email: 'test@email.com' });
-    await runOnPushChangeDetection(fixture);
 
     expect(page.firstNameValue).toBe(mockContactDetails.firstName);
     expect(page.lastNameValue).toBe(mockContactDetails.lastName);
@@ -157,15 +149,12 @@ describe('ContactDetailsComponent', () => {
     page.countryCodeValue = '30';
 
     page.submitButton.click();
-    await runOnPushChangeDetection(fixture);
 
     expect(navigateSpy).not.toHaveBeenCalled();
-    expect(component.isSummaryDisplayed).toBeTruthy();
     page.countryCodeValue = '30';
     page.phoneNumberValue = '306946332211';
 
     page.submitButton.click();
-    await runOnPushChangeDetection(fixture);
 
     expect(navigateSpy).toHaveBeenCalledWith(['../choose-password'], { relativeTo: route });
   });

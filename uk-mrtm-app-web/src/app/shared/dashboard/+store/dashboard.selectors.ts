@@ -2,7 +2,7 @@ import { MrtmItemDTO } from '@mrtm/api';
 
 import { createDescendingSelector, createSelector, StateSelector } from '@netz/common/store';
 
-import { DashboardState, WorkflowItemsAssignmentType } from '@shared/dashboard/+store/dashboard.state';
+import { DashboardFiltersAndOrderBy, DashboardState, WorkflowItemsAssignmentType } from '@shared/dashboard/+store';
 import { Paging } from '@shared/types';
 
 export const selectActiveTab: StateSelector<DashboardState, WorkflowItemsAssignmentType> = createSelector(
@@ -18,6 +18,10 @@ export const selectPaging: StateSelector<DashboardState, Paging> = createSelecto
 export const selectPage: StateSelector<DashboardState, number> = createDescendingSelector(
   selectPaging,
   (state) => state.page,
+);
+
+export const selectFilters: StateSelector<DashboardState, DashboardFiltersAndOrderBy> = createSelector(
+  (state) => state.filters,
 );
 
 export const selectPageSize: StateSelector<DashboardState, number> = createDescendingSelector(

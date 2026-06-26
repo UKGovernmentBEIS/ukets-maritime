@@ -40,12 +40,12 @@ export abstract class WizardFlowManager {
   protected router = inject(Router);
 
   nextStep(currentStep: string, route: ActivatedRoute): Observable<string> {
-    return this.nextStepPath(currentStep).pipe(
+    return this.nextStepPath(currentStep, route).pipe(
       concatMap((path) => {
         return fromPromise(this.router.navigate([path], { relativeTo: route })).pipe(map(() => path));
       }),
     );
   }
 
-  abstract nextStepPath(currentStep: string): Observable<string>;
+  abstract nextStepPath(currentStep: string, route?: ActivatedRoute): Observable<string>;
 }

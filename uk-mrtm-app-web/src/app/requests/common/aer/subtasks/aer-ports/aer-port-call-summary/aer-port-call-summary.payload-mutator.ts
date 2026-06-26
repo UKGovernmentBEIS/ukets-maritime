@@ -10,19 +10,21 @@ import { AerPortsWizardStep } from '@requests/common/aer/subtasks/aer-ports';
 import { AER_PORTS_SUB_TASK } from '@requests/common/aer/subtasks/aer-ports/aer-ports.helpers';
 import { TaskItemStatus } from '@requests/common/task-item-status';
 
-export class AerPortCallSummaryPayloadMutator extends PayloadMutator {
-  public readonly subtask = AER_PORTS_SUB_TASK;
-  public readonly step = AerPortsWizardStep.PORT_CALL_SUMMARY;
-
-  public apply(
-    currentPayload: AerSubmitTaskPayload,
-    userInput: AerPort['uniqueIdentifier'],
-  ): Observable<AerSubmitTaskPayload> {
-    return of(
-      produce(currentPayload, (payload: AerSubmitTaskPayload) => {
-        payload.aerSectionsCompleted[this.subtask] = TaskItemStatus.IN_PROGRESS;
-        payload.aerSectionsCompleted[`${this.subtask}-port-call-${userInput}`] = TaskItemStatus.COMPLETED;
-      }),
-    );
-  }
-}
+export const provideAerPortCallSummaryPayloadMutator = (
+  step: AerPortsWizardStep.NEW_PORT_CALL_SUMMARY | AerPortsWizardStep.PORT_CALL_SUMMARY,
+): PayloadMutator =>
+  ({
+    subtask: AER_PORTS_SUB_TASK,
+    step,
+    apply: (
+      currentPayload: AerSubmitTaskPayload,
+      userInput: AerPort['uniqueIdentifier'],
+    ): Observable<AerSubmitTaskPayload> => {
+      return of(
+        produce(currentPayload, (payload: AerSubmitTaskPayload) => {
+          payload.aerSectionsCompleted[AER_PORTS_SUB_TASK] = TaskItemStatus.IN_PROGRESS;
+          payload.aerSectionsCompleted[`${AER_PORTS_SUB_TASK}-port-call-${userInput}`] = TaskItemStatus.COMPLETED;
+        }),
+      );
+    },
+  }) as PayloadMutator;

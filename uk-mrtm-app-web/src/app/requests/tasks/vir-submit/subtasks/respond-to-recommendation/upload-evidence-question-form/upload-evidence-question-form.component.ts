@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { take } from 'rxjs';
 
@@ -27,7 +27,6 @@ export class UploadEvidenceQuestionFormComponent {
   private readonly store = inject(RequestTaskStore);
   private readonly service = inject(TaskService);
   private readonly activatedRoute = inject(ActivatedRoute);
-  private readonly router = inject(Router);
 
   public readonly formGroup = inject(TASK_FORM);
   public readonly key = input<string>();
@@ -48,15 +47,6 @@ export class UploadEvidenceQuestionFormComponent {
         this.formGroup.value,
       )
       .pipe(take(1))
-      .subscribe(() => {
-        this.router.navigate(
-          [
-            !this.formGroup.value.uploadEvidence
-              ? VirRespondToRecommendationWizardStep.SUMMARY
-              : `../${VirRespondToRecommendationWizardStep.UPLOAD_EVIDENCE_FORM}`,
-          ],
-          { relativeTo: this.activatedRoute },
-        );
-      });
+      .subscribe();
   }
 }

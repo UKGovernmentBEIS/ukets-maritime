@@ -1,69 +1,79 @@
-@if (data()) {
-  <h2 class="govuk-heading-m">Application of carbon capture and storage technologies</h2>
-  <dl [hasBorders]="true" govuk-summary-list>
+<h2 class="govuk-heading-m">Application of carbon capture and storage technologies</h2>
+<dl govuk-summary-list>
+  <div govukSummaryListRow>
+    <dt govukSummaryListRowKey>Are carbon capture and storage technologies being applied ?</dt>
+    <dd
+      govukSummaryListRowValue
+      htmlDiff
+      [current]="carbonCapture()?.exist | booleanToText"
+      [previous]="originalCarbonCapture()?.exist | booleanToText"></dd>
+    @if (isEditable()) {
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+          Change
+          <span class="govuk-visually-hidden">whether carbon capture and storage technologies are being applied</span>
+        </a>
+      </dd>
+    }
+  </div>
+
+  @if (carbonCapture()?.exist) {
     <div govukSummaryListRow>
-      <dt govukSummaryListRowKey>Are carbon capture and storage technologies being applied ?</dt>
-      <dd govukSummaryListRowValue>{{ data().exist | booleanToText }}</dd>
+      <dt govukSummaryListRowKey>Describe the technology that is used for carbon capture and storage</dt>
+      <dd
+        govukSummaryListRowValue
+        class="pre-wrap"
+        htmlDiff
+        [current]="carbonCapture()?.technologies?.description"
+        [previous]="originalCarbonCapture()?.technologies?.description"></dd>
       @if (isEditable()) {
         <dd govukSummaryListRowActions>
           <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
             Change
-            <span class="govuk-visually-hidden">whether carbon capture and storage technologies are being applied</span>
+            <span class="govuk-visually-hidden">
+              description of technology that is used for carbon capture and storage
+            </span>
           </a>
         </dd>
       }
     </div>
-    @if (data()?.technologies; as technologies) {
-      @if (technologies.description) {
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Describe the technology that is used for carbon capture and storage</dt>
-          <dd govukSummaryListRowValue class="pre-wrap">{{ technologies.description }}</dd>
-          @if (isEditable()) {
-            <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-                Change
-                <span class="govuk-visually-hidden">
-                  description of technology that is used for carbon capture and storage
-                </span>
-              </a>
-            </dd>
-          }
-        </div>
-      }
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Uploaded file</dt>
-        <dd govukSummaryListRowValue>
-          <mrtm-summary-download-files [files]="files()" />
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Uploaded file</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="files()" [originalFiles]="originalFiles()" />
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">uploaded file</span>
+          </a>
         </dd>
-        @if (isEditable()) {
-          <dd govukSummaryListRowActions>
-            <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-              Change
-              <span class="govuk-visually-hidden">uploaded file</span>
-            </a>
-          </dd>
-        }
-      </div>
-      @if (technologies.technologyEmissionSources) {
-        <div govukSummaryListRow>
-          <dt govukSummaryListRowKey>Emission source this technology is applied to</dt>
-          <dd govukSummaryListRowValue>
-            <ul class="govuk-list govuk-list--bullet">
-              @for (source of technologies.technologyEmissionSources; track source) {
-                <li>{{ source }}</li>
-              }
-            </ul>
-          </dd>
-          @if (isEditable()) {
-            <dd govukSummaryListRowActions>
-              <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
-                Change
-                <span class="govuk-visually-hidden">emission source this technology is applied to</span>
-              </a>
-            </dd>
-          }
-        </div>
       }
-    }
-  </dl>
-}
+    </div>
+
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Emission source this technology is applied to</dt>
+      <dd govukSummaryListRowValue>
+        @if (combinedTechnologyEmissionSources()?.length) {
+          <ul class="govuk-list govuk-list--bullet">
+            @for (source of combinedTechnologyEmissionSources(); track $index) {
+              <li htmlDiff [current]="source?.current" [previous]="source?.previous"></li>
+            }
+          </ul>
+        } @else {
+          <span [notProvided]="undefined"></span>
+        }
+      </dd>
+      @if (isEditable()) {
+        <dd govukSummaryListRowActions>
+          <a govukLink [routerLink]="changeLink()" [queryParams]="queryParams()">
+            Change
+            <span class="govuk-visually-hidden">emission source this technology is applied to</span>
+          </a>
+        </dd>
+      }
+    </div>
+  }
+</dl>

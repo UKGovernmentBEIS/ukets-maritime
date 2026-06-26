@@ -1,0 +1,39 @@
+<form [formGroup]="formGroup" (ngSubmit)="onSubmit()" class="govuk-!-margin-bottom-6">
+  <govuk-details
+    summary="Filters"
+    class="filter-by-ship-and-date-range__details"
+    [bottomSpacing]="4"
+    [bottomContentPadding]="0"
+    [openOnInit]="false">
+    <div class="govuk-grid-row">
+      <div class="govuk-grid-column-one-half">
+        <div
+          mrtm-autocomplete-select
+          formControlName="accountId"
+          inputFieldType="search"
+          [options]="accountsSuggestions()"
+          label="Search by ID or account name"
+          noOptionsFoundText="No matching results"
+          widthClass="govuk-!-width-full"></div>
+        <div
+          govuk-select
+          formControlName="workflowType"
+          [options]="workflowFilterItems()"
+          label="Filter by workflow"
+          widthClass="govuk-!-width-full"></div>
+        <div
+          govuk-select
+          formControlName="orderBy"
+          [options]="orderByFilterItems"
+          label="Sort by"
+          widthClass="govuk-!-width-full"></div>
+      </div>
+    </div>
+    <button govukSecondaryButton type="submit">Apply</button>
+  </govuk-details>
+  @if (hasAppliedFilters()) {
+    <a govukLink class="govuk-link--no-visited-state" href="javascript:void(0)" (click)="onClearFiltersClick()">
+      Clear all filters
+    </a>
+  }
+</form>

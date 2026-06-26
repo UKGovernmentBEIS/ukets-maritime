@@ -9,7 +9,7 @@ import { TaskSuperListComponent } from './task-superlist.component';
 describe('TaskSuperListComponent', () => {
   let component: TaskSuperListComponent;
   let fixture: ComponentFixture<TaskSuperListComponent>;
-  const map: TaskStatusTagMap = { COMPLETED: { text: 'COMPLETED', color: 'blue' } };
+  const map: TaskStatusTagMap = { COMPLETED: { text: 'Completed', color: 'blue', style: 'fill' } };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({

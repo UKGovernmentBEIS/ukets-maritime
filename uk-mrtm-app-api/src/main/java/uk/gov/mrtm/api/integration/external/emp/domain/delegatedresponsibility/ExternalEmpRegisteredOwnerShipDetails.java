@@ -16,7 +16,10 @@ import uk.gov.netz.api.common.validation.uniqueelements.UniqueField;
 public class ExternalEmpRegisteredOwnerShipDetails {
 
     @NotBlank
-    @Pattern(regexp = "^\\d{7}$")
+    @Pattern(
+        regexp = "^\\d{7}$",
+        message = "Ship IMO number must contain exactly 7 digits"
+    )
     @UniqueField
     private String shipImoNumber;
 

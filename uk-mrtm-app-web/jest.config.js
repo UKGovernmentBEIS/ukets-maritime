@@ -11,7 +11,6 @@ module.exports = {
     '^@accessibility/(.*)': '<rootDir>/src/app/accessibility/$1',
     '^@accounts/(.*)': '<rootDir>/src/app/accounts/$1',
     '^@batch-variations/(.*)': '<rootDir>/src/app/batch-variations/$1',
-    '^@contact-us/(.*)': '<rootDir>/src/app/contact-us/$1',
     '^@cookies/(.*)': '<rootDir>/src/app/cookies/$1',
     '^@core/(.*)': '<rootDir>/src/app/core/$1',
     '^@data-suppliers/(.*)': '<rootDir>/src/app/data-suppliers/$1',

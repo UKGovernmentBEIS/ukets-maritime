@@ -10,22 +10,30 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.domain.MrtmAccountStatus;
+import uk.gov.mrtm.api.account.domain.dto.MrtmAccountInfoDTO;
 import uk.gov.mrtm.api.account.domain.dto.MrtmAccountViewDTO;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.account.transform.MrtmAccountMapper;
 import uk.gov.mrtm.api.common.domain.AddressState;
 import uk.gov.mrtm.api.common.domain.dto.AddressStateDTO;
+import uk.gov.netz.api.authorization.core.domain.AppAuthority;
+import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.authorization.rules.services.authorization.verifier.VerifierAccountAccessService;
+import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.common.exception.BusinessException;
+import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -42,6 +50,9 @@ class MrtmAccountQueryServiceTest {
 
     @Mock
     private MrtmAccountRepository mrtmAccountRepository;
+
+    @Mock
+    private VerifierAccountAccessService verifierAccountAccessService;
 
     @Mock
     private MrtmAccountMapper accountMapper;
@@ -195,6 +206,51 @@ class MrtmAccountQueryServiceTest {
         verify(mrtmAccountRepository, times(1)).findById(accountId);
         verify(accountMapper, times(toMrtmAccountViewDTOInvocations)).toMrtmAccountViewDTO(account);
         verifyNoMoreInteractions(accountMapper);
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideGetMrtmAccountsInfoByUserArgs")
+    void getMrtmAccountsInfoByUser(String roleType, int findAllByAccountIdInInvocations,
+                                   int findAllByCAInvocations, int findAuthorizedAccountIdsInvocations,
+                                   Set<Long> accountIds) {
+
+        MrtmAccountInfoDTO infoDTO = mock(MrtmAccountInfoDTO.class);
+        List<MrtmAccountInfoDTO> expected = List.of(infoDTO);
+
+        long accountId = 1L;
+        long accountId2 = 2L;
+        AppUser user = AppUser.builder()
+            .authorities(List.of(
+                AppAuthority.builder()
+                    .competentAuthority(CompetentAuthorityEnum.ENGLAND)
+                    .accountId(accountId)
+                    .build()))
+            .roleType(roleType)
+            .build();
+
+        lenient().when(mrtmAccountRepository.findAllByAccountIdIn(accountIds)).thenReturn(expected);
+        lenient().when(mrtmAccountRepository.findAllByCA(CompetentAuthorityEnum.ENGLAND)).thenReturn(expected);
+        lenient().when(verifierAccountAccessService.findAuthorizedAccountIds(user)).thenReturn(Set.of(accountId2));
+
+        List<MrtmAccountInfoDTO> actual = mrtmAccountQueryService.getMrtmAccountsInfoByUser(user);
+
+        assertEquals(expected, actual);
+
+        verify(mrtmAccountRepository, times(findAllByAccountIdInInvocations)).findAllByAccountIdIn(accountIds);
+        verify(mrtmAccountRepository, times(findAllByCAInvocations)).findAllByCA(CompetentAuthorityEnum.ENGLAND);
+        verify(verifierAccountAccessService, times(findAuthorizedAccountIdsInvocations)).findAuthorizedAccountIds(user);
+
+        verifyNoMoreInteractions(mrtmAccountRepository, verifierAccountAccessService);
+        verifyNoInteractions(accountMapper);
+
+    }
+
+    public static Stream<Arguments> provideGetMrtmAccountsInfoByUserArgs() {
+        return Stream.of(
+            Arguments.of(RoleTypeConstants.OPERATOR, 1, 0, 0, Set.of(1L)),
+            Arguments.of(RoleTypeConstants.REGULATOR, 0, 1, 0, null),
+            Arguments.of(RoleTypeConstants.VERIFIER, 1, 0, 1, Set.of(2L))
+        );
     }
 
     @Test

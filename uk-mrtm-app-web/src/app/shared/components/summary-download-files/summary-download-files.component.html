@@ -1,0 +1,36 @@
+@if (combinedFiles()?.length > 0) {
+  <ul class="govuk-list govuk-!-margin-0">
+    @for (file of combinedFiles(); track file) {
+      <li>
+        @if (!htmlDiffProvider || file?.previous?.fileName === file?.current?.fileName) {
+          <ng-container *ngTemplateOutlet="fileLink; context: { file: file?.current }" />
+        } @else if (isNullOrEmpty(file?.previous?.fileName)) {
+          <ng-container *ngTemplateOutlet="currentFile; context: { file: file?.current }" />
+        } @else if (isNullOrEmpty(file?.current?.fileName)) {
+          <ng-container *ngTemplateOutlet="previousFile; context: { file: file?.previous }" />
+        } @else {
+          <ng-container *ngTemplateOutlet="previousFile; context: { file: file?.previous }" />
+          <ng-container *ngTemplateOutlet="currentFile; context: { file: file?.current }" />
+        }
+      </li>
+    }
+  </ul>
+} @else {
+  <span class="govuk-hint">Not provided</span>
+}
+
+<ng-template #previousFile let-file="file">
+  <del class="diffmod">
+    <ng-container *ngTemplateOutlet="fileLink; context: { file: file }" />
+  </del>
+</ng-template>
+
+<ng-template #currentFile let-file="file">
+  <ins class="diffmod">
+    <ng-container *ngTemplateOutlet="fileLink; context: { file: file }" />
+  </ins>
+</ng-template>
+
+<ng-template #fileLink let-file="file">
+  <a govukLink [routerLink]="file?.downloadUrl" target="_blank">{{ file?.fileName }}</a>
+</ng-template>
