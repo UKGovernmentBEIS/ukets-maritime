@@ -1,5 +1,5 @@
 import { NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, effect, inject, linkedSignal, signal } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -35,6 +35,7 @@ import {
 import { DashboardFiltersComponent } from '@shared/dashboard/components/dashboard-filters';
 import { DashboardItemsListComponent } from '@shared/dashboard/components/dashboard-items-list';
 import { WorkflowItemsService } from '@shared/dashboard/services';
+import { MrtmRequestType } from '@shared/types';
 import { daysRemainingTransformer, isEqual, taskActionTypeToTitleTransformer } from '@shared/utils';
 
 const DEFAULT_TABLE_COLUMNS: GovukTableColumn<MrtmItemDTO>[] = [
@@ -95,11 +96,17 @@ export class DashboardPageComponent {
       ? (this.activatedRoute.snapshot.fragment as WorkflowItemsAssignmentType)
       : initialState.activeTab,
   );
-  readonly page = signal(
-    this.activatedRoute.snapshot.queryParamMap.get('page')
-      ? +this.activatedRoute.snapshot.queryParamMap.get('page')
-      : initialState.paging.page,
-  );
+  readonly page = linkedSignal<MrtmRequestType, number>({
+    source: computed(() => this.filters().workflowType),
+    computation: (_, previous) => {
+      if (previous) {
+        return initialState.paging.page;
+      }
+
+      const initialPage = this.activatedRoute.snapshot.queryParamMap.get('page');
+      return initialPage ? +initialPage : initialState.paging.page;
+    },
+  });
   readonly tableColumns = computed(() => getTableColumns(this.activeTab()));
   private readonly params = computed(() => ({
     activeTab: this.activeTab(),
@@ -165,6 +172,26 @@ export class DashboardPageComponent {
       </ul>`
         : 'No tasks found',
   );
+
+  /**
+   * The pagination component reads the current page from the 'page' query param,
+   * so the URL must follow the 'page' signal when a filter change resets it.
+   */
+  constructor() {
+    effect(() => {
+      const page = this.page();
+      const urlPage = this.activatedRoute.snapshot.queryParamMap.get('page');
+      const resolvedPage = urlPage ? +urlPage : initialState.paging.page;
+
+      if (page !== resolvedPage) {
+        this.router.navigate([], {
+          relativeTo: this.activatedRoute,
+          queryParams: { page },
+          fragment: this.activatedRoute.snapshot.fragment,
+        });
+      }
+    });
+  }
 
   changePage(page: number) {
     this.page.update(() => page);

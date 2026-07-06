@@ -7,6 +7,7 @@ import {
   ItemDTOResponse,
   ItemsAssignedToMeService,
   ItemsAssignedToOthersService,
+  MaritimeAccountsService,
   UnassignedItemsService,
 } from '@mrtm/api';
 
@@ -46,6 +47,7 @@ describe('DashboardPageComponent', () => {
   let itemsAssignedToMeService: Partial<jest.Mocked<ItemsAssignedToMeService>>;
   let itemsAssignedToOthersService: Partial<jest.Mocked<ItemsAssignedToOthersService>>;
   let unassignedItemsService: Partial<jest.Mocked<UnassignedItemsService>>;
+  let maritimeAccountsService: Partial<jest.Mocked<MaritimeAccountsService>>;
 
   const mockTasks: ItemDTOResponse = {
     items: [
@@ -102,6 +104,9 @@ describe('DashboardPageComponent', () => {
     unassignedItemsService = {
       getUnassignedItems: jest.fn().mockReturnValue(of(unassignedItems)),
     };
+    maritimeAccountsService = {
+      getMrtmAccountsInfoByUser: jest.fn().mockReturnValue(of([])),
+    };
     await TestBed.configureTestingModule({
       providers: [
         provideRouter([]),
@@ -110,6 +115,7 @@ describe('DashboardPageComponent', () => {
         { provide: ItemsAssignedToMeService, useValue: itemsAssignedToMeService },
         { provide: ItemsAssignedToOthersService, useValue: itemsAssignedToOthersService },
         { provide: UnassignedItemsService, useValue: unassignedItemsService },
+        { provide: MaritimeAccountsService, useValue: maritimeAccountsService },
       ],
     }).compileComponents();
 
@@ -149,6 +155,31 @@ describe('DashboardPageComponent', () => {
 
     it('should not display the unassigned items', () => {
       expect(page.unassignedTabLink).toBeFalsy();
+    });
+
+    it('should reset the page when the workflow type filter changes', async () => {
+      const store = TestBed.inject(DashboardStore);
+
+      component.changePage(3);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(itemsAssignedToMeService.getAssignedItems).toHaveBeenLastCalledWith(
+        2,
+        10,
+        expect.objectContaining({ requestType: null }),
+      );
+
+      store.setFilters({ accountId: null, workflowType: 'AER', orderBy: 'NEWEST_FIRST' });
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(component.page()).toEqual(1);
+      expect(itemsAssignedToMeService.getAssignedItems).toHaveBeenLastCalledWith(
+        0,
+        10,
+        expect.objectContaining({ requestType: 'AER' }),
+      );
     });
   });
 

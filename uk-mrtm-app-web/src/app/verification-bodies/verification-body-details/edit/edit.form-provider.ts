@@ -22,8 +22,8 @@ export const editVerificationBodyFormProvider: Provider = {
         validators: [
           GovukValidators.required('Enter the name of the verification body organisation'),
           GovukValidators.maxLength(
-            25,
-            'Name of the verification body organisation should not be more than 25 characters',
+            255,
+            'Name of the verification body organisation should not be more than 255 characters',
           ),
         ],
       }),

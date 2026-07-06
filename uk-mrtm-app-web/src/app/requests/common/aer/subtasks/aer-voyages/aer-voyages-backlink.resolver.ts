@@ -6,6 +6,7 @@ import { AerVoyage } from '@mrtm/api';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { aerCommonQuery } from '@requests/common/aer/+state';
+import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import { AerVoyagesWizardStep } from '@requests/common/aer/subtasks/aer-voyages/aer-voyages.helpers';
 import { isNil } from '@shared/utils';
 
@@ -34,6 +35,20 @@ const voyageDetailsBacklinkResolver = (
   }
 };
 
+const voyageSummaryBacklinkResolver = (
+  returnToSummary: boolean,
+  voyages: Array<AerVoyage>,
+  activatedRoute: ActivatedRouteSnapshot,
+  isNewEntry: boolean,
+): string => {
+  switch (true) {
+    case isNewEntry:
+      return `../../`;
+    default:
+      return '../';
+  }
+};
+
 const stepBacklinkResolvers: Partial<
   Record<
     AerVoyagesWizardStep,
@@ -49,14 +64,16 @@ const stepBacklinkResolvers: Partial<
   [AerVoyagesWizardStep.VOYAGE_DETAILS]: voyageDetailsBacklinkResolver,
   [AerVoyagesWizardStep.FUEL_EMISSIONS]: (returnToSummary: boolean) =>
     returnToSummary ? '../' : `../${AerVoyagesWizardStep.VOYAGE_DETAILS}`,
-  [AerVoyagesWizardStep.VOYAGE_SUMMARY]: (returnToSummary: boolean) => (returnToSummary ? '../../' : '../'),
+  [AerVoyagesWizardStep.VOYAGE_SUMMARY]: voyageSummaryBacklinkResolver,
 };
 
 export const aerVoyagesBacklinkResolver =
-  (step: AerVoyagesWizardStep, isNew: boolean = false): ResolveFn<any> =>
+  (step: AerVoyagesWizardStep): ResolveFn<any> =>
   (route: ActivatedRouteSnapshot) => {
-    const isChange = route.queryParamMap.get('change') === 'true';
     const store = inject(RequestTaskStore);
+    const isNew = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
+
+    const isChange = route.queryParamMap.get('change') === 'true';
     const isEditable = store.select(requestTaskQuery.selectIsEditable)();
     const voyages = store.select(aerCommonQuery.selectVoyages)();
 

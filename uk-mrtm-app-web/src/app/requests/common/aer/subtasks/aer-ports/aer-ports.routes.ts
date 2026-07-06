@@ -67,7 +67,7 @@ export const AER_PORTS_ROUTES: Routes = [
             title: aerPortsMap.portDetails.title,
             canActivate: [canActivatePortDetails],
             resolve: {
-              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.PORT_DETAILS, true),
+              backlink: aerPortsBacklinkResolver(AerPortsWizardStep.PORT_DETAILS),
             },
             loadComponent: () =>
               import('@requests/common/aer/subtasks/aer-ports/aer-port-details').then((c) => c.AerPortDetailsComponent),

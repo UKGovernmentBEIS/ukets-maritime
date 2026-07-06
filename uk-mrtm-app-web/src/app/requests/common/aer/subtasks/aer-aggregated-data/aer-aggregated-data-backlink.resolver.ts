@@ -3,6 +3,7 @@ import { ActivatedRouteSnapshot, ResolveFn } from '@angular/router';
 
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
+import { AER_SUBTASK_NEW_ENTRY_FLOW } from '@requests/common/aer/aer.consts';
 import {
   AER_AGGREGATED_DATA_PARAM,
   AerAggregatedDataWizardStep,
@@ -42,6 +43,19 @@ const shipEmissionsSummaryBacklinkResolver = (returnToSummary: boolean, activate
   return returnToSummary ? '../' : !isNil(dataId) ? `../${AerAggregatedDataWizardStep.ANNUAL_EMISSIONS}` : '../';
 };
 
+const aggregatedDataSummaryBacklinkResolver = (
+  returnToSummary: boolean,
+  activatedRoute: ActivatedRouteSnapshot,
+  isNewEntry: boolean,
+): string => {
+  switch (true) {
+    case isNewEntry:
+      return `../../`;
+    default:
+      return '../';
+  }
+};
+
 const stepBacklinkResolvers: Partial<
   Record<
     AerAggregatedDataWizardStep,
@@ -52,17 +66,18 @@ const stepBacklinkResolvers: Partial<
   [AerAggregatedDataWizardStep.FUEL_CONSUMPTION]: selectFuelConsumptionBacklinkResolver,
   [AerAggregatedDataWizardStep.ANNUAL_EMISSIONS]: selectAnnualEmissionsBacklinkResolver,
   [AerAggregatedDataWizardStep.SHIP_EMISSIONS]: shipEmissionsSummaryBacklinkResolver,
-  [AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY]: (returnToSummary: boolean) =>
-    returnToSummary ? '../../' : '../',
+  [AerAggregatedDataWizardStep.AGGREGATED_DATA_SUMMARY]: aggregatedDataSummaryBacklinkResolver,
 };
 
 export const aerAggregatedDataBacklinkResolver =
-  (step: AerAggregatedDataWizardStep, isNew: boolean = false): ResolveFn<unknown> =>
+  (step: AerAggregatedDataWizardStep): ResolveFn<unknown> =>
   (route: ActivatedRouteSnapshot) => {
-    const isChange = route.queryParamMap.get('change') === 'true';
     const store = inject(RequestTaskStore);
-    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
-    const resolverFn = stepBacklinkResolvers[step];
+    const isNew = inject(AER_SUBTASK_NEW_ENTRY_FLOW, { optional: true });
 
+    const isChange = route.queryParamMap.get('change') === 'true';
+    const isEditable = store.select(requestTaskQuery.selectIsEditable)();
+
+    const resolverFn = stepBacklinkResolvers[step];
     return resolverFn ? resolverFn(isChange || !isEditable, route, isNew) : './';
   };

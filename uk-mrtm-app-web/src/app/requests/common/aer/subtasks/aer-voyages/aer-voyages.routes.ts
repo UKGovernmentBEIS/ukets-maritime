@@ -65,7 +65,7 @@ export const AER_VOYAGES_ROUTES: Routes = [
             path: AerVoyagesWizardStep.VOYAGE_DETAILS,
             data: { breadcrumb: false },
             resolve: {
-              backlink: aerVoyagesBacklinkResolver(AerVoyagesWizardStep.VOYAGE_DETAILS, true),
+              backlink: aerVoyagesBacklinkResolver(AerVoyagesWizardStep.VOYAGE_DETAILS),
             },
             canActivate: [canActivateVoyageDetails],
             loadComponent: () =>

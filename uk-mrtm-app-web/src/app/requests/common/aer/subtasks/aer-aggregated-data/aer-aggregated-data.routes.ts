@@ -74,7 +74,7 @@ export const AER_AGGREGATED_DATA_ROUTES: Routes = [
             path: AerAggregatedDataWizardStep.FUEL_CONSUMPTION,
             data: { breadcrumb: false },
             resolve: {
-              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.FUEL_CONSUMPTION, true),
+              backlink: aerAggregatedDataBacklinkResolver(AerAggregatedDataWizardStep.FUEL_CONSUMPTION),
             },
             // canActivate: [canActivateAggregatedDataEdit],
             loadComponent: () =>
