@@ -1,6 +1,13 @@
 import { ExtraOptions, Routes } from '@angular/router';
 
-import { AuthGuard, loggedInGuard, NonAuthGuard, PendingRequestGuard, TermsAndConditionsGuard } from '@core/guards';
+import {
+  AuthGuard,
+  canRedirectToSignIn,
+  loggedInGuard,
+  NonAuthGuard,
+  PendingRequestGuard,
+  TermsAndConditionsGuard,
+} from '@core/guards';
 import { DATA_SUPPLIERS_ROUTE_PREFIX } from '@data-suppliers/data-suppliers.constants';
 import { canActivateDataSuppliers } from '@data-suppliers/data-suppliers.guards';
 import { GUIDANCE_ROUTE_PREFIX } from '@guidance/guidance.constants';
@@ -75,6 +82,11 @@ export const APP_ROUTES: Routes = [
     title: 'Session Timeout',
     canActivate: [NonAuthGuard],
     component: TimedOutComponent,
+  },
+  {
+    path: 'redirect-to-sign-in',
+    canActivate: [canRedirectToSignIn],
+    children: [],
   },
   {
     path: '',

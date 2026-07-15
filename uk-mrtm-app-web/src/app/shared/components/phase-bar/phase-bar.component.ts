@@ -15,10 +15,11 @@ import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
   standalone: true,
   template: `
     <govuk-phase-banner phase="Beta">
-      This is a new service – your
-      <a govukLink routerLink="feedback">feedback</a>
-      will help us to improve it.
       @if (userProfile$ | async; as user) {
+        This is a new service – your
+        <a govukLink routerLink="feedback">feedback</a>
+        will help us to improve it.
+
         <span class="logged-in-user float-right">
           You are logged in as:
           <span class="govuk-!-font-weight-bold">{{ user.firstName }} {{ user.lastName }}</span>

@@ -10,7 +10,6 @@ import { ForgotPasswordService } from '@mrtm/api';
 import { ErrorCodes } from '@netz/common/error';
 import { BasePage, mockClass } from '@netz/common/testing';
 
-import { AuthService } from '@core/services/auth.service';
 import { ResetPasswordStore } from '@forgot-password/store/reset-password.store';
 import { SubmitOtpComponent } from '@forgot-password/submit-otp/submit-otp.component';
 import { BackToTopComponent, WizardStepComponent } from '@shared/components';
@@ -23,7 +22,6 @@ describe('SubmitOtpComponent', () => {
   let resetPasswordStore: ResetPasswordStore;
 
   const forgotPasswordService = mockClass(ForgotPasswordService);
-  const authService = mockClass(AuthService);
 
   class Page extends BasePage<SubmitOtpComponent> {
     set passwordValue(value: string) {
@@ -40,7 +38,6 @@ describe('SubmitOtpComponent', () => {
       imports: [SubmitOtpComponent, WizardStepComponent, BackToTopComponent],
       providers: [
         provideRouter([]),
-        { provide: AuthService, useValue: authService },
         { provide: ForgotPasswordService, useValue: forgotPasswordService },
         { provide: APP_BASE_HREF, useValue: '/maritime/' },
       ],
@@ -128,7 +125,6 @@ describe('SubmitOtpComponent', () => {
   });
 
   it('should go to login after clicking link', () => {
-    jest.spyOn(fixture.componentInstance, 'onSignInAgain');
     forgotPasswordService.resetPassword.mockReturnValueOnce(of({} as any));
 
     page.passwordValue = '123456';
@@ -136,10 +132,6 @@ describe('SubmitOtpComponent', () => {
     fixture.detectChanges();
     expect(page.errorSummary).toBeFalsy();
 
-    page.link.click();
-    fixture.detectChanges();
-
-    expect(component.onSignInAgain).toHaveBeenCalledTimes(1);
-    expect(authService.login).toHaveBeenCalledTimes(1);
+    expect(page.link.getAttribute('href')).toBe('/maritime/redirect-to-sign-in');
   });
 });

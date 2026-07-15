@@ -1,9 +1,7 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { LinkDirective, PanelComponent } from '@netz/govuk-components';
-
-import { AuthService } from '@core/services/auth.service';
 
 @Component({
   selector: 'mrtm-regulator-confirmation',
@@ -19,12 +17,10 @@ import { AuthService } from '@core/services/auth.service';
         </p>
         <h3 class="govuk-heading-m">What happens next</h3>
         <p class="govuk-body">You can sign in to the NETZ service and apply to create a new organisation account.</p>
-        <a routerLink="." (click)="authService.login()" govukLink>Go to my dashboard</a>
+        <a [routerLink]="['/', 'redirect-to-sign-in']" govukLink>Go to my dashboard</a>
       </div>
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InvitationConfirmationComponent {
-  readonly authService = inject(AuthService);
-}
+export class InvitationConfirmationComponent {}

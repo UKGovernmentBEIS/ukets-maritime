@@ -10,7 +10,6 @@ import { ForgotPasswordService } from '@mrtm/api';
 import { catchBadRequest, ErrorCodes } from '@netz/common/error';
 import { ErrorSummaryComponent, GovukValidators, LinkDirective, TextInputComponent } from '@netz/govuk-components';
 
-import { AuthService } from '@core/services/auth.service';
 import { ResetPasswordStore } from '@forgot-password/store/reset-password.store';
 import { BackToTopComponent, WizardStepComponent } from '@shared/components';
 
@@ -32,7 +31,6 @@ import { BackToTopComponent, WizardStepComponent } from '@shared/components';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SubmitOtpComponent {
-  private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly forgotPasswordService = inject(ForgotPasswordService);
   private readonly fb = inject(UntypedFormBuilder);
@@ -81,9 +79,5 @@ export class SubmitOtpComponent {
       .subscribe(() => {
         this.isPasswordReset = true;
       });
-  }
-
-  onSignInAgain(): void {
-    this.authService.login({ redirectUri: this.authService.baseRedirectUri });
   }
 }
