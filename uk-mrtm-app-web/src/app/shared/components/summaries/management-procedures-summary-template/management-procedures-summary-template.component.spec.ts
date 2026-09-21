@@ -171,7 +171,7 @@ describe('ManagementProceduresSummaryTemplateComponent', () => {
       'risk it',
       'Change name of IT system used (Procedures for risk assessment)',
       'Uploaded files',
-      '1.png2.png',
+      '1.png  2.png',
       'Change  uploaded files (Procedures for risk assessment)',
     ]);
   });

@@ -48,7 +48,8 @@ public class EmpVariationReviewNotifyOperatorActionHandler implements
                   (EmpVariationApplicationReviewRequestTaskPayload) requestTask.getPayload();
         requestTaskPayload.setFinalDocumentsGenerationInProgress(true);
         requestTaskPayload.setFinalDocumentsGenerationSuccessful(null);
-        
+        requestTaskPayload.setFailureNotificationSent(false);
+
         final Request request = requestTask.getRequest();
         final EmpVariationRequestPayload requestPayload = (EmpVariationRequestPayload) request.getPayload();
         

@@ -1,0 +1,27 @@
+@if (data(); as data) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <govuk-panel title="Data import into operator accounts in progress" />
+      <p class="govuk-body">
+        Your request has been completed, and data is being imported into the operator account workflows.
+      </p>
+      <p class="govuk-body">You have requested to import:</p>
+      <dl govuk-summary-list [hasBorders]="true">
+        <div govukSummaryListRow>
+          <dt govukSummaryListRowKey>Tasks</dt>
+          <dd govukSummaryListRowValue>{{ data?.items?.length }}</dd>
+        </div>
+      </dl>
+
+      <h3 class="govuk-heading-m">What happens next</h3>
+      <p class="govuk-body">
+        Successfully imported data can be reviewed and processed immediately in the relevant task. For an analytical
+        report of the import, visit 'Activity history' under API Data Management.
+      </p>
+    </div>
+  </div>
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <a govukLink routerLink="../../../">Return to: Dashboard</a>
+  </div>
+}

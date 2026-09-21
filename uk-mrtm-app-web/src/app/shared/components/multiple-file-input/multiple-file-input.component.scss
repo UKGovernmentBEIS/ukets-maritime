@@ -1,12 +1,9 @@
 // Based on https://github.com/ministryofjustice/moj-frontend/blob/main/src/moj/components/multi-file-upload/_multi-file-upload.scss
+// Dropzone styles. The uploaded files list is styled in file-upload-list.component.scss.
 @use 'govuk-base' as govuk;
 
 .moj-multi-file-upload {
   margin-bottom: 40px;
-}
-
-.moj-multi-file-upload--enhanced .moj-multi-file-upload__button {
-  display: none;
 }
 
 .moj-multi-file-upload__dropzone {
@@ -15,7 +12,7 @@
   transition:
     outline-offset 0.1s ease-in-out,
     background-color 0.1s linear;
-  outline: 3px dashed govuk.govuk-colour("black");
+  outline: 3px dashed govuk.govuk-colour('black');
   text-align: center;
 }
 
@@ -31,7 +28,7 @@
   padding-top: 7px;
 }
 
-.moj-multi-file-upload__dropzone [type="file"] {
+.moj-multi-file-upload__dropzone [type='file'] {
   position: absolute;
   left: -9999em;
 }
@@ -39,35 +36,4 @@
 .moj-multi-file-upload--dragover {
   outline-color: #6f777b;
   background: #b1b4b6;
-}
-
-.moj-multi-file-upload--focused {
-  outline: none;
-  color: govuk.$govuk-focus-text-colour;
-  background-color: govuk.$govuk-focus-colour;
-  box-shadow:
-    0 -2px govuk.$govuk-focus-colour,
-    0 4px govuk.$govuk-focus-text-colour;
-}
-
-.moj-multi-file-upload__error {
-  color: govuk.govuk-colour("red");
-  font-weight: bold;
-}
-
-.moj-multi-file-upload__success {
-  color: govuk.govuk-colour("green");
-  font-weight: bold;
-}
-
-.moj-multi-file-upload__error svg {
-  margin-right: govuk.govuk-spacing(2);
-  float: left;
-  fill: currentcolor;
-}
-
-.moj-multi-file-upload__success svg {
-  margin-right: govuk.govuk-spacing(2);
-  float: left;
-  fill: currentcolor;
 }

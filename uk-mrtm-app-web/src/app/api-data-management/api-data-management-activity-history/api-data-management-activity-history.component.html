@@ -1,0 +1,104 @@
+<ng-template #infoBadge let-details="details">
+  <div class="app-column-width-20-per">
+    <span class="govuk-heading-l govuk-!-margin-bottom-0">{{ details?.count }}</span>
+    <span class="govuk-body">{{ details?.title }}</span>
+  </div>
+</ng-template>
+@if (data(); as data) {
+  @if (data?.stats?.totalImports > 0) {
+    <div class="row-flex govuk-!-margin-1">
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.stats?.totalImports ?? 0,
+              title: 'Total imports',
+            },
+          }
+        " />
+
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.stats?.totalCompletedImports ?? 0,
+              title: 'Completed imports',
+            },
+          }
+        " />
+
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.stats?.totalCompletedWithFailuresImports ?? 0,
+              title: 'Imports completed with failures',
+            },
+          }
+        " />
+
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.stats?.totalFailedImports ?? 0,
+              title: 'Failed imports',
+            },
+          }
+        " />
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.stats?.totalInProgressImports ?? 0,
+              title: 'Imports currently in progress',
+            },
+          }
+        " />
+    </div>
+  }
+  <h4 class="govuk-heading-m">Import records</h4>
+
+  <govuk-table
+    [columns]="columns"
+    [data]="data?.items"
+    emptyTableText="No data to display"
+    ariaLabel="Available to import"
+    (sort)="onSort($event)">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('itemType') {
+          {{ row?.itemType?.requestType | apiDataManagementTaskTypeToText: row?.itemType?.year }}
+        }
+        @case ('createdOn') {
+          {{ row[column.field] | govukDate: 'datetime' }}
+        }
+        @case ('status') {
+          <govuk-tag [color]="row[column.field] | apiDataManagementTaskStatusColor">
+            {{ row[column.field] | apiDataManagementTaskStatusTitle }}
+          </govuk-tag>
+        }
+        @case ('report') {
+          @if (row?.report) {
+            <button type="button" class="link-button" (click)="downloadReport(row.id)">Download report</button>
+          }
+        }
+        @default {
+          {{ row[column.field] }}
+        }
+      }
+    </ng-template>
+  </govuk-table>
+  @if (data?.stats?.totalImports > pageSize()) {
+    <govuk-pagination
+      fragment="activity-history"
+      [count]="data?.stats?.totalImports"
+      [pageSize]="pageSize()"
+      (currentPageChange)="changePage($event)" />
+  }
+}

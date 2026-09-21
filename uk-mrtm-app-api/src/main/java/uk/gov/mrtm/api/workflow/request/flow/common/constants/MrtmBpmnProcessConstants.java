@@ -12,11 +12,13 @@ public class MrtmBpmnProcessConstants {
     public static final String FOLLOW_UP_TIMER_EXTENDED = "followUpTimerExtended";
     
     public static final String EMP_VARIATION_SUBMIT_OUTCOME = "empVariationSubmitOutcome";
-    public static final String BATCH_NUMBER_OF_ACCOUNTS_COMPLETED = "batchAccountsCompleted";
     public static final String EMP_REISSUE_REQUEST_ID = "empReissueRequestId";
-    public static final String EMP_REISSUE_REQUEST_SUCCEEDED = "empReissueRequestSucceeded";
+    public static final String EMP_REISSUE_COMPLETED = "empReissueCompleted";
     public static final String EMP_BATCH_REQUEST_BUSINESS_KEY = "empBatchRequestBusinessKey";
-
+    
+    public static final String DOCUMENT_FILE_GENERATED = "documentFileGenerated";
+    public static final String EMP_REISSUE_REQUEST_SUCCEEDED = "empReissueRequestSucceeded";
+    
     //AER
     public static final String AER_EXPIRATION_DATE = MrtmRequestExpirationType.AER + _EXPIRATION_DATE;
     public static final String AER_YEAR = "aerYear";
@@ -42,4 +44,10 @@ public class MrtmBpmnProcessConstants {
     //SITE_VISIT
     public static final String SITE_VISIT_SUBMIT_OUTCOME = "siteVisitSubmitOutcome";
 
+    // PROCESS_IMPORT_THIRD_PART_DATA_BATCH
+    public static final String SUBMITTER_ID = "submitterId";
+    public static final String STAGING_IDS = "stagingIds";
+    public static final String IMPORT_THIRD_PART_DATA_TRANSACTION_ID = "transactionId";
+    public static final String IMPORT_THIRD_PART_DATA_TRANSACTION_JOBS = "transactionJobs";
+    public static final String IMPORT_THIRD_PART_DATA_TRANSACTION_JOB_ID = "jobId";
 }

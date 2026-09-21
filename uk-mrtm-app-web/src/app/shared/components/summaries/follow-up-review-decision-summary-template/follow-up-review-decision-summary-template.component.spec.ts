@@ -49,7 +49,7 @@ describe('FollowUpReviewDecisionSummaryTemplateComponent', () => {
       'Decision',
       'Operator amends needed',
       'Changes required from operator',
-      'some required change 1 1.png2.png some required change 2',
+      'some required change 1  1.png  2.png  some required change 2',
       'New due date for the response',
       '1 Jan 2027',
       'Notes',

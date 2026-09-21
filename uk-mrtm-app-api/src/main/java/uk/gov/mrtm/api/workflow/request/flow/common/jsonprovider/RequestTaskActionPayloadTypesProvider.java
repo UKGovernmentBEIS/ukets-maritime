@@ -42,6 +42,8 @@ import uk.gov.mrtm.api.workflow.request.flow.noncompliance.domain.NonComplianceS
 import uk.gov.mrtm.api.workflow.request.flow.sitevisit.review.domain.SiteVisitSaveApplicationAmendRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.sitevisit.review.domain.SiteVisitSaveReviewGroupDecisionRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.sitevisit.submit.domain.SiteVisitApplicationSaveRequestTaskActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.rde.domain.RdeSaveRequestTaskActionPayload;
+import uk.gov.mrtm.api.workflow.request.flow.rfi.domain.RfiSaveRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirSaveApplicationRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirSaveRespondToRegulatorCommentsRequestTaskActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirSaveReviewRequestTaskActionPayload;
@@ -100,6 +102,8 @@ import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequest
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_SAVE_REVIEW_DETERMINATION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.EMP_VARIATION_SAVE_REVIEW_GROUP_DECISION_REGULATOR_LED_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.RDE_SAVE_PAYLOAD;
+import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.RFI_SAVE_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_AMEND_DETAILS_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_CIVIL_PENALTY_NOTIFY_OPERATOR_PAYLOAD;
 import static uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionPayloadTypes.NON_COMPLIANCE_CIVIL_PENALTY_REQUEST_PEER_REVIEW_PAYLOAD;
@@ -223,7 +227,11 @@ public class RequestTaskActionPayloadTypesProvider implements JsonSubTypesProvid
                 new NamedType(PeerReviewRequestTaskActionPayload.class, SITE_VISIT_REQUEST_PEER_REVIEW_PAYLOAD),
                 new NamedType(PeerReviewDecisionRequestTaskActionPayload.class, SITE_VISIT_REVIEW_SUBMIT_PEER_REVIEW_DECISION_PAYLOAD),
                 new NamedType(SiteVisitSaveApplicationAmendRequestTaskActionPayload.class, SITE_VISIT_SAVE_APPLICATION_AMEND_PAYLOAD),
-                new NamedType(NotifyOperatorForDecisionRequestTaskActionPayload.class, SITE_VISIT_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD)
+                new NamedType(NotifyOperatorForDecisionRequestTaskActionPayload.class, SITE_VISIT_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD),
+
+                // RFI / RDE
+                new NamedType(RfiSaveRequestTaskActionPayload.class, RFI_SAVE_PAYLOAD),
+                new NamedType(RdeSaveRequestTaskActionPayload.class, RDE_SAVE_PAYLOAD)
         );
     }
 

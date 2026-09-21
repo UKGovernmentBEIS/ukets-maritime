@@ -3,12 +3,12 @@
     [listTitle]="listTitle()"
     [headerSize]="headerSize()"
     (fileDelete)="onFileDeleteClick($event)"
-    [files]="uploadedFiles$ | async"
-    [isDisabled]="isDisabled" />
+    [files]="uploadedFiles()"
+    [isDisabled]="isDisabled()" />
 
   <div class="moj-multi-file-upload__upload">
     <div class="govuk-form-group">
-      <label [for]="id" [class]="`govuk-label govuk-label--${headerSize()}`" id="{{ `l.${id}` }}">{{ label() }}</label>
+      <label [for]="id" [class]="`govuk-label govuk-label--${headerSize()}`" [id]="`l.${id}`">{{ label() }}</label>
       @if (hint()) {
         <div [id]="`${id}-hint`" class="govuk-hint" [innerHTML]="hint() | safeHtml"></div>
       }
@@ -20,31 +20,33 @@
         (dragleave)="onDragLeave()"
         (dragover)="onDragOver($event)"
         (drop)="onDrop($event)"
-        [class.moj-multi-file-upload--dragover]="isDraggedOver"
+        [class.moj-multi-file-upload--dragover]="isDraggedOver()"
         class="moj-multi-file-upload__dropzone">
+        <!-- The native input stays for assistive technology and drag and drop; the button is the keyboard control. -->
         <input
           #input
-          (blur)="onFileBlur()"
           (change)="onFileChange($event)"
-          (focus)="onFileFocus()"
           [accept]="accepted()"
-          [class.moj-multi-file-upload--focused]="isFocused"
-          [disabled]="isDisabled"
+          [attr.aria-describedby]="describedBy"
+          [disabled]="isDisabled()"
           [id]="id"
           [name]="id"
-          [attr.aria-labelledby]="`l.${id} ld.${id}`"
           class="govuk-file-upload moj-multi-file-upload__input"
           multiple
+          tabindex="-1"
           type="file" />
         <p class="govuk-body">{{ dropzoneHintText() }}</p>
-        <label
-          [class.govuk-button--disabled]="isDisabled"
-          [for]="id"
-          id="{{ `ld.${id}` }}"
-          class="govuk-button govuk-button--secondary">
+
+        <button
+          govukSecondaryButton
+          (blur)="onChooseFilesBlur()"
+          (click)="onChooseFilesClick()"
+          [disabled]="isDisabled()"
+          class="govuk-!-margin-bottom-0"
+          type="button">
           {{ dropzoneButtonText() }}
-        </label>
-        <div aria-live="polite" class="govuk-visually-hidden" role="status">{{ uploadStatusText$ | async }}</div>
+        </button>
+        <div aria-live="polite" class="govuk-visually-hidden" role="status">{{ liveStatusText() }}</div>
       </div>
     </div>
   </div>

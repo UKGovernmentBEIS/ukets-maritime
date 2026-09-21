@@ -506,4 +506,86 @@
 
         </sql>
     </changeSet>
+
+    <changeSet id="0_1_0_insert_document_generation_failed_template" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                text)
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'Document generation failed template',
+                       'Problem with a task - Manage your UK ETS reporting',
+                       'Dear regulator,
+
+There was a problem with completing the Review emissions monitoring plan application task.
+
+**Task reference:** ${workflowId}
+
+**Account Name:** ${accountName}
+
+**Account ID:** ${accountBusinessId}
+
+[Sign in to the UK ETS reporting service](${homeUrl}) and select the task in your task list, then select ''Notify Operator of decision'' to try again.
+
+Contact ${competentAuthorityEmail} if you have any questions or need help.
+
+Kind regards, ${competentAuthorityName}'
+                   )]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                DELETE FROM notification_template WHERE name = 'Document generation failed template';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_document_generation_failed_template" author="P44065">
+        <sql>
+            UPDATE notification_template
+            SET text = 'Dear Regulator,
+
+There was a problem with completing the Review emissions monitoring plan application task.
+
+**Task reference:** ${workflowId}
+
+**Account Name:** ${accountName}
+
+**Account ID:** ${accountBusinessId}
+
+[Sign in to the UK ETS reporting service](${homeUrl}) and select the task in your task list, then select ''Notify Operator of decision'' to try again.
+
+Contact ${competentAuthorityEmail} if you have any questions or need help.
+
+Kind regards,
+
+${competentAuthorityName}'
+            WHERE name = 'Document generation failed template';
+        </sql>
+        <rollback>
+            <sql>
+            UPDATE notification_template
+            SET text = 'Dear regulator,
+
+There was a problem with completing the Review emissions monitoring plan application task.
+
+**Task reference:** ${workflowId}
+
+**Account Name:** ${accountName}
+
+**Account ID:** ${accountBusinessId}
+
+[Sign in to the UK ETS reporting service](${homeUrl}) and select the task in your task list, then select ''Notify Operator of decision'' to try again.
+
+Contact ${competentAuthorityEmail} if you have any questions or need help.
+
+Kind regards, ${competentAuthorityName}'
+            WHERE name = 'Document generation failed template';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

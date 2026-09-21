@@ -58,7 +58,7 @@ describe('RfiSubmittedSummaryTemplateComponent', () => {
       'Question 2',
       'q2',
       'Uploaded files',
-      'attachment 1' + 'attachment 2',
+      'attachment 1  attachment 2',
       'Response deadline',
       '29 Jun 2025',
       'Users',

@@ -10,6 +10,7 @@ import uk.gov.mrtm.api.integration.registry.accountupdated.domain.AccountUpdated
 import uk.gov.mrtm.api.integration.registry.accountupdated.request.MaritimeAccountUpdatedEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationReviewRequestTaskPayload;
@@ -110,6 +111,7 @@ public class EmpVariationOfficialNoticeService {
 				decisionNotification.getSignatory());
 		
 		final Map<String, String> documentMetadata = Map.of(
+				DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
 				DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTask.getId()),
 				DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
 				DocumentTemplateGeneratorParamConstants.FILE_NAME, resolveOfficialNoticeFileName(stage, "emp_variation_approved.pdf"),
@@ -156,6 +158,7 @@ public class EmpVariationOfficialNoticeService {
                 decisionNotification.getSignatory());
         
 		final Map<String, String> documentMetadata = Map.of(
+				DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
 				DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTask.getId()),
 				DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
 				DocumentTemplateGeneratorParamConstants.FILE_NAME, resolveOfficialNoticeFileName(stage, "emp_variation_approved.pdf"),
@@ -224,6 +227,7 @@ public class EmpVariationOfficialNoticeService {
                 decisionNotification.getSignatory());
         
 		final Map<String, String> documentMetadata = Map.of(
+				DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
 				DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTask.getId()),
 				DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
 				DocumentTemplateGeneratorParamConstants.FILE_NAME, resolveOfficialNoticeFileName(stage, fileNameToGenerate),

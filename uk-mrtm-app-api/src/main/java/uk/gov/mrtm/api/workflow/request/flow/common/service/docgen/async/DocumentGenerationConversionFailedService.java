@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.workflow.request.flow.common.service.docgen.async;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import uk.gov.netz.api.workflow.request.core.service.RequestTaskService;
 public class DocumentGenerationConversionFailedService {
 	
 	private final RequestTaskService requestTaskService;
+	private final DocumentGenerationFailedNotificationService failedNotificationService;
 
 	@Transactional
 	public void failed(Long requestTaskId,
@@ -40,6 +42,11 @@ public class DocumentGenerationConversionFailedService {
 		case FINAL -> {
 			requestTaskPayload.setFinalDocumentsGenerationSuccessful(false);
 			requestTaskPayload.setFinalDocumentsGenerationInProgress(false);
+
+			if (BooleanUtils.isNotTrue(requestTaskPayload.getFailureNotificationSent())) {
+				failedNotificationService.notifyRegulator(requestTask);
+				requestTaskPayload.setFailureNotificationSent(true);
+			}
 		}
 		default -> throw new UnsupportedOperationException(stage.name());
 		}

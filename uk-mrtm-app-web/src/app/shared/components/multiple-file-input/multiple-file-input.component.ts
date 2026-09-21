@@ -1,36 +1,26 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, ElementRef, inject, input, OnInit, viewChild } from '@angular/core';
-import { ControlValueAccessor, NgControl, UntypedFormControl } from '@angular/forms';
+import { Component, computed, effect, ElementRef, inject, input, signal, untracked, viewChild } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { ControlValueAccessor, NgControl } from '@angular/forms';
 
-import {
-  BehaviorSubject,
-  combineLatest,
-  filter,
-  map,
-  Observable,
-  scan,
-  startWith,
-  Subject,
-  tap,
-  withLatestFrom,
-} from 'rxjs';
+import { filter, scan } from 'rxjs';
 
-import { FormService, MessageValidationErrors, SafeHtmlPipe } from '@netz/govuk-components';
+import { ButtonDirective, FormService, SafeHtmlPipe } from '@netz/govuk-components';
 
 import { FileUploadListComponent } from '@shared/components';
 import { FileUploadService } from '@shared/services';
 import { FileUpload, FileUploadEvent } from '@shared/types';
 
+type UploadState = Partial<Pick<FileUploadEvent, 'progress' | 'uuid' | 'errors'>>;
+
 /* eslint-disable @angular-eslint/component-selector */
 @Component({
   selector: 'mrtm-multiple-file-input[baseDownloadUrl]',
-  imports: [FileUploadListComponent, AsyncPipe, SafeHtmlPipe],
+  imports: [FileUploadListComponent, SafeHtmlPipe, ButtonDirective],
   standalone: true,
   templateUrl: './multiple-file-input.component.html',
   styleUrl: './multiple-file-input.component.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MultipleFileInputComponent implements ControlValueAccessor, OnInit {
+export class MultipleFileInputComponent implements ControlValueAccessor {
   private readonly ngControl = inject(NgControl, { self: true, optional: true })!;
   private readonly formService = inject(FormService);
   private readonly fileUploadService = inject(FileUploadService);
@@ -44,143 +34,140 @@ export class MultipleFileInputComponent implements ControlValueAccessor, OnInit 
   readonly dropzoneHintText = input('Drag and drop files here or');
   readonly dropzoneButtonText = input('Choose files');
   readonly baseDownloadUrl = input<string>();
-  readonly fileInput = viewChild<ElementRef<HTMLInputElement>>('input');
 
-  uploadStatusText$ = new Subject<string>();
-  uploadedFiles$: Observable<FileUploadEvent[]>;
-  isFocused = false;
-  isDraggedOver = false;
-  isDisabled: boolean;
-  private onChange: (value: FileUpload[]) => any;
-  private onBlur: () => any;
-  private value$ = new BehaviorSubject<FileUpload[]>([]);
+  private readonly fileInput = viewChild.required<ElementRef<HTMLInputElement>>('input');
+
+  readonly isDraggedOver = signal(false);
+  readonly isDisabled = signal(false);
+  /** Announced to assistive technology once files are dropped, while they upload. */
+  readonly liveStatusText = signal('');
+
+  /** The control's value: every selected file, carrying its uuid once uploaded. */
+  private readonly value = signal<FileUpload[]>([]);
+
+  /**
+   * What the upload service has reported so far for each selected file: progress, the uuid once uploaded, or the
+   * reason it was not uploaded. Events are folded as they arrive, so none is lost between two renders.
+   */
+  private readonly uploads = toSignal(
+    this.fileUploadService.uploadProgress$.pipe(
+      filter((uploadEvent) => this.value().some(({ file }) => file === uploadEvent.file)),
+      scan(
+        (uploads, { file, ...upload }) => new Map(uploads).set(file, { ...uploads.get(file), ...upload }),
+        new Map<File, UploadState>(),
+      ),
+    ),
+    { initialValue: new Map<File, UploadState>() },
+  );
+
+  readonly uploadedFiles = computed<FileUploadEvent[]>(() => {
+    const uploads = this.uploads();
+
+    return this.value().map((selected) => {
+      const upload = uploads.get(selected.file);
+      const uuid = selected.uuid ?? upload?.uuid;
+
+      return {
+        progress: null,
+        ...selected,
+        ...upload,
+        ...(uuid && { downloadUrl: `${this.baseDownloadUrl()}${uuid}` }),
+        errors: upload?.errors ?? null,
+      };
+    });
+  });
+
+  private onChange: (value: FileUpload[]) => void = () => undefined;
+  private onBlur: () => void = () => undefined;
 
   constructor() {
-    const ngControl = this.ngControl;
+    this.ngControl.valueAccessor = this;
 
-    ngControl.valueAccessor = this;
+    // Once a file is uploaded its uuid has to become part of the form value, which is the one thing the form cannot
+    // derive on its own.
+    effect(() => {
+      const uploads = this.uploads();
+      const value = untracked(this.value);
+
+      if (value.some((selected) => !selected.uuid && uploads.get(selected.file)?.uuid)) {
+        untracked(() =>
+          this.onChange(
+            value.map((selected) => ({ ...selected, uuid: selected.uuid ?? uploads.get(selected.file)?.uuid })),
+          ),
+        );
+      }
+    });
   }
 
   get id(): string {
     return this.formService.getControlIdentifier(this.ngControl);
   }
 
-  private get control(): UntypedFormControl {
-    return this.ngControl.control as UntypedFormControl;
+  get describedBy(): string {
+    return [this.hint() && `${this.id}-hint`, `${this.id}-hint-file-size`].filter(Boolean).join(' ');
   }
 
-  ngOnInit(): void {
-    this.uploadedFiles$ = combineLatest([
-      this.value$,
-      this.control.statusChanges.pipe(
-        startWith(this.control.status),
-        //as we now have async validators we should update errors on final statuses (VALID, INVALID)
-        filter((status) => status !== 'PENDING'),
-        map(() => this.control.errors),
-        startWith(this.control.errors),
-      ),
-      this.fileUploadService.uploadProgress$.pipe(
-        withLatestFrom(this.value$),
-        filter(([uploadEvent, value]) => value?.some(({ file }) => file === uploadEvent.file)),
-        tap(([{ progress, ...uploadEvent }, value]) => {
-          if (uploadEvent.uuid) {
-            value.splice(
-              value.findIndex((upload) => upload.file === uploadEvent.file),
-              1,
-              uploadEvent,
-            );
-          }
-        }),
-        map(([uploadEvent]) => uploadEvent),
-        startWith(undefined),
-      ),
-    ]).pipe(
-      scan(
-        (acc, [existing, errors, uploadEvent]) =>
-          (existing ?? []).map((existingFile, index) => {
-            return {
-              ...existingFile,
-              ...acc.find(({ file, uuid }) => (uuid && uuid === existingFile.uuid) || file === existingFile.file),
-              ...(uploadEvent?.file === existingFile.file ? uploadEvent : {}),
-              ...(existingFile.uuid && { downloadUrl: this.baseDownloadUrl() + `${existingFile.uuid}` }),
-              errors: this.applyRowErrors(errors, index),
-            };
-          }),
-        [],
-      ),
-    );
-  }
-
-  registerOnChange(onChange: (value: FileUpload[]) => any): void {
+  registerOnChange(onChange: (value: FileUpload[]) => void): void {
     this.onChange = (value) => {
-      this.value$.next(value);
+      this.value.set(value);
       onChange(value);
     };
   }
 
-  registerOnTouched(onBlur: () => any): void {
+  registerOnTouched(onBlur: () => void): void {
     this.onBlur = onBlur;
   }
 
   writeValue(value: FileUploadEvent[]): void {
-    this.value$.next(value ?? []);
+    this.value.set(value ?? []);
   }
 
   setDisabledState(isDisabled: boolean): void {
-    this.isDisabled = isDisabled;
+    this.isDisabled.set(isDisabled);
   }
 
   onFileChange(event: Event): void {
     const files = (event?.target as HTMLInputElement)?.files;
     this.uploadFiles(files);
     this.fileInput().nativeElement.value = null;
-    this.fileInput().nativeElement.focus();
+    this.onBlur();
   }
 
-  onFileFocus(): void {
-    this.isFocused = true;
+  onChooseFilesClick(): void {
+    this.fileInput().nativeElement.click();
   }
 
-  onFileBlur(): void {
-    this.isFocused = false;
+  onChooseFilesBlur(): void {
     this.onBlur();
   }
 
   onDragOver(event: DragEvent): void {
     event.preventDefault();
 
-    if (!this.isDisabled) {
-      this.isDraggedOver = true;
+    if (!this.isDisabled()) {
+      this.isDraggedOver.set(true);
     }
   }
 
   onDragLeave(): void {
-    this.isDraggedOver = false;
+    this.isDraggedOver.set(false);
   }
 
   onDrop(event: DragEvent): void {
     event.preventDefault();
-    this.isDraggedOver = false;
+    this.isDraggedOver.set(false);
 
-    if (!this.isDisabled) {
-      this.uploadStatusText$.next(this.uploadStatusText());
+    if (!this.isDisabled()) {
+      this.liveStatusText.set(this.uploadStatusText());
       this.uploadFiles(event.dataTransfer.files);
     }
   }
 
   onFileDeleteClick(deletedIndex: number): void {
-    this.onChange(this.value$.getValue().filter((_, index) => index !== deletedIndex));
+    this.onChange(this.value().filter((_, index) => index !== deletedIndex));
   }
 
   private uploadFiles(files: FileList): void {
-    this.onChange(this.value$.getValue().concat(Array.from(files).map((file) => ({ file }))));
-  }
-
-  private applyRowErrors(errors: MessageValidationErrors, index: number): MessageValidationErrors {
-    const rowErrors = Object.entries(errors ?? {}).filter(([key]) => key.endsWith(`-${index}`));
-
-    return rowErrors.length === 0
-      ? null
-      : rowErrors.reduce((acc, [key, value]) => ({ ...(acc ? acc : {}), [key]: value }) as any, null);
+    this.onChange(this.value().concat(Array.from(files).map((file) => ({ file }))));
   }
 }

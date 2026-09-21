@@ -32,6 +32,7 @@ import uk.gov.mrtm.api.integration.registry.regulatornotice.domain.RegulatorNoti
 import uk.gov.mrtm.api.integration.registry.regulatornotice.request.MaritimeRegulatorNoticeEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDetermination;
@@ -134,6 +135,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
         long requestTaskId = 2L;
         String expectedResponse = "response";
         Map<String, String> documentMetadata = Map.of(
+        	DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
             DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTaskId),
             DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
             DocumentTemplateGeneratorParamConstants.FILE_NAME,
@@ -237,6 +239,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
         String expectedResponse = "response";
 
         Map<String, String> documentMetadata = Map.of(
+        		DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
             DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTaskId),
             DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
             DocumentTemplateGeneratorParamConstants.FILE_NAME,

@@ -12,6 +12,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.emp.domain.ExternalEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
@@ -75,6 +76,7 @@ class ExternalEmpSubmitServiceTest {
             .createdOn(now)
             .updatedOn(now)
             .providerName("provider name")
+            .importStatus(StagingImportStatus.NEW)
             .build();
 
         when(mapper.toStagingEmissionsMonitoringPlan(external)).thenReturn(staging);
@@ -124,6 +126,7 @@ class ExternalEmpSubmitServiceTest {
             .accountId(accountId)
             .updatedOn(now)
             .providerName("provider name")
+            .importStatus(StagingImportStatus.NEW)
             .build();
 
         when(mapper.toStagingEmissionsMonitoringPlan(external)).thenReturn(staging);

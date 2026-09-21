@@ -50,7 +50,7 @@ describe('FollowUpResponseRegulatorSummaryTemplateComponent', () => {
       "Operator's response",
       'Some response',
       'Supporting documents',
-      '1.png2.png',
+      '1.png  2.png',
     ]);
   });
 });

@@ -17,8 +17,10 @@ public class EmpReissueRequestPayload extends RequestPayload {
 
     private Integer consolidationNumber;
 
+    private Boolean officialNoticeSucceed;
     private FileInfoDTO officialNotice;
 
+    private Boolean documentSucceed;
     private FileInfoDTO document; //emp
 
     private String summary;

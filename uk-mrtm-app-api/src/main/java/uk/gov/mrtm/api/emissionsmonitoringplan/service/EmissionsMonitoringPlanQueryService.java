@@ -87,13 +87,6 @@ public class EmissionsMonitoringPlanQueryService implements EmpAuthorityInfoProv
         return emissionsMonitoringPlanRepository.findIdByAccountId(accountId);
     }
 
-    @Transactional(readOnly = true)
-    public int getEmissionsMonitoringPlanConsolidationNumberByAccountId(Long accountId) {
-        return emissionsMonitoringPlanRepository.findByAccountId(accountId)
-                .map(EmissionsMonitoringPlanEntity::getConsolidationNumber)
-                .orElseThrow(() -> new BusinessException(ErrorCode.RESOURCE_NOT_FOUND));
-    }
-
     public Map<Long, EmpAccountDTO> getEmpAccountsByAccountIds(Set<Long> accountIds) {
         return emissionsMonitoringPlanRepository.findAllByAccountIdIn(accountIds).stream()
                 .collect(Collectors.toMap(EmpAccountDTO::getAccountId, Function.identity()));

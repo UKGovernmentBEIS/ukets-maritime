@@ -2,6 +2,7 @@ package uk.gov.mrtm.api.web.controller.exception;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.giffing.bucket4j.spring.boot.starter.context.RateLimitException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Validation;
@@ -340,6 +341,23 @@ class ExceptionControllerAdviceTest {
 
         ResponseEntity<ErrorResponse> errorResponseEntity =
             exceptionControllerAdvice.handleSecurityException(new SecurityException("blocked"));
+
+        assertNotNull(errorResponseEntity);
+        assertEquals(expectedErrorCode.getHttpStatus(), errorResponseEntity.getStatusCode());
+
+        ErrorResponse errorResponse = errorResponseEntity.getBody();
+        assertNotNull(errorResponse);
+        assertEquals(expectedErrorCode.getCode(), errorResponse.getCode());
+        assertEquals(expectedErrorCode.getMessage(), errorResponse.getMessage());
+        assertThat(errorResponse.getData()).isEmpty();
+    }
+
+    @Test
+    void handleRateLimitException() {
+        final ErrorCode expectedErrorCode = ErrorCode.API_REQUEST_LIMIT_EXCEEDED;
+
+        ResponseEntity<ErrorResponse> errorResponseEntity =
+            exceptionControllerAdvice.handleRateLimitException(new RateLimitException());
 
         assertNotNull(errorResponseEntity);
         assertEquals(expectedErrorCode.getHttpStatus(), errorResponseEntity.getStatusCode());

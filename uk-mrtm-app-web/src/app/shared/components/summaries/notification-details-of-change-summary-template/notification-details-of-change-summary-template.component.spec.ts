@@ -60,7 +60,7 @@ describe('NotificationDetailsOfChangeSummaryTemplateComponent', () => {
       'Justification for not submitting a variation',
       'some justification',
       'Uploaded files',
-      '1.png2.png3.png',
+      '1.png  2.png  3.png',
       'Provide the start date of the non-significant change',
       '1 Apr 2020',
       'Provide the end date of the non-significant change',

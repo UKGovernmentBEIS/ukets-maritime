@@ -148,7 +148,7 @@ describe('AdditionalDocumentsUploadComponent', () => {
       await fixture.whenStable();
       fixture.detectChanges();
 
-      expect(page.filesText).toEqual(['testfile3.jpg', 'testfile4.jpg has been uploaded']);
+      expect(page.filesText).toEqual(['testfile3.jpg', 'testfile4.jpg']);
       page.submitButton.click();
       fixture.detectChanges();
 

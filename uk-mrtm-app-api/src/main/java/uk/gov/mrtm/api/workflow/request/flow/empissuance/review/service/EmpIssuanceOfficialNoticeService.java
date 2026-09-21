@@ -23,6 +23,7 @@ import uk.gov.mrtm.api.integration.registry.regulatornotice.domain.RegulatorNoti
 import uk.gov.mrtm.api.integration.registry.regulatornotice.request.MaritimeRegulatorNoticeEventListenerResolver;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateGenerationContextActionType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDetermination;
@@ -151,6 +152,7 @@ public class EmpIssuanceOfficialNoticeService {
             decisionNotification.getSignatory());
 
         final Map<String, String> documentMetadata = Map.of(
+        	DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
             DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTask.getId()),
             DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
             DocumentTemplateGeneratorParamConstants.FILE_NAME, resolveOfficialNoticeFileName(stage, "emp_application_approved.pdf"),
@@ -178,6 +180,7 @@ public class EmpIssuanceOfficialNoticeService {
             decisionNotification.getSignatory());
 
         final Map<String, String> documentMetadata = Map.of(
+        	DocumentTemplateGeneratorParamConstants.CONTEXT_TYPE, DocumentGenerationContextType.EMP_REVIEW.name(),
             DocumentTemplateGeneratorParamConstants.REQUEST_TASK_ID, String.valueOf(requestTask.getId()),
             DocumentTemplateGeneratorParamConstants.FILE_TYPE, RequestGeneratedFileType.OFFICIAL_NOTICE.name(),
             DocumentTemplateGeneratorParamConstants.FILE_NAME, resolveOfficialNoticeFileName(stage, "emp_application_withdrawn.pdf"),

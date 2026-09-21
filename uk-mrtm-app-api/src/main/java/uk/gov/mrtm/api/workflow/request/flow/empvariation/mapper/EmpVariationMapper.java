@@ -16,8 +16,6 @@ import uk.gov.netz.api.common.config.MapperConfig;
 import uk.gov.netz.api.common.constants.RoleTypeConstants;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 
-import java.time.LocalDateTime;
-
 @Mapper(componentModel = "spring", config = MapperConfig.class)
 public interface EmpVariationMapper {
 
@@ -50,10 +48,6 @@ public interface EmpVariationMapper {
 	EmissionsMonitoringPlanContainer toEmissionsMonitoringPlanContainer(
 			EmpVariationRequestPayload requestPayload);
 	
-	@Deprecated
-	@Mapping(target = "endDate", source = "endDate")
-	EmpVariationRequestInfo toEmpVariationRequestInfo(Request request, LocalDateTime endDate);
-
 	EmpVariationRequestInfo toEmpVariationRequestInfo(Request request);
 
 	@AfterMapping

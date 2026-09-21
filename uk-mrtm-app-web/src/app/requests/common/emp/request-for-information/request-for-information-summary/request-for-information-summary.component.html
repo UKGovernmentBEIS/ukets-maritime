@@ -5,7 +5,8 @@
     [isEditable]="vm?.isEditable"
     [queryParams]="vm?.queryParams"
     [notificationEditUrl]="vm?.wizardSteps?.RFI_NOTIFICATION"
-    [questionEditUrl]="vm?.wizardSteps?.RFI_REQUEST" />
+    [questionEditUrl]="vm?.wizardSteps?.RFI_REQUEST"
+    [officialNotice]="vm?.officialNotice" />
 
   <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
 

@@ -1,5 +1,7 @@
 import { ExtraOptions, Routes } from '@angular/router';
 
+import { API_DATA_MANAGEMENT_ROUTE_PREFIX } from '@api-data-management/api-data-management.constants';
+import { canActivateApiDataManagement } from '@api-data-management/api-data-management.guard';
 import {
   AuthGuard,
   canRedirectToSignIn,
@@ -148,6 +150,14 @@ export const APP_ROUTES: Routes = [
         data: { breadcrumb: 'Manage data suppliers' },
         canActivate: [canActivateDataSuppliers],
         loadChildren: () => import('@data-suppliers/data-suppliers.routes').then((r) => r.DATA_SUPPLIERS_ROUTES),
+      },
+      {
+        path: API_DATA_MANAGEMENT_ROUTE_PREFIX,
+        title: 'API data management',
+        data: { breadcrumb: 'API data management' },
+        canActivate: [canActivateApiDataManagement],
+        loadChildren: () =>
+          import('@api-data-management/api-data-management.routes').then((r) => r.API_DATA_MANAGEMENT_ROUTES),
       },
     ],
   },

@@ -2,6 +2,8 @@ package uk.gov.mrtm.api.account.domain;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
+import jakarta.persistence.ColumnResult;
+import jakarta.persistence.ConstructorResult;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -10,6 +12,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
+import jakarta.persistence.SqlResultSetMapping;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.Valid;
@@ -26,10 +29,13 @@ import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import uk.gov.mrtm.api.common.domain.AddressState;
 import uk.gov.mrtm.api.common.domain.RegisteredAddressState;
+import uk.gov.mrtm.api.thirdpartydatamanagement.common.domain.ThirdPartyDataRequestType;
+import uk.gov.mrtm.api.thirdpartydatamanagement.viewavailabletoimport.domain.ThirdPartyDataManagementAvailableToImportItem;
 import uk.gov.netz.api.account.domain.Account;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,12 +76,29 @@ import java.util.List;
                 + "inner join acc.contacts contacts "
                 + "where contacts = :userId"
 )
+@SqlResultSetMapping(
+    name = MrtmAccount.THIRD_PARTY_AVAILABLE_DATA_DTO_RESULT_MAPPER,
+    classes = @ConstructorResult(
+        targetClass = ThirdPartyDataManagementAvailableToImportItem.class,
+        columns = {
+            @ColumnResult(name = "id", type = Long.class),
+            @ColumnResult(name = "request_type", type = ThirdPartyDataRequestType.class),
+            @ColumnResult(name = "account_id", type = Long.class),
+            @ColumnResult(name = "name", type = String.class),
+            @ColumnResult(name = "imo_number", type = String.class),
+            @ColumnResult(name = "year", type = Year.class),
+            @ColumnResult(name = "provider_name", type = String.class),
+            @ColumnResult(name = "received_on", type = LocalDateTime.class)
+        }
+    )
+)
 public class MrtmAccount extends Account {
 
     public static final String NAMED_QUERY_FIND_ACCOUNT_ID_BY_IMO_NUMBER = "MrtmAccount.findAccountIdByImoNumber";
     public static final String NAMED_QUERY_FIND_VERIFICATION_BODY_ID_BY_IMO_NUMBER = "MrtmAccount.findVerificationBodyIdByImoNumber";
     public static final String NAMED_QUERY_FIND_BY_IMO_NUMBER = "MrtmAccount.findByImoNumber";
     public static final String NAMED_QUERY_FIND_BY_USER_ID = "MrtmAccount.findByUserId";
+    public static final String THIRD_PARTY_AVAILABLE_DATA_DTO_RESULT_MAPPER = "thirdPartyAvailableDataDtoResultMapper";
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")

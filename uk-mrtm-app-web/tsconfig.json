@@ -19,6 +19,7 @@
       "@netz/common/*": ["./dist/common/*"],
       "@accessibility/*": ["./src/app/accessibility/*"],
       "@accounts/*": ["./src/app/accounts/*"],
+      "@api-data-management/*": ["./src/app/api-data-management/*"],
       "@batch-variations/*": ["./src/app/batch-variations/*"],
       "@cookies/*": ["./src/app/cookies/*"],
       "@core/*": ["./src/app/core/*"],

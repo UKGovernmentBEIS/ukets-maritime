@@ -1905,4 +1905,87 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_add_rule_and_associate_services_for_accessing_IMPORT_THIRD_PARTY_DATA_TRANSACTION_for_operator" author="P44065">
+        <sql>
+            insert into au_service(id, name)
+            values (nextval('au_service_seq'), 'findImportTransactionDetails');
+
+            insert into au_rule(id, resource_type, resource_sub_type, handler, role_type, scope)
+            values (nextval('au_rule_seq'), 'IMPORT_THIRD_PARTY_DATA_TRANSACTION' , null, 'importThirdPartyDataTransactionAccessRuleHandler', 'OPERATOR', null);
+
+            insert into au_service_rule(service_id, rule_id)
+            select aus.id, aur.id
+            from au_service aus
+                     cross join au_rule aur
+            where aus.name = 'findImportTransactionDetails'
+              and aur.resource_type = 'IMPORT_THIRD_PARTY_DATA_TRANSACTION'
+              and aur.resource_sub_type is null
+              and aur.handler = 'importThirdPartyDataTransactionAccessRuleHandler'
+              and aur.scope is null
+              and aur.role_type = 'OPERATOR';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'findImportTransactionDetails'
+                and r.resource_type = 'IMPORT_THIRD_PARTY_DATA_TRANSACTION'
+                and r.resource_sub_type is null
+                and r.handler = 'importThirdPartyDataTransactionAccessRuleHandler'
+                and r.role_type = 'OPERATOR'
+                and r.scope is null;
+
+                delete
+                from au_rule
+                where resource_type = 'IMPORT_THIRD_PARTY_DATA_TRANSACTION'
+                and resource_sub_type is null
+                and handler = 'importThirdPartyDataTransactionAccessRuleHandler'
+                and role_type = 'OPERATOR'
+                and scope is null;
+
+                delete
+                from au_service
+                where name = 'findImportTransactionDetails';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_add_getDocumentPreview_permission_for_EMP_VARIATION_tasks" author="pkouris">
+        <sql>
+            insert into au_service_rule(service_id, rule_id)
+            select s.id, r.id
+            from au_service s cross join au_rule r
+            where s.name = 'getDocumentPreview'
+              and r.resource_type = 'REQUEST_TASK'
+              and r.resource_sub_type in ('EMP_VARIATION_APPLICATION_REVIEW',
+                                          'EMP_VARIATION_WAIT_FOR_PEER_REVIEW',
+                                          'EMP_VARIATION_WAIT_FOR_AMENDS')
+              and r.handler = 'requestTaskAccessHandler'
+              and r.role_type = 'REGULATOR'
+              and r.scope = 'REQUEST_TASK_EXECUTE';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_service_rule sr
+                using
+                au_rule r,
+                au_service s
+                where r.id = sr.rule_id
+                and s.id = sr.service_id
+                and s.name = 'getDocumentPreview'
+                and r.resource_type = 'REQUEST_TASK'
+                and r.resource_sub_type in ('EMP_VARIATION_APPLICATION_REVIEW',
+                                            'EMP_VARIATION_WAIT_FOR_PEER_REVIEW',
+                                            'EMP_VARIATION_WAIT_FOR_AMENDS')
+                and r.handler = 'requestTaskAccessHandler'
+                and r.role_type = 'REGULATOR'
+                and r.scope = 'REQUEST_TASK_EXECUTE';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

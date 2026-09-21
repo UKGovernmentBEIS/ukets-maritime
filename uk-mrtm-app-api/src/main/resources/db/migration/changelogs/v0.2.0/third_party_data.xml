@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog logicalFilePath="v0.2.0/third_party_data.xml"
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_1_0_ADD_COLUMN_IMPORT_STATUS_ON_aer_staging" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.aer_staging
+            ADD COLUMN import_status VARCHAR(255);
+
+            UPDATE sch_third_party_data.aer_staging
+            SET import_status = CASE
+                WHEN imported_on IS NULL THEN 'NEW'
+                ELSE 'IMPORTED'
+            END;
+
+            ALTER TABLE sch_third_party_data.aer_staging
+            ALTER COLUMN import_status SET NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.aer_staging DROP COLUMN IF EXISTS import_status CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_COLUMN_IMPORT_STATUS_ON_emp_staging" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.emp_staging
+            ADD COLUMN import_status VARCHAR(255);
+
+            UPDATE sch_third_party_data.emp_staging
+            SET import_status = CASE
+                WHEN imported_on IS NULL THEN 'NEW'
+                ELSE 'IMPORTED'
+            END;
+
+            ALTER TABLE sch_third_party_data.emp_staging
+            ALTER COLUMN import_status SET NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.emp_staging DROP COLUMN IF EXISTS import_status CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_COLUMN_IMPORT_STATUS_ON_aer_verification_staging" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.aer_verification_staging
+            ADD COLUMN import_status VARCHAR(255);
+
+            UPDATE sch_third_party_data.aer_verification_staging
+            SET import_status = CASE
+                WHEN imported_on IS NULL THEN 'NEW'
+                ELSE 'IMPORTED'
+            END;
+
+            ALTER TABLE sch_third_party_data.aer_verification_staging
+            ALTER COLUMN import_status SET NOT NULL;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.aer_verification_staging DROP COLUMN IF EXISTS import_status CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_IMPORT_THIRD_PARTY_DATA_TRANSACTION_TABLE" author="P44065" >
+        <createTable tableName="import_third_party_data_transaction" schemaName="sch_third_party_data">
+            <column name="id" type="bigint" remarks="The transaction id (primary key)">
+                <constraints primaryKey="true" primaryKeyName="import_third_party_data_transaction_pk" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)" remarks="The transaction status">
+                <constraints nullable="false" />
+            </column>
+            <column name="type" type="varchar(255)" remarks="The transaction type">
+                <constraints nullable="false" />
+            </column>
+            <column name="year" type="int" remarks="The reporting year"/>
+            <column name="process_instance_id" type="varchar(255)" remarks="The id of the process instance that was started for this transaction" />
+            <column name="created_on" type="timestamp" remarks="When the data was created">
+                <constraints nullable="false" />
+            </column>
+            <column name="submitter_id" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="submitter_name" type="varchar(512)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS sch_third_party_data.import_third_party_data_transaction;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_IMPORT_THIRD_PARTY_DATA_TRANSACTION_SEQUENCE" author="P44065">
+        <createSequence sequenceName="import_third_party_data_transaction_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false" schemaName="sch_third_party_data"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS import_third_party_data_transaction_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_IMPORT_THIRD_PARTY_DATA_JOB_TABLE" author="P44065" >
+        <createTable tableName="import_third_party_data_job" schemaName="sch_third_party_data">
+            <column name="id" type="bigint" remarks="The transaction job id (primary key)">
+                <constraints primaryKey="true" primaryKeyName="import_third_party_data_job_pk" nullable="false"/>
+            </column>
+            <column name="status" type="varchar(255)" remarks="The transaction status">
+                <constraints nullable="false" />
+            </column>
+            <column name="staging_data_id" type="bigint" remarks="The staging data ID">
+                <constraints nullable="false" />
+            </column>
+            <column name="account_id" type="bigint" remarks="The account id to which the transaction job data entry refers to">
+                <constraints nullable="false" foreignKeyName="import_third_party_data_job_id_account_id_uc" referencedTableName="account_mrtm" referencedColumnNames="id" />
+            </column>
+            <column name="import_third_party_data_transaction_id" type="bigint" remarks="The transaction id to which the transaction job data entry refers to">
+                <constraints nullable="false" foreignKeyName="import_third_party_data_transaction_id_fk" referencedTableSchemaName="sch_third_party_data" referencedTableName="import_third_party_data_transaction" referencedColumnNames="id" />
+            </column>
+        </createTable>
+        <rollback>
+            <sql>
+                DROP TABLE IF EXISTS sch_third_party_data.import_third_party_data_job;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_CREATE_IMPORT_THIRD_PARTY_DATA_JOB_SEQUENCE" author="P44065">
+        <createSequence sequenceName="import_third_party_data_job_seq" minValue="0" maxValue="999999999999999999"
+                        incrementBy="1" startValue="1" cycle="false" schemaName="sch_third_party_data"/>
+        <rollback>
+            <sql>
+                DROP SEQUENCE IF EXISTS sch_third_party_data.import_third_party_data_job_seq;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_COLUMN_IMPORT_IN_PROGRESS_ON_aer_staging" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.aer_staging
+            ADD COLUMN import_in_progress BOOLEAN NOT NULL DEFAULT FALSE;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.aer_staging DROP COLUMN IF EXISTS import_in_progress CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_COLUMN_IMPORT_IN_PROGRESS_ON_emp_staging" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.emp_staging
+                ADD COLUMN import_in_progress BOOLEAN NOT NULL DEFAULT FALSE;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.emp_staging DROP COLUMN IF EXISTS import_in_progress CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_ADD_COLUMN_IMPORT_IN_PROGRESS_ON_aer_verification_staging" author="P44065">
+        <sql>
+            ALTER TABLE sch_third_party_data.aer_verification_staging
+                ADD COLUMN import_in_progress BOOLEAN NOT NULL DEFAULT FALSE;
+        </sql>
+        <rollback>
+            <sql>
+                ALTER TABLE sch_third_party_data.aer_verification_staging DROP COLUMN IF EXISTS import_in_progress CASCADE;
+            </sql>
+        </rollback>
+    </changeSet>
+
+</databaseChangeLog>

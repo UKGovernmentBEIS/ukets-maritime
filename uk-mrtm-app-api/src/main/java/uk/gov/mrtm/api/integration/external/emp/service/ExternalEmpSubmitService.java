@@ -8,6 +8,7 @@ import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.emp.domain.ExternalEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlan;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
@@ -61,6 +62,7 @@ public class ExternalEmpSubmitService {
             stagingEmpEntity.setPayload(staging);
             stagingEmpEntity.setUpdatedOn(now);
             stagingEmpEntity.setProviderName(thirdPartyDataProvider.getName());
+            stagingEmpEntity.setImportStatus(StagingImportStatus.NEW);
 
             stagingEmpRepository.save(stagingEmpEntity);
         } else {
@@ -71,6 +73,7 @@ public class ExternalEmpSubmitService {
                     .createdOn(now)
                     .updatedOn(now)
                     .providerName(thirdPartyDataProvider.getName())
+                    .importStatus(StagingImportStatus.NEW)
                     .build()
             );
         }

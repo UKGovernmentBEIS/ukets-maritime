@@ -12,6 +12,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.abbreviations.EmpAbbreviat
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.abbreviations.EmpAbbreviations;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.additionaldocuments.AdditionalDocuments;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
 import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionPayloadType;
@@ -146,6 +147,7 @@ class RequestEmpServiceTest {
         verify(stagingEmpRepository).findByAccountId(accountId);
         verify(dateService).getLocalDateTime();
         verify(stagingEmpEntity).setImportedOn(now);
+        verify(stagingEmpEntity).setImportStatus(StagingImportStatus.IMPORTED);
         verifyNoMoreInteractions(stagingEmpRepository, stagingEmpEntity);
         verifyNoInteractions(requestService, empValidatorService);
     }

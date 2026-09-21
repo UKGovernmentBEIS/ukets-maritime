@@ -12,6 +12,7 @@ import uk.gov.mrtm.api.integration.external.aer.domain.StagingAerEntity;
 import uk.gov.mrtm.api.integration.external.aer.repository.StagingAerRepository;
 import uk.gov.mrtm.api.integration.external.aer.transform.ExternalAerMapper;
 import uk.gov.mrtm.api.integration.external.aer.validation.ExternalAerValidator;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.exception.BusinessException;
 import uk.gov.netz.api.common.utils.DateService;
@@ -61,6 +62,7 @@ public class ExternalAerService {
             stagingAerEntity.setPayload(staging);
             stagingAerEntity.setUpdatedOn(now);
             stagingAerEntity.setProviderName(thirdPartyDataProvider.getName());
+            stagingAerEntity.setImportStatus(StagingImportStatus.NEW);
 
             stagingAerRepository.save(stagingAerEntity);
         } else {
@@ -72,6 +74,7 @@ public class ExternalAerService {
                     .createdOn(now)
                     .updatedOn(now)
                     .providerName(thirdPartyDataProvider.getName())
+                    .importStatus(StagingImportStatus.NEW)
                     .build()
             );
         }

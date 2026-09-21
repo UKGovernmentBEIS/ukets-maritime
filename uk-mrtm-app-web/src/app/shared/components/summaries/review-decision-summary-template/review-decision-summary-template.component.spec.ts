@@ -50,7 +50,7 @@ describe('ReviewDecisionSummaryTemplateComponent', () => {
       'Decision status',
       'Accepted',
       'Changes required by operator',
-      'some required change 1 1.png2.png some required change 2',
+      'some required change 1  1.png  2.png  some required change 2',
       'Notes',
       'some notes',
     ]);

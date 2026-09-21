@@ -32,5 +32,7 @@
 </ng-template>
 
 <ng-template #fileLink let-file="file">
-  <a govukLink [routerLink]="file?.downloadUrl" target="_blank">{{ file?.fileName }}</a>
+  <a govukLink [routerLink]="file?.downloadUrl" [queryParams]="file?.queryParams" target="_blank">
+    {{ file?.fileName }}
+  </a>
 </ng-template>

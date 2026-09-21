@@ -78,7 +78,7 @@ class ThirdPartyProviderViewServiceDelegatorTest {
         UnsupportedOperationException exc = assertThrows(UnsupportedOperationException.class,
             () -> service.getThirdPartyDataProviderInfo(requestTaskId));
 
-        assertEquals(exc.getMessage(), "Third party data for request task type REQUEST_TASK_TYPE_A is not supported");
+        assertEquals("Third party data for request task type REQUEST_TASK_TYPE_A is not supported", exc.getMessage());
 
         verify(requestTaskService).findTaskById(requestTaskId);
         verify(empThirdPartyProviderViewService).getTypes();

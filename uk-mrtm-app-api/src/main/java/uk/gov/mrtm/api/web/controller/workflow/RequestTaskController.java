@@ -59,10 +59,7 @@ public class RequestTaskController {
     @Transactional
     public ResponseEntity<RequestTaskItemDTO> getTaskItemInfoById(@Parameter(hidden = true) AppUser appUser,
                                                                   @PathVariable("id") @Parameter(description = "The task id") Long taskId) {
-        long startTime = System.nanoTime();
         final RequestTaskItemDTO taskItem = requestTaskViewService.getTaskItemInfo(taskId, appUser);
-        long duration = (System.nanoTime() - startTime) / 1_000_000;
-        log.info("Service execution time: {} ms", duration);
         return new ResponseEntity<>(taskItem, HttpStatus.OK);
     }
 

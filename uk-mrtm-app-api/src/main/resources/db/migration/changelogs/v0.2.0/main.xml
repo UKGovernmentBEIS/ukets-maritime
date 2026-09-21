@@ -12,6 +12,6 @@
 	<include file="site_visit.xml" relativeToChangelogFile="true" />
 	<include file="notification_template.xml" relativeToChangelogFile="true" />
     <include file="account_details_history.xml" relativeToChangelogFile="true" />
-
 	<include file="changelog_flowable_schema_tables_management.xml" relativeToChangelogFile="true"/>
+	<include file="third_party_data.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

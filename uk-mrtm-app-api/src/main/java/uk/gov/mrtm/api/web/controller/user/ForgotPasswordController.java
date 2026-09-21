@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.web.controller.user;
 
+import com.giffing.bucket4j.spring.boot.starter.context.RateLimiting;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -48,6 +49,7 @@ public class ForgotPasswordController {
     @ApiResponse(responseCode = "204", description = NO_CONTENT)
     @ApiResponse(responseCode = "400", description = REQUEST_RESET_PASSWORD_BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @RateLimiting(name = "resetPasswordEmail", cacheKey = "#emailDTO.email?.trim()?.toLowerCase()")
     public ResponseEntity<Void> sendResetPasswordEmail(
         @RequestBody @Valid @Parameter(description = "The user email", required = true) EmailDTO emailDTO) {
         log.debug("Call to sendResetPasswordEmail: {}", emailDTO);
@@ -74,7 +76,7 @@ public class ForgotPasswordController {
         String email = userResetPasswordService.verifyToken(tokenDTO.getToken());
         return new ResponseEntity<>(new EmailDTO(email), HttpStatus.OK);
     }
-    
+
     /**
      * Resets the user password.
      *

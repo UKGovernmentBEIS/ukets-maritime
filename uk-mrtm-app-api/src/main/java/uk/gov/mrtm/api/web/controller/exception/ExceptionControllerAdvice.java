@@ -1,5 +1,6 @@
 package uk.gov.mrtm.api.web.controller.exception;
 
+import com.giffing.bucket4j.spring.boot.starter.context.RateLimitException;
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.log4j.Log4j2;
 import org.hibernate.validator.internal.metadata.descriptor.ConstraintDescriptorImpl;
@@ -212,6 +213,14 @@ public class ExceptionControllerAdvice {
         return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.INVALID_FILE_TYPE);
     }
 
+    @ExceptionHandler(RateLimitException.class)
+    @ResponseBody
+    public ResponseEntity<ErrorResponse> handleRateLimitException(RateLimitException e) {
+        log.error("Rate limit exceeded:", e);
+
+        return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.API_REQUEST_LIMIT_EXCEEDED);
+    }
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleGenericException(Exception e) {
@@ -219,4 +228,5 @@ public class ExceptionControllerAdvice {
 
         return ErrorUtil.getErrorResponse(new Object[]{}, ErrorCode.INTERNAL_SERVER);
     }
+
 }

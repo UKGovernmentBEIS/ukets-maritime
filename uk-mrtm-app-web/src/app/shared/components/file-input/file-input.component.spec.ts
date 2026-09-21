@@ -38,7 +38,11 @@ describe('FileInputComponent', () => {
 
   class Page extends BasePage<TestComponent> {
     get fileText() {
-      return this.query<HTMLDivElement>('.moj-multi-file-upload__message');
+      return this.query<HTMLElement>('mrtm-file-upload-list .file-upload__filename');
+    }
+
+    get fileError() {
+      return this.query<HTMLElement>('mrtm-file-upload-list .govuk-error-message');
     }
 
     get downloadLink() {
@@ -46,7 +50,7 @@ describe('FileInputComponent', () => {
     }
 
     get delete() {
-      return this.query<HTMLButtonElement>('.moj-multi-file-upload__delete');
+      return this.query<HTMLButtonElement>('mrtm-file-upload-list button[name="delete"]');
     }
 
     get file() {
@@ -86,7 +90,8 @@ describe('FileInputComponent', () => {
     fixture.detectChanges();
 
     expect(page.fileText.textContent.trim()).toEqual('New file');
-    expect(page.downloadLink.textContent.trim()).toEqual('New file');
+    // The file is not uploaded yet, so there is nothing to download.
+    expect(page.downloadLink).toBeNull();
   });
 
   it('should validate a file against max size', () => {
@@ -102,9 +107,10 @@ describe('FileInputComponent', () => {
     fixture.detectChanges();
 
     expect(control.touched).toBeTruthy();
-    expect(page.fileText.textContent).toEqual(' Big file must be smaller than 1MB ');
+    expect(page.fileText.textContent.trim()).toEqual('Big file');
+    expect(page.fileError.textContent.trim()).toEqual('Error: The selected file must be smaller than 1MB');
     expect(control.invalid).toBeTruthy();
-    expect(control.errors).toEqual({ 'maxFileSize-0': 'Big file must be smaller than 1MB' });
+    expect(control.errors).toEqual({ 'maxFileSize-0': 'The selected file must be smaller than 1MB' });
   });
 
   it('should display upload progress', () => {
@@ -116,17 +122,15 @@ describe('FileInputComponent', () => {
     page.file = new File(['test content'], 'New file');
     uploadSubject.next({ type: HttpEventType.UploadProgress, loaded: 5, total: 15 });
     fixture.detectChanges();
-    expect(page.fileText.textContent.trim()).toEqual('New file 33%');
+    expect(page.fileText.textContent.trim()).toEqual('New file');
 
     uploadSubject.next({ type: HttpEventType.UploadProgress, loaded: 10, total: 15 });
     fixture.detectChanges();
 
-    expect(page.fileText.textContent).toEqual('New file 67%');
-
     uploadSubject.next(new HttpResponse({ status: HttpStatuses.Ok, body: { uuid: 'abcd' } }));
     fixture.detectChanges();
 
-    expect(page.fileText.textContent.trim()).toEqual('New file has been uploaded');
+    expect(page.fileText.textContent.trim()).toEqual('New file');
     expect(page.downloadLink.textContent.trim()).toEqual('New file');
   });
 
@@ -154,8 +158,8 @@ describe('FileInputComponent', () => {
     fixture.detectChanges();
 
     expect(control.invalid).toBeTruthy();
-    expect(control.errors).toEqual({ upload: 'New file should not be txt' });
-    expect(page.fileText.textContent.trim()).toEqual('New file should not be txt');
+    expect(control.errors).toEqual({ upload: 'The selected file upload failed' });
+    expect(page.fileError.textContent.trim()).toEqual('Error: The selected file upload failed');
   });
 
   it('should delete a file', () => {

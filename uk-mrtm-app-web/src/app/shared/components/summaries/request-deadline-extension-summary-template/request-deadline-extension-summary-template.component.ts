@@ -13,7 +13,9 @@ import {
   SummaryListRowValueDirective,
 } from '@netz/govuk-components';
 
+import { SummaryDownloadFilesComponent } from '@shared/components';
 import { NotProvidedDirective } from '@shared/directives';
+import { AttachedFile } from '@shared/types';
 
 @Component({
   selector: 'mrtm-request-deadline-extension-summary-template',
@@ -27,6 +29,7 @@ import { NotProvidedDirective } from '@shared/directives';
     RouterLink,
     SummaryListComponent,
     GovukDatePipe,
+    SummaryDownloadFilesComponent,
   ],
   standalone: true,
   templateUrl: './request-deadline-extension-summary-template.component.html',
@@ -38,4 +41,6 @@ export class RequestDeadlineExtensionSummaryTemplateComponent {
   readonly deadlineFormEditUrl = input<string>();
   readonly deadlineNotificationEditUrl = input<string>();
   readonly queryParams = input<Params>();
+  /** The download link of the official notice preview, displayed under the recipients. */
+  readonly officialNotice = input<AttachedFile>();
 }

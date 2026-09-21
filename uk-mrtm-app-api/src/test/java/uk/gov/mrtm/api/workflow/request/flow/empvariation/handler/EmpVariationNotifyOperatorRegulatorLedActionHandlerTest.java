@@ -83,6 +83,7 @@ public class EmpVariationNotifyOperatorRegulatorLedActionHandlerTest {
         
         assertThat(requestTaskPayload.getFinalDocumentsGenerationInProgress()).isTrue();
         assertThat(requestTaskPayload.getFinalDocumentsGenerationSuccessful()).isNull();
+        assertThat(requestTaskPayload.getFailureNotificationSent()).isFalse();
 
         verify(requestTaskService, times(1)).findTaskByIdForUpdate(requestTaskId);
         verify(validator, times(1)).validate(requestTask, payload, appUser);

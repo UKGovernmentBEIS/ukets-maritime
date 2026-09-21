@@ -22,13 +22,15 @@ describe('FileUploadListComponent', () => {
         [listTitle]="listTitle()"
         [files]="files()"
         (fileDelete)="onDelete($any($event))"
-        [isDisabled]="isDisabled()" />
+        [isDisabled]="isDisabled()"
+        [showNoFilesHint]="showNoFilesHint()" />
     `,
   })
   class TestComponent {
     readonly listTitle = signal<string>(undefined);
     readonly files = signal<FileUploadEvent[]>([]);
     readonly isDisabled = signal<boolean>(false);
+    readonly showNoFilesHint = signal<boolean>(true);
 
     onDeleteSpy = vi.fn<(index: number) => void>();
 
@@ -43,15 +45,27 @@ describe('FileUploadListComponent', () => {
     }
 
     get rows() {
-      return this.queryAll<HTMLDivElement>('.moj-multi-file-upload__row');
+      return this.queryAll<HTMLDivElement>('.govuk-summary-list__row');
     }
 
-    get files() {
-      return this.queryAll<HTMLDataElement>('.moj-multi-file-upload__message');
+    get fileNames() {
+      return this.queryAll<HTMLSpanElement>('.file-upload__filename');
+    }
+
+    get downloadLinks() {
+      return this.queryAll<HTMLAnchorElement>('.file-upload__filename a');
+    }
+
+    get errors() {
+      return this.queryAll<HTMLSpanElement>('.govuk-error-message');
     }
 
     get deleteButtons() {
-      return this.queryAll<HTMLButtonElement>('.moj-multi-file-upload__delete');
+      return this.queryAll<HTMLButtonElement>('button[name="delete"]');
+    }
+
+    get uploadedFiles() {
+      return this.query<HTMLDivElement>('mrtm-file-upload-list > div');
     }
   }
 
@@ -81,9 +95,9 @@ describe('FileUploadListComponent', () => {
     expect(page.listTitle.textContent.trim()).toBe(listTitle);
   });
 
-  it('should list the files and their status', () => {
+  it('should list the files with their status and flag the ones that failed', () => {
     hostComponent.files.set([
-      { file: { name: 'Uploaded file' } as File, uuid: '1234', progress: null },
+      { file: { name: 'Uploaded file' } as File, uuid: '1234', downloadUrl: '/download/1234', progress: null },
       { file: new File([], 'Test file'), uuid: '1254', errors: null, progress: 1 },
       { file: new File([], 'Test file 2'), uuid: null, errors: null, progress: 0.3 },
       { file: new File([], 'Test file 3'), uuid: null, errors: { upload: 'Could not upload' }, progress: null },
@@ -91,13 +105,36 @@ describe('FileUploadListComponent', () => {
     fixture.detectChanges();
 
     expect(page.rows).toHaveLength(4);
-    expect(page.files.map((row) => row.textContent.trim())).toEqual([
+    expect(page.fileNames.map((name) => name.textContent.trim())).toEqual([
       'Uploaded file',
-      'Test file has been uploaded',
-      'Test file 2 30%',
-      'Could not upload',
+      'Test file',
+      'Test file 2',
+      'Test file 3',
+    ]);
+    expect(page.downloadLinks.map((link) => link.textContent.trim())).toEqual(['Uploaded file']);
+    expect(page.errors.map((error) => error.textContent.trim())).toEqual(['Error: Could not upload']);
+    expect(page.rows.map((row) => row.classList.contains('govuk-summary-list__row__error'))).toEqual([
+      false,
+      false,
+      false,
+      true,
     ]);
     expect(page.deleteButtons).toHaveLength(4);
+    expect(page.deleteButtons.map((button) => button.value)).toEqual(['1234', '1254', 'Test file 2', 'Test file 3']);
+  });
+
+  it('should hide the uploaded files container when there are no files and no hint to show', () => {
+    expect(page.uploadedFiles.classList.contains('govuk-!-display-none')).toBeFalsy();
+
+    hostComponent.showNoFilesHint.set(false);
+    fixture.detectChanges();
+
+    expect(page.uploadedFiles.classList.contains('govuk-!-display-none')).toBeTruthy();
+
+    hostComponent.files.set([{ file: { name: 'Uploaded file' } as File, uuid: '1234', progress: null }]);
+    fixture.detectChanges();
+
+    expect(page.uploadedFiles.classList.contains('govuk-!-display-none')).toBeFalsy();
   });
 
   it('should emit whenever a file is deleted', () => {

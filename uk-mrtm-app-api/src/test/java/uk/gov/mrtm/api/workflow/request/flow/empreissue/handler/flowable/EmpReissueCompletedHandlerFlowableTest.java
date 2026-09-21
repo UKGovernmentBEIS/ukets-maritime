@@ -38,15 +38,17 @@ class EmpReissueCompletedHandlerFlowableTest {
     @Test
     void execute() {
         String batchRequestBk = "1";
-        String batchRequestProcessInstanceId = "2";
+        String batchProcessInstanceId = "2";
         String batchRequestId = "3";
+        String requestId = "ReqId";
         Long accountId = 4l;
         boolean reissueSucceeded = true;
-        Request request = Request.builder().id(batchRequestId).processInstanceId(batchRequestProcessInstanceId).build();
+        Request batchRequest = Request.builder().id(batchRequestId).processInstanceId(batchProcessInstanceId).build();
         
         when(execution.getVariable(MrtmBpmnProcessConstants.EMP_BATCH_REQUEST_BUSINESS_KEY)).thenReturn(batchRequestBk);
-        when(workflowService.getProcessInstanceIdByBusinessKey(batchRequestBk)).thenReturn(batchRequestProcessInstanceId);
-        when(requestQueryService.findByProcessInstanceId(batchRequestProcessInstanceId)).thenReturn(request);
+        when(workflowService.getProcessInstanceIdByBusinessKey(batchRequestBk)).thenReturn(batchProcessInstanceId);
+        when(requestQueryService.findByProcessInstanceId(batchProcessInstanceId)).thenReturn(batchRequest);
+        when(execution.getVariable(BpmnProcessConstants.REQUEST_ID)).thenReturn(requestId);
         when(execution.getVariable(BpmnProcessConstants.ACCOUNT_ID)).thenReturn(accountId);
         when(execution.getVariable(MrtmBpmnProcessConstants.EMP_REISSUE_REQUEST_SUCCEEDED)).thenReturn(reissueSucceeded);
         
@@ -54,10 +56,14 @@ class EmpReissueCompletedHandlerFlowableTest {
         
         verify(execution, times(1)).getVariable(MrtmBpmnProcessConstants.EMP_BATCH_REQUEST_BUSINESS_KEY);
         verify(workflowService, times(1)).getProcessInstanceIdByBusinessKey(batchRequestBk);
-        verify(requestQueryService, times(1)).findByProcessInstanceId(batchRequestProcessInstanceId);
+        verify(requestQueryService, times(1)).findByProcessInstanceId(batchProcessInstanceId);
+        verify(execution, times(1)).getVariable(BpmnProcessConstants.REQUEST_ID);
         verify(execution, times(1)).getVariable(BpmnProcessConstants.ACCOUNT_ID);
         verify(execution, times(1)).getVariable(MrtmBpmnProcessConstants.EMP_REISSUE_REQUEST_SUCCEEDED);
-        verify(service, times(1)).reissueCompleted(batchRequestId, accountId, reissueSucceeded, true);
+        verify(service, times(1)).reissueCompleted(requestId, batchRequestId, accountId, reissueSucceeded);
+        verify(workflowService, times(1)).sendEventInProcessesThatContainVariable(
+        		batchRequestId,
+				MrtmBpmnProcessConstants.EMP_REISSUE_COMPLETED, BpmnProcessConstants.ACCOUNT_ID, accountId);
     }
     
 }

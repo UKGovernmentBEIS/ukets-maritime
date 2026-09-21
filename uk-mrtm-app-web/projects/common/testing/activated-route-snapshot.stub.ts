@@ -22,6 +22,7 @@ export class ActivatedRouteSnapshotStub implements ActivatedRouteSnapshot {
     this.paramMap = convertToParamMap(initialParams);
     this.params = initialParams;
     this.queryParamMap = convertToParamMap(initialQueryParams);
+    this.queryParams = initialQueryParams;
     this.data = resolves;
   }
 

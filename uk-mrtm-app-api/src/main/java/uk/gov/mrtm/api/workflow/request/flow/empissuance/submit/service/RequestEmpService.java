@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
 import uk.gov.mrtm.api.emissionsmonitoringplan.validation.EmpValidatorService;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.emp.domain.StagingEmissionsMonitoringPlanEntity;
 import uk.gov.mrtm.api.integration.external.emp.repository.StagingEmissionsMonitoringPlanRepository;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestActionType;
@@ -73,6 +74,7 @@ public class RequestEmpService {
                 .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
         stagingEmpEntity.setImportedOn(dateService.getLocalDateTime());
+        stagingEmpEntity.setImportStatus(StagingImportStatus.IMPORTED);
     }
 
     private void addEmpApplicationSubmittedRequestAction(EmpIssuanceApplicationSubmitRequestTaskPayload empIssuanceApplicationSubmitRequestTaskPayload,

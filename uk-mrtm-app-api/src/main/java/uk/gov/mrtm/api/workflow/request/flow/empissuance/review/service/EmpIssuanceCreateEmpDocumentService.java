@@ -9,6 +9,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanCon
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPlanDTO;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanIdentifierGenerator;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.EmpCreateDocumentService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.mapper.EmpReviewMapper;
@@ -60,7 +61,8 @@ public class EmpIssuanceCreateEmpDocumentService {
             Collections.emptyList(),
             request.getSubmissionDate(),
             dateService.getLocalDateTime(),
-            accountData
+            accountData,
+            DocumentGenerationContextType.EMP_REVIEW
         );
     }
 }

@@ -13,7 +13,7 @@ import {
 
 import { SummaryDownloadFilesComponent } from '@shared/components';
 import { NotProvidedDirective } from '@shared/directives';
-import { RfiSubmitDto } from '@shared/types';
+import { AttachedFile, RfiSubmitDto } from '@shared/types';
 
 @Component({
   selector: 'mrtm-request-for-information-summary-template',
@@ -39,4 +39,6 @@ export class RequestForInformationSummaryTemplateComponent {
   readonly questionEditUrl = input<string>();
   readonly notificationEditUrl = input<string>();
   readonly queryParams = input<Params>();
+  /** The download link of the official notice preview, displayed under the recipients. */
+  readonly officialNotice = input<AttachedFile>();
 }

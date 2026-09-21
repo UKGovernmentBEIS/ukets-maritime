@@ -45,6 +45,7 @@ public class EmpIssuanceApplicationReviewRequestTaskPayload extends EmpIssuanceA
 
     private Boolean finalDocumentsGenerationInProgress;
     private Boolean finalDocumentsGenerationSuccessful;
+    private Boolean failureNotificationSent;
 
     @Builder.Default
     private Map<RequestGeneratedFileType, RequestTaskPreviewFileInfoDTO> previewFiles = new HashMap<>();

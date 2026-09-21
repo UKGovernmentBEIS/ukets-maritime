@@ -170,4 +170,10 @@ public class MrtmRequestTaskActionType {
     public static final String SITE_VISIT_SAVE_APPLICATION_AMEND = "SITE_VISIT_SAVE_APPLICATION_AMEND";
     public static final String SITE_VISIT_SUBMIT_APPLICATION_AMEND = "SITE_VISIT_SUBMIT_APPLICATION_AMEND";
     public static final String SITE_VISIT_NOTIFY_OPERATOR_FOR_DECISION = "SITE_VISIT_NOTIFY_OPERATOR_FOR_DECISION";
+
+    /**
+     * RFI / RDE
+     */
+    public static final String RFI_SAVE = "RFI_SAVE";
+    public static final String RDE_SAVE = "RDE_SAVE";
 }

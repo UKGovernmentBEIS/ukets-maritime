@@ -48,7 +48,7 @@ describe('ReviewReturnForAmendsSummaryTemplateComponent', () => {
   it('should display all HTML elements', () => {
     expect(page.summariesContents).toEqual([
       'Changes required by operator',
-      'some required change 1 1.png2.png some required change 2',
+      'some required change 1  1.png  2.png  some required change 2',
     ]);
   });
 });

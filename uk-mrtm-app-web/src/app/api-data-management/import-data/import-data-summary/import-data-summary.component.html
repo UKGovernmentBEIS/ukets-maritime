@@ -1,0 +1,50 @@
+@if (data(); as data) {
+  <netz-feedback-banner />
+  <netz-page-heading caption="Import data">Check your answers</netz-page-heading>
+  <govuk-warning-text
+    assistiveText="Once you confirm, data will be imported for all selected account and workflow combinations. This action cannot be undone." />
+
+  <h4 class="govuk-heading-m">Task</h4>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Selected task</dt>
+      <dd govukSummaryListRowValue>{{ data?.requestType | apiDataManagementTaskTypeToText: data?.year }}</dd>
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.SELECT_TASK_TYPE]" [queryParams]="{ change: true }">Change</a>
+        <span class="govuk-visually-hidden">task type)</span>
+      </dd>
+    </div>
+  </dl>
+  <h4 class="govuk-heading-m">Operator account list</h4>
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total selected accounts</dt>
+      <dd govukSummaryListRowValue>{{ data?.items?.length }}</dd>
+      <dd govukSummaryListRowActions>
+        <a govukLink [routerLink]="[wizardStep.SELECT_OPERATOR_ACCOUNTS]" [queryParams]="{ change: true }">Change</a>
+        <span class="govuk-visually-hidden">selected accounts)</span>
+      </dd>
+    </div>
+  </dl>
+
+  <govuk-table id="selected-accounts" [columns]="columns" [data]="rows()">
+    <ng-template let-column="column" let-row="row">
+      {{ row[column.field] }}
+    </ng-template>
+  </govuk-table>
+
+  @if (data.rawItems?.length > pageSize()) {
+    <govuk-pagination
+      fragment="selected-accounts"
+      [count]="data.rawItems?.length"
+      [pageSize]="pageSize()"
+      (currentPageChange)="onPageChange($event)" />
+  }
+
+  <button (click)="onSubmit()" govukButton type="button">Confirm and continue</button>
+
+  <div>
+    <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+    <a govukLink routerLink="../../">Return to: API data management</a>
+  </div>
+}

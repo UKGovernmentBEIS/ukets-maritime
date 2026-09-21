@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanService;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestMetadata;
+import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestPayload;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestResource;
@@ -34,13 +35,7 @@ class EmpReissueDoReissueServiceTest {
 	private EmissionsMonitoringPlanService emissionsMonitoringPlanService;
 	
 	@Mock
-	private EmpReissueUpdatePayloadConsolidationNumberService empReissueUpdatePayloadConsolidationNumberService;
-	
-	@Mock
-	private EmpReissueGenerateDocumentsService empReissueGenerateDocumentsService;
-	
-	@Mock
-	private EmpReissueAddCompletedRequestActionService empReissueAddCompletedRequestActionService;
+	private EmpReissueCreateEmpDocumentService empReissueCreateEmpDocumentService;
 	
 	@Mock
 	private EmpReissueOfficialNoticeService empReissueOfficialNoticeService;
@@ -49,7 +44,8 @@ class EmpReissueDoReissueServiceTest {
 	void doReissue() {
 		String requestId = "1";
 		Long accountId = 1L;
-		EmpReissueRequestMetadata metadata = new EmpReissueRequestMetadata(); // Create metadata object
+		EmpReissueRequestMetadata metadata = new EmpReissueRequestMetadata();
+		EmpReissueRequestPayload requestPayload = new EmpReissueRequestPayload();
 
 		Request request = Request.builder()
 				.type(RequestType.builder().code(MrtmRequestType.EMP_REISSUE).build())
@@ -57,22 +53,22 @@ class EmpReissueDoReissueServiceTest {
 						.resourceId(accountId.toString())
 						.resourceType(ResourceType.ACCOUNT)
 						.build()))
-				.metadata(metadata) // Set metadata here
+				.metadata(metadata)
+				.payload(requestPayload)
 				.build();
 
 		when(requestService.findRequestById(requestId)).thenReturn(request);
-		when(emissionsMonitoringPlanService.incrementEmpConsolidationNumber(accountId)).thenReturn(1); // Mock return value
+		when(emissionsMonitoringPlanService.calculateNextConsolidationNumber(accountId)).thenReturn(1);
 
 		cut.doReissue(requestId);
 
 		assertThat(request.getSubmissionDate()).isNotNull();
-		assertThat(metadata.getEmpConsolidationNumber()).isEqualTo(1); // Validate metadata is updated
+		assertThat(requestPayload.getConsolidationNumber()).isEqualTo(1);
+		assertThat(metadata.getEmpConsolidationNumber()).isEqualTo(1);
 
 		verify(requestService, times(1)).findRequestById(requestId);
-		verify(emissionsMonitoringPlanService, times(1)).incrementEmpConsolidationNumber(accountId);
-		verify(empReissueUpdatePayloadConsolidationNumberService, times(1)).updateRequestPayloadConsolidationNumber(request);
-		verify(empReissueGenerateDocumentsService, times(1)).generateDocuments(request);
-		verify(empReissueAddCompletedRequestActionService, times(1)).add(requestId);
-		verify(empReissueOfficialNoticeService, times(1)).sendOfficialNotice(request);
+		verify(emissionsMonitoringPlanService, times(1)).calculateNextConsolidationNumber(accountId);
+		verify(empReissueCreateEmpDocumentService, times(1)).create(request);
+		verify(empReissueOfficialNoticeService, times(1)).generateOfficialNotice(request);
 	}
 }

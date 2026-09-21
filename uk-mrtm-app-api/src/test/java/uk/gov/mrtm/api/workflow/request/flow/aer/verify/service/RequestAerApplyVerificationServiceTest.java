@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerification;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerificationEntity;
 import uk.gov.mrtm.api.integration.external.verification.repository.StagingAerVerificationRepository;
@@ -240,6 +241,7 @@ class RequestAerApplyVerificationServiceTest {
         assertEquals(expectedTaskPayload, taskPayload);
         assertEquals(expectedRequestPayload, request.getPayload());
         assertEquals(now, stagingAerVerificationEntity.getImportedOn());
+        assertEquals(StagingImportStatus.IMPORTED, stagingAerVerificationEntity.getImportStatus());
 
         verify(stagingAerVerificationRepository).findByAccountIdAndYear(accountId, year);
         verify(dateService).getLocalDateTime();

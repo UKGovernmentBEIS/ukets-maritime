@@ -12,9 +12,7 @@ export const canActivateGuidance: CanActivateFn = () => {
 
   return service.loadGuidanceSections().pipe(
     take(1),
-    catchError((err) => {
-      console.error(err);
-
+    catchError(() => {
       return of(router.createUrlTree(['dashboard']));
     }),
   );

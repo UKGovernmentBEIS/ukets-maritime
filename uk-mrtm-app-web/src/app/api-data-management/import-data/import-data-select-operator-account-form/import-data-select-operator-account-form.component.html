@@ -1,0 +1,31 @@
+<mrtm-wizard-step
+  [formGroup]="form"
+  caption="Import data"
+  heading="Select operator account for EMP"
+  (formSubmit)="onSubmit()">
+  <p class="govuk-body">
+    Only accounts that have received data from suppliers and are ready to import for this task are shown.
+  </p>
+  <h4 class="govuk-heading-m">Operators account list</h4>
+  <div class="govuk-inset-text">
+    All operator accounts are pre-selected. Uncheck any accounts that should not be included in this import.
+  </div>
+  <mrtm-multi-select-table
+    id="list-of-available-accounts"
+    targetFragment="list-of-available-accounts"
+    [pageSize]="20"
+    [columns]="columns"
+    [data]="data()"
+    (selectionChanged)="onAccountsSelectionChanged()"
+    emptyTableText="No items to display"
+    description="Select ships to associate">
+    <ng-template let-column="column" let-row="row">
+      {{ row[column.field] }}
+    </ng-template>
+  </mrtm-multi-select-table>
+</mrtm-wizard-step>
+
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <a govukLink routerLink="../../">Return to: API data management</a>
+</div>

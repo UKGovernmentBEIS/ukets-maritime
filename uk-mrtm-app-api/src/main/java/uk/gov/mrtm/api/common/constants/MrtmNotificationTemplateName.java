@@ -11,4 +11,5 @@ public class MrtmNotificationTemplateName {
     public static final String AER_SUBMISSION_WINDOW_EXPIRATION_REMINDER_TEMPLATE = "AER Submission Window Expiration Reminder Template";
     public static final String VIR_NOTIFICATION_OPERATOR_RESPONSE = "Verifier Improvement Report Operator Response";
     public static final String VIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE = "Verifier Improvement Report Operator misses a deadline";
+    public static final String DOCUMENT_GENERATION_FAILED_TEMPLATE = "Document generation failed template";
 }

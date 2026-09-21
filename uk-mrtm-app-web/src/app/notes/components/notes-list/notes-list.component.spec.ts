@@ -56,7 +56,7 @@ describe('NotesListComponent', () => {
     expect(accountNotesService.getNotesByAccountId).toHaveBeenLastCalledWith(1, 0, 10);
 
     expect(page.notesContent).toEqual([
-      ['The note 1\nfile 1Submitter 1, 24 Nov 2022, 2:00pm'],
+      ['The note 1\n file 1 Submitter 1, 24 Nov 2022, 2:00pm'],
       ['The note 2\nNot providedSubmitter 2, 25 Nov 2022, 3:00pm'],
     ]);
   });

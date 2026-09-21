@@ -12,7 +12,7 @@ import uk.gov.mrtm.api.integration.external.common.domain.BaseStagingEntity;
 @SuperBuilder
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "emp_staging", schema="sch_third_party_data")
 public class StagingEmissionsMonitoringPlanEntity extends BaseStagingEntity {
 }

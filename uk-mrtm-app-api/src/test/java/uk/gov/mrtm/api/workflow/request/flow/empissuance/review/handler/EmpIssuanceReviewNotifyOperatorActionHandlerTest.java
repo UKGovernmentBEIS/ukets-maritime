@@ -92,6 +92,7 @@ class EmpIssuanceReviewNotifyOperatorActionHandlerTest {
 
         assertThat(requestTaskPayload.getFinalDocumentsGenerationInProgress()).isTrue();
         assertThat(requestTaskPayload.getFinalDocumentsGenerationSuccessful()).isNull();
+        assertThat(requestTaskPayload.getFailureNotificationSent()).isFalse();
 
         verify(requestTaskService, times(1)).findTaskByIdForUpdate(requestTaskId);
         verify(requestEmpReviewService,times(1))

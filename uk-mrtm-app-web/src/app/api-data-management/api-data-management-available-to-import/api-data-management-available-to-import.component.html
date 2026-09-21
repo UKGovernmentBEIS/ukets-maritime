@@ -1,0 +1,74 @@
+<ng-template #infoBadge let-details="details">
+  <span class="govuk-heading-l govuk-!-margin-bottom-0">{{ details?.count }}</span>
+  <span class="govuk-body">{{ details?.title }}</span>
+  @if (details?.badge) {
+    <govuk-tag>{{ details?.badge }}</govuk-tag>
+  }
+</ng-template>
+
+@if (data(); as data) {
+  <div class="govuk-grid-row govuk-!-margin-bottom-6">
+    <div class="govuk-grid-column-one-third">
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.totalAccounts ?? 0,
+              title: 'Total accounts',
+            },
+          }
+        " />
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <ng-container
+        *ngTemplateOutlet="
+          infoBadge;
+          context: {
+            details: {
+              count: data?.accountsEligibleForImport ?? 0,
+              title: 'Accounts with received API data',
+              badge: data?.accountsEligibleForImport ? 'Ready to import' : undefined,
+            },
+          }
+        " />
+    </div>
+  </div>
+
+  <h4 class="govuk-heading-m">Available to import</h4>
+
+  <div class="govuk-inset-text">
+    The displayed accounts have data ready to import. Select 'Import data' to transfer the data into account workflows.
+  </div>
+
+  <govuk-table
+    [columns]="columns"
+    [data]="data?.items"
+    emptyTableText="No data to display"
+    ariaLabel="Available to import"
+    (sort)="onSort($event)">
+    <ng-template let-column="column" let-row="row">
+      @switch (column.field) {
+        @case ('name') {
+          <a govukLink [routerLink]="['/', 'accounts', row.accountId]">{{ row[column.field] }}</a>
+        }
+        @case ('itemType') {
+          {{ row?.itemType?.requestType | apiDataManagementTaskTypeToText: row?.itemType?.year }}
+        }
+        @case ('receivedOn') {
+          {{ row[column.field] | govukDate: 'datetime' }}
+        }
+        @default {
+          {{ row[column.field] }}
+        }
+      }
+    </ng-template>
+  </govuk-table>
+  @if (data?.totalItems > pageSize()) {
+    <govuk-pagination
+      fragment="available-to-import"
+      [count]="data?.totalItems"
+      [pageSize]="pageSize()"
+      (currentPageChange)="changePage($event)" />
+  }
+}

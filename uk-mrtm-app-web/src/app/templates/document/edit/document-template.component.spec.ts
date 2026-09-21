@@ -25,10 +25,7 @@ describe('DocumentTemplateComponent', () => {
     }
 
     get file() {
-      return (
-        this.query<HTMLSpanElement>('.moj-multi-file-upload__filename') ??
-        this.query<HTMLSpanElement>('.moj-multi-file-upload__success')
-      );
+      return this.query<HTMLSpanElement>('.file-upload__filename');
     }
 
     set fileValue(value: File) {

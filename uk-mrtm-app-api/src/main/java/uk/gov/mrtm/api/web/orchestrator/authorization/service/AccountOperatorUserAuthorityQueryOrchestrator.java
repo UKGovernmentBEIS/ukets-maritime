@@ -16,7 +16,6 @@ import uk.gov.mrtm.api.web.orchestrator.authorization.transform.UserAuthorityInf
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor

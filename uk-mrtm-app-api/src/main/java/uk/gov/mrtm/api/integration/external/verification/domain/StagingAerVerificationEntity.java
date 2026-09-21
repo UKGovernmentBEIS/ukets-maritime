@@ -5,6 +5,7 @@ import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -19,12 +20,13 @@ import java.time.Year;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@EqualsAndHashCode(callSuper = true, onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(callSuper = true)
 @Table(name = "aer_verification_staging", schema="sch_third_party_data")
 public class StagingAerVerificationEntity extends BaseStagingEntity {
 
     @Column(name = "year")
     @EqualsAndHashCode.Include()
     @Convert(converter = YearAttributeConverter.class)
+    @NotNull
     private Year year;
 }

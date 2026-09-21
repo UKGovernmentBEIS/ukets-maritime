@@ -3,6 +3,7 @@ package uk.gov.mrtm.api.workflow.request.flow.aer.verify.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerification;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerificationEntity;
 import uk.gov.mrtm.api.integration.external.verification.repository.StagingAerVerificationRepository;
@@ -72,6 +73,7 @@ public class RequestAerApplyVerificationService {
         }
 
         stagingAerVerificationEntity.setImportedOn(dateService.getLocalDateTime());
+        stagingAerVerificationEntity.setImportStatus(StagingImportStatus.IMPORTED);
 
         taskPayload.setVerificationSectionsCompleted(requestTaskActionPayload.getVerificationSectionsCompleted());
         updateRequestPayload(requestTask);

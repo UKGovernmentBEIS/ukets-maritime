@@ -44,4 +44,10 @@
       govuk-select
       widthClass="govuk-!-width-two-thirds"></div>
   </div>
+
+  <netz-related-documents
+    [fileDownloadPrePath]="['../../../']"
+    [previewDocuments]="previewDocuments()"
+    [taskId]="requestTaskId"
+    [decisionNotification]="decisionNotification" />
 </mrtm-wizard-step>

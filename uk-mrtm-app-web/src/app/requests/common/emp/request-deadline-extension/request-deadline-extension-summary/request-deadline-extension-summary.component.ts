@@ -15,15 +15,18 @@ import {
   RequestDeadlineExtensionApiService,
   RequestDeadlineExtensionStore,
 } from '@requests/common/emp/request-deadline-extension/services';
+import { injectRequestPreviewDocuments, toOfficialNoticeFile } from '@requests/common/emp/utils';
 import { RequestDeadlineExtensionSummaryTemplateComponent } from '@shared/components';
 import { UserInfoResolverPipe } from '@shared/pipes';
 import { NotifyUsersService } from '@shared/services';
+import { AttachedFile } from '@shared/types';
 
 interface ViewModel {
   data: RdePayload;
   wizardSteps: Record<string, string>;
   queryParams?: Params;
   isEditable?: boolean;
+  officialNotice?: AttachedFile;
 }
 
 @Component({
@@ -51,6 +54,7 @@ export class RequestDeadlineExtensionSummaryComponent {
   private readonly requestTaskId = this.taskStore.select(requestTaskQuery.selectRequestTaskId)();
   private readonly allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
   private readonly assignees = toSignal(this.notifyUsersService.getAssignees(this.requestTaskId));
+  private readonly previewDocuments = injectRequestPreviewDocuments('RDE_SAVE');
 
   public readonly vm: Signal<ViewModel> = computed(() => {
     const { signatory, operators, ...rest } = this.rdeStore.select(rdeQuery.selectRde)();
@@ -72,6 +76,9 @@ export class RequestDeadlineExtensionSummaryComponent {
           queryParams: { change: true },
           isEditable: true,
           wizardSteps: RdeWizardSteps,
+          officialNotice: this.previewDocuments()[0]
+            ? toOfficialNoticeFile(this.previewDocuments()[0], { signatory, operators }, ['../../'])
+            : undefined,
         }
       : null;
   });

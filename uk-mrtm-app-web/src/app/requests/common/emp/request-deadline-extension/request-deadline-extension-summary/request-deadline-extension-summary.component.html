@@ -5,7 +5,8 @@
     [isEditable]="vm?.isEditable"
     [deadlineFormEditUrl]="vm?.wizardSteps?.RDE_DEADLINE_EXTENSION"
     [deadlineNotificationEditUrl]="vm?.wizardSteps?.RDE_DEADLINE_NOTIFICATION"
-    [queryParams]="vm?.queryParams" />
+    [queryParams]="vm?.queryParams"
+    [officialNotice]="vm?.officialNotice" />
 
   <button (click)="onSubmit()" netzPendingButton govukButton type="button">Confirm and continue</button>
 

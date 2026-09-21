@@ -47,6 +47,7 @@ public class EmpIssuanceReviewNotifyOperatorActionHandler
             (EmpIssuanceApplicationReviewRequestTaskPayload) requestTask.getPayload();
         requestTaskPayload.setFinalDocumentsGenerationInProgress(true);
         requestTaskPayload.setFinalDocumentsGenerationSuccessful(null);
+        requestTaskPayload.setFailureNotificationSent(false);
 
         final Request request = requestTask.getRequest();
         final EmpIssuanceRequestPayload requestPayload = (EmpIssuanceRequestPayload) request.getPayload();

@@ -6,6 +6,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { map } from 'rxjs';
 import { addDays } from 'date-fns';
 
+import { RdePayload } from '@mrtm/api';
+
+import { AuthStore, selectUserId } from '@netz/common/auth';
 import { ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { GovukDatePipe } from '@netz/common/pipes';
 import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
@@ -13,7 +16,10 @@ import { DateInputComponent } from '@netz/govuk-components';
 
 import { RdeWizardSteps } from '@requests/common/emp/request-deadline-extension/request-deadline-extension.consts';
 import { requestDeadlineExtensionFormProvider } from '@requests/common/emp/request-deadline-extension/request-deadline-extension-form/request-deadline-extension-form.provider';
-import { RequestDeadlineExtensionStore } from '@requests/common/emp/request-deadline-extension/services';
+import {
+  RequestDeadlineExtensionApiService,
+  RequestDeadlineExtensionStore,
+} from '@requests/common/emp/request-deadline-extension/services';
 import { TASK_FORM } from '@requests/common/task-form.token';
 import { WizardStepComponent } from '@shared/components';
 
@@ -33,7 +39,9 @@ import { WizardStepComponent } from '@shared/components';
 })
 export class RequestDeadlineExtensionFormComponent {
   private readonly taskStore = inject(RequestTaskStore);
+  private readonly authStore = inject(AuthStore);
   private readonly rdeStore = inject(RequestDeadlineExtensionStore);
+  private readonly rdeService = inject(RequestDeadlineExtensionApiService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   public readonly formGroup = inject<FormGroup>(TASK_FORM);
@@ -47,13 +55,26 @@ export class RequestDeadlineExtensionFormComponent {
   );
 
   public onSubmit(): void {
-    this.rdeStore.setRde({
-      ...this.rdeStore.state.rdePayload,
+    const rdePayload: RdePayload = {
+      ...this.rdeStore.state?.rdePayload,
       ...this.formGroup.value,
-    });
+    };
 
-    this.router.navigate(this.inChangeStatus() ? ['../'] : ['../', RdeWizardSteps.RDE_DEADLINE_NOTIFICATION], {
-      relativeTo: this.route,
-    });
+    // The RDE details are persisted on the task so that the document preview of the notification step can be
+    // generated from them. The backend requires a signatory, which the user has not selected yet at this step,
+    // so it defaults to the current user (the same default the notification form uses).
+    this.rdeService
+      .save({
+        ...rdePayload,
+        signatory: rdePayload.signatory ?? this.authStore.select(selectUserId)(),
+        operators: rdePayload.operators ?? [],
+      })
+      .subscribe(() => {
+        this.rdeStore.setRde(rdePayload);
+
+        this.router.navigate(this.inChangeStatus() ? ['../'] : ['../', RdeWizardSteps.RDE_DEADLINE_NOTIFICATION], {
+          relativeTo: this.route,
+        });
+      });
   }
 }

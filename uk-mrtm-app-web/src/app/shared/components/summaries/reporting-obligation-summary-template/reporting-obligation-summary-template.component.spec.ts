@@ -54,7 +54,7 @@ describe('ReportingObligationSummaryTemplateComponent', () => {
       'Lorem ipsum',
       'Change explanation for not submitting a report',
       'Upload supporting documents',
-      'FileName1FileName2',
+      'FileName1  FileName2',
       'Change upload of supporting documents',
     ]);
   });

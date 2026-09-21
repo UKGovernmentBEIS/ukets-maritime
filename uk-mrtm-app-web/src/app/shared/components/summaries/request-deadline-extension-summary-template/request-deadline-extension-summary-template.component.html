@@ -38,5 +38,11 @@
         </dd>
       }
     </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Official notice</dt>
+      <dd govukSummaryListRowValue>
+        <mrtm-summary-download-files [files]="officialNotice() ? [officialNotice()] : []" />
+      </dd>
+    </div>
   </dl>
 }

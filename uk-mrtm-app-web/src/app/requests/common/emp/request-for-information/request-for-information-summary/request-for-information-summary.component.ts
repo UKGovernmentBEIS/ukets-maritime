@@ -16,16 +16,19 @@ import {
   RequestForInformationApiService,
   RequestForInformationStore,
 } from '@requests/common/emp/request-for-information/services';
+import { injectRequestPreviewDocuments, toOfficialNoticeFile } from '@requests/common/emp/utils';
 import { RequestForInformationSummaryTemplateComponent } from '@shared/components';
 import { UserInfoResolverPipe } from '@shared/pipes';
 import { NotifyUsersService } from '@shared/services';
-import { RfiSubmitDto, UploadedFile } from '@shared/types';
+import { AttachedFile, RfiSubmitDto, UploadedFile } from '@shared/types';
+import { createFileUploadPayload } from '@shared/utils';
 
 interface ViewModel {
   data: RfiSubmitDto;
   wizardSteps: Record<string, string>;
   queryParams?: Params;
   isEditable?: boolean;
+  officialNotice?: AttachedFile;
 }
 
 @Component({
@@ -53,6 +56,7 @@ export class RequestForInformationSummaryComponent {
   private readonly requestTaskId = this.taskStore.select(requestTaskQuery.selectRequestTaskId)();
   private readonly allOperatorsInfo = toSignal(this.notifyUsersService.getAllOperatorsInfo(this.accountId));
   private readonly assignees = toSignal(this.notifyUsersService.getAssignees(this.requestTaskId));
+  private readonly previewDocuments = injectRequestPreviewDocuments('RFI_SAVE');
 
   public readonly wizardSteps = RfiWizardSteps;
 
@@ -83,6 +87,9 @@ export class RequestForInformationSummaryComponent {
           wizardSteps: RfiWizardSteps,
           isEditable: true,
           queryParams: { change: true },
+          officialNotice: this.previewDocuments()[0]
+            ? toOfficialNoticeFile(this.previewDocuments()[0], { signatory, operators }, ['../../'])
+            : undefined,
         }
       : null;
   });
@@ -95,9 +102,7 @@ export class RequestForInformationSummaryComponent {
         ...rfiPayload,
         rfiSubmitPayload: {
           ...rfiPayload.rfiSubmitPayload,
-          files: (rfiPayload?.rfiSubmitPayload?.files ?? []).map((file: string | UploadedFile) =>
-            typeof file === 'string' ? file : file?.uuid,
-          ),
+          files: createFileUploadPayload((rfiPayload?.rfiSubmitPayload?.files ?? []) as unknown as UploadedFile[]),
         },
       })
       .subscribe(() => {

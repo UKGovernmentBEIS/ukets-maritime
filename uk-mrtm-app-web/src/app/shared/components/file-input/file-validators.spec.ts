@@ -2,7 +2,7 @@ import { FormControl } from '@angular/forms';
 
 import { MessageValidationErrors, MessageValidatorFn } from '@netz/govuk-components';
 
-import { FileValidators } from '@shared/components';
+import { FileValidators, MAX_FILE_NAME_LENGTH } from '@shared/components';
 
 describe('FileValidators', () => {
   it('should create an instance', () => {
@@ -48,7 +48,51 @@ describe('FileValidators', () => {
     expect(formControl.valid).toBeTruthy();
 
     formControl.setValue({ file: { name: 'Test file', size: 3 * 1024 * 1024 } });
-    expect(formControl.errors).toEqual({ ['maxFileSize-0']: 'Test file must be smaller than 2MB' });
+    expect(formControl.errors).toEqual({ ['maxFileSize-0']: 'The selected file must be smaller than 2MB' });
     expect(formControl.invalid).toBeTruthy();
+  });
+
+  it('should limit the file name length to given amount', () => {
+    const formControl = new FormControl(
+      { file: { name: 'a'.repeat(255) + '.txt', size: 1024 } },
+      { validators: FileValidators.maxFileNameLength(259) },
+    );
+
+    expect(formControl.errors).toBeNull();
+    expect(formControl.valid).toBeTruthy();
+
+    formControl.setValue({ file: { name: 'a'.repeat(256) + '.txt', size: 1024 } });
+    expect(formControl.errors).toEqual({
+      ['maxFileNameLength-0']: 'The selected file must have a name of 259 characters or less',
+    });
+    expect(formControl.invalid).toBeTruthy();
+  });
+
+  it('should default the file name length limit to MAX_FILE_NAME_LENGTH characters', () => {
+    const formControl = new FormControl(
+      { file: { name: 'a'.repeat(MAX_FILE_NAME_LENGTH), size: 1024 } },
+      { validators: FileValidators.maxFileNameLength() },
+    );
+
+    expect(formControl.errors).toBeNull();
+
+    formControl.setValue({ file: { name: 'a'.repeat(MAX_FILE_NAME_LENGTH + 1), size: 1024 } });
+    expect(formControl.errors).toEqual({
+      ['maxFileNameLength-0']: `The selected file must have a name of ${MAX_FILE_NAME_LENGTH} characters or less`,
+    });
+  });
+
+  it('should validate the file name length of every file in a list', () => {
+    const formControl = new FormControl(
+      [
+        { file: { name: 'short.txt', size: 1024 } },
+        { file: { name: 'a'.repeat(MAX_FILE_NAME_LENGTH + 1), size: 1024 } },
+      ],
+      { validators: FileValidators.maxFileNameLength() },
+    );
+
+    expect(formControl.errors).toEqual({
+      ['maxFileNameLength-1']: `The selected file must have a name of ${MAX_FILE_NAME_LENGTH} characters or less`,
+    });
   });
 });

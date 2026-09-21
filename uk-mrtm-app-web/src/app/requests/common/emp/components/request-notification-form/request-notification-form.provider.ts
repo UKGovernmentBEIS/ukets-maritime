@@ -18,6 +18,14 @@ export const REQUEST_NOTIFICATION_DATA: InjectionToken<Signal<RequestNotificatio
   Signal<RequestNotificationModel>
 >('Request notification data');
 
+/**
+ * The allowed request task action (e.g. RFI_SAVE) that gates the document preview of the notification step
+ * and is used as key in TASK_RELATED_PREVIEW_DOCUMENTS_MAP, since RFI/RDE sub-flows share the parent task type.
+ */
+export const REQUEST_NOTIFICATION_PREVIEW_DOCUMENTS_ACTION: InjectionToken<string> = new InjectionToken<string>(
+  'Request notification preview documents action',
+);
+
 export const requestNotificationFormProvider: Provider = {
   provide: TASK_FORM,
   deps: [FormBuilder, REQUEST_NOTIFICATION_DATA, AuthStore],

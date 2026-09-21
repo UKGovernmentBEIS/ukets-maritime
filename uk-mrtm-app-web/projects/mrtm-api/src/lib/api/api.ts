@@ -45,6 +45,7 @@ export * from './tasks.service';
 export * from './tasksAssignment.service';
 export * from './tasksRelease.service';
 export * from './termsAndConditions.service';
+export * from './thirdPartyDataManagementAPI.service';
 export * from './thirdPartyDataProviderAPI.service';
 export * from './uIConfiguration.service';
 export * from './unassignedItems.service';

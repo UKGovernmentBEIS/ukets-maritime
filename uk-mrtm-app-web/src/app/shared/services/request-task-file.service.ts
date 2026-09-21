@@ -12,7 +12,10 @@ import {
   requestTaskReassignedError,
 } from '@netz/common/error';
 
-import { createCommonFileValidators } from '@shared/components/file-input/file-validators';
+import {
+  createCommonFileValidators,
+  createMultipleFileValidators,
+} from '@shared/components/file-input/file-validators';
 import { FileUploadService } from '@shared/services';
 import { FileUploadEvent } from '@shared/types';
 
@@ -52,7 +55,9 @@ export class RequestTaskFileService {
         disabled,
       },
       {
-        validators: createCommonFileValidators(required, requiredMessage),
+        validators: Array.isArray(uuid)
+          ? createMultipleFileValidators(required, requiredMessage)
+          : createCommonFileValidators(required, requiredMessage),
         asyncValidators: [
           Array.isArray(uuid)
             ? this.uploadMany(requestTaskId, requestTaskActionType)

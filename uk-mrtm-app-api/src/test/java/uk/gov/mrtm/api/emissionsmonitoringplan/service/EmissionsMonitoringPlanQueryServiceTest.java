@@ -43,7 +43,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -252,18 +251,6 @@ class EmissionsMonitoringPlanQueryServiceTest {
                 .recordsLocation("Some Records location")
                 .itSystemUsed("Some IT System used")
                 .build();
-    }
-
-    @Test
-    void getEmissionsMonitoringPlanConsolidationNumberByAccountId() {
-        Long accountId = 1L;
-        EmissionsMonitoringPlanEntity empEntity = new EmissionsMonitoringPlanEntity("1", accountId, EmissionsMonitoringPlanContainer.builder().build(), null);
-
-        when(emissionsMonitoringPlanRepository.findByAccountId(accountId)).thenReturn(Optional.of(empEntity));
-
-        int result = emissionsMonitoringPlanQueryService.getEmissionsMonitoringPlanConsolidationNumberByAccountId(accountId);
-        assertThat(result).isEqualTo(1);
-        verify(emissionsMonitoringPlanRepository, times(1)).findByAccountId(accountId);
     }
 
     @Test

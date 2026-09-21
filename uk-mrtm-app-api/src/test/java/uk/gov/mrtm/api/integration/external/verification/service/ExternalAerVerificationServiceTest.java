@@ -8,6 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.integration.external.aer.validation.ExternalAerValidator;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.verification.domain.ExternalAerVerification;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerification;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerificationEntity;
@@ -72,6 +73,7 @@ class ExternalAerVerificationServiceTest {
             .createdOn(now)
             .updatedOn(now)
             .providerName("provider name")
+            .importStatus(StagingImportStatus.NEW)
             .build();
 
         when(mapper.toStagingAerVerification(external, "AER_VERIFICATION_STAGING_PAYLOAD")).thenReturn(staging);
@@ -121,6 +123,7 @@ class ExternalAerVerificationServiceTest {
             .payload(staging)
             .accountId(accountId)
             .updatedOn(now)
+            .importStatus(StagingImportStatus.NEW)
             .providerName("provider name")
             .build();
 

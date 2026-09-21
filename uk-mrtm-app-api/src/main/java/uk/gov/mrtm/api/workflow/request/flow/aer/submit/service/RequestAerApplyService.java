@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import uk.gov.mrtm.api.integration.external.aer.domain.StagingAer;
 import uk.gov.mrtm.api.integration.external.aer.domain.StagingAerEntity;
 import uk.gov.mrtm.api.integration.external.aer.repository.StagingAerRepository;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.reporting.domain.Aer;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerAggregatedDataEmissionsCalculator;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.service.AerPortEmissionsCalculator;
@@ -75,6 +76,12 @@ public class RequestAerApplyService {
             .findByAccountIdAndYear(requestTask.getRequest().getAccountId(), taskPayload.getReportingYear())
             .orElseThrow(() -> new BusinessException(RESOURCE_NOT_FOUND));
 
+        taskPayload.setAerSectionsCompleted(requestTaskActionPayload.getAerSectionsCompleted());
+        importAerFromStagingData(taskPayload, stagingAerEntity);
+    }
+
+    public void importAerFromStagingData(AerApplicationSubmitRequestTaskPayload taskPayload,
+                                         StagingAerEntity stagingAerEntity) {
         StagingAer stagingPayload = (StagingAer) stagingAerEntity.getPayload();
         Aer aer = taskPayload.getAer();
 
@@ -82,14 +89,14 @@ public class RequestAerApplyService {
         aer.setSmf(stagingPayload.getSmf());
         aer.setAggregatedData(stagingPayload.getAggregatedData());
         aer.setThirdPartyDataProviderName(stagingAerEntity.getProviderName());
-        performCalculations(aer);
-
-        stagingAerEntity.setImportedOn(dateService.getLocalDateTime());
-
-        taskPayload.setAerSectionsCompleted(requestTaskActionPayload.getAerSectionsCompleted());
 
         // Reset verification
         taskPayload.setVerificationPerformed(false);
+
+        performCalculations(aer);
+
+        stagingAerEntity.setImportedOn(dateService.getLocalDateTime());
+        stagingAerEntity.setImportStatus(StagingImportStatus.IMPORTED);
     }
 
     private void performCalculations(Aer aer) {

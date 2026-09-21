@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestMetadataType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayloadType;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestType;
-import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpBatchReissueRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpBatchReissueRequestCreateActionPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpBatchReissueRequestMetadata;
@@ -54,8 +53,7 @@ public class EmpBatchReissueCreateActionHandler implements RequestCACreateAction
                     .type(MrtmRequestMetadataType.EMP_BATCH_REISSUE)
                     .summary(payload.getSummary())
                     .build())
-            .processVars(Map.of(BpmnProcessConstants.ACCOUNT_IDS, new HashSet<>(accountsDetails.keySet()),
-                    MrtmBpmnProcessConstants.BATCH_NUMBER_OF_ACCOUNTS_COMPLETED, 0))
+            .processVars(Map.of(BpmnProcessConstants.ACCOUNT_IDS, new HashSet<>(accountsDetails.keySet())))
             .build();
 
         final Request request = startProcessRequestService.startProcess(requestParams);

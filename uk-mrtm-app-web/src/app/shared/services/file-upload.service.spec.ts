@@ -10,7 +10,8 @@ import { HttpStatuses } from '@netz/common/error';
 import { testSchedulerFactory } from '@netz/common/testing';
 import { MessageValidationErrors } from '@netz/govuk-components';
 
-import { FileUploadService } from '@shared/services';
+import { MAX_FILE_NAME_LENGTH } from '@shared/components';
+import { FileUploadService, UPLOAD_FAILED_MESSAGE } from '@shared/services';
 import { TestScheduler } from 'rxjs/testing';
 
 describe('FileUploadService', () => {
@@ -101,6 +102,59 @@ describe('FileUploadService', () => {
     });
   });
 
+  it('should report files whose name is too long instead of uploading them', () => {
+    testScheduler.run(({ cold, expectObservable, expectSubscriptions }) => {
+      const file = new File(['some content'], 'a'.repeat(MAX_FILE_NAME_LENGTH + 1));
+      const control = new FormControl([{ file }]);
+      const upload$ = cold<HttpEvent<FileUuidDTO>>('--a|', {
+        a: new HttpResponse({ status: HttpStatuses.Ok, body: { uuid: 'abcd' } }),
+      });
+      const errors = {
+        'maxFileNameLength-0': `The selected file must have a name of ${MAX_FILE_NAME_LENGTH} characters or less`,
+      };
+
+      // The failure is reported on the progress stream synchronously, so listen to it before validating.
+      expectObservable(service.uploadProgress$).toBe('a', { a: { file, progress: null, errors } });
+      expectObservable(service.uploadMany(() => upload$)(control) as Observable<MessageValidationErrors>).toBe('(c|)', {
+        c: { 'maxFileNameLength-0-0': errors['maxFileNameLength-0'] },
+      });
+      expectSubscriptions(upload$.subscriptions).toBe([]);
+    });
+  });
+
+  it('should still upload the valid files when another file fails a per-file check', () => {
+    testScheduler.run(({ cold, expectObservable, flush }) => {
+      const tooLong = new File(['some content'], 'a'.repeat(MAX_FILE_NAME_LENGTH + 1));
+      const empty = new File([], 'empty.txt');
+      const valid = new File(['some content'], 'valid.txt');
+      const control = new FormControl([{ file: tooLong }, { file: empty }, { file: valid }]);
+      const upload$ = vi.fn(() =>
+        cold<HttpEvent<FileUuidDTO>>('----a|', {
+          a: new HttpResponse({ status: HttpStatuses.Ok, body: { uuid: 'abcd' } }),
+        }),
+      );
+      const tooLongErrors = {
+        'maxFileNameLength-0': `The selected file must have a name of ${MAX_FILE_NAME_LENGTH} characters or less`,
+      };
+      const emptyErrors = { 'notEmpty-0': 'The selected file should not be empty' };
+
+      expectObservable(service.uploadProgress$).toBe('(ab)c', {
+        a: { file: tooLong, progress: null, errors: tooLongErrors },
+        b: { file: empty, progress: null, errors: emptyErrors },
+        c: { file: valid, progress: 1, uuid: 'abcd' },
+      });
+      expectObservable(service.uploadMany(upload$)(control) as Observable<MessageValidationErrors>).toBe('-----(c|)', {
+        c: {
+          'maxFileNameLength-0-0': tooLongErrors['maxFileNameLength-0'],
+          'notEmpty-0-1': emptyErrors['notEmpty-0'],
+        },
+      });
+      flush();
+      expect(upload$).toHaveBeenCalledTimes(1);
+      expect(upload$).toHaveBeenCalledWith(valid);
+    });
+  });
+
   it('should emit file upload events from various validations', () => {
     testScheduler.run(({ cold, expectObservable }) => {
       const controlA = new FormControl({ file: new File(['some content'], 'single-file.txt') });
@@ -132,7 +186,7 @@ describe('FileUploadService', () => {
           service.upload(upload$)(controlA),
           service.uploadMany(upload$)(controlB),
         ) as Observable<MessageValidationErrors>,
-      ).toBe('--------------a(b|)', { a: null, b: { 'upload-1': `second-file.txt ${error.error.message}` } });
+      ).toBe('--------------a(b|)', { a: null, b: { 'upload-1': UPLOAD_FAILED_MESSAGE } });
 
       expectObservable(service.uploadProgress$).toBe('--(abc)(def)--(gh)--', {
         a: { file: controlA.value.file, progress: 5 / 15 },
@@ -143,7 +197,7 @@ describe('FileUploadService', () => {
         f: {
           file: controlB.value[1].file,
           progress: null,
-          errors: { upload: `second-file.txt ${error.error.message}` },
+          errors: { upload: UPLOAD_FAILED_MESSAGE },
         },
         g: { file: controlA.value.file, progress: 1, uuid: 'abcd' },
         h: { file: controlB.value[0].file, progress: 1, uuid: 'abcd' },

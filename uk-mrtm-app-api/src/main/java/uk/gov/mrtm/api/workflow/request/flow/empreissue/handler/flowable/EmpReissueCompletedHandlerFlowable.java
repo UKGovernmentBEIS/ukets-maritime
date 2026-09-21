@@ -27,11 +27,15 @@ public class EmpReissueCompletedHandlerFlowable implements JavaDelegate {
 		final String batchProcessInstanceId = workflowService.getProcessInstanceIdByBusinessKey(batchRequestBk);
 		
 		final String batchRequestId = requestQueryService.findByProcessInstanceId(batchProcessInstanceId).getId();
+		final String requestId = (String) execution.getVariable(BpmnProcessConstants.REQUEST_ID);
 		
 		final Long accountId = (Long)execution.getVariable(BpmnProcessConstants.ACCOUNT_ID);
 		final boolean reissueSucceeded = (Boolean)execution.getVariable(MrtmBpmnProcessConstants.EMP_REISSUE_REQUEST_SUCCEEDED);
 		
-		service.reissueCompleted(batchRequestId, accountId, reissueSucceeded, true);
+		service.reissueCompleted(requestId, batchRequestId, accountId, reissueSucceeded);
+		
+		workflowService.sendEventInProcessesThatContainVariable(batchRequestId,
+				MrtmBpmnProcessConstants.EMP_REISSUE_COMPLETED, BpmnProcessConstants.ACCOUNT_ID, accountId);
 	}
 
 }

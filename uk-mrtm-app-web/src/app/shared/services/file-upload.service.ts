@@ -1,10 +1,11 @@
-import { HttpErrorResponse, HttpEvent, HttpEventType } from '@angular/common/http';
+import { HttpEvent, HttpEventType } from '@angular/common/http';
 import { Service } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn } from '@angular/forms';
 
 import {
   catchError,
   defaultIfEmpty,
+  defer,
   filter,
   forkJoin,
   iif,
@@ -18,10 +19,12 @@ import {
 
 import { FileUuidDTO } from '@mrtm/api';
 
-import { MessageValidationErrors } from '@netz/govuk-components';
+import { MessageValidationErrors, MessageValidatorFn } from '@netz/govuk-components';
 
-import { FileValidators } from '@shared/components/file-input/file-validators';
+import { commonFileValidators, FileValidators } from '@shared/components/file-input/file-validators';
 import { FileUploadEvent } from '@shared/types';
+
+export const UPLOAD_FAILED_MESSAGE = 'The selected file upload failed';
 
 export type FileUploadRequest<T = FileUuidDTO> = (file: File) => Observable<HttpEvent<T>>;
 
@@ -40,7 +43,19 @@ export class FileUploadService {
     };
   }
 
-  uploadMany(request: FileUploadRequest): AsyncValidatorFn {
+  /**
+   * Uploads every file of the control that is not uploaded yet.
+   *
+   * The per-file checks (size, empty, name length) run in here rather than as sync validators of the control on
+   * purpose: Angular does not run async validators while a sync validator fails, so a sync per-file check would block
+   * the upload of every other file as soon as one of them is invalid. Files failing a check are reported with the same
+   * `validator-index` error keys the sync validators would produce, and on `uploadProgress$`, while the remaining files
+   * are still uploaded.
+   */
+  uploadMany(
+    request: FileUploadRequest,
+    fileValidators: MessageValidatorFn[] = commonFileValidators,
+  ): AsyncValidatorFn {
     const requestUpload = this.requestUpload(request);
 
     // Cache files that already have been attempted to be uploaded, to avoid replays of errored or in progress files
@@ -55,14 +70,9 @@ export class FileUploadService {
             if (!attempts.has(fileEvent.file)) {
               attempts.set(
                 fileEvent.file,
-                iif(
-                  () =>
-                    !this.isFileAlreadyUploaded(fileEvent) &&
-                    !this.isFileEmpty(fileEvent) &&
-                    !this.isFileLarge(fileEvent),
-                  requestUpload(fileEvent.file),
-                  of(null),
-                ).pipe(shareReplay({ bufferSize: 1, refCount: false })),
+                this.validateOrUpload(fileEvent, fileValidators, requestUpload).pipe(
+                  shareReplay({ bufferSize: 1, refCount: false }),
+                ),
               );
             }
 
@@ -87,32 +97,58 @@ export class FileUploadService {
                 break;
             }
           },
-          error: (error: HttpErrorResponse) =>
+          error: () =>
             this.uploadProgressSubject.next({
               progress: null,
               file,
-              errors: this.createValidationError(file, error),
+              errors: this.createValidationError(),
             }),
         }),
         filter((event) => event.type === HttpEventType.Response),
         map(() => null),
-        catchError((error: HttpErrorResponse) => of(this.createValidationError(file, error))),
+        catchError(() => of(this.createValidationError())),
       );
+  }
+
+  private validateOrUpload(
+    fileEvent: FileUploadEvent,
+    fileValidators: MessageValidatorFn[],
+    requestUpload: (file: File) => Observable<MessageValidationErrors | null>,
+  ): Observable<MessageValidationErrors | null> {
+    if (this.isFileAlreadyUploaded(fileEvent)) {
+      return of(null);
+    }
+
+    const errors = this.validateFile(fileEvent, fileValidators);
+
+    if (!errors) {
+      return requestUpload(fileEvent.file);
+    }
+
+    // Report the failure on the progress stream as well, so a file list can show it next to the file the same way it
+    // shows a failed upload, without having to wait for the control's validation to settle.
+    return defer(() => {
+      this.uploadProgressSubject.next({ file: fileEvent.file, progress: null, errors });
+
+      return of(errors);
+    });
+  }
+
+  private validateFile(fileEvent: FileUploadEvent, fileValidators: MessageValidatorFn[]): MessageValidationErrors {
+    const errors = fileValidators.reduce((acc, validator) => {
+      const next = validator({ value: fileEvent } as AbstractControl);
+      return next ? { ...acc, ...next } : acc;
+    }, {} as MessageValidationErrors);
+
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 
   private isFileAlreadyUploaded({ file, uuid }: FileUploadEvent): boolean {
     return !(file instanceof File) || !!uuid;
   }
 
-  private isFileEmpty({ file }: FileUploadEvent): boolean {
-    return !(file instanceof File) || file.size === 0;
-  }
-
-  private isFileLarge({ file }: FileUploadEvent): boolean {
-    return !(file instanceof File) || file.size >= 20 * 1024 * 1024;
-  }
-
-  private createValidationError(file: File, error: HttpErrorResponse): MessageValidationErrors {
-    return { upload: `${file.name} ${error.error?.message ?? error.message}` };
+  // The list already shows the file name next to the error, and the server's message is not user-facing copy.
+  private createValidationError(): MessageValidationErrors {
+    return { upload: UPLOAD_FAILED_MESSAGE };
   }
 }

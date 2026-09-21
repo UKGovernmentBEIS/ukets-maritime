@@ -3,11 +3,14 @@ package uk.gov.mrtm.api.integration.external.common.domain;
 import io.hypersistence.utils.hibernate.type.json.JsonType;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -23,7 +26,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @SuperBuilder
 @MappedSuperclass
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public abstract class BaseStagingEntity {
 
     @Id
@@ -31,18 +33,21 @@ public abstract class BaseStagingEntity {
     private Long id;
 
     @Column(name = "account_id")
-    @EqualsAndHashCode.Include()
+    @NotNull
     private Long accountId;
 
     @Basic(fetch = FetchType.LAZY)
     @Type(JsonType.class)
     @Column(name = "payload", columnDefinition = "jsonb")
+    @NotNull
     private ThirdPartyDataProviderPayload payload;
 
     @Column(name = "provider_name")
+    @NotNull
     private String providerName;
 
     @Column(name = "created_on")
+    @NotNull
     private LocalDateTime createdOn;
 
     @Column(name = "updated_on")
@@ -50,4 +55,13 @@ public abstract class BaseStagingEntity {
 
     @Column(name = "imported_on")
     private LocalDateTime importedOn;
+
+    @NotNull
+    @Enumerated(EnumType.STRING)
+    @Column(name = "import_status")
+    private StagingImportStatus importStatus;
+
+    @NotNull
+    @Column(name = "import_in_progress")
+    private boolean importInProgress;
 }

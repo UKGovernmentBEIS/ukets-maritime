@@ -2,6 +2,7 @@ import { Route } from '@angular/router';
 
 import {
   REQUEST_NOTIFICATION_DATA,
+  REQUEST_NOTIFICATION_PREVIEW_DOCUMENTS_ACTION,
   REQUEST_NOTIFICATION_SERVICE,
 } from '@requests/common/emp/components/request-notification-form/request-notification-form.provider';
 import { canActivateRfiOrRdeRequestGuard } from '@requests/common/emp/guards';
@@ -58,6 +59,7 @@ export const REQUEST_DEADLINE_EXTENSION_ROUTES: Route[] = [
           backlink: backlinkResolver(RdeWizardSteps.SUMMARY, RdeWizardSteps.RDE_DEADLINE_EXTENSION),
         },
         providers: [
+          { provide: REQUEST_NOTIFICATION_PREVIEW_DOCUMENTS_ACTION, useValue: 'RDE_SAVE' },
           { provide: REQUEST_NOTIFICATION_SERVICE, useExisting: RequestDeadlineExtensionStore },
           {
             provide: REQUEST_NOTIFICATION_DATA,

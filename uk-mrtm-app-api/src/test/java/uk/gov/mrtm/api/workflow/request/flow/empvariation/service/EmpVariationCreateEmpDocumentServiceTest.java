@@ -25,6 +25,7 @@ import uk.gov.mrtm.api.emissionsmonitoringplan.domain.dto.EmissionsMonitoringPla
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanQueryService;
 import uk.gov.mrtm.api.emissionsmonitoringplan.service.EmissionsMonitoringPlanService;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTemplateType;
+import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.EmpCreateDocumentService;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRequestInfo;
@@ -129,7 +130,7 @@ class EmpVariationCreateEmpDocumentServiceTest {
     	when(templateAccountDataCollectFromEmpVariationService.collect(requestTask)).thenReturn(accountData);
 		when(empCreateDocumentService.generateDocumentAsyncConvert(empIssuanceRequest, requestTaskId, decision.getSignatory(), emp,
 				MrtmDocumentTemplateType.EMP, stage, variationHistory, empIssuanceRequest.getSubmissionDate(),
-				empIssuanceRequest.getEndDate(), accountData)).thenReturn(expectedResult);
+				empIssuanceRequest.getEndDate(), accountData, DocumentGenerationContextType.EMP_REVIEW)).thenReturn(expectedResult);
     	
     	String result = cut.createAsyncConvert(requestTaskId, stage, decision);
 
@@ -145,7 +146,7 @@ class EmpVariationCreateEmpDocumentServiceTest {
     	verify(templateAccountDataCollectFromEmpVariationService).collect(requestTask);
     	verify(empCreateDocumentService, times(1)).generateDocumentAsyncConvert(request, requestTaskId, decision.getSignatory(), emp,
                 MrtmDocumentTemplateType.EMP, stage, variationHistory, empIssuanceRequest.getSubmissionDate(),
-                empIssuanceRequest.getEndDate(), accountData);
+                empIssuanceRequest.getEndDate(), accountData, DocumentGenerationContextType.EMP_REVIEW);
     	
         
     }

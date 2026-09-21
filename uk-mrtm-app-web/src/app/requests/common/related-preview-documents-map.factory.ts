@@ -57,6 +57,24 @@ export const taskRelatedPreviewDocumentsMapFactory = (store: RequestTaskStore): 
       },
     ];
 
+    const rfiSubmitPreviewDocuments = [
+      {
+        filename: 'letter_preview.pdf',
+        documentType: 'IN_RFI',
+        visibleInRelatedActions: false,
+        visibleInNotify: true,
+      },
+    ];
+
+    const rdeSubmitPreviewDocuments = [
+      {
+        filename: 'letter_preview.pdf',
+        documentType: 'IN_RDE',
+        visibleInRelatedActions: false,
+        visibleInNotify: true,
+      },
+    ];
+
     return {
       EMP_NOTIFICATION_APPLICATION_REVIEW: empNotificationPreviewDocuments,
       EMP_NOTIFICATION_APPLICATION_PEER_REVIEW: empNotificationPreviewDocuments,
@@ -67,5 +85,9 @@ export const taskRelatedPreviewDocumentsMapFactory = (store: RequestTaskStore): 
       SITE_VISIT_APPLICATION_REVIEW: siteVisitApplicationPreviewDocuments(false),
       SITE_VISIT_WAIT_FOR_PEER_REVIEW: siteVisitApplicationPreviewDocuments(false),
       SITE_VISIT_APPLICATION_PEER_REVIEW: siteVisitApplicationPreviewDocuments(true),
+      // RFI/RDE sub-flows run under the parent task's type (e.g. tasks/:id/rfi/submit/notification),
+      // so they are keyed by the allowed request task action instead of the request task type.
+      RFI_SAVE: rfiSubmitPreviewDocuments,
+      RDE_SAVE: rdeSubmitPreviewDocuments,
     };
   });

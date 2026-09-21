@@ -64,7 +64,6 @@ describe('ReviewDecisionComponent', () => {
       'Operator amends needed',
       'Reason for required change 1',
       'Upload a file (Optional)',
-      'Choose files',
       'Notes (optional)',
     ]);
   });
@@ -79,7 +78,6 @@ describe('ReviewDecisionComponent', () => {
       'Operator amends needed',
       'Reason for required change 1',
       'Upload a file (Optional)',
-      'Choose files',
       'Notes (optional)',
     ]);
   });

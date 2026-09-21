@@ -1,0 +1,21 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  caption="Import data"
+  heading="Select task"
+  [isTwoThirds]="true"
+  (formSubmit)="onSubmit()">
+  <div class="govuk-inset-text">
+    Select one workflow at a time. After completing this import, you can start a new one for a different workflow.
+  </div>
+  <div
+    govuk-select
+    widthClass="govuk-!-width-full"
+    [options]="availableTasks()"
+    formControlName="requestType"
+    label="Task"></div>
+  <govuk-warning-text assistiveText="This action will replace any previous existing data." />
+</mrtm-wizard-step>
+<div>
+  <hr class="govuk-section-break govuk-section-break--m govuk-section-break--visible" aria-hidden="true" />
+  <a govukLink routerLink="../../">Return to: API data management</a>
+</div>

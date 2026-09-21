@@ -9,9 +9,12 @@ public interface RequestTaskDocumentAsyncGeneratedDataPayload {
     void setFinalDocumentsGenerationInProgress(Boolean finalDocumentsGenerationInProgress);
     
     void setFinalDocumentsGenerationSuccessful(Boolean finalDocumentsGenerationSuccessful);
-    
+
     Map<RequestGeneratedFileType, RequestTaskPreviewFileInfoDTO> getPreviewFiles();
-    
+
     boolean canPreviewOfficialDocument();
-    
+
+    void setFailureNotificationSent(Boolean failureNotificationSent);
+
+    Boolean getFailureNotificationSent();
 }

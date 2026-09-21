@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 
 import {
   REQUEST_NOTIFICATION_DATA,
+  REQUEST_NOTIFICATION_PREVIEW_DOCUMENTS_ACTION,
   REQUEST_NOTIFICATION_SERVICE,
 } from '@requests/common/emp/components/request-notification-form/request-notification-form.provider';
 import { canActivateRfiOrRdeRequestGuard } from '@requests/common/emp/guards';
@@ -55,6 +56,7 @@ export const REQUEST_FOR_INFORMATION_ROUTES: Routes = [
           backlink: backlinkResolver(RfiWizardSteps.SUMMARY, RfiWizardSteps.RFI_REQUEST),
         },
         providers: [
+          { provide: REQUEST_NOTIFICATION_PREVIEW_DOCUMENTS_ACTION, useValue: 'RFI_SAVE' },
           { provide: REQUEST_NOTIFICATION_SERVICE, useExisting: RequestForInformationStore },
           {
             provide: REQUEST_NOTIFICATION_DATA,

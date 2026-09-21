@@ -54,7 +54,8 @@ public class EmpVariationNotifyOperatorRegulatorLedActionHandler
                   (EmpVariationApplicationSubmitRegulatorLedRequestTaskPayload) requestTask.getPayload();
         requestTaskPayload.setFinalDocumentsGenerationInProgress(true);
         requestTaskPayload.setFinalDocumentsGenerationSuccessful(null);
-        
+        requestTaskPayload.setFailureNotificationSent(false);
+
         // generate emp
         if(requestPayload.shouldGenerateEmpDocument()) {
         	empReviewDocumentGenerateService.generate(EmpReviewDocumentGenerateDto.builder()

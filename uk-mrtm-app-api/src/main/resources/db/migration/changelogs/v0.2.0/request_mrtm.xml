@@ -497,4 +497,54 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_insert_RFI_RDE_SAVE_action_types" author="pkouris">
+        <sql>
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'RFI_SAVE', false);
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'RDE_SAVE', false);
+
+            INSERT INTO public.request_task_type_action_type (request_task_type_id, request_task_action_type_id)
+            SELECT rtt.id, rtat.id
+            FROM public.request_task_type rtt, public.request_task_action_type rtat
+            WHERE rtt.code IN (
+                'EMP_ISSUANCE_APPLICATION_REVIEW',
+                'EMP_ISSUANCE_WAIT_FOR_AMENDS',
+                'EMP_VARIATION_APPLICATION_REVIEW',
+                'EMP_VARIATION_WAIT_FOR_AMENDS',
+                'EMP_NOTIFICATION_APPLICATION_REVIEW',
+                'VIR_APPLICATION_REVIEW'
+            )
+            AND rtat.code = 'RFI_SAVE';
+
+            INSERT INTO public.request_task_type_action_type (request_task_type_id, request_task_action_type_id)
+            SELECT rtt.id, rtat.id
+            FROM public.request_task_type rtt, public.request_task_action_type rtat
+            WHERE rtt.code IN (
+                'EMP_ISSUANCE_APPLICATION_REVIEW',
+                'EMP_ISSUANCE_WAIT_FOR_AMENDS',
+                'EMP_ISSUANCE_WAIT_FOR_PEER_REVIEW',
+                'EMP_VARIATION_APPLICATION_REVIEW',
+                'EMP_VARIATION_WAIT_FOR_AMENDS',
+                'EMP_VARIATION_WAIT_FOR_PEER_REVIEW'
+            )
+            AND rtat.code = 'RDE_SAVE';
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_action_type_id IN (
+                    SELECT id FROM public.request_task_action_type
+                    WHERE code IN ('RFI_SAVE', 'RDE_SAVE')
+                );
+
+                DELETE FROM public.request_task_action_type
+                WHERE code IN ('RFI_SAVE', 'RDE_SAVE');
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

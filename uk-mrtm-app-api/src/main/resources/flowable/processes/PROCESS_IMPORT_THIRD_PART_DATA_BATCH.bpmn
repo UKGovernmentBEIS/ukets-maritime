@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.46.1">
+  <process id="PROCESS_IMPORT_THIRD_PART_DATA_BATCH" name="Batch Import Third Party Data Process" isExecutable="true">
+    <startEvent id="StartEvent_1" flowable:formFieldValidation="true" flowable:async="true"/>
+    <sequenceFlow id="Flow_1opujsq" sourceRef="StartEvent_1" targetRef="Activity_131ih32" />
+    <endEvent id="Event_05qh1be">
+      <incoming>Flow_1d2oip9</incoming>
+    </endEvent>
+    <sequenceFlow id="Flow_1d2oip9" sourceRef="Activity_01feqfw" targetRef="Event_05qh1be" />
+    <serviceTask id="Activity_01feqfw" flowable:async="true" name="Import completed" flowable:delegateExpression="#{thirdPartyDataManagementImportCompletedHandlerFlowable}">
+      <incoming>Flow_1460e76</incoming>
+      <outgoing>Flow_1d2oip9</outgoing>
+    </serviceTask>
+    <serviceTask id="Activity_131ih32" flowable:async="true" name="Import data" flowable:delegateExpression="#{thirdPartyDataManagementImportJobHandlerFlowable}">
+      <incoming>Flow_1opujsq</incoming>
+      <outgoing>Flow_1460e76</outgoing>
+      <multiInstanceLoopCharacteristics isSequential="false" flowable:collection="transactionJobs" flowable:elementVariable="jobId" />
+    </serviceTask>
+    <sequenceFlow id="Flow_1460e76" sourceRef="Activity_131ih32" targetRef="Activity_01feqfw" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_PROCESS_IMPORT_THIRD_PART_DATA_BATCH">
+    <bpmndi:BPMNPlane id="BPMNPlane_PROCESS_IMPORT_THIRD_PART_DATA_BATCH" bpmnElement="PROCESS_IMPORT_THIRD_PART_DATA_BATCH">
+      <bpmndi:BPMNShape id="BPMNShape_Activity_131ih32" bpmnElement="Activity_131ih32">
+        <omgdc:Bounds x="290" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1rn1w46_di" bpmnElement="Activity_01feqfw">
+        <omgdc:Bounds x="540" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_Event_05qh1be" bpmnElement="Event_05qh1be">
+        <omgdc:Bounds x="746" y="106" width="28" height="28" />
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds x="772" y="203" width="56" height="14" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_StartEvent_1" bpmnElement="StartEvent_1">
+        <omgdc:Bounds x="155" y="105" width="30" height="30" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="BPMNEdge_Flow_1opujsq" bpmnElement="Flow_1opujsq">
+        <omgdi:waypoint x="185" y="120" />
+        <omgdi:waypoint x="290" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1d2oip9_di" bpmnElement="Flow_1d2oip9">
+        <omgdi:waypoint x="640" y="120" />
+        <omgdi:waypoint x="746" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1460e76_di" bpmnElement="Flow_1460e76">
+        <omgdi:waypoint x="390" y="120" />
+        <omgdi:waypoint x="540" y="120" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

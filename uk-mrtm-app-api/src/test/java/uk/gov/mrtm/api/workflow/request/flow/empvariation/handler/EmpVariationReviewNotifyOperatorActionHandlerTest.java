@@ -87,6 +87,7 @@ class EmpVariationReviewNotifyOperatorActionHandlerTest {
         
         assertThat(requestTaskPayload.getFinalDocumentsGenerationInProgress()).isTrue();
         assertThat(requestTaskPayload.getFinalDocumentsGenerationSuccessful()).isNull();
+        assertThat(requestTaskPayload.getFailureNotificationSent()).isFalse();
 
         verify(requestTaskService, times(1)).findTaskByIdForUpdate(requestTaskId);
         verify(empVariationReviewService,times(1))

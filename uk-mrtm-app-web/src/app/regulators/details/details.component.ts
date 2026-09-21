@@ -162,10 +162,11 @@ export class DetailsComponent implements OnInit {
         {
           validators: [
             ...(isNil(this.activatedRoute?.snapshot?.paramMap?.get('userId')) ? [requiredFileValidator()] : []),
-            FileValidators.validContentTypes(FileType.BMP, 'must be BMP'),
-            FileValidators.maxFileSize(0.2, 'must be smaller than 200KB'),
-            FileValidators.maxImageDimensionsSize(240, 140, 'must be 240 x 140 pixels'),
+            FileValidators.validContentTypes(FileType.BMP, 'The selected file must be BMP'),
+            FileValidators.maxFileSize(0.2, 'The selected file must be smaller than 200KB'),
+            FileValidators.maxImageDimensionsSize(240, 140),
             FileValidators.notEmpty(),
+            FileValidators.maxFileNameLength(),
           ],
           updateOn: 'change',
         },

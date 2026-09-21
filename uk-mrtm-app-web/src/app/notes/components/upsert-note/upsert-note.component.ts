@@ -21,7 +21,7 @@ import {
 import { OperatorAccountsStatusColorPipe } from '@accounts/pipes';
 import { OperatorAccountsStore, selectAccount } from '@accounts/store';
 import { NotesService } from '@notes/services';
-import { createCommonFileValidators, MultipleFileInputComponent } from '@shared/components';
+import { createMultipleFileValidators, MultipleFileInputComponent } from '@shared/components';
 import { FileUploadService } from '@shared/services';
 
 interface ViewModel {
@@ -87,7 +87,7 @@ export class UpsertNoteComponent implements OnInit {
       },
 
       {
-        validators: createCommonFileValidators(false),
+        validators: createMultipleFileValidators(false),
         asyncValidators: [
           this.fileUploadService.uploadMany((file) =>
             this.notesService.uploadNoteFile(+this.accountId, this.workflowId, file),

@@ -8,6 +8,7 @@ import uk.gov.mrtm.api.account.domain.MrtmAccount;
 import uk.gov.mrtm.api.account.repository.MrtmAccountRepository;
 import uk.gov.mrtm.api.integration.external.aer.validation.ExternalAerValidator;
 import uk.gov.mrtm.api.integration.external.common.MrtmStagingPayloadType;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.mrtm.api.integration.external.verification.domain.ExternalAerVerification;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerification;
 import uk.gov.mrtm.api.integration.external.verification.domain.StagingAerVerificationEntity;
@@ -64,6 +65,7 @@ public class ExternalAerVerificationService {
             stagingAerEntity.setPayload(staging);
             stagingAerEntity.setUpdatedOn(now);
             stagingAerEntity.setProviderName(thirdPartyDataProvider.getName());
+            stagingAerEntity.setImportStatus(StagingImportStatus.NEW);
 
             stagingAerVerificationRepository.save(stagingAerEntity);
         } else {
@@ -75,6 +77,7 @@ public class ExternalAerVerificationService {
                     .createdOn(now)
                     .updatedOn(now)
                     .providerName(thirdPartyDataProvider.getName())
+                    .importStatus(StagingImportStatus.NEW)
                     .build()
             );
         }

@@ -76,7 +76,7 @@ export class BasePage<C> {
   }
 
   get fileDeleteButtons(): HTMLButtonElement[] {
-    return this.queryAll<HTMLButtonElement>('.moj-multi-file-upload__delete');
+    return this.queryAll<HTMLButtonElement>('mrtm-file-upload-list button[name="delete"]');
   }
 
   set filesValue(value: File[]) {
@@ -84,7 +84,9 @@ export class BasePage<C> {
   }
 
   get filesText(): string[] {
-    return this.queryAll<HTMLDivElement>('.moj-multi-file-upload__message')?.map((row) => row.textContent.trim());
+    return this.queryAll<HTMLElement>('mrtm-file-upload-list .file-upload__filename')?.map((row) =>
+      row.textContent.trim(),
+    );
   }
 
   get summariesContents(): string[] {

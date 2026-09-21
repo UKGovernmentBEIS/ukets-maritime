@@ -13,6 +13,7 @@ import uk.gov.mrtm.api.integration.external.aer.domain.StagingAerEntity;
 import uk.gov.mrtm.api.integration.external.aer.repository.StagingAerRepository;
 import uk.gov.mrtm.api.integration.external.aer.transform.ExternalAerMapper;
 import uk.gov.mrtm.api.integration.external.aer.validation.ExternalAerValidator;
+import uk.gov.mrtm.api.integration.external.common.domain.StagingImportStatus;
 import uk.gov.netz.api.authorization.core.domain.AppAuthority;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
 import uk.gov.netz.api.common.utils.DateService;
@@ -24,6 +25,7 @@ import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -68,6 +70,7 @@ class ExternalAerServiceTest {
             .year(year)
             .createdOn(now)
             .updatedOn(now)
+            .importStatus(StagingImportStatus.NEW)
             .providerName("provider name")
             .build();
 
@@ -118,6 +121,7 @@ class ExternalAerServiceTest {
             .payload(staging)
             .accountId(accountId)
             .updatedOn(now)
+            .importStatus(StagingImportStatus.NEW)
             .providerName("provider name")
             .build();
 
