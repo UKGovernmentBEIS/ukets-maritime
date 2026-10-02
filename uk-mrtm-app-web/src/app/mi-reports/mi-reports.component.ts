@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, Signal, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 
@@ -21,6 +21,7 @@ import { createTablePage, miReportTypeDescriptionMap, miReportTypeLinkMap } from
 export class MiReportsComponent {
   private readonly route = inject(ActivatedRoute);
 
+  readonly withHeader = input<boolean>(true);
   readonly data = toSignal(this.route.data.pipe(map((data) => data.miReports as MiReportSystemSearchResult[])));
   readonly currentPage = signal(1);
   readonly currentPageData = computed(() =>
@@ -34,5 +35,7 @@ export class MiReportsComponent {
 
   readonly pageSize = 10;
   readonly miReportTypeLinkMap = miReportTypeLinkMap;
-  readonly tableColumns: GovukTableColumn[] = [{ field: 'description', header: 'MI Report Type' }];
+  readonly tableColumns: Signal<Array<GovukTableColumn>> = computed(() => [
+    { field: 'description', header: 'MI Report Type', hiddenHeader: !this.withHeader() },
+  ]);
 }

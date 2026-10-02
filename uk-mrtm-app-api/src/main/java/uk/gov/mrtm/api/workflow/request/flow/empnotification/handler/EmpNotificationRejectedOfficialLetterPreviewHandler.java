@@ -9,7 +9,7 @@ import uk.gov.mrtm.api.workflow.request.flow.empnotification.domain.EmpNotificat
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentAbstractHandler;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentAbstractHandler;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestTaskService;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class EmpNotificationRejectedOfficialLetterPreviewHandler extends PreviewDocumentAbstractHandler {
+public class EmpNotificationRejectedOfficialLetterPreviewHandler extends SyncPreviewDocumentAbstractHandler {
 
     private final PreviewOfficialNoticeService previewOfficialNoticeService;
     private final FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;

@@ -73,7 +73,7 @@ export class EuXmlImportProcessComponent {
 
   readonly xmlErrors: WritableSignal<XmlValidationError[]> = signal([]);
   readonly parseWarnings: WritableSignal<XmlValidationError[]> = signal([]);
-  readonly parsedData: WritableSignal<EuXmlImportData | null> = signal(null);
+  readonly parsedData: WritableSignal<Partial<EuXmlImportData> | null> = signal(null);
   readonly saveError: WritableSignal<boolean> = signal(false);
   readonly showConfirmation: WritableSignal<boolean> = signal(false);
   readonly wizardStep = viewChild(DataParserWizardStepComponent);

@@ -2,7 +2,7 @@ import { inject, Service } from '@angular/core';
 
 import { catchError, map, Observable, throwError } from 'rxjs';
 
-import { RequestTaskActionProcessDTO, TasksService } from '@mrtm/api';
+import { EmpEmissionSources, RequestTaskActionProcessDTO, TasksService } from '@mrtm/api';
 
 import {
   BusinessErrorService,
@@ -51,7 +51,7 @@ export class EuXmlImportSaveService {
     );
   }
 
-  save(importData: EuXmlImportData): Observable<void> {
+  save(importData: Partial<EuXmlImportData>): Observable<void> {
     const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
     const requestTaskId = this.store.select(requestTaskQuery.selectRequestTaskId)();
     const currentPayload = this.store.state.requestTaskItem.requestTask.payload as Record<string, any>;
@@ -93,7 +93,7 @@ export class EuXmlImportSaveService {
 
     const subtaskCompletion: Record<string, boolean> = {
       [EMISSIONS_SUB_TASK]: emissionsCompleted,
-      [EMISSION_SOURCES_SUB_TASK]: isEmissionSourcesCompleted(mergedPlan.sources),
+      [EMISSION_SOURCES_SUB_TASK]: isEmissionSourcesCompleted(mergedPlan.sources as EmpEmissionSources),
       [CONTROL_ACTIVITIES_SUB_TASK]: isControlActivitiesCompleted(mergedPlan.controlActivities),
       [ABBREVIATIONS_SUB_TASK]: isAbbreviationsCompleted(mergedPlan.abbreviations),
       [MANAGEMENT_PROCEDURES_SUB_TASK]: isManagementProceduresCompleted(mergedPlan.managementProcedures),

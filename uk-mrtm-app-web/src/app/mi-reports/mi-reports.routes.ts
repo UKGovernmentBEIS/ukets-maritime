@@ -3,18 +3,22 @@ import { Routes } from '@angular/router';
 import { miReportTypeDescriptionMap } from '@mi-reports/core/mi-report';
 import { MiReportType } from '@mi-reports/core/mi-report-type.enum';
 import { MiReportsListGuard } from '@mi-reports/core/mi-reports-list.guard';
+import { CUSTOM_REPORTS_ROUTE_PREFIX } from '@mi-reports/custom-reports';
+import { clearCustomReportsPermissionsGuard } from '@mi-reports/custom-reports/custom-reports.guard';
+import { loadMiReportMainComponent } from '@mi-reports/mi-reports.component-loaders';
 import { miReportUseCaseMap } from '@mi-reports/use-cases';
 
 export const MI_REPORTS_ROUTES: Routes = [
   {
     path: '',
     canActivate: [MiReportsListGuard],
+    canDeactivate: [clearCustomReportsPermissionsGuard],
     resolve: { miReports: MiReportsListGuard },
     children: [
       {
         path: '',
         title: 'MI reports',
-        loadComponent: () => import('@mi-reports/mi-reports.component').then((c) => c.MiReportsComponent),
+        loadComponent: loadMiReportMainComponent,
       },
       {
         path: 'custom',
@@ -66,6 +70,10 @@ export const MI_REPORTS_ROUTES: Routes = [
         },
         providers: miReportUseCaseMap[MiReportType.LIST_OF_VERIFICATION_BODY_USERS],
         loadComponent: () => import('@mi-reports/report-preview').then((c) => c.ReportPreviewComponent),
+      },
+      {
+        path: CUSTOM_REPORTS_ROUTE_PREFIX,
+        loadChildren: () => import('@mi-reports/custom-reports').then((r) => r.CUSTOM_REPORTS_ROUTES),
       },
     ],
   },

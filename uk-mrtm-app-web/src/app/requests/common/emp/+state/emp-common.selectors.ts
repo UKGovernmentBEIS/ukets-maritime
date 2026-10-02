@@ -258,6 +258,8 @@ const selectHasReview: StateSelector<RequestTaskState, boolean> = createDescendi
       'EMP_ISSUANCE_WAIT_FOR_PEER_REVIEW',
       'EMP_VARIATION_APPLICATION_REVIEW',
       'EMP_VARIATION_APPLICATION_PEER_REVIEW',
+      'EMP_ISSUANCE_WAIT_FOR_AMENDS',
+      'EMP_VARIATION_WAIT_FOR_AMENDS',
     ].includes(requestTaskType),
 );
 

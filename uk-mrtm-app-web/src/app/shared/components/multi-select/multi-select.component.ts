@@ -2,6 +2,7 @@ import { AsyncPipe } from '@angular/common';
 import {
   ChangeDetectorRef,
   Component,
+  computed,
   contentChildren,
   effect,
   ElementRef,
@@ -17,7 +18,7 @@ import { ControlValueAccessor, FormGroupDirective, NgControl, NgForm, UntypedFor
 import { BehaviorSubject, Subject } from 'rxjs';
 
 import { DestroySubject } from '@netz/common/services';
-import { ErrorMessageComponent, FormService, SafeHtmlPipe } from '@netz/govuk-components';
+import { ErrorMessageComponent, FormService, LabelSizeType, SafeHtmlPipe } from '@netz/govuk-components';
 
 import { MultiSelectItemComponent } from '@shared/components';
 import { DOCUMENT_EVENT } from '@shared/services';
@@ -54,6 +55,7 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit {
     return this.shouldDisplayErrors;
   }
 
+  readonly labelSize = input<LabelSizeType>('normal');
   readonly label = input<string>();
   readonly hint = input<string>();
   readonly showErrors = input<boolean>();
@@ -63,9 +65,28 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit {
     { descendants: true },
   );
 
+  readonly currentLabelSize = computed(() => {
+    switch (this.labelSize()) {
+      case 'small':
+        return 'govuk-label govuk-label--s';
+      case 'medium':
+        return 'govuk-label govuk-label--m';
+      case 'large':
+        return 'govuk-label govuk-label--l';
+      default:
+        return 'govuk-label';
+    }
+  });
+
+  readonly itemMap = computed(() =>
+    this.options().reduce(
+      (result, option) => ({ ...result, [option.itemValue()]: option.label() }),
+      {} as { [key: string]: string },
+    ),
+  );
+
   isOpen = new BehaviorSubject<boolean>(false);
   isDisabled: boolean;
-  itemMap: { [key: string]: string };
   hasBeenTouched = false;
   readonly currentValue = signal<any[]>([]);
   private onBlur: () => any;
@@ -92,11 +113,8 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit {
 
     effect(() => {
       const options = this.options();
-
-      this.itemMap = options.reduce(
-        (result, option) => ({ ...result, [option.itemValue()]: option.label() }),
-        {} as { [key: string]: string },
-      );
+      // Track the item values so the control value is written again once the item inputs are set
+      options.forEach((option) => option.itemValue());
 
       options.forEach((option, index) => {
         option.groupIdentifier = this.identifier;
@@ -139,6 +157,11 @@ export class MultiSelectComponent implements ControlValueAccessor, OnInit {
           this.hasBeenTouched = true;
         }
       });
+    // Submit and validity changes do not touch this view, so without these the error
+    // message would not be rendered until something else marks the view as dirty
+    this.form?.ngSubmit.pipe(takeUntil(this.destroy$)).subscribe(() => this.cdRef.markForCheck());
+    this.control?.statusChanges.pipe(takeUntil(this.destroy$)).subscribe(() => this.cdRef.markForCheck());
+
     this.isOpen.pipe(takeUntil(this.destroy$), skip(1)).subscribe((res) => {
       if (!res) {
         this.onBlur();

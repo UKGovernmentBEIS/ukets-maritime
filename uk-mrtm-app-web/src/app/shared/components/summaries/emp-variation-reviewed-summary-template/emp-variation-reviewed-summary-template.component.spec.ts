@@ -92,6 +92,8 @@ describe('EmpVariationReviewedSummaryTemplateComponent', () => {
     expect(page.summariesContents).toEqual([
       'Emissions plan',
       'UK-E-MA-00020 v2.pdf',
+      'Emissions plan application',
+      'Emissions monitoring plan',
       'Decision',
       'Rejected',
       'Users',

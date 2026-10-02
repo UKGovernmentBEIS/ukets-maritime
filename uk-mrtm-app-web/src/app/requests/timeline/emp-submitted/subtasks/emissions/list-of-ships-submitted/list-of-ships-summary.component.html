@@ -5,8 +5,8 @@
 </div>
 <mrtm-list-of-ships-summary-template [data]="ships" editUrl="./ships" />
 
-@if (reviewGroupDecision(); as reviewGroupDecision) {
-  <mrtm-review-decision-summary-template [reviewDecision]="reviewGroupDecision" />
+@if (reviewGroupDecision() || isRegulator()) {
+  <mrtm-review-decision-summary-template [reviewDecision]="reviewGroupDecision()" />
 }
 
 <div>

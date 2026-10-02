@@ -1,6 +1,7 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { BreadcrumbService } from '@netz/common/navigation';
 import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
 @Component({
@@ -10,4 +11,10 @@ import { LinkDirective, PanelComponent } from '@netz/govuk-components';
   templateUrl: './request-for-information-respond-success.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RequestForInformationRespondSuccessComponent {}
+export class RequestForInformationRespondSuccessComponent implements OnInit {
+  private readonly breadcrumbService = inject(BreadcrumbService);
+
+  public ngOnInit(): void {
+    this.breadcrumbService.showDashboardBreadcrumb();
+  }
+}

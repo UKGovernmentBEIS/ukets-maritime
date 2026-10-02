@@ -18,6 +18,12 @@ You can then access the final jar file that contains the API here :
 
     uk-mrtm-app-api\target
 
+### EMP issuance email links
+
+Approved EMP issuance emails attach the official notice and include a download link to the EMP document stored in S3. If no EMP document is present, the email contains only the official-notice attachment. Deemed-withdrawn emails continue to use attachments. Recipient selection and registry notifications are unchanged.
+
+Local linked EMP documents are stored under `s3://uk-ets-files/mrtm/`, with browser URLs such as `http://localhost:4566/uk-ets-files/mrtm/{uuid}`. Captured emails are available at http://localhost:8025. Deployed environments must set `EMAIL_LINK_PUBLIC_BASE_URL` to their CloudFront/DNS origin and may override the container and prefix through the existing environment variables. This POC does not provision cloud resources.
+
 For the build to succeed uk-netz-swagger-coverage-maven-plugin must have been built prior to building the UK MRTM API application
 
 ## REST API Documentation

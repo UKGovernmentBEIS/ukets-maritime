@@ -3,7 +3,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ControlContainer, FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
 
-import { LabelDirective } from '../directives';
+import { InputSuffixDirective, LabelDirective } from '../directives';
 import { GovukValidators } from '../error-message';
 import { LabelSizeType } from './label-size.type';
 import { TextInputComponent } from './text-input.component';
@@ -253,5 +253,39 @@ describe('TextInputComponent', () => {
     fixtureTestComponent.detectChanges();
 
     expect(label.className).toEqual('govuk-label govuk-label--l');
+  });
+
+  describe('with projected suffix content', () => {
+    @Component({
+      imports: [TextInputComponent, InputSuffixDirective, ReactiveFormsModule],
+      standalone: true,
+      template: `
+        <div govuk-text-input [formControl]="control" label="Search" suffix="ignored">
+          <span govukInputSuffix class="icon-suffix">icon</span>
+        </div>
+      `,
+    })
+    class SuffixContentTestComponent {
+      control = new FormControl();
+    }
+
+    it('should render the projected content as the suffix instead of the text suffix', async () => {
+      TestBed.resetTestingModule();
+      await TestBed.configureTestingModule({
+        imports: [SuffixContentTestComponent],
+        providers: [ControlContainer],
+      }).compileComponents();
+      const fixture = TestBed.createComponent(SuffixContentTestComponent);
+      fixture.detectChanges();
+
+      const wrapper: HTMLElement = fixture.nativeElement.querySelector('.govuk-input__wrapper');
+      const suffixes = wrapper.querySelectorAll('.govuk-input__suffix');
+
+      expect(suffixes).toHaveLength(1);
+      expect(suffixes[0].classList).toContain('icon-suffix');
+      expect(suffixes[0].getAttribute('aria-hidden')).toBe('true');
+      expect(suffixes[0].textContent).toBe('icon');
+      expect(wrapper.firstElementChild.tagName).toBe('INPUT');
+    });
   });
 });

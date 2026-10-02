@@ -1,0 +1,84 @@
+<mrtm-wizard-step
+  [formGroup]="formGroup"
+  [caption]="caption()"
+  [heading]="title()"
+  [isTwoThirds]="false"
+  (formSubmit)="onSubmit()"
+  [showCancelLink]="formMode() === 'edit'"
+  cancelLinkPath="../../../"
+  submitText="Save report">
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <div
+        govuk-text-input
+        formControlName="reportName"
+        labelSize="small"
+        label="Report name"
+        hint="Use a clear, specific name - for example 'Monthly applications report'"></div>
+
+      <div
+        mrtm-multi-select
+        formControlName="categories"
+        labelSize="small"
+        label="Categories"
+        hint="Choose the category that best describes this report">
+        @for (category of availableCategories(); track category.value) {
+          <div mrtm-multi-select-item [itemValue]="category.value" [label]="category.text"></div>
+        }
+      </div>
+
+      <div
+        govuk-textarea
+        formControlName="description"
+        labelSize="small"
+        label="Description"
+        [maxLength]="10000"
+        hint="Explain what the report returns, which fields are included, and when a regulator might use it"></div>
+
+      <div
+        govuk-textarea
+        formControlName="queryDefinition"
+        labelSize="small"
+        label="SQL Query"
+        [maxLength]="50000"
+        hint="Enter a valid read-only SELECT query. INSERT, UPDATE, DELETE and DROP statements are not permitted"></div>
+      <button type="button" govukSecondaryButton (click)="onPreviewResults()">Preview results</button>
+    </div>
+    <div class="govuk-grid-column-one-third">
+      <aside class="app-mi-custom-reports-guidance-items" role="complementary">
+        <h2 class="govuk-heading-m" id="mi-custom-report-guidance">Guidance</h2>
+        <nav role="navigation" aria-labelledby="mi-custom-report-guidance">
+          <ul class="govuk-list govuk-!-font-size-16">
+            <li>
+              <a
+                govukLink
+                href="https://beisgov.sharepoint.com/sites/UKETSDelShare/Shared%20Documents/Forms/AllItems.aspx?id=%2Fsites%2FUKETSDelShare%2FShared%20Documents%2FMaritime%2FMI%20Reports%2FCustom%20SQL">
+                SQL query guidance for METS
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
+    </div>
+  </div>
+
+  @if (previewData(); as previewData) {
+    <h3 class="govuk-heading-m">Preview of the first 10 results</h3>
+    <govuk-table
+      mrtmScrollablePane
+      ariaLabel="Report preview"
+      [columns]="previewColumns()"
+      [data]="previewData"
+      emptyTableText="No data to display" />
+  }
+
+  @if (formMode() === 'edit') {
+    <div
+      govuk-textarea
+      formControlName="reason"
+      labelSize="small"
+      label="Reason for change"
+      [maxLength]="10000"
+      hint="Explain why you are changing this report"></div>
+  }
+</mrtm-wizard-step>

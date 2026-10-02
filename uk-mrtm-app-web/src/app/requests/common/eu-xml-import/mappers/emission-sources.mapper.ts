@@ -1,22 +1,21 @@
-import { EmpEmissionCompliance, EmpEmissionFactors, EmpEmissionSources } from '@mrtm/api';
+import { EmpEmissionFactors, EmpEmissionSources } from '@mrtm/api';
 
 import { EuXmlMonitoringPlan } from '@requests/common/eu-xml-import/eu-xml-import.types';
 import { mapProcedureForm } from '@requests/common/eu-xml-import/mappers/procedure-form.mapper';
 import { XmlValidationError } from '@shared/types';
 
 export function mapEmissionSources(plan: EuXmlMonitoringPlan): {
-  emissionSources: EmpEmissionSources;
+  emissionSources: Partial<EmpEmissionSources>;
   procedureWarnings: XmlValidationError[];
 } {
   const warnings: XmlValidationError[] = [];
   const b5 = plan.emissionSources?.procedureAnnexITableB5;
-  const b8 = plan.fuelTypes?.procedureAnnexITableB8;
 
   const listCompletion = mapProcedureForm(b5, 'Emission sources (list completion procedure)', warnings);
-  const emissionFactors: EmpEmissionFactors = b8
-    ? { exist: false, factors: mapProcedureForm(b8, 'Emission sources (emission factors procedure)', warnings) }
-    : { exist: true };
-  const emissionCompliance: EmpEmissionCompliance = { exist: false };
+  // B8 (default values used) and B9 (biofuels information) do not map cleanly onto the combined
+  // Determination of Emissions Factors guard question, so those nodes are ignored and the
+  // question is left unanswered for the operator to complete explicitly.
+  const emissionFactors: EmpEmissionFactors = { exist: undefined };
 
-  return { emissionSources: { listCompletion, emissionFactors, emissionCompliance }, procedureWarnings: warnings };
+  return { emissionSources: { listCompletion, emissionFactors }, procedureWarnings: warnings };
 }

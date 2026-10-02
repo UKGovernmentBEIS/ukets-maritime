@@ -24,7 +24,21 @@ public interface EmpVariationReviewRequestActionMapper {
     @Mapping(target = "reviewGroupDecisions", source = "reviewGroupDecisions", qualifiedByName = "approvedReviewGroupDecisionsWithoutNotes")
     EmpVariationApplicationApprovedRequestActionPayload cloneApprovedPayloadIgnoreReasonAndDecisionsNotes(
         EmpVariationApplicationApprovedRequestActionPayload payload);
-	
+
+    @Mapping(target = "determination.reason", ignore = true)
+    @Mapping(target = "reviewGroupDecisions", ignore = true)
+    @Mapping(target = "empVariationDetailsReviewDecision", ignore = true)
+    @Mapping(target = "reviewAttachments", ignore = true)
+    EmpVariationApplicationDeemedWithdrawnRequestActionPayload cloneDeemedWithdrawnPayloadIgnoreReasonAndDecisionsNotes(
+        EmpVariationApplicationDeemedWithdrawnRequestActionPayload payload);
+
+    @Mapping(target = "determination.reason", ignore = true)
+    @Mapping(target = "reviewGroupDecisions", ignore = true)
+    @Mapping(target = "empVariationDetailsReviewDecision", ignore = true)
+    @Mapping(target = "reviewAttachments", ignore = true)
+    EmpVariationApplicationRejectedRequestActionPayload cloneRejectedPayloadIgnoreReasonAndDecisionsNotes(
+        EmpVariationApplicationRejectedRequestActionPayload payload);
+
 	@Named("approvedVariationDetailsReviewDecisionWithoutNotes")
     default EmpVariationReviewDecision setApprovedVariationDetailsReviewDecisionWithoutNotes(
     		EmpVariationReviewDecision variationDetailsReviewDecision) {
@@ -49,12 +63,4 @@ public interface EmpVariationReviewRequestActionMapper {
                 		.build())
                 .build();
     }
-
-    @Mapping(target = "determination.reason", ignore = true)
-    EmpVariationApplicationDeemedWithdrawnRequestActionPayload cloneDeemedWithdrawnPayloadIgnoreReason(
-        EmpVariationApplicationDeemedWithdrawnRequestActionPayload payload);
-    
-    @Mapping(target = "determination.reason", ignore = true)
-    EmpVariationApplicationRejectedRequestActionPayload cloneRejectedPayloadIgnoreReason(
-        EmpVariationApplicationRejectedRequestActionPayload payload);
 }

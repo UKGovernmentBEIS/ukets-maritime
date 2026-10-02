@@ -196,6 +196,7 @@ export class DetailsComponent implements OnInit {
       ACCOUNT_CLOSURE: ['NONE'],
       REVIEW_SITE_VISIT: ['NONE'],
       PEER_REVIEW_SITE_VISIT: ['NONE'],
+      MI_REPORTS_MANAGE_CUSTOM: ['NONE'],
     }),
   });
 
@@ -322,6 +323,11 @@ export class DetailsComponent implements OnInit {
       permission: 'PEER_REVIEW_SITE_VISIT',
       task: 'Peer review',
       type: 'Site visit',
+    },
+    {
+      permission: 'MI_REPORTS_MANAGE_CUSTOM',
+      task: 'Manage custom reports',
+      type: 'MI Reports',
     },
   ];
 

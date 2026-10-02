@@ -14,6 +14,7 @@ import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuan
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
 
 import java.util.Map;
 import java.util.Set;
@@ -59,7 +60,8 @@ class EmpIssuanceReviewRequestActionMapperTest {
     }
 
     @Test
-    void cloneDeemedWithdrawnPayloadIgnoreReason() {
+    void cloneDeemedWithdrawnPayloadIgnoreReasonAndDecisions() {
+        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder().build();
         EmpIssuanceDetermination determination = EmpIssuanceDetermination.builder()
             .type(EmpIssuanceDeterminationType.DEEMED_WITHDRAWN)
             .reason("reason")
@@ -68,17 +70,29 @@ class EmpIssuanceReviewRequestActionMapperTest {
             .operators(Set.of("operatorUser"))
             .signatory("regulatorUser")
             .build();
+        Map<EmpReviewGroup, EmpIssuanceReviewDecision> reviewGroupDecisions = Map.of(
+            EmpReviewGroup.MARITIME_OPERATOR_DETAILS, EmpIssuanceReviewDecision.builder()
+                .type(EmpReviewDecisionType.ACCEPTED)
+                .details(ReviewDecisionDetails.builder().notes("regulator notes").build())
+                .build()
+        );
         EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload empIssuanceApplicationDeemedWithdrawnRequestActionPayload =
             EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload.builder()
+                .emissionsMonitoringPlan(emissionsMonitoringPlan)
                 .determination(determination)
                 .decisionNotification(decisionNotification)
+                .reviewGroupDecisions(reviewGroupDecisions)
+                .reviewAttachments(Map.of(UUID.randomUUID(), "attachment.pdf"))
                 .officialNotice(FileInfoDTO.builder().uuid(UUID.randomUUID().toString()).name("approved official notice name").build())
                 .build();
 
         EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload clonedRequestActionPayload =
-            requestActionMapper.cloneDeemedWithdrawnPayloadIgnoreReason(empIssuanceApplicationDeemedWithdrawnRequestActionPayload);
+            requestActionMapper.cloneDeemedWithdrawnPayloadIgnoreReasonAndDecisions(empIssuanceApplicationDeemedWithdrawnRequestActionPayload);
 
+        assertEquals(emissionsMonitoringPlan, clonedRequestActionPayload.getEmissionsMonitoringPlan());
         assertEquals(decisionNotification, clonedRequestActionPayload.getDecisionNotification());
+        assertThat(clonedRequestActionPayload.getReviewGroupDecisions()).isEmpty();
+        assertThat(clonedRequestActionPayload.getReviewAttachments()).isEmpty();
 
         EmpIssuanceDetermination clonedRequestActionPayloadDetermination = clonedRequestActionPayload.getDetermination();
         assertEquals(determination.getType(), clonedRequestActionPayloadDetermination.getType());

@@ -1,0 +1,19 @@
+@use 'govuk-base' as govuk;
+
+.search-suffix {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 41px;
+  min-width: 41px;
+  height: 40px;
+  padding: 8px 10px;
+  border: 0;
+  background-color: govuk.$govuk-brand-colour;
+  box-shadow: inset 0 -1px 0 #003078;
+
+  svg {
+    display: block;
+  }
+}

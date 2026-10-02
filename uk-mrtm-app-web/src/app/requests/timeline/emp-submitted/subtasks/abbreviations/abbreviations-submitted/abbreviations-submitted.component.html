@@ -2,8 +2,8 @@
   <netz-page-heading caption="Additional information">{{ vm.abbreviationsMap.title }}</netz-page-heading>
   <mrtm-abbreviations-summary-template [abbreviations]="vm.abbreviations" [abbreviationsMap]="vm.abbreviationsMap" />
 
-  @if (vm?.reviewGroupDecision) {
-    <mrtm-review-decision-summary-template [reviewDecision]="vm.reviewGroupDecision" />
+  @if (vm?.reviewGroupDecision || isRegulator()) {
+    <mrtm-review-decision-summary-template [reviewDecision]="vm?.reviewGroupDecision" />
   }
 
   <div>

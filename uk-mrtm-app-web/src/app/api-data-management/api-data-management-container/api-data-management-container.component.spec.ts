@@ -48,14 +48,30 @@ describe('ApiDataManagementContainerComponent', () => {
     expect((component as any).isImportAvailable()).toBe(false);
   });
 
-  it('should update the current tab and navigate when a tab is selected', () => {
+  it('should update the current tab and navigate to it, resetting the page, when a tab is selected', () => {
     const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
     const activatedRoute = TestBed.inject(ActivatedRoute);
 
     component.handleSelectedTab('activity-history');
 
     expect(component.currentTab()).toBe('activity-history');
-    expect(navigateSpy).toHaveBeenCalledWith([], { relativeTo: activatedRoute, preserveFragment: true });
+    expect(navigateSpy).toHaveBeenCalledWith([], {
+      relativeTo: activatedRoute,
+      queryParams: { page: undefined },
+      fragment: 'activity-history',
+      scroll: 'manual',
+    });
+  });
+
+  it('should not navigate again when the already selected tab is selected', () => {
+    const navigateSpy = vi.spyOn(router, 'navigate').mockResolvedValue(true);
+    component.handleSelectedTab('activity-history');
+    navigateSpy.mockClear();
+
+    component.handleSelectedTab('activity-history');
+
+    expect(component.currentTab()).toBe('activity-history');
+    expect(navigateSpy).not.toHaveBeenCalled();
   });
 
   it('should flag import as available when the available-to-import tab reports it', () => {

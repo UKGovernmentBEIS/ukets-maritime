@@ -41,6 +41,7 @@ export interface EmpVariationApplicationReviewRequestTaskPayload {
   determination?: EmpVariationDetermination;
   finalDocumentsGenerationInProgress?: boolean;
   finalDocumentsGenerationSuccessful?: boolean;
+  failureNotificationSent?: boolean;
   previewFiles?: { [key: string]: RequestTaskPreviewFileInfoDTO };
   reviewAttachments?: { [key: string]: string };
   rfiAttachments?: { [key: string]: string };

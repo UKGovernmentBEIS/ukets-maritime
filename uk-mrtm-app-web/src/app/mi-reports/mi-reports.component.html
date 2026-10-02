@@ -1,6 +1,7 @@
-<netz-page-heading size="xl">MI Reports</netz-page-heading>
-
-<govuk-table id="mi-reports" [columns]="tableColumns" [data]="currentPageData()">
+@if (withHeader()) {
+  <netz-page-heading size="xl">MI Reports</netz-page-heading>
+}
+<govuk-table id="mi-reports" [columns]="tableColumns()" [data]="currentPageData()">
   <ng-template let-column="column" let-row="row">
     @switch (column.field) {
       @default {

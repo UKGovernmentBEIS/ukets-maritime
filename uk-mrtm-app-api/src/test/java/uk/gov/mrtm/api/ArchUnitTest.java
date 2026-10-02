@@ -143,7 +143,20 @@ class ArchUnitTest {
                             NOTIFICATION_PACKAGE,
                             COMMON_PACKAGE,
                             AUTHORIZATION_PACKAGE,
-                            CA_PACKAGE));
+                            CA_PACKAGE,
+                            FILES_PACKAGE));
+
+    @ArchTest
+    public static final ArchRule onlyFileIntegrationDependsOnFiles =
+            noClasses().that().resideInAPackage(NOTIFICATION_PACKAGE)
+                    .and().resideOutsideOfPackage(BASE_PACKAGE + ".notification.mail.files..")
+                    .should().dependOnClassesThat().resideInAPackage(FILES_PACKAGE);
+
+    @ArchTest
+    public static final ArchRule fileIntegrationIsProviderNeutral =
+            noClasses().that().resideInAPackage(BASE_PACKAGE + ".notification.mail.files..")
+                    .should().dependOnClassesThat()
+                    .resideInAnyPackage("io.awspring..", "software.amazon..", BASE_PACKAGE + ".files.storage.s3..");
 
     @ArchTest
     public static final ArchRule verificationBodyPackageChecks =

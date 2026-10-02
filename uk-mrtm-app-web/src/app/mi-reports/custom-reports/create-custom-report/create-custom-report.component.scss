@@ -1,0 +1,6 @@
+@use 'govuk-frontend/dist/govuk/base' as govuk;
+
+.app-mi-custom-reports-guidance-items {
+  padding-top: govuk.govuk-spacing(1);
+  border-top: govuk.$govuk-border-width solid govuk.govuk-colour('blue');
+}

@@ -4,7 +4,7 @@
       {{ caption() }}
     </caption>
   }
-  <thead class="govuk-table__head">
+  <thead class="govuk-table__head" [class.govuk-table__head--hidden-headers]="allHeadersHidden()">
     <tr class="govuk-table__row">
       @for (column of columns(); track $index) {
         <th

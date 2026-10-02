@@ -59,7 +59,12 @@ export const VALID_SHIP_TYPES = new Set([
   'OFFSHORE',
   'OTHER',
 ]);
-export const VALID_BUNKER_METHODS = new Set(['ON_BOARD_MEASUREMENT_SYSTEMS', 'FUEL_SUPPLIER', 'LABORATORY_TEST']);
+export const VALID_BUNKER_METHODS = new Set([
+  'ON_BOARD_MEASUREMENT_SYSTEMS',
+  'ON_BOARD_MEASUREMENT',
+  'FUEL_SUPPLIER',
+  'LABORATORY_TEST',
+]);
 export const VALID_FLAGS = new Set<string>(Object.values(FlagEnum));
 
 export const PROC_REFERENCE_MAX = 250;

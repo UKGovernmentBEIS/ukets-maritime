@@ -20,7 +20,7 @@ describe('mapShipEmissions', () => {
     expect(noCompanyShip.details.natureOfReportingResponsibility).toBeUndefined();
   });
 
-  it('reads the bunker density method from methodDensityBunkerCode, leaving tank density undefined', () => {
+  it('reads the bunker density method from methodDensityBunkerCode and copies it to the tank density method', () => {
     const { ship } = mapShipEmissions(
       basePlan({
         fuelTypes: {
@@ -38,9 +38,40 @@ describe('mapShipEmissions', () => {
     );
 
     expect(ship.fuelsAndEmissionsFactors[0].densityMethodBunker).toBe('FUEL_SUPPLIER');
-    // The EU XSD only carries the tank density method per fuel tank, not per fuel type, so there's
-    // no reliable source for it — it's left undefined instead of guessed.
-    expect(ship.fuelsAndEmissionsFactors[0].densityMethodTank).toBeUndefined();
+    expect(ship.fuelsAndEmissionsFactors[0].densityMethodTank).toBe('FUEL_SUPPLIER');
+  });
+
+  it('leaves both density method fields undefined when methodDensityBunkerCode is missing, empty or invalid', () => {
+    const { ship: missing } = mapShipEmissions(
+      basePlan({
+        fuelTypes: {
+          fuelTypeEntry: [
+            { fuelTypeCode: 'HFO', fuelOriginCode: 'FOSSIL', emissionFactors: [{ ghgCode: 'CO2', ttwEF: 3.1 }] },
+          ],
+        },
+      }),
+      'MV Test',
+    );
+    expect(missing.fuelsAndEmissionsFactors[0].densityMethodBunker).toBeUndefined();
+    expect(missing.fuelsAndEmissionsFactors[0].densityMethodTank).toBeUndefined();
+
+    const { ship: invalid } = mapShipEmissions(
+      basePlan({
+        fuelTypes: {
+          fuelTypeEntry: [
+            {
+              fuelTypeCode: 'HFO',
+              fuelOriginCode: 'FOSSIL',
+              methodDensityBunkerCode: 'INVALID_CODE',
+              emissionFactors: [{ ghgCode: 'CO2', ttwEF: 3.1 }],
+            },
+          ],
+        },
+      }),
+      'MV Test',
+    );
+    expect(invalid.fuelsAndEmissionsFactors[0].densityMethodBunker).toBeUndefined();
+    expect(invalid.fuelsAndEmissionsFactors[0].densityMethodTank).toBeUndefined();
   });
 
   describe('fuel classification', () => {

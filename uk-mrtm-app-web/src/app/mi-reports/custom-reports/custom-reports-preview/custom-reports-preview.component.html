@@ -1,0 +1,94 @@
+<netz-feedback-banner />
+@if (data(); as data) {
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <netz-page-heading>{{ data?.reportName }}</netz-page-heading>
+    </div>
+    @if (canManageReport()) {
+      <div class="govuk-grid-column-one-third row-flex justify-content-end">
+        <div class="govuk-button-group">
+          <a govukSecondaryButton [routerLink]="['./', 'edit']">Edit report</a>
+          <a govukSecondaryButton [routerLink]="['./', 'delete']">Delete report</a>
+        </div>
+      </div>
+    }
+  </div>
+
+  <p class="govuk-body">
+    <a govukLink class="govuk-link--no-visited-state" href="." (click)="toggleFavourites($event, !favourite())">
+      @if (favourite()) {
+        <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M10 15.27L16.18 19L14.54 11.97L20 7.24L12.81 6.63L10 0L7.19 6.63L0 7.24L5.46 11.97L3.82 19L10 15.27Z"
+            fill="#FFDD00" />
+        </svg>
+        Remove from your favourites
+      } @else {
+        <svg width="20" height="19" viewBox="0 0 20 19" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path
+            d="M20 7.24L12.81 6.62L10 0L7.19 6.63L0 7.24L5.46 11.97L3.82 19L10 15.27L16.18 19L14.55 11.97L20 7.24ZM10 13.4L6.24 15.67L7.24 11.39L3.92 8.51L8.3 8.13L10 4.1L11.71 8.14L16.09 8.52L12.77 11.4L13.77 15.68L10 13.4Z"
+            fill="#FFDD00" />
+        </svg>
+        Add to your favourites
+      }
+    </a>
+  </p>
+
+  <dl govuk-summary-list>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Categories</dt>
+      <dd govukSummaryListRowValue>
+        <ul class="govuk-list--bullet">
+          @for (category of data.categories; track category.id) {
+            <li>{{ category.name }}</li>
+          }
+        </ul>
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Description</dt>
+      <dd govukSummaryListRowValue class="pre-wrap">
+        {{ data?.description }}
+      </dd>
+    </div>
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Last updated</dt>
+      <dd govukSummaryListRowValue>
+        {{ data?.lastUpdatedOn | govukDate }}
+      </dd>
+    </div>
+  </dl>
+
+  <p class="govuk-body">
+    <a govukLink [routerLink]="['./history']">View report history</a>
+  </p>
+
+  <p class="govuk-inset-text">
+    You can modify the query below before running it. Changes made here will not be saved to the report unless you are
+    in edit mode.
+  </p>
+
+  <form [formGroup]="formGroup" (submit)="onSubmit()">
+    <div
+      govuk-textarea
+      formControlName="sqlQuery"
+      label="SQL Query"
+      labelSize="small"
+      class="govuk-!-width-two-thirds"></div>
+    <p>
+      <button govukSecondaryButton netzPendingButton type="button" (click)="onPreview()">Preview results</button>
+    </p>
+    @if (previewData(); as previewData) {
+      <h3 class="govuk-heading-m">Preview of the first 10 results</h3>
+      <govuk-table
+        mrtmScrollablePane
+        ariaLabel="Report preview"
+        [columns]="previewColumns()"
+        [data]="previewData"
+        emptyTableText="No data to display" />
+    }
+    <p>
+      <button govukButton netzPendingButton type="submit">Export to excel</button>
+    </p>
+  </form>
+}

@@ -29,6 +29,10 @@
     0 4px govuk.$govuk-focus-text-colour;
 }
 
+.govuk-table__head--hidden-headers .govuk-table__header {
+  border-bottom: 0;
+}
+
 .govuk-table__cell--empty {
   padding-block: govuk.govuk-spacing(3);
   border-bottom: govuk.govuk-spacing(3) solid transparent;

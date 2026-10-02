@@ -11,10 +11,12 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import static uk.gov.mrtm.api.authorization.mrtmauth.core.domain.MrtmPermission.PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.ACCOUNT_CLOSURE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.ANNUAL_IMPROVEMENT_REPORT;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.MANAGE_GUIDANCE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.MANAGE_THIRD_PARTY_DATA_PROVIDERS;
+import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.MI_REPORTS_MANAGE_CUSTOM;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_DOE;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_EMP_APPLICATION;
 import static uk.gov.mrtm.api.authorization.mrtmauth.regulator.domain.MrtmRegulatorPermissionGroup.PEER_REVIEW_EMP_NOTIFICATION;
@@ -277,6 +279,14 @@ public class MrtmRegulatorPermissionsAdapter extends AbstarctRegulatorPermission
             .put(new RegulatorPermissionGroupLevel(PEER_REVIEW_SITE_VISIT, EXECUTE),
                 List.of(MrtmPermission.PERM_SITE_VISIT_PEER_REVIEW_VIEW_TASK,
                     MrtmPermission.PERM_SITE_VISIT_PEER_REVIEW_EXECUTE_TASK));
+
+        // MI REPORTS CUSTOM REPORTS
+        permissionGroupLevelsConfig.put(
+            new RegulatorPermissionGroupLevel(MI_REPORTS_MANAGE_CUSTOM, NONE),
+            List.of());
+        permissionGroupLevelsConfig.put(
+            new RegulatorPermissionGroupLevel(MI_REPORTS_MANAGE_CUSTOM, EXECUTE),
+            List.of(PERM_MI_REPORTS_MANAGE_CUSTOM_REPORTS_EXECUTE_TASK));
     }
 
 

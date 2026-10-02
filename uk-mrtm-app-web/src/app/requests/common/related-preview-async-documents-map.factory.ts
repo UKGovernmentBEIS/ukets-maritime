@@ -20,8 +20,6 @@ export const taskRelatedPreviewAsyncDocumentsMapFactory = (store: RequestTaskSto
     const empIssuancePreviewDocuments: PreviewAsyncDocument[] = [
       {
         requestGeneratedFileType: 'OFFICIAL_NOTICE',
-        requestPayloadType: 'EMP_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-        requestTaskActionType: 'EMP_ISSUANCE_REVIEW_PREVIEW_OFFICIAL_DOCUMENT',
         labelText: 'Create letter preview file',
         loadingText: 'Creating letter preview file',
         displayedFileName: 'Letter_preview.pdf',
@@ -30,8 +28,6 @@ export const taskRelatedPreviewAsyncDocumentsMapFactory = (store: RequestTaskSto
       },
       {
         requestGeneratedFileType: 'EMP',
-        requestPayloadType: 'EMP_ISSUANCE_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-        requestTaskActionType: 'EMP_ISSUANCE_REVIEW_PREVIEW_EMP_DOCUMENT',
         labelText: 'Create emissions monitoring plan file',
         loadingText: 'Creating emissions monitoring plan file',
         displayedFileName: 'emissions_monitoring_plan_preview.pdf',
@@ -43,8 +39,6 @@ export const taskRelatedPreviewAsyncDocumentsMapFactory = (store: RequestTaskSto
     const empVariationPreviewDocuments: PreviewAsyncDocument[] = [
       {
         requestGeneratedFileType: 'OFFICIAL_NOTICE',
-        requestPayloadType: 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-        requestTaskActionType: 'EMP_VARIATION_REVIEW_PREVIEW_OFFICIAL_DOCUMENT',
         labelText: 'Create letter preview file',
         loadingText: 'Creating letter preview file',
         displayedFileName: 'Letter_preview.pdf',
@@ -53,8 +47,6 @@ export const taskRelatedPreviewAsyncDocumentsMapFactory = (store: RequestTaskSto
       },
       {
         requestGeneratedFileType: 'EMP',
-        requestPayloadType: 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-        requestTaskActionType: 'EMP_VARIATION_REVIEW_PREVIEW_EMP_DOCUMENT',
         labelText: 'Create emissions monitoring plan file',
         loadingText: 'Creating emissions monitoring plan file',
         displayedFileName: 'emissions_monitoring_plan_preview.pdf',
@@ -66,8 +58,6 @@ export const taskRelatedPreviewAsyncDocumentsMapFactory = (store: RequestTaskSto
     const empVariationRegulatorLedPreviewDocuments: PreviewAsyncDocument[] = [
       {
         requestGeneratedFileType: 'OFFICIAL_NOTICE',
-        requestPayloadType: 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-        requestTaskActionType: 'EMP_VARIATION_SUBMIT_REGULATOR_LED_PREVIEW_OFFICIAL_DOCUMENT',
         labelText: 'Create letter preview file',
         loadingText: 'Creating letter preview file',
         displayedFileName: 'Letter_preview.pdf',
@@ -76,8 +66,6 @@ export const taskRelatedPreviewAsyncDocumentsMapFactory = (store: RequestTaskSto
       },
       {
         requestGeneratedFileType: 'EMP',
-        requestPayloadType: 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-        requestTaskActionType: 'EMP_VARIATION_SUBMIT_REGULATOR_LED_PREVIEW_EMP_DOCUMENT',
         labelText: 'Create emissions monitoring plan file',
         loadingText: 'Creating emissions monitoring plan file',
         displayedFileName: 'emissions_monitoring_plan_preview.pdf',

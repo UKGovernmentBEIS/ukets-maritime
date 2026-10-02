@@ -17,7 +17,7 @@ import { ControlValueAccessor } from '@angular/forms';
 
 import { distinctUntilChanged, takeUntil, tap } from 'rxjs';
 
-import { LabelDirective } from '../directives';
+import { InputSuffixDirective, LabelDirective } from '../directives';
 import { ErrorMessageComponent, GovukValidators } from '../error-message';
 import { FormInput } from '../form';
 import { SafeHtmlPipe } from '../pipes';
@@ -53,6 +53,7 @@ export class TextInputComponent extends FormInput implements ControlValueAccesso
   readonly numberFormat = input<string>();
   readonly prefix = input<string>();
   readonly suffix = input<string>();
+  readonly suffixContent = contentChild(InputSuffixDirective);
 
   readonly templateLabel = contentChild(LabelDirective);
   readonly input = viewChild<ElementRef<HTMLInputElement>>('input');

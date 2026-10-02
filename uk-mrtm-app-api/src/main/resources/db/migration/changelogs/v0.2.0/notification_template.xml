@@ -588,4 +588,313 @@ Kind regards, ${competentAuthorityName}'
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_1_0_insert_EMP_approved_notification_template_ENGLAND" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                is_managed,
+                last_updated_date,
+                event_trigger,
+                workflow,
+                role_type,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'EMP approved template',
+                       'An important letter from the Manage your UK ETS reporting service',
+                       'ENGLAND',
+                       true,
+                       now(),
+                       'EMP approval',
+                       'EMP Issuance, EMP Variation, EMP Variation regulator led, EMP Batch variation',
+                       'OPERATOR',
+                       'Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries about this letter, please contact your technical officer.
+
+This is an automatic email - please do not reply to this address.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'EMP approved template';
+                and competent_authority = 'ENGLAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_EMP_approved_notification_template_NORTHERN_IRELAND" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                is_managed,
+                last_updated_date,
+                event_trigger,
+                workflow,
+                role_type,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'EMP approved template',
+                       'An important letter from the Manage your UK ETS reporting service',
+                       'NORTHERN_IRELAND',
+                       true,
+                       now(),
+                       'EMP approval',
+                       'EMP Issuance, EMP Variation, EMP Variation regulator led, EMP Batch variation',
+                       'OPERATOR',
+                       'Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries about this letter, please contact your technical officer.
+
+This is an automatic email - please do not reply to this address.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'EMP approved template';
+                and competent_authority = 'NORTHERN_IRELAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_EMP_approved_notification_template_OPRED" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                is_managed,
+                last_updated_date,
+                event_trigger,
+                workflow,
+                role_type,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'EMP approved template',
+                       'An important letter from the Manage your UK ETS reporting service',
+                       'OPRED',
+                       true,
+                       now(),
+                       'EMP approval',
+                       'EMP Issuance, EMP Variation, EMP Variation regulator led, EMP Batch variation',
+                       'OPERATOR',
+                       'Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries about this letter, please contact your technical officer.
+
+This is an automatic email - please do not reply to this address.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'EMP approved template';
+                and competent_authority = 'OPRED';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_EMP_approved_notification_template_SCOTLAND" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                is_managed,
+                last_updated_date,
+                event_trigger,
+                workflow,
+                role_type,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'EMP approved template',
+                       'An important letter from the Manage your UK ETS reporting service',
+                       'SCOTLAND',
+                       true,
+                       now(),
+                       'EMP approval',
+                       'EMP Issuance, EMP Variation, EMP Variation regulator led, EMP Batch variation',
+                       'OPERATOR',
+                       'Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries about this letter, please contact your technical officer.
+
+This is an automatic email - please do not reply to this address.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'EMP approved template';
+                and competent_authority = 'SCOTLAND';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_insert_EMP_approved_notification_template_WALES" author="P44065">
+        <sql>
+            <![CDATA[
+            INSERT INTO notification_template (
+                id,
+                name,
+                subject,
+                competent_authority,
+                is_managed,
+                last_updated_date,
+                event_trigger,
+                workflow,
+                role_type,
+                text
+            )
+            VALUES (
+                       nextval('notification_template_seq'),
+                       'EMP approved template',
+                       'An important letter from the Manage your UK ETS reporting service',
+                       'WALES',
+                       true,
+                       now(),
+                       'EMP approval',
+                       'EMP Issuance, EMP Variation, EMP Variation regulator led, EMP Batch variation',
+                       'OPERATOR',
+                       'Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries about this letter, please contact your technical officer.
+
+This is an automatic email - please do not reply to this address.')
+            ]]>;
+        </sql>
+
+        <rollback>
+            <sql>
+                delete from notification_template
+                where name = 'EMP approved template';
+                and competent_authority = 'WALES';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_1_0_update_document_template_and_notification_template_association_for_EMP_doc" author="P44065">
+        <sql>
+            UPDATE document_template dt
+            SET notification_template_id = (SELECT id FROM notification_template nt WHERE name = 'EMP approved template' AND dt.competent_authority = nt.competent_authority)
+            WHERE type = 'EMP'
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE document_template dt
+                SET notification_template_id = (SELECT id FROM notification_template nt WHERE name = 'Generic email template' AND dt.competent_authority = nt.competent_authority)
+                WHERE type = 'EMP'
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_generic_email_notification_template_text" author="P44065">
+        <sql>
+            UPDATE notification_template
+            SET text='Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+If you have any queries, please contact [${competentAuthorityEmail}](mailto:${competentAuthorityEmail}).
+
+Kind regards,
+
+${competentAuthorityName}'
+            WHERE name = 'Generic email template';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET text='Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+If you have any queries, please contact ${competentAuthorityEmail}
+
+Kind regards,
+
+${competentAuthorityName}'
+                WHERE name = 'Generic email template';
+            </sql>
+        </rollback>
+    </changeSet>
+
+    <changeSet id="0_2_0_update_EMP_approved_notification_template_text" author="P44065">
+        <sql>
+            UPDATE notification_template
+            SET text='Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries, please contact [${competentAuthorityEmail}](mailto:${competentAuthorityEmail}).
+
+Kind regards,
+
+${competentAuthorityName}'
+            WHERE name = 'EMP approved template';
+        </sql>
+        <rollback>
+            <sql>
+                UPDATE notification_template
+                SET text='Dear ${(accountServiceContactFirstName)!}
+
+Please find attached a communication from your regulator.
+
+You can now [download your approved emissions monitoring plan](${fileLinks[0].url}).
+
+If you have any queries about this letter, please contact your technical officer.
+
+This is an automatic email - please do not reply to this address.'
+                WHERE name = 'EMP approved template';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

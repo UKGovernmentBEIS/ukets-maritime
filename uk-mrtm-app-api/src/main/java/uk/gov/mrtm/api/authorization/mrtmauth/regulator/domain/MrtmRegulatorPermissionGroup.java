@@ -23,4 +23,5 @@ public class MrtmRegulatorPermissionGroup {
     public static final String MANAGE_THIRD_PARTY_DATA_PROVIDERS = "MANAGE_THIRD_PARTY_DATA_PROVIDERS";
     public static final String REVIEW_SITE_VISIT = "REVIEW_SITE_VISIT";
     public static final String PEER_REVIEW_SITE_VISIT = "PEER_REVIEW_SITE_VISIT";
+    public static final String MI_REPORTS_MANAGE_CUSTOM = "MI_REPORTS_MANAGE_CUSTOM";
 }

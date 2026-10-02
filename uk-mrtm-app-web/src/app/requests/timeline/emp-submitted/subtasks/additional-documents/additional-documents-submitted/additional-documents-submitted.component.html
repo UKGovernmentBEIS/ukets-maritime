@@ -5,8 +5,8 @@
     [additionalDocumentsMap]="vm.additionalDocumentsMap"
     [files]="vm.files" />
 
-  @if (vm?.reviewGroupDecision) {
-    <mrtm-review-decision-summary-template [reviewDecision]="vm.reviewGroupDecision" />
+  @if (vm?.reviewGroupDecision || isRegulator()) {
+    <mrtm-review-decision-summary-template [reviewDecision]="vm?.reviewGroupDecision" />
   }
 
   <div>

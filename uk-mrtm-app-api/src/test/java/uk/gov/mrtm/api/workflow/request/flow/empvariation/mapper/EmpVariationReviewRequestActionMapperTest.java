@@ -21,6 +21,7 @@ import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationRev
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationReviewDecisionType;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
+import uk.gov.netz.api.workflow.request.flow.common.domain.review.ReviewDecisionDetails;
 
 import java.util.List;
 import java.util.Map;
@@ -105,14 +106,29 @@ class EmpVariationReviewRequestActionMapperTest {
     }
 
     @Test
-    void cloneDeemedWithdrawnPayloadIgnoreReason() {
+    void cloneDeemedWithdrawnPayloadIgnoreReasonAndDecisionsNotes() {
     	EmpVariationDetermination determination = EmpVariationDetermination.builder()
             .type(EmpVariationDeterminationType.DEEMED_WITHDRAWN)
             .reason("reason")
             .build();
+        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder().build();
+        Map<EmpReviewGroup, EmpVariationReviewDecision> reviewGroupDecisions = Map.of(
+            EmpReviewGroup.MARITIME_OPERATOR_DETAILS, EmpVariationReviewDecision.builder()
+                .type(EmpVariationReviewDecisionType.REJECTED)
+                .details(ReviewDecisionDetails.builder().notes("notes").build())
+                .build()
+        );
+        EmpVariationReviewDecision detailsReviewDecision = EmpVariationReviewDecision.builder()
+            .type(EmpVariationReviewDecisionType.ACCEPTED)
+            .details(EmpAcceptedVariationDecisionDetails.builder().notes("details notes").build())
+            .build();
         EmpVariationApplicationDeemedWithdrawnRequestActionPayload requestActionPayload =
         		EmpVariationApplicationDeemedWithdrawnRequestActionPayload.builder()
+                .emissionsMonitoringPlan(emissionsMonitoringPlan)
                 .determination(determination)
+                .reviewGroupDecisions(reviewGroupDecisions)
+                .empVariationDetailsReviewDecision(detailsReviewDecision)
+                .reviewAttachments(Map.of(UUID.randomUUID(), "attachment.pdf"))
                 .officialNotice(FileInfoDTO.builder()
                 		.uuid(UUID.randomUUID().toString())
                 		.name("withdrawn official notice name")
@@ -120,7 +136,12 @@ class EmpVariationReviewRequestActionMapperTest {
                 .build();
 
         EmpVariationApplicationDeemedWithdrawnRequestActionPayload clonedRequestActionPayload =
-            requestActionMapper.cloneDeemedWithdrawnPayloadIgnoreReason(requestActionPayload);
+            requestActionMapper.cloneDeemedWithdrawnPayloadIgnoreReasonAndDecisionsNotes(requestActionPayload);
+
+        assertEquals(emissionsMonitoringPlan, clonedRequestActionPayload.getEmissionsMonitoringPlan());
+        assertThat(clonedRequestActionPayload.getReviewGroupDecisions()).isEmpty();
+        assertNull(clonedRequestActionPayload.getEmpVariationDetailsReviewDecision());
+        assertThat(clonedRequestActionPayload.getReviewAttachments()).isEmpty();
 
         EmpVariationDetermination clonedRequestActionPayloadDetermination = clonedRequestActionPayload.getDetermination();
         assertEquals(determination.getType(), clonedRequestActionPayloadDetermination.getType());
@@ -128,14 +149,27 @@ class EmpVariationReviewRequestActionMapperTest {
     }
     
     @Test
-    void clonRejectedPayloadIgnoreReason() {
+    void cloneRejectedPayloadIgnoreReasonAndDecisionsNotes() {
     	EmpVariationDetermination determination = EmpVariationDetermination.builder()
             .type(EmpVariationDeterminationType.REJECTED)
             .reason("reason")
             .build();
+        EmissionsMonitoringPlan emissionsMonitoringPlan = EmissionsMonitoringPlan.builder().build();
+        Map<EmpReviewGroup, EmpVariationReviewDecision> reviewGroupDecisions = Map.of(
+            EmpReviewGroup.MARITIME_OPERATOR_DETAILS, EmpVariationReviewDecision.builder()
+                .type(EmpVariationReviewDecisionType.REJECTED)
+                .details(ReviewDecisionDetails.builder().notes("notes").build())
+                .build()
+        );
     	EmpVariationApplicationRejectedRequestActionPayload requestActionPayload =
     			EmpVariationApplicationRejectedRequestActionPayload.builder()
+                .emissionsMonitoringPlan(emissionsMonitoringPlan)
                 .determination(determination)
+                .reviewGroupDecisions(reviewGroupDecisions)
+                .empVariationDetailsReviewDecision(EmpVariationReviewDecision.builder()
+                    .type(EmpVariationReviewDecisionType.REJECTED)
+                    .details(ReviewDecisionDetails.builder().notes("details notes").build())
+                    .build())
                 .officialNotice(FileInfoDTO.builder()
                 		.uuid(UUID.randomUUID().toString())
                 		.name("rejected official notice name")
@@ -143,7 +177,11 @@ class EmpVariationReviewRequestActionMapperTest {
                 .build();
 
         EmpVariationApplicationRejectedRequestActionPayload clonedRequestActionPayload =
-            requestActionMapper.cloneRejectedPayloadIgnoreReason(requestActionPayload);
+            requestActionMapper.cloneRejectedPayloadIgnoreReasonAndDecisionsNotes(requestActionPayload);
+
+        assertEquals(emissionsMonitoringPlan, clonedRequestActionPayload.getEmissionsMonitoringPlan());
+        assertThat(clonedRequestActionPayload.getReviewGroupDecisions()).isEmpty();
+        assertNull(clonedRequestActionPayload.getEmpVariationDetailsReviewDecision());
 
         EmpVariationDetermination clonedRequestActionPayloadDetermination = clonedRequestActionPayload.getDetermination();
         assertEquals(determination.getType(), clonedRequestActionPayloadDetermination.getType());

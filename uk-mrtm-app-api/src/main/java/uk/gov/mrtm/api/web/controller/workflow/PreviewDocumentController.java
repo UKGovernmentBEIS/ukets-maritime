@@ -25,7 +25,9 @@ import uk.gov.mrtm.api.web.controller.exception.ErrorResponse;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
 import uk.gov.netz.api.security.Authorized;
 import uk.gov.netz.api.workflow.request.application.filedocument.preview.domain.PreviewDocumentRequest;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentHandlerDelegator;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.AsyncPreviewDocumentHandlerDelegator;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentHandlerDelegator;
+import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
 
 import java.nio.charset.StandardCharsets;
 
@@ -35,8 +37,9 @@ import java.nio.charset.StandardCharsets;
 @Tag(name = "Document Preview")
 @SecurityRequirements
 public class PreviewDocumentController {
-    
-    final PreviewDocumentHandlerDelegator documentDelegator;
+
+    final SyncPreviewDocumentHandlerDelegator syncDocumentDelegator;
+    final AsyncPreviewDocumentHandlerDelegator asyncDocumentDelegator;
 
     @PostMapping(path = "/{taskId}")
     @Operation(summary = "Get the file for preview")
@@ -53,12 +56,29 @@ public class PreviewDocumentController {
         PreviewDocumentRequest previewDocumentRequest
     )
     {
-        final FileDTO file = documentDelegator.getDocument(taskId, previewDocumentRequest);
+        final FileDTO file = syncDocumentDelegator.getDocument(taskId, previewDocumentRequest);
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION,
                         ContentDisposition.builder("attachment").filename(file.getFileName(), StandardCharsets.UTF_8).build().toString())
                 .contentType(MediaType.parseMediaType(file.getFileType()))
                 .body(new ByteArrayResource(file.getFileContent()));
+    }
+
+    @PostMapping(path = "/async/{taskId}")
+    @Operation(summary = "Trigger the async document generation for preview")
+    @ApiResponse(responseCode = "200", description = SwaggerApiInfo.OK, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = RequestTaskPayload.class))})
+    @ApiResponse(responseCode = "400", description = SwaggerApiInfo.BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "404", description = SwaggerApiInfo.NOT_FOUND, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "429", description = SwaggerApiInfo.TOO_MANY_REQUESTS,
+        content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
+    @Authorized(resourceId = "#taskId")
+    public ResponseEntity<RequestTaskPayload> triggerAsyncDocumentGeneration(
+        @PathVariable("taskId") @Parameter(description = "The task id") Long taskId,
+        @RequestBody @Valid @Parameter(description = "The request to preview the document", required = true)
+        PreviewDocumentRequest previewDocumentRequest) {
+
+        return ResponseEntity.ok(asyncDocumentDelegator.triggerDocumentGeneration(taskId, previewDocumentRequest));
     }
 }

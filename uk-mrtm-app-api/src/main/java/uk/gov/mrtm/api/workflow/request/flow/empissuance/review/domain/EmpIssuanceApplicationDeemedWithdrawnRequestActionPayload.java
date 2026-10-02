@@ -11,11 +11,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDetermination;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceReviewDecision;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpReviewGroup;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuanceApplicationSubmittedRequestActionPayload;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.netz.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,11 +30,18 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload extends RequestActionPayload {
+public class EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload
+        extends EmpIssuanceApplicationSubmittedRequestActionPayload {
 
     @Valid
     @NotNull
     private DecisionNotification decisionNotification;
+
+    @Builder.Default
+    private Map<EmpReviewGroup, EmpIssuanceReviewDecision> reviewGroupDecisions = new EnumMap<>(EmpReviewGroup.class);
+
+    @Builder.Default
+    private Map<UUID, String> reviewAttachments = new HashMap<>();
 
     @Valid
     @NotNull
@@ -53,5 +63,12 @@ public class EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload extends R
                         )
                 )
                 .flatMap(m -> m.entrySet().stream()).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    @Override
+    public Map<UUID, String> getAttachments() {
+        return Stream.of(super.getAttachments(), getReviewAttachments())
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (first, second) -> first));
     }
 }

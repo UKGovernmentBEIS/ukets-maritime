@@ -83,8 +83,7 @@ export class MandateSummaryComponent {
 
     if (!this.mandate().exist && ismShips.size > 0) {
       this.form.setErrors({
-        ismShips:
-          'The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered owner has been added. All relevant ships must be associated with a registered owner.',
+        ismShips: 'You must associate all ships with delegated responsibility with a registered owner.',
       });
 
       this.feedbackBannerStore.setInvalidForm(this.form);

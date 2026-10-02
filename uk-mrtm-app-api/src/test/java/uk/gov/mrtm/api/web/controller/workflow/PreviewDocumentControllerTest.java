@@ -32,7 +32,8 @@ import uk.gov.netz.api.security.AppSecurityComponent;
 import uk.gov.netz.api.security.AuthorizationAspectUserResolver;
 import uk.gov.netz.api.security.AuthorizedAspect;
 import uk.gov.netz.api.workflow.request.application.filedocument.preview.domain.PreviewDocumentRequest;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentHandlerDelegator;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.AsyncPreviewDocumentHandlerDelegator;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentHandlerDelegator;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 
 import java.nio.charset.StandardCharsets;
@@ -55,7 +56,10 @@ class PreviewDocumentControllerTest {
     private PreviewDocumentController controller;
 
     @Mock
-    private PreviewDocumentHandlerDelegator delegator;
+    private SyncPreviewDocumentHandlerDelegator delegator;
+
+    @Mock
+    private AsyncPreviewDocumentHandlerDelegator asyncDelegator;
 
     @Mock
     private AppSecurityComponent appSecurityComponent;
@@ -151,5 +155,59 @@ class PreviewDocumentControllerTest {
             .andExpect(status().isForbidden());
 
         verify(delegator, never()).getDocument(2L, documentRequest);
+    }
+
+
+    @Test
+    void triggerAsyncDocumentGeneration_success() throws Exception {
+
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
+        final long taskId = 2L;
+        final PreviewDocumentRequest documentRequest = PreviewDocumentRequest.builder()
+            .documentType(DocumentTemplateType.IN_RFI)
+            .decisionNotification(DecisionNotification.builder()
+                .signatory("signatory")
+                .build())
+            .build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        when(asyncDelegator.triggerDocumentGeneration(2L, documentRequest)).thenReturn(TestRequestTaskPayload.builder().build());
+
+        MvcResult result = mockMvc.perform(MockMvcRequestBuilders
+                .post(CONTROLLER_PATH + "/async/" + taskId)
+                .content(mapper.writeValueAsString(documentRequest))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andReturn();
+
+        MockHttpServletResponse response = result.getResponse();
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+        verify(asyncDelegator).triggerDocumentGeneration(2L, documentRequest);
+    }
+
+    @Test
+    void triggerAsyncDocumentGeneration_forbidden() throws Exception {
+
+        final AppUser user = AppUser.builder().roleType(RoleTypeConstants.REGULATOR).build();
+        final long taskId = 2L;
+        final PreviewDocumentRequest documentRequest = PreviewDocumentRequest.builder()
+            .documentType(DocumentTemplateType.IN_RFI)
+            .decisionNotification(DecisionNotification.builder()
+                .signatory("signatory")
+                .build())
+            .build();
+
+        when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);
+        doThrow(new BusinessException(ErrorCode.FORBIDDEN))
+            .when(appUserAuthorizationService)
+            .authorize(user, "triggerAsyncDocumentGeneration", "2", null, null);
+
+        mockMvc.perform(MockMvcRequestBuilders
+                .post(CONTROLLER_PATH + "/async/" + taskId)
+                .content(mapper.writeValueAsString(documentRequest))
+                .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isForbidden());
+
+        verify(asyncDelegator, never()).triggerDocumentGeneration(2L, documentRequest);
     }
 }

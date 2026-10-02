@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { ActivatedRoute } from '@angular/router';
 
+import { AuthStore } from '@netz/common/auth';
 import { RequestActionStore } from '@netz/common/store';
 import { ActivatedRouteStub, BasePage } from '@netz/common/testing';
 
@@ -67,5 +68,16 @@ describe('ControlActivitiesSubmittedComponent', () => {
       'Name of IT system used',
       'Are any of your activities outsourced?',
     ]);
+  });
+
+  it('should not display the decision details when there is no review decision and the user is not a regulator', () => {
+    expect(fixture.nativeElement.textContent).not.toContain('Decision details');
+  });
+
+  it('should display the decision details for regulators even when there is no review decision', () => {
+    TestBed.inject(AuthStore).setUserState({ roleType: 'REGULATOR' });
+    fixture.detectChanges();
+
+    expect(fixture.nativeElement.textContent).toContain('Decision details');
   });
 });

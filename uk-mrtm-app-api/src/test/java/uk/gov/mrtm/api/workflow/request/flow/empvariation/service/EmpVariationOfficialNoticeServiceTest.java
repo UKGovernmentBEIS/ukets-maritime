@@ -24,6 +24,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTempla
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.service.EmpOfficialNoticeSendService;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationAccountDraftData;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDetermination;
@@ -47,7 +48,6 @@ import uk.gov.netz.api.workflow.request.flow.common.service.RequestAccountContac
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateGeneratorParamConstants;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
-import uk.gov.netz.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.Collections;
 import java.util.List;
@@ -55,7 +55,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -66,6 +65,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName.EMP_APPROVED_TEMPLATE;
+import static uk.gov.netz.api.workflow.utils.NotificationTemplateName.GENERIC_EMAIL;
 
 @ExtendWith(MockitoExtension.class)
 class EmpVariationOfficialNoticeServiceTest {
@@ -95,7 +96,7 @@ class EmpVariationOfficialNoticeServiceTest {
     private DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
 
     @Mock
-    private OfficialNoticeSendService officialNoticeSendService;
+    private EmpOfficialNoticeSendService empOfficialNoticeSendService;
 
     @Mock
     private MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
@@ -210,7 +211,7 @@ class EmpVariationOfficialNoticeServiceTest {
     }
 
     @Test
-    void generateApprovedOfficialNoticeRegulatorLed() throws InterruptedException, ExecutionException {
+    void generateApprovedOfficialNoticeRegulatorLed() {
     	Long requestTaskId = 1L;
     	DocumentTemplateStage stage = DocumentTemplateStage.PREVIEW;
     	DecisionNotification decision = DecisionNotification.builder().signatory("sign").build();
@@ -307,7 +308,7 @@ class EmpVariationOfficialNoticeServiceTest {
     @ParameterizedTest
     @MethodSource("provideSendOfficialNoticeTestArgs")
     void sendOfficialNotice(FileInfoDTO officialDocFileInfoDTO, FileInfoDTO empDocFileInfoDTO,
-                            List<FileInfoDTO> attachments, String roleType,
+                            List<FileInfoDTO> attachedFiles, List<FileInfoDTO> linkedFiles, String roleType,
                             EmpVariationDetermination empVariationDetermination,
                             int approvedInvokedServices,
                             int rejectOrWithdrawnInvokedServices) {
@@ -365,10 +366,14 @@ class EmpVariationOfficialNoticeServiceTest {
             .addRequestAction(request, accountUpdatedSubmittedEventDetails, organisationStructure, null);
         verify(registryConfig, times(approvedInvokedServices)).getEmail();
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
-        verify(officialNoticeSendService, times(rejectOrWithdrawnInvokedServices)).sendOfficialNotice(attachments, request, ccRecipientsEmails, Collections.emptyList());
-        verify(officialNoticeSendService, times(approvedInvokedServices)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryMail));
+        verify(empOfficialNoticeSendService, times(rejectOrWithdrawnInvokedServices)).sendOfficialNotice(
+			attachedFiles, linkedFiles, request, ccRecipientsEmails, Collections.emptyList(),
+			GENERIC_EMAIL);
+		verify(empOfficialNoticeSendService, times(approvedInvokedServices)).sendOfficialNotice(
+			attachedFiles, linkedFiles, request, ccRecipientsEmails, List.of(registryMail),
+			EMP_APPROVED_TEMPLATE);
         verifyNoMoreInteractions(registryConfig, requestService, accountUpdatedRegistryListener,
-            accountUpdatedEventRequestActionService, decisionNotificationUsersService, officialNoticeSendService);
+            accountUpdatedEventRequestActionService, decisionNotificationUsersService, empOfficialNoticeSendService);
         verifyNoInteractions(requestAccountContactQueryService,
             fileDocumentGenerateServiceDelegator, documentTemplateOfficialNoticeParamsProvider);
     }
@@ -378,12 +383,12 @@ class EmpVariationOfficialNoticeServiceTest {
         FileInfoDTO empDocFileInfoDTO = buildOfficialFileInfo();
 
         return Stream.of(
-            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO, empDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.APPROVED).build(), 1, 0),
-            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.REJECTED).build(), 0, 1),
-            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.DEEMED_WITHDRAWN).build(), 0, 1),
+            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO), List.of(empDocFileInfoDTO), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.APPROVED).build(), 1, 0),
+            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), List.of(), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.REJECTED).build(), 0, 1),
+            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), List.of(), RoleTypeConstants.OPERATOR, EmpVariationDetermination.builder().type(EmpVariationDeterminationType.DEEMED_WITHDRAWN).build(), 0, 1),
 
-            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO, empDocFileInfoDTO), RoleTypeConstants.REGULATOR, null, 1, 0),
-            Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO), RoleTypeConstants.REGULATOR, null, 1, 0)
+            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO), List.of(empDocFileInfoDTO), RoleTypeConstants.REGULATOR, null, 1, 0),
+            Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO), List.of(empDocFileInfoDTO), RoleTypeConstants.REGULATOR, null, 1, 0)
         );
     }
     @Test

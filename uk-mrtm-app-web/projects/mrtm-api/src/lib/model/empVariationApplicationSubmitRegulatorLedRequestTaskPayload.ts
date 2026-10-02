@@ -39,5 +39,6 @@ export interface EmpVariationApplicationSubmitRegulatorLedRequestTaskPayload {
   reviewGroupDecisions?: { [key: string]: EmpAcceptedVariationDecisionDetails };
   finalDocumentsGenerationInProgress?: boolean;
   finalDocumentsGenerationSuccessful?: boolean;
+  failureNotificationSent?: boolean;
   previewFiles?: { [key: string]: RequestTaskPreviewFileInfoDTO };
 }

@@ -9,13 +9,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlan;
 import uk.gov.mrtm.api.emissionsmonitoringplan.domain.EmissionsMonitoringPlanContainer;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpReviewGroup;
 import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
-import uk.gov.netz.api.workflow.request.core.domain.RequestActionPayload;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 import uk.gov.netz.api.workflow.request.flow.common.domain.dto.RequestActionUserInfo;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -27,22 +27,20 @@ import java.util.stream.Stream;
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 @SuperBuilder
-public class EmpVariationApplicationRejectedRequestActionPayload extends RequestActionPayload {
+public class EmpVariationApplicationRejectedRequestActionPayload
+        extends EmpVariationApplicationSubmittedRequestActionPayload {
 
     @Valid
     @NotNull
     private EmissionsMonitoringPlanContainer originalEmpContainer;
 
-    @Valid
-    @NotNull
-    private EmissionsMonitoringPlan emissionsMonitoringPlan;
-
-    @Valid
-    @NotNull
-    private EmpVariationDetails empVariationDetails;
+    private EmpVariationReviewDecision empVariationDetailsReviewDecision;
 
     @Builder.Default
-    private Map<UUID, String> empAttachments = new HashMap<>();
+    private Map<EmpReviewGroup, EmpVariationReviewDecision> reviewGroupDecisions = new EnumMap<>(EmpReviewGroup.class);
+
+    @Builder.Default
+    private Map<UUID, String> reviewAttachments = new HashMap<>();
 
     @Valid
     @NotNull
@@ -76,8 +74,8 @@ public class EmpVariationApplicationRejectedRequestActionPayload extends Request
         final Map<UUID, String> originalAttachments = originalEmpContainer != null ?
             originalEmpContainer.getEmpAttachments() : new HashMap<>();
 
-        return Stream.of(getEmpAttachments(), originalAttachments).flatMap(m -> m.entrySet().stream()).collect(
-            Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (first, second) -> first)
-        );
+        return Stream.of(super.getEmpAttachments(), originalAttachments, getReviewAttachments())
+                .flatMap(m -> m.entrySet().stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (first, second) -> first));
     }
 }

@@ -7,9 +7,9 @@ import { catchError, combineLatest, of, Subject, switchMap, take, takeWhile, tim
 
 import {
   DecisionNotification,
+  DocumentPreviewService,
   EmpVariationApplicationReviewRequestTaskPayload,
   RequestDetailsDTO,
-  RequestTaskActionProcessDTO,
   RequestTaskDTO,
   RequestTaskPreviewFileInfoDTO,
   TasksService,
@@ -40,6 +40,7 @@ const MAX_POLL_ATTEMPTS = 20;
 export class RelatedAsyncDocumentsComponent {
   private readonly authStore: AuthStore = inject(AuthStore);
   private readonly tasksService: TasksService = inject(TasksService);
+  private readonly documentPreviewService: DocumentPreviewService = inject(DocumentPreviewService);
   private readonly requestTaskStore: RequestTaskStore = inject(RequestTaskStore);
   private readonly notificationBannerStore = inject(FeedbackBannerStore);
 
@@ -84,9 +85,6 @@ export class RelatedAsyncDocumentsComponent {
 
     effect(() => {
       const hasFailedFiles = this.hasFailedFiles();
-      const docGenInProgress = this.requestTaskStore.select(
-        requestTaskQuery.selectFinalDocumentsGenerationInProgress,
-      )();
       const docGenSuccessful = this.requestTaskStore.select(
         requestTaskQuery.selectFinalDocumentsGenerationSuccessful,
       )();
@@ -95,8 +93,6 @@ export class RelatedAsyncDocumentsComponent {
         untracked(() => this.setBusinessErrors());
       } else if (hasFailedFiles) {
         untracked(() => this.setRequestErrors());
-      } else if (docGenInProgress === true) {
-        untracked(() => this.setInProgressBanner());
       }
     });
   }
@@ -155,23 +151,16 @@ export class RelatedAsyncDocumentsComponent {
     );
   }
 
-  /**
-   * Processes a request task action by sending the necessary data to the task service and handling any errors that occur.
-   */
   private processRequestTaskAction(previewDocument: PreviewAsyncDocument) {
-    return this.tasksService
-      .processRequestTaskAction({
-        requestTaskActionType: previewDocument.requestTaskActionType,
-        requestTaskId: this.taskId(),
-        requestTaskActionPayload: {
-          payloadType: previewDocument.requestPayloadType,
-          decisionNotification: {
-            operators: this.decisionNotification()?.operators ?? [],
-            externalContacts: this.decisionNotification()?.externalContacts ?? [],
-            signatory: this.decisionNotification()?.signatory ?? this.authStore.select(selectUserId)(),
-          },
+    return this.documentPreviewService
+      .triggerAsyncDocumentGeneration(Number(this.taskId()), {
+        decisionNotification: {
+          operators: this.decisionNotification()?.operators ?? [],
+          externalContacts: this.decisionNotification()?.externalContacts ?? [],
+          signatory: this.decisionNotification()?.signatory ?? this.authStore.select(selectUserId)(),
         },
-      } as RequestTaskActionProcessDTO)
+        documentType: previewDocument.requestGeneratedFileType,
+      })
       .pipe(
         catchError(() => {
           this.setRequestErrors();
@@ -194,13 +183,6 @@ export class RelatedAsyncDocumentsComponent {
       DOCUMENTS_REQUEST_ERROR: 'There was a problem preparing the files. Select to create the file again',
     });
     this.notificationBannerStore.setInvalidForm(this.formGroup);
-  }
-
-  private setInProgressBanner() {
-    this.notificationBannerStore.setNeutralBanner({
-      heading: 'Task is in progress',
-      body: 'The task is processing in the background. Once this is complete it will be removed from your task list',
-    });
   }
 
   private clearFormErrors() {

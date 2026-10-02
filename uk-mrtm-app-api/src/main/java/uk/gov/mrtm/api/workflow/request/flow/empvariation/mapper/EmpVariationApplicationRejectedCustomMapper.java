@@ -28,7 +28,7 @@ public class EmpVariationApplicationRejectedCustomMapper implements RequestActio
         RequestActionDTO requestActionDTO = REQUEST_ACTION_MAPPER.toRequestActionDTOIgnorePayload(requestAction);
 
         EmpVariationApplicationRejectedRequestActionPayload clonedRequestActionPayload =
-        		EMP_VARIATION_REVIEW_REQUEST_ACTION_MAPPER.cloneRejectedPayloadIgnoreReason(requestActionPayload);
+        		EMP_VARIATION_REVIEW_REQUEST_ACTION_MAPPER.cloneRejectedPayloadIgnoreReasonAndDecisionsNotes(requestActionPayload);
 
         requestActionDTO.setPayload(clonedRequestActionPayload);
 

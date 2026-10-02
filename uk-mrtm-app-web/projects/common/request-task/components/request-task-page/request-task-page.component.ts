@@ -8,12 +8,14 @@ import {
   Injector,
   runInInjectionContext,
   Type,
+  untracked,
   ViewEncapsulation,
 } from '@angular/core';
 
 import { ItemDTO, RequestActionInfoDTO, RequestTaskDTO, RequestTaskItemDTO } from '@mrtm/api';
 
 import {
+  FeedbackBannerStore,
   PageHeadingComponent,
   PreviewAsyncDocument,
   PreviewDocument,
@@ -56,6 +58,11 @@ type ViewModel = {
   previewAsyncDocuments: PreviewAsyncDocument[];
 };
 
+export const FINAL_DOCUMENTS_IN_PROGRESS_BANNER = {
+  heading: 'Task is in progress',
+  body: 'The task is processing in the background. Once this is complete it will be removed from your task list',
+};
+
 /* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'netz-request-task-page',
@@ -76,6 +83,7 @@ type ViewModel = {
 })
 export class RequestTaskPageComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
+  private readonly feedbackBannerStore = inject(FeedbackBannerStore);
   private readonly contentFactoryMap: RequestTaskPageContentFactoryMap = inject(REQUEST_TASK_PAGE_CONTENT);
   private readonly relatedPreviewDocumentsMap: RelatedPreviewDocumentsMap = inject(TASK_RELATED_PREVIEW_DOCUMENTS_MAP, {
     optional: true,
@@ -100,6 +108,7 @@ export class RequestTaskPageComponent {
     const timeline = this.store.select(requestTaskQuery.selectTimeline)();
     const showAssignAction = this.store.select(requestTaskQuery.selectIsAssignActionVisible)();
     const relatedActions = this.store.select(requestTaskQuery.selectRelatedActions)();
+    const documentsInProgress = this.store.select(requestTaskQuery.selectFinalDocumentsGenerationInProgress)() === true;
     const {
       header,
       headerSize,
@@ -117,10 +126,11 @@ export class RequestTaskPageComponent {
       ? this.relatedPreviewAsyncDocumentsMap()[requestTask.type].filter((item) => item.visibleInRelatedActions)
       : [];
     const hasSidebar =
-      relatedActions?.filter((action) => !this.relatedActionsHiddenFromSidebar.includes(action)).length > 0 ||
-      previewDocuments?.length > 0 ||
-      previewAsyncDocuments?.length > 0 ||
-      showAssignAction;
+      (relatedActions?.filter((action) => !this.relatedActionsHiddenFromSidebar.includes(action)).length > 0 ||
+        previewDocuments?.length > 0 ||
+        previewAsyncDocuments?.length > 0 ||
+        showAssignAction) &&
+      !documentsInProgress;
 
     return {
       requestId,
@@ -146,6 +156,16 @@ export class RequestTaskPageComponent {
   });
 
   constructor() {
+    // The sidebar (and the related async documents within it) is hidden while the final documents are being
+    // generated, so the in-progress banner has to be raised from here rather than from the sidebar.
+    effect(() => {
+      const documentsInProgress = this.store.select(requestTaskQuery.selectFinalDocumentsGenerationInProgress)();
+
+      if (documentsInProgress === true) {
+        untracked(() => this.feedbackBannerStore.setNeutralBanner(FINAL_DOCUMENTS_IN_PROGRESS_BANNER));
+      }
+    });
+
     effect(() => {
       if (!!this.vm() && !this.vm().contentComponent && !this.vm().sections) {
         throw new Error(

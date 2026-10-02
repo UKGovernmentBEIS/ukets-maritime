@@ -11,7 +11,7 @@ import uk.gov.mrtm.api.workflow.request.flow.doe.submit.domain.DoeApplicationSub
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentAbstractHandler;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentAbstractHandler;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestTaskService;
@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class DoeSubmitOfficialLetterPreviewHandler extends PreviewDocumentAbstractHandler {
+public class DoeSubmitOfficialLetterPreviewHandler extends SyncPreviewDocumentAbstractHandler {
 
     private final PreviewOfficialNoticeService previewOfficialNoticeService;
     private final FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;

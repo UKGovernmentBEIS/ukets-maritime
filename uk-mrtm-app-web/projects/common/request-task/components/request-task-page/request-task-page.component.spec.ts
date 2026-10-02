@@ -3,6 +3,9 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 
+import { RequestTaskItemDTO } from '@mrtm/api';
+
+import { FeedbackBannerComponent, TASK_RELATED_ACTIONS_MAP } from '@netz/common/components';
 import { TaskSection } from '@netz/common/model';
 import { TASK_STATUS_TAG_MAP, TaskStatusTagMap } from '@netz/common/pipes';
 import { RequestTaskStore } from '@netz/common/store';
@@ -10,7 +13,7 @@ import { BasePage } from '@netz/common/testing';
 
 import { REQUEST_TASK_PAGE_CONTENT } from '../../request-task.providers';
 import { RequestTaskPageContentFactory, RequestTaskPageContentFactoryMap } from '../../request-task.types';
-import { RequestTaskPageComponent } from './request-task-page.component';
+import { FINAL_DOCUMENTS_IN_PROGRESS_BANNER, RequestTaskPageComponent } from './request-task-page.component';
 
 let dynamicSectionsFlag = true;
 
@@ -92,6 +95,14 @@ const contentWithSections: Record<string, RequestTaskPageContentFactory> = {
   }),
 };
 
+const contentWithBanner: Record<string, RequestTaskPageContentFactory> = {
+  TEST_TYPE: () => ({
+    header: 'TEST_TYPE_HEADER',
+    sections: sectionsA,
+    pageTopComponent: FeedbackBannerComponent,
+  }),
+};
+
 const contentWithDynamicSections: RequestTaskPageContentFactoryMap = {
   TEST_TYPE: () => {
     return {
@@ -121,9 +132,21 @@ describe('RequestTaskPageComponent', () => {
     get headings2(): HTMLHeadingElement[] {
       return this.queryAll<HTMLHeadingElement>('h2');
     }
+
+    get sidebar(): HTMLElement {
+      return this.query<HTMLElement>('netz-related-actions');
+    }
+
+    get notificationBanner(): HTMLElement {
+      return this.query<HTMLElement>('govuk-notification-banner');
+    }
   }
 
-  async function createModule(content: RequestTaskPageContentFactoryMap) {
+  async function createModule(
+    content: RequestTaskPageContentFactoryMap,
+    requestTaskItem: RequestTaskItemDTO = { requestTask: { type: 'TEST_TYPE' as any } },
+  ) {
+    window.HTMLElement.prototype.scrollIntoView = vi.fn();
     TestBed.configureTestingModule({
       providers: [
         provideRouter([
@@ -132,11 +155,12 @@ describe('RequestTaskPageComponent', () => {
         ]),
         { provide: REQUEST_TASK_PAGE_CONTENT, useValue: content },
         { provide: TASK_STATUS_TAG_MAP, useValue: statusTagMap },
+        { provide: TASK_RELATED_ACTIONS_MAP, useValue: {} },
       ],
     });
 
     store = TestBed.inject(RequestTaskStore);
-    store.setRequestTaskItem({ requestTask: { type: 'TEST_TYPE' as any } });
+    store.setRequestTaskItem(requestTaskItem);
 
     harness = await RouterTestingHarness.create();
     component = await harness.navigateByUrl('/', RequestTaskPageComponent);
@@ -167,6 +191,34 @@ describe('RequestTaskPageComponent', () => {
       'Test pre content',
       'Test post content',
     ]);
+  });
+
+  it('should show the sidebar when the task is assignable and no final documents are being generated', async () => {
+    await createModule(contentWithBanner, {
+      userAssignCapable: true,
+      allowedRequestTaskActions: [],
+      requestTask: { type: 'TEST_TYPE' as any, assignable: true, payload: {} as any },
+    });
+
+    expect(component.vm().hasSidebar).toBe(true);
+    expect(page.sidebar).toBeTruthy();
+    expect(page.notificationBanner).toBeFalsy();
+  });
+
+  it('should hide the sidebar and show the in progress banner while final documents are being generated', async () => {
+    await createModule(contentWithBanner, {
+      userAssignCapable: true,
+      requestTask: {
+        type: 'TEST_TYPE' as any,
+        assignable: true,
+        payload: { finalDocumentsGenerationInProgress: true } as any,
+      },
+    });
+
+    expect(component.vm().hasSidebar).toBe(false);
+    expect(page.sidebar).toBeFalsy();
+    expect(page.notificationBanner.textContent).toContain(FINAL_DOCUMENTS_IN_PROGRESS_BANNER.heading);
+    expect(page.notificationBanner.textContent).toContain(FINAL_DOCUMENTS_IN_PROGRESS_BANNER.body);
   });
 
   it('should show changed sections for same task type after navigation', async () => {

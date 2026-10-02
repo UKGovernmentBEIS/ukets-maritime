@@ -1,0 +1,21 @@
+<netz-feedback-banner />
+
+<div class="govuk-grid-row">
+  <div class="govuk-grid-column-three-quarters">
+    <netz-page-heading>MI Reports</netz-page-heading>
+  </div>
+  <div class="govuk-grid-column-one-quarter govuk-!-text-align-right">
+    @if (canAddMiReport()) {
+      <a govukButton [routerLink]="['custom-reports', 'add']">Add a custom report</a>
+    }
+  </div>
+</div>
+
+<govuk-tabs>
+  <ng-template govukTabLazy label="Custom reports" id="custom-reports">
+    <mrtm-custom-reports-list />
+  </ng-template>
+  <ng-template govukTabLazy label="Standard reports" id="standard-reports">
+    <mrtm-mi-reports [withHeader]="false" />
+  </ng-template>
+</govuk-tabs>

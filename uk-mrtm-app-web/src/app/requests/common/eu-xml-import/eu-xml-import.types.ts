@@ -166,7 +166,7 @@ export interface EuXmlRoot {
 
 export interface EuXmlImportData {
   shipEmissions: EmpShipEmissions[];
-  emissionSources: EmpEmissionSources;
+  emissionSources: Partial<EmpEmissionSources>;
   controlActivities: EmpControlActivities;
   abbreviations: EmpAbbreviations;
   managementProcedures: EmpManagementProcedures;
@@ -176,7 +176,7 @@ export interface EuXmlImportData {
 }
 
 export interface EuXmlImportResult {
-  data?: EuXmlImportData;
+  data?: Partial<EuXmlImportData>;
   errors?: XmlValidationError[];
   warnings?: XmlValidationError[];
 }

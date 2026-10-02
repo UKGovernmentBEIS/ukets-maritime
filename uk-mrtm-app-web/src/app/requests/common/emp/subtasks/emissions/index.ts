@@ -7,6 +7,7 @@ export * from './list-of-ships';
 export * from './measurements';
 export * from './ship-summary';
 export * from './validators';
+export * from './emissions-base.flow-manager';
 export * from './emissions.flow-manager';
 export * from './emissions-review.flow-manager';
 export * from './emissions-variation-regulator.flow-manager';

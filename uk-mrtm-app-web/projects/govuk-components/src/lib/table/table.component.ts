@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  computed,
   contentChild,
   inject,
   input,
@@ -34,6 +35,9 @@ export class TableComponent<T> {
 
   readonly sort = output<SortEvent>();
   readonly template = contentChild(TemplateRef);
+  readonly allHeadersHidden = computed(
+    () => !!this.columns()?.length && this.columns().every((column) => column.hiddenHeader),
+  );
 
   sortedField: GovukTableColumn<T>['field'];
   sortedColumn: GovukTableColumn<T>['header'];

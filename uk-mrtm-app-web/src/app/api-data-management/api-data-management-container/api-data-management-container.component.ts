@@ -28,11 +28,15 @@ export class ApiDataManagementContainerComponent {
   public readonly currentTab = signal<string>(null);
   protected readonly isImportAvailable = signal<boolean>(false);
   public handleSelectedTab(tab: string): void {
-    this.router.navigate([], {
-      relativeTo: this.activatedRoute,
-      preserveFragment: true,
-    });
-    this.currentTab.set(tab);
+    if (tab !== this.currentTab()) {
+      this.router.navigate([], {
+        relativeTo: this.activatedRoute,
+        queryParams: { page: undefined },
+        fragment: tab,
+        scroll: 'manual',
+      });
+      this.currentTab.set(tab);
+    }
   }
 
   protected handleIsImportAvailable($event: boolean) {

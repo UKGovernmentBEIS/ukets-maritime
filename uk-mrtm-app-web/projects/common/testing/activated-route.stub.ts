@@ -14,8 +14,12 @@ export class ActivatedRouteStub {
   readonly snapshot: ActivatedRouteSnapshotStub;
   private paramSubject = new ReplaySubject<ParamMap>(1);
   readonly paramMap = this.paramSubject.asObservable();
+  private plainParamSubject = new ReplaySubject<Params>(1);
+  readonly params = this.plainParamSubject.asObservable();
   private queryParamSubject = new ReplaySubject<ParamMap>(1);
   readonly queryParamMap = this.queryParamSubject.asObservable();
+  private plainQueryParamSubject = new ReplaySubject<Params>(1);
+  readonly queryParams = this.plainQueryParamSubject.asObservable();
   private dataSubject = new ReplaySubject<Params>(1);
   readonly data = this.dataSubject.asObservable();
   private fragmentSubject = new ReplaySubject<string>(1);
@@ -42,16 +46,18 @@ export class ActivatedRouteStub {
     return undefined;
   }
 
-  /** Set the paramMap observables's next value */
+  /** Set the paramMap and params observables's next value */
   setParamMap(params?: Params): void {
     const newParams = convertToParamMap(params);
     this.paramSubject.next(newParams);
+    this.plainParamSubject.next(params);
     this.snapshot.paramMap = newParams;
   }
 
-  /** Set the queryParamMap observable's next value */
+  /** Set the queryParamMap and queryParams observables's next value */
   setQueryParamMap(params?: Params): void {
     this.queryParamSubject.next(convertToParamMap(params));
+    this.plainQueryParamSubject.next(params);
   }
 
   /** Set the data for resolves */

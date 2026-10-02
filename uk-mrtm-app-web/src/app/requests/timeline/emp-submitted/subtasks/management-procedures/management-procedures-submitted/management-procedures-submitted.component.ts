@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@a
 
 import { EmpManagementProcedures } from '@mrtm/api';
 
+import { AuthStore, selectUserRoleType } from '@netz/common/auth';
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { RequestActionStore } from '@netz/common/store';
 
@@ -35,6 +36,8 @@ interface ViewModel {
 })
 export class ManagementProceduresSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
+  private readonly authStore = inject(AuthStore);
+  protected readonly isRegulator = computed(() => this.authStore.select(selectUserRoleType)() === 'REGULATOR');
 
   readonly vm: Signal<ViewModel> = computed(() => {
     const managementProcedures = this.store.select(empSubmittedQuery.selectManagementProcedures)();

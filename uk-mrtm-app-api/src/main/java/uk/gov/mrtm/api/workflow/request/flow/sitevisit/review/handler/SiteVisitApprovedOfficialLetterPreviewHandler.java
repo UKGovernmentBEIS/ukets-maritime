@@ -6,7 +6,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskTyp
 import uk.gov.mrtm.api.workflow.request.flow.sitevisit.review.domain.SiteVisitApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.sitevisit.review.service.SiteVisitOfficialNoticeService;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentAbstractHandler;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentAbstractHandler;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestTaskService;
@@ -15,7 +15,7 @@ import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 import java.util.List;
 
 @Service
-public class SiteVisitApprovedOfficialLetterPreviewHandler extends PreviewDocumentAbstractHandler {
+public class SiteVisitApprovedOfficialLetterPreviewHandler extends SyncPreviewDocumentAbstractHandler {
 
     private final SiteVisitOfficialNoticeService siteVisitOfficialNoticeService;
 

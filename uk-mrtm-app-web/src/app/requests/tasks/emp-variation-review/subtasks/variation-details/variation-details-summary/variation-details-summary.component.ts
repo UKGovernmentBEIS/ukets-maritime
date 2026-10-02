@@ -26,7 +26,6 @@ interface ViewModel {
   empReviewDecisionDTO: EmpVariationReviewDecisionDto;
   isEditable: boolean;
   isSubTaskCompleted: boolean;
-  showDecisionDetails: boolean;
   wizardStep: { [s: string]: string };
 }
 
@@ -59,8 +58,6 @@ export class VariationDetailsSummaryComponent {
       empReviewDecisionDTO: this.store.select(empVariationReviewQuery.selectEmpVariationDetailsReviewDecisionDTO)(),
       isEditable: this.store.select(requestTaskQuery.selectIsEditable)(),
       isSubTaskCompleted: this.store.select(empVariationReviewQuery.selectIsVariationReviewDetailsSubtaskCompleted)(),
-      showDecisionDetails:
-        this.store.select(requestTaskQuery.selectRequestTaskType)() !== 'EMP_VARIATION_WAIT_FOR_AMENDS',
       wizardStep: VariationDetailsWizardStep,
     };
   });

@@ -37,6 +37,7 @@ import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileT
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDetermination;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.service.EmpOfficialNoticeSendService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuanceRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
@@ -80,6 +81,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName.EMP_APPROVED_TEMPLATE;
+import static uk.gov.netz.api.workflow.utils.NotificationTemplateName.GENERIC_EMAIL;
 
 @ExtendWith(MockitoExtension.class)
 class EmpIssuanceOfficialNoticeServiceTest {
@@ -90,7 +93,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
     @Mock
     private RequestService requestService;
     @Mock
-    private OfficialNoticeSendService officialNoticeSendService;
+    private EmpOfficialNoticeSendService empOfficialNoticeSendService;
     @Mock
     private DecisionNotificationUsersService decisionNotificationUsersService;
     @Mock
@@ -216,7 +219,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
             templateAccountDataCollectFromEmpIssuanceService);
 
         verifyNoInteractions(requestService,
-            officialNoticeSendService,
+            empOfficialNoticeSendService,
             registryConfig,
             accountCreatedEventListenerResolver,
             empQueryService,
@@ -319,7 +322,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
             templateAccountDataCollectFromAccountService);
 
         verifyNoInteractions(requestService,
-            officialNoticeSendService,
+            empOfficialNoticeSendService,
             registryConfig,
             accountCreatedEventListenerResolver,
             empQueryService,
@@ -336,7 +339,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
     @ParameterizedTest
     @MethodSource("provideSendOfficialNoticeTestArgs")
     void sendOfficialNotice(FileInfoDTO officialDocFileInfoDTO, FileInfoDTO empDocFileInfoDTO,
-                            List<FileInfoDTO> attachments) {
+                            List<FileInfoDTO> linkedFiles) {
         String requestId = "1";
         Long accountId = 1L;
         String registryEmail = "registry@pmrv.uk";
@@ -398,13 +401,14 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(requestService, times(1)).findRequestById(requestId);
         verify(addRequestActionService, times(1)).addRequestAction(request, organisationStructure, regulatorReviewer);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
-        verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
+        verify(empOfficialNoticeSendService, times(1)).sendOfficialNotice(
+            List.of(officialDocFileInfoDTO), linkedFiles, request, ccRecipientsEmails, List.of(registryEmail), EMP_APPROVED_TEMPLATE);
         verify(empQueryService).getEmissionsMonitoringPlanDTOByAccountId(accountId);
         verify(accountCreatedEventListenerResolver, times(1)).onAccountCreatedEvent(empApprovedEventArgumentCaptor.capture());
         verify(accountQueryService).getAccountById(accountId);
 
         verifyNoMoreInteractions(requestService, decisionNotificationUsersService,
-            officialNoticeSendService, empQueryService, accountCreatedEventListenerResolver, addRequestActionService, accountQueryService);
+            empOfficialNoticeSendService, empQueryService, accountCreatedEventListenerResolver, addRequestActionService, accountQueryService);
         verifyNoInteractions(fileDocumentRepository, registryNoticeEventListenerResolver, regulatorNoticeEventAddRequestActionService);
         assertEquals(accountId, empApprovedEventArgumentCaptor.getValue().getAccountId());
         assertEquals(emissionsMonitoringPlan, empApprovedEventArgumentCaptor.getValue().getEmissionsMonitoringPlan());
@@ -476,7 +480,8 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
         verify(requestService, times(1)).findRequestById(requestId);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
-        verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
+        verify(empOfficialNoticeSendService, times(1))
+            .sendOfficialNotice(attachments, List.of(), request, ccRecipientsEmails, List.of(registryEmail), EMP_APPROVED_TEMPLATE);
         verify(accountQueryService).getAccountById(accountId);
         verify(empQueryService).getEmissionsMonitoringPlanDTOByAccountId(accountId);
         verify(accountUpdatedRegistryListener, times(accountUpdateSentToRegistryInvocations)).onAccountUpdatedEvent(accountUpdatedRegistryEvent);
@@ -485,7 +490,7 @@ class EmpIssuanceOfficialNoticeServiceTest {
 
 
         verifyNoMoreInteractions(accountUpdatedRegistryListener, accountUpdatedEventRequestActionService,
-            empQueryService, requestService, decisionNotificationUsersService, officialNoticeSendService,
+            empQueryService, requestService, decisionNotificationUsersService, empOfficialNoticeSendService,
             accountQueryService);
         verifyNoInteractions(accountCreatedEventListenerResolver, addRequestActionService, fileDocumentRepository, registryNoticeEventListenerResolver,
             regulatorNoticeEventAddRequestActionService);
@@ -555,23 +560,26 @@ class EmpIssuanceOfficialNoticeServiceTest {
         verify(registryNoticeEventListenerResolver).onRegulatorNoticeEvent(mrtmRegulatorNoticeEvent);
         verify(decisionNotificationUsersService, times(1)).findUserEmails(decisionNotification);
         verify(fileDocumentRepository, times(1)).findByUuid(officialDocFileInfoDTO.getUuid());
-        verify(officialNoticeSendService, times(1)).sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryEmail));
+        verify(empOfficialNoticeSendService, times(1)).sendOfficialNotice(attachments, List.of(), request, ccRecipientsEmails, List.of(registryEmail), GENERIC_EMAIL);
         verify(regulatorNoticeEventAddRequestActionService)
             .addRequestAction(request, submittedEventDetails, officialDocFileInfoDTO, MrtmRegulatorNoticeNotificationType.EMP_WITHDRAWN);
 
         verifyNoMoreInteractions(requestService, decisionNotificationUsersService, regulatorNoticeEventAddRequestActionService,
-            officialNoticeSendService, addRequestActionService, fileDocumentRepository, registryNoticeEventListenerResolver);
+            empOfficialNoticeSendService, addRequestActionService, fileDocumentRepository, registryNoticeEventListenerResolver);
         verifyNoInteractions(empQueryService, accountCreatedEventListenerResolver, accountQueryService);
     }
 
     private static Stream<Arguments> provideSendOfficialNoticeTestArgs() {
         FileInfoDTO officialDocFileInfoDTO = buildOfficialFileInfo();
-        FileInfoDTO empDocFileInfoDTO = buildOfficialFileInfo();
+        FileInfoDTO empDocFileInfoDTO = FileInfoDTO.builder()
+                .name("emp.pdf")
+                .uuid(UUID.randomUUID().toString())
+                .build();
 
         return Stream.of(
                 //when operator
-                Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(officialDocFileInfoDTO, empDocFileInfoDTO)),
-                Arguments.of(officialDocFileInfoDTO, null, List.of(officialDocFileInfoDTO))
+                Arguments.of(officialDocFileInfoDTO, empDocFileInfoDTO, List.of(empDocFileInfoDTO)),
+                Arguments.of(officialDocFileInfoDTO, null, List.of())
         );
     }
 

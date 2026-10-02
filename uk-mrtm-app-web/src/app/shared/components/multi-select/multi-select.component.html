@@ -1,4 +1,4 @@
-<label [for]="identifier" [id]="`l.${identifier}`" class="govuk-label">
+<label [for]="identifier" [id]="`l.${identifier}`" [class]="currentLabelSize()">
   {{ label() }}
 </label>
 @if (hint()) {
@@ -37,7 +37,7 @@
       id="selected-options">
       @for (value of currentValue(); track value) {
         <span class="selected">
-          {{ itemMap[value] }}
+          {{ itemMap()[value] }}
         </span>
       }
     </div>

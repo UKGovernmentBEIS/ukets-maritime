@@ -60,6 +60,9 @@ public interface EmpReviewMapper {
             AddressStateDTO contactAddress,  String payloadType);
 
     @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.attachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.aerRelatedAttachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.empSectionAttachmentIds", ignore = true)
     EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload toEmpIssuanceApplicationDeemedWithdrawnRequestActionPayload(
             EmpIssuanceRequestPayload requestPayload, Map<String, RequestActionUserInfo> usersInfo, String payloadType);
 

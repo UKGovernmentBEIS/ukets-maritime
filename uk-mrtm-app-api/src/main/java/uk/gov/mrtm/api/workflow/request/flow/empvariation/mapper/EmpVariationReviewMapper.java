@@ -36,12 +36,18 @@ public interface EmpVariationReviewMapper {
             String operatorName, AddressStateDTO contactAddress, String payloadType);
 
     @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.attachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.aerRelatedAttachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.empSectionAttachmentIds", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "fileDocuments", ignore = true)
     EmpVariationApplicationRejectedRequestActionPayload toEmpVariationApplicationRejectedRequestActionPayload(
             EmpVariationRequestPayload requestPayload, Map<String, RequestActionUserInfo> usersInfo, String payloadType);
 
     @Mapping(target = "payloadType", source = "payloadType")
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.attachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.operatorDetails.aerRelatedAttachmentIds", ignore = true)
+    @Mapping(target = "emissionsMonitoringPlan.empSectionAttachmentIds", ignore = true)
     @Mapping(target = "attachments", ignore = true)
     @Mapping(target = "fileDocuments", ignore = true)
     EmpVariationApplicationDeemedWithdrawnRequestActionPayload toEmpVariationApplicationDeemedWithdrawnRequestActionPayload(

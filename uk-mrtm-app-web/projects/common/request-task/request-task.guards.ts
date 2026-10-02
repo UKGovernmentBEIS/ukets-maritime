@@ -5,6 +5,7 @@ import { catchError, concatMap, map, of } from 'rxjs';
 
 import { RequestActionsService, RequestItemsService, TasksService } from '@mrtm/api';
 
+import { BusinessErrorService, catchNotFoundRequest, ErrorCodes, taskViewNotFoundError } from '@netz/common/error';
 import { PendingRequestService } from '@netz/common/services';
 import { RequestTaskStore } from '@netz/common/store';
 
@@ -21,6 +22,7 @@ export function getRequestTaskPageDefaultCanActivateGuard(taskIdParam = 'taskId'
     const requestItemsService = inject(RequestItemsService);
     const editableResolver: RequestTaskIsEditableResolver = inject(REQUEST_TASK_IS_EDITABLE_RESOLVER);
     const pendingRequestService = inject(PendingRequestService);
+    const businessErrorService = inject(BusinessErrorService);
 
     const id = +route.paramMap.get(taskIdParam);
     if (!route.paramMap.has(taskIdParam) || Number.isNaN(id)) {
@@ -47,6 +49,9 @@ export function getRequestTaskPageDefaultCanActivateGuard(taskIdParam = 'taskId'
         );
       }),
       pendingRequestService.trackRequest(),
+      catchNotFoundRequest(ErrorCodes.NOTFOUND1001, () =>
+        businessErrorService.showErrorForceNavigation(taskViewNotFoundError),
+      ),
       catchError((error) => {
         console.error(error);
         return of(router.createUrlTree(['dashboard']));

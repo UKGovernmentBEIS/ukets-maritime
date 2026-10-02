@@ -1,6 +1,16 @@
-import { buildSaveNotFoundError, buildSavePartiallyNotFoundError, BusinessError } from './business-error';
+import {
+  buildSaveNotFoundError,
+  buildSavePartiallyNotFoundError,
+  buildViewNotFoundError,
+  BusinessError,
+} from './business-error';
 
 export const taskNotFoundError = buildSaveNotFoundError().withLink({
+  link: ['/dashboard'],
+  linkText: 'Return to: Dashboard',
+});
+
+export const taskViewNotFoundError = buildViewNotFoundError().withLink({
   link: ['/dashboard'],
   linkText: 'Return to: Dashboard',
 });

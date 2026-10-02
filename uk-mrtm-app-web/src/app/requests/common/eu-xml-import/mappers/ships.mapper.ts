@@ -185,9 +185,15 @@ function buildFuelFactorMap(
       ? entry.methodDensityBunkerCode.find(Boolean)
       : entry.methodDensityBunkerCode;
     const rawBunker = bunkerCode?.toUpperCase() ?? '';
-    const densityMethodBunker: EmpFuelsAndEmissionsFactors['densityMethodBunker'] = VALID_BUNKER_METHODS.has(rawBunker)
-      ? (rawBunker as EmpFuelsAndEmissionsFactors['densityMethodBunker'])
-      : undefined;
+
+    let densityMethodBunker: EmpFuelsAndEmissionsFactors['densityMethodBunker'] = undefined;
+
+    if (VALID_BUNKER_METHODS.has(rawBunker)) {
+      densityMethodBunker =
+        rawBunker === 'ON_BOARD_MEASUREMENT'
+          ? 'ON_BOARD_MEASUREMENT_SYSTEMS'
+          : (rawBunker as EmpFuelsAndEmissionsFactors['densityMethodBunker']);
+    }
 
     const { origin, type, name } = fuelOrigin;
 
@@ -200,7 +206,12 @@ function buildFuelFactorMap(
       methane: ch4Val !== undefined ? String(ch4Val) : undefined,
       nitrousOxide: n2oVal !== undefined ? String(n2oVal) : undefined,
       densityMethodBunker,
-      densityMethodTank: undefined,
+      // The XSD only carries a bunkered fuel density method, not a separate one for fuel in
+      // tanks, so the same value is copied across to keep both reporting fields consistent.
+      densityMethodTank:
+        densityMethodBunker === 'ON_BOARD_MEASUREMENT_SYSTEMS'
+          ? 'MEASUREMENT_SYSTEMS'
+          : (densityMethodBunker as EmpFuelsAndEmissionsFactors['densityMethodTank']),
     } as EmpFuelsAndEmissionsFactors & { type: string });
   }
 

@@ -28,7 +28,7 @@ public class EmpIssuanceApplicationDeemedWithdrawnCustomMapper implements Reques
         RequestActionDTO requestActionDTO = REQUEST_ACTION_MAPPER.toRequestActionDTOIgnorePayload(requestAction);
 
         EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload clonedRequestActionPayload =
-            EMP_ISSUANCE_REVIEW_REQUEST_ACTION_MAPPER.cloneDeemedWithdrawnPayloadIgnoreReason(requestActionPayload);
+            EMP_ISSUANCE_REVIEW_REQUEST_ACTION_MAPPER.cloneDeemedWithdrawnPayloadIgnoreReasonAndDecisions(requestActionPayload);
 
         requestActionDTO.setPayload(clonedRequestActionPayload);
 

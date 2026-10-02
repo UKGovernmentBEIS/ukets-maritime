@@ -3,7 +3,7 @@ import { ActivatedRoute, provideRouter } from '@angular/router';
 
 import { of, throwError } from 'rxjs';
 
-import { RequestTaskItemDTO, TasksService } from '@mrtm/api';
+import { DocumentPreviewService, RequestTaskItemDTO, TasksService } from '@mrtm/api';
 
 import { AuthStore } from '@netz/common/auth';
 import { RequestTaskStore } from '@netz/common/store';
@@ -22,6 +22,7 @@ describe('RelatedAsyncDocumentsComponent', () => {
   let requestTaskStore: RequestTaskStore;
   let feedbackBannerStore: FeedbackBannerStore;
   let tasksService: TasksService;
+  let documentPreviewService: DocumentPreviewService;
   let page: Page;
 
   const mockRequestTaskItem: RequestTaskItemDTO = {
@@ -47,8 +48,6 @@ describe('RelatedAsyncDocumentsComponent', () => {
   const mockPreviewAsyncDocuments: PreviewAsyncDocument[] = [
     {
       requestGeneratedFileType: 'OFFICIAL_NOTICE',
-      requestPayloadType: 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-      requestTaskActionType: 'EMP_VARIATION_SUBMIT_REGULATOR_LED_PREVIEW_OFFICIAL_DOCUMENT',
       labelText: 'Create letter preview file',
       loadingText: 'Creating letter preview file',
       displayedFileName: 'Letter_preview.pdf',
@@ -57,8 +56,6 @@ describe('RelatedAsyncDocumentsComponent', () => {
     },
     {
       requestGeneratedFileType: 'EMP',
-      requestPayloadType: 'EMP_VARIATION_NOTIFY_OPERATOR_FOR_DECISION_PAYLOAD',
-      requestTaskActionType: 'EMP_VARIATION_SUBMIT_REGULATOR_LED_PREVIEW_EMP_DOCUMENT',
       labelText: 'Create emissions monitoring plan file',
       loadingText: 'Creating emissions monitoring plan file',
       displayedFileName: 'emissions_monitoring_plan_preview.pdf',
@@ -89,6 +86,10 @@ describe('RelatedAsyncDocumentsComponent', () => {
           provide: TasksService,
           useValue: mockClass(TasksService),
         },
+        {
+          provide: DocumentPreviewService,
+          useValue: mockClass(DocumentPreviewService),
+        },
       ],
     }).overrideComponent(RelatedAsyncDocumentsComponent, {
       set: { host: { 'test-id': 'component-spec' } },
@@ -102,6 +103,7 @@ describe('RelatedAsyncDocumentsComponent', () => {
 
     feedbackBannerStore = TestBed.inject(FeedbackBannerStore);
     tasksService = TestBed.inject(TasksService);
+    documentPreviewService = TestBed.inject(DocumentPreviewService);
     // default state has an IN_PROGRESS file, so every created component auto-starts polling;
     // give the poll a benign response so stray timers never call .pipe on undefined
     (tasksService.getTaskItemInfoById as Mock).mockReturnValue(of(null));
@@ -151,7 +153,7 @@ describe('RelatedAsyncDocumentsComponent', () => {
   it('should handle document generation success and polling', () => {
     vi.useFakeTimers();
     fixture.detectChanges();
-    (tasksService.processRequestTaskAction as Mock).mockReturnValue(of({}));
+    (documentPreviewService.triggerAsyncDocumentGeneration as Mock).mockReturnValue(of({}));
     (tasksService.getTaskItemInfoById as Mock).mockReturnValue(
       of({
         requestTask: {
@@ -177,7 +179,10 @@ describe('RelatedAsyncDocumentsComponent', () => {
     generateBtn.click();
     vi.advanceTimersByTime(0);
 
-    expect(tasksService.processRequestTaskAction).toHaveBeenCalled();
+    expect(documentPreviewService.triggerAsyncDocumentGeneration).toHaveBeenCalledWith(1337, {
+      decisionNotification: { operators: [], externalContacts: [], signatory: 'test-user-id' },
+      documentType: 'EMP',
+    });
     expect(tasksService.getTaskItemInfoById).toHaveBeenCalledWith(1337);
 
     fixture.detectChanges();
@@ -194,32 +199,14 @@ describe('RelatedAsyncDocumentsComponent', () => {
   it('should handle document generation failure', () => {
     fixture.detectChanges();
     const setInvalidFormSpy = vi.spyOn(feedbackBannerStore, 'setInvalidForm');
-    (tasksService.processRequestTaskAction as Mock).mockReturnValue(throwError(() => new Error('Error')));
+    (documentPreviewService.triggerAsyncDocumentGeneration as Mock).mockReturnValue(
+      throwError(() => new Error('Error')),
+    );
 
     const generateBtn = page.links[3];
     generateBtn.click();
 
     expect(setInvalidFormSpy).toHaveBeenCalled();
-  });
-
-  it('should set neutral banner when final documents generation is in progress', () => {
-    const setNeutralBannerSpy = vi.spyOn(feedbackBannerStore, 'setNeutralBanner');
-    requestTaskStore.setPayload({
-      ...mockRequestTaskItem.requestTask.payload,
-      previewFiles: {},
-      finalDocumentsGenerationInProgress: true,
-      finalDocumentsGenerationSuccessful: undefined,
-    } as any);
-
-    fixture = TestBed.createComponent(RelatedAsyncDocumentsComponent);
-    fixture.componentRef.setInput('previewDocuments', mockPreviewAsyncDocuments);
-    fixture.componentRef.setInput('taskId', mockRequestTaskItem.requestTask.id);
-    fixture.detectChanges();
-
-    expect(setNeutralBannerSpy).toHaveBeenCalledWith({
-      heading: 'Task is in progress',
-      body: 'The task is processing in the background. Once this is complete it will be removed from your task list',
-    });
   });
 
   it('should set business errors in constructor', () => {
@@ -259,7 +246,7 @@ describe('RelatedAsyncDocumentsComponent', () => {
     vi.useFakeTimers();
     fixture.detectChanges();
     const setInvalidFormSpy = vi.spyOn(feedbackBannerStore, 'setInvalidForm');
-    (tasksService.processRequestTaskAction as Mock).mockReturnValue(of({}));
+    (documentPreviewService.triggerAsyncDocumentGeneration as Mock).mockReturnValue(of({}));
     (tasksService.getTaskItemInfoById as Mock).mockReturnValue(
       of({
         requestTask: {
@@ -288,7 +275,7 @@ describe('RelatedAsyncDocumentsComponent', () => {
   it('should handle polling until completion', () => {
     vi.useFakeTimers();
     fixture.detectChanges();
-    (tasksService.processRequestTaskAction as Mock).mockReturnValue(of({}));
+    (documentPreviewService.triggerAsyncDocumentGeneration as Mock).mockReturnValue(of({}));
     (tasksService.getTaskItemInfoById as Mock)
       .mockReturnValueOnce(
         of({

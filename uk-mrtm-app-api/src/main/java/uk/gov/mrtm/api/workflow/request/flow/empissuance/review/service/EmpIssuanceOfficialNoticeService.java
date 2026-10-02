@@ -28,6 +28,7 @@ import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileT
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDetermination;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.domain.EmpIssuanceDeterminationType;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.service.EmpOfficialNoticeSendService;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.review.domain.EmpIssuanceApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.domain.EmpIssuanceRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.registry.service.AccountUpdatedEventAddRequestActionService;
@@ -50,14 +51,15 @@ import uk.gov.netz.api.workflow.request.flow.common.service.RequestAccountContac
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateGeneratorParamConstants;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
-import uk.gov.netz.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
 import java.util.List;
 import java.util.Map;
 
+import static uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName.EMP_APPROVED_TEMPLATE;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.REQUEST_LOG_FORMAT;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
 import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
+import static uk.gov.netz.api.workflow.utils.NotificationTemplateName.GENERIC_EMAIL;
 
 @Service
 @Log4j2
@@ -65,7 +67,7 @@ import static uk.gov.netz.api.common.exception.ErrorCode.RESOURCE_NOT_FOUND;
 public class EmpIssuanceOfficialNoticeService {
 
     private final RequestService requestService;
-    private final OfficialNoticeSendService officialNoticeSendService;
+    private final EmpOfficialNoticeSendService empOfficialNoticeSendService;
     private final DecisionNotificationUsersService decisionNotificationUsersService;
     private final RegistryConfig registryConfig;
     private final RequestAccountContactQueryService requestAccountContactQueryService;
@@ -89,13 +91,23 @@ public class EmpIssuanceOfficialNoticeService {
     public void sendOfficialNotice(final String requestId, EmpIssuanceDeterminationType determinationType) {
         final Request request = requestService.findRequestById(requestId);
         final EmpIssuanceRequestPayload requestPayload = (EmpIssuanceRequestPayload) request.getPayload();
-        final List<FileInfoDTO> attachments = requestPayload.getEmpDocument() != null ?
+        final List<FileInfoDTO> files = requestPayload.getEmpDocument() != null ?
                 List.of(requestPayload.getOfficialNotice(), requestPayload.getEmpDocument()) :
                 List.of(requestPayload.getOfficialNotice());
+        final List<String> ccRecipientsEmails = decisionNotificationUsersService
+                .findUserEmails(requestPayload.getDecisionNotification());
+        final List<String> bccRecipientsEmails = List.of(registryConfig.getEmail());
 
-        officialNoticeSendService.sendOfficialNotice(attachments, request,
-                decisionNotificationUsersService.findUserEmails(requestPayload.getDecisionNotification()),
-                List.of(registryConfig.getEmail()));
+        if (EmpIssuanceDeterminationType.APPROVED.equals(determinationType)) {
+            final List<FileInfoDTO> linkedFiles = requestPayload.getEmpDocument() != null ?
+                    List.of(requestPayload.getEmpDocument()) : List.of();
+            empOfficialNoticeSendService.sendOfficialNotice(
+                List.of(requestPayload.getOfficialNotice()), linkedFiles,
+                request, ccRecipientsEmails, bccRecipientsEmails, EMP_APPROVED_TEMPLATE);
+        } else {
+            empOfficialNoticeSendService.sendOfficialNotice(
+                    files, List.of(), request, ccRecipientsEmails, bccRecipientsEmails, GENERIC_EMAIL);
+        }
 
         if (EmpIssuanceDeterminationType.APPROVED.equals(determinationType)) {
             final MrtmAccount account = accountQueryService.getAccountById(request.getAccountId());

@@ -1,9 +1,9 @@
-import { BASIC_SHIP_DETAILS_STEP } from '@requests/common/components/emissions/basic-ship-details';
+import { BASIC_SHIP_DETAILS_STEP } from '@requests/common/components/emissions/basic-ship-details/basic-ship-details.helpers';
 import { LIST_OF_SHIPS_DELETE_STEP } from '@requests/common/components/emissions/delete-ships/delete-ships.helper';
 import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import { LIST_OF_SHIPS_STEP, UPLOAD_SHIPS_STEP } from '@requests/common/components/emissions/emissions.helpers';
 import { FUELS_AND_EMISSIONS_FORM_STEP } from '@requests/common/components/emissions/fuels-and-emissions-factors-form/fuels-and-emissions-factors-form.helper';
-import { UNCERTAINTY_LEVEL_STEP } from '@requests/common/components/emissions/uncertainty-level';
+import { UNCERTAINTY_LEVEL_STEP } from '@requests/common/components/emissions/uncertainty-level/uncertainty-level.helpers';
 
 export enum EmissionsWizardStep {
   BASIC_DETAILS = BASIC_SHIP_DETAILS_STEP,

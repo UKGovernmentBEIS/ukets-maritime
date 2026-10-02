@@ -2,8 +2,6 @@ import { InjectionToken, Signal } from '@angular/core';
 
 export type PreviewAsyncDocument = {
   requestGeneratedFileType: 'EMP' | 'OFFICIAL_NOTICE';
-  requestPayloadType: string;
-  requestTaskActionType: string;
   labelText: string;
   loadingText: string;
   /** Display name for the generated file, overriding the name provided by the backend */

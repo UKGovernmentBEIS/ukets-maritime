@@ -19,7 +19,7 @@ class EmpIssuanceReviewSendAccountOpeningEvaluatorTest {
     private EmpIssuanceReviewSendAccountOpeningEvaluator evaluator;
 
     @Test
-    void isFiltered() {
+    void isEligible() {
         final boolean actual = evaluator.isEligible(EmpIssuanceApplicationReviewRequestTaskPayload.builder()
                 .accountOpeningEventSentToRegistry(true)
                 .build());

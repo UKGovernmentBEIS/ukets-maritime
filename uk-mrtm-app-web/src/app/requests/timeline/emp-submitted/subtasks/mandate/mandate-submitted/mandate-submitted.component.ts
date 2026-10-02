@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 
+import { AuthStore, selectUserRoleType } from '@netz/common/auth';
 import { PageHeadingComponent, ReturnToTaskOrActionPageComponent } from '@netz/common/components';
 import { RequestActionStore } from '@netz/common/store';
 
@@ -21,6 +22,8 @@ import { MandateSummaryTemplateComponent, ReviewDecisionSummaryTemplateComponent
 })
 export class MandateSubmittedComponent {
   private readonly store: RequestActionStore = inject(RequestActionStore);
+  private readonly authStore = inject(AuthStore);
+  protected readonly isRegulator = computed(() => this.authStore.select(selectUserRoleType)() === 'REGULATOR');
 
   readonly mandateMap = mandateMap;
   readonly mandate = this.store.select(empSubmittedQuery.selectMandate);

@@ -76,7 +76,8 @@ export class MandateRegisteredOwnersListComponent {
   });
 
   readonly notAllShipsAssociatedMessage =
-    'The list of ships includes ships where the nature of responsibility lies with the ISM company, and no registered owner has been added. All relevant ships must be associated with a registered owner.';
+    'Some ships with delegated responsibility are not yet associated with a registered owner.\n' +
+    "Select ‘Change’ to associate the ships with an existing registered owner, or select 'Add registered owner' to create a new registered owner.";
 
   public onSubmit(): void {
     this.validationErrors.set(undefined);
@@ -86,7 +87,7 @@ export class MandateRegisteredOwnersListComponent {
       errors.push({
         column: null,
         row: null,
-        message: this.notAllShipsAssociatedMessage,
+        message: 'You must associate all ships with delegated responsibility with a registered owner.',
       });
     }
 

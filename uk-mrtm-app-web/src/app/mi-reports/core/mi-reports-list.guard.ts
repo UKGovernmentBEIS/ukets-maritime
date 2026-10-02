@@ -1,14 +1,18 @@
 import { inject, Service } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
 import { CanActivate, Resolve } from '@angular/router';
 
 import { map, Observable, tap } from 'rxjs';
 
 import { MiReportsService, MiReportSystemSearchResult } from '@mrtm/api';
 
+import { ConfigService } from '@core/config';
+
 @Service()
 export class MiReportsListGuard implements CanActivate, Resolve<MiReportSystemSearchResult[]> {
   private readonly miReportsService = inject(MiReportsService);
-
+  private readonly configService = inject(ConfigService);
+  private readonly useLegacyMiReportsPage = toSignal(this.configService.getConfigProperty('useLegacyMiReportsPage'));
   miReports: MiReportSystemSearchResult[];
 
   canActivate(): Observable<boolean> {
@@ -24,13 +28,15 @@ export class MiReportsListGuard implements CanActivate, Resolve<MiReportSystemSe
    */
   resolve(): MiReportSystemSearchResult[] {
     return this.miReports
-      ? [
-          ...this.miReports,
-          {
-            id: 9999,
-            miReportType: 'CUSTOM',
-          },
-        ]
+      ? this.useLegacyMiReportsPage() === 'true'
+        ? [
+            ...this.miReports,
+            {
+              id: 9999,
+              miReportType: 'CUSTOM',
+            },
+          ]
+        : this.miReports
       : [];
   }
 }

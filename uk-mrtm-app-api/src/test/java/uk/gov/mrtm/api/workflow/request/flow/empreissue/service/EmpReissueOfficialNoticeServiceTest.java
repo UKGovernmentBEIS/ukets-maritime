@@ -14,6 +14,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestPayload
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.service.EmpOfficialNoticeSendService;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestPayload;
 import uk.gov.netz.api.authorization.rules.domain.ResourceType;
@@ -31,6 +32,7 @@ import uk.gov.netz.api.workflow.request.flow.common.service.notification.Documen
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,6 +44,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
+import static uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName.EMP_APPROVED_TEMPLATE;
 
 @ExtendWith(MockitoExtension.class)
 class EmpReissueOfficialNoticeServiceTest {
@@ -56,7 +59,7 @@ class EmpReissueOfficialNoticeServiceTest {
 	private FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;
 
 	@Mock
-	private OfficialNoticeSendService officialNoticeSendService;
+	private EmpOfficialNoticeSendService empOfficialNoticeSendService;
 
 	@Mock
 	private RegistryConfig registryConfig;
@@ -65,7 +68,7 @@ class EmpReissueOfficialNoticeServiceTest {
 	private MrtmDocumentTemplateAccountDataCollectFromAccountService accountTemplateDataFromAccountService;
 
 	@Test
-	void generateOfficialNotice() throws InterruptedException, ExecutionException {
+	void generateOfficialNotice() {
 		Long accountId = 1L;
 		String requestId = "RequestId";
 		EmpReissueRequestMetadata requestMetadata = EmpReissueRequestMetadata.builder()
@@ -146,10 +149,11 @@ class EmpReissueOfficialNoticeServiceTest {
 		cut.sendOfficialNotice(request);
 
 		verify(registryConfig).getEmail();
-		verify(officialNoticeSendService, times(1))
-			.sendOfficialNotice(List.of(officialNotice, permitDocument), request, List.of(registryMail));
+		verify(empOfficialNoticeSendService, times(1)).sendOfficialNotice(
+			List.of(officialNotice), List.of(permitDocument), request,
+			Collections.emptyList(), List.of(registryMail), EMP_APPROVED_TEMPLATE);
 
-		verifyNoMoreInteractions(registryConfig, officialNoticeSendService);
+		verifyNoMoreInteractions(registryConfig, empOfficialNoticeSendService);
 		verifyNoInteractions(fileDocumentGenerateServiceDelegator, documentTemplateOfficialNoticeParamsProvider);
 	}
 	

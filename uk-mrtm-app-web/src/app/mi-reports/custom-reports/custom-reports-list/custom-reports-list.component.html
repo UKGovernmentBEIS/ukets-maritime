@@ -1,0 +1,68 @@
+<div class="govuk-grid-row" [formGroup]="formGroup">
+  <div class="govuk-grid-column-one-third row-flex">
+    <div class="grid-row">
+      <div class="govuk-grid-column-full govuk-!-margin-bottom-1">Search by report name or description</div>
+      <div class="govuk-grid-column-full">
+        <div
+          govuk-text-input
+          inputType="search"
+          formControlName="term"
+          [isLabelHidden]="true"
+          label="Search by report name or description">
+          <span govukInputSuffix class="search-suffix">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 20 20"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden="true"
+              focusable="false">
+              <path
+                d="M8.90102 14.4683C12.385 14.4683 15.2093 11.644 15.2093 8.16005C15.2093 4.6761 12.385 1.85181 8.90102 1.85181C5.41707 1.85181 2.59277 4.6761 2.59277 8.16005C2.59277 11.644 5.41707 14.4683 8.90102 14.4683Z"
+                stroke="white"
+                stroke-width="2.22222" />
+              <path d="M13.2349 12.8583L19.5909 19.2143" stroke="white" stroke-width="2.22222" />
+            </svg>
+          </span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="govuk-grid-column-one-third">
+    <div
+      govuk-select
+      [options]="availableCategories()"
+      widthClass="govuk-!-width-full"
+      formControlName="categoryId"
+      label="Filter by category"></div>
+  </div>
+  <div class="govuk-grid-column-one-third govuk-!-margin-top-6">
+    <div formControlName="favourites" label="Filter only my favourites" [isLabelHidden]="true" govuk-checkboxes>
+      <govuk-checkbox [value]="true" label="Show only my favourites" />
+    </div>
+  </div>
+</div>
+
+<govuk-table [columns]="columns" [data]="data()" [emptyTableText]="emptyTableText()" (sort)="onSort($event)">
+  <ng-template let-column="column" let-row="row">
+    @switch (column.field) {
+      @case ('reportName') {
+        <a govukLink [routerLink]="['custom-reports', row?.id]">{{ row[column.field] }}</a>
+      }
+      @default {
+        <span class="pre-wrap break-anywhere">
+          {{ row[column.field] }}
+        </span>
+      }
+    }
+  </ng-template>
+</govuk-table>
+
+@if (totalPages() > pageSize) {
+  <govuk-pagination
+    fragment="custom-reports"
+    [count]="totalPages()"
+    [pageSize]="pageSize"
+    (currentPageChange)="currentPage.set($event)" />
+}

@@ -11,20 +11,22 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTempla
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.service.EmpOfficialNoticeSendService;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestMetadata;
 import uk.gov.mrtm.api.workflow.request.flow.empreissue.domain.EmpReissueRequestPayload;
 import uk.gov.netz.api.documenttemplate.domain.DocumentTemplateStage;
 import uk.gov.netz.api.documenttemplate.domain.templateparams.TemplateParams;
 import uk.gov.netz.api.documenttemplate.service.FileDocumentGenerateServiceDelegator;
-import uk.gov.netz.api.files.common.domain.dto.FileInfoDTO;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateGeneratorParamConstants;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateOfficialNoticeParamsProvider;
 import uk.gov.netz.api.workflow.request.flow.common.service.notification.DocumentTemplateParamsSourceData;
-import uk.gov.netz.api.workflow.request.flow.common.service.notification.OfficialNoticeSendService;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName.EMP_APPROVED_TEMPLATE;
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class EmpReissueOfficialNoticeService {
 
 	private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
 	private final FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;
-	private final OfficialNoticeSendService officialNoticeSendService;
+	private final EmpOfficialNoticeSendService empOfficialNoticeSendService;
 	private final RegistryConfig registryConfig;
 	private final MrtmDocumentTemplateAccountDataCollectFromAccountService accountTemplateDataFromAccountService;
 
@@ -65,8 +67,8 @@ public class EmpReissueOfficialNoticeService {
 	
 	public void sendOfficialNotice(final Request request) {
         final EmpReissueRequestPayload requestPayload = (EmpReissueRequestPayload) request.getPayload();
-		final List<FileInfoDTO> attachments = List.of(requestPayload.getOfficialNotice(),
-				requestPayload.getDocument());
-        officialNoticeSendService.sendOfficialNotice(attachments, request, List.of(registryConfig.getEmail()));
-    }
+		empOfficialNoticeSendService.sendOfficialNotice(
+			List.of(requestPayload.getOfficialNotice()), List.of(requestPayload.getDocument()),
+			request, Collections.emptyList(), List.of(registryConfig.getEmail()), EMP_APPROVED_TEMPLATE);
+	}
 }

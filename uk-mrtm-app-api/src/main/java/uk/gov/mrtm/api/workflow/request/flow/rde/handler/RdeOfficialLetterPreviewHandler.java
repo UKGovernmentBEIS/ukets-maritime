@@ -8,13 +8,13 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskTyp
 import uk.gov.mrtm.api.workflow.request.flow.common.service.RfiRdePreviewOfficialNoticeService;
 import uk.gov.netz.api.documenttemplate.domain.DocumentTemplateType;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentAbstractHandler;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentAbstractHandler;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 
 @Service
-public class RdeOfficialLetterPreviewHandler extends PreviewDocumentAbstractHandler {
+public class RdeOfficialLetterPreviewHandler extends SyncPreviewDocumentAbstractHandler {
 
     private final RfiRdePreviewOfficialNoticeService rfiRdePreviewOfficialNoticeService;
 

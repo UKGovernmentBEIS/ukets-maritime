@@ -7,7 +7,7 @@ import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirApplicationReviewRequ
 import uk.gov.mrtm.api.workflow.request.flow.vir.domain.VirRequestPayload;
 import uk.gov.mrtm.api.workflow.request.flow.vir.service.VirOfficialNoticeService;
 import uk.gov.netz.api.files.common.domain.dto.FileDTO;
-import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.PreviewDocumentAbstractHandler;
+import uk.gov.netz.api.workflow.request.application.filedocument.preview.service.SyncPreviewDocumentAbstractHandler;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestService;
@@ -17,7 +17,7 @@ import uk.gov.netz.api.workflow.request.flow.common.domain.DecisionNotification;
 import java.util.List;
 
 @Service
-public class VirPreviewHandler extends PreviewDocumentAbstractHandler {
+public class VirPreviewHandler extends SyncPreviewDocumentAbstractHandler {
 
     private final VirOfficialNoticeService virOfficialNoticeService;
     private final RequestService requestService;

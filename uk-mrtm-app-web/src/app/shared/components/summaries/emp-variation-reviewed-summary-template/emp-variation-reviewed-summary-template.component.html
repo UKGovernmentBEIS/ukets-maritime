@@ -9,14 +9,12 @@
         </dd>
       </div>
     }
-    @if (data?.determination?.type === 'APPROVED') {
-      <div govukSummaryListRow>
-        <dt govukSummaryListRowKey>Emissions plan application</dt>
-        <dd govukSummaryListRowValue>
-          <a govukLink [routerLink]="[data?.empApplication?.url]">{{ data?.empApplication?.title }}</a>
-        </dd>
-      </div>
-    }
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Emissions plan application</dt>
+      <dd govukSummaryListRowValue>
+        <a govukLink [routerLink]="[data?.empApplication?.url]">{{ data?.empApplication?.title }}</a>
+      </dd>
+    </div>
     <div govukSummaryListRow>
       <dt govukSummaryListRowKey>Decision</dt>
       <dd govukSummaryListRowValue>{{ data?.determination?.type | determinationType }}</dd>

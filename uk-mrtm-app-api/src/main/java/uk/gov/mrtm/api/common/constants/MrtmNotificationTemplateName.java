@@ -12,4 +12,5 @@ public class MrtmNotificationTemplateName {
     public static final String VIR_NOTIFICATION_OPERATOR_RESPONSE = "Verifier Improvement Report Operator Response";
     public static final String VIR_NOTIFICATION_OPERATOR_MISSES_DEADLINE = "Verifier Improvement Report Operator misses a deadline";
     public static final String DOCUMENT_GENERATION_FAILED_TEMPLATE = "Document generation failed template";
+    public static final String EMP_APPROVED_TEMPLATE = "EMP approved template";
 }

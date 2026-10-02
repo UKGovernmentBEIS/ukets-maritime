@@ -1,0 +1,57 @@
+<netz-page-heading>Report history</netz-page-heading>
+
+@if (data(); as data) {
+  <govuk-accordion>
+    @for (history of data?.results; track history?.submissionDate) {
+      <govuk-accordion-item [header]="history.submissionDate | govukDate: 'datetime'">
+        <dl govuk-summary-list id="report-summary">
+          @if (history?.reasonForChange?.length) {
+            <div govukSummaryListRow>
+              <dt govukSummaryListRowKey>Reason for change</dt>
+              <dd govukSummaryListRowValue class="pre-wrap">{{ history.reasonForChange }}</dd>
+            </div>
+          }
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Changed by</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">{{ history.submittedBy }}</dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Report name</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">{{ history.reportName }}</dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Categories</dt>
+            <dd govukSummaryListRowValue>
+              <ul class="govuk-list--bullet">
+                @for (category of history.categories.split(','); track category) {
+                  <li>{{ category }}</li>
+                }
+              </ul>
+            </dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>Description</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">{{ history.description }}</dd>
+          </div>
+          <div govukSummaryListRow>
+            <dt govukSummaryListRowKey>SQL Query</dt>
+            <dd govukSummaryListRowValue class="pre-wrap">
+              <govuk-details summary="Show SQL code">
+                <p class="govuk-body pre-wrap">
+                  {{ history.queryDefinition }}
+                </p>
+              </govuk-details>
+            </dd>
+          </div>
+        </dl>
+      </govuk-accordion-item>
+    }
+  </govuk-accordion>
+  @if (data.total > pageSize) {
+    <govuk-pagination
+      fragment="report-summary"
+      [count]="data.total"
+      [pageSize]="pageSize"
+      (currentPageChange)="currentPage.set($event)" />
+  }
+}

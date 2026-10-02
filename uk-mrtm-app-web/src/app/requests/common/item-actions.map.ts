@@ -210,6 +210,11 @@ export const itemActionsMap: Record<
     transformed: false,
     linkable: false,
   },
+  RDE_CANCELLED: {
+    text: 'Deadline extension date rejected',
+    transformed: true,
+    linkable: false,
+  },
   EMP_REISSUE_COMPLETED: {
     text: 'Batch variation completed',
     transformed: true,

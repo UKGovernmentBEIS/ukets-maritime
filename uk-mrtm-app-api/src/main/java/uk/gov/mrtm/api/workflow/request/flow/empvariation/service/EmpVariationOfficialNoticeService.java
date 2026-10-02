@@ -13,6 +13,7 @@ import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmDocumentTempla
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.DocumentGenerationContextType;
 import uk.gov.mrtm.api.workflow.request.flow.common.domain.RequestGeneratedFileType;
 import uk.gov.mrtm.api.workflow.request.flow.common.service.MrtmDocumentTemplateAccountDataCollectFromAccountService;
+import uk.gov.mrtm.api.workflow.request.flow.empissuance.common.service.EmpOfficialNoticeSendService;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationApplicationReviewRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDetermination;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationDeterminationType;
@@ -43,6 +44,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static uk.gov.mrtm.api.common.constants.MrtmNotificationTemplateName.EMP_APPROVED_TEMPLATE;
+import static uk.gov.netz.api.workflow.utils.NotificationTemplateName.GENERIC_EMAIL;
+
 @Service
 @RequiredArgsConstructor
 public class EmpVariationOfficialNoticeService {
@@ -54,7 +58,7 @@ public class EmpVariationOfficialNoticeService {
     private final DecisionNotificationUsersService decisionNotificationUsersService;
     private final FileDocumentGenerateServiceDelegator fileDocumentGenerateServiceDelegator;
     private final DocumentTemplateOfficialNoticeParamsProvider documentTemplateOfficialNoticeParamsProvider;
-    private final OfficialNoticeSendService officialNoticeSendService;
+	private final EmpOfficialNoticeSendService empOfficialNoticeSendService;
     private final MaritimeAccountUpdatedEventListenerResolver accountUpdatedRegistryListener;
     private final RegistryConfig registryConfig;
     private final MrtmDocumentTemplateAccountDataCollectFromEmpVariationService templateAccountDataCollectFromEmpVariationService;
@@ -183,7 +187,9 @@ public class EmpVariationOfficialNoticeService {
                 || requestPayload.getDetermination().getType().equals(EmpVariationDeterminationType.APPROVED);
 
         if (isApproved) {
-            officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails, List.of(registryConfig.getEmail()));
+			empOfficialNoticeSendService.sendOfficialNotice(
+				List.of(requestPayload.getOfficialNotice()), List.of(requestPayload.getEmpDocument()),
+				request, ccRecipientsEmails, List.of(registryConfig.getEmail()), EMP_APPROVED_TEMPLATE);
 
             AccountUpdatedSubmittedEventDetails updatedSubmittedEventDetails = accountUpdatedRegistryListener.onAccountUpdatedEvent(AccountUpdatedRegistryEvent.builder()
                 .accountId(request.getAccountId())
@@ -196,7 +202,8 @@ public class EmpVariationOfficialNoticeService {
                 requestPayload.getEmissionsMonitoringPlan().getOperatorDetails().getOrganisationStructure(),
                 null);
         } else {
-            officialNoticeSendService.sendOfficialNotice(attachments, request, ccRecipientsEmails, Collections.emptyList());
+            empOfficialNoticeSendService.sendOfficialNotice(attachments, List.of(), request, ccRecipientsEmails,
+				Collections.emptyList(), GENERIC_EMAIL);
         }
     }
 
