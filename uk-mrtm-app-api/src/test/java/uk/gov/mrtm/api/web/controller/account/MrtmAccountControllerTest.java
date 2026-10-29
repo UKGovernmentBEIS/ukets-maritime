@@ -454,7 +454,7 @@ class MrtmAccountControllerTest {
         final AppUser user = AppUser.builder().userId("userId").build();
 
         final List<MrtmAccountInfoDTO> results = List.of(
-            new MrtmAccountInfoDTO(1L, "account1", "EM00009")
+            new MrtmAccountInfoDTO(1L, "account1", "EM00009", "1234567")
         );
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(user);

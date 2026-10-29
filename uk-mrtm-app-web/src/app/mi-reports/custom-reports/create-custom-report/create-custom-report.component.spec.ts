@@ -114,6 +114,59 @@ describe('CreateCustomReportComponent', () => {
     });
   });
 
+  describe('leftover errors', () => {
+    beforeEach(async () => setup(MiReportFormMode.ADD));
+
+    const errorSummary = (): HTMLElement => fixture.nativeElement.querySelector('.govuk-error-summary');
+    const submitButton = (): HTMLButtonElement => fixture.nativeElement.querySelector('#wizard-step__button-submit');
+    const fillForm = (queryDefinition: string) =>
+      (component as any).formGroup.patchValue({
+        reportName: 'Report',
+        categories: ['1'],
+        description: 'Description',
+        queryDefinition,
+      });
+
+    it('should not display a leftover error after saving a corrected query', async () => {
+      service.createMiReportUserDefined.mockReturnValueOnce(throwError(() => new Error('failed')));
+      fillForm('select wrong');
+      submitButton().click();
+      await fixture.whenStable();
+
+      submitButton().click();
+      fixture.detectChanges();
+      expect(errorSummary().textContent).toContain('Custom query could not be executed');
+
+      fillForm('select 1');
+      submitButton().click();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect(service.createMiReportUserDefined).toHaveBeenCalledTimes(2);
+      expect((component as any).formGroup.get('queryDefinition').errors).toBeNull();
+      expect(errorSummary()?.textContent ?? '').not.toContain('Custom query could not be executed');
+    });
+
+    it('should not display a leftover error after previewing a corrected query', async () => {
+      service.previewCustomReport.mockReturnValueOnce(throwError(() => new Error('failed')));
+      fillForm('select wrong');
+      (component as any).onPreviewResults();
+      await fixture.whenStable();
+
+      submitButton().click();
+      fixture.detectChanges();
+      expect(errorSummary().textContent).toContain('Custom query could not be executed');
+
+      fillForm('select 1');
+      (component as any).onPreviewResults();
+      await fixture.whenStable();
+      fixture.detectChanges();
+
+      expect((component as any).formGroup.get('queryDefinition').errors).toBeNull();
+      expect(errorSummary()?.textContent ?? '').not.toContain('Custom query could not be executed');
+    });
+  });
+
   describe('edit mode', () => {
     beforeEach(async () => setup(MiReportFormMode.EDIT, { id: '7' }));
 

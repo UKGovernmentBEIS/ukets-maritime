@@ -59,9 +59,11 @@ export class DashboardFiltersComponent {
     }
 
     const { accountId, workflowType, orderBy } = this.formGroup.value;
+    const searchText = accountId?.text?.trim();
 
     this.store.setFilters({
-      accountId: accountId?.data ? accountId : null,
+      // when no option is selected, the typed text is sent as a free search term (partial name, ID or IMO number)
+      accountId: accountId?.data ? accountId : searchText ? { data: searchText, text: accountId.text } : null,
       workflowType,
       orderBy,
     });

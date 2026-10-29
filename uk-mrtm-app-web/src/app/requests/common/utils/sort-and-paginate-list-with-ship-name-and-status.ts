@@ -18,7 +18,7 @@ const compareValues = <T = unknown>(
     return aNil ? nilOrder : -nilOrder;
   }
 
-  let result = 0;
+  let result: number;
 
   // Dates (Date object)
   if (a instanceof Date && b instanceof Date) {

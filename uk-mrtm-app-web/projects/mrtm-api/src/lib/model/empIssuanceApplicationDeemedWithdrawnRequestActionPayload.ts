@@ -8,13 +8,20 @@
  * Do not edit the class manually.
  */
 import { DecisionNotification } from './decisionNotification';
+import { EmissionsMonitoringPlan } from './emissionsMonitoringPlan';
 import { EmpIssuanceDetermination } from './empIssuanceDetermination';
+import { EmpIssuanceReviewDecision } from './empIssuanceReviewDecision';
 import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionUserInfo } from './requestActionUserInfo';
 
 export interface EmpIssuanceApplicationDeemedWithdrawnRequestActionPayload {
   payloadType?: string;
+  emissionsMonitoringPlan: EmissionsMonitoringPlan;
+  empSectionsCompleted?: { [key: string]: string };
+  empAttachments?: { [key: string]: string };
   decisionNotification: DecisionNotification;
+  reviewGroupDecisions?: { [key: string]: EmpIssuanceReviewDecision };
+  reviewAttachments?: { [key: string]: string };
   determination: EmpIssuanceDetermination;
   usersInfo?: { [key: string]: RequestActionUserInfo };
   officialNotice: FileInfoDTO;

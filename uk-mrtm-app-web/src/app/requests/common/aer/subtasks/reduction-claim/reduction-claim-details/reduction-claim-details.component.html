@@ -9,6 +9,7 @@
 <mrtm-reduction-claim-details-summary-template
   [editable]="isEditable()"
   [data]="data()"
+  [totalEmissions]="totalEmissions()"
   [dataSupplierName]="thirdPartyDataProviderName()"
   (handleChange)="onChange($event)"
   (handleDelete)="onDelete($event)" />

@@ -874,4 +874,41 @@
             </sql>
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_UPDATE_AER_AMEND_APPLICATION_VERIFICATION_SUBMIT_SUBMIT_REQUEST_TASK_ACTION" author="P44065">
+        <sql>
+            DELETE FROM public.request_task_type_action_type
+            WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT')
+              AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_VERIFICATION');
+
+            INSERT INTO public.request_task_action_type
+                (id, code, blocked_by_payment)
+            VALUES(nextval('request_task_action_type_seq'), 'AER_SUBMIT_APPLICATION_VERIFICATION_AMEND', false);
+
+            INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+            VALUES(
+                      (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT'),
+                      (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_VERIFICATION_AMEND')
+                  );
+        </sql>
+        <rollback>
+            <sql>
+                DELETE FROM public.request_task_type_action_type
+                WHERE request_task_type_id = (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT')
+                AND request_task_action_type_id = (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_VERIFICATION_AMEND');
+
+                DELETE FROM public.request_task_action_type
+                WHERE code = 'AER_SUBMIT_APPLICATION_VERIFICATION_AMEND';
+
+                INSERT INTO public.request_task_type_action_type
+                (request_task_type_id, request_task_action_type_id)
+                VALUES(
+                (SELECT rtt.id FROM request_task_type rtt WHERE rtt.code = 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT'),
+                (SELECT rtat.id FROM request_task_action_type rtat WHERE rtat.code = 'AER_SUBMIT_APPLICATION_VERIFICATION')
+                );
+            </sql>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>

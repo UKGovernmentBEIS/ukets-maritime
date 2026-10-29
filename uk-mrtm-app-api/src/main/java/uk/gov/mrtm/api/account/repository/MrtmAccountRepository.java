@@ -73,14 +73,16 @@ public interface MrtmAccountRepository extends AccountBaseRepository<MrtmAccount
             CompetentAuthorityEnum competentAuthority, Set<MrtmAccountStatus> statuses);
 
     @Transactional(readOnly = true)
-    @Query(value = "select acc.id as id, acc.name as name, acc.business_id as businessId "
+    @Query(value = "select acc.id as id, acc.name as name, acc.business_id as businessId, acc_mrtm.imo_number as imoNumber "
         + "from account acc "
+        + "inner join account_mrtm acc_mrtm on acc_mrtm.id = acc.id "
         + "where acc.competent_authority = :#{#competentAuthority.name()}", nativeQuery = true)
     List<MrtmAccountInfoDTO> findAllByCA(CompetentAuthorityEnum competentAuthority);
 
     @Transactional(readOnly = true)
-    @Query(value = "select acc.id as id, acc.name as name, acc.business_id as businessId "
+    @Query(value = "select acc.id as id, acc.name as name, acc.business_id as businessId, acc_mrtm.imo_number as imoNumber "
         + "from account acc "
+        + "inner join account_mrtm acc_mrtm on acc_mrtm.id = acc.id "
         + "where acc.id in :#{#accountIds}", nativeQuery = true)
     List<MrtmAccountInfoDTO> findAllByAccountIdIn(Set<Long> accountIds);
 }

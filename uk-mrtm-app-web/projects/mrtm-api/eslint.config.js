@@ -13,6 +13,7 @@ module.exports = tseslint.config(...rootConfig, {
   rules: {
     'no-control-regex': 'off',
     'no-useless-escape': 'off',
+    'no-useless-assignment': 'off',
     '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-restricted-imports': 'off',
     '@typescript-eslint/no-empty-object-type': 'off',

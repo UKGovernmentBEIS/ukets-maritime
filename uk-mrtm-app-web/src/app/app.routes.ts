@@ -12,6 +12,7 @@ import {
 } from '@core/guards';
 import { DATA_SUPPLIERS_ROUTE_PREFIX } from '@data-suppliers/data-suppliers.constants';
 import { canActivateDataSuppliers } from '@data-suppliers/data-suppliers.guards';
+import { canActivateRequestFeedback } from '@feedback/request-feedback/request-feedback.guard';
 import { GUIDANCE_ROUTE_PREFIX } from '@guidance/guidance.constants';
 import { landingPageGuard } from '@landing-page/landing-page.guard';
 
@@ -140,6 +141,13 @@ export const APP_ROUTES: Routes = [
       {
         path: 'batch-variations',
         loadChildren: () => import('@batch-variations/batch-variations.routes').then((r) => r.BATCH_VARIATIONS_ROUTES),
+      },
+      {
+        path: 'request-feedback',
+        data: { keepUrlOnSignIn: true },
+        canActivate: [canActivateRequestFeedback],
+        loadChildren: () =>
+          import('@feedback/request-feedback/request-feedback.routes').then((r) => r.REQUEST_FEEDBACK_ROUTES),
       },
       {
         path: GUIDANCE_ROUTE_PREFIX,

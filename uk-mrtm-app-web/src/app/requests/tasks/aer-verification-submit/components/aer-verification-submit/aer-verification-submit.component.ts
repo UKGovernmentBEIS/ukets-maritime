@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@a
 
 import { TaskSuperListComponent } from '@netz/common/components';
 import { TaskSuperSection } from '@netz/common/model';
-import { RequestTaskStore } from '@netz/common/store';
+import { requestTaskQuery, RequestTaskStore } from '@netz/common/store';
 
 import { TaskItemStatus } from '@requests/common';
 import { aerCommonQuery } from '@requests/common/aer/+state';
@@ -28,7 +28,14 @@ export class AerVerificationSubmitComponent {
   private readonly store: RequestTaskStore = inject(RequestTaskStore);
   private readonly aer = this.store.select(aerCommonQuery.selectAer);
   private readonly sectionsCompleted = this.store.select(aerCommonQuery.selectVerificationSectionsCompleted);
-  private readonly canSubmitAerVerification = getCanSubmitAerVerification();
+  private readonly canSubmitAerVerification =
+    getCanSubmitAerVerification() &&
+    (this.store
+      .select(requestTaskQuery.selectAllowedRequestTaskActions)()
+      .includes('AER_SUBMIT_APPLICATION_VERIFICATION') ||
+      this.store
+        .select(requestTaskQuery.selectAllowedRequestTaskActions)()
+        .includes('AER_SUBMIT_APPLICATION_VERIFICATION_AMEND'));
 
   readonly superSections: Signal<TaskSuperSection[]> = computed(() => {
     return [

@@ -65,6 +65,9 @@ export class ReductionClaimSummaryComponent {
   public readonly fuelPurchases: Signal<Array<WithNeedsReview<ReductionClaimDetailsListItemDto>>> = this.store.select(
     aerCommonQuery.selectReductionClaimDetailsListItems,
   );
+  public readonly totalEmissions: Signal<string> = this.store.select(
+    aerCommonQuery.selectReductionClaimTotalSustainableEmissions,
+  );
   public readonly editable: Signal<boolean> = this.store.select(requestTaskQuery.selectIsEditable);
   public readonly canSubmit: Signal<boolean> = computed(() => {
     const status = this.status();

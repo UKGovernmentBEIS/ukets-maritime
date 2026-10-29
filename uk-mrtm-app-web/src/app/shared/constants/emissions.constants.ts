@@ -11,13 +11,13 @@ import { GovukSelectOption } from '@netz/govuk-components';
 import { FuelsAndEmissionsFactors, FuelType } from '@shared/types';
 
 export const SHIP_TYPE_SELECT_ITEMS: GovukSelectOption<ShipDetails['type']>[] = [
-  { value: 'PAX', text: 'Passenger Ship' },
+  { value: 'PAX', text: 'Passenger ship' },
   { value: 'RORO', text: 'Ro-ro ship' },
-  { value: 'CONT', text: 'Container Ship' },
+  { value: 'CONT', text: 'Container ship' },
   { value: 'OIL', text: 'Oil tanker' },
   { value: 'CHEM', text: 'Chemical tanker' },
-  { value: 'LNG', text: 'LNG Carrier' },
-  { value: 'GAS', text: 'Gas Carrier' },
+  { value: 'LNG', text: 'LNG carrier' },
+  { value: 'GAS', text: 'Gas carrier' },
   { value: 'BULK', text: 'Bulk carrier' },
   { value: 'GENERAL', text: 'General cargo ship' },
   { value: 'RCV', text: 'Refrigerated cargo ship' },
@@ -26,7 +26,7 @@ export const SHIP_TYPE_SELECT_ITEMS: GovukSelectOption<ShipDetails['type']>[] = 
   { value: 'ROPAX', text: 'Ro-pax ship' },
   { value: 'CONT_RORO', text: 'Container/ro-ro cargo ship' },
   { value: 'CRUISE', text: 'Cruise passenger ship' },
-  { value: 'OFFSHORE', text: 'Offshore support vessel' },
+  { value: 'OFFSHORE', text: 'Offshore ship' },
   { value: 'OTHER', text: 'Other ship types' },
 ];
 

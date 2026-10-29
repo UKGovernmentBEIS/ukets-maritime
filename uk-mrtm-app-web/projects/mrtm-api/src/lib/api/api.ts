@@ -37,6 +37,7 @@ export * from './regulatorUsersRegistration.service';
 export * from './requestActionAttachmentsHandling.service';
 export * from './requestActionFileDocumentsHandling.service';
 export * from './requestActions.service';
+export * from './requestFeedbackAPI.service';
 export * from './requestItems.service';
 export * from './requestNotes.service';
 export * from './requestTaskAttachmentsHandling.service';

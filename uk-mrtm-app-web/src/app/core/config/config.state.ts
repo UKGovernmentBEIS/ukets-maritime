@@ -2,7 +2,11 @@ export const FEATURES = ['terms', 'serviceGatewayEnabled', 'aerCurrentYearSubmit
 export type FeatureName = (typeof FEATURES)[number];
 export type FeaturesConfig = { [key in FeatureName]?: boolean };
 
-export const CONFIG_PROPERTIES = ['minYearOfFirstMrtmActivity', 'useLegacyMiReportsPage'] as const;
+export const CONFIG_PROPERTIES = [
+  'minYearOfFirstMrtmActivity',
+  'useLegacyMiReportsPage',
+  'requestFeedbackEnabled',
+] as const;
 export type ConfigPropertiesName = (typeof CONFIG_PROPERTIES)[number];
 export type ConfigProperties = { [key in ConfigPropertiesName]?: string };
 

@@ -83,6 +83,8 @@ export class ErrorCodes {
   static EXTCONTACT1003: string = 'EXTCONTACT1003';
   static FILE1004: string = 'FILE1004';
   static OTP1001: string = 'OTP1001';
+  static REQUESTFEEDBACK1000: string = 'REQUESTFEEDBACK1000';
+  static REQUESTFEEDBACK1001: string = 'REQUESTFEEDBACK1001';
   static REQUEST_TASK_ACTION1000: string = 'REQUEST_TASK_ACTION1000';
   static REQUEST_TASK_ACTION1001: string = 'REQUEST_TASK_ACTION1001';
   static TOKEN1001: string = 'TOKEN1001';

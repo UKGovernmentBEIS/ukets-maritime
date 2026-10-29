@@ -55,6 +55,9 @@ export class ReductionClaimDetailsComponent {
   public readonly data: Signal<Array<WithNeedsReview<ReductionClaimDetailsListItemDto>>> = this.store.select(
     aerCommonQuery.selectReductionClaimDetailsListItems,
   );
+  public readonly totalEmissions: Signal<string> = this.store.select(
+    aerCommonQuery.selectReductionClaimTotalSustainableEmissions,
+  );
   public readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
 
   public readonly warningMessage: Signal<string> = computed(() =>

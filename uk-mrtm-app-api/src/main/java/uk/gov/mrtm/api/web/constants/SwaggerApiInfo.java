@@ -330,12 +330,16 @@ public final class SwaggerApiInfo {
         "EMP1005 | No emissions monitoring plan found";
     public static final String CREATE_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
         FORM1001_ERROR_CODE +
-        "THIRDPARTYDATAPROVIDER1000 | Third party data provider name already exists" +
-        "THIRDPARTYDATAPROVIDER1001 | Third party data provider JWKS url already exists";
+        "THIRDPARTYDATAPROVIDER1000 | Third party data provider name already exists \t\n" +
+        "THIRDPARTYDATAPROVIDER1001 | Third party data provider JWKS url already exists \t\n";
     public static final String APPOINT_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         ACCOUNT1009_ERROR_CODE +
         NOTFOUND1001_ERROR_CODE +
         THIRDPARTYDATAPROVIDER1002_ERROR_CODE;
     public static final String UNAPPOINT_THIRD_PARTY_DATA_PROVIDER_BAD_REQUEST = BAD_REQUEST + ERROR_CODES_HEADER +
         NOTFOUND1001_ERROR_CODE;
+    public static final String REQUEST_FEEDBACK_BAD_REQUEST = BAD_REQUEST + "\t\n" + ERROR_CODES_HEADER +
+        "REQUESTFEEDBACK1000 | Request feedback form has expired \t\n" +
+        "REQUESTFEEDBACK1001 | Request feedback form is already submitted \t\n" +
+        "REQUESTFEEDBACK1002 | Request feedback invalid payload \t\n";
 }

@@ -3,6 +3,8 @@ package uk.gov.mrtm.api.integration.registry.accountexempt.response;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -14,6 +16,10 @@ import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
 import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
+import uk.gov.mrtm.api.integration.registry.emissionsupdated.request.MaritimeEmissionsUpdatedEventListenerResolver;
+import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsEntity;
+import uk.gov.mrtm.api.reporting.domain.common.ReportableEmissionsUpdatedEvent;
+import uk.gov.mrtm.api.reporting.repository.ReportableEmissionsRepository;
 import uk.gov.netz.api.competentauthority.CompetentAuthorityEnum;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
@@ -21,12 +27,15 @@ import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEvent;
 import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEventOutcome;
 
+import java.math.BigDecimal;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Stream;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -48,19 +57,96 @@ class AccountExemptResponseHandlerTest {
     private NotifyRegistryEmailService notifyRegistryEmailService;
     @Mock
     private RegistryIntegrationEmailProperties emailProperties;
+    @Mock
+    private ReportableEmissionsRepository reportableEmissionsRepository;
+    @Mock
+    private MaritimeEmissionsUpdatedEventListenerResolver emissionsUpdatedEventListenerResolver;
 
-    @Test
-    void handleResponse_success() {
+    @MethodSource
+    @ParameterizedTest
+    void handleResponse_success_is_exempted(Boolean exemptionFlag) {
         AccountExemptionUpdateEventOutcome event = AccountExemptionUpdateEventOutcome.builder()
             .outcome(IntegrationEventOutcome.SUCCESS)
             .event(AccountExemptionUpdateEvent.builder()
                 .registryId(REGISTRY_ID)
+                .exemptionFlag(exemptionFlag)
                 .build())
             .build();
 
         service.handleResponse(event, CORRELATION_ID);
 
-        verifyNoInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties);
+        verifyNoInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties,
+            reportableEmissionsRepository, emissionsUpdatedEventListenerResolver);
+    }
+
+    private static Stream<Boolean> handleResponse_success_is_exempted() {
+        return Stream.of(true, null);
+    }
+
+    @Test
+    void handleResponse_success_reportable_emissions_is_empty() {
+        Year year = Year.now();
+        Long accountId = 10L;
+        AccountExemptionUpdateEventOutcome event = AccountExemptionUpdateEventOutcome.builder()
+            .outcome(IntegrationEventOutcome.SUCCESS)
+            .event(AccountExemptionUpdateEvent.builder()
+                .registryId(REGISTRY_ID)
+                .exemptionFlag(false)
+                .reportingYear(year)
+                .build())
+            .build();
+        MrtmAccount account = MrtmAccount.builder().id(accountId).build();
+
+        when(accountQueryService.getAccountByRegistryId(REGISTRY_ID.intValue())).thenReturn(account);
+        when(reportableEmissionsRepository.findByAccountIdAndYear(accountId, year)).thenReturn(Optional.empty());
+
+        service.handleResponse(event, CORRELATION_ID);
+
+        verify(accountQueryService).getAccountByRegistryId(REGISTRY_ID.intValue());
+        verify(reportableEmissionsRepository).findByAccountIdAndYear(accountId, year);
+
+        verifyNoInteractions(emissionsUpdatedEventListenerResolver, notifyRegistryEmailService, emailProperties);
+        verifyNoMoreInteractions(accountQueryService, reportableEmissionsRepository);
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void handleResponse_success_reportable_emissions_is_not_empty(boolean isFromDoe) {
+        Year year = Year.now();
+        BigDecimal surrenderEmissions = new BigDecimal("100");
+        Long accountId = 10L;
+        AccountExemptionUpdateEventOutcome event = AccountExemptionUpdateEventOutcome.builder()
+            .outcome(IntegrationEventOutcome.SUCCESS)
+            .event(AccountExemptionUpdateEvent.builder()
+                .registryId(REGISTRY_ID)
+                .exemptionFlag(false)
+                .reportingYear(year)
+                .build())
+            .build();
+        MrtmAccount account = MrtmAccount.builder().id(accountId).build();
+        ReportableEmissionsEntity reportableEmissions = ReportableEmissionsEntity.builder()
+            .surrenderEmissions(surrenderEmissions)
+            .isFromDoe(isFromDoe)
+            .build();
+        ReportableEmissionsUpdatedEvent emissionsUpdatedEvent = ReportableEmissionsUpdatedEvent.builder()
+            .accountId(account.getId())
+            .isFromDoe(reportableEmissions.isFromDoe())
+            .reportableEmissions(reportableEmissions.getSurrenderEmissions())
+            .year(year)
+            .isFromRegulator(false)
+            .build();
+
+        when(accountQueryService.getAccountByRegistryId(REGISTRY_ID.intValue())).thenReturn(account);
+        when(reportableEmissionsRepository.findByAccountIdAndYear(accountId, year)).thenReturn(Optional.of(reportableEmissions));
+
+        service.handleResponse(event, CORRELATION_ID);
+
+        verify(accountQueryService).getAccountByRegistryId(REGISTRY_ID.intValue());
+        verify(reportableEmissionsRepository).findByAccountIdAndYear(accountId, year);
+        verify(emissionsUpdatedEventListenerResolver).onAccountCreatedEvent(emissionsUpdatedEvent);
+
+        verifyNoInteractions(notifyRegistryEmailService, emailProperties);
+        verifyNoMoreInteractions(accountQueryService, reportableEmissionsRepository, emissionsUpdatedEventListenerResolver);
     }
 
     @Test
@@ -76,7 +162,8 @@ class AccountExemptResponseHandlerTest {
 
         service.handleResponse(event, CORRELATION_ID);
 
-        verifyNoInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties);
+        verifyNoInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties,
+            reportableEmissionsRepository, emissionsUpdatedEventListenerResolver);
     }
 
     @ParameterizedTest
@@ -165,6 +252,7 @@ class AccountExemptResponseHandlerTest {
         verify(notifyRegistryEmailService).notifyRegulator(infoEmailParams);
 
         verifyNoMoreInteractions(accountQueryService,  notifyRegistryEmailService, emailProperties);
+        verifyNoInteractions(reportableEmissionsRepository, emissionsUpdatedEventListenerResolver);
     }
 
     private Map<String, String> getEventFields(boolean isExempt) {

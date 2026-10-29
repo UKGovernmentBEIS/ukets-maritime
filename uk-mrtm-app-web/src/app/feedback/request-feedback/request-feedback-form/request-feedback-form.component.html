@@ -1,0 +1,65 @@
+@if (isFormAvailable()) {
+  @if (isErrorSummaryDisplayed()) {
+    <govuk-error-summary [form]="form" />
+  }
+  <div class="govuk-grid-row">
+    <div class="govuk-grid-column-two-thirds">
+      <netz-page-heading size="l">{{ config.pageTitle }}</netz-page-heading>
+
+      <form (ngSubmit)="onSubmit()" [formGroup]="form" id="request-feedback-form">
+        <div formControlName="easeRating" govuk-radio legendSize="medium" [legend]="config.easeRatingLegend">
+          @for (option of easeRatingOptions; track option.value) {
+            <govuk-radio-option [label]="option.label" [value]="option.value" />
+          }
+        </div>
+
+        <div
+          formControlName="reportCompletionMethods"
+          govuk-checkboxes
+          labelSize="medium"
+          [label]="config.completionMethodsLegend"
+          [hint]="config.completionMethodsHint">
+          @for (option of config.completionMethods; track option.value) {
+            <govuk-checkbox [label]="option.label" [value]="option.value">
+              @if (option.value === otherCompletionMethod) {
+                <ng-container govukConditionalContent>
+                  <div
+                    formControlName="otherReportCompletionMethods"
+                    govuk-textarea
+                    [label]="config.otherCompletionMethodsLabel"
+                    [maxLength]="10000"></div>
+                </ng-container>
+              }
+            </govuk-checkbox>
+          }
+        </div>
+
+        <mrtm-feedback-review-groups
+          formControlName="feedbackReviewGroups"
+          [legend]="config.reviewGroupsLegend"
+          [hint]="config.reviewGroupsHint"
+          [options]="config.reviewGroups"
+          [showErrors]="isErrorSummaryDisplayed()" />
+
+        @if (isReviewGroupsCommentVisible()) {
+          <div
+            formControlName="feedbackReviewGroupsComment"
+            govuk-textarea
+            labelSize="medium"
+            [label]="config.reviewGroupsCommentLabel"
+            [hint]="config.reviewGroupsCommentHint"
+            [maxLength]="10000"></div>
+        }
+
+        <div
+          formControlName="additionalComments"
+          govuk-textarea
+          labelSize="medium"
+          [label]="config.additionalCommentsLabel"
+          [maxLength]="10000"></div>
+
+        <button netzPendingButton govukButton type="submit">Send feedback</button>
+      </form>
+    </div>
+  </div>
+}

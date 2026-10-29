@@ -4,8 +4,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.feedback.domain.common.MrtmRequestFeedbackType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.service.RequestEmpService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.request.feedback.service.RequestFeedbackService;
 import uk.gov.netz.api.workflow.request.WorkflowService;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
@@ -25,6 +27,7 @@ public class EmpIssuanceApplySubmitActionHandler implements RequestTaskActionHan
     private final RequestEmpService requestEmpService;
     private final WorkflowService workflowService;
     private final RequestTaskService requestTaskService;
+    private final RequestFeedbackService requestFeedbackService;
 
     @Value("${govuk-pay.empIssuancePaymentIsActive}")
     private boolean empIssuancePaymentIsActive;
@@ -39,6 +42,11 @@ public class EmpIssuanceApplySubmitActionHandler implements RequestTaskActionHan
         requestEmpService.applySubmitAction(requestTask, appUser);
 
         requestTask.getRequest().setSubmissionDate(LocalDateTime.now());
+
+        requestFeedbackService.createRequestFeedback(
+            requestTask.getRequest().getId(),
+            MrtmRequestFeedbackType.EMP_ISSUANCE_SUBMIT.name(),
+            appUser);
 
         boolean shouldSkipPaymentBeforeDate = requestTask.getRequest().getCreationDate().isBefore(empPaymentSkipBeforeDate);
 

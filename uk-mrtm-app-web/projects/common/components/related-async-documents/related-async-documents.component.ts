@@ -27,7 +27,7 @@ import { PreviewAsyncDocument } from './related-async-documents.providers';
 type TaskPreviewFile = PreviewAsyncDocument & RequestTaskPreviewFileInfoDTO;
 
 const POLLING_INTERVAL = 30000;
-const MAX_POLL_ATTEMPTS = 20;
+const MAX_POLL_ATTEMPTS = 60;
 
 @Component({
   selector: 'netz-related-async-documents',

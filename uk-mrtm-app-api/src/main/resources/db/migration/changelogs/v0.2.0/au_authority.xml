@@ -124,4 +124,69 @@
 
         </rollback>
     </changeSet>
+
+    <changeSet id="0_2_0_request_feedback_add_permissions_to_operators_and_verifiers" author="stavroula.papagiannakopoulou@trasys.gr">
+        <sql>
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_SUBMIT_REQUEST_FEEDBACK'
+            from au_role
+            where code in('operator', 'operator_admin', 'consultant_agent');
+
+            insert into au_role_permission(id, role_id, permission)
+            select nextval('au_role_permission_seq'), id, 'PERM_SUBMIT_REQUEST_FEEDBACK'
+            from au_role
+            where code in('verifier', 'verifier_admin');
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                     join au_role r on au.code = r.code
+                     join au_role_permission rp on r.id = rp.role_id
+            where r.code in ('operator', 'operator_admin', 'consultant_agent')
+              and rp.permission = 'PERM_SUBMIT_REQUEST_FEEDBACK';
+
+            insert into au_authority_permission(id, authority_id, permission)
+            select nextval('au_authority_permission_seq'), au.id, rp.permission
+            from au_authority au
+                     join au_role r on au.code = r.code
+                     join au_role_permission rp on r.id = rp.role_id
+            where r.code in ('verifier', 'verifier_admin')
+              and rp.permission = 'PERM_SUBMIT_REQUEST_FEEDBACK';
+        </sql>
+        <rollback>
+            <sql>
+                delete from au_authority_permission ap
+                using
+                au_authority au,
+                au_role r
+                where ap.authority_id = au.id
+                and au.code = r.code
+                and r.code in ('operator', 'operator_admin', 'consultant_agent')
+                and ap.permission = 'PERM_SUBMIT_REQUEST_FEEDBACK';
+
+                delete from au_authority_permission ap
+                using
+                au_authority au,
+                au_role r
+                where ap.authority_id = au.id
+                and au.code = r.code
+                and r.code in ('verifier', 'verifier_admin')
+                and ap.permission = 'PERM_SUBMIT_REQUEST_FEEDBACK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('operator', 'operator_admin', 'consultant_agent')
+                and rp.permission = 'PERM_SUBMIT_REQUEST_FEEDBACK';
+
+                delete
+                from au_role_permission rp
+                using au_role r
+                where r.id = rp.role_id
+                and r.code in ('verifier', 'verifier_admin')
+                and rp.permission = 'PERM_SUBMIT_REQUEST_FEEDBACK';
+            </sql>
+        </rollback>
+    </changeSet>
 </databaseChangeLog>

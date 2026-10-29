@@ -12,15 +12,20 @@ import { EmissionsMonitoringPlan } from './emissionsMonitoringPlan';
 import { EmissionsMonitoringPlanContainer } from './emissionsMonitoringPlanContainer';
 import { EmpVariationDetails } from './empVariationDetails';
 import { EmpVariationDetermination } from './empVariationDetermination';
+import { EmpVariationReviewDecision } from './empVariationReviewDecision';
 import { FileInfoDTO } from './fileInfoDTO';
 import { RequestActionUserInfo } from './requestActionUserInfo';
 
 export interface EmpVariationApplicationDeemedWithdrawnRequestActionPayload {
   payloadType?: string;
-  originalEmpContainer: EmissionsMonitoringPlanContainer;
   emissionsMonitoringPlan: EmissionsMonitoringPlan;
-  empAttachments?: { [key: string]: string };
   empVariationDetails: EmpVariationDetails;
+  empSectionsCompleted?: { [key: string]: string };
+  empAttachments?: { [key: string]: string };
+  originalEmpContainer: EmissionsMonitoringPlanContainer;
+  empVariationDetailsReviewDecision?: EmpVariationReviewDecision;
+  reviewGroupDecisions?: { [key: string]: EmpVariationReviewDecision };
+  reviewAttachments?: { [key: string]: string };
   determination: EmpVariationDetermination;
   decisionNotification: DecisionNotification;
   usersInfo?: { [key: string]: RequestActionUserInfo };

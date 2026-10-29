@@ -17,5 +17,6 @@ export class ReductionClaimSubmittedSummaryTemplateComponent {
   readonly data = input<AerSmf>();
   readonly wizardMap = input<SubTaskListMap<AerSmf>>();
   readonly fuelPurchases = input<Array<WithNeedsReview<ReductionClaimDetailsListItemDto>>>();
+  readonly totalEmissions = input<string>();
   readonly dataSupplierName = input<string>();
 }

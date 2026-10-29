@@ -61,6 +61,11 @@ public enum MrtmErrorCode implements NetzErrorCode {
     INVALID_SITE_VISIT("SITEVISIT1001", HttpStatus.BAD_REQUEST, "Invalid Site Visit"),
     INVALID_SITE_VISIT_REVIEW("SITEVISIT1002", HttpStatus.BAD_REQUEST, "Invalid Site Visit review"),
     INVALID_SITE_VISIT_PEER_REVIEW("SITEVISIT1003", HttpStatus.BAD_REQUEST, "Site Visit cannot be sent for peer review"),
+
+    /**
+     * Request feedback
+     */
+    INVALID_REQUEST_FEEDBACK_PAYLOAD("REQUESTFEEDBACK2000", HttpStatus.BAD_REQUEST, "Invalid payload"),
     ;
 
     /**

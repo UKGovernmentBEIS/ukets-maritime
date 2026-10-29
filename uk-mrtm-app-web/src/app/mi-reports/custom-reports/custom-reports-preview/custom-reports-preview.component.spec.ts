@@ -153,7 +153,40 @@ describe('CustomReportsPreviewComponent', () => {
       vi.runOnlyPendingTimers();
 
       expect(service.generateCustomReport).toHaveBeenCalledWith({ sqlQuery: 'select 1' });
-      expect((component as any).formGroup.errors).toEqual({ invalid: null });
+      expect((component as any).formGroup.errors).toBeNull();
+      expect((component as any).formGroup.valid).toBe(true);
+    });
+
+    it('should clear a previous error banner when exporting a corrected query', () => {
+      service.generateCustomReport.mockReturnValueOnce(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              error: { code: 'REPORT1001', message: 'Custom query could not be executed' },
+              status: 400,
+            }),
+        ),
+      );
+      (component as any).queryCtrl.setValue('select wrong');
+      (component as any).onSubmit();
+
+      expect(feedbackBannerStore.state.type).toEqual('error');
+
+      (component as any).queryCtrl.setValue('select 1');
+      (component as any).onSubmit();
+      vi.runOnlyPendingTimers();
+
+      expect(service.generateCustomReport).toHaveBeenLastCalledWith({ sqlQuery: 'select 1' });
+      expect(feedbackBannerStore.state.invalidForm).toBeFalsy();
+      expect((component as any).formGroup.errors).toBeNull();
+    });
+
+    it('should allow exporting again after a successful export', () => {
+      (component as any).onSubmit();
+      (component as any).onSubmit();
+      vi.runOnlyPendingTimers();
+
+      expect(service.generateCustomReport).toHaveBeenCalledTimes(2);
     });
 
     it('should register a business error with the feedback banner on a REPORT1001 bad request', () => {

@@ -14,5 +14,6 @@ public class MrtmAccountInfoDTO {
 	private Long id;
 	private String name;
 	private String businessId;
+	private String imoNumber;
 
 }

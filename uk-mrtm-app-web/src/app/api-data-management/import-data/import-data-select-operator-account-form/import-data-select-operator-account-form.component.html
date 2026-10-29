@@ -1,8 +1,4 @@
-<mrtm-wizard-step
-  [formGroup]="form"
-  caption="Import data"
-  heading="Select operator account for EMP"
-  (formSubmit)="onSubmit()">
+<mrtm-wizard-step [formGroup]="form" caption="Import data" [heading]="heading" (formSubmit)="onSubmit()">
   <p class="govuk-body">
     Only accounts that have received data from suppliers and are ready to import for this task are shown.
   </p>

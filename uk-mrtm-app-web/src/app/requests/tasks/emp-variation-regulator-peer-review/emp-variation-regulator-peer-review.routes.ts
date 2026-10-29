@@ -98,8 +98,8 @@ export const EMP_VARIATION_REGULATOR_PEER_REVIEW_ROUTES: Routes = [
         title: dataGapsMap.title,
         data: { breadcrumb: false, backlink: '../../' },
         loadComponent: () =>
-          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-mandate/emp-var-reg-peer-review-mandate.component').then(
-            (c) => c.EmpVarRegPeerReviewMandateComponent,
+          import('@requests/tasks/emp-variation-regulator-peer-review/subtasks/emp-var-reg-peer-review-data-gaps/emp-var-reg-peer-review-data-gaps.component').then(
+            (c) => c.EmpVarRegPeerReviewDataGapsComponent,
           ),
       },
       {

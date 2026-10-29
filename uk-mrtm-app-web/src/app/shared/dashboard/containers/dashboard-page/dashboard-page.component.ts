@@ -118,7 +118,9 @@ export class DashboardPageComponent {
       map((accounts) =>
         accounts.map<AutocompleteSelectOption>((account) => ({
           data: account.businessId,
-          text: `${account.name} (ID: ${account.businessId})`,
+          text: account.imoNumber
+            ? `${account.name} (ID: ${account.businessId}, IMO: ${account.imoNumber})`
+            : `${account.name} (ID: ${account.businessId})`,
         })),
       ),
     ),

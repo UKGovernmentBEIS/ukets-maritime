@@ -19,19 +19,19 @@ public class ExternalAerAggregatedDataEmissionsMeasurements {
 
     @NotNull
     @Digits(integer = Integer.MAX_VALUE, fraction= 7)
-    @Schema(description = "Carbon dioxide. Positive or zero decimal number with fraction part max 7 digits", minimum = "0")
+    @Schema(description = "Carbon dioxide in tonnes. Positive or zero decimal number with fraction part max 7 digits", minimum = "0")
     @PositiveOrZero
     private BigDecimal tco2Total;
 
     @NotNull
     @Digits(integer = Integer.MAX_VALUE, fraction= 7)
-    @Schema(description = "Methane. Positive or zero decimal number with fraction part max 7 digits", minimum = "0")
+    @Schema(description = "Methane in tonnes. Positive or zero decimal number with fraction part max 7 digits", minimum = "0")
     @PositiveOrZero
     private BigDecimal tch4eqTotal;
 
     @NotNull
     @Digits(integer = Integer.MAX_VALUE, fraction= 7)
-    @Schema(description = "Nitrous oxide. Positive or zero decimal number with fraction part max 7 digits", minimum = "0")
+    @Schema(description = "Nitrous oxide in tonnes. Positive or zero decimal number with fraction part max 7 digits", minimum = "0")
     @PositiveOrZero
     private BigDecimal tn2oeqTotal;
 }

@@ -12,4 +12,5 @@ export interface MrtmAccountInfoDTO {
   id?: number;
   name?: string;
   businessId?: string;
+  imoNumber?: string;
 }

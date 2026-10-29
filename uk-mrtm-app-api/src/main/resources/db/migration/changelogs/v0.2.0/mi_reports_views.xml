@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        logicalFilePath="v0.2.0/mi_reports_views.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+    <changeSet id="0_2_0_drop_request_feedback_views" author="P44065" runOrder="first" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            drop view if exists sch_report_sepa.request_feedback cascade;
+            drop view if exists sch_report_opred.request_feedback cascade;
+            drop view if exists sch_report_nrw.request_feedback cascade;
+            drop view if exists sch_report_niea.request_feedback cascade;
+            drop view if exists sch_report_ea.request_feedback cascade;
+        </sql>
+        <rollback/>
+    </changeSet>
+
+    <changeSet id="0_2_0_create_request_feedback_views" author="P44065" runOrder="last" runAlways="true">
+        <validCheckSum>ANY</validCheckSum>
+        <sql>
+            create or replace view sch_report_sepa.request_feedback as SELECT rf.* FROM request_feedback rf JOIN request_resource ca ON rf.request_id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON rf.request_id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'SCOTLAND';
+            create or replace view sch_report_opred.request_feedback as SELECT rf.* FROM request_feedback rf JOIN request_resource ca ON rf.request_id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON rf.request_id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'OPRED';
+            create or replace view sch_report_nrw.request_feedback as SELECT rf.* FROM request_feedback rf JOIN request_resource ca ON rf.request_id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON rf.request_id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'WALES';
+            create or replace view sch_report_niea.request_feedback as SELECT rf.* FROM request_feedback rf JOIN request_resource ca ON rf.request_id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON rf.request_id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'NORTHERN_IRELAND';
+            create or replace view sch_report_ea.request_feedback as SELECT rf.* FROM request_feedback rf JOIN request_resource ca ON rf.request_id = ca.request_id AND ca.resource_type = 'CA' LEFT JOIN request_resource acc ON rf.request_id = acc.request_id AND acc.resource_type = 'ACCOUNT' WHERE ca.resource_id = 'ENGLAND';
+        </sql>
+        <rollback/>
+    </changeSet>
+</databaseChangeLog>

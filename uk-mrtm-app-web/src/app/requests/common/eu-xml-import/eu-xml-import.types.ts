@@ -35,6 +35,13 @@ export interface EuXmlEmissionFactor {
   slipEF?: number;
 }
 
+export interface EuXmlSlippageEntry {
+  fuelTypeCode?: string;
+  fuelOriginCode?: string;
+  otherFuelType?: string;
+  slipPercentage?: number;
+}
+
 export interface EuXmlEmissionSourceEntry {
   emissionSourceTypeCode?: string;
   name?: string;
@@ -49,6 +56,7 @@ export interface EuXmlEmissionSourceEntry {
   shipSpecificUncertainty?: number;
   emissionSourceClassCode?: string;
   otherFuelType?: string | string[];
+  slippageEntry?: EuXmlSlippageEntry[];
 }
 
 export interface EuXmlFuelTypeEntry {

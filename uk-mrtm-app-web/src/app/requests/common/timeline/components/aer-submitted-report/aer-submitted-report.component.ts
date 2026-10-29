@@ -77,6 +77,7 @@ interface ViewModel {
   aerAggregatedDataSubtaskMap: SubTaskListMap<unknown>;
   aerReductionClaim: AerSmf;
   fuelPurchases: ReductionClaimDetailsListItemDto[];
+  fuelPurchasesTotalEmissions: string;
   aerReductionClaimSubtaskMap: SubTaskListMap<AerSmf & Pick<AerSmfDetails, 'purchases'>>;
   operatorDetails: AerOperatorDetails;
   operatorDetailsFiles: AttachedFile[];
@@ -163,6 +164,9 @@ export class AerSubmittedReportComponent implements AfterViewInit {
     // Reduction Claim
     const aerReductionClaim = this.store.select(aerTimelineCommonQuery.selectReductionClaim)();
     const fuelPurchases = this.store.select(aerTimelineCommonQuery.selectReductionClaimDetailsListItems)();
+    const fuelPurchasesTotalEmissions = this.store.select(
+      aerTimelineCommonQuery.selectReductionClaimTotalSustainableEmissions,
+    )();
     const aerReductionClaimSubtaskMap = reductionClaimMap;
 
     // Additional Documents
@@ -200,6 +204,7 @@ export class AerSubmittedReportComponent implements AfterViewInit {
       aerAggregatedDataSubtaskMap,
       aerReductionClaim,
       fuelPurchases,
+      fuelPurchasesTotalEmissions,
       aerReductionClaimSubtaskMap,
       additionalDocuments,
       additionalDocumentsFiles,

@@ -1,5 +1,5 @@
 import { DatePipe, NgTemplateOutlet } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, computed, inject, signal, TrackByFunction } from '@angular/core';
 import { toObservable, toSignal } from '@angular/core/rxjs-interop';
 
 import { catchError, EMPTY, exhaustMap, map, Subject, switchMap, tap } from 'rxjs';
@@ -8,6 +8,7 @@ import {
   ThirdPartyDataManagementAPIService,
   ThirdPartyDataManagementImportRequestDTO,
   ThirdPartyDataManagementTransactionDetailsResponseDTO,
+  ThirdPartyDataManagementTransactionItem,
 } from '@mrtm/api';
 
 import { GovukDatePipe } from '@netz/common/pipes';
@@ -66,6 +67,7 @@ export class ApiDataManagementActivityHistoryComponent {
 
   private readonly downloadReport$ = new Subject<number>();
   readonly columns = IMPORTED_RECORDS_COLUMNS;
+  readonly trackById: TrackByFunction<ThirdPartyDataManagementTransactionItem> = (_, row) => row.id;
 
   private readonly downloadReportResult = toSignal(
     this.downloadReport$.pipe(

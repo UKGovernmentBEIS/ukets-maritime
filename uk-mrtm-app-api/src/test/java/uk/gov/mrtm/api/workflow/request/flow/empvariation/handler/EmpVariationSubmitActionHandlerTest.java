@@ -6,10 +6,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.feedback.domain.common.MrtmRequestFeedbackType;
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.domain.EmpVariationSubmitOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.empvariation.service.EmpVariationSubmitService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.request.feedback.service.RequestFeedbackService;
 import uk.gov.netz.api.workflow.request.WorkflowService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
@@ -42,6 +44,9 @@ class EmpVariationSubmitActionHandlerTest {
     @Mock
     private WorkflowService workflowService;
 
+    @Mock
+    private RequestFeedbackService requestFeedbackService;
+
     @Test
     void process() {
         Long requestTaskId = 1L;
@@ -51,7 +56,8 @@ class EmpVariationSubmitActionHandlerTest {
         RequestTaskPayload expectedRequestTaskPayload = mock(RequestTaskPayload.class);
 
         String processTaskId = "processTaskId";
-        Request request = Request.builder().id("1").build();
+        String requestId = "2";
+        Request request = Request.builder().id(requestId).build();
         RequestTask requestTask = RequestTask.builder()
             .id(1L)
             .request(request)
@@ -69,10 +75,11 @@ class EmpVariationSubmitActionHandlerTest {
         verifyNoMoreInteractions(expectedRequestTaskPayload);
         verify(requestTaskService, times(1)).findTaskById(requestTask.getId());
         verify(service, times(1)).submitEmpVariation(requestTask, appUser);
+        verify(requestFeedbackService).createRequestFeedback(requestId, MrtmRequestFeedbackType.EMP_VARIATION_SUBMIT.name(), appUser);
         verify(workflowService, times(1)).completeTask(processTaskId,
                 Map.of(MrtmBpmnProcessConstants.EMP_VARIATION_SUBMIT_OUTCOME, EmpVariationSubmitOutcome.SUBMITTED,
                         BpmnProcessConstants.SKIP_PAYMENT, true));
-        verifyNoMoreInteractions(requestTaskService, service, workflowService);
+        verifyNoMoreInteractions(requestTaskService, service, workflowService, requestFeedbackService);
     }
 
     @Test

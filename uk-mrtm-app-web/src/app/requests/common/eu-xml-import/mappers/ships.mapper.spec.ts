@@ -493,6 +493,81 @@ describe('mapShipEmissions', () => {
     });
   });
 
+  describe('methane slip', () => {
+    const planWithSlip = (fuelTypeCode: string, slipPercentage?: number) =>
+      basePlan({
+        fuelTypes: {
+          fuelTypeEntry: [
+            { fuelTypeCode, fuelOriginCode: 'FOSSIL', emissionFactors: [{ ghgCode: 'CO2', ttwEF: 2.75 }] },
+          ],
+        },
+        emissionSources: {
+          emissionSourceEntry: [
+            {
+              name: 'Main Engine 1',
+              fuelTypeCode: [fuelTypeCode],
+              slippageEntry: [{ fuelTypeCode, fuelOriginCode: 'FOSSIL', slipPercentage }],
+            },
+          ],
+        },
+      });
+
+    it.each([
+      [0, '0'],
+      [0.031, '3.1'],
+      [0.017, '1.7'],
+      [0.002, '0.2'],
+      [0.026, '2.6'],
+    ])('maps slipPercentage %s to the preselected option "%s"', (slipPercentage, methaneSlip) => {
+      const { ship, shipWarnings } = mapShipEmissions(planWithSlip('LNG', slipPercentage), 'MV Test');
+
+      expect(ship.emissionsSources[0].fuelDetails[0]).toEqual(
+        expect.objectContaining({ methaneSlip, methaneSlipValueType: 'PRESELECTED' }),
+      );
+      expect(shipWarnings.some((w) => w.message.includes('methane slip'))).toBe(false);
+    });
+
+    it.each([
+      [0.0123, '1.23'],
+      [0.5, '50'],
+      [1, '100'],
+    ])('maps a non-preselected slipPercentage %s to OTHER with value "%s"', (slipPercentage, methaneSlip) => {
+      const { ship } = mapShipEmissions(planWithSlip('LNG', slipPercentage), 'MV Test');
+
+      expect(ship.emissionsSources[0].fuelDetails[0]).toEqual(
+        expect.objectContaining({ methaneSlip, methaneSlipValueType: 'OTHER' }),
+      );
+    });
+
+    it.each([-0.01, 1.01, 0.12345])('drops an invalid slipPercentage %s and warns', (slipPercentage) => {
+      const { ship, shipWarnings } = mapShipEmissions(planWithSlip('LNG', slipPercentage), 'MV Test');
+
+      const fuel = ship.emissionsSources[0].fuelDetails[0];
+      expect(fuel.methaneSlip).toBeUndefined();
+      expect(fuel.methaneSlipValueType).toBeUndefined();
+      expect(shipWarnings.some((w) => w.message.includes('methane slip must be'))).toBe(true);
+    });
+
+    it('ignores slipPercentage for non-LNG fuels and when it is absent', () => {
+      const nonLng = mapShipEmissions(planWithSlip('HFO', 0.031), 'MV Test').ship.emissionsSources[0].fuelDetails[0];
+      const absent = mapShipEmissions(planWithSlip('LNG'), 'MV Test').ship.emissionsSources[0].fuelDetails[0];
+
+      expect(nonLng.methaneSlip).toBeUndefined();
+      expect(nonLng.methaneSlipValueType).toBeUndefined();
+      expect(absent.methaneSlip).toBeUndefined();
+      expect(absent.methaneSlipValueType).toBeUndefined();
+    });
+
+    it('leaves methane slip empty when slipPercentage is an empty element', () => {
+      const { ship, shipWarnings } = mapShipEmissions(planWithSlip('LNG', '' as unknown as number), 'MV Test');
+
+      const fuel = ship.emissionsSources[0].fuelDetails[0];
+      expect(fuel.methaneSlip).toBeUndefined();
+      expect(fuel.methaneSlipValueType).toBeUndefined();
+      expect(shipWarnings.some((w) => w.message.includes('methane slip'))).toBe(false);
+    });
+  });
+
   describe('measurements', () => {
     it('links measuring equipment applied to emission sources by name', () => {
       const { ship } = mapShipEmissions(

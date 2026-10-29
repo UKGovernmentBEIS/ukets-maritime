@@ -10,6 +10,7 @@ import {
   model,
   output,
   TemplateRef,
+  TrackByFunction,
 } from '@angular/core';
 
 import { SafeHtmlPipe } from '../pipes';
@@ -28,6 +29,8 @@ export class TableComponent<T> {
 
   readonly columns = input<GovukTableColumn<T>[]>();
   readonly data = model<Pick<T, GovukTableColumn<T>['field']>[]>();
+  // Identity by default: form-bound rows (e.g. UsersTableDirective) must be re-created when their controls are replaced
+  readonly trackBy = input<TrackByFunction<Pick<T, GovukTableColumn<T>['field']>>>((_, row) => row);
   readonly caption = input<string>();
   readonly description = input<string>();
   readonly emptyTableText = input<string>();

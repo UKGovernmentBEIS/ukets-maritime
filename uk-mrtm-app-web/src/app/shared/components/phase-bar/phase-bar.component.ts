@@ -8,6 +8,8 @@ import { AuthStore, selectUserProfile } from '@netz/common/auth';
 import { DestroySubject } from '@netz/common/services';
 import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
 
+import { ServiceFeedbackLinkService } from '@shared/services/service-feedback-link.service';
+
 /* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'mrtm-phase-bar',
@@ -16,9 +18,11 @@ import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
   template: `
     <govuk-phase-banner phase="Beta">
       @if (userProfile$ | async; as user) {
-        This is a new service – your
-        <a govukLink routerLink="feedback">feedback</a>
-        will help us to improve it.
+        @if (isServiceFeedbackLinkVisible()) {
+          This is a new service – your
+          <a govukLink routerLink="feedback">feedback</a>
+          will help us to improve it.
+        }
 
         <span class="logged-in-user float-right">
           You are logged in as:
@@ -34,6 +38,8 @@ import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
 export class PhaseBarComponent {
   private readonly authStore = inject(AuthStore);
   private readonly destroy$ = inject(DestroySubject);
+
+  readonly isServiceFeedbackLinkVisible = inject(ServiceFeedbackLinkService).isVisible;
 
   userProfile$ = this.authStore.rxSelect(selectUserProfile).pipe(takeUntil(this.destroy$));
 }

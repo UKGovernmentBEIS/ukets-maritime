@@ -30,10 +30,12 @@ import {
   EuXmlFuelTypeEntry,
   EuXmlMeasuringEquipmentEntry,
   EuXmlMonitoringPlan,
+  EuXmlSlippageEntry,
 } from '@requests/common/eu-xml-import/eu-xml-import.types';
 import { clampEF, classifyFuel, warn } from '@requests/common/eu-xml-import/mappers/mapper.helpers';
-import { XmlValidationError } from '@shared/types';
-import { isNil } from '@shared/utils';
+import { EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS } from '@shared/constants';
+import { AllFuelOriginTypeName, XmlValidationError } from '@shared/types';
+import { isLNG, isNil } from '@shared/utils';
 
 export function mapShipEmissions(
   plan: EuXmlMonitoringPlan,
@@ -269,12 +271,13 @@ function mapEmissionSourcesList(
         // referenced only here.
         const factor = fuelFactorsByCode.get(code);
         if (factor) {
-          return {
+          const fuel = {
             uniqueIdentifier: factor.uniqueIdentifier,
             origin: factor.origin,
             ...(factor.name ? { name: factor.name } : {}),
             type: factor.type,
-          } as FuelOriginTypeName;
+          } as AllFuelOriginTypeName;
+          return { ...fuel, ...mapMethaneSlip(fuel, code, entry.slippageEntry, ctx, warnings) };
         }
 
         const fuelOrigin = classifyFuel(code);
@@ -283,12 +286,13 @@ function mapEmissionSourcesList(
         }
 
         const { origin, type: fuelType, name: fuelName } = fuelOrigin;
-        return {
+        const fuel = {
           uniqueIdentifier: crypto.randomUUID(),
           origin,
           type: fuelType,
           ...(fuelName ? { name: fuelName } : {}),
-        } as FuelOriginTypeName;
+        } as AllFuelOriginTypeName;
+        return { ...fuel, ...mapMethaneSlip(fuel, code, entry.slippageEntry, ctx, warnings) };
       })
       .filter(Boolean);
 
@@ -315,6 +319,68 @@ function mapEmissionSourcesList(
       referenceNumber,
     };
   });
+}
+
+// Mirrors the methaneSlipOther form rules: min(0) and percentageValidator(2) — up to 100% with
+// up to 2 decimal places.
+const METHANE_SLIP_PERCENTAGE_PATTERN = /^((100(\.0{1,2})?)|(\d{1,2})(\.\d{1,2})?)$/;
+
+function isValidMethaneSlipPercentage(value: number): boolean {
+  return Number.isFinite(value) && value >= 0 && METHANE_SLIP_PERCENTAGE_PATTERN.test(String(value));
+}
+
+function findSlippageEntry(
+  fuel: AllFuelOriginTypeName,
+  code: string,
+  slippageEntries: EuXmlSlippageEntry[] | undefined,
+): EuXmlSlippageEntry | undefined {
+  return slippageEntries?.find(
+    (slippage) =>
+      slippage.fuelTypeCode?.toUpperCase() === code?.toUpperCase() &&
+      (!slippage.fuelOriginCode || slippage.fuelOriginCode.toUpperCase() === fuel.origin) &&
+      (fuel.type !== 'OTHER' || slippage.otherFuelType?.trim().toUpperCase() === fuel.name?.toUpperCase()),
+  );
+}
+
+/**
+ * The XML carries slipPercentage as a fraction (e.g. 0.031), while the DTO stores methaneSlip as
+ * a percentage string (e.g. "3.1"). Preselected options are therefore converted to fractions for
+ * the comparison; anything else is stored as OTHER, provided it passes the form validation.
+ * Only LNG fuels carry a methane slip — the form disables the control for every other fuel.
+ */
+function mapMethaneSlip(
+  fuel: AllFuelOriginTypeName,
+  code: string,
+  slippageEntries: EuXmlSlippageEntry[] | undefined,
+  ctx: string,
+  warnings: XmlValidationError[],
+): Pick<FuelOriginTypeName, 'methaneSlip' | 'methaneSlipValueType'> {
+  const slipPercentage = findSlippageEntry(fuel, code, slippageEntries)?.slipPercentage;
+  // An empty <slipPercentage></slipPercentage> is parsed as '' — treat it as absent rather than 0.
+  if (!isLNG(fuel) || isNil(slipPercentage) || String(slipPercentage).trim() === '') {
+    return {};
+  }
+
+  const value = Number(slipPercentage);
+  const preselected = EMISSION_SOURCES_METHANE_SLIP_SELECT_ITEMS.find(
+    (item) => item.value !== 'OTHER' && Math.abs(Number(item.value) / 100 - value) < 1e-9,
+  );
+  if (preselected) {
+    return { methaneSlip: preselected.value, methaneSlipValueType: 'PRESELECTED' };
+  }
+
+  // toFixed strips floating point noise from the multiplication (e.g. 0.0123 * 100).
+  const percentage = Number((value * 100).toFixed(10));
+  if (!isValidMethaneSlipPercentage(percentage)) {
+    warnings.push(
+      warn(
+        `${ctx} / Fuel "${code}": methane slip must be 0% or more, less or equal than 100% with up to 2 decimal places, and will need to be entered manually.`,
+      ),
+    );
+    return {};
+  }
+
+  return { methaneSlip: String(percentage), methaneSlipValueType: 'OTHER' };
 }
 
 function mapMeasurements(

@@ -44,6 +44,11 @@ export class AerVerificationSubmitApiService extends TaskApiService<AerVerificat
     const taskType = this.store.select(requestTaskQuery.selectRequestTaskType)();
 
     switch (taskType) {
+      case 'AER_AMEND_APPLICATION_VERIFICATION_SUBMIT':
+        return {
+          actionType: 'AER_SUBMIT_APPLICATION_VERIFICATION_AMEND',
+          actionPayloadType: 'EMPTY_PAYLOAD',
+        };
       case 'AER_APPLICATION_VERIFICATION_SUBMIT':
       default:
         return {

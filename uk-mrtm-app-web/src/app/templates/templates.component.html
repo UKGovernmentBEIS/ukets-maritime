@@ -36,7 +36,8 @@
     <govuk-table
       id="templates"
       [columns]="(currentFragment$ | async) === 'regulator-emails' ? regulatorTabCols : operatorTabCols"
-      [data]="templates$ | async">
+      [data]="templates$ | async"
+      [trackBy]="trackById">
       <ng-template let-column="column" let-row="row">
         @switch (column.field) {
           @case ('name') {

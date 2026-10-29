@@ -3,3 +3,4 @@ export * from './file-upload.service';
 export * from './notify-users.service';
 export * from './request-task-file.service';
 export * from './persistable-pagination.service';
+export * from './service-feedback-link.service';

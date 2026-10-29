@@ -5,7 +5,13 @@
   "compilerOptions": {
     "emitDecoratorMetadata": true,
     "outDir": "../../out-tsc/spec",
-    "types": ["vitest/globals", "node"]
+    "types": ["vitest/globals", "node"],
+    // Specs test the source: resolving @netz/common/* to dist loads a second copy of every component (NG0912)
+    "paths": {
+      "@netz/govuk-components": ["../../dist/govuk-components"],
+      "@mrtm/api": ["../../dist/mrtm-api"],
+      "@netz/common/*": ["./*"]
+    }
   },
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

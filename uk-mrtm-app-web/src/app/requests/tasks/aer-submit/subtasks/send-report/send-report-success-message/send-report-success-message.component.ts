@@ -3,13 +3,14 @@ import { RouterLink } from '@angular/router';
 
 import { LinkDirective, PanelComponent } from '@netz/govuk-components';
 
+import { RequestFeedbackInvitationComponent } from '@feedback/request-feedback/request-feedback-invitation';
 import { sendReportSuccessQuery } from '@requests/tasks/aer-submit/subtasks/send-report/send-report-success-message/+state/send-report-success.selectors';
 import { SendReportSuccessStore } from '@requests/tasks/aer-submit/subtasks/send-report/send-report-success-message/+state/send-report-success-store.service';
 import { CapitalizeFirstPipe } from '@shared/pipes';
 
 @Component({
   selector: 'mrtm-send-report-success-message',
-  imports: [PanelComponent, CapitalizeFirstPipe, LinkDirective, RouterLink],
+  imports: [PanelComponent, CapitalizeFirstPipe, LinkDirective, RouterLink, RequestFeedbackInvitationComponent],
   standalone: true,
   templateUrl: './send-report-success-message.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,

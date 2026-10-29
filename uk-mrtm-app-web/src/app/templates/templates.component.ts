@@ -1,5 +1,5 @@
 import { AsyncPipe, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, TrackByFunction } from '@angular/core';
 import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 
@@ -16,8 +16,10 @@ import {
 } from 'rxjs';
 
 import {
+  DocumentTemplateInfoDTO,
   DocumentTemplateSearchResults,
   DocumentTemplatesService,
+  NotificationTemplateInfoDTO,
   NotificationTemplateSearchResults,
   NotificationTemplatesService,
 } from '@mrtm/api';
@@ -76,6 +78,7 @@ export class TemplatesComponent {
     { field: 'lastUpdatedDate', header: 'Last changed' },
   ];
   regulatorTabCols: GovukTableColumn[] = this.operatorTabCols.filter((col) => col.field !== 'operatorType');
+  readonly trackById: TrackByFunction<NotificationTemplateInfoDTO | DocumentTemplateInfoDTO> = (_, row) => row.id;
   searchForm: UntypedFormGroup = this.fb.group({
     term: [
       null,

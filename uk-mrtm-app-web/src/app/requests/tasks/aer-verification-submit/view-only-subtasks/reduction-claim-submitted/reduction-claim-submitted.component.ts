@@ -27,5 +27,6 @@ export class ReductionClaimSubmittedComponent {
   public readonly map = reductionClaimMap;
   public readonly data = this.store.select(aerCommonQuery.selectReductionClaim);
   public readonly fuelPurchases = this.store.select(aerCommonQuery.selectReductionClaimDetailsListItems);
+  public readonly totalEmissions = this.store.select(aerCommonQuery.selectReductionClaimTotalSustainableEmissions);
   public readonly thirdPartyDataProviderName = this.store.select(aerCommonQuery.selectThirdPartyDataProviderName);
 }

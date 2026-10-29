@@ -90,6 +90,7 @@ const provideReductionClaimSubtaskSummary: Provider = {
         data: store.select(aerCommonQuery.selectReductionClaim)(),
         wizardMap: reductionClaimMap,
         fuelPurchases: store.select(aerCommonQuery.selectReductionClaimDetailsListItems)(),
+        totalEmissions: store.select(aerCommonQuery.selectReductionClaimTotalSustainableEmissions)(),
         dataSupplierName: store.select(aerCommonQuery.selectThirdPartyDataProviderName)(),
       })),
     };

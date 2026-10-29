@@ -656,19 +656,19 @@ const selectReductionClaimDetailsListItems: StateSelector<
   selectAerAttachments,
   selectReductionClaim,
   (downloadUrl, attachments, smf) =>
-    [
-      ...(smf?.smfDetails?.purchases ?? []).map((purchase) => ({
-        ...purchase,
-        evidenceFiles: purchase.evidenceFiles?.map((file) => ({
-          downloadUrl: downloadUrl + file,
-          fileName: attachments?.[file],
-        })),
-        needsReview: !purchase.evidenceFiles?.length,
+    (smf?.smfDetails?.purchases ?? []).map((purchase) => ({
+      ...purchase,
+      evidenceFiles: purchase.evidenceFiles?.map((file) => ({
+        downloadUrl: downloadUrl + file,
+        fileName: attachments?.[file],
       })),
-      smf?.smfDetails?.purchases?.length
-        ? { isSummary: true, co2Emissions: smf?.smfDetails?.totalSustainableEmissions }
-        : undefined,
-    ].filter(Boolean),
+      needsReview: !purchase.evidenceFiles?.length,
+    })),
+);
+
+const selectReductionClaimTotalSustainableEmissions: StateSelector<RequestTaskState, string> = createDescendingSelector(
+  selectReductionClaim,
+  (smf) => smf?.smfDetails?.totalSustainableEmissions,
 );
 
 const selectStatusForTotalEmissions: StateSelector<RequestTaskState, TaskItemStatus> = createAggregateSelector(
@@ -825,6 +825,7 @@ export const aerCommonQuery = {
   selectReductionClaimFuelPurchase,
   selectSupersetOfFuelTypes,
   selectReductionClaimDetailsListItems,
+  selectReductionClaimTotalSustainableEmissions,
   selectStatusForTotalEmissions,
   selectTotalEmissions,
   selectVoyageEmissions,

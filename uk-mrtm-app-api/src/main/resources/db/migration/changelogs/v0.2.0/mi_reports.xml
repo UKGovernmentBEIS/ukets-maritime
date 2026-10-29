@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+		logicalFilePath="v0.2.0/mi_reports.xml"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.11.xsd">
+
+	<changeSet id="0_2_0_remove_user_defined_request_feedback_related_mi_reports" author="P44065">
+		<sql>
+            delete FROM public.mi_report_user_defined_favourite WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Operators V1%');
+			delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Operators V1%');
+			delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Operators V1%');
+			delete FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Operators V1%';
+
+            delete FROM public.mi_report_user_defined_favourite WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Variation Operators V1%');
+			delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Variation Operators V1%');
+			delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Variation Operators V1%');
+			delete FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Variation Operators V1%';
+
+            delete FROM public.mi_report_user_defined_favourite WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Operators V1%');
+			delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Operators V1%');
+			delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Operators V1%');
+			delete FROM public.mi_report_user_defined WHERE report_name like 'Survey EMP Operators V1%';
+
+            delete FROM public.mi_report_user_defined_favourite WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Verifier V1%');
+			delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Verifier V1%');
+			delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Verifier V1%');
+			delete FROM public.mi_report_user_defined WHERE report_name like 'Survey AER Verifier V1%';
+		</sql>
+	</changeSet>
+
+	<changeSet id="0_2_0_insert_user_defined_EMP_ISSUANCE_SUBMIT_request_feedback_mi_report" author="P44065">
+		<sql>
+INSERT INTO public.mi_report_user_defined
+(id, report_name, description, query_definition, created_by, last_updated_on, active)
+VALUES(nextval('mi_report_user_defined_seq'), 'Survey EMP Operators V1', 'Feedback responses submitted by Operators after completing and submitting an EMP application for regulatory review.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''EMP Issuance''                                  AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''operator_admin''             THEN ''Operator admin''
+        WHEN ''operator''                   THEN ''Operator''
+        WHEN ''consultant_agent''           THEN ''Consultant agent''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''reportCompletionEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report completion ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''UPLOADED_SINGLE_SHIP_EU_XML_FILE''    THEN ''Uploaded an EU XML for a single ship''
+                    WHEN ''UPLOADED_XML_FILE''                   THEN ''Uploaded an XML file to add ships''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''OPERATOR_DETAILS''               THEN ''Operator details''
+                    WHEN ''SHIPS_CALCULATION_EMISSIONS''    THEN ''List of ships and calculation of maritime emissions''
+                    WHEN ''EMISSION_SOURCES''               THEN ''Procedures related to emission sources and emissions factors''
+                    WHEN ''MONITORING_APPROACH''            THEN ''Procedures related to the monitoring of greenhouse gas emissions and fuel consumption''
+                    WHEN ''DATA_GAPS''                      THEN ''Data gaps''
+                    WHEN ''MANDATE''                        THEN ''Delegated responsibility''
+                    WHEN ''MANAGEMENT_PROCEDURES''          THEN ''Management procedures''
+                    WHEN ''CONTROL_ACTIVITIES''             THEN ''Control activities''
+                    WHEN ''ABBREVIATIONS_AND_DEFINITIONS''  THEN ''List of definitions and abbreviations''
+                    WHEN ''ADDITIONAL_DOCUMENTS''           THEN ''Additional information''
+                    WHEN ''NO_FEEDBACK''                    THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id AND acc.id = au.account_id
+WHERE rf.type = ''EMP_ISSUANCE_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';', 'SYSTEM', now(), true);
+
+INSERT INTO public.mi_report_user_defined_category_mapping
+(mi_report_id, category_id)
+VALUES((SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Operators V1'), (SELECT id FROM public.mi_report_user_defined_category WHERE name = 'Management'));
+
+INSERT INTO public.mi_report_user_defined_history
+(id, mi_report_id, change_type, submitted_by, submission_date, reason_for_change, report_name, categories, description, query_definition)
+VALUES (nextval('mi_report_user_defined_history_seq'), (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Operators V1'), 'CREATE', 'SYSTEM', now(), null, 'Survey EMP Operators V1', 'Management', 'Feedback responses submitted by Operators after completing and submitting an EMP application for regulatory review.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''EMP Issuance''                                  AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''operator_admin''             THEN ''Operator admin''
+        WHEN ''operator''                   THEN ''Operator''
+        WHEN ''consultant_agent''           THEN ''Consultant agent''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''reportCompletionEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report completion ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''UPLOADED_SINGLE_SHIP_EU_XML_FILE''    THEN ''Uploaded an EU XML for a single ship''
+                    WHEN ''UPLOADED_XML_FILE''                   THEN ''Uploaded an XML file to add ships''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''OPERATOR_DETAILS''               THEN ''Operator details''
+                    WHEN ''SHIPS_CALCULATION_EMISSIONS''    THEN ''List of ships and calculation of maritime emissions''
+                    WHEN ''EMISSION_SOURCES''               THEN ''Procedures related to emission sources and emissions factors''
+                    WHEN ''MONITORING_APPROACH''            THEN ''Procedures related to the monitoring of greenhouse gas emissions and fuel consumption''
+                    WHEN ''DATA_GAPS''                      THEN ''Data gaps''
+                    WHEN ''MANDATE''                        THEN ''Delegated responsibility''
+                    WHEN ''MANAGEMENT_PROCEDURES''          THEN ''Management procedures''
+                    WHEN ''CONTROL_ACTIVITIES''             THEN ''Control activities''
+                    WHEN ''ABBREVIATIONS_AND_DEFINITIONS''  THEN ''List of definitions and abbreviations''
+                    WHEN ''ADDITIONAL_DOCUMENTS''           THEN ''Additional information''
+                    WHEN ''NO_FEEDBACK''                    THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id AND acc.id = au.account_id
+WHERE rf.type = ''EMP_ISSUANCE_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';');
+		</sql>
+		<rollback>
+			<sql>
+				delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Operators V1');
+				delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Operators V1');
+				delete FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Operators V1';
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="0_2_0_insert_user_defined_EMP_VARIATION_SUBMIT_request_feedback_mi_report" author="P44065">
+		<sql>
+			INSERT INTO public.mi_report_user_defined
+(id, report_name, description, query_definition, created_by, last_updated_on, active)
+VALUES(nextval('mi_report_user_defined_seq'), 'Survey EMP Variation Operators V1', 'Feedback responses submitted by Operators after completing and submitting an EMP variation for regulatory review.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''EMP Variation''                                 AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''operator_admin''             THEN ''Operator admin''
+        WHEN ''operator''                   THEN ''Operator''
+        WHEN ''consultant_agent''           THEN ''Consultant agent''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''reportCompletionEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report completion ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''UPLOADED_SINGLE_SHIP_EU_XML_FILE''    THEN ''Uploaded an EU XML for a single ship''
+                    WHEN ''UPLOADED_XML_FILE''                   THEN ''Uploaded an XML file to add ships''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''OPERATOR_DETAILS''               THEN ''Operator details''
+                    WHEN ''SHIPS_CALCULATION_EMISSIONS''    THEN ''List of ships and calculation of maritime emissions''
+                    WHEN ''EMISSION_SOURCES''               THEN ''Procedures related to emission sources and emissions factors''
+                    WHEN ''MONITORING_APPROACH''            THEN ''Procedures related to the monitoring of greenhouse gas emissions and fuel consumption''
+                    WHEN ''DATA_GAPS''                      THEN ''Data gaps''
+                    WHEN ''MANDATE''                        THEN ''Delegated responsibility''
+                    WHEN ''MANAGEMENT_PROCEDURES''          THEN ''Management procedures''
+                    WHEN ''CONTROL_ACTIVITIES''             THEN ''Control activities''
+                    WHEN ''ABBREVIATIONS_AND_DEFINITIONS''  THEN ''List of definitions and abbreviations''
+                    WHEN ''ADDITIONAL_DOCUMENTS''           THEN ''Additional information''
+                    WHEN ''NO_FEEDBACK''                    THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id AND acc.id = au.account_id
+WHERE rf.type = ''EMP_VARIATION_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';', 'SYSTEM', now(), true);
+
+INSERT INTO public.mi_report_user_defined_category_mapping
+(mi_report_id, category_id)
+VALUES((SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Variation Operators V1'), (SELECT id FROM public.mi_report_user_defined_category WHERE name = 'Management'));
+
+INSERT INTO public.mi_report_user_defined_history
+(id, mi_report_id, change_type, submitted_by, submission_date, reason_for_change, report_name, categories, description, query_definition)
+VALUES (nextval('mi_report_user_defined_history_seq'), (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Variation Operators V1'), 'CREATE', 'SYSTEM', now(), null, 'Survey EMP Variation Operators V1', 'Management', 'Feedback responses submitted by Operators after completing and submitting an EMP variation for regulatory review.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''EMP Variation''                                 AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''operator_admin''             THEN ''Operator admin''
+        WHEN ''operator''                   THEN ''Operator''
+        WHEN ''consultant_agent''           THEN ''Consultant agent''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''reportCompletionEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report completion ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''UPLOADED_SINGLE_SHIP_EU_XML_FILE''    THEN ''Uploaded an EU XML for a single ship''
+                    WHEN ''UPLOADED_XML_FILE''                   THEN ''Uploaded an XML file to add ships''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''OPERATOR_DETAILS''               THEN ''Operator details''
+                    WHEN ''SHIPS_CALCULATION_EMISSIONS''    THEN ''List of ships and calculation of maritime emissions''
+                    WHEN ''EMISSION_SOURCES''               THEN ''Procedures related to emission sources and emissions factors''
+                    WHEN ''MONITORING_APPROACH''            THEN ''Procedures related to the monitoring of greenhouse gas emissions and fuel consumption''
+                    WHEN ''DATA_GAPS''                      THEN ''Data gaps''
+                    WHEN ''MANDATE''                        THEN ''Delegated responsibility''
+                    WHEN ''MANAGEMENT_PROCEDURES''          THEN ''Management procedures''
+                    WHEN ''CONTROL_ACTIVITIES''             THEN ''Control activities''
+                    WHEN ''ABBREVIATIONS_AND_DEFINITIONS''  THEN ''List of definitions and abbreviations''
+                    WHEN ''ADDITIONAL_DOCUMENTS''           THEN ''Additional information''
+                    WHEN ''NO_FEEDBACK''                    THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id AND acc.id = au.account_id
+WHERE rf.type = ''EMP_VARIATION_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';');
+		</sql>
+		<rollback>
+			<sql>
+				delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Variation Operators V1');
+				delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Variation Operators V1');
+				delete FROM public.mi_report_user_defined WHERE report_name = 'Survey EMP Variation Operators V1';
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="0_2_0_insert_user_defined_AER_SUBMIT_request_feedback_mi_report" author="P44065">
+		<sql>
+INSERT INTO public.mi_report_user_defined
+(id, report_name, description, query_definition, created_by, last_updated_on, active)
+VALUES(nextval('mi_report_user_defined_seq'), 'Survey AER Operators V1', 'Feedback responses submitted by Operators after submitting a verified AER for regulatory review.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''AER''                                           AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''operator_admin''             THEN ''Operator admin''
+        WHEN ''operator''                   THEN ''Operator''
+        WHEN ''consultant_agent''           THEN ''Consultant agent''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''reportCompletionEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report completion ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''UPLOADED_XML_FILE''                   THEN ''Uploaded an XML file to add ships''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''OPERATOR_DETAILS''               THEN ''Operator details''
+                    WHEN ''MONITORING_PLAN_CHANGES''        THEN ''Monitoring plan changes''
+                    WHEN ''LIST_OF_SHIPS''                  THEN ''Ships and emissions details list''
+                    WHEN ''VOYAGES''                        THEN ''Voyages''
+                    WHEN ''PORTS''                          THEN ''Ports''
+                    WHEN ''AGGREGATED_EMISSIONS_DATA''      THEN ''Aggregated data''
+                    WHEN ''ADDITIONAL_DOCUMENTS''           THEN ''Additional documents and information''
+                    WHEN ''EMISSIONS_REDUCTION_CLAIM''      THEN ''Reduction claim''
+                    WHEN ''TOTAL_EMISSIONS''                THEN ''Emissions summary for all ships''
+                    WHEN ''NO_FEEDBACK''                    THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id AND acc.id = au.account_id
+WHERE rf.type = ''AER_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';', 'SYSTEM', now(), true);
+
+INSERT INTO public.mi_report_user_defined_category_mapping
+(mi_report_id, category_id)
+VALUES((SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Operators V1'), (SELECT id FROM public.mi_report_user_defined_category WHERE name = 'Management'));
+
+INSERT INTO public.mi_report_user_defined_history
+(id, mi_report_id, change_type, submitted_by, submission_date, reason_for_change, report_name, categories, description, query_definition)
+VALUES (nextval('mi_report_user_defined_history_seq'), (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Operators V1'), 'CREATE', 'SYSTEM', now(), null, 'Survey AER Operators V1', 'Management', 'Feedback responses submitted by Operators after submitting a verified AER for regulatory review.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''AER''                                           AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''operator_admin''             THEN ''Operator admin''
+        WHEN ''operator''                   THEN ''Operator''
+        WHEN ''consultant_agent''           THEN ''Consultant agent''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''reportCompletionEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report completion ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''UPLOADED_XML_FILE''                   THEN ''Uploaded an XML file to add ships''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''OPERATOR_DETAILS''               THEN ''Operator details''
+                    WHEN ''MONITORING_PLAN_CHANGES''        THEN ''Monitoring plan changes''
+                    WHEN ''LIST_OF_SHIPS''                  THEN ''Ships and emissions details list''
+                    WHEN ''VOYAGES''                        THEN ''Voyages''
+                    WHEN ''PORTS''                          THEN ''Ports''
+                    WHEN ''AGGREGATED_EMISSIONS_DATA''      THEN ''Aggregated data''
+                    WHEN ''ADDITIONAL_DOCUMENTS''           THEN ''Additional documents and information''
+                    WHEN ''EMISSIONS_REDUCTION_CLAIM''      THEN ''Reduction claim''
+                    WHEN ''TOTAL_EMISSIONS''                THEN ''Emissions summary for all ships''
+                    WHEN ''NO_FEEDBACK''                    THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id AND acc.id = au.account_id
+WHERE rf.type = ''AER_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';');
+		</sql>
+		<rollback>
+			<sql>
+				delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Operators V1');
+				delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Operators V1');
+				delete FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Operators V1';
+			</sql>
+		</rollback>
+	</changeSet>
+
+	<changeSet id="0_2_0_insert_user_defined_AER_VERIFICATION_SUBMIT_request_feedback_mi_report" author="P44065">
+		<sql>
+			INSERT INTO public.mi_report_user_defined
+(id, report_name, description, query_definition, created_by, last_updated_on, active)
+VALUES(nextval('mi_report_user_defined_seq'), 'Survey AER Verifier V1', 'Feedback responses submitted by Verifiers after submitting a Verification Report and Verification Opinion Statement to the Operator.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''AER Verification''                              AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''verifier_admin''             THEN ''Verifier admin''
+        WHEN ''verifier''                   THEN ''Verifier''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''opinionStatementEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report review ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''VERIFIER_DETAILS''                         THEN ''Verifier details''
+                    WHEN ''OPINION_STATEMENT''                        THEN ''Opinion statement''
+                    WHEN ''ETS_COMPLIANCE_RULES''                     THEN ''Compliance with ETS rules''
+                    WHEN ''COMPLIANCE_MONITORING_REPORTING''          THEN ''Compliance with monitoring and reporting principles''
+                    WHEN ''OVERALL_DECISION''                         THEN ''Overall decision''
+                    WHEN ''UNCORRECTED_MISSTATEMENTS''                THEN ''Uncorrected misstatements''
+                    WHEN ''UNCORRECTED_NON_CONFORMITIES''             THEN ''Uncorrected non-conformities''
+                    WHEN ''UNCORRECTED_NON_COMPLIANCES''              THEN ''Uncorrected non-compliances''
+                    WHEN ''RECOMMENDED_IMPROVEMENTS''                 THEN ''Recommended improvements''
+                    WHEN ''EMISSIONS_REDUCTION_CLAIM_VERIFICATION''   THEN ''Verify the emissions reduction claim''
+                    WHEN ''CLOSE_DATA_GAPS_METHODOLOGIES''            THEN ''Methodologies to close data gaps''
+                    WHEN ''MATERIALITY_LEVEL''                        THEN ''Further information of relevance to the opinion''
+                    WHEN ''NO_FEEDBACK''                              THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id
+WHERE rf.type = ''AER_VERIFICATION_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';', 'SYSTEM', now(), true);
+
+INSERT INTO public.mi_report_user_defined_category_mapping
+(mi_report_id, category_id)
+VALUES((SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Verifier V1'), (SELECT id FROM public.mi_report_user_defined_category WHERE name = 'Management'));
+
+INSERT INTO public.mi_report_user_defined_history
+(id, mi_report_id, change_type, submitted_by, submission_date, reason_for_change, report_name, categories, description, query_definition)
+VALUES (nextval('mi_report_user_defined_history_seq'), (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Verifier V1'), 'CREATE', 'SYSTEM', now(), null, 'Survey AER Verifier V1', 'Management', 'Feedback responses submitted by Verifiers after submitting a Verification Report and Verification Opinion Statement to the Operator.', 'SELECT
+    rf.request_id                                   AS "Workflow ID",
+    ''AER Verification''                              AS "Workflow Type",
+    acc.name                                        AS "Account",
+    rf.submitter_id                                 AS "User$userfullname",
+    rf.submitter_id                                 AS "Email$useremail",
+    CASE au.code
+        WHEN ''verifier_admin''             THEN ''Verifier admin''
+        WHEN ''verifier''                   THEN ''Verifier''
+        ELSE au.code
+    END as "User type",
+    (rf.payload ->> ''version'')::int                 AS "Version",
+    CASE rf.payload ->> ''opinionStatementEaseRating''
+        WHEN ''VERY_EASY''                  THEN ''Very easy''
+        WHEN ''EASY''                       THEN ''Easy''
+        WHEN ''NEITHER_EASY_NOR_DIFFICULT'' THEN ''Neither easy or difficult''
+        WHEN ''DIFFICULT''                  THEN ''Difficult''
+        WHEN ''VERY_DIFFICULT''             THEN ''Very difficult''
+    END                                             AS "Report review ease rating",
+    (SELECT string_agg(
+                CASE m.val
+                    WHEN ''TYPED_INTO_FORM_SECTIONS''            THEN ''Typed answers into the form sections''
+                    WHEN ''IMPORTED_FROM_DATA_SUPPLIER''         THEN ''Imported data from an appointed data supplier''
+                    WHEN ''OTHER''                               THEN ''Other''
+                    ELSE m.val
+                END, '', '' ORDER BY m.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''reportCompletionMethods'')
+            WITH ORDINALITY AS m(val, ord))         AS "Report completion methods",
+    rf.payload ->> ''otherReportCompletionMethods''   AS "Other report completion methods",
+    (SELECT string_agg(
+                CASE g.val
+                    WHEN ''VERIFIER_DETAILS''                         THEN ''Verifier details''
+                    WHEN ''OPINION_STATEMENT''                        THEN ''Opinion statement''
+                    WHEN ''ETS_COMPLIANCE_RULES''                     THEN ''Compliance with ETS rules''
+                    WHEN ''COMPLIANCE_MONITORING_REPORTING''          THEN ''Compliance with monitoring and reporting principles''
+                    WHEN ''OVERALL_DECISION''                         THEN ''Overall decision''
+                    WHEN ''UNCORRECTED_MISSTATEMENTS''                THEN ''Uncorrected misstatements''
+                    WHEN ''UNCORRECTED_NON_CONFORMITIES''             THEN ''Uncorrected non-conformities''
+                    WHEN ''UNCORRECTED_NON_COMPLIANCES''              THEN ''Uncorrected non-compliances''
+                    WHEN ''RECOMMENDED_IMPROVEMENTS''                 THEN ''Recommended improvements''
+                    WHEN ''EMISSIONS_REDUCTION_CLAIM_VERIFICATION''   THEN ''Verify the emissions reduction claim''
+                    WHEN ''CLOSE_DATA_GAPS_METHODOLOGIES''            THEN ''Methodologies to close data gaps''
+                    WHEN ''MATERIALITY_LEVEL''                        THEN ''Further information of relevance to the opinion''
+                    WHEN ''NO_FEEDBACK''                              THEN ''No, I do not want to give feedback on any of these sections''
+                    ELSE g.val
+                END, '', '' ORDER BY g.ord)
+       FROM jsonb_array_elements_text(rf.payload -> ''feedbackReviewGroups'')
+            WITH ORDINALITY AS g(val, ord))         AS "Feedback review groups",
+    rf.payload ->> ''feedbackReviewGroupsComment''    AS "Feedback review groups comment",
+    rf.payload ->> ''additionalComments''             AS "Additional comments"
+FROM request_feedback rf
+JOIN request_account ra on ra.id = rf.request_id
+JOIN account acc on ra.account_id = acc.id::VARCHAR
+LEFT JOIN au_authority au on au.user_id = rf.submitter_id
+WHERE rf.type = ''AER_VERIFICATION_SUBMIT''
+  AND (rf.payload ->> ''version'')::int = 1 AND rf.status = ''SUBMITTED'';');
+		</sql>
+		<rollback>
+			<sql>
+				delete FROM public.mi_report_user_defined_category_mapping WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Verifier V1');
+                delete FROM public.mi_report_user_defined_history WHERE mi_report_id IN (SELECT id FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Verifier V1');
+				delete FROM public.mi_report_user_defined WHERE report_name = 'Survey AER Verifier V1';
+			</sql>
+		</rollback>
+	</changeSet>
+</databaseChangeLog>

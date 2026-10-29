@@ -18,7 +18,6 @@ import {
   GovukSelectOption,
   GovukValidators,
   SelectComponent,
-  WarningTextComponent,
 } from '@netz/govuk-components';
 
 import { ConfirmationComponent } from '@accounts/containers/verification-body';
@@ -34,7 +33,6 @@ import {
   selector: 'mrtm-appoint',
   imports: [
     PageHeadingComponent,
-    WarningTextComponent,
     ReactiveFormsModule,
     AsyncPipe,
     SelectComponent,

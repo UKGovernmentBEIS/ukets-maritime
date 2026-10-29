@@ -1,0 +1,17 @@
+@if (isFeedbackAvailable()) {
+  <div class="govuk-grid-row govuk-!-margin-bottom-8">
+    <div class="govuk-grid-column-two-thirds">
+      <h2 class="govuk-heading-s govuk-!-margin-bottom-3">{{ config().invitation.heading }}</h2>
+      <p class="govuk-body govuk-!-margin-bottom-3">{{ config().invitation.description }}</p>
+      <a
+        govukLink
+        class="govuk-body"
+        routerLink="/request-feedback"
+        [queryParams]="{ requestId: requestId(), type: type() }"
+        target="_blank"
+        rel="noreferrer noopener">
+        Give us your feedback (opens in new tab)
+      </a>
+    </div>
+  </div>
+}

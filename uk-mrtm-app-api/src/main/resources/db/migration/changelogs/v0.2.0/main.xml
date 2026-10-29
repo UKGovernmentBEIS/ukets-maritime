@@ -15,4 +15,6 @@
 	<include file="changelog_flowable_schema_tables_management.xml" relativeToChangelogFile="true"/>
 	<include file="third_party_data.xml" relativeToChangelogFile="true" />
 	<include file="changelog_custom_mi_reports_categories.xml" relativeToChangelogFile="true" />
+	<include file="mi_reports_views.xml" relativeToChangelogFile="true" />
+	<include file="mi_reports.xml" relativeToChangelogFile="true" />
 </databaseChangeLog>

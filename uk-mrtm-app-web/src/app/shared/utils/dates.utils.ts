@@ -90,15 +90,13 @@ export const convertToUTCDate = (date: Date): Date | null => {
  * @param isUTC - Determines if the resulting `Date` should be in UTC format.
  */
 export const formatDateFromString = (dateString: string, fallback = new Date(), isUTC = false): Date | null => {
-  let formattedDate = null;
-
   if (!dateFormatPattern.test(dateString)) return fallback;
 
   const match = dateString.match(dateFormatPattern);
   const day = Number(match[1]);
   const month = Number(match[3]);
   const year = Number(match[4]);
-  formattedDate = isUTC ? new Date(Date.UTC(year, month - 1, day)) : new Date(year, month - 1, day);
+  const formattedDate = isUTC ? new Date(Date.UTC(year, month - 1, day)) : new Date(year, month - 1, day);
   if (formattedDate instanceof Date && !isNaN(formattedDate as any)) {
     return formattedDate;
   }
@@ -107,7 +105,6 @@ export const formatDateFromString = (dateString: string, fallback = new Date(), 
 };
 
 export const formatDateTimeFromString = (dateString: string, timeString: string, isUTC = false): Date | null => {
-  let formattedDate = null;
   if (!dateFormatPattern.test(dateString) || !timeFormatPattern.test(timeString)) return null;
 
   const dateMatch = dateString.match(dateFormatPattern);
@@ -119,7 +116,7 @@ export const formatDateTimeFromString = (dateString: string, timeString: string,
   const minutes = Number(timeMatch[2]);
   const seconds = Number(timeMatch[3]);
 
-  formattedDate = isUTC
+  const formattedDate = isUTC
     ? new Date(Date.UTC(year, month - 1, day, hours, minutes, seconds, 0))
     : new Date(year, month - 1, day, hours, minutes, seconds);
   if (formattedDate instanceof Date && !isNaN(formattedDate as any)) {

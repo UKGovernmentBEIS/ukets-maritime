@@ -101,7 +101,7 @@ public class MiReportUserDefinedController {
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#id")
+    @Authorized
     public ResponseEntity<Void> updateMiReportUserDefined(
         @Parameter(hidden = true) AppUser appUser,
         @PathVariable @NotNull @Parameter(description = "The unique identifier of the report") Long id,
@@ -116,7 +116,7 @@ public class MiReportUserDefinedController {
     @ApiResponse(responseCode = "400", description = SwaggerApiInfo.BAD_REQUEST, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "403", description = SwaggerApiInfo.FORBIDDEN, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#id")
+    @Authorized
     public ResponseEntity<Void> deleteMiReportUserDefined(@PathVariable @Parameter(description = "The MI report user defined id") Long id) {
         miReportUserDefinedService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -132,7 +132,7 @@ public class MiReportUserDefinedController {
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#id")
+    @AuthorizedRole(roleType = {REGULATOR})
     public ResponseEntity<MiReportUserDefinedDTO> getMiReportUserDefinedById(
         @Parameter(hidden = true) AppUser appUser,
         @PathVariable @NotNull @Parameter(description = "The unique identifier of the report") Long id){
@@ -151,9 +151,11 @@ public class MiReportUserDefinedController {
         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)) })
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR, content = {
         @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class)) })
-    @Authorized(resourceId = "#id")
-    public ResponseEntity<MiReportUserDefinedResult> generateMiReportUserDefined(@PathVariable Long id) {
-        MiReportUserDefinedResult reportResult = miReportUserDefinedService.generateReport(id);
+    @AuthorizedRole(roleType = {REGULATOR})
+    public ResponseEntity<MiReportUserDefinedResult> generateMiReportUserDefined(
+        @Parameter(hidden = true) AppUser appUser,
+        @PathVariable Long id) {
+        MiReportUserDefinedResult reportResult = miReportUserDefinedService.generateReport(id, appUser);
         return ResponseEntity.ok(reportResult);
     }
 
@@ -167,7 +169,7 @@ public class MiReportUserDefinedController {
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#id")
+    @AuthorizedRole(roleType = {REGULATOR})
     public ResponseEntity<MiReportUserDefinedHistoryResults> getMiReportUserDefinedHistory(
         @PathVariable @Parameter(description = "The id of the report to fetch the history for") Long id,
         @RequestParam(value = "page") @NotNull @Parameter(description = "The page number starting from zero") @Min(value = 0, message = "{parameter.page.typeMismatch}") Integer page,
@@ -185,7 +187,7 @@ public class MiReportUserDefinedController {
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#id")
+    @AuthorizedRole(roleType = {REGULATOR})
     public ResponseEntity<Void> addMiReportUserDefinedAsFavourite(
         @Parameter(hidden = true) AppUser appUser,
         @PathVariable @Parameter(description = "The id of the user defined mi report", required = true) Long id) {
@@ -202,7 +204,7 @@ public class MiReportUserDefinedController {
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
     @ApiResponse(responseCode = "500", description = SwaggerApiInfo.INTERNAL_SERVER_ERROR,
         content = {@Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))})
-    @Authorized(resourceId = "#id")
+    @AuthorizedRole(roleType = {REGULATOR})
     public ResponseEntity<Void> removeMiReportUserDefinedFromFavourites(
         @Parameter(hidden = true) AppUser appUser,
         @PathVariable @Parameter(description = "The id of the user defined mi report", required = true) Long id) {
@@ -265,7 +267,7 @@ public class MiReportUserDefinedController {
         MiReportUserDefinedSearchCriteriaDTO searchCriteria) {
 
         MiReportUserDefinedResults miReportUserDefinedResults =
-            miReportUserDefinedService.findAllByCA(appUser, page, pageSize, searchCriteria);
+            miReportUserDefinedService.findAllBySearchCriteria(appUser, page, pageSize, searchCriteria);
         return ResponseEntity.ok(miReportUserDefinedResults);
     }
 

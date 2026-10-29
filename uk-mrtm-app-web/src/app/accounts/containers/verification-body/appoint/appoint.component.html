@@ -14,12 +14,13 @@
 
   <div class="govuk-grid-row">
     <div class="govuk-grid-column-two-thirds">
-      <govuk-warning-text assistiveText="">
-        A verifier will have read-only access to your account.
-        <br />
-        This allows staff at the verifier organization to prepare in advance for the review and verification of your
-        Annual Emissions Monitoring (AEM) report.
-      </govuk-warning-text>
+      <p class="govuk-body">
+        Appointing a verifier will grant personnel at the verifier organisation read-only access to your account.
+      </p>
+      <p class="govuk-body">
+        This is useful for the verifier to prepare in advance to undertake the necessary tasks involved with reviewing
+        and verifying your Annual Emissions report (AER).
+      </p>
 
       <form (ngSubmit)="onSubmit()" [formGroup]="form">
         <div

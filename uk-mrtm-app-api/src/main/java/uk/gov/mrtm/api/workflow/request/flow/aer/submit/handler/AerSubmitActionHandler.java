@@ -3,10 +3,12 @@ package uk.gov.mrtm.api.workflow.request.flow.aer.submit.handler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.feedback.domain.common.MrtmRequestFeedbackType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.service.RequestAerSubmitService;
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.request.feedback.service.RequestFeedbackService;
 import uk.gov.netz.api.workflow.request.WorkflowService;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTaskPayload;
@@ -26,6 +28,7 @@ public class AerSubmitActionHandler implements RequestTaskActionHandler<RequestT
     private final RequestTaskService requestTaskService;
     private final RequestAerSubmitService requestAerSubmitService;
     private final WorkflowService workflowService;
+    private final RequestFeedbackService requestFeedbackService;
 
     @Override
     public RequestTaskPayload process(Long requestTaskId, String requestTaskActionType, AppUser appUser,
@@ -35,6 +38,11 @@ public class AerSubmitActionHandler implements RequestTaskActionHandler<RequestT
         requestAerSubmitService.sendToRegulator(requestTask, appUser);
 
         requestTask.getRequest().setSubmissionDate(LocalDateTime.now());
+
+        requestFeedbackService.createRequestFeedback(
+            requestTask.getRequest().getId(),
+            MrtmRequestFeedbackType.AER_SUBMIT.name(),
+            appUser);
 
         // Complete task
         workflowService.completeTask(requestTask.getProcessTaskId(),

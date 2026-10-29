@@ -4,7 +4,7 @@
 @if (data()?.exist) {
   <div>
     <h3 class="govuk-heading-m">{{ map.smfDetails.title }}</h3>
-    <mrtm-reduction-claim-details-summary-template [data]="fuelPurchases()" />
+    <mrtm-reduction-claim-details-summary-template [data]="fuelPurchases()" [totalEmissions]="totalEmissions()" />
   </div>
 }
 

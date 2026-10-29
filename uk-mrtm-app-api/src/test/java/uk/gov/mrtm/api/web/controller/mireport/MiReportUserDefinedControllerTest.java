@@ -277,7 +277,7 @@ class MiReportUserDefinedControllerTest {
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
-            .authorize(appUser, "updateMiReportUserDefined", String.valueOf(id), null, null);
+            .authorize(appUser, "updateMiReportUserDefined");
 
         mockMvc.perform(MockMvcRequestBuilders.put(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/" + id)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -340,7 +340,7 @@ class MiReportUserDefinedControllerTest {
             .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(miReportUserDefinedService.generateReport(id)).thenReturn(result);
+        when(miReportUserDefinedService.generateReport(id, appUser)).thenReturn(result);
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/" + id + "/generate")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -348,7 +348,7 @@ class MiReportUserDefinedControllerTest {
             .andExpect(jsonPath("$.columnNames[0]").value("col1"));
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
-        verify(miReportUserDefinedService, times(1)).generateReport(id);
+        verify(miReportUserDefinedService, times(1)).generateReport(id, appUser);
     }
 
     @Test
@@ -358,8 +358,8 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(appUserAuthorizationService)
-            .authorize(appUser, "generateMiReportUserDefined", String.valueOf(id), null, null);
+            .when(roleAuthorizationService)
+            .evaluate(appUser, new String[]{ RoleTypeConstants.REGULATOR });
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/" + id + "/generate")
                 .contentType(MediaType.APPLICATION_JSON))
@@ -391,8 +391,8 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(appUserAuthorizationService)
-            .authorize(appUser, "addMiReportUserDefinedAsFavourite", String.valueOf(id), null, null);
+            .when(roleAuthorizationService)
+            .evaluate(appUser, new String[]{ RoleTypeConstants.REGULATOR });
 
         mockMvc.perform(MockMvcRequestBuilders.post(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites/" + id)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -424,8 +424,8 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(appUserAuthorizationService)
-            .authorize(appUser, "removeMiReportUserDefinedFromFavourites", String.valueOf(id), null, null);
+            .when(roleAuthorizationService)
+            .evaluate(appUser, new String[]{ RoleTypeConstants.REGULATOR });
 
         mockMvc.perform(MockMvcRequestBuilders.delete(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/favourites/" + id)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -464,8 +464,8 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(appUserAuthorizationService)
-            .authorize(appUser, "getMiReportUserDefinedHistory", String.valueOf(id), null, null);
+            .when(roleAuthorizationService)
+            .evaluate(appUser, new String[]{ RoleTypeConstants.REGULATOR });
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/history/" + id)
                 .param("page", "0")
@@ -500,7 +500,7 @@ class MiReportUserDefinedControllerTest {
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
             .when(appUserAuthorizationService)
-            .authorize(appUser, "deleteMiReportUserDefined", String.valueOf(id), null, null);
+            .authorize(appUser, "deleteMiReportUserDefined");
 
         mockMvc.perform(MockMvcRequestBuilders.delete(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/" + id)
                 .contentType(MediaType.APPLICATION_JSON))
@@ -559,7 +559,7 @@ class MiReportUserDefinedControllerTest {
         MiReportUserDefinedSearchCriteriaDTO searchCriteria = MiReportUserDefinedSearchCriteriaDTO.builder().build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(miReportUserDefinedService.findAllByCA(appUser, page, pageSize, searchCriteria)).thenReturn(results);
+        when(miReportUserDefinedService.findAllBySearchCriteria(appUser, page, pageSize, searchCriteria)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports")
                 .param("page", String.valueOf(page))
@@ -571,7 +571,7 @@ class MiReportUserDefinedControllerTest {
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(miReportUserDefinedService, times(1))
-            .findAllByCA(appUser, page, pageSize, searchCriteria);
+            .findAllBySearchCriteria(appUser, page, pageSize, searchCriteria);
     }
 
     @Test
@@ -590,7 +590,7 @@ class MiReportUserDefinedControllerTest {
             .build();
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
-        when(miReportUserDefinedService.findAllByCA(appUser, page, pageSize, searchCriteria)).thenReturn(results);
+        when(miReportUserDefinedService.findAllBySearchCriteria(appUser, page, pageSize, searchCriteria)).thenReturn(results);
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/reports")
                 .param("page", String.valueOf(page))
@@ -605,7 +605,7 @@ class MiReportUserDefinedControllerTest {
 
         verify(appSecurityComponent, times(1)).getAuthenticatedUser();
         verify(miReportUserDefinedService, times(1))
-            .findAllByCA(appUser, page, pageSize, searchCriteria);
+            .findAllBySearchCriteria(appUser, page, pageSize, searchCriteria);
     }
 
     @Test
@@ -668,8 +668,8 @@ class MiReportUserDefinedControllerTest {
 
         when(appSecurityComponent.getAuthenticatedUser()).thenReturn(appUser);
         doThrow(new BusinessException(ErrorCode.FORBIDDEN))
-            .when(appUserAuthorizationService)
-            .authorize(appUser, "getMiReportUserDefinedById", "1", null, null);
+            .when(roleAuthorizationService)
+            .evaluate(appUser, new String[]{ RoleTypeConstants.REGULATOR });
 
         mockMvc.perform(MockMvcRequestBuilders.get(MI_REPORT_QUERY_BASE_CONTROLLER_PATH + "/1")
                 .contentType(MediaType.APPLICATION_JSON))

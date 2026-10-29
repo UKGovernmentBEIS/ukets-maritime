@@ -25,6 +25,7 @@ export class EuXmlImportService {
     'monitoringPlans.monitoringPlan.emissionSources.emissionSourceEntry',
     'monitoringPlans.monitoringPlan.emissionSources.emissionSourceEntry.fuelTypeCode',
     'monitoringPlans.monitoringPlan.emissionSources.emissionSourceEntry.monitoringMethodCode',
+    'monitoringPlans.monitoringPlan.emissionSources.emissionSourceEntry.slippageEntry',
     'monitoringPlans.monitoringPlan.fuelTypes.fuelTypeEntry',
     'monitoringPlans.monitoringPlan.fuelTypes.fuelTypeEntry.emissionFactors',
     'monitoringPlans.monitoringPlan.fuelTypes.fuelTypeEntry.methodDensityBunkerCode',

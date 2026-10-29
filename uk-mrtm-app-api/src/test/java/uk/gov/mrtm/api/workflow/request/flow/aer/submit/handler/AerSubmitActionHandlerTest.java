@@ -6,11 +6,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.feedback.domain.common.MrtmRequestFeedbackType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.common.domain.AerOutcome;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.domain.AerApplicationSubmitRequestTaskPayload;
 import uk.gov.mrtm.api.workflow.request.flow.aer.submit.service.RequestAerSubmitService;
 import uk.gov.mrtm.api.workflow.request.flow.common.constants.MrtmBpmnProcessConstants;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.request.feedback.service.RequestFeedbackService;
 import uk.gov.netz.api.workflow.request.WorkflowService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
@@ -26,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -42,6 +45,9 @@ class AerSubmitActionHandlerTest {
 
     @Mock
     private WorkflowService workflowService;
+
+    @Mock
+    private RequestFeedbackService requestFeedbackService;
 
     @Test
     void process() {
@@ -78,9 +84,11 @@ class AerSubmitActionHandlerTest {
         // Verify
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(requestAerSubmitService, times(1)).sendToRegulator(task, user);
+        verify(requestFeedbackService).createRequestFeedback(requestId, MrtmRequestFeedbackType.AER_SUBMIT.name(), user);
         verify(workflowService, times(1)).completeTask(processId,
             Map.of(BpmnProcessConstants.REQUEST_ID, requestId,
                 MrtmBpmnProcessConstants.AER_OUTCOME, AerOutcome.REVIEW_REQUESTED));
+        verifyNoMoreInteractions(requestTaskService, requestAerSubmitService, workflowService, requestFeedbackService);
     }
 
     @Test

@@ -9,8 +9,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.feedback.domain.common.MrtmRequestFeedbackType;
 import uk.gov.mrtm.api.workflow.request.flow.empissuance.submit.service.RequestEmpService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.request.feedback.service.RequestFeedbackService;
 import uk.gov.netz.api.workflow.request.WorkflowService;
 import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
@@ -47,6 +49,9 @@ class EmpIssuanceApplySubmitActionHandlerTest {
     @Mock
     private RequestTaskService requestTaskService;
 
+    @Mock
+    private RequestFeedbackService requestFeedbackService;
+
     private static Stream<Arguments> process() {
         return Stream.of(
             Arguments.of(LocalDateTime.of(2026, 1, 1, 0, 0), true, true),
@@ -71,7 +76,8 @@ class EmpIssuanceApplySubmitActionHandlerTest {
 
         Long requestTaskId = 1L;
         String processTaskId = "processTaskId";
-        Request request = Request.builder().id("requestId").creationDate(creationDate).build();
+        String requestId = "requestId";
+        Request request = Request.builder().id(requestId).creationDate(creationDate).build();
         RequestTaskPayload expectedRequestTaskPayload = mock(RequestTaskPayload.class);
         RequestTask requestTask = RequestTask.builder()
             .id(requestTaskId)
@@ -92,7 +98,8 @@ class EmpIssuanceApplySubmitActionHandlerTest {
         verifyNoMoreInteractions(expectedRequestTaskPayload);
         verify(requestEmpService).applySubmitAction(requestTask, user);
         verify(workflowService).completeTask(requestTask.getProcessTaskId(), Map.of(BpmnProcessConstants.SKIP_PAYMENT, skipPayment));
-        verifyNoMoreInteractions(requestEmpService, requestTaskService);
+        verify(requestFeedbackService).createRequestFeedback(requestId, MrtmRequestFeedbackType.EMP_ISSUANCE_SUBMIT.name(), user);
+        verifyNoMoreInteractions(requestEmpService, requestTaskService, requestFeedbackService);
     }
 
     @Test

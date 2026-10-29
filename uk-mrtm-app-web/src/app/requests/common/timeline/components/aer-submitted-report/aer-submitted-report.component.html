@@ -73,7 +73,10 @@
       @if (vm.aerReductionClaim.exist) {
         <div>
           <h3 class="govuk-heading-m">{{ vm.aerReductionClaimSubtaskMap.smfDetails.title }}</h3>
-          <mrtm-reduction-claim-details-summary-template [data]="vm.fuelPurchases" />
+          <mrtm-reduction-claim-details-summary-template
+            [withPagination]="false"
+            [data]="vm.fuelPurchases"
+            [totalEmissions]="vm.fuelPurchasesTotalEmissions" />
         </div>
       }
       <div style="page-break-after: always">&nbsp;</div>

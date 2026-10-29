@@ -4,6 +4,9 @@
     @if (wizardMap()?.smfDetails?.title; as title) {
       <h2 class="govuk-heading-m">{{ title }}</h2>
     }
-    <mrtm-reduction-claim-details-summary-template [data]="fuelPurchases()" [dataSupplierName]="dataSupplierName()" />
+    <mrtm-reduction-claim-details-summary-template
+      [data]="fuelPurchases()"
+      [totalEmissions]="totalEmissions()"
+      [dataSupplierName]="dataSupplierName()" />
   }
 }

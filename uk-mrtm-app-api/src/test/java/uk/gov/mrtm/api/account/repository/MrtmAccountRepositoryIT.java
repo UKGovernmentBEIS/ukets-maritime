@@ -168,13 +168,17 @@ class MrtmAccountRepositoryIT extends AbstractContainerBaseTest {
         String imoNumber2 = "0000002";
         Long accountId1 = 1L;
         Long accountId2 = 2L;
+
+        MrtmAccountInfoDTO dto1 = MrtmAccountInfoDTO.builder()
+            .id(accountId1).name("name").businessId(accountId1.toString()).imoNumber(imoNumber1)
+            .build();
         createAccount(accountId1, imoNumber1, null, CompetentAuthorityEnum.ENGLAND);
         createAccount(accountId2, imoNumber2, null, CompetentAuthorityEnum.SCOTLAND);
 
         List<MrtmAccountInfoDTO> accountInfoDTOs = repository.findAllByCA(CompetentAuthorityEnum.ENGLAND);
 
         assertThat(accountInfoDTOs).hasSize(1);
-        assertThat(new ArrayList<>(accountInfoDTOs).getFirst().getId()).isEqualTo(accountId1);
+        assertThat(new ArrayList<>(accountInfoDTOs).getFirst()).isEqualTo(dto1);
     }
 
     @Test
@@ -183,13 +187,16 @@ class MrtmAccountRepositoryIT extends AbstractContainerBaseTest {
         String imoNumber2 = "0000002";
         Long accountId1 = 1L;
         Long accountId2 = 2L;
+        MrtmAccountInfoDTO dto1 = MrtmAccountInfoDTO.builder()
+            .id(accountId1).name("name").businessId(accountId1.toString()).imoNumber(imoNumber1)
+            .build();
         createAccount(accountId1, imoNumber1, null, CompetentAuthorityEnum.ENGLAND);
         createAccount(accountId2, imoNumber2, null, CompetentAuthorityEnum.SCOTLAND);
 
         List<MrtmAccountInfoDTO> accountInfoDTOs = repository.findAllByAccountIdIn(Set.of(accountId1));
 
         assertThat(accountInfoDTOs).hasSize(1);
-        assertThat(new ArrayList<>(accountInfoDTOs).getFirst().getId()).isEqualTo(accountId1);
+        assertThat(new ArrayList<>(accountInfoDTOs).getFirst()).isEqualTo(dto1);
     }
 
     private MrtmAccount createAccount(Long id, String imoNumber, Integer registryId,

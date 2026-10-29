@@ -11,7 +11,11 @@
       [options]="availableStatuses"
       formControlName="status"
       label="Status"></div>
-    <div govuk-text-input formControlName="contactEmail" label="Contact's email address"></div>
+    <div
+      govuk-text-input
+      formControlName="contactEmail"
+      label="Contact's email address"
+      hint="Enter the full email address, like name@example.com"></div>
   </govuk-details>
   <button govukButton netzPendingButton type="submit">Search</button>
   @if (hasAppliedFilters()) {

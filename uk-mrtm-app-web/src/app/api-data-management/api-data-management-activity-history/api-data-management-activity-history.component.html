@@ -67,6 +67,7 @@
   <govuk-table
     [columns]="columns"
     [data]="data?.items"
+    [trackBy]="trackById"
     emptyTableText="No data to display"
     ariaLabel="Available to import"
     (sort)="onSort($event)">

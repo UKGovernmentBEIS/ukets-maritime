@@ -279,19 +279,17 @@ const selectReductionClaimDetailsListItems: StateSelector<
   selectAerAttachments,
   selectReductionClaim,
   (downloadUrl, attachments, smf) =>
-    [
-      ...(smf?.smfDetails?.purchases ?? []).map((purchase) => ({
-        ...purchase,
-        evidenceFiles: purchase.evidenceFiles?.map((file) => ({
-          downloadUrl: downloadUrl + file,
-          fileName: attachments?.[file],
-        })),
+    (smf?.smfDetails?.purchases ?? []).map((purchase) => ({
+      ...purchase,
+      evidenceFiles: purchase.evidenceFiles?.map((file) => ({
+        downloadUrl: downloadUrl + file,
+        fileName: attachments?.[file],
       })),
-      smf?.smfDetails?.purchases?.length
-        ? { isSummary: true, co2Emissions: smf?.smfDetails?.totalSustainableEmissions }
-        : undefined,
-    ].filter(Boolean),
+    })),
 );
+
+const selectReductionClaimTotalSustainableEmissions: StateSelector<RequestActionState, string> =
+  createDescendingSelector(selectReductionClaim, (smf) => smf?.smfDetails?.totalSustainableEmissions);
 
 const selectTotalEmissions: StateSelector<RequestActionState, AerTotalEmissions> = createDescendingSelector(
   selectPayload,
@@ -438,6 +436,7 @@ export const aerTimelineCommonQuery = {
   selectRelatedShipForAggregatedData,
   selectReductionClaim,
   selectReductionClaimDetailsListItems,
+  selectReductionClaimTotalSustainableEmissions,
   selectTotalEmissions,
   selectVerificationReport,
   selectVerifierDetails,

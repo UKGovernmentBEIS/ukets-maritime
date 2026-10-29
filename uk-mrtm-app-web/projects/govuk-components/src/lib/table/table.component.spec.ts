@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, TrackByFunction } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 
@@ -16,7 +16,8 @@ describe('TableComponent', () => {
         [data]="data()"
         [caption]="caption()"
         (sort)="onSort($event)"
-        [rowCssClasses]="rowCssClasses()" />
+        [rowCssClasses]="rowCssClasses()"
+        [trackBy]="trackBy()" />
     `,
   })
   class TestComponent {
@@ -29,6 +30,7 @@ describe('TableComponent', () => {
     readonly caption = signal<string>(undefined);
     onSort = vi.fn((_: SortEvent) => null);
     readonly rowCssClasses = signal<((row: any) => string | string[]) | undefined>(undefined);
+    readonly trackBy = signal<TrackByFunction<any>>((_, row) => row);
   }
 
   @Component({
@@ -210,5 +212,35 @@ describe('TableComponent', () => {
     rows.forEach((row: HTMLTableRowElement) => {
       expect(row.getAttribute('class')).toContain('test-custom-css-row-class');
     });
+  });
+
+  it('should re-create rows for new row objects by default', () => {
+    const templateFixture = TestBed.createComponent(TestTemplateComponent);
+    templateFixture.componentInstance.data.set([{ link: 'Go to', text: 'Something to watch' }]);
+    templateFixture.detectChanges();
+
+    const element: HTMLElement = templateFixture.nativeElement;
+    const row = element.querySelector('tbody tr');
+
+    templateFixture.componentInstance.data.set([{ link: 'Go to', text: 'Something to watch' }]);
+    templateFixture.detectChanges();
+
+    expect(element.querySelector('tbody tr')).not.toBe(row);
+  });
+
+  it('should keep rows tracked by the trackBy key', () => {
+    hostComponent.trackBy.set((_, row) => row.name);
+    hostComponent.data.set(TABLE_DATA);
+    fixture.detectChanges();
+
+    const element: HTMLElement = fixture.nativeElement;
+    const rows = Array.from(element.querySelectorAll('tbody tr'));
+
+    hostComponent.data.set(TABLE_DATA.map((row) => ({ ...row, age: row.age + 1 })).reverse());
+    fixture.detectChanges();
+
+    const updatedRows = Array.from(element.querySelectorAll('tbody tr'));
+    rows.reverse().forEach((row, index) => expect(updatedRows[index]).toBe(row));
+    expect(updatedRows[0].querySelectorAll('td')[1].textContent).toContain('33');
   });
 });

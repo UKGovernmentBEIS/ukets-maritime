@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, provideRouter, RedirectCommand, Router, RouterStateSnapshot } from '@angular/router';
 
 import { firstValueFrom, Observable } from 'rxjs';
 
@@ -39,5 +39,18 @@ describe('loggedInGuard', () => {
     const resultPromise = firstValueFrom(result$);
     TestBed.tick();
     expect(await resultPromise).toEqual(router.parseUrl('landing'));
+  });
+
+  it('should redirect to landing page keeping the requested url when the route requires it', async () => {
+    store.setIsLoggedIn(false);
+    const state = {
+      root: { data: {}, children: [{ data: { keepUrlOnSignIn: true }, children: [] }] },
+    } as unknown as RouterStateSnapshot;
+    const result$ = TestBed.runInInjectionContext(() =>
+      loggedInGuard({} as ActivatedRouteSnapshot, state),
+    ) as Observable<any>;
+    const resultPromise = firstValueFrom(result$);
+    TestBed.tick();
+    expect(await resultPromise).toEqual(new RedirectCommand(router.parseUrl('landing'), { skipLocationChange: true }));
   });
 });

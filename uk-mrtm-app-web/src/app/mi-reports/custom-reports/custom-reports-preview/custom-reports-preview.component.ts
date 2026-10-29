@@ -149,11 +149,10 @@ export class CustomReportsPreviewComponent {
         }),
       )
       .subscribe({
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        next: (_) =>
-          this.formGroup.setErrors({
-            invalid: null,
-          }),
+        next: () => {
+          this.formGroup.setErrors(null);
+          this.feedbackBannerStore.reset();
+        },
         error: (err) => {
           this.formGroup.setErrors({ invalid: err.message });
           this.feedbackBannerStore.setInvalidFormLive(this.formGroup);

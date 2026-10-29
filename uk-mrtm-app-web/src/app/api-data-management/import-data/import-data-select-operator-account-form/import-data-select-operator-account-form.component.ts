@@ -61,6 +61,7 @@ export class ImportDataSelectOperatorAccountFormComponent {
   );
 
   protected readonly columns = SELECTED_ACCOUNTS_COLUMNS;
+  protected readonly heading = `Select operator account for ${this.getTaskFriendlyName()}`;
 
   public onAccountsSelectionChanged(): void {
     this.updateForm(
@@ -68,6 +69,20 @@ export class ImportDataSelectOperatorAccountFormComponent {
         .filter((x) => x.isSelected)
         .map((x) => x.id),
     );
+  }
+
+  private getTaskFriendlyName(): string {
+    const { requestType, year } = this.store.state;
+    switch (requestType) {
+      case 'EMP_ISSUANCE':
+        return 'EMP';
+      case 'EMP_VARIATION':
+        return 'EMP Variation';
+      case 'AER':
+        return isNil(year) ? 'AER' : `AER ${year}`;
+      default:
+        return requestType;
+    }
   }
 
   private updateForm(items: number[]): void {

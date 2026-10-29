@@ -3,12 +3,12 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable } from 'rxjs';
 
 import {
-  AccountSearchResultInfoDTO,
   ItemDTOResponse,
   ItemsAssignedToMeService,
   ItemsAssignedToOthersService,
   ItemSearchCriteriaDTO,
   MaritimeAccountsService,
+  MrtmAccountInfoDTO,
   UnassignedItemsService,
 } from '@mrtm/api';
 
@@ -22,7 +22,7 @@ export class WorkflowItemsService {
   private readonly unassignedItemsService = inject(UnassignedItemsService);
   private readonly accountsService = inject(MaritimeAccountsService);
 
-  getRelatedAccounts(): Observable<Array<AccountSearchResultInfoDTO>> {
+  getRelatedAccounts(): Observable<Array<MrtmAccountInfoDTO>> {
     return this.accountsService.getMrtmAccountsInfoByUser().pipe(map((response) => response ?? []));
   }
 

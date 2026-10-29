@@ -6,9 +6,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import uk.gov.mrtm.api.workflow.request.core.domain.constants.MrtmRequestTaskActionType;
+import uk.gov.mrtm.api.workflow.request.feedback.domain.common.MrtmRequestFeedbackType;
 import uk.gov.mrtm.api.workflow.request.flow.aer.verify.service.RequestAerSubmitVerificationService;
 import uk.gov.netz.api.authorization.core.domain.AppUser;
+import uk.gov.netz.api.request.feedback.service.RequestFeedbackService;
 import uk.gov.netz.api.workflow.request.WorkflowService;
+import uk.gov.netz.api.workflow.request.core.domain.Request;
 import uk.gov.netz.api.workflow.request.core.domain.RequestTask;
 import uk.gov.netz.api.workflow.request.core.service.RequestTaskService;
 import uk.gov.netz.api.workflow.request.flow.common.domain.RequestTaskActionEmptyPayload;
@@ -34,13 +37,18 @@ class AerApplySubmitVerificationActionHandlerTest {
     @Mock
     private WorkflowService workflowService;
 
+    @Mock
+    private RequestFeedbackService requestFeedbackService;
+
     @Test
     void process() {
         Long requestTaskId = 1L;
         String processTaskId = "processTaskId";
+        String requestId = "requestId";
         AppUser user = AppUser.builder().build();
         RequestTaskActionEmptyPayload taskActionPayload = RequestTaskActionEmptyPayload.builder().build();
-        RequestTask requestTask = RequestTask.builder().id(requestTaskId).processTaskId(processTaskId).build();
+        Request request = Request.builder().id(requestId).build();
+        RequestTask requestTask = RequestTask.builder().id(requestTaskId).request(request).processTaskId(processTaskId).build();
 
         when(requestTaskService.findTaskById(requestTaskId)).thenReturn(requestTask);
 
@@ -55,7 +63,8 @@ class AerApplySubmitVerificationActionHandlerTest {
         verify(requestTaskService, times(1)).findTaskById(requestTaskId);
         verify(submitVerificationService, times(1)).submitVerificationReport(requestTask, user);
         verify(workflowService, times(1)).completeTask(processTaskId);
-        verifyNoMoreInteractions(requestTaskService, submitVerificationService, workflowService);
+        verify(requestFeedbackService).createRequestFeedback(requestId, MrtmRequestFeedbackType.AER_VERIFICATION_SUBMIT.name(), user);
+        verifyNoMoreInteractions(requestTaskService, submitVerificationService, workflowService, requestFeedbackService);
     }
 
     @Test

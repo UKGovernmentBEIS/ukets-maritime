@@ -12,6 +12,9 @@ Its context consists of the current `row` and `column` variables.
 - `columns` - An array of objects following the `GovukTableColumn` interface. The `field` property is used to determine which value of each object will be rendered.
   The `isHeader` property is used to determine if the column will be considered a row header.
 - `caption` - A string to be used as a caption.
+- `trackBy` - A `TrackByFunction` identifying each row, e.g. `(_, row) => row.id`. Defaults to the row object itself,
+  which re-creates every row whenever `data` is replaced with new objects. Keep the default for rows bound to form controls
+  that are replaced together with the data.
 
 ### Outputs
 

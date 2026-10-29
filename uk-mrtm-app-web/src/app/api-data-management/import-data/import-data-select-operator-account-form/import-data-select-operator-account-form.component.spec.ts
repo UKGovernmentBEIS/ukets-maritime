@@ -91,6 +91,27 @@ describe('ImportDataSelectOperatorAccountFormComponent', () => {
     });
   });
 
+  describe('heading', () => {
+    beforeEach(async () => {
+      await configureModule();
+    });
+
+    it.each([
+      [{ requestType: 'EMP_ISSUANCE' as const }, 'Select operator account for EMP'],
+      [{ requestType: 'EMP_VARIATION' as const }, 'Select operator account for EMP Variation'],
+      [{ requestType: 'AER' as const, year: 2025 }, 'Select operator account for AER 2025'],
+    ])('should display the friendly task name for %o', (state, expectedHeading) => {
+      store.setState(state);
+      fixture = TestBed.createComponent(ImportDataSelectOperatorAccountFormComponent);
+      fixture.detectChanges();
+      httpMock
+        .expectOne((req) => req.url === '/api/v1.0/third-party-data-management/available-to-import')
+        .flush(response);
+
+      expect(fixture.nativeElement.querySelector('h1').textContent.trim()).toEqual(expectedHeading);
+    });
+  });
+
   describe('selection and submission', () => {
     beforeEach(async () => {
       await configureModule();

@@ -2,6 +2,7 @@ package uk.gov.mrtm.api.integration.registry.accountexempt.response;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.apache.commons.lang3.BooleanUtils;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -11,6 +12,11 @@ import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailService;
 import uk.gov.mrtm.api.integration.registry.common.NotifyRegistryEmailServiceParams;
 import uk.gov.mrtm.api.integration.registry.common.PayloadFieldsUtils;
 import uk.gov.mrtm.api.integration.registry.common.RegistryIntegrationEmailProperties;
+import uk.gov.mrtm.api.integration.registry.emissionsupdated.domain.ReportableEmissionsUpdatedSubmittedEventDetails;
+import uk.gov.mrtm.api.integration.registry.emissionsupdated.request.MaritimeEmissionsUpdatedEventListenerResolver;
+import uk.gov.mrtm.api.reporting.domain.ReportableEmissionsEntity;
+import uk.gov.mrtm.api.reporting.domain.common.ReportableEmissionsUpdatedEvent;
+import uk.gov.mrtm.api.reporting.repository.ReportableEmissionsRepository;
 import uk.gov.netz.api.account.domain.Account;
 import uk.gov.netz.integration.model.IntegrationEventOutcome;
 import uk.gov.netz.integration.model.error.IntegrationEventError;
@@ -18,9 +24,11 @@ import uk.gov.netz.integration.model.error.IntegrationEventErrorDetails;
 import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEvent;
 import uk.gov.netz.integration.model.exemption.AccountExemptionUpdateEventOutcome;
 
+import java.time.Year;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.RESPONSE_LOG_FORMAT;
 import static uk.gov.mrtm.api.integration.registry.common.NotifyRegistryUtils.SERVICE_KEY;
@@ -36,6 +44,8 @@ public class AccountExemptResponseHandler {
     private final MrtmAccountQueryService accountQueryService;
     private final RegistryIntegrationEmailProperties emailProperties;
     private final NotifyRegistryEmailService notifyRegistryEmailService;
+    private final ReportableEmissionsRepository reportableEmissionsRepository;
+    private final MaritimeEmissionsUpdatedEventListenerResolver emissionsUpdatedEventListenerResolver;
 
     private final static List<IntegrationEventError> INFO_ERRORS = List.of(
         IntegrationEventError.ERROR_0401,
@@ -142,7 +152,41 @@ public class AccountExemptResponseHandler {
         } else {
             log.info("Successfully send account exempt event with correlationId {} and registry ID {}",
                 correlationId, registryId);
+            sendEmissionsOnSuccess(event);
         }
+    }
+
+    private void sendEmissionsOnSuccess(AccountExemptionUpdateEventOutcome outcome) {
+        AccountExemptionUpdateEvent event = outcome.getEvent();
+        Year reportingYear = event.getReportingYear();
+        int registryId = Math.toIntExact(event.getRegistryId());
+
+        if (BooleanUtils.isNotFalse(event.getExemptionFlag())) {
+            log.info("Account with registry ID {} is exempted, skipping emissions", registryId);
+            return;
+        }
+
+        Account account = accountQueryService.getAccountByRegistryId(registryId);
+        Optional<ReportableEmissionsEntity> reportableEmissionsOptional =
+            reportableEmissionsRepository.findByAccountIdAndYear(account.getId(), reportingYear);
+
+        if(reportableEmissionsOptional.isEmpty()) {
+            log.info("No reportable emissions for registry ID {} and year {}, nothing to send", registryId, reportingYear);
+            return;
+        }
+
+        ReportableEmissionsEntity reportableEmissions = reportableEmissionsOptional.get();
+
+        ReportableEmissionsUpdatedSubmittedEventDetails emissionsEventDetails =
+            emissionsUpdatedEventListenerResolver.onAccountCreatedEvent(ReportableEmissionsUpdatedEvent.builder()
+            .accountId(account.getId())
+            .isFromDoe(reportableEmissions.isFromDoe())
+            .reportableEmissions(reportableEmissions.getSurrenderEmissions())
+            .year(reportingYear)
+            .isFromRegulator(false)
+            .build());
+
+        log.info("Sent emissions in response of account exempt for account {}: {}", account.getId(), emissionsEventDetails);
     }
 
     private Map<String, String> getEventFields(AccountExemptionUpdateEvent event) {

@@ -1,27 +1,30 @@
+@if (totalItems() > 0 && totalEmissions(); as totalEmissions) {
+  <dl govuk-summary-list [hasBorders]="true">
+    <div govukSummaryListRow>
+      <dt govukSummaryListRowKey>Total CO2 emissions (t)</dt>
+      <dd govukSummaryListRowValue>{{ totalEmissions | bigNumber: 7 }}</dd>
+    </div>
+  </dl>
+}
 <govuk-table
+  id="reductionClaimDetails"
   [columns]="columns()"
-  [data]="$any(data())"
+  [data]="$any(paginatedData())"
   emptyTableText="No items to display"
   [rowCssClasses]="onDefineRowAdditionalStyle">
   <ng-template let-row="row" let-column="column">
     @switch (column.field) {
       @case ('fuelOriginTypeName') {
-        @if (row.isSummary) {
-          <strong>Total emissions</strong>
-        } @else {
-          {{ row[column.field] | fuelOriginTitle }}
-        }
+        {{ row[column.field] | fuelOriginTitle }}
       }
       @case ('evidenceFiles') {
-        @if (!row.isSummary) {
-          <mrtm-summary-download-files [files]="row[column.field]" />
-        }
+        <mrtm-summary-download-files [files]="row[column.field]" />
       }
       @case ('batchNumber') {
         {{ row[column.field] }}
       }
       @case ('actions') {
-        @if (editable() && !row.isSummary) {
+        @if (editable()) {
           <ul class="govuk-summary-list__actions-list">
             <li class="govuk-summary-list__actions-list-item">
               <a govukLink routerLink="." (click)="onChange($event, row)">
@@ -47,3 +50,10 @@
     }
   </ng-template>
 </govuk-table>
+@if (totalItems() > pageSize()) {
+  <govuk-pagination
+    fragment="reductionClaimDetails"
+    [count]="totalItems()"
+    [pageSize]="pageSize()"
+    (currentPageChange)="onPageChange($event)" />
+}
