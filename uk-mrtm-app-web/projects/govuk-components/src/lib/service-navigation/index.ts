@@ -1,2 +1,2 @@
 export * from './service-navigation.component';
-export * from './navigation-item.interface';
+export * from './service-navigation-item.type';

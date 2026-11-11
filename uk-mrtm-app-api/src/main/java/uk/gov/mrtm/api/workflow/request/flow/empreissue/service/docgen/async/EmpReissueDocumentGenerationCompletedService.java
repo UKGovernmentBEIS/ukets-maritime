@@ -1,5 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.empreissue.service.docgen.async;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -35,10 +37,8 @@ public class EmpReissueDocumentGenerationCompletedService {
 	public void completed(String requestId, RequestGeneratedFileType fileType, String status, FileInfoDTO fileInfoDTO) {
 		final Request request = requestService.findRequestByIdForUpdate(requestId);
 		final EmpReissueRequestPayload requestPayload = (EmpReissueRequestPayload) request.getPayload();
-		
-		final byte[] bytes = documentGeneratorClient.downloadBytes(fileInfoDTO.getUuid());
-		final FileInfoDTO fileDocumentDTO = fileDocumentStorageService.createFileDocumentWithUuid(bytes, fileInfoDTO.getName(),
-				fileInfoDTO.getUuid());
+
+		final FileInfoDTO fileDocumentDTO = resolveFileDocument(fileInfoDTO);
 		
     	switch (fileType) {
 		case EMP:
@@ -58,5 +58,22 @@ public class EmpReissueDocumentGenerationCompletedService {
 		}
     	
     	sendEventService.sendEventIfAllDocsCompleted(requestId);
+	}
+
+	/**
+	 * Idempotent for Kafka COMPLETE redelivery: reuse existing file_document by job uuid
+	 * instead of failing on {@code file_document_uuid_uq}.
+	 */
+	private FileInfoDTO resolveFileDocument(FileInfoDTO fileInfoDTO) {
+		final String jobUuid = fileInfoDTO.getUuid();
+
+		Optional<FileInfoDTO> existing = fileDocumentStorageService.findFileInfoDTO(jobUuid);
+		if (existing.isPresent()) {
+			log.warn("File document already exists for job uuid {} - reusing existing", jobUuid);
+			return existing.get();
+		}
+
+		final byte[] bytes = documentGeneratorClient.downloadBytes(jobUuid);
+		return fileDocumentStorageService.createFileDocumentWithUuid(bytes, fileInfoDTO.getName(), jobUuid);
 	}
 }

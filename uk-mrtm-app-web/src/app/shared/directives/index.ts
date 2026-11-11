@@ -6,5 +6,5 @@ export * from './html-diff';
 export * from './grouped-summary-list/grouped-summary-list.directive';
 export * from './not-provided/not-provided.directive';
 export * from './scrollable-pane';
-export * from './skip-link-focus/skip-link-focus.directive';
+export * from './skip-link-focus';
 export * from './users-table/users-table.directive';

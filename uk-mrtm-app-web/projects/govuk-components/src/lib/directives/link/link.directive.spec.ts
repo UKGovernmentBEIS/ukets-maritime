@@ -1,21 +1,18 @@
 import { Component, ElementRef, viewChild } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { provideRouter, RouterLink } from '@angular/router';
 
 import { NotificationBannerComponent } from '../../notification-banner';
 import { LinkDirective } from './link.directive';
 
 describe('LinkDirective', () => {
   @Component({
-    imports: [LinkDirective, RouterLink, NotificationBannerComponent],
+    imports: [LinkDirective, NotificationBannerComponent],
     standalone: true,
     template: `
-      <a #meta govukLink="meta" href="#">Test Meta Link</a>
-      <a #header govukLink="header" [routerLink]="['test']">Test Header Link</a>
-      <h1>Some middle text</h1>
-      <a #footer govukLink="footer" href="#">Test Footer Link</a>
       <a #breadcrumb govukLink="breadcrumb" href="#">Test Breadcrumb Link</a>
+      <h1>Some middle text</h1>
+      <a #summaryAction govukLink="summaryAction" href="#">Test Summary Action Link</a>
       <a #simple govukLink href="#">Simple link</a>
       <govuk-notification-banner>
         <p class="govuk-body">
@@ -26,25 +23,19 @@ describe('LinkDirective', () => {
     `,
   })
   class TestComponent {
-    readonly metaLink = viewChild<ElementRef<HTMLAnchorElement>>('meta');
-    readonly headerLink = viewChild<ElementRef<HTMLAnchorElement>>('header');
-    readonly footerLink = viewChild<ElementRef<HTMLAnchorElement>>('footer');
     readonly breadcrumbLink = viewChild<ElementRef<HTMLAnchorElement>>('breadcrumb');
+    readonly summaryActionLink = viewChild<ElementRef<HTMLAnchorElement>>('summaryAction');
     readonly simpleLink = viewChild<ElementRef<HTMLAnchorElement>>('simple');
     readonly notificationLink = viewChild<ElementRef<HTMLAnchorElement>>('notification');
   }
 
   let directive: LinkDirective;
-  let hostComponent: TestComponent;
   let fixture: ComponentFixture<TestComponent>;
 
   beforeEach(() => {
     fixture = TestBed.configureTestingModule({
       imports: [TestComponent],
-      providers: [provideRouter([{ path: 'test', component: TestComponent }])],
     }).createComponent(TestComponent);
-
-    hostComponent = fixture.componentInstance;
 
     fixture.detectChanges();
     directive = fixture.debugElement.query(By.directive(LinkDirective)).injector.get(LinkDirective);
@@ -52,42 +43,6 @@ describe('LinkDirective', () => {
 
   it('should create an instance', () => {
     expect(directive).toBeTruthy();
-  });
-
-  it('should add navigation link class (meta link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.metaLink().nativeElement;
-    expect(testElement.classList).toContain('govuk-footer__link');
-  });
-
-  it('should add anchor inside li element (meta link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.metaLink().nativeElement;
-    const parentElement: HTMLElement = testElement.parentElement;
-    expect(parentElement.tagName).toEqual('LI');
-    expect(parentElement.classList).toContain('govuk-footer__inline-list-item');
-  });
-
-  it('should add navigation link class (header link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.headerLink().nativeElement;
-    expect(testElement.classList).toContain('govuk-header-legacy__link');
-  });
-
-  it('should add anchor inside li element (header link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.headerLink().nativeElement;
-    const parentElement: HTMLElement = testElement.parentElement;
-    expect(parentElement.tagName).toEqual('LI');
-    expect(parentElement.classList).toContain('govuk-header-legacy__navigation-item');
-  });
-
-  it('should add navigation link class (footer link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.footerLink().nativeElement;
-    expect(testElement.classList).toContain('govuk-footer__link');
-  });
-
-  it('should add anchor inside li element (footer link)', () => {
-    const testElement: HTMLElement = fixture.componentInstance.footerLink().nativeElement;
-    const parentElement: HTMLElement = testElement.parentElement;
-    expect(parentElement.tagName).toEqual('LI');
-    expect(parentElement.classList).toContain('govuk-footer__list-item');
   });
 
   it('should add navigation li element and link class (breadcrumb link)', () => {
@@ -99,17 +54,13 @@ describe('LinkDirective', () => {
     expect(parentElement.classList).toContain('govuk-breadcrumbs__list-item');
   });
 
-  it('should apply the active class to li element', async () => {
-    const element: HTMLElement = fixture.nativeElement;
+  it('should add navigation li element and link class (summary action link)', () => {
+    const summaryActionLinkElement: HTMLElement = fixture.componentInstance.summaryActionLink().nativeElement;
+    const parentElement: HTMLElement = summaryActionLinkElement.parentElement;
 
-    expect(element.querySelector('.govuk-header-legacy__navigation-item--active')).toBeFalsy();
-
-    hostComponent.headerLink().nativeElement.click();
-
-    await fixture.whenStable();
-    fixture.detectChanges();
-
-    expect(element.querySelector('.govuk-header-legacy__navigation-item--active')).toBeTruthy();
+    expect(summaryActionLinkElement.classList).toContain('govuk-link');
+    expect(parentElement.tagName).toEqual('LI');
+    expect(parentElement.classList).toContain('govuk-summary-card__action');
   });
 
   it('should apply the link class to simple links', () => {
@@ -129,7 +80,7 @@ describe('LinkDirective', () => {
   it('should keep the order of sibling elements', () => {
     const element: HTMLElement = fixture.nativeElement;
 
-    expect(element.querySelector('h1').nextElementSibling.textContent).toEqual('Test Footer Link');
+    expect(element.querySelector('h1').nextElementSibling.textContent).toEqual('Test Summary Action Link');
   });
 
   it('should clean up the li element on destroy', () => {

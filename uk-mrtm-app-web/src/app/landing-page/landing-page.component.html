@@ -1,5 +1,4 @@
 <mrtm-service-banner />
-
 @if (vm(); as vm) {
   @if (!vm.isLoggedIn) {
     <div class="govuk-grid-row govuk-!-margin-bottom-9">
@@ -10,20 +9,22 @@
           <h2 class="govuk-heading-s">I already have a sign in</h2>
           <p>You'll need your password and two-factor authentication app to sign in to the service.</p>
 
-          <a class="govuk-button govuk-button--start" routerLink="." (click)="authService.login()" draggable="false">
+          <button govukButton class="govuk-button--start" (click)="authService.login()" type="button">
             Sign in
-            <img
+            <svg
               class="govuk-button__start-icon"
-              ngSrc="./assets/images/start-button-arrow.svg"
-              alt=""
+              xmlns="http://www.w3.org/2000/svg"
+              width="17.5"
               height="19"
-              width="18" />
-          </a>
+              viewBox="0 0 33 40"
+              aria-hidden="true"
+              focusable="false">
+              <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+            </svg>
+          </button>
         </div>
       </div>
     </div>
-
-    <mrtm-back-to-top />
   } @else {
     @if (vm.roleType) {
       @switch (vm.status) {
@@ -59,19 +60,19 @@
         <a govukLink href="/contact-us">contact your regulator or administrator</a>
         to create a sign in for you.
       </netz-page-heading>
-      <a
-        class="govuk-button govuk-button--secondary govuk-button--start"
-        routerLink="."
-        (click)="authService.logout()"
-        draggable="false">
+      <button govukSecondaryButton class="govuk-button--start" (click)="authService.logout()" type="button">
         Sign out
-        <img
+        <svg
           class="govuk-button__start-icon"
-          ngSrc="./assets/images/start-button-arrow.svg"
-          alt=""
+          xmlns="http://www.w3.org/2000/svg"
+          width="17.5"
           height="19"
-          width="18" />
-      </a>
+          viewBox="0 0 33 40"
+          aria-hidden="true"
+          focusable="false">
+          <path fill="currentColor" d="M0 0h13l20 20-20 20H0l20-20z" />
+        </svg>
+      </button>
     }
   }
 

@@ -5,13 +5,13 @@ import { isNil } from '@shared/utils';
 const verificationBodyBusinessLink = (
   verificationBodyId: number,
 ): Pick<BusinessError, 'link' | 'linkText' | 'fragment'> => ({
-  link: ['/verification-bodies/', verificationBodyId],
+  link: ['/service-access/verification-bodies/', verificationBodyId],
   fragment: 'contacts',
   linkText: 'Return to manage verification bodies page',
 });
 
 const verifierBusinessLink: Pick<BusinessError, 'link' | 'linkText' | 'fragment'> = {
-  link: ['/user/verifiers'],
+  link: ['/service-access'],
   fragment: 'verifier-users',
   linkText: 'Return to manage verifier users page',
 };

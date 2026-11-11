@@ -1,4 +1,6 @@
-import { Observable, of } from 'rxjs';
+import { ActivatedRoute } from '@angular/router';
+
+import { from, map, Observable, of } from 'rxjs';
 
 import { WizardFlowManager } from '@netz/common/forms';
 
@@ -6,6 +8,20 @@ import { AER_PORTS_SUB_TASK, AerPortsWizardStep } from '@requests/common/aer/sub
 
 export class AerPortsFlowManager extends WizardFlowManager {
   readonly subtask: string = AER_PORTS_SUB_TASK;
+
+  /**
+   * Adding direct emissions completes the entry, so the emissions page guard would redirect to the summary
+   * unless it is opened in change mode.
+   */
+  nextStep(currentStep: string, route: ActivatedRoute): Observable<string> {
+    if (currentStep !== AerPortsWizardStep.DIRECT_EMISSIONS) {
+      return super.nextStep(currentStep, route);
+    }
+
+    return from(
+      this.router.navigate(['../'], { relativeTo: route, queryParams: { change: true }, fragment: 'directEmissions' }),
+    ).pipe(map(() => '../'));
+  }
 
   nextStepPath(currentStep: string): Observable<string> {
     switch (currentStep) {

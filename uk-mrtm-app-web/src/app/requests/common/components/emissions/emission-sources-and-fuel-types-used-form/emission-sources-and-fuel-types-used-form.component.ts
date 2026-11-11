@@ -20,7 +20,7 @@ import {
 } from '@netz/govuk-components';
 
 import { REQUEST_TASK_COMMON_SUBTASK_STEPS_QUERY } from '@requests/+state';
-import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form//emission-sources-and-fuel-types-used-form.helper';
+import { EMISSION_SOURCES_AND_FUEL_TYPES_USED_FORM_STEP } from '@requests/common/components/emissions/emission-sources-and-fuel-types-used-form/emission-sources-and-fuel-types-used-form.helper';
 import {
   addFuelDetailsFormControl,
   emissionSourcesAndFuelTypesUsedFormProvider,

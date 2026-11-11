@@ -1,0 +1,55 @@
+import { ChangeDetectionStrategy, Component, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+
+import { PageHeadingComponent } from '@netz/common/components';
+import { PendingButtonDirective } from '@netz/common/directives';
+import {
+  ButtonDirective,
+  LinkDirective,
+  SummaryListComponent,
+  SummaryListRowActionsDirective,
+  SummaryListRowDirective,
+  SummaryListRowKeyDirective,
+  SummaryListRowValueDirective,
+} from '@netz/govuk-components';
+
+import { dataSuppliersQuery, DataSuppliersStore } from '@service-access/data-suppliers/+state';
+import { DataSuppliersService } from '@service-access/data-suppliers/services/data-suppliers.service';
+
+@Component({
+  selector: 'mrtm-data-suppliers-form-summary',
+  imports: [
+    PageHeadingComponent,
+    LinkDirective,
+    RouterLink,
+    SummaryListComponent,
+    SummaryListRowDirective,
+    SummaryListRowKeyDirective,
+    SummaryListRowActionsDirective,
+    ButtonDirective,
+    PendingButtonDirective,
+    SummaryListRowValueDirective,
+  ],
+  standalone: true,
+  templateUrl: './data-suppliers-form-summary.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class DataSuppliersFormSummaryComponent {
+  private readonly store = inject(DataSuppliersStore);
+  private readonly service = inject(DataSuppliersService);
+  private readonly destroyRef = inject(DestroyRef);
+  private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
+
+  public readonly data = this.store.select(dataSuppliersQuery.selectNewItem);
+
+  onSubmit(): void {
+    this.service
+      .addNewItem(this.data())
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe(() => {
+        this.router.navigate(['../', 'success'], { relativeTo: this.route });
+      });
+  }
+}

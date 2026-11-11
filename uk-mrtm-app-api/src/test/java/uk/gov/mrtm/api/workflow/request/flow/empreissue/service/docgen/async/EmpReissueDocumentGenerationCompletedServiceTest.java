@@ -1,6 +1,7 @@
 package uk.gov.mrtm.api.workflow.request.flow.empreissue.service.docgen.async;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
@@ -84,6 +85,7 @@ class EmpReissueDocumentGenerationCompletedServiceTest {
 				.build();
 		
 		when(requestService.findRequestByIdForUpdate(requestId)).thenReturn(request);
+		when(fileDocumentStorageService.findFileInfoDTO(fileInfoDTO.getUuid())).thenReturn(Optional.empty());
 		when(documentGeneratorClient.downloadBytes(fileInfoDTO.getUuid())).thenReturn(fileBytes);
 		when(fileDocumentStorageService.createFileDocumentWithUuid(fileBytes, fileInfoDTO.getName(),
 				fileInfoDTO.getUuid())).thenReturn(fileDocumentDTO);
@@ -133,6 +135,7 @@ class EmpReissueDocumentGenerationCompletedServiceTest {
 				.build();
 		
 		when(requestService.findRequestByIdForUpdate(requestId)).thenReturn(request);
+		when(fileDocumentStorageService.findFileInfoDTO(fileInfoDTO.getUuid())).thenReturn(Optional.empty());
 		when(documentGeneratorClient.downloadBytes(fileInfoDTO.getUuid())).thenReturn(fileBytes);
 		when(fileDocumentStorageService.createFileDocumentWithUuid(fileBytes, fileInfoDTO.getName(),
 				fileInfoDTO.getUuid())).thenReturn(fileDocumentDTO);
@@ -149,6 +152,34 @@ class EmpReissueDocumentGenerationCompletedServiceTest {
 		verify(sendEventService, times(1)).sendEventIfAllDocsCompleted(requestId);
 		
 		verifyNoInteractions(emissionsMonitoringPlanQueryService);
+	}
+
+	@Test
+	void completed_reuses_existing_file_without_download() {
+		String requestId = "reqId";
+		Long accountId = 1L;
+		FileInfoDTO fileInfoDTO = FileInfoDTO.builder().name("name").uuid("job-uuid").build();
+		FileInfoDTO existing = FileInfoDTO.builder().name("name").uuid("job-uuid").build();
+
+		EmpReissueRequestPayload requestPayload = EmpReissueRequestPayload.builder().build();
+		Request request = Request.builder()
+				.payload(requestPayload)
+				.requestResources(List.of(RequestResource.builder().resourceId(String.valueOf(accountId))
+						.resourceType(ResourceType.ACCOUNT).build()))
+				.build();
+
+		when(requestService.findRequestByIdForUpdate(requestId)).thenReturn(request);
+		when(fileDocumentStorageService.findFileInfoDTO("job-uuid")).thenReturn(Optional.of(existing));
+
+		cut.completed(requestId, RequestGeneratedFileType.OFFICIAL_NOTICE,
+				DocumentGenerationEventOutcome.COMPLETE.name(), fileInfoDTO);
+
+		assertThat(requestPayload.getOfficialNotice()).isEqualTo(existing);
+		assertThat(requestPayload.getOfficialNoticeSucceed()).isTrue();
+		verify(documentGeneratorClient, never()).downloadBytes("job-uuid");
+		verify(fileDocumentStorageService, never()).createFileDocumentWithUuid(
+				org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+		verify(sendEventService, times(1)).sendEventIfAllDocsCompleted(requestId);
 	}
 
 }

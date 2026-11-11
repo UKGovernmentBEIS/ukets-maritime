@@ -47,6 +47,6 @@ describe('PhaseBarComponent', () => {
     const banner: HTMLElement = fixture.nativeElement.querySelector('govuk-phase-banner');
     expect(banner.querySelector('a[href="/feedback"]')).toBeNull();
     expect(banner.textContent).not.toContain('will help us to improve it.');
-    expect(banner.textContent.replace(/\s+/g, ' ')).toContain('You are logged in as: Gimli Gloin');
+    expect(banner.textContent.replace(/\s+/g, ' ')).toContain(' Beta You are signed in as Gimli Gloin');
   });
 });

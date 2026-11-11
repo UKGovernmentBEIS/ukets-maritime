@@ -1,23 +1,18 @@
-import { AsyncPipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { takeUntil } from 'rxjs';
-
 import { AuthStore, selectUserProfile } from '@netz/common/auth';
-import { DestroySubject } from '@netz/common/services';
 import { LinkDirective, PhaseBannerComponent } from '@netz/govuk-components';
 
-import { ServiceFeedbackLinkService } from '@shared/services/service-feedback-link.service';
+import { ServiceFeedbackLinkService } from '@shared/services';
 
-/* eslint-disable @angular-eslint/use-component-view-encapsulation */
 @Component({
   selector: 'mrtm-phase-bar',
-  imports: [PhaseBannerComponent, LinkDirective, RouterLink, AsyncPipe],
+  imports: [PhaseBannerComponent, LinkDirective, RouterLink],
   standalone: true,
   template: `
-    <govuk-phase-banner phase="Beta">
-      @if (userProfile$ | async; as user) {
+    <govuk-phase-banner borderTop phase="Beta">
+      @if (userProfile(); as user) {
         @if (isServiceFeedbackLinkVisible()) {
           This is a new service – your
           <a govukLink routerLink="feedback">feedback</a>
@@ -25,21 +20,17 @@ import { ServiceFeedbackLinkService } from '@shared/services/service-feedback-li
         }
 
         <span class="logged-in-user float-right">
-          You are logged in as:
+          You are signed in as
           <span class="govuk-!-font-weight-bold">{{ user.firstName }} {{ user.lastName }}</span>
         </span>
       }
     </govuk-phase-banner>
   `,
-  providers: [DestroySubject],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  encapsulation: ViewEncapsulation.None,
 })
 export class PhaseBarComponent {
   private readonly authStore = inject(AuthStore);
-  private readonly destroy$ = inject(DestroySubject);
 
   readonly isServiceFeedbackLinkVisible = inject(ServiceFeedbackLinkService).isVisible;
-
-  userProfile$ = this.authStore.rxSelect(selectUserProfile).pipe(takeUntil(this.destroy$));
+  userProfile = this.authStore.select(selectUserProfile);
 }

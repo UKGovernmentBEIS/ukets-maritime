@@ -1,0 +1,34 @@
+<netz-feedback-banner />
+<netz-page-heading size="xl">Service access</netz-page-heading>
+<govuk-tabs>
+  @if (isRegulator()) {
+    <ng-template govukTabLazy id="regulator-users" label="Regulator users">
+      <mrtm-regulator-users-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="site-contacts" label="Site contacts">
+      <mrtm-site-contacts-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="external-contacts" label="External contacts">
+      <mrtm-external-contacts-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="verification-bodies" label="Verification bodies">
+      <mrtm-verification-bodies-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="data-suppliers" label="Data suppliers">
+      <mrtm-regulator-data-suppliers-tab />
+    </ng-template>
+  } @else {
+    <ng-template govukTabLazy id="details" label="Details">
+      <mrtm-verifier-details-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="verifier-users" label="Verifier users">
+      <mrtm-verifier-users-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="site-contacts" label="Site contacts">
+      <mrtm-site-contacts-tab />
+    </ng-template>
+    <ng-template govukTabLazy id="data-suppliers" label="Data suppliers">
+      <mrtm-verifier-data-suppliers-tab />
+    </ng-template>
+  }
+</govuk-tabs>

@@ -10,8 +10,6 @@ import {
   PendingRequestGuard,
   TermsAndConditionsGuard,
 } from '@core/guards';
-import { DATA_SUPPLIERS_ROUTE_PREFIX } from '@data-suppliers/data-suppliers.constants';
-import { canActivateDataSuppliers } from '@data-suppliers/data-suppliers.guards';
 import { canActivateRequestFeedback } from '@feedback/request-feedback/request-feedback.guard';
 import { GUIDANCE_ROUTE_PREFIX } from '@guidance/guidance.constants';
 import { landingPageGuard } from '@landing-page/landing-page.guard';
@@ -96,22 +94,13 @@ export const APP_ROUTES: Routes = [
       {
         path: 'dashboard',
         title: 'Tasks',
+        data: { breadcrumb: false },
         loadComponent: () => import('@shared/dashboard').then((c) => c.DashboardPageComponent),
       },
       {
-        path: 'user',
-        children: [
-          {
-            path: 'regulators',
-            data: { breadcrumb: 'Regulator users' },
-            loadChildren: () => import('@regulators/regulators.routes').then((m) => m.REGULATORS_ROUTES),
-          },
-          {
-            path: 'verifiers',
-            data: { breadcrumb: 'Manage verifier users' },
-            loadChildren: () => import('@verifiers/verifiers.routes').then((m) => m.VERIFIERS_ROUTES),
-          },
-        ],
+        path: 'service-access',
+        data: { breadcrumb: 'Service access' },
+        loadChildren: () => import('@service-access/service-access.routes').then((m) => m.SERVICE_ACCESS_ROUTES),
       },
       {
         path: 'tasks',
@@ -119,19 +108,13 @@ export const APP_ROUTES: Routes = [
       },
       {
         path: 'mi-reports',
-        data: { breadcrumb: 'MI Reports' },
+        data: { breadcrumb: false },
         loadChildren: () => import('@mi-reports/mi-reports.routes').then((m) => m.MI_REPORTS_ROUTES),
       },
       {
         path: 'accounts',
         data: { breadcrumb: 'Accounts' },
         loadChildren: () => import('@accounts/accounts.routes').then((m) => m.ACCOUNTS_ROUTES),
-      },
-      {
-        path: 'verification-bodies',
-        data: { breadcrumb: 'Manage verification bodies' },
-        loadChildren: () =>
-          import('./verification-bodies/verification-bodies.routes').then((m) => m.VERIFICATION_BODIES_ROUTES),
       },
       {
         path: 'templates',
@@ -154,14 +137,7 @@ export const APP_ROUTES: Routes = [
         loadChildren: () => import('@guidance/guidance.routes').then((r) => r.GUIDANCE_ROUTES),
       },
       {
-        path: DATA_SUPPLIERS_ROUTE_PREFIX,
-        data: { breadcrumb: 'Manage data suppliers' },
-        canActivate: [canActivateDataSuppliers],
-        loadChildren: () => import('@data-suppliers/data-suppliers.routes').then((r) => r.DATA_SUPPLIERS_ROUTES),
-      },
-      {
         path: API_DATA_MANAGEMENT_ROUTE_PREFIX,
-        title: 'API data management',
         data: { breadcrumb: 'API data management' },
         canActivate: [canActivateApiDataManagement],
         loadChildren: () =>

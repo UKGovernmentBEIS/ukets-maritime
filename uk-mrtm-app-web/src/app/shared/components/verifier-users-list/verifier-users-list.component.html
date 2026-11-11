@@ -100,7 +100,7 @@
           @case ('deleteBtn') {
             <div class="govuk-!-text-align-right">
               <a
-                [routerLink]="['/user/verifiers', row.userId, 'delete']"
+                [routerLink]="['/service-access/verifier-users', row.userId, 'delete']"
                 [queryParams]="{ verificationBodyId: verificationBodyId() }"
                 govukLink>
                 Delete

@@ -7,6 +7,7 @@ import { EmailTemplateGuard } from '@templates/email/email-template.guard';
 export const TEMPLATE_ROUTES: Routes = [
   {
     path: '',
+    data: { breadcrumb: false },
     loadComponent: () => import('@templates/templates.component').then((c) => c.TemplatesComponent),
   },
   {

@@ -20,7 +20,11 @@ import { BreadcrumbItem, RouteBreadcrumb } from './breadcrumbs.interface';
       <govuk-breadcrumbs [inverse]="inverse()">
         @for (breadcrumb of breadcrumbs; track $index) {
           @if (breadcrumb.link) {
-            <a govukLink="breadcrumb" [routerLink]="breadcrumb.link" [queryParams]="breadcrumb.queryParams">
+            <a
+              govukLink="breadcrumb"
+              [routerLink]="breadcrumb.link"
+              [queryParams]="breadcrumb.queryParams"
+              [fragment]="breadcrumb.fragment">
               {{ breadcrumb.text }}
             </a>
           }
@@ -68,6 +72,7 @@ export class BreadcrumbsComponent {
           text: this.getBreadcrumbText(route.data, route.title),
           link: this.getBreadcrumbLink(route, routeUrl),
           queryParams: route.queryParams ?? {},
+          fragment: this.getBreadcrumbFragment(route.data),
         };
 
         if (!this.alreadyHasBreadcrumb(breadcrumbs, breadcrumb)) {
@@ -91,7 +96,11 @@ export class BreadcrumbsComponent {
           : breadcrumb;
   }
 
-  private getBreadcrumbLink(route: ActivatedRouteSnapshot, routeUrl: string[]): string[] {
+  private getBreadcrumbLink(route: ActivatedRouteSnapshot, routeUrl: string[]): any[] {
+    if (this.hasExplicitLink(route.data)) {
+      return this.hasMoreUrlSegments(route) ? route.data.breadcrumb.link : null;
+    }
+
     let currentRoute = route;
     let currentRouteUrl = routeUrl;
 
@@ -116,6 +125,14 @@ export class BreadcrumbsComponent {
     }
 
     return this.hasMoreUrlSegments(route) ? ['/' + currentRouteUrl.join('/')] : null;
+  }
+
+  private getBreadcrumbFragment(data: Data): string {
+    return typeof data.breadcrumb === 'object' ? data.breadcrumb.fragment : undefined;
+  }
+
+  private hasExplicitLink(data: Data): boolean {
+    return typeof data.breadcrumb === 'object' && Array.isArray(data.breadcrumb.link);
   }
 
   private alreadyHasBreadcrumb(breadcrumbs: BreadcrumbItem[], breadcrumb: BreadcrumbItem): boolean {

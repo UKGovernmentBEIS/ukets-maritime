@@ -5,7 +5,8 @@ import { canActivateImportData, IMPORT_DATA_ROUTE_PREFIX } from '@api-data-manag
 export const API_DATA_MANAGEMENT_ROUTES: Routes = [
   {
     path: '',
-    data: { breadcrumb: true },
+    title: 'API data management',
+    data: { breadcrumb: false },
     loadComponent: () =>
       import('@api-data-management/api-data-management-container').then((c) => c.ApiDataManagementContainerComponent),
   },

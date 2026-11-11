@@ -18,6 +18,7 @@ export const MI_REPORTS_ROUTES: Routes = [
       {
         path: '',
         title: 'MI reports',
+        data: { breadcrumb: false },
         loadComponent: loadMiReportMainComponent,
       },
       {

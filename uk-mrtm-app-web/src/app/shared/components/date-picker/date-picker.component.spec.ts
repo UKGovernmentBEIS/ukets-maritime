@@ -5,8 +5,8 @@ import { By } from '@angular/platform-browser';
 
 import { GovukValidators, LabelSizeType } from '@netz/govuk-components';
 
-import { datePickerConfigDefaults } from '@shared/components/date-picker//date-picker.interface';
 import { DatePickerComponent } from '@shared/components/date-picker/date-picker.component';
+import { datePickerConfigDefaults } from '@shared/components/date-picker/date-picker.interface';
 
 describe('DatePickerComponent', () => {
   @Component({

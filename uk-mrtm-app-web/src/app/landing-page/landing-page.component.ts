@@ -1,6 +1,5 @@
-import { NgOptimizedImage, NgTemplateOutlet } from '@angular/common';
+import { NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, Component, computed, inject, Signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
 
 import { KeycloakProfile } from 'keycloak-js';
 
@@ -9,10 +8,10 @@ import { UserStateDTO } from '@mrtm/api';
 import { AuthStore, selectIsLoggedIn, selectUserProfile, selectUserRoleType, selectUserState } from '@netz/common/auth';
 import { PageHeadingComponent } from '@netz/common/components';
 import { DestroySubject } from '@netz/common/services';
-import { LinkDirective } from '@netz/govuk-components';
+import { ButtonDirective, LinkDirective } from '@netz/govuk-components';
 
 import { AuthService } from '@core/services/auth.service';
-import { BackToTopComponent, ServiceBannerComponent } from '@shared/components';
+import { ServiceBannerComponent } from '@shared/components';
 
 interface ViewModel {
   isLoggedIn: boolean;
@@ -23,15 +22,7 @@ interface ViewModel {
 
 @Component({
   selector: 'mrtm-landing-page',
-  imports: [
-    PageHeadingComponent,
-    RouterLink,
-    BackToTopComponent,
-    NgTemplateOutlet,
-    NgOptimizedImage,
-    ServiceBannerComponent,
-    LinkDirective,
-  ],
+  imports: [PageHeadingComponent, NgTemplateOutlet, ServiceBannerComponent, LinkDirective, ButtonDirective],
   standalone: true,
   templateUrl: './landing-page.component.html',
   providers: [DestroySubject],

@@ -12,6 +12,8 @@ Any content can be projected within the component, and will be displayed as the 
 - `phase` - The phase tag, can take only `alpha` or `beta` values.
 - `tagColor` - Choose the color of the tag. If not provided will default to `#1d70b8` the color of `.govuk-tag` class.
 - `tagAlign`- Accepts `right` and `left`. Defaults to `left`.
+- `borderTop` - Moves the dividing line to the top edge, for a banner placed at the bottom of the
+  page, above the footer. Defaults to `false`.
 
 ### Example
 

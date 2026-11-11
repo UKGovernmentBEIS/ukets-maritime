@@ -1,21 +1,18 @@
-import { AsyncPipe } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { Title } from '@angular/platform-browser';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink, RouterOutlet } from '@angular/router';
-
-import { combineLatest, filter, map, Observable, of, switchMap, take, takeUntil } from 'rxjs';
+import { Component, computed, inject, OnInit } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterOutlet } from '@angular/router';
 
 import { AuthStore, selectIsLoggedIn, selectUserState } from '@netz/common/auth';
 import { BackLinkComponent, BreadcrumbsComponent } from '@netz/common/navigation';
 import { DestroySubject } from '@netz/common/services';
 import {
-  FooterComponent,
-  HeaderActionsListComponent,
-  HeaderLegacyComponent,
+  GovukFooterComponent,
+  GovukHeaderComponent,
+  GovukLinkItem,
+  GovukServiceNavigationComponent,
+  GovukServiceNavigationItem,
+  GovukSkipLinkComponent,
   LinkDirective,
-  MetaInfoComponent,
-  NavListLegacyComponent,
-  SkipLinkComponent,
 } from '@netz/govuk-components';
 
 import { CookiesService } from '@cookies/cookies.service';
@@ -26,6 +23,7 @@ import { AnalyticsService } from '@core/services/analytics.service';
 import { hasNoAuthority, loginDisabled, shouldShowAccepted } from '@core/util';
 import { IncorporateHeaderComponent } from '@incorporate-header/incorporate-header.component';
 import { PhaseBarComponent } from '@shared/components';
+import { SkipLinkFocusDirective } from '@shared/directives';
 import { TimeoutBannerComponent } from '@timeout/timeout-banner';
 
 interface Permissions {
@@ -38,21 +36,18 @@ interface Permissions {
   selector: 'mrtm-root',
   imports: [
     CookiesContainerComponent,
-    HeaderLegacyComponent,
-    SkipLinkComponent,
-    HeaderActionsListComponent,
-    RouterLink,
-    NavListLegacyComponent,
-    LinkDirective,
     PhaseBarComponent,
     BreadcrumbsComponent,
     BackLinkComponent,
     RouterOutlet,
-    FooterComponent,
-    MetaInfoComponent,
+    GovukFooterComponent,
     TimeoutBannerComponent,
-    AsyncPipe,
     IncorporateHeaderComponent,
+    GovukHeaderComponent,
+    GovukServiceNavigationComponent,
+    LinkDirective,
+    GovukSkipLinkComponent,
+    SkipLinkFocusDirective,
   ],
   standalone: true,
   templateUrl: './app.component.html',
@@ -62,85 +57,75 @@ export class AppComponent implements OnInit {
   private readonly authStore = inject(AuthStore);
   private readonly authService = inject(AuthService);
   private readonly configStore = inject(ConfigStore);
-  private readonly titleService = inject(Title);
-  private readonly router = inject(Router);
-  private readonly route = inject(ActivatedRoute);
-  private readonly destroy$ = inject(DestroySubject);
   private readonly cookiesService = inject(CookiesService);
   private readonly analyticsService = inject(AnalyticsService);
 
-  rootUrl: string = location.origin;
-  serviceGatewayUrl: string = this.rootUrl;
-  isGatewayServiceEnabled$ = this.configStore.pipe(selectIsFeatureEnabled('serviceGatewayEnabled'));
-  permissions$: Observable<null | Permissions>;
-  isLoggedIn$ = this.authStore.rxSelect(selectIsLoggedIn).pipe(takeUntil(this.destroy$));
-  showCookiesBanner$ = this.cookiesService.accepted$.pipe(
-    map((cookiesAccepted) => !cookiesAccepted),
-    take(1),
-  );
-  private readonly userState$ = this.authStore.rxSelect(selectUserState).pipe(takeUntil(this.destroy$));
-  private readonly roleType$ = this.userState$.pipe(
-    map((userState) => userState?.roleType),
-    takeUntil(this.destroy$),
-  );
+  readonly serviceGatewayUrl: string = location.origin;
+  readonly isGatewayServiceEnabled = toSignal(this.configStore.pipe(selectIsFeatureEnabled('serviceGatewayEnabled')), {
+    initialValue: false,
+  });
+  readonly isLoggedIn = this.authStore.select(selectIsLoggedIn);
+  readonly showCookiesBanner = !this.cookiesService.accepted$.getValue();
+  readonly footerMetaLinks: GovukLinkItem[] = [
+    { text: 'Privacy Notice', href: '/privacy-notice' },
+    { text: 'Contact us', href: '/contact-us' },
+    { text: 'Accessibility Statement', routerLink: '/accessibility' },
+    { text: 'Legislation', routerLink: '/legislation' },
+  ];
+  private readonly userState = this.authStore.select(selectUserState);
+  readonly permissions = computed<Permissions | null>(() => {
+    const userState = this.userState();
+
+    if (!this.isLoggedIn() || loginDisabled(userState) || shouldShowAccepted(userState)) {
+      return null;
+    }
+
+    const showRegulators = userState?.roleType === 'REGULATOR';
+    const showVerifiers = userState?.roleType === 'VERIFIER';
+    const showAuthorizedOperators =
+      userState !== null && userState.roleType === 'OPERATOR' && !hasNoAuthority(userState);
+
+    return showRegulators || showVerifiers || showAuthorizedOperators
+      ? { showRegulators, showVerifiers, showAuthorizedOperators }
+      : null;
+  });
+  readonly navigationItems = computed<GovukServiceNavigationItem[]>(() => {
+    const permissions = this.permissions();
+    if (!permissions) {
+      return [];
+    }
+
+    const showCommon = permissions.showRegulators || permissions.showAuthorizedOperators || permissions.showVerifiers;
+
+    return [
+      ...(showCommon
+        ? [
+            { routerLink: '/dashboard', text: 'Tasks' },
+            { routerLink: '/accounts', text: 'Accounts' },
+          ]
+        : []),
+      ...(permissions.showRegulators || permissions.showVerifiers
+        ? [{ routerLink: '/service-access', text: 'Service access' }]
+        : []),
+      ...(permissions.showRegulators
+        ? [
+            { routerLink: '/templates', text: 'Templates' },
+            { routerLink: '/mi-reports', text: 'MI Reports' },
+            { routerLink: '/batch-variations', text: 'Batch variations' },
+          ]
+        : []),
+      ...(permissions.showAuthorizedOperators ? [{ routerLink: '/cdm', text: 'API data management' }] : []),
+      ...(showCommon ? [{ routerLink: '/guidance', text: 'Guidance' }] : []),
+    ];
+  });
 
   ngOnInit(): void {
-    this.permissions$ = combineLatest([this.isLoggedIn$]).pipe(
-      switchMap(([isLoggedIn]) =>
-        isLoggedIn
-          ? combineLatest([
-              this.userState$.pipe(map((userState) => loginDisabled(userState) || shouldShowAccepted(userState))),
-              this.roleType$.pipe(map((role) => role === 'REGULATOR')),
-              this.roleType$.pipe(map((role) => role === 'VERIFIER')),
-              this.userState$.pipe(
-                map(
-                  (userState) => userState !== null && userState.roleType === 'OPERATOR' && !hasNoAuthority(userState),
-                ),
-              ),
-            ]).pipe(
-              map(
-                ([isDisabled, showRegulators, showVerifiers, showAuthorizedOperators]) =>
-                  !isDisabled &&
-                  Object.values({
-                    showRegulators,
-                    showVerifiers,
-                    showAuthorizedOperators,
-                  }).some((permission) => !!permission) && {
-                    showRegulators,
-                    showVerifiers,
-                    showAuthorizedOperators,
-                  },
-              ),
-            )
-          : of(null),
-      ),
-    );
-
-    const appTitle = this.titleService.getTitle();
-
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        map(() => {
-          let child = this.route.firstChild;
-          while (child.firstChild) {
-            child = child.firstChild;
-          }
-          if (child.snapshot.data['pageTitle']) {
-            return child.snapshot.data['pageTitle'];
-          }
-          return appTitle;
-        }),
-        takeUntil(this.destroy$),
-      )
-      .subscribe((title: string) => this.titleService.setTitle(`${title} - GOV.UK`));
-
     if (this.cookiesService.accepted$.getValue() && this.cookiesService.hasAnalyticsConsent()) {
       this.analyticsService.enableGoogleTagManager();
     }
   }
 
-  public async logout(event: MouseEvent): Promise<void> {
+  public async logout(event: Event): Promise<void> {
     event.preventDefault();
     event.stopPropagation();
     await this.authService.logout();

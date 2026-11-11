@@ -43,4 +43,18 @@ describe('PhaseBannerComponent', () => {
     const element: HTMLElement = fixture.nativeElement;
     expect(element.querySelector<HTMLSpanElement>('.govuk-phase-banner__text').textContent).toEqual('Test content');
   });
+
+  it('should move the border to the top edge only when borderTop is set', () => {
+    expect(fixture.nativeElement.querySelector('.govuk-phase-banner').classList).not.toContain(
+      'govuk-phase-banner--border-top',
+    );
+
+    const bannerFixture = TestBed.createComponent(PhaseBannerComponent);
+    bannerFixture.componentRef.setInput('borderTop', true);
+    bannerFixture.detectChanges();
+
+    expect(bannerFixture.nativeElement.querySelector('.govuk-phase-banner').classList).toContain(
+      'govuk-phase-banner--border-top',
+    );
+  });
 });

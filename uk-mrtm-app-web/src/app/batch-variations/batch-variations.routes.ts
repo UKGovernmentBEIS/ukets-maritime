@@ -11,7 +11,7 @@ export const BATCH_VARIATIONS_ROUTES: Route[] = [
     children: [
       {
         path: '',
-        data: { breadcrumb: 'Dashboard' },
+        data: { breadcrumb: false },
         loadComponent: () =>
           import('@batch-variations/batch-variations-list').then((c) => c.BatchVariationsListComponent),
       },

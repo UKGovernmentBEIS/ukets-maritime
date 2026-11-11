@@ -1,16 +1,21 @@
-<div class="govuk-header">
-  <div class="govuk-header__container govuk-width-container">
-    <div class="govuk-header__logo">
-      @if (isExternal()) {
-        <a [href]="homepageUrl()" class="govuk-header__homepage-link">
-          <ng-container *ngTemplateOutlet="logoContent" />
-        </a>
-      } @else {
-        <a [routerLink]="homepageUrl()" class="govuk-header__homepage-link">
-          <ng-container *ngTemplateOutlet="logoContent" />
-        </a>
-      }
-    </div>
+<div [class]="containerClass()">
+  <div class="govuk-header__logo">
+    @if (isRouterLink(homepage())) {
+      <a
+        class="govuk-header__homepage-link"
+        [fragment]="homepage().fragment"
+        [queryParams]="homepage().queryParams ?? null"
+        [routerLink]="homepage().routerLink">
+        <ng-container *ngTemplateOutlet="logoContent" />
+      </a>
+    } @else {
+      <a class="govuk-header__homepage-link" [href]="homepage()?.href ?? '//gov.uk'">
+        <ng-container *ngTemplateOutlet="logoContent" />
+      </a>
+    }
+  </div>
+  <div class="govuk-header__actions">
+    <ng-content />
   </div>
 </div>
 

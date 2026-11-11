@@ -30,6 +30,7 @@ export const ACCOUNTS_ROUTES: Routes = [
   {
     path: '',
     title: 'Accounts',
+    data: { breadcrumb: false },
     loadComponent: () => import('@accounts/containers').then((c) => c.AccountsPageComponent),
   },
   {

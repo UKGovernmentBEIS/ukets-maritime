@@ -15,6 +15,7 @@ export const GUIDANCE_ROUTES: Routes = [
       {
         path: '',
         title: 'Guidance',
+        data: { breadcrumb: false },
         loadComponent: () => import('@guidance/guidance-list').then((c) => c.GuidanceListComponent),
       },
       {

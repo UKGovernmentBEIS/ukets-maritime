@@ -1,3 +1,10 @@
+@use 'govuk-frontend/dist/govuk/base' as govuk;
+
+.govuk-phase-banner--border-top {
+  border-top: 1px solid govuk.govuk-functional-colour(border);
+  border-bottom: 0;
+}
+
 .align-right {
   display: flex;
   justify-content: space-between;

@@ -12,8 +12,8 @@ Design details can be found at [GOV.UK Design System](https://design-system.serv
 - `menuButtonText` - The text for the menu button. Defaults to `Menu`.
 - `menuButtonLabel` - The ARIA label for the menu button. Defaults to `Menu`.
 - `navigationId` - The ID for the navigation element. Defaults to `navigation`.
-- `navigationLabel` - The ARIA label for the navigation element. Defaults to `Menu`.
-- `collapseNavigationOnMobile` - Whether to collapse the navigation on mobile. Defaults to `true`.
+- `navigationLabel` - The ARIA label for the navigation element. Defaults to the value of `menuButtonText`.
+- `collapseNavigationOnMobile` - Whether to collapse the navigation on mobile behind a menu button. Defaults to `true` when there is more than one navigation item.
 
 ### Examples
 

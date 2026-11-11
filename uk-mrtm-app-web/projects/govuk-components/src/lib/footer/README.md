@@ -1,35 +1,34 @@
-The footer components are designed to add footer content to a full screen app.
-To set up a govuk footer we use three components: `<govuk-footer>` which acts as
-a structural container for our content including the styling and icons from the
-GOV.UK design standards and navigation, `<govuk-footer-nav-list>` which represents
-the secondary navigation of the application, and `<govuk-footer-meta-info>` which
-can include links to meta information about a site, like cookies and contact details in the footer.
+The footer component adds the GOV.UK footer to a full screen app: the crown logo, optional
+navigation columns, support ("meta") links, the Open Government Licence notice and the Crown
+copyright link.
 
-### Specifying the footer, navigation and meta information
+The component renders the `govuk-footer` block itself (its host element carries the class),
+matching the upstream govuk-frontend template; the page template is responsible for wrapping it in
+the `<footer>` landmark element.
 
-Both the navigation and the meta information should be placed inside `<govuk-footer>` tag.
+### Inputs
 
-The navigation should be wrapped in a `<govuk-footer-nav-list>`. The `title` property can be used
-to add title to the navigation section of the footer. The `twoColumnList` property can be used to
-define if the navigation should be in a two columns layout or in a single column.
+- `navigation` — columns of links shown above the meta row (`GovukFooterNavigation[]`). Each
+  section has a `title`, its `items`, an optional grid `width` (defaults to `full`) and an optional
+  `columns` count for splitting the list.
+- `meta` — support links shown in the meta row (`GovukLinkItem[]`).
+- `metaVisuallyHiddenTitle` — accessible heading for the meta links. Defaults to `Support links`.
+- `showContentLicence` — set to `false` for content not covered by the Open Government Licence.
+- `copyright` — the copyright link text. Defaults to `© Crown copyright`.
+- `containerClasses` — extra classes for the inner width container.
 
-The `govukLink` directive is required with input `footer` for every link inside the `<govuk-footer-nav-list>` container
-in order to apply the required styling.
+Links use the `GovukLinkTarget` shape: `routerLink` for in-app navigation, `href` for anything that
+leaves the app. Projected content is rendered as custom meta content above the licence notice.
 
-The meta information should be wrapped in a `<govuk-footer-meta-info>`.
-
-The `govukLink` directive is required with input `meta` for every link inside the `<govuk-footer-meta-info>` container
-in order to apply the required styling.
-
-The following is an example of a valid footer container:
+### Example
 
 ```html
-<govuk-footer>
-  <govuk-footer-nav-list title="Single column list" [columns]="1">
-    <a govukLink="footer" href="#1"> Navigation item 1 </a>
-  </govuk-footer-nav-list>
-  <govuk-footer-meta-info>
-    <a govukLink="meta" href="#3"> Item 1 </a>
-  </govuk-footer-meta-info>
-</govuk-footer>
+<footer>
+  <govuk-footer
+    [navigation]="[{ title: 'Services', items: [{ text: 'Service one', routerLink: '/one' }] }]"
+    [meta]="[
+      { text: 'Cookies', routerLink: '/cookies' },
+      { text: 'Contact us', href: '/contact-us' },
+    ]" />
+</footer>
 ```

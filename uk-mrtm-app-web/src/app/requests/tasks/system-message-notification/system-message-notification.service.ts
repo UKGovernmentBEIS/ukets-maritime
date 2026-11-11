@@ -96,7 +96,7 @@ export class SystemMessageNotificationService {
       case 'ACCOUNT_USERS_SETUP':
         return `/accounts/${params.accountId}` + `#users`;
       case 'VERIFICATION_BODY_USERS_SETUP':
-        return '/user/verifiers';
+        return '/service-access#verifier-users';
       default:
         return '/';
     }

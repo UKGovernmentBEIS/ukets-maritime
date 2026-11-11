@@ -36,7 +36,10 @@ describe('SystemMessageNotificationService', () => {
     const msg = 'Setup [Verifiers]({"action": "VERIFICATION_BODY_USERS_SETUP"})';
     const result = service.parseMessage(msg);
 
-    expect(result).toEqual([{ text: 'Setup ' }, { text: 'Verifiers', route: '/user/verifiers', fragment: null }]);
+    expect(result).toEqual([
+      { text: 'Setup ' },
+      { text: 'Verifiers', route: '/service-access', fragment: 'verifier-users' },
+    ]);
   });
 
   it('should fall back to default route for unknown action', () => {
@@ -62,7 +65,7 @@ describe('SystemMessageNotificationService', () => {
       { text: 'Visit ' },
       { text: 'Account Users', route: '/accounts/123', fragment: 'users' },
       { text: ' or ' },
-      { text: 'Verifiers', route: '/user/verifiers', fragment: null },
+      { text: 'Verifiers', route: '/service-access', fragment: 'verifier-users' },
       { text: ' today!' },
     ]);
   });

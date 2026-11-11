@@ -2,7 +2,7 @@ version: "3"
 
 services:
   postgres-mrtm:
-    image: postgres
+    image: postgres:15.17  # <--- change it with your local postgress image version here
     volumes:
       - postgres-data-mrtm:/var/lib/postgresql/data
     environment:

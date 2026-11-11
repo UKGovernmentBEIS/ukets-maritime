@@ -23,7 +23,6 @@
       "@batch-variations/*": ["./src/app/batch-variations/*"],
       "@cookies/*": ["./src/app/cookies/*"],
       "@core/*": ["./src/app/core/*"],
-      "@data-suppliers/*": ["./src/app/data-suppliers/*"],
       "@error/*": ["./src/app/error/*"],
       "@feedback/*": ["./src/app/feedback/*"],
       "@forgot-password/*": ["./src/app/forgot-password/*"],
@@ -36,8 +35,8 @@
       "@notes/*": ["./src/app/notes/*"],
       "@privacy-notice/*": ["./src/app/privacy-notice/*"],
       "@registration/*": ["./src/app/registration/*"],
-      "@regulators/*": ["./src/app/regulators/*"],
       "@requests/*": ["./src/app/requests/*"],
+      "@service-access/*": ["./src/app/service-access/*"],
       "@shared/*": ["./src/app/shared/*"],
       "@templates/*": ["./src/app/templates/*"],
       "@terms-and-conditions/*": ["./src/app/terms-and-conditions/*"],
@@ -45,9 +44,7 @@
       "@timeline/*": ["./src/app/timeline/*"],
       "@two-fa/*": ["./src/app/two-fa/*"],
       "@version/*": ["./src/app/version/*"],
-      "@environments/*": ["./src/environments/*"],
-      "@verification-bodies/*": ["./src/app/verification-bodies/*"],
-      "@verifiers/*": ["./src/app/verifiers/*"]
+      "@environments/*": ["./src/environments/*"]
     },
     "useDefineForClassFields": false
   },

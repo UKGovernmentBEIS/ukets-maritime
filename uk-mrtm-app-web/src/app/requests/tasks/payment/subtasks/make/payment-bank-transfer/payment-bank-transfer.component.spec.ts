@@ -4,8 +4,8 @@ import { ActivatedRoute } from '@angular/router';
 import { TaskService } from '@netz/common/forms';
 import { ActivatedRouteStub, MockType } from '@netz/common/testing';
 
-import { PaymentBankTransferComponent } from '@requests//tasks/payment/subtasks/make/payment-bank-transfer/payment-bank-transfer.component';
 import { taskProviders } from '@requests/common/task.providers';
+import { PaymentBankTransferComponent } from '@requests/tasks/payment/subtasks/make/payment-bank-transfer/payment-bank-transfer.component';
 
 describe('PaymentBankTransferComponent', () => {
   let component: PaymentBankTransferComponent;

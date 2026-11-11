@@ -58,7 +58,7 @@ export class VerifierUsersListComponent implements OnInit {
   private readonly authStore: AuthStore = inject(AuthStore);
   private readonly destroyRef: DestroyRef = inject(DestroyRef);
 
-  readonly editVerifierSubpath = input<string>('/user/verifiers');
+  readonly editVerifierSubpath = input<string>('/service-access/verifier-users');
   readonly verificationBodyId = input<number>();
   readonly editable = input<boolean>(false);
   readonly authorities = input.required<Observable<UserAuthorityInfoDTO[]>>();
@@ -130,6 +130,6 @@ export class VerifierUsersListComponent implements OnInit {
   }
 
   public addNewUser(): void {
-    this.router.navigate(['/user/verifiers/add', this.addNewUserForm.value.roleCode]);
+    this.router.navigate(['/service-access/verifier-users/add', this.addNewUserForm.value.roleCode]);
   }
 }

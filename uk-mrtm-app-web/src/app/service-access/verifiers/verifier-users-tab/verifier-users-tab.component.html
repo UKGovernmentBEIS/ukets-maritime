@@ -1,0 +1,6 @@
+<h2 class="govuk-heading-m">Verifier users</h2>
+<mrtm-verifier-users-list
+  (discardChanges)="onDiscardChanges()"
+  (saveChanges)="onSave($event)"
+  [authorities]="authorities$"
+  [editable]="verifiersEditable$ | async" />

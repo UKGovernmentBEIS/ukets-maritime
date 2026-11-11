@@ -25,7 +25,6 @@ Below you can find a list of the implemented [GDS components](https://design-sys
 - [Fieldset](src/lib/fieldset/README.md)
 - [File upload](src/lib/file-upload/README.md)
 - [Footer](src/lib/footer/README.md)
-- [Header legacy](src/lib/header-legacy/README.md)
 - [Header](src/lib/header/README.md)
 - [Inset text](src/lib/directives/inset-text/README.md)
 - [Panel](src/lib/panel/README.md)

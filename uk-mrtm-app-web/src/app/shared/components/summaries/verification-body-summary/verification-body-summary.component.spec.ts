@@ -8,8 +8,8 @@ import { ActivatedRouteStub } from '@netz/common/testing';
 
 import { CountryService } from '@core/services';
 import { CountryServiceStub } from '@registration/testing/country-service-stub';
+import { mockedVerificationBodyCreationDTO } from '@service-access/verification-bodies/testing/verification-bodies-data.mock';
 import { VerificationBodySummaryComponent } from '@shared/components/summaries/verification-body-summary';
-import { mockedVerificationBodyCreationDTO } from '@verification-bodies/testing/verification-bodies-data.mock';
 
 @Component({
   selector: 'mrtm-test-parent',

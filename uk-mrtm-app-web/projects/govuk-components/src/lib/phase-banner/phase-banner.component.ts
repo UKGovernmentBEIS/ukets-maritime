@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { booleanAttribute, ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   selector: 'govuk-phase-banner',
@@ -12,4 +12,7 @@ export class PhaseBannerComponent {
   readonly phase = input<string>();
   readonly tagColor = input<string>();
   readonly tagAlign = input<'right' | 'left'>('left');
+
+  /** Moves the dividing line to the top edge, for a banner placed at the bottom of the page. */
+  readonly borderTop = input(false, { transform: booleanAttribute });
 }

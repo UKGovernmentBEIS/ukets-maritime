@@ -137,4 +137,18 @@ a[role='button'] {
   &:focus {
     color: govuk.govuk-functional-colour(focus-text);
   }
+
+  // Mirrors govuk-link-style-inverse for buttons: like an inverse anchor, the
+  // colour stays inverse-text in every state except focus
+  &.govuk-link--inverse {
+    &,
+    &:hover,
+    &:active {
+      color: govuk.govuk-functional-colour(inverse-text);
+    }
+
+    &:focus {
+      color: govuk.govuk-functional-colour(focus-text);
+    }
+  }
 }
